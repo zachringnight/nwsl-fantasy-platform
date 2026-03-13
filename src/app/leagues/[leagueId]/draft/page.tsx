@@ -12,7 +12,7 @@ export default async function DraftLobbyPage({
       leagueId={leagueId}
       eyebrow="Draft lobby"
       title="Pre-draft waiting room"
-      description="Check the order, start time, roster setup, and autopick status before the room opens."
+      description="Draft order, start time, and setup — all before the room opens."
     >
       <DraftLobbyClient leagueId={leagueId} />
     </LeaguePageShell>

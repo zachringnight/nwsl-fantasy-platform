@@ -21,7 +21,7 @@ export default function SignupPage() {
         <SurfaceCard
           eyebrow="What happens next"
           title="Choose your club and join a league"
-          description="After creating your account you will choose your club, set your experience level, and decide whether to create or join a league."
+          description="Next you'll pick a club, set your level, and join a league."
           tone="accent"
         >
           <div className="space-y-3 text-sm leading-6 text-foreground">
