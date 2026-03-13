@@ -15,6 +15,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 
 type AdminTab = "scoring" | "data" | "support";
 
@@ -198,6 +199,13 @@ export default function AdminPage() {
   }
 
   return (
+    <FantasyAuthGate
+      loadingTitle="Checking access"
+      loadingDescription="Verifying your admin credentials."
+      signedOutTitle="Admin access required"
+      signedOutDescription="Sign in with an admin account to access the operations desk."
+    >
+      {() => (
     <AppShell
       eyebrow="Admin"
       title="League operations desk"
@@ -548,5 +556,7 @@ export default function AdminPage() {
         </section>
       )}
     </AppShell>
+      )}
+    </FantasyAuthGate>
   );
 }
