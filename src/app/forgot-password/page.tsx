@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
     <AppShell
       eyebrow="Recovery"
       title="Get back into your account"
-      description="Enter the email tied to your profile and we will send you a fresh sign-in link."
+      description="We will send a secure link to reset your password."
     >
       <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
         <SurfaceCard
@@ -57,8 +57,8 @@ export default function ForgotPasswordPage() {
           title={formState === "sent" ? "Check your inbox" : "Request a new magic link"}
           description={
             formState === "sent"
-              ? "We sent a recovery link to the email you provided. Follow it to sign in and reset your password."
-              : "Use the same email you use for fantasy leagues, draft rooms, and salary-cap entries."
+              ? "Check your email for a link to reset your password."
+              : "Enter the email address you used to create your account."
           }
         >
           {formState === "sent" ? (
@@ -127,8 +127,8 @@ export default function ForgotPasswordPage() {
 
         <SurfaceCard
           eyebrow="Account security"
-          title="Recovery happens through your email"
-          description="We never store passwords in plain text. The magic link signs you in securely without needing to remember credentials."
+          title="How recovery works"
+          description="We send a secure, one-time link to your inbox."
           tone="accent"
         >
           <div className="space-y-3">

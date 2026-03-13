@@ -6,22 +6,22 @@ const helpTopics = [
   {
     title: "How scoring works",
     description:
-      "Classic leagues use weekly head-to-head scoring. Salary-cap contests track your single entry against the shared field for that slate.",
+      "Classic leagues use weekly head-to-head scoring. Salary-cap contests rank your entry against the field.",
   },
   {
     title: "When lineups lock",
     description:
-      "Classic rosters lock by match window. Salary-cap entries stay editable until the slate lock, then freeze until the next contest opens.",
+      "Classic rosters lock by match window. Salary-cap entries stay editable until the slate lock time.",
   },
   {
     title: "How waivers run",
     description:
-      "Classic leagues use rolling priority. If you win a claim, you move to the back of the line. Salary-cap formats do not use exclusive waivers.",
+      "Classic leagues use rolling priority — win a claim and you move to the back of the line.",
   },
   {
-    title: "What the draft room does on mobile",
+    title: "Draft room on mobile",
     description:
-      "The board, queue, and clock stay visible in a phone-first layout so managers can draft from the couch, a bar, or the concourse.",
+      "The board, queue, and clock stay visible in a phone-first layout. Draft from anywhere.",
   },
 ];
 
@@ -29,8 +29,8 @@ export default function HelpPage() {
   return (
     <AppShell
       eyebrow="Help"
-      title="Quick answers for the moments that decide a matchweek"
-      description="Find quick answers about scoring, lineup locks, waivers, drafts, and salary-cap lineups."
+      title="Quick answers when you need them"
+      description="Scoring, locks, waivers, and drafts — answered in seconds."
       actions={
         <Link href="/rules" className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white">
           Open rules
@@ -38,7 +38,7 @@ export default function HelpPage() {
       }
     >
       <section className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
-        <SurfaceCard eyebrow="FAQ" title="Most common questions" description="These are the answers managers look for most often during setup, draft prep, and live matchdays.">
+        <SurfaceCard eyebrow="FAQ" title="Most common questions" description="The answers managers ask for during setup, draft prep, and live matchdays.">
           <div className="space-y-3 text-sm text-muted">
             {helpTopics.map((topic) => (
               <div key={topic.title} className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
@@ -49,15 +49,24 @@ export default function HelpPage() {
           </div>
         </SurfaceCard>
         <SurfaceCard
-          eyebrow="Need help now?"
-          title="The answer is already near the action"
-          description="Most rules and timing questions are answered on the screen where the decision happens."
+          eyebrow="Built-in context"
+          title="Answers are on every screen"
+          description="Rules and timing show up right where you make decisions."
           tone="accent"
         >
           <div className="space-y-3 text-sm leading-6 text-foreground">
-            <p>League pages show draft timing, roster control, and waiver rules right next to the standings and lineup tabs.</p>
-            <p>Salary-cap entry screens keep slate lock, projection, and submission status visible while you build.</p>
-            <p>Player pages and compare views explain why a projection is high, not just what the number is.</p>
+            <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+              <p className="font-semibold">League pages</p>
+              <p className="mt-1 text-muted">Draft timing, roster rules, and waivers sit right next to your lineup.</p>
+            </div>
+            <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+              <p className="font-semibold">Salary-cap entries</p>
+              <p className="mt-1 text-muted">Lock time and projections stay visible while you build.</p>
+            </div>
+            <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+              <p className="font-semibold">Player profiles</p>
+              <p className="mt-1 text-muted">See why a projection is high, not just the number.</p>
+            </div>
           </div>
         </SurfaceCard>
       </section>

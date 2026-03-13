@@ -100,7 +100,7 @@ export default function PlayersPage() {
     <AppShell
       eyebrow="Players"
       title="Scout with real conviction before the room tilts"
-      description="Build a watchlist, stack a compare tray, and read exactly what the scoring model rewards before you spend a draft pick or salary slot."
+      description="Scout, watchlist, and compare before you commit a pick or salary slot."
       actions={
         comparePlayers.length === 2 ? (
           <Link href={compareHref} className={getButtonClassName({ className: "group" })}>
@@ -123,7 +123,7 @@ export default function PlayersPage() {
         <SurfaceCard
           eyebrow="Scouting control"
           title="Watchlist, compare, and project from one board"
-          description="Search, filter, and compare from one board without losing context."
+          description="Search, filter, and pin targets from one board."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-3">
@@ -185,7 +185,7 @@ export default function PlayersPage() {
         <SurfaceCard
           eyebrow="Scoring clarity"
           title="Projection readout and rules are visible before you commit"
-          description="Projection now comes from real NWSL production across finishing, creation, passing, and defending. Value score still ranks projected points per $1k of salary so cap choices stay readable."
+          description="Projections reflect real NWSL performance. Value score ranks projected points per $1k of salary."
           tone="accent"
         >
           <div className="space-y-4">

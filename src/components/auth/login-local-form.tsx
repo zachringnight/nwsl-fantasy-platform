@@ -25,8 +25,8 @@ export function LoginLocalForm() {
   if (!supabaseReady) {
     return (
       <EmptyState
-        title="Sign-in unavailable"
-        description="This environment is missing the account configuration required for sign-in."
+        title="Sign-in temporarily unavailable"
+        description="We're having trouble connecting right now. Please try again in a moment."
       />
     );
   }
@@ -34,8 +34,8 @@ export function LoginLocalForm() {
   if (!hasHydrated) {
     return (
       <EmptyState
-        title="Checking your session"
-        description="Looking for an existing account on this browser."
+        title="One moment"
+        description="Checking if you are already signed in."
       />
     );
   }

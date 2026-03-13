@@ -87,7 +87,7 @@ export default function Home() {
     <AppShell
       eyebrow="NWSL fantasy"
       title="Fantasy for every NWSL match window"
-      description="Create private season-long leagues, build weekly salary-cap lineups, and follow daily slates in one place built for NWSL fans."
+      description="Season-long leagues, weekly contests, and daily slates — all in one place."
       actions={
         <div className="flex flex-wrap gap-3">
           <Link
@@ -109,8 +109,8 @@ export default function Home() {
       <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <SurfaceCard
           eyebrow="Play now"
-          title="Classic draft nights, weekly contests, and daily slates in one place"
-          description="Choose the format that fits the way you want to play. Every mode uses the same player board, scoring rules, and live matchday experience."
+          title="Draft nights, weekly contests, and daily slates"
+          description="Pick the format that fits you. Every mode shares the same player board and scoring."
           tone="brand"
           className="section-fade"
         >
@@ -191,8 +191,8 @@ export default function Home() {
         <div className="grid gap-4 section-fade section-fade-delay-1">
           <SurfaceCard
             eyebrow="Contest calendar"
-            title="Every lock window is visible before you commit"
-            description="See when contests lock, when the next slate opens, and how often you need to update your lineup."
+            title="Always know when entries lock"
+            description="Lock times, slate windows, and deadlines — always visible."
           >
             <div className="space-y-3 text-sm text-muted">
               <div className="flex items-center gap-3">
@@ -257,8 +257,8 @@ export default function Home() {
       <section className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
         <SurfaceCard
           eyebrow="Player market"
-          title="Real NWSL talent drives every format"
-          description="Scouting, drafting, waivers, and salary-cap builds all pull from the same live player board with real clubs, positions, salary, and projections."
+          title="Real NWSL players power every format"
+          description="One player board with real clubs, positions, salaries, and projections."
           className="section-fade"
         >
           <div className="grid gap-3 md:grid-cols-2">

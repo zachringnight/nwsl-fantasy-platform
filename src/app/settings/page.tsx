@@ -6,14 +6,14 @@ export default function SettingsPage() {
   return (
     <AppShell
       eyebrow="Account"
-      title="Manage your profile, recovery, and league preferences"
-      description="Use this hub to update your account details and jump to the settings that already control league play."
+      title="Your profile and account settings"
+      description="Update your details, reset your password, or review scoring rules."
     >
       <section className="grid gap-5 lg:grid-cols-2">
         <SurfaceCard
           eyebrow="Profile"
-          title="Keep your fantasy identity up to date"
-          description="Set your display name, favorite club, and experience level so every league reads cleanly from the first invite onward."
+          title="Update your identity"
+          description="Change your display name, favorite club, or experience level."
         >
           <div className="flex flex-wrap gap-3">
             <Link href="/onboarding" className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white">
@@ -25,9 +25,9 @@ export default function SettingsPage() {
           </div>
         </SurfaceCard>
         <SurfaceCard
-          eyebrow="Recovery and rules"
-          title="Keep access and league context close"
-          description="If you need help getting back in or checking a scoring question, the right path is one tap away."
+          eyebrow="Security & rules"
+          title="Password and scoring"
+          description="Reset your password or check how points are awarded."
           tone="accent"
         >
           <div className="flex flex-wrap gap-3">
@@ -35,7 +35,7 @@ export default function SettingsPage() {
               Reset password
             </Link>
             <Link href="/rules" className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground">
-              Review scoring
+              Scoring rules
             </Link>
           </div>
         </SurfaceCard>

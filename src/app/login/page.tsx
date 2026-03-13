@@ -8,14 +8,14 @@ export default function LoginPage() {
   return (
     <AppShell
       eyebrow="Sign in"
-      title="Sign in fast and get back to your leagues"
-      description="Sign in, recover your account if needed, and get back to your leagues."
+      title="Welcome back"
+      description="Sign in and pick up where you left off."
     >
       <section className="grid gap-5 lg:grid-cols-[1fr_0.7fr]">
         <SurfaceCard
-          eyebrow="Primary flow"
+          eyebrow="Sign in"
           title="Sign in"
-          description="Enter your details and go straight back to your leagues."
+          description="Enter your details to continue."
         >
           <LoginLocalForm />
         </SurfaceCard>

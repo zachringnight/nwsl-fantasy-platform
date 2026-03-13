@@ -26,8 +26,8 @@ export function SignupLocalForm() {
   if (!supabaseReady) {
     return (
       <EmptyState
-        title="Account creation unavailable"
-        description="This environment is missing the account configuration required for signup."
+        title="Sign-up temporarily unavailable"
+        description="We're having trouble connecting right now. Please try again in a moment."
       />
     );
   }
@@ -35,8 +35,8 @@ export function SignupLocalForm() {
   if (!hasHydrated) {
     return (
       <EmptyState
-        title="Checking your session"
-        description="Looking for an existing account on this browser."
+        title="One moment"
+        description="Checking if you are already signed in."
       />
     );
   }

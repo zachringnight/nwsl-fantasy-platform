@@ -43,8 +43,8 @@ export default function LeaguesPage() {
   return (
     <AppShell
       eyebrow="Leagues"
-      title="Create a league, join by code, and keep up with every matchweek"
-      description="Start a new league, join an existing one, and see how each format works before you enter."
+      title="Start or join a league"
+      description="Pick your format, invite friends, and get playing."
       actions={
         <div className="flex gap-3">
           <Link
@@ -75,8 +75,8 @@ export default function LeaguesPage() {
 
       <SurfaceCard
         eyebrow="Choose your rhythm"
-        title="Every format tells you exactly how often you need to manage"
-        description="Pick the pace that fits your group: one draft all season, one lineup per week, or one lineup per slate."
+        title="Pick the pace that fits your group"
+        description="One draft all season, one lineup per week, or one lineup per day."
       >
         <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[1.4rem] border border-line bg-panel-soft p-4">
@@ -109,8 +109,8 @@ export default function LeaguesPage() {
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <SurfaceCard
           eyebrow="How entry works"
-          title="Create or join without guessing the rules"
-          description="League setup spells out player ownership, lineup cadence, salary cap, and lock timing before you commit."
+          title="Create or join in three steps"
+          description="Every rule is visible before you commit."
         >
           <div className="grid gap-3 md:grid-cols-3">
             <div className="rounded-[1.2rem] border border-line bg-panel-soft p-4">
@@ -145,7 +145,7 @@ export default function LeaguesPage() {
         <SurfaceCard
           eyebrow="Top market"
           title="Start with the names everyone will chase"
-          description="The same rankings power draft boards, waivers, player compare, and salary-cap pricing."
+          description="The same rankings power every format."
         >
           <div className="space-y-3">
             {featuredMarket.map((player) => (
