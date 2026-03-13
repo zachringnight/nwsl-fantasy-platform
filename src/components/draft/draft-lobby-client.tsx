@@ -162,7 +162,7 @@ export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
     return (
       <EmptyState
         title="Draft not found"
-        description="That league does not have a draft state yet."
+        description="This league's draft hasn't been set up yet."
       />
     );
   }

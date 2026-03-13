@@ -329,7 +329,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="That league does not have a draft state yet."
+        description="This league's draft hasn't been set up yet."
       />
     );
   }

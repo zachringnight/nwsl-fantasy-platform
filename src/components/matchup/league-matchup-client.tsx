@@ -178,7 +178,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         if (!matchupState) {
           return (
             <EmptyState
-              description="No weekly matchup state is available for this league yet."
+              description="No matchup scheduled for this league yet."
               title="Matchup unavailable"
             />
           );

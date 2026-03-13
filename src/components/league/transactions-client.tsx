@@ -177,7 +177,7 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
         if (isLoading && !hubState) {
           return (
             <EmptyState
-              description="Loading waiver claims, transaction history, and roster state."
+              description="Loading your waivers, transactions, and roster moves."
               title="Loading transactions"
             />
           );
