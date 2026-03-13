@@ -1,8 +1,8 @@
 export const featureFlags = {
-  enablePublicLeagues: false,
-  enablePushNotifications: false,
+  enablePublicLeagues: true,
+  enablePushNotifications: true,
   enableCommissionerOverrides: true,
   enablePlayerComparison: true,
-  enableAdminTools: false,
-  enableDarkMode: false,
+  enableAdminTools: true,
+  enableDarkMode: true,
 } as const;

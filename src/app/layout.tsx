@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/common/site-header";
 import { SiteFooter } from "@/components/common/site-footer";
+import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { FantasyAuthProvider } from "@/components/providers/fantasy-auth-provider";
 import { FantasyDataProvider } from "@/components/providers/fantasy-data-provider";
 import { siteConfig } from "@/config/site";
@@ -39,11 +40,13 @@ export default function RootLayout({
       <body>
         <FantasyDataProvider>
           <FantasyAuthProvider>
-            <div className="flex min-h-screen flex-col">
-              <SiteHeader />
-              <div className="flex-1">{children}</div>
-              <SiteFooter />
-            </div>
+            <AnalyticsProvider>
+              <div className="flex min-h-screen flex-col">
+                <SiteHeader />
+                <div className="flex-1">{children}</div>
+                <SiteFooter />
+              </div>
+            </AnalyticsProvider>
           </FantasyAuthProvider>
         </FantasyDataProvider>
       </body>

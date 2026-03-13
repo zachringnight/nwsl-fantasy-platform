@@ -3,18 +3,25 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Chrome, Mail } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+
+type SignupMode = "choice" | "email";
 
 export function SignupLocalForm() {
   const router = useRouter();
   const dataClient = useFantasyDataClient();
   const { hasHydrated, profile, refreshProfile, supabaseReady } = useFantasyAuth();
   const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [signupMode, setSignupMode] = useState<SignupMode>("choice");
 
   if (!supabaseReady) {
     return (
@@ -51,7 +58,7 @@ export function SignupLocalForm() {
     );
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleGuestSignup(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setIsSubmitting(true);
@@ -63,37 +70,170 @@ export function SignupLocalForm() {
         onboardingComplete: false,
       });
       await refreshProfile();
+      router.push("/onboarding");
     } catch (submissionError) {
       setError(
         submissionError instanceof Error
           ? submissionError.message
           : "Unable to create your account."
       );
+    } finally {
       setIsSubmitting(false);
-      return;
     }
+  }
 
-    setIsSubmitting(false);
-    router.push("/onboarding");
+  async function handleEmailSignup(event: React.FormEvent) {
+    event.preventDefault();
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { error: authError } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          data: { display_name: displayName },
+          emailRedirectTo: `${window.location.origin}/onboarding`,
+        },
+      });
+
+      if (authError) {
+        throw authError;
+      }
+
+      await dataClient.upsertFantasyProfile({
+        displayName,
+        onboardingComplete: false,
+      });
+      await refreshProfile();
+      router.push("/onboarding");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to create your account."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleGoogleSignup() {
+    setError("");
+
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { error: authError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/onboarding`,
+        },
+      });
+
+      if (authError) {
+        throw authError;
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to start Google sign-up."
+      );
+    }
+  }
+
+  if (signupMode === "email") {
+    return (
+      <form className="space-y-4" onSubmit={handleEmailSignup}>
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-foreground">Display name</span>
+          <input
+            className="field-control"
+            type="text"
+            placeholder="Rose City Press"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+            autoFocus
+          />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-foreground">Email</span>
+          <input
+            className="field-control"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-foreground">Password</span>
+          <input
+            className="field-control"
+            type="password"
+            placeholder="At least 6 characters"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+          />
+        </label>
+        {error ? <p className="text-sm text-danger">{error}</p> : null}
+        <Button disabled={isSubmitting} fullWidth type="submit">
+          <Mail className="size-4" />
+          {isSubmitting ? "Creating account…" : "Create account with email"}
+        </Button>
+        <button
+          className={getButtonClassName({ variant: "ghost", fullWidth: true })}
+          onClick={() => setSignupMode("choice")}
+          type="button"
+        >
+          Back to options
+        </button>
+      </form>
+    );
   }
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit}>
-      <label className="block space-y-2">
-        <span className="text-sm font-medium text-foreground">Display name</span>
-        <input
-          className="field-control"
-          type="text"
-          placeholder="Rose City Press"
-          value={displayName}
-          onChange={(event) => setDisplayName(event.target.value)}
-          required
-        />
-      </label>
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
-      <Button disabled={isSubmitting} fullWidth type="submit">
-        {isSubmitting ? "Creating account..." : "Create account"}
-      </Button>
-    </form>
+    <div className="space-y-4">
+      <form onSubmit={handleGuestSignup}>
+        <label className="block space-y-2">
+          <span className="text-sm font-medium text-foreground">Display name</span>
+          <input
+            className="field-control"
+            type="text"
+            placeholder="Rose City Press"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+          />
+        </label>
+        {error ? <p className="mt-3 text-sm text-danger">{error}</p> : null}
+        <div className="mt-4 space-y-3">
+          <Button
+            fullWidth
+            onClick={() => setSignupMode("email")}
+            type="button"
+          >
+            <Mail className="size-4" />
+            Sign up with email
+          </Button>
+          <button
+            className={getButtonClassName({ variant: "secondary", fullWidth: true })}
+            onClick={handleGoogleSignup}
+            type="button"
+          >
+            <Chrome className="size-4" />
+            Continue with Google
+          </button>
+          <button
+            className={getButtonClassName({ variant: "ghost", fullWidth: true })}
+            disabled={isSubmitting}
+            type="submit"
+          >
+            {isSubmitting ? "Starting session…" : "Quick guest session"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

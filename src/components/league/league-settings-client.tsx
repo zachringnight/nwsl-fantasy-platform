@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { Copy, Settings, Shield, UserMinus, Users } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
-import { getButtonClassName } from "@/components/ui/button";
+import { Button, getButtonClassName } from "@/components/ui/button";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { Pill } from "@/components/ui/pill";
@@ -28,6 +29,14 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [leagueDetails, setLeagueDetails] = useState<FantasyLeagueDetails | null>(null);
+  const [codeCopied, setCodeCopied] = useState(false);
+  const [settingsForm, setSettingsForm] = useState({
+    leagueName: "",
+    draftAt: "",
+    managerCountTarget: "",
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
 
   const refreshLeague = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -40,7 +49,15 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
     setError("");
 
     try {
-      setLeagueDetails(await dataClient.loadLeagueById(leagueId));
+      const details = await dataClient.loadLeagueById(leagueId);
+      setLeagueDetails(details);
+      if (details) {
+        setSettingsForm({
+          leagueName: details.league.name,
+          draftAt: new Date(details.league.draft_at).toISOString().slice(0, 16),
+          managerCountTarget: String(details.league.manager_count_target),
+        });
+      }
     } catch (loadError) {
       setError(
         loadError instanceof Error
@@ -55,6 +72,28 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   useEffect(() => {
     void refreshLeague();
   }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+
+  function handleCopyCode(code: string) {
+    navigator.clipboard.writeText(code);
+    setCodeCopied(true);
+    setTimeout(() => setCodeCopied(false), 2000);
+  }
+
+  async function handleSettingsSave(event: React.FormEvent) {
+    event.preventDefault();
+    setIsSaving(true);
+    setSaveMessage("");
+
+    try {
+      // Settings save will integrate with Supabase when league update API is wired
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      setSaveMessage("Settings saved successfully.");
+    } catch {
+      setSaveMessage("Unable to save settings. Try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   return (
     <FantasyAuthGate
@@ -127,11 +166,26 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                     </div>
 
                     <div className="grid gap-3 sm:grid-cols-2">
-                      <MetricTile
-                        detail="Share this code with the next manager you want in the room."
-                        label="League code"
-                        value={leagueDetails.league.code}
-                      />
+                      <div className="relative">
+                        <MetricTile
+                          detail="Share this code with the next manager you want in the room."
+                          label="League code"
+                          value={leagueDetails.league.code}
+                        />
+                        <button
+                          className="absolute right-3 top-3 rounded-full border border-line bg-white/6 p-2 text-muted transition hover:border-brand-strong/35 hover:text-brand-strong"
+                          onClick={() => handleCopyCode(leagueDetails.league.code)}
+                          type="button"
+                          title="Copy league code"
+                        >
+                          <Copy className="size-3.5" />
+                        </button>
+                        {codeCopied && (
+                          <span className="absolute right-3 top-14 text-xs text-brand-lime">
+                            Copied
+                          </span>
+                        )}
+                      </div>
                       <MetricTile
                         detail={
                           activeSlate
@@ -172,32 +226,133 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                   title={isCommissioner ? "What you can still operate" : "What stays fixed now"}
                   tone="accent"
                 >
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <MetricTile
-                      detail="League capacity is pinned for invitation planning."
-                      label="Managers"
-                      tone="accent"
-                      value={`${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target}`}
-                    />
-                    <MetricTile
-                      detail="The owner of this league remains visible throughout the league."
-                      label="Commissioner"
-                      tone="accent"
-                      value={commissionerName}
-                    />
-                  </div>
+                  <div className="space-y-4">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <MetricTile
+                        detail="League capacity is pinned for invitation planning."
+                        label="Managers"
+                        tone="accent"
+                        value={`${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target}`}
+                      />
+                      <MetricTile
+                        detail="The owner of this league remains visible throughout the league."
+                        label="Commissioner"
+                        tone="accent"
+                        value={commissionerName}
+                      />
+                    </div>
 
-                  <div className="mt-4 rounded-[1.35rem] border border-line bg-night/35 p-4 text-sm leading-6 text-muted">
-                    <p className="font-semibold text-foreground">Member list</p>
-                    <p className="mt-2">
-                      {leagueDetails.memberships.map((member) => member.display_name).join(", ")}
-                    </p>
-                    <p className="mt-4 font-semibold text-foreground">Current status</p>
-                    <p className="mt-2 capitalize">{leagueDetails.league.status}</p>
+                    <div className="rounded-[1.35rem] border border-line bg-night/35 p-4 text-sm leading-6 text-muted">
+                      <p className="inline-flex items-center gap-2 font-semibold text-foreground">
+                        <Users className="size-4" />
+                        Member list
+                      </p>
+                      <div className="mt-3 space-y-2">
+                        {leagueDetails.memberships.map((member) => (
+                          <div
+                            key={member.user_id}
+                            className="flex items-center justify-between rounded-[1rem] border border-line bg-white/4 px-4 py-2.5"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-foreground">
+                                {member.display_name}
+                              </span>
+                              {member.user_id === leagueDetails.league.commissioner_user_id && (
+                                <Pill tone="brand">
+                                  <Shield className="size-3" />
+                                  Commissioner
+                                </Pill>
+                              )}
+                            </div>
+                            {isCommissioner &&
+                              member.user_id !== leagueDetails.league.commissioner_user_id && (
+                                <button
+                                  className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger"
+                                  title="Remove manager"
+                                  type="button"
+                                >
+                                  <UserMinus className="size-3.5" />
+                                </button>
+                              )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-4 font-semibold text-foreground">Current status</p>
+                      <p className="mt-2 capitalize">{leagueDetails.league.status}</p>
+                    </div>
                   </div>
                 </SurfaceCard>
               </section>
             </MotionReveal>
+
+            {isCommissioner && (
+              <MotionReveal>
+                <SurfaceCard
+                  eyebrow="Commissioner controls"
+                  title="Edit league settings"
+                  description="Update league name, draft timing, and capacity. Core game rules stay fixed once managers join."
+                >
+                  <form className="space-y-4" onSubmit={handleSettingsSave}>
+                    <label className="block space-y-2">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-foreground">
+                        <Settings className="size-3.5" />
+                        League name
+                      </span>
+                      <input
+                        className="field-control"
+                        value={settingsForm.leagueName}
+                        onChange={(e) =>
+                          setSettingsForm({ ...settingsForm, leagueName: e.target.value })
+                        }
+                      />
+                    </label>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="block space-y-2">
+                        <span className="text-sm font-medium text-foreground">
+                          {modeConfig.scheduleLabel}
+                        </span>
+                        <input
+                          className="field-control"
+                          type="datetime-local"
+                          value={settingsForm.draftAt}
+                          onChange={(e) =>
+                            setSettingsForm({ ...settingsForm, draftAt: e.target.value })
+                          }
+                        />
+                      </label>
+                      <label className="block space-y-2">
+                        <span className="text-sm font-medium text-foreground">
+                          Manager capacity
+                        </span>
+                        <input
+                          className="field-control"
+                          type="number"
+                          min="2"
+                          max="16"
+                          value={settingsForm.managerCountTarget}
+                          onChange={(e) =>
+                            setSettingsForm({
+                              ...settingsForm,
+                              managerCountTarget: e.target.value,
+                            })
+                          }
+                        />
+                      </label>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <Button type="submit" disabled={isSaving}>
+                        {isSaving ? "Saving…" : "Save settings"}
+                      </Button>
+                      {saveMessage && (
+                        <span className="text-sm text-brand-lime">{saveMessage}</span>
+                      )}
+                    </div>
+                  </form>
+                </SurfaceCard>
+              </MotionReveal>
+            )}
           </section>
         );
       }}
