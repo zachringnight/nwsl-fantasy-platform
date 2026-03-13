@@ -6,8 +6,8 @@ import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Button } from "@/components/ui/button";
-import { EmptyState } from "@/components/common/empty-state";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
+import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 
 type NotificationChannel = "in_app" | "email" | "push";
 
@@ -154,18 +154,14 @@ export default function NotificationsPage() {
     );
   }
 
-  if (!user) {
-    return (
-      <AppShell eyebrow="Notifications" title="Sign in to see your alerts" description="">
-        <EmptyState
-          title="Sign in required"
-          description="Sign in to view and manage your notifications."
-        />
-      </AppShell>
-    );
-  }
-
   return (
+    <FantasyAuthGate
+      loadingTitle="Loading notifications"
+      loadingDescription="Checking your account."
+      signedOutTitle="Sign in to continue"
+      signedOutDescription="Sign in to view and manage your notifications."
+    >
+      {() => (
     <AppShell
       eyebrow="Notifications"
       title="The alerts that matter, without the noise"
@@ -304,5 +300,7 @@ export default function NotificationsPage() {
         </SurfaceCard>
       </section>
     </AppShell>
+      )}
+    </FantasyAuthGate>
   );
 }

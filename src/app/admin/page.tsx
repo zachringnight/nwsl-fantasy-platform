@@ -201,7 +201,7 @@ export default function AdminPage() {
   return (
     <FantasyAuthGate
       loadingTitle="Checking access"
-      loadingDescription="Verifying your admin credentials."
+      loadingDescription="Verifying your access."
       signedOutTitle="Admin access required"
       signedOutDescription="Sign in with an admin account to access the operations desk."
     >
