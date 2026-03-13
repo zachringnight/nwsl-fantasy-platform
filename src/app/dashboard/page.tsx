@@ -14,35 +14,35 @@ export default function DashboardPage() {
   return (
     <AppShell
       eyebrow="Dashboard"
-      title="Every league, lock, and next move in one board"
-      description="See draft rooms, lineup work, salary-cap locks, and league actions in one place."
+      title="Your leagues, locks, and next moves"
+      description="Everything you need to manage in one place."
     >
       <section className="grid gap-5 lg:grid-cols-3">
         <SurfaceCard
-          eyebrow="Weekly timing"
+          eyebrow="Weekly"
           title={firstWeeklySlate?.label ?? "Week 1"}
           description={
             firstWeeklySlate
               ? `${formatFantasySlateRange(firstWeeklySlate)} • locks ${new Date(firstWeeklySlate.lock_at).toLocaleString()}`
-              : "Weekly slate data unavailable."
+              : "No weekly slate scheduled yet."
           }
         />
         <SurfaceCard
-          eyebrow="Daily timing"
+          eyebrow="Daily"
           title={firstDailySlate?.label ?? "Opening slate"}
           description={
             firstDailySlate
-              ? `${formatFantasySlateRange(firstDailySlate)} • real matchday window`
-              : "Daily slate data unavailable."
+              ? `${formatFantasySlateRange(firstDailySlate)} • matchday window`
+              : "No daily slate scheduled yet."
           }
         />
           <SurfaceCard
-          eyebrow="Season lock"
+          eyebrow="Season"
           title={seasonSlate?.label ?? "2026 Season"}
           description={
             seasonSlate
-              ? `${new Date(seasonSlate.lock_at).toLocaleString()} • single-entry season cap lock`
-              : "Season timing unavailable."
+              ? `Locks ${new Date(seasonSlate.lock_at).toLocaleString()}`
+              : "Season lock not set yet."
           }
           tone="accent"
         />
@@ -52,15 +52,20 @@ export default function DashboardPage() {
         <DashboardClient />
 
         <SurfaceCard
-          eyebrow="At a glance"
-          title="What deserves attention today"
-          description="Check what locks first, which league needs work, and whether you have an action waiting."
+          eyebrow="How it works"
+          title="Your next action, always front and center"
+          description="Each league card shows what needs attention right now."
           tone="accent"
         >
-          <div className="space-y-3 text-sm leading-6 text-foreground">
-            <p>League cards lead with the next action, not vanity stats.</p>
-            <p>Salary-cap contests always point to the live or upcoming slate.</p>
-            <p>Classic leagues route straight into draft, lineup, matchup, or waivers.</p>
+          <div className="space-y-3">
+            <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3 text-sm">
+              <p className="font-semibold text-foreground">Classic leagues</p>
+              <p className="mt-1 text-muted">Jump straight into your draft, lineup, matchup, or waivers.</p>
+            </div>
+            <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3 text-sm">
+              <p className="font-semibold text-foreground">Salary-cap contests</p>
+              <p className="mt-1 text-muted">Always pointing to the live or upcoming slate.</p>
+            </div>
           </div>
         </SurfaceCard>
       </section>

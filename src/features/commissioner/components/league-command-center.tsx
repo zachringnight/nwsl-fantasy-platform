@@ -59,8 +59,8 @@ export function LeagueCommandCenter({
   return (
     <SurfaceCard
       description={scheduleSummary}
-      eyebrow={isCommissioner ? "Commissioner view" : "League state"}
-      title={isCommissioner ? "Run league operations" : "League configuration stays visible"}
+      eyebrow={isCommissioner ? "Commissioner view" : "League info"}
+      title={isCommissioner ? "Run league operations" : "League settings at a glance"}
       tone="accent"
     >
       <div className="space-y-4">

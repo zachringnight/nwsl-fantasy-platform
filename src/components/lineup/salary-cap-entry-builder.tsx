@@ -741,7 +741,7 @@ export function SalaryCapEntryBuilder({
         <SurfaceCard
           eyebrow="Quick actions"
           title={entryName || modeConfig.teamHubTitle}
-          description="Each official slate follows the same clear flow: build, save, submit before lock, then reopen only while the window is still open."
+          description="Build, save, and submit before lock. You can edit until the window closes."
           tone="accent"
         >
           <div className="space-y-4">
@@ -841,7 +841,7 @@ export function SalaryCapEntryBuilder({
         <SurfaceCard
           eyebrow="Lineup slots"
           title={modeConfig.teamHubTitle}
-          description="Set a legal lineup for the active slate with budget, projection, and open slots visible throughout."
+          description="Fill each slot within budget before the window locks."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">

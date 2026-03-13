@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Heart, Search, Scale, Sparkles, Target } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { PlayerCard } from "@/components/player/player-card";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
+import { usePersistedList } from "@/hooks/use-persisted-list";
 import { getButtonClassName } from "@/components/ui/button";
 import { getFantasyPlayerPool } from "@/lib/fantasy-player-pool";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
@@ -23,45 +24,15 @@ const boardFilters: Array<{ key: BoardFilter; label: string }> = [
   { key: "VALUE", label: "Best value" },
 ];
 
-const watchlistStorageKey = "nwsl-fantasy-watchlist-v1";
-const compareStorageKey = "nwsl-fantasy-compare-v1";
-
 export default function PlayersPage() {
   const players = useMemo(() => getFantasyPlayerPool(), []);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<BoardFilter>("ALL");
-  const [watchlistIds, setWatchlistIds] = useState<string[]>([]);
-  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const watchlist = usePersistedList({ key: "watchlist-v1" });
+  const compare = usePersistedList({ key: "compare-v1", maxItems: 2 });
 
-  useEffect(() => {
-    const syncStoredLists = () => {
-      try {
-        const savedWatchlist = window.localStorage.getItem(watchlistStorageKey);
-        const savedCompare = window.localStorage.getItem(compareStorageKey);
-
-        if (savedWatchlist) {
-          setWatchlistIds(JSON.parse(savedWatchlist) as string[]);
-        }
-
-        if (savedCompare) {
-          setCompareIds(JSON.parse(savedCompare) as string[]);
-        }
-      } catch {
-        setWatchlistIds([]);
-        setCompareIds([]);
-      }
-    };
-
-    syncStoredLists();
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(watchlistStorageKey, JSON.stringify(watchlistIds));
-  }, [watchlistIds]);
-
-  useEffect(() => {
-    window.localStorage.setItem(compareStorageKey, JSON.stringify(compareIds));
-  }, [compareIds]);
+  const watchlistIds = watchlist.items;
+  const compareIds = compare.items;
 
   const filteredPlayers = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -118,32 +89,18 @@ export default function PlayersPage() {
   const topValuePlayer = [...players].sort((left, right) => getValueScore(right) - getValueScore(left))[0];
 
   function toggleWatchlist(playerId: string) {
-    setWatchlistIds((current) =>
-      current.includes(playerId)
-        ? current.filter((id) => id !== playerId)
-        : [...current, playerId]
-    );
+    watchlist.toggle(playerId);
   }
 
   function toggleCompare(playerId: string) {
-    setCompareIds((current) => {
-      if (current.includes(playerId)) {
-        return current.filter((id) => id !== playerId);
-      }
-
-      if (current.length >= 2) {
-        return [current[1], playerId];
-      }
-
-      return [...current, playerId];
-    });
+    compare.toggle(playerId);
   }
 
   return (
     <AppShell
       eyebrow="Players"
       title="Scout with real conviction before the room tilts"
-      description="Build a watchlist, stack a compare tray, and read exactly what the scoring model rewards before you spend a draft pick or salary slot."
+      description="Scout, watchlist, and compare before you commit a pick or salary slot."
       actions={
         comparePlayers.length === 2 ? (
           <Link href={compareHref} className={getButtonClassName({ className: "group" })}>
@@ -166,7 +123,7 @@ export default function PlayersPage() {
         <SurfaceCard
           eyebrow="Scouting control"
           title="Watchlist, compare, and project from one board"
-          description="Search, filter, and compare from one board without losing context."
+          description="Search, filter, and pin targets from one board."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-3">
@@ -228,7 +185,7 @@ export default function PlayersPage() {
         <SurfaceCard
           eyebrow="Scoring clarity"
           title="Projection readout and rules are visible before you commit"
-          description="Projection now comes from real NWSL production across finishing, creation, passing, and defending. Value score still ranks projected points per $1k of salary so cap choices stay readable."
+          description="Projections reflect real NWSL performance. Value score ranks projected points per $1k of salary."
           tone="accent"
         >
           <div className="space-y-4">
@@ -319,7 +276,7 @@ export default function PlayersPage() {
                     variant: "ghost",
                   })}
                   onClick={() => {
-                    setCompareIds([]);
+                    compare.clear();
                   }}
                   type="button"
                 >

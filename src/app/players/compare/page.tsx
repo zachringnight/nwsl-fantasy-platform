@@ -31,7 +31,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
     <AppShell
       eyebrow="Player compare"
       title="Projection, price, and scoring fit in one decision view"
-      description="Compare two players fast by projection, price, and how they fit the scoring system in front of you."
+      description="Side-by-side on projection, price, and scoring fit."
       actions={
         <Link
           href="/players"
@@ -48,7 +48,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
         <SurfaceCard
           eyebrow="Head-to-head summary"
           title="Read the decision before you stare at the cards"
-          description="The goal here is fast conviction. Start with projection, then check value, then confirm how each player wins under the scoring model."
+          description="Projection first, then value, then how each player scores."
         >
           <div className="space-y-5">
             <div className="grid gap-3 sm:grid-cols-3">
@@ -167,10 +167,10 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
               </div>
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Tracking logic
+                  How scores move
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Live score starts with appearance, climbs at 60 minutes, then reacts to match events. Projection is your baseline; score tracking explains the swings as the match unfolds.
+                  Points start with appearance, climb at 60 minutes, then react to match events. The projection is your baseline — live scores show the swings as the game unfolds.
                 </p>
               </div>
             </div>

@@ -38,8 +38,8 @@ export function FantasyAuthGate({
   signedOutAction,
   signedOutDescription,
   signedOutTitle,
-  unavailableDescription = "Account services are not configured in this environment.",
-  unavailableTitle = "Account unavailable",
+  unavailableDescription = "Account services are temporarily unavailable. Try again in a moment.",
+  unavailableTitle = "Something went wrong",
 }: FantasyAuthGateProps) {
   const auth = useFantasyAuth();
 

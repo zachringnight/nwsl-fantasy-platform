@@ -1211,6 +1211,39 @@ export async function createHostedLeague(input: {
   throw new Error("Unable to generate a unique league code.");
 }
 
+export async function updateLeagueSettings(
+  leagueId: string,
+  updates: { name?: string; draftAt?: string; managerCountTarget?: number }
+) {
+  const supabase = getSupabaseBrowserClient();
+  const user = await requireUser();
+
+  // Verify commissioner ownership
+  const { data: league } = await supabase
+    .from("fantasy_leagues")
+    .select("commissioner_user_id")
+    .eq("id", leagueId)
+    .single();
+
+  if (!league || league.commissioner_user_id !== user.id) {
+    throw new Error("Only the commissioner can update league settings.");
+  }
+
+  const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  if (updates.name !== undefined) patch.name = updates.name.trim();
+  if (updates.draftAt !== undefined) patch.draft_at = new Date(updates.draftAt).toISOString();
+  if (updates.managerCountTarget !== undefined) patch.manager_count_target = updates.managerCountTarget;
+
+  const { error } = await supabase
+    .from("fantasy_leagues")
+    .update(patch)
+    .eq("id", leagueId);
+
+  if (error) {
+    throw new Error(assertErrorMessage(error, "Unable to save league settings."));
+  }
+}
+
 export async function loadLeaguePlayerListings(leagueId: string) {
   const supabase = getSupabaseBrowserClient();
   const { league, memberships } = await fetchLeagueContext(leagueId);

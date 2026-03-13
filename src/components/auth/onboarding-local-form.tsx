@@ -44,7 +44,10 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
   const [experienceLevel, setExperienceLevel] = useState<"new" | "casual" | "experienced">(
     profile.experience_level ?? "new"
   );
-  const [nextStep, setNextStep] = useState<"create" | "join">("create");
+  const isReturning = profile.onboarding_complete;
+  const [nextStep, setNextStep] = useState<"create" | "join" | "dashboard">(
+    isReturning ? "dashboard" : "create"
+  );
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -72,7 +75,12 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
     }
 
     setIsSubmitting(false);
-    router.push(nextStep === "create" ? "/leagues/create" : "/leagues/join");
+    const destinations = {
+      create: "/leagues/create",
+      join: "/leagues/join",
+      dashboard: "/dashboard",
+    } as const;
+    router.push(destinations[nextStep]);
   }
 
   return (
@@ -109,8 +117,9 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
         <select
           className="field-control"
           value={nextStep}
-          onChange={(event) => setNextStep(event.target.value as "create" | "join")}
+          onChange={(event) => setNextStep(event.target.value as "create" | "join" | "dashboard")}
         >
+          {isReturning && <option value="dashboard">Back to dashboard</option>}
           <option value="create">Create a league</option>
           <option value="join">Join a league</option>
         </select>

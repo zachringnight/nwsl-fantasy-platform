@@ -12,7 +12,7 @@ export default async function LeagueMatchupPage({
       leagueId={leagueId}
       eyebrow="Matchup"
       title="Pregame, live scoring, and final context"
-      description="Track score swings, event momentum, and the current state of the contest from one place."
+      description="Follow score swings and key moments as they happen."
     >
       <LeagueMatchupClient leagueId={leagueId} />
     </LeaguePageShell>

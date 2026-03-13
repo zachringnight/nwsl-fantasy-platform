@@ -280,7 +280,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="Account services are not configured in this environment."
+        description="Something went wrong. Please try again in a moment."
       />
     );
   }
@@ -316,7 +316,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Loading draft room"
-        description="Loading the live room state."
+        description="Setting up your draft board."
       />
     );
   }
@@ -329,7 +329,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="That league does not have a draft state yet."
+        description="This league's draft hasn't been set up yet."
       />
     );
   }
@@ -357,7 +357,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Reveal the draft order first"
-        description="The commissioner needs to reveal the randomized snake order in the lobby before the live room can open."
+        description="The commissioner needs to reveal the draft order in the lobby before the room opens."
         action={
           <Link
             href={links.draft}
@@ -569,7 +569,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
           <SurfaceCard
             eyebrow="Recent picks"
             title="Room activity"
-            description="This feed keeps the board understandable on mobile without forcing a full draft-board replay."
+            description="See who was just picked and which teams are building."
           >
             <div className="space-y-3">
               {recentPicks.length === 0 ? (

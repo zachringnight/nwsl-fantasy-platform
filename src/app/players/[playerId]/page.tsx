@@ -44,7 +44,7 @@ export default async function PlayerDetailPage({
       title={playerName}
       description={
         player
-          ? `Official 2026 roster profile with a ${sourceSeason.toLowerCase()} baseline for drafts, waivers, and salary-cap builds.`
+          ? `2026 profile with projections based on ${sourceSeason.toLowerCase()}.`
           : "That player is not on the current NWSL board."
       }
     >
@@ -91,7 +91,7 @@ export default async function PlayerDetailPage({
           title={player ? "Why the number lands here" : "Search another player"}
           description={
             player
-              ? "The projection is built from official NWSL production, then smoothed for sample size so the live board does not overreact to tiny minute counts."
+              ? "Projections are based on real NWSL stats, adjusted so small sample sizes don't skew the numbers."
               : "Search the player board for another manager target."
           }
           tone="accent"

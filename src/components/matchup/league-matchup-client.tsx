@@ -94,7 +94,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         if (isLoading && !leagueDetails) {
           return (
             <EmptyState
-              description="Loading the league state and current matchup context."
+              description="Pulling up your matchup details."
               title="Loading matchup"
             />
           );
@@ -137,7 +137,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
                 <SurfaceCard
-                  description="Weekly matchups publish after the room fills and the roster cycle is ready to compare real teams."
+                  description="Weekly matchups publish once the league fills and the draft completes."
                   eyebrow="Matchup readiness"
                   title="Fixtures publish after the league fills and the draft closes"
                 >
@@ -178,7 +178,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         if (!matchupState) {
           return (
             <EmptyState
-              description="No weekly matchup state is available for this league yet."
+              description="No matchup scheduled for this league yet."
               title="Matchup unavailable"
             />
           );

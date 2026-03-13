@@ -13,7 +13,7 @@ export default async function JoinLeaguePage({ searchParams }: JoinLeaguePagePro
 
   return (
     <AppShell
-      eyebrow="League join"
+      eyebrow="Join league"
       title="Enter a code and get straight into the room"
       description="Join from a link or code and land directly in the right league."
     >

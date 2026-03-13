@@ -42,9 +42,9 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--danger);
-  --font-sans: var(--font-jost);
-  --font-display: var(--font-teko);
-  --font-mono: var(--font-ibm-plex-mono);
+  --font-sans: "Jost", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Teko", "Oswald", "Impact", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Code", "Fira Code", monospace;
   --shadow-card: var(--shadow-card);
   --shadow-brand: var(--shadow-brand);
 }
@@ -67,7 +67,7 @@ body {
     radial-gradient(circle at 50% 100%, rgba(255, 60, 34, 0.18), transparent 30%),
     linear-gradient(180deg, #010205 0%, #020717 32%, #040b23 62%, #010205 100%);
   color: var(--foreground);
-  font-family: var(--font-jost), sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
 }
 

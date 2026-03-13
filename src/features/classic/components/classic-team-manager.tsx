@@ -189,9 +189,9 @@ export function ClassicTeamManager({
       </section>
 
       <SurfaceCard
-        description="Set every player into a legal role so lineup decisions stay clear before kickoff."
-        eyebrow="Slot editor"
-        title="Assign every player to a legal role"
+        description="Place each player into a position before kickoff."
+        eyebrow="Lineup"
+        title="Set your starting lineup"
       >
         <div className="grid gap-4 md:grid-cols-2">
           {roster.map((player) => (

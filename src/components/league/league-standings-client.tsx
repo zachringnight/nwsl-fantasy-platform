@@ -87,7 +87,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
         if (isLoading && !leagueDetails) {
           return (
             <EmptyState
-              description="Reading the live league membership state."
+              description="Loading your league standings."
               title="Loading standings"
             />
           );
@@ -113,7 +113,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-2">
                 <SurfaceCard
-                  description="Salary-cap formats track contest results and leaderboard movement instead of classic head-to-head standings."
+                  description="Contest results and leaderboard for salary-cap leagues."
                   eyebrow="Salary-cap path"
                   title={`${modeConfig.label} does not use classic standings`}
                 >
@@ -132,7 +132,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                   </div>
                 </SurfaceCard>
                 <SurfaceCard
-                  description="Open the contest hub to manage the live entry and check the matchup view for the current slate."
+                  description="Head to the contest hub to manage your entry."
                   eyebrow="Contest route"
                   title="Use the contest hub for entry results"
                   tone="accent"
@@ -252,7 +252,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
 
                 <SurfaceCard
                   description="See where you rank and why your scoring profile has you there."
-                  eyebrow="Ranking logic"
+                  eyebrow="How it works"
                   title="How scoring turns into standings"
                   tone="accent"
                 >

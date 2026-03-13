@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { SignupLocalForm } from "@/components/auth/signup-local-form";
-import { getButtonClassName } from "@/components/ui/button";
 
 export default function SignupPage() {
   return (
@@ -22,13 +20,21 @@ export default function SignupPage() {
 
         <SurfaceCard
           eyebrow="What happens next"
-          title="Next: club, experience, next move"
-          description="Next you will choose your club, set your experience level, and decide whether to create or join a league."
+          title="Choose your club and join a league"
+          description="Next you'll pick a club, set your level, and join a league."
           tone="accent"
         >
-          <Link href="/onboarding" className={getButtonClassName({ variant: "secondary" })}>
-            Preview onboarding
-          </Link>
+          <div className="space-y-3 text-sm leading-6 text-foreground">
+            <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
+              Pick a favorite NWSL club
+            </div>
+            <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
+              Set your fantasy experience level
+            </div>
+            <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
+              Create or join your first league
+            </div>
+          </div>
         </SurfaceCard>
       </section>
     </AppShell>

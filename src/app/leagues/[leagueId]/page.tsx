@@ -12,7 +12,7 @@ export default async function LeagueHomePage({
       leagueId={leagueId}
       eyebrow="League home"
       title="League overview"
-      description="See the next action, room status, invite code, and the rules that matter this week."
+      description="Your next action, invite code, and this week's key info."
     >
       <LeagueHomeClient leagueId={leagueId} />
     </LeaguePageShell>

@@ -50,7 +50,7 @@ export function LineupPitch({
     <SurfaceCard
       eyebrow="Lineup editor"
       title={title}
-      description="Tap-to-swap is still the intended mobile behavior. This first pass uses explicit slots so the legality rules stay obvious."
+      description="Tap a slot to assign or swap players into your formation."
     >
       <div
         className="relative overflow-hidden rounded-[1.75rem] border border-line bg-[linear-gradient(180deg,rgba(5,14,34,0.98)_0%,rgba(6,20,43,0.96)_100%)] p-4 sm:p-5"
