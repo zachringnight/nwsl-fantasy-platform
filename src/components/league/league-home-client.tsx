@@ -201,8 +201,8 @@ export function LeagueHomeClient({ leagueId }: LeagueHomeClientProps) {
                 scheduleSummary={scheduleSummary}
                 secondarySummary={
                   activeSlate
-                    ? "Salary-cap lock and submission rules track the active slate."
-                    : "Classic leagues keep draft, lineup, and waiver context visible."
+                    ? "Lock times and entry rules follow the active window."
+                    : "Draft, lineup, and waiver info stays visible here."
                 }
                 settingsHref={links.settings}
               />

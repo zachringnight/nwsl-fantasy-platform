@@ -209,7 +209,7 @@ export default function AdminPage() {
     <AppShell
       eyebrow="Admin"
       title="League operations desk"
-      description="Review support cases, scoring corrections, and league operations from one secure workspace."
+      description="Scoring corrections, data feeds, and support cases."
     >
       <section className="flex flex-wrap gap-2">
         {tabs.map((tab) => {
@@ -418,14 +418,14 @@ export default function AdminPage() {
             <MetricTile
               label="Active jobs"
               value={mockFeedJobs.length}
-              detail="Registered data ingestion jobs."
+              detail="Active data feeds."
             />
           </div>
 
           <SurfaceCard
             eyebrow="Feed health"
-            title="Data ingestion pipeline status"
-            description="Monitor each feed for timing, volume, and error state."
+            title="Data feed health"
+            description="Check each feed for timing, volume, and health."
           >
             <div className="space-y-3">
               {mockFeedJobs.map((job) => {

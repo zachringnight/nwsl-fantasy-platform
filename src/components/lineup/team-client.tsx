@@ -141,7 +141,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
         if (isLoading && roster.length === 0) {
           return (
             <EmptyState
-              description="Loading the league state and current lineup tools."
+              description="Getting your roster and lineup ready."
               title="Loading team hub"
             />
           );

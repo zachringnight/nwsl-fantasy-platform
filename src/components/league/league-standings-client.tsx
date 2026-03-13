@@ -87,7 +87,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
         if (isLoading && !leagueDetails) {
           return (
             <EmptyState
-              description="Reading the live league membership state."
+              description="Loading your league standings."
               title="Loading standings"
             />
           );

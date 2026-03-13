@@ -3,21 +3,78 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 
 const gameModes = [
-  "Classic season-long leagues with a live snake draft",
-  "Season-long salary cap — lock once, ride all season",
-  "Weekly salary-cap contests that reset each cycle",
-  "Daily contests built around same-day matches",
-  "Private leagues with invite codes",
-  "Shared player pool (salary cap) or exclusive rosters (classic)",
+  { label: "Classic", detail: "Season-long league with a live snake draft" },
+  { label: "Season cap", detail: "Build one roster under the cap — no draft needed" },
+  { label: "Weekly cap", detail: "Rebuild your lineup every matchweek" },
+  { label: "Daily cap", detail: "Pick players for a single matchday" },
+  { label: "Private leagues", detail: "Create or join with a short invite code" },
+  { label: "Shared vs exclusive", detail: "Salary-cap shares players; classic rosters are exclusive" },
 ];
 
-const scoringCategories = [
-  `Floor: appearance ${launchScoringRules.appearance}, 60+ minutes ${launchScoringRules.minutes60Plus}`,
-  `Attack: goals ${launchScoringRules.goal.FWD}–${launchScoringRules.goal.DEF}, assists ${launchScoringRules.assist}, shots ${launchScoringRules.shot}, on target ${launchScoringRules.shotOnTarget}`,
-  `Creation: chances ${launchScoringRules.chanceCreated}, crosses ${launchScoringRules.successfulCross}, passes ${launchScoringRules.successfulPass}`,
-  `Ball-winning: tackles ${launchScoringRules.tackleWon}, interceptions ${launchScoringRules.interception}, blocks ${launchScoringRules.block}`,
-  `Defense: clean sheets ${launchScoringRules.cleanSheet.DEF}–${launchScoringRules.cleanSheet.GK}, saves ${launchScoringRules.save}, goals conceded ${launchScoringRules.goalsConceded.DEF}/${launchScoringRules.goalsConceded.GK}`,
-  `Risk: fouls ${launchScoringRules.foulCommitted}, yellow ${launchScoringRules.yellowCard}, red ${launchScoringRules.redCard}, pen miss ${launchScoringRules.penaltyMiss}`,
+const scoringGroups = [
+  {
+    category: "Floor",
+    description: "Every player earns just for showing up.",
+    items: [
+      { action: "Appearance", pts: launchScoringRules.appearance },
+      { action: "60+ minutes", pts: launchScoringRules.minutes60Plus },
+    ],
+  },
+  {
+    category: "Attack",
+    description: "Finishing and shot volume.",
+    items: [
+      { action: "Goal (FWD / MID)", pts: `${launchScoringRules.goal.FWD}` },
+      { action: "Goal (DEF / GK)", pts: `${launchScoringRules.goal.DEF}` },
+      { action: "Assist", pts: launchScoringRules.assist },
+      { action: "Shot", pts: launchScoringRules.shot },
+      { action: "Shot on target", pts: launchScoringRules.shotOnTarget },
+    ],
+  },
+  {
+    category: "Creation",
+    description: "Building chances for teammates.",
+    items: [
+      { action: "Chance created", pts: launchScoringRules.chanceCreated },
+      { action: "Successful cross", pts: launchScoringRules.successfulCross },
+      { action: "Successful pass", pts: launchScoringRules.successfulPass },
+    ],
+  },
+  {
+    category: "Defending",
+    description: "Ball-winning and shot-blocking.",
+    items: [
+      { action: "Tackle won", pts: launchScoringRules.tackleWon },
+      { action: "Interception", pts: launchScoringRules.interception },
+      { action: "Block", pts: launchScoringRules.block },
+      { action: "Clean sheet (GK)", pts: launchScoringRules.cleanSheet.GK },
+      { action: "Clean sheet (DEF)", pts: launchScoringRules.cleanSheet.DEF },
+      { action: "Save", pts: launchScoringRules.save },
+    ],
+  },
+  {
+    category: "Risk",
+    description: "Actions that cost points.",
+    items: [
+      { action: "Foul committed", pts: launchScoringRules.foulCommitted },
+      { action: "Yellow card", pts: launchScoringRules.yellowCard },
+      { action: "Red card", pts: launchScoringRules.redCard },
+      { action: "Penalty miss", pts: launchScoringRules.penaltyMiss },
+      { action: "Own goal", pts: launchScoringRules.ownGoal },
+      { action: "Goals conceded (GK)", pts: launchScoringRules.goalsConceded.GK },
+      { action: "Goals conceded (DEF)", pts: launchScoringRules.goalsConceded.DEF },
+    ],
+  },
+  {
+    category: "Bonus",
+    description: "Extra rewards for goalkeepers.",
+    items: [
+      { action: "Penalty save", pts: launchScoringRules.penaltySave },
+      { action: "GK win", pts: launchScoringRules.goalkeeperWin },
+      { action: "GK draw", pts: launchScoringRules.goalkeeperDraw },
+      { action: "Foul won", pts: launchScoringRules.foulWon },
+    ],
+  },
 ];
 
 export default function RulesPage() {
@@ -27,35 +84,45 @@ export default function RulesPage() {
       title="How every league and contest works"
       description="Formats, scoring, and point values — all in one place."
     >
-      <section className="grid gap-5 lg:grid-cols-2">
-        <SurfaceCard
-          eyebrow="Formats"
-          title="Ways to play"
-          description="Classic and salary-cap modes share the same player board with different ownership rules."
-        >
-          <ul className="space-y-3 text-sm leading-6 text-muted">
-            {gameModes.map((item) => (
-              <li key={item} className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </SurfaceCard>
+      <SurfaceCard
+        eyebrow="Formats"
+        title="Ways to play"
+        description="Classic and salary-cap modes share the same player board with different ownership rules."
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {gameModes.map((mode) => (
+            <div key={mode.label} className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
+              <p className="text-sm font-semibold text-foreground">{mode.label}</p>
+              <p className="mt-1 text-sm text-muted">{mode.detail}</p>
+            </div>
+          ))}
+        </div>
+      </SurfaceCard>
 
-        <SurfaceCard
-          eyebrow="Scoring"
-          title="What earns and loses points"
-          description="Goals matter, but so do creation, defending, and goalkeeper work."
-          tone="accent"
-        >
-          <ul className="space-y-3 text-sm leading-6 text-foreground">
-            {scoringCategories.map((item) => (
-              <li key={item} className="rounded-[1.2rem] bg-white/10 px-4 py-3">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </SurfaceCard>
+      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {scoringGroups.map((group) => (
+          <SurfaceCard
+            key={group.category}
+            eyebrow={group.category}
+            title={group.category}
+            description={group.description}
+            tone={group.category === "Risk" ? "accent" : undefined}
+          >
+            <div className="space-y-2">
+              {group.items.map((item) => (
+                <div
+                  key={item.action}
+                  className="flex items-center justify-between rounded-xl border border-line bg-panel-soft px-3 py-2"
+                >
+                  <span className="text-sm text-muted">{item.action}</span>
+                  <span className={`text-sm font-semibold ${Number(item.pts) < 0 ? "text-red-400" : "text-foreground"}`}>
+                    {Number(item.pts) > 0 ? `+${item.pts}` : item.pts}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </SurfaceCard>
+        ))}
       </section>
     </AppShell>
   );

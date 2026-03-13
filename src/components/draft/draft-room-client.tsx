@@ -280,7 +280,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="Account services are not configured in this environment."
+        description="Something went wrong. Please try again in a moment."
       />
     );
   }
@@ -316,7 +316,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Loading draft room"
-        description="Loading the live room state."
+        description="Setting up your draft board."
       />
     );
   }

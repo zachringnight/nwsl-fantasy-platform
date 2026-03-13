@@ -169,7 +169,7 @@ export default function NotificationsPage() {
     <AppShell
       eyebrow="Notifications"
       title="The alerts that matter, without the noise"
-      description="Configure delivery channels for each notification type and view your recent alerts."
+      description="See what happened and choose how you hear about it."
       actions={
         unreadCount > 0 ? (
           <Button variant="secondary" onClick={markAllRead}>
@@ -189,12 +189,12 @@ export default function NotificationsPage() {
         <MetricTile
           label="Active channels"
           value={new Set(preferences.flatMap((p) => p.channels)).size}
-          detail="Delivery methods enabled."
+          detail="Ways alerts reach you."
         />
         <MetricTile
           label="Alert types"
           value={preferences.length}
-          detail="Configurable notification triggers."
+          detail="Things you can get alerted about."
           tone="accent"
         />
       </div>

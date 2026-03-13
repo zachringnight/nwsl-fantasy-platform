@@ -9,7 +9,7 @@ export default function DraftRoomPage() {
     <AppShell
       eyebrow="Draft Room"
       title="Draft room layout"
-      description="See the three things that matter most on draft night: the clock, the player board, and your queue."
+      description="Clock, player board, and your queue — everything you need on draft night."
     >
 
       <section className="grid gap-5 xl:grid-cols-[0.78fr_1.2fr_0.82fr]">

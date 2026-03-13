@@ -81,7 +81,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
     return (
       <EmptyState
         title="Draft recap unavailable"
-        description="Account services are not configured in this environment."
+        description="Something went wrong. Please try again in a moment."
       />
     );
   }

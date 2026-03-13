@@ -12,7 +12,7 @@ export default async function LeagueTeamPage({
       leagueId={leagueId}
       eyebrow="My team"
       title="Team and lineup tools"
-      description="Set your classic lineup or build your salary-cap entry without leaving the same league shell."
+      description="Set your lineup, review your roster, and make moves."
     >
       <TeamClient leagueId={leagueId} />
     </LeaguePageShell>

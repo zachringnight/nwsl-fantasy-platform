@@ -113,7 +113,7 @@ export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
     return (
       <EmptyState
         title="Draft lobby unavailable"
-        description="Account services are not configured in this environment."
+        description="Something went wrong. Please try again in a moment."
       />
     );
   }

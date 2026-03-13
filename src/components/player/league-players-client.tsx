@@ -82,7 +82,7 @@ export function LeaguePlayersClient({ leagueId }: LeaguePlayersClientProps) {
         if (isLoading && !league) {
           return (
             <EmptyState
-              description="Loading the player board and league ownership state."
+              description="Loading the player board for your league."
               title="Loading player board"
             />
           );

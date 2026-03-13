@@ -12,7 +12,7 @@ export default async function LeagueSettingsPage({
       leagueId={leagueId}
       eyebrow="Commissioner tools"
       title="League settings and guardrails"
-      description="Review league rules, invite details, and the settings that stay fixed once the season is underway."
+      description="League rules, invite code, and settings for this league."
     >
       <LeagueSettingsClient leagueId={leagueId} />
     </LeaguePageShell>

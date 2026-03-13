@@ -12,7 +12,7 @@ export default async function LeagueTransactionsPage({
       leagueId={leagueId}
       eyebrow="Transactions"
       title="Waivers, adds, and drops"
-      description="See waiver priority, pending claims, and recent roster moves before you commit a transaction."
+      description="Waiver priority, pending claims, and recent roster moves."
     >
       <TransactionsClient leagueId={leagueId} />
     </LeaguePageShell>

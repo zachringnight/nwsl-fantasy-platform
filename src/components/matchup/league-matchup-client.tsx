@@ -94,7 +94,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         if (isLoading && !leagueDetails) {
           return (
             <EmptyState
-              description="Loading the league state and current matchup context."
+              description="Pulling up your matchup details."
               title="Loading matchup"
             />
           );
