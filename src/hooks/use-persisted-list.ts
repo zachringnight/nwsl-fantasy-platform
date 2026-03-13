@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -21,6 +21,9 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
   const [items, setItems] = useState<string[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
 
+  // Track whether the user has made local mutations before the backend loads
+  const hasMutatedRef = useRef(false);
+
   // Load from localStorage on mount
   useEffect(() => {
     try {
@@ -38,6 +41,9 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
   useEffect(() => {
     if (!session?.user?.id || !hasLoaded) return;
 
+    // Reset mutation tracking on each backend sync attempt
+    hasMutatedRef.current = false;
+
     async function loadFromBackend() {
       try {
         const supabase = getSupabaseBrowserClient();
@@ -48,7 +54,7 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
           .eq("list_key", key)
           .single();
 
-        if (data?.item_ids) {
+        if (data?.item_ids && !hasMutatedRef.current) {
           const backendItems = data.item_ids as string[];
           setItems(backendItems);
           window.localStorage.setItem(storageKey, JSON.stringify(backendItems));
@@ -64,6 +70,7 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
   // Persist changes to localStorage and optionally Supabase
   const persistItems = useCallback(
     async (nextItems: string[]) => {
+      hasMutatedRef.current = true;
       window.localStorage.setItem(storageKey, JSON.stringify(nextItems));
 
       if (!session?.user?.id) return;

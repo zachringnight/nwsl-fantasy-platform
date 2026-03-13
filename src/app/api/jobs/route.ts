@@ -15,7 +15,14 @@ export async function POST(request: Request) {
   const authHeader = request.headers.get("authorization");
   const expectedToken = process.env.JOBS_API_SECRET;
 
-  if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
+  if (!expectedToken) {
+    return NextResponse.json(
+      { error: "JOBS_API_SECRET is not configured" },
+      { status: 503 }
+    );
+  }
+
+  if (authHeader !== `Bearer ${expectedToken}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -34,13 +34,13 @@ export function SiteFooter() {
         <div className="mt-6 flex flex-col gap-2 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {siteConfig.copyrightYear} {siteConfig.owner}. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="/help" className="transition hover:text-foreground">
+            <Link href="/privacy" className="transition hover:text-foreground">
               Privacy
             </Link>
-            <Link href="/help" className="transition hover:text-foreground">
+            <Link href="/terms" className="transition hover:text-foreground">
               Terms
             </Link>
-            <Link href="/help" className="transition hover:text-foreground">
+            <Link href="/contact" className="transition hover:text-foreground">
               Contact
             </Link>
           </div>

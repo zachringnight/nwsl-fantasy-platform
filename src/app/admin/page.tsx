@@ -168,6 +168,7 @@ export default function AdminPage() {
     correctedPoints: "",
     reason: "",
   });
+  const [overrideMessage, setOverrideMessage] = useState("");
 
   const tabs: Array<{ key: AdminTab; label: string; icon: typeof Zap }> = [
     { key: "scoring", label: "Scoring", icon: Zap },
@@ -177,6 +178,15 @@ export default function AdminPage() {
 
   function handleOverrideSubmit(event: React.FormEvent) {
     event.preventDefault();
+
+    if (!overrideForm.playerName || !overrideForm.reason) {
+      setOverrideMessage("Player name and reason are required.");
+      return;
+    }
+
+    setOverrideMessage(
+      `Correction queued for ${overrideForm.playerName}: ${overrideForm.originalPoints} → ${overrideForm.correctedPoints} pts.`
+    );
     setOverrideForm({
       playerName: "",
       leagueName: "",
@@ -366,7 +376,12 @@ export default function AdminPage() {
                   }
                 />
               </label>
-              <Button type="submit">Submit correction</Button>
+              <div className="flex items-center gap-3">
+                <Button type="submit">Submit correction</Button>
+                {overrideMessage && (
+                  <span className="text-sm text-brand-lime">{overrideMessage}</span>
+                )}
+              </div>
             </form>
           </SurfaceCard>
         </section>

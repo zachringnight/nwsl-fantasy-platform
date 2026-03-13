@@ -10,7 +10,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
-type SignupMode = "choice" | "email";
+type SignupMode = "choice" | "email" | "check_email";
 
 export function SignupLocalForm() {
   const router = useRouter();
@@ -89,7 +89,7 @@ export function SignupLocalForm() {
 
     try {
       const supabase = getSupabaseBrowserClient();
-      const { error: authError } = await supabase.auth.signUp({
+      const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: email.trim(),
         password,
         options: {
@@ -100,6 +100,12 @@ export function SignupLocalForm() {
 
       if (authError) {
         throw authError;
+      }
+
+      // If email confirmation is required, the session will be null
+      if (!signUpData.session) {
+        setSignupMode("check_email");
+        return;
       }
 
       await dataClient.upsertFantasyProfile({
@@ -137,6 +143,27 @@ export function SignupLocalForm() {
         err instanceof Error ? err.message : "Unable to start Google sign-up."
       );
     }
+  }
+
+  if (signupMode === "check_email") {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-[1.4rem] border border-success/30 bg-success/8 p-4 text-sm leading-6 text-foreground">
+          <p className="font-semibold">Check your inbox</p>
+          <p className="mt-2 text-muted">
+            We sent a confirmation link to <strong>{email}</strong>. Click the link
+            to activate your account and continue to onboarding.
+          </p>
+        </div>
+        <button
+          className={getButtonClassName({ variant: "ghost", fullWidth: true })}
+          onClick={() => setSignupMode("choice")}
+          type="button"
+        >
+          Back to options
+        </button>
+      </div>
+    );
   }
 
   if (signupMode === "email") {

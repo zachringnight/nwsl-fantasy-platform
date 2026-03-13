@@ -73,10 +73,14 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
     void refreshLeague();
   }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
 
-  function handleCopyCode(code: string) {
-    navigator.clipboard.writeText(code);
-    setCodeCopied(true);
-    setTimeout(() => setCodeCopied(false), 2000);
+  async function handleCopyCode(code: string) {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCodeCopied(true);
+      setTimeout(() => setCodeCopied(false), 2000);
+    } catch {
+      // Clipboard API may be unavailable in non-HTTPS contexts
+    }
   }
 
   async function handleSettingsSave(event: React.FormEvent) {
@@ -85,11 +89,17 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
     setSaveMessage("");
 
     try {
-      // Settings save will integrate with Supabase when league update API is wired
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      await dataClient.updateLeagueSettings(leagueId, {
+        name: settingsForm.leagueName,
+        draftAt: settingsForm.draftAt,
+        managerCountTarget: Number(settingsForm.managerCountTarget),
+      });
       setSaveMessage("Settings saved successfully.");
-    } catch {
-      setSaveMessage("Unable to save settings. Try again.");
+      void refreshLeague();
+    } catch (err) {
+      setSaveMessage(
+        err instanceof Error ? err.message : "Unable to save settings. Try again."
+      );
     } finally {
       setIsSaving(false);
     }
