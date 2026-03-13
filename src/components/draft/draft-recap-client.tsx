@@ -154,7 +154,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
         <SurfaceCard
           eyebrow="Roster read"
           title="What the draft built"
-          description="See the scoring profile your roster came out of the draft with, not just the names you selected."
+          description="How your drafted roster stacks up by position and scoring profile."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">

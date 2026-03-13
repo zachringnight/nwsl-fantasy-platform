@@ -132,7 +132,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                   </div>
                 </SurfaceCard>
                 <SurfaceCard
-                  description="Open the contest hub to manage the live entry and check the matchup view for the current slate."
+                  description="Head to the contest hub to manage your entry."
                   eyebrow="Contest route"
                   title="Use the contest hub for entry results"
                   tone="accent"

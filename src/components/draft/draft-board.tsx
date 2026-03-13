@@ -27,7 +27,7 @@ export function DraftBoard({
     <SurfaceCard
       eyebrow="Best available"
       title="Player pool"
-      description="Queue first, then draft when the clock moves to you. The board is sorted by the current player ranking."
+      description="Queue players, then draft when the clock reaches you."
     >
       <div className="space-y-3">
         {players.map((player) => {

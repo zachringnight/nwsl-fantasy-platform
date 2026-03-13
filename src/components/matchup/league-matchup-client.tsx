@@ -137,7 +137,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
                 <SurfaceCard
-                  description="Weekly matchups publish after the room fills and the roster cycle is ready to compare real teams."
+                  description="Weekly matchups publish once the league fills and the draft completes."
                   eyebrow="Matchup readiness"
                   title="Fixtures publish after the league fills and the draft closes"
                 >

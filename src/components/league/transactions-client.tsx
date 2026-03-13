@@ -251,8 +251,8 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
             <MotionReveal delay={60}>
               <section className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
                 <SurfaceCard
-                  description="Every add routes through waivers so priority movement stays visible and easy to understand."
-                  eyebrow="Waiver model"
+                  description="All adds go through waivers based on your priority."
+                  eyebrow="Waivers"
                   title="Rolling priority"
                 >
                   <div className="space-y-4">

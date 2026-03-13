@@ -569,7 +569,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
           <SurfaceCard
             eyebrow="Recent picks"
             title="Room activity"
-            description="This feed keeps the board understandable on mobile without forcing a full draft-board replay."
+            description="See who was just picked and which teams are building."
           >
             <div className="space-y-3">
               {recentPicks.length === 0 ? (

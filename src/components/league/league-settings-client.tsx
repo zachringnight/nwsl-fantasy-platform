@@ -300,7 +300,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                 <SurfaceCard
                   eyebrow="Commissioner controls"
                   title="Edit league settings"
-                  description="Update league name, draft timing, and capacity. Core game rules stay fixed once managers join."
+                  description="Update league name, draft timing, and capacity."
                 >
                   <form className="space-y-4" onSubmit={handleSettingsSave}>
                     <label className="block space-y-2">
