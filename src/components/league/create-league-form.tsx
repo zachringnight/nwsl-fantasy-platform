@@ -91,9 +91,9 @@ export function CreateLeagueForm() {
       {() => (
         <form className="grid gap-6 xl:grid-cols-[1.12fr_0.88fr]" onSubmit={handleSubmit}>
           <SurfaceCard
-            eyebrow="League architecture"
+            eyebrow="League format"
             title="Choose the fantasy mode"
-            description="Pick the format that matches how your group wants to play. The room will inherit the right ownership rules, lock rhythm, and draft or contest timing."
+            description="Pick the format that matches how your group wants to play."
             className="overflow-hidden"
           >
             <div className="grid gap-3">

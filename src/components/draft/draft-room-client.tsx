@@ -357,7 +357,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Reveal the draft order first"
-        description="The commissioner needs to reveal the randomized snake order in the lobby before the live room can open."
+        description="The commissioner needs to reveal the draft order in the lobby before the room opens."
         action={
           <Link
             href={links.draft}

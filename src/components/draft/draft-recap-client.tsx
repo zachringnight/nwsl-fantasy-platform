@@ -194,7 +194,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
         <SurfaceCard
           eyebrow="Next move"
           title="Finish lineup prep"
-          description="The recap hands the roster directly into the team editor so the first legal lineup is only one step away."
+          description="Your drafted roster is ready — set your first lineup now."
         >
           <div className="flex flex-wrap gap-3">
             <Link
@@ -218,7 +218,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
       <SurfaceCard
         eyebrow="League recap"
         title="Pick board"
-        description="Review how the room unfolded, where value landed, and which picks changed each team’s scoring outlook."
+        description="See every pick, who got what, and how rosters shaped up."
         tone="accent"
       >
         <div className="space-y-3">

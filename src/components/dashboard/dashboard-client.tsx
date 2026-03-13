@@ -147,7 +147,7 @@ export function DashboardClient() {
             <section className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
               <MotionReveal variant="left">
                 <SurfaceCard
-                  description="See the next lock, the highest-priority league, and the next useful move the moment this page opens."
+                  description="Next lock, top league, and your next move — all at a glance."
                   eyebrow="Portfolio view"
                   title="Run every league from one dashboard"
                 >

@@ -170,7 +170,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
             <section className="space-y-5">
               <MotionReveal>
                 <SalaryCapLeagueBrief
-                  description="Build one entry against the shared player pool with lock timing, salary pressure, and next actions all visible above the board."
+                  description="Build your entry under the salary cap before the window locks."
                   leagueDetails={leagueDetails}
                   primaryActionHref={links.players}
                   primaryActionLabel="Browse player salaries"

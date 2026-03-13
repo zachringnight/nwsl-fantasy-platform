@@ -211,7 +211,7 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-2">
                 <SurfaceCard
-                  description="Rolling-priority waivers are a classic exclusive-roster mechanic. Salary-cap leagues use contest-entry editing and lock-based rebuilds instead."
+                  description="Classic leagues use rolling-priority waivers. Salary-cap leagues edit entries directly."
                   eyebrow="Salary-cap path"
                   title="Waivers are not the right move here"
                 >
@@ -332,7 +332,7 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                 </SurfaceCard>
 
                 <SurfaceCard
-                  description="Choose the target, attach a drop only if your roster is full, then submit the claim into the priority queue."
+                  description="Pick a player to add, drop someone if needed, then submit your claim."
                   eyebrow="Submit claim"
                   title="Claim a player"
                   tone="accent"

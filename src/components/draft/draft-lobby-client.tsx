@@ -252,7 +252,7 @@ export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
         <SurfaceCard
           eyebrow={draftState.canCommissionerControl ? "Commissioner controls" : "Lobby controls"}
           title="Open, pause, and resume"
-          description="Reveal the order, open the room, and keep the clock fair without losing the atmosphere of draft night."
+          description="Reveal the order, open the room, and keep the clock fair."
           tone="accent"
         >
           {draftState.canCommissionerControl ? (
@@ -301,7 +301,7 @@ export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
       <SurfaceCard
         eyebrow="Draft order"
         title={hasOrder ? "Snake order is locked" : "Waiting on reveal"}
-        description="Order is revealed in the lobby first so the room itself can stay focused on the clock, queue, and board."
+        description="The draft order is revealed here before the room opens."
       >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {sortMemberships(draftState.memberships).map((membership, index) => (

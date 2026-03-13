@@ -113,7 +113,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-2">
                 <SurfaceCard
-                  description="Salary-cap formats track contest results and leaderboard movement instead of classic head-to-head standings."
+                  description="Contest results and leaderboard for salary-cap leagues."
                   eyebrow="Salary-cap path"
                   title={`${modeConfig.label} does not use classic standings`}
                 >
