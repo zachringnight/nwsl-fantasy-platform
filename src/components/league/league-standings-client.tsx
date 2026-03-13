@@ -252,7 +252,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
 
                 <SurfaceCard
                   description="See where you rank and why your scoring profile has you there."
-                  eyebrow="Ranking logic"
+                  eyebrow="How it works"
                   title="How scoring turns into standings"
                   tone="accent"
                 >
