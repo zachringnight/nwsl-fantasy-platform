@@ -24,6 +24,7 @@ import {
 } from "@/lib/fantasy-slate-engine";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 import { cn } from "@/lib/utils";
+import { useSwipe } from "@/hooks/use-swipe";
 import {
   buildSalaryCapActionLabel,
   buildSalaryCapEntrySummary,
@@ -141,6 +142,12 @@ export function SalaryCapEntryBuilder({
   const slotPulseTimeoutRef = useRef<number | null>(null);
   const budgetPulseTimeoutRef = useRef<number | null>(null);
   const projectionPulseTimeoutRef = useRef<number | null>(null);
+  const switchSlateRef = useRef<(direction: -1 | 1) => void>(() => {});
+
+  const swipeRef = useSwipe<HTMLElement>({
+    onSwipeLeft: () => switchSlateRef.current(1),
+    onSwipeRight: () => switchSlateRef.current(-1),
+  });
 
   const refreshEntry = useCallback(async (slateKey?: string) => {
     setIsLoading(true);
@@ -538,8 +545,10 @@ export function SalaryCapEntryBuilder({
     void refreshEntry(target.key);
   }
 
+  switchSlateRef.current = handleSwitchSlate;
+
   return (
-    <section className="space-y-5">
+    <section ref={swipeRef} className="space-y-5">
       {error ? (
         <StatusBanner title="Lineup" message={error} tone="warning" />
       ) : null}
