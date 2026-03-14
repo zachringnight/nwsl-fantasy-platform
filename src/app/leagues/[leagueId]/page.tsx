@@ -12,7 +12,8 @@ export default async function LeagueHomePage({
       leagueId={leagueId}
       eyebrow="League home"
       title="League overview"
-      description="Your next action, invite code, and this week's key info."
+      description="Your club story, crew status, and next move in one scroll."
+      highlights={["Club story", "Crew status", "Next tap"]}
     >
       <LeagueHomeClient leagueId={leagueId} />
     </LeaguePageShell>

@@ -13,6 +13,7 @@ export default async function LeagueTeamPage({
       eyebrow="My team"
       title="Team and lineup tools"
       description="Set your lineup, review your roster, and make moves."
+      highlights={["Lineup glow", "Bench pressure", "Fast swaps"]}
     >
       <TeamClient leagueId={leagueId} />
     </LeaguePageShell>

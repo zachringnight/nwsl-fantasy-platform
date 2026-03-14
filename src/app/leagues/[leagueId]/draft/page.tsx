@@ -13,6 +13,7 @@ export default async function DraftLobbyPage({
       eyebrow="Draft lobby"
       title="Pre-draft waiting room"
       description="Draft order, start time, and setup — all before the room opens."
+      highlights={["Countdown mode", "Pick order", "Room prep"]}
     >
       <DraftLobbyClient leagueId={leagueId} />
     </LeaguePageShell>

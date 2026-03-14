@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { Crown, Users2 } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
-import { SurfaceCard } from "@/components/common/surface-card";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
@@ -133,17 +134,16 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
           leagueDetails.league.status === "live";
 
         if (needsMoreManagers || draftStillBlocking) {
+          const primarySetupAction = draftStillBlocking ? links.draft : links.team;
+          const primarySetupLabel = draftStillBlocking ? "Open draft lobby" : "Open team hub";
+
           return (
             <MotionReveal>
-              <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-                <SurfaceCard
-                  description="Weekly matchups publish once the league fills and the draft completes."
-                  eyebrow="Matchup readiness"
-                  title="Fixtures publish after the league fills and the draft closes"
-                >
-                  <div className="flex flex-wrap gap-3">
-                    <Link className={getButtonClassName()} href={links.team}>
-                      Open team hub
+              <GuidedLeagueState
+                actions={
+                  <>
+                    <Link className={getButtonClassName()} href={primarySetupAction}>
+                      {primarySetupLabel}
                     </Link>
                     <Link
                       className={getButtonClassName({
@@ -153,20 +153,55 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
                     >
                       Scout players
                     </Link>
-                  </div>
-                </SurfaceCard>
-
-                <SurfaceCard
-                  description={
-                    needsMoreManagers
-                      ? "Add another manager before publishing head-to-head fixtures."
-                      : "Finish the draft flow before the matchup engine takes over."
-                  }
-                  eyebrow="Blocking reason"
-                  title={needsMoreManagers ? "Need at least two managers" : "Draft still in progress"}
-                  tone="accent"
-                />
-              </section>
+                  </>
+                }
+                badge={needsMoreManagers ? "Fill the room" : "Draft still live"}
+                description={
+                  needsMoreManagers
+                    ? "Head-to-head matchups unlock after another manager joins the circle."
+                    : "Weekly fixtures publish when the draft flow is done and the room has real teams."
+                }
+                eyebrow="Matchup setup"
+                highlights={
+                  needsMoreManagers
+                    ? ["Invite one more", "Crew first", "Fixtures next"]
+                    : ["Draft closes first", "Lineups after", "Matchups unlock"]
+                }
+                icon={needsMoreManagers ? Users2 : Crown}
+                steps={
+                  needsMoreManagers
+                    ? [
+                        {
+                          detail: "Share the invite link and get one more manager into the room.",
+                          label: "Expand the circle",
+                        },
+                        {
+                          detail: "Make sure every manager has a team identity before kickoff.",
+                          label: "Lock the room",
+                        },
+                        {
+                          detail: "Come back here once fixtures can auto-publish.",
+                          label: "Open matchups",
+                        },
+                      ]
+                    : [
+                        {
+                          detail: "Run the lobby and enter the room when the board is live.",
+                          label: "Finish the draft",
+                        },
+                        {
+                          detail: "Let every roster fill before the weekly schedule takes over.",
+                          label: "Complete the board",
+                        },
+                        {
+                          detail: "Return for the first real head-to-head story.",
+                          label: "Check the matchup",
+                        },
+                      ]
+                }
+                title={needsMoreManagers ? "Need at least two managers" : "Draft still in progress"}
+                tone={needsMoreManagers ? "accent" : "brand"}
+              />
             </MotionReveal>
           );
         }

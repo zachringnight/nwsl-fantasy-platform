@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { Crown } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
@@ -128,9 +130,46 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
 
   if (!draftState || draftState.picks.length === 0) {
     return (
-      <EmptyState
+      <GuidedLeagueState
+        actions={
+          <>
+            <Link
+              href={links.draft}
+              className={getButtonClassName()}
+            >
+              Open draft lobby
+            </Link>
+            <Link
+              href={links.team}
+              className={getButtonClassName({
+                variant: "secondary",
+              })}
+            >
+              Open team hub
+            </Link>
+          </>
+        }
+        badge="Recap unlock"
+        description="This page turns into a visual board once the draft room starts logging real picks."
+        eyebrow="Draft recap"
+        highlights={["Picks first", "Board story next", "Lineup prep after"]}
+        icon={Crown}
+        steps={[
+          {
+            detail: "Run the draft room or finish revealing the order from the lobby.",
+            label: "Get the board moving",
+          },
+          {
+            detail: "Once picks land, this recap will fill with roster reads and the full board.",
+            label: "Let picks stack",
+          },
+          {
+            detail: "Come back here to review your haul before lineup setup.",
+            label: "Read the room",
+          },
+        ]}
         title="No draft recap yet"
-        description="This recap fills in once the room has logged picks."
+        tone="brand"
       />
     );
   }

@@ -13,6 +13,7 @@ export default async function LeagueDraftRoomPage({
       eyebrow="Live draft room"
       title="Clock, queue, player board"
       description="Draft from the full player board while the clock runs."
+      highlights={["Clock pressure", "Queue energy", "Board control"]}
     >
       <DraftRoomClient leagueId={leagueId} />
     </LeaguePageShell>

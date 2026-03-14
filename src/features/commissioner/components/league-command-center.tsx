@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Copy, Settings2, Shield, Users } from "lucide-react";
+import { Copy, Settings2, Shield, Sparkles, Users } from "lucide-react";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -37,6 +37,9 @@ export function LeagueCommandCenter({
   settingsHref,
 }: LeagueCommandCenterProps) {
   const [copyLabel, setCopyLabel] = useState("Copy invite");
+  const managerFillPercentage = Math.round(
+    (leagueDetails.memberships.length / leagueDetails.league.manager_count_target) * 100
+  );
 
   const handleCopyInvite = async () => {
     const inviteUrl =
@@ -66,7 +69,7 @@ export function LeagueCommandCenter({
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           <MetricTile
-            detail="Capacity stays visible so invite urgency is obvious."
+            detail="Keep an eye on how quickly the room is filling."
             label="Managers"
             tone="accent"
             value={`${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target}`}
@@ -91,20 +94,44 @@ export function LeagueCommandCenter({
         </div>
 
         <div className="grid gap-3 lg:grid-cols-2">
-          <div className="rounded-[1.4rem] border border-line bg-night/35 p-4 text-sm leading-6 text-muted">
+          <div className="league-mood-card rounded-[1.45rem] border border-white/12 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">
               <Shield className="size-4 text-brand-strong" />
               Invite route
             </p>
-            <p className="mt-3 break-all">{invitePath}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Pill tone="brand">Code {leagueDetails.league.code}</Pill>
+              <Pill tone="accent">{copyLabel === "Copied invite" ? "Shared" : "Ready to share"}</Pill>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-white/78">
+              Drop the link in the group chat when the crew is ready.
+            </p>
+            <p className="mt-3 break-all text-xs text-white/58">{invitePath}</p>
           </div>
-          <div className="rounded-[1.4rem] border border-line bg-night/35 p-4 text-sm leading-6 text-muted">
+          <div className="rounded-[1.45rem] border border-line bg-night/35 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">
               <Users className="size-4 text-brand-strong" />
-              Manager order
+              Manager circle
             </p>
-            <p className="mt-3">
-              {leagueDetails.memberships.map((member) => member.display_name).join(", ")}
+            <div className="mt-3 flex flex-wrap gap-2">
+              {leagueDetails.memberships.map((member) => (
+                <span
+                  key={member.id}
+                  className="rounded-full border border-white/10 bg-white/7 px-3 py-1.5 text-xs font-semibold tracking-[0.02em] text-white/84"
+                >
+                  {member.display_name}
+                </span>
+              ))}
+            </div>
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/8">
+              <div
+                className="h-full rounded-full bg-[linear-gradient(90deg,#ff7eb6_0%,#00e1ff_100%)]"
+                style={{ width: `${managerFillPercentage}%` }}
+              />
+            </div>
+            <p className="mt-2 inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#ffd5e5]">
+              <Sparkles className="size-3.5" />
+              {managerFillPercentage}% full
             </p>
           </div>
         </div>
