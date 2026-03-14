@@ -62,6 +62,10 @@ export function SignupLocalForm() {
 
   async function handleGuestSignup(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!displayName.trim()) {
+      setError("Display name is required.");
+      return;
+    }
     setError("");
     setIsSubmitting(true);
 
