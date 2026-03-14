@@ -46,13 +46,13 @@ export async function GET(request: NextRequest) {
       error instanceof Error
         ? error.message
         : "Unable to load notifications.";
-    const status = message === "Sign in before opening notifications." ? 401 : 200;
+    const status = message === "Sign in before opening notifications." ? 401 : 500;
 
     if (status === 401) {
       return NextResponse.json({ error: message }, { status });
     }
 
-    return NextResponse.json({ notifications: [] });
+    return NextResponse.json({ error: message }, { status });
   }
 }
 
@@ -85,12 +85,12 @@ export async function PATCH(request: NextRequest) {
       error instanceof Error
         ? error.message
         : "Unable to update notifications.";
-    const status = message === "Sign in before opening notifications." ? 401 : 200;
+    const status = message === "Sign in before opening notifications." ? 401 : 500;
 
     if (status === 401) {
       return NextResponse.json({ error: message }, { status });
     }
 
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ error: message }, { status });
   }
 }

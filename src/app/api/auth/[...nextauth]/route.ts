@@ -1,3 +1,10 @@
-import { authHandler } from "@/lib/auth";
+import { NextResponse } from "next/server";
 
-export { authHandler as GET, authHandler as POST };
+// The public app authenticates directly with Supabase Auth.
+// Disable the legacy NextAuth surface so launch traffic cannot hit an unused auth path.
+function disabledAuthRoute() {
+  return NextResponse.json({ error: "Not found" }, { status: 404 });
+}
+
+export const GET = disabledAuthRoute;
+export const POST = disabledAuthRoute;
