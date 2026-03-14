@@ -74,7 +74,7 @@ export function GuidedLeagueState({
             </div>
 
             <div className="space-y-3">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/68">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/78">
                 {eyebrow}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -118,7 +118,7 @@ export function GuidedLeagueState({
                     <ArrowUpRight className="size-3" />
                   </span>
                   <p className="mt-4 text-sm font-semibold text-white">{step.label}</p>
-                  <p className="mt-2 text-sm leading-6 text-white/68">{step.detail}</p>
+                  <p className="mt-2 text-sm leading-6 text-white/78">{step.detail}</p>
                 </article>
               ))}
             </div>

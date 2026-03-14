@@ -338,45 +338,54 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                   tone="accent"
                 >
                   <div className="space-y-4">
-                    <input
-                      className="field-control"
-                      onChange={(event) => {
-                        setSearch(event.target.value);
-                      }}
-                      placeholder="Search claimable player"
-                      type="search"
-                      value={search}
-                    />
-                    <select
-                      className="field-control"
-                      onChange={(event) => {
-                        setSelectedPlayerId(event.target.value);
-                      }}
-                      value={selectedPlayerId}
-                    >
-                      <option value="">Choose a player</option>
-                      {filteredPlayers.map((player) => (
-                        <option key={player.id} value={player.id}>
-                          #{player.rank} {player.display_name} • {player.club_name} • {player.position}
+                    <label className="block">
+                      <span className="sr-only">Search claimable players</span>
+                      <input
+                        className="field-control"
+                        onChange={(event) => {
+                          setSearch(event.target.value);
+                        }}
+                        placeholder="Search claimable player"
+                        type="search"
+                        value={search}
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="sr-only">Select player to claim</span>
+                      <select
+                        className="field-control"
+                        onChange={(event) => {
+                          setSelectedPlayerId(event.target.value);
+                        }}
+                        value={selectedPlayerId}
+                      >
+                        <option value="">Choose a player</option>
+                        {filteredPlayers.map((player) => (
+                          <option key={player.id} value={player.id}>
+                            #{player.rank} {player.display_name} • {player.club_name} • {player.position}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block">
+                      <span className="sr-only">Select player to drop</span>
+                      <select
+                        className="field-control"
+                        onChange={(event) => {
+                          setSelectedDropRosterSlotId(event.target.value);
+                        }}
+                        value={selectedDropRosterSlotId}
+                      >
+                        <option value="">
+                          {rosterIsFull ? "Choose a drop candidate" : "No drop needed"}
                         </option>
-                      ))}
-                    </select>
-                    <select
-                      className="field-control"
-                      onChange={(event) => {
-                        setSelectedDropRosterSlotId(event.target.value);
-                      }}
-                      value={selectedDropRosterSlotId}
-                    >
-                      <option value="">
-                        {rosterIsFull ? "Choose a drop candidate" : "No drop needed"}
-                      </option>
-                      {hubState.roster.map((player) => (
-                        <option key={player.id} value={player.id}>
-                          {player.player_name} • {player.player_position} • {player.club_name}
-                        </option>
-                      ))}
-                    </select>
+                        {hubState.roster.map((player) => (
+                          <option key={player.id} value={player.id}>
+                            {player.player_name} • {player.player_position} • {player.club_name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                     <Button
                       disabled={
                         busyAction === "submit" ||

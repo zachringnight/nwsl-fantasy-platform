@@ -144,7 +144,7 @@ export function ClassicTeamManager({
                   <div className="mt-4 space-y-3">
                     {roleMix.map((entry) => (
                       <div key={entry.role}>
-                        <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.18em] text-white/62">
+                        <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.18em] text-white/75">
                           <span>{entry.role}</span>
                           <span>{entry.points.toFixed(1)} pts</span>
                         </div>

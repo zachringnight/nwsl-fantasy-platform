@@ -117,7 +117,7 @@ export default function Home() {
           <div className="grid gap-4 edge-frame">
             <div className="grid gap-3 md:grid-cols-3">
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/68">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
                   Opening daily slate
                 </p>
                 <p className="mt-2 text-lg font-semibold text-white">
@@ -125,13 +125,13 @@ export default function Home() {
                 </p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/68">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
                   Weekly windows
                 </p>
                 <p className="mt-2 text-lg font-semibold text-white">{weeklySlateCount} windows</p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/68">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
                   Final daily lock
                 </p>
                 <p className="mt-2 text-lg font-semibold text-white">

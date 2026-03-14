@@ -106,7 +106,7 @@ export function LeagueCommandCenter({
             <p className="mt-3 text-sm leading-6 text-white/78">
               Drop the link in the group chat when the crew is ready.
             </p>
-            <p className="mt-3 break-all text-xs text-white/58">{invitePath}</p>
+            <p className="mt-3 break-all text-xs text-white/75">{invitePath}</p>
           </div>
           <div className="rounded-[1.45rem] border border-line bg-night/35 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">

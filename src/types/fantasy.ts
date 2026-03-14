@@ -167,6 +167,8 @@ export interface FantasyPoolPlayer {
   salary_cost: number;
   availability: AvailabilityStatus;
   rank: number;
+  /** Player headshot URL (optional — falls back to initials) */
+  photo_url?: string;
 }
 
 export interface FantasyRosterPlayer extends FantasyRosterSlotRecord {

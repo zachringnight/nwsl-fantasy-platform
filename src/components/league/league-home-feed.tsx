@@ -162,7 +162,7 @@ export function LeagueHomeFeed({
               </div>
 
               <div className="space-y-3">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/66">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/75">
                   Club story
                 </p>
                 <h2 className="font-display text-[3.6rem] uppercase leading-[0.88] tracking-[0.01em] text-white sm:text-[4.3rem]">
@@ -198,14 +198,14 @@ export function LeagueHomeFeed({
 
             <div className="grid gap-3">
               <div className="club-score-panel">
-                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-white/58">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-white/75">
                   Room fill
                 </p>
                 <div className="mt-4 flex items-end gap-3">
                   <span className="font-display text-[4.4rem] leading-none text-white">
                     {managerFillPercentage}
                   </span>
-                  <span className="pb-2 text-sm font-semibold uppercase tracking-[0.2em] text-white/64">
+                  <span className="pb-2 text-sm font-semibold uppercase tracking-[0.2em] text-white/75">
                     %
                   </span>
                 </div>
@@ -241,7 +241,7 @@ export function LeagueHomeFeed({
             </div>
 
             <div className="space-y-3">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/60">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/75">
                 Schedule signal
               </p>
               <h3 className="font-display text-[3rem] uppercase leading-[0.9] text-white sm:text-[3.5rem]">
@@ -277,7 +277,7 @@ export function LeagueHomeFeed({
               <Pill tone="accent" className="border-white/10 bg-white/8 text-white">
                 Manager circle
               </Pill>
-              <Users2 className="size-5 text-white/68" />
+              <Users2 className="size-5 text-white/78" />
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -295,7 +295,7 @@ export function LeagueHomeFeed({
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center justify-between gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+              <div className="flex items-center justify-between gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                 <span>Crew status</span>
                 <span>{managerFillPercentage}% full</span>
               </div>
@@ -325,7 +325,7 @@ export function LeagueHomeFeed({
                 Drop the link when the crew is ready. Keep the code front and center.
               </p>
               <div className="rounded-[1.3rem] border border-white/12 bg-white/6 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/58">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/75">
                   Invite lane
                 </p>
                 <p className="mt-3 break-all text-sm text-white/86">{invitePath}</p>

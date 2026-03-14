@@ -876,7 +876,7 @@ export function SalaryCapEntryBuilder({
                 <p className="mt-2 text-lg font-semibold leading-tight text-white">
                   {topProjectedPlayer ? topProjectedPlayer.display_name : "Awaiting first pick"}
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                   {topProjectedPlayer
                     ? `${formatPoints(topProjectedPlayer.average_points)} pts baseline`
                     : `${formatPoints(averageProjectionPerSlot)} avg per filled slot`}
@@ -938,14 +938,14 @@ export function SalaryCapEntryBuilder({
                               <p className="mt-2 text-sm font-semibold text-white">
                                 {selectedPlayer?.display_name ?? "Open slot"}
                               </p>
-                              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                                 {selectedPlayer
                                   ? `${selectedPlayer.position} • ${selectedPlayer.club_name}`
                                   : `${eligiblePlayers.length} eligible players`}
                               </p>
                             </div>
                             {selectedPlayer ? (
-                              <div className="text-right text-sm text-white/64">
+                              <div className="text-right text-sm text-white/75">
                                 <p>${selectedPlayer.salary_cost}</p>
                                 <p>{formatPoints(selectedPlayer.average_points)} pts</p>
                               </div>
@@ -971,7 +971,7 @@ export function SalaryCapEntryBuilder({
 
                           {selectedPlayer ? (
                             <button
-                              className="mt-3 rounded-full border border-white/12 bg-white/6 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/68"
+                              className="mt-3 rounded-full border border-white/12 bg-white/6 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/78"
                               disabled={!canEditEntry}
                               onClick={() => {
                                 handleAssignPlayer(slot, "");

@@ -186,7 +186,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                           className="absolute right-3 top-3 rounded-full border border-line bg-white/6 p-2 text-muted transition hover:border-brand-strong/35 hover:text-brand-strong"
                           onClick={() => handleCopyCode(leagueDetails.league.code)}
                           type="button"
-                          title="Copy league code"
+                          aria-label="Copy league code"
                         >
                           <Copy className="size-3.5" />
                         </button>

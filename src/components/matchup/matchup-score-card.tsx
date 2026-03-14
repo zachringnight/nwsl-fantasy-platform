@@ -80,7 +80,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
 
         <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
           <div className="rounded-[1.6rem] bg-black/18 p-4">
-            <p className="text-xs uppercase tracking-[0.22em] text-white/64">
+            <p className="text-xs uppercase tracking-[0.22em] text-white/75">
               {homeSubLabel}
             </p>
             <p className="mt-3 font-display text-6xl leading-none">
@@ -89,7 +89,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
             <p className="mt-2 text-sm text-white/78">{homeTeam}</p>
           </div>
           <div className="rounded-[1.6rem] border border-white/10 bg-black/24 p-4 lg:flex lg:w-[13rem] lg:flex-col lg:items-center lg:justify-center">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/64">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/75">
               Match edge
             </p>
             <p className="mt-3 text-center text-2xl font-semibold leading-tight text-white">
@@ -99,14 +99,14 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
               {formatDelta(scoreDelta)}
             </p>
             {isLeagueMatchup ? (
-              <p className="mt-3 text-center text-sm leading-6 text-white/70">
+              <p className="mt-3 text-center text-sm leading-6 text-white/78">
                 Projection {formatPoints(matchup.home_projection)} -{" "}
                 {formatPoints(matchup.away_projection)}
               </p>
             ) : null}
           </div>
           <div className="rounded-[1.6rem] bg-black/18 p-4">
-            <p className="text-xs uppercase tracking-[0.22em] text-white/64">
+            <p className="text-xs uppercase tracking-[0.22em] text-white/75">
               {awaySubLabel}
             </p>
             <p className="mt-3 font-display text-6xl leading-none">
@@ -117,10 +117,10 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
         </div>
 
         {isLeagueMatchup ? (
-          <div className="space-y-3 rounded-[1.4rem] bg-black/18 p-4 text-sm text-white/76">
+          <div className="space-y-3 rounded-[1.4rem] bg-black/18 p-4 text-sm text-white/80">
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               <div>
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   Projection lane
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
@@ -128,7 +128,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
                 </p>
               </div>
               <div>
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   Live pace
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
@@ -138,7 +138,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
                 </p>
               </div>
               <div>
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   Last swing
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
@@ -146,7 +146,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
                 </p>
               </div>
               <div>
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   Lock window
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">{matchup.lock_label}</p>
@@ -154,34 +154,34 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
             </div>
 
             <div>
-              <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+              <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                 <TimerReset className="size-3.5" />
                 Score tracking
               </p>
-              <p className="mt-2 leading-6 text-white/76">
+              <p className="mt-2 leading-6 text-white/80">
                 Live score starts with appearance ({launchScoringRules.appearance}) and 60+ minute ({launchScoringRules.minutes60Plus}) base points, then shifts on goals, assists, clean sheets, saves, and discipline events. Projection is the baseline; the event feed explains every swing away from it.
               </p>
             </div>
 
             <div className="grid gap-3 md:grid-cols-2">
               <div className="rounded-[1.15rem] border border-white/10 bg-black/18 px-3 py-3">
-                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   <Target className="size-3.5" />
                   Scoring anchors
                 </p>
-                <p className="mt-2 leading-6 text-white/76">
+                <p className="mt-2 leading-6 text-white/80">
                   FWD goals {launchScoringRules.goal.FWD}, MID goals {launchScoringRules.goal.MID}, DEF/GK goals {launchScoringRules.goal.DEF}, assists {launchScoringRules.assist}, clean sheets {launchScoringRules.cleanSheet.GK}.
                 </p>
               </div>
               <div className="rounded-[1.15rem] border border-white/10 bg-black/18 px-3 py-3">
-                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
+                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   <Activity className="size-3.5" />
                   Your side
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
                   {matchup.my_team_side === "home" ? matchup.home_team_name : matchup.away_team_name}
                 </p>
-                <p className="mt-1 text-sm text-white/70">
+                <p className="mt-1 text-sm text-white/78">
                   {recentEvent ? recentEvent.summary : "Waiting for the first tracked event."}
                 </p>
               </div>
