@@ -35,12 +35,15 @@ export default function SettingsPage() {
               </div>
             </SurfaceCard>
             <SurfaceCard
-              eyebrow="Rules"
-              title="Scoring"
-              description="Check how points are awarded."
+              eyebrow="Security & rules"
+              title="Password and scoring"
+              description="Reset your password or check how points are awarded."
               tone="accent"
             >
               <div className="flex flex-wrap gap-3">
+                <Link href="/forgot-password" className="rounded-full bg-night px-4 py-2 text-sm font-semibold text-foreground">
+                  Reset password
+                </Link>
                 <Link href="/rules" className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground">
                   Scoring rules
                 </Link>

@@ -21,14 +21,17 @@ export default function LoginPage() {
         </SurfaceCard>
 
         <SurfaceCard
-          eyebrow="New here?"
-          title="Need an account?"
-          description="Create a new account to get started."
+          eyebrow="Alternates"
+          title="Need a different path?"
+          description="Create a new account or send yourself a recovery link."
           tone="accent"
         >
           <div className="space-y-3 text-sm text-foreground">
             <Link href="/signup" className={getButtonClassName({ className: "w-full", variant: "secondary" })}>
               Create account
+            </Link>
+            <Link href="/forgot-password" className={getButtonClassName({ className: "w-full", variant: "ghost" })}>
+              Send recovery link
             </Link>
           </div>
         </SurfaceCard>
