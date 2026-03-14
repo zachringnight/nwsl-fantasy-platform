@@ -8,6 +8,7 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { Pill } from "@/components/ui/pill";
@@ -86,6 +87,17 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
   async function handleSettingsSave(event: React.FormEvent) {
     event.preventDefault();
+
+    if (!settingsForm.leagueName.trim()) {
+      setSaveMessage("League name cannot be empty.");
+      return;
+    }
+    const managerCount = Number(settingsForm.managerCountTarget);
+    if (managerCount < 2 || managerCount > 16) {
+      setSaveMessage("Manager capacity must be between 2 and 16.");
+      return;
+    }
+
     setIsSaving(true);
     setSaveMessage("");
 
@@ -278,7 +290,11 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                             {isCommissioner &&
                               member.user_id !== leagueDetails.league.commissioner_user_id && (
                                 <button
-                                  className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger"
+                                  aria-label={`Remove ${member.display_name} from league`}
+                                  className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                                  onClick={() => {
+                                    // TODO: Implement remove-manager flow with confirmation dialog
+                                  }}
                                   title="Remove manager"
                                   type="button"
                                 >
@@ -354,6 +370,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
                     <div className="flex items-center gap-3">
                       <Button type="submit" disabled={isSaving}>
+                        {isSaving ? <Spinner /> : null}
                         {isSaving ? "Saving…" : "Save settings"}
                       </Button>
                       {saveMessage && (

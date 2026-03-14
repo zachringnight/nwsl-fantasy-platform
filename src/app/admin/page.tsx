@@ -180,8 +180,16 @@ export default function AdminPage() {
   function handleOverrideSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    if (!overrideForm.playerName || !overrideForm.reason) {
-      setOverrideMessage("Player name and reason are required.");
+    if (!overrideForm.playerName.trim()) {
+      setOverrideMessage("Player name is required.");
+      return;
+    }
+    if (!overrideForm.reason.trim()) {
+      setOverrideMessage("Reason is required for audit trail.");
+      return;
+    }
+    if (overrideForm.originalPoints && overrideForm.correctedPoints && overrideForm.originalPoints === overrideForm.correctedPoints) {
+      setOverrideMessage("Original and corrected points are the same — no correction needed.");
       return;
     }
 
@@ -495,8 +503,9 @@ export default function AdminPage() {
             description="Search by display name, league name, or user ID."
           >
             <label className="relative block">
-              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-brand-strong" />
+              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-brand-strong" aria-hidden="true" />
               <input
+                aria-label="Search accounts, leagues, or user IDs"
                 className="field-control pl-11"
                 placeholder="Search by name, league, or user ID"
                 type="search"
