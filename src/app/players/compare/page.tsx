@@ -30,8 +30,8 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
   return (
     <AppShell
       eyebrow="Player compare"
-      title="Projection, price, and scoring fit in one decision view"
-      description="Side-by-side on projection, price, and scoring fit."
+      title="Compare players side-by-side"
+      description="Points, salary, and value at a glance."
       actions={
         <Link
           href="/players"
@@ -47,25 +47,25 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
       <section className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
         <SurfaceCard
           eyebrow="Head-to-head summary"
-          title="Read the decision before you stare at the cards"
-          description="Projection first, then value, then how each player scores."
+          title="Who gives you the edge?"
+          description="Compare projected points, value, and salary."
         >
           <div className="space-y-5">
             <div className="grid gap-3 sm:grid-cols-3">
               <MetricTile
-                detail="Higher projected production based on current average fantasy points."
-                label="Projection edge"
+                detail="Who scores more points."
+                label="Points edge"
                 tone="brand"
                 value={`${getCallsign(projectionLeader)} +${Math.abs(leftPlayer.average_points - rightPlayer.average_points).toFixed(1)}`}
               />
               <MetricTile
-                detail="Projected points generated per $1k of salary."
+                detail="Better points per dollar."
                 label="Value edge"
                 tone="accent"
                 value={`${getCallsign(valueLeader)} +${Math.abs(getValueScore(leftPlayer) - getValueScore(rightPlayer)).toFixed(2)}`}
               />
               <MetricTile
-                detail="Lower salary wins when projection is close and cap pressure matters."
+                detail="Cheaper option when points are close."
                 label="Salary edge"
                 value={`${getCallsign(salaryLeader)} $${Math.abs(leftPlayer.salary_cost - rightPlayer.salary_cost)}`}
               />
@@ -124,8 +124,8 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
 
         <SurfaceCard
           eyebrow="Scoring system"
-          title="Clear scoring rules and live tracking cues"
-          description="See what counts, when it lands, and why each projection moves."
+          title="How points are scored"
+          description="Key scoring actions for every position."
           tone="accent"
         >
           <div className="space-y-4">
@@ -170,7 +170,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                   How scores move
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Points start with appearance, climb at 60 minutes, then react to match events. The projection is your baseline — live scores show the swings as the game unfolds.
+                  Points start with appearance, increase at 60 minutes, then change with goals, assists, and other match events.
                 </p>
               </div>
             </div>
@@ -213,24 +213,24 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <MetricTile
-                    detail={projectionGap >= 0 ? "Leads this head-to-head projection." : "Trailing the other player on baseline projection."}
+                    detail={projectionGap >= 0 ? "Higher projected points." : "Lower projected points."}
                     label="Projection"
                     tone={projectionGap >= 0 ? "brand" : "default"}
                     value={player.average_points.toFixed(1)}
                   />
                   <MetricTile
-                    detail="Salary-cap cost for season, weekly, or daily builds."
+                    detail="Salary-cap cost."
                     label="Salary"
                     value={`$${player.salary_cost}`}
                   />
                   <MetricTile
-                    detail={valueGap >= 0 ? "Stronger projected efficiency per $1k." : "Less efficient per $1k than the other side."}
+                    detail={valueGap >= 0 ? "Better value per dollar." : "Less value per dollar."}
                     label="Value / $1k"
                     tone={valueGap >= 0 ? "accent" : "default"}
                     value={getValueScore(player).toFixed(2)}
                   />
                   <MetricTile
-                    detail="Draft and waiver priority signal across the player pool."
+                    detail="Overall ranking."
                     label="Pool rank"
                     value={`#${player.rank}`}
                   />
@@ -315,27 +315,27 @@ function getCallsign(player: FantasyPoolPlayer) {
 function getScoringFit(player: FantasyPoolPlayer) {
   if (player.position === "GK") {
     return {
-      label: "Save ceiling",
-      detail: `Keepers stack fantasy points through saves (${launchScoringRules.save} each), clean sheets (${launchScoringRules.cleanSheet.GK}), and rare goal events worth ${launchScoringRules.goal.GK}. This profile tracks best when shot volume stays high but goals conceded stay controlled.`,
+      label: "Goalkeeper",
+      detail: `Earns points from saves (${launchScoringRules.save}), clean sheets (${launchScoringRules.cleanSheet.GK}), and goals (${launchScoringRules.goal.GK}).`,
     };
   }
 
   if (player.position === "DEF") {
     return {
-      label: "Two-way floor",
-      detail: `Defenders get the strongest non-goal floor from appearance, 60+ minutes, and a ${launchScoringRules.cleanSheet.DEF}-point clean sheet bonus, while still carrying ${launchScoringRules.goal.DEF}-point goal upside on set pieces.`,
+      label: "Defender",
+      detail: `Earns consistent points from minutes played, plus clean sheet bonus (${launchScoringRules.cleanSheet.DEF}) and goals (${launchScoringRules.goal.DEF}).`,
     };
   }
 
   if (player.position === "MID") {
     return {
-      label: "Creation engine",
-      detail: `Midfielders usually win this format by layering assists (${launchScoringRules.assist}), steady minutes, and occasional ${launchScoringRules.goal.MID}-point goals. Their projection is strongest when they touch multiple categories instead of relying on a single finish.`,
+      label: "Midfielder",
+      detail: `Scores from assists (${launchScoringRules.assist}), goals (${launchScoringRules.goal.MID}), and steady minutes.`,
     };
   }
 
   return {
-    label: "Finisher ceiling",
-    detail: `Forwards spike fastest through goals (${launchScoringRules.goal.FWD}) and assists (${launchScoringRules.assist}). Their projections can separate quickly when they dominate shots, final-third touches, and penalty duty.`,
+    label: "Forward",
+    detail: `Highest ceiling from goals (${launchScoringRules.goal.FWD}) and assists (${launchScoringRules.assist}).`,
   };
 }

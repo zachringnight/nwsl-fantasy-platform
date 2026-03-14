@@ -14,29 +14,38 @@ export async function GET(request: Request) {
   }
 
   const unreadOnly = searchParams.get("unreadOnly") === "true";
-  const limit = Number(searchParams.get("limit") ?? 20);
+  const limit = Math.min(Math.max(Number(searchParams.get("limit") ?? 20), 1), 100);
 
-  const notifications = await getUserNotifications(userId, { limit, unreadOnly });
-
-  return NextResponse.json({ notifications });
+  try {
+    const notifications = await getUserNotifications(userId, { limit, unreadOnly });
+    return NextResponse.json({ notifications });
+  } catch {
+    return NextResponse.json({ error: "Unable to load notifications." }, { status: 500 });
+  }
 }
 
 export async function PATCH(request: Request) {
-  const body = (await request.json()) as {
-    notificationId?: string;
-    userId?: string;
-    action: "read" | "read_all";
-  };
+  let body: { notificationId?: string; userId?: string; action?: string };
 
-  if (body.action === "read" && body.notificationId) {
-    await markNotificationRead(body.notificationId);
-    return NextResponse.json({ success: true });
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  if (body.action === "read_all" && body.userId) {
-    await markAllNotificationsRead(body.userId);
-    return NextResponse.json({ success: true });
-  }
+  try {
+    if (body.action === "read" && body.notificationId) {
+      await markNotificationRead(body.notificationId);
+      return NextResponse.json({ success: true });
+    }
 
-  return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    if (body.action === "read_all" && body.userId) {
+      await markAllNotificationsRead(body.userId);
+      return NextResponse.json({ success: true });
+    }
+
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  } catch {
+    return NextResponse.json({ error: "Unable to update notifications." }, { status: 500 });
+  }
 }

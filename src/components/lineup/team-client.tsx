@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useEffectEvent, useState } from "react";
+import { lazy, Suspense, useEffect, useEffectEvent, useState } from "react";
 import { Crown } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { GuidedLeagueState } from "@/components/league/guided-setup-state";
-import { SalaryCapEntryBuilder } from "@/components/lineup/salary-cap-entry-builder";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
+
+const SalaryCapEntryBuilder = lazy(() =>
+  import("@/components/lineup/salary-cap-entry-builder").then((m) => ({
+    default: m.SalaryCapEntryBuilder,
+  }))
+);
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getButtonClassName } from "@/components/ui/button";
 import { MotionReveal } from "@/components/ui/motion-reveal";
@@ -128,15 +133,15 @@ export function TeamClient({ leagueId }: TeamClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the team page."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before editing a lineup."
-      signedOutDescription="Sign in before opening team tools."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
@@ -184,7 +189,9 @@ export function TeamClient({ leagueId }: TeamClientProps) {
               </MotionReveal>
 
               <MotionReveal delay={80}>
-                <SalaryCapEntryBuilder leagueDetails={leagueDetails} leagueId={leagueId} />
+                <Suspense fallback={<EmptyState title="Loading lineup builder" description="Preparing the salary-cap entry builder." />}>
+                  <SalaryCapEntryBuilder leagueDetails={leagueDetails} leagueId={leagueId} />
+                </Suspense>
               </MotionReveal>
             </section>
           );

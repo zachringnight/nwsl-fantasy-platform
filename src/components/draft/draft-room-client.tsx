@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useDeferredValue, useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
 import { Activity, AlarmClockCheck, PlayCircle, ShieldAlert, Sparkles } from "lucide-react";
+import { useDraftRealtime } from "@/hooks/use-draft-realtime";
 import { DraftBoard } from "@/components/draft/draft-board";
 import { DraftQueuePanel } from "@/components/draft/draft-queue-panel";
 import { EmptyState } from "@/components/common/empty-state";
@@ -12,6 +13,11 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { ConfettiBurst } from "@/components/ui/confetti-burst";
+import { LiveRegion } from "@/components/ui/live-region";
+import { FirstPickGuide } from "@/components/draft/first-pick-guide";
+import { feedback } from "@/lib/feedback";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type { FantasyDraftState, PlayerPosition } from "@/types/fantasy";
@@ -37,6 +43,12 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const [turnPulseActive, setTurnPulseActive] = useState(false);
   const [recentPickPulseId, setRecentPickPulseId] = useState<string | null>(null);
   const [queuePulsePlayerId, setQueuePulsePlayerId] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [screenReaderAnnouncement, setScreenReaderAnnouncement] = useState("");
+  const [showFirstPickGuide, setShowFirstPickGuide] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !window.localStorage.getItem("nwsl-draft-guide-dismissed");
+  });
   const deferredSearch = useDeferredValue(search);
   const links = buildLeagueLinks(leagueId);
   const draftStatus = draftState?.draft.status;
@@ -84,6 +96,17 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     };
   }, []);
 
+  // Subscribe to realtime draft updates — instant push instead of waiting for polls
+  useDraftRealtime({
+    leagueId,
+    enabled: !!session && !!profile?.onboarding_complete && !!draftStatus && draftStatus !== "complete",
+    onDraftUpdate: useCallback(() => {
+      if (document.visibilityState === "visible") {
+        void refreshDraftState();
+      }
+    }, []),
+  });
+
   useEffect(() => {
     if (!session || !profile?.onboarding_complete || !draftStatus || draftStatus === "complete") {
       return;
@@ -95,9 +118,10 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       }
     };
 
+    // Longer poll interval as a fallback — realtime handles the fast path
     const pollId = window.setInterval(
       refreshIfVisible,
-      draftStatus === "live" || draftStatus === "paused" ? 4000 : 3000
+      draftStatus === "live" || draftStatus === "paused" ? 15000 : 10000
     );
 
     window.addEventListener("focus", refreshIfVisible);
@@ -266,7 +290,17 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   async function handleDraftPlayer(playerId: string) {
     setBusyPlayerId(playerId);
+    const prevPickCount = draftState?.picks.length ?? 0;
     await withDraftAction("pick", () => dataClient.makeDraftPick(leagueId, playerId));
+    // If we got a new pick, celebrate
+    const player = draftState?.availablePlayers.find((p) => p.id === playerId);
+    const playerName = player?.display_name ?? "Player";
+    setScreenReaderAnnouncement(`${playerName} drafted successfully.`);
+    if ((draftState?.picks.length ?? 0) >= prevPickCount) {
+      setShowConfetti(true);
+      feedback.celebrate();
+      setTimeout(() => setShowConfetti(false), 100);
+    }
   }
 
   async function handleAutopick() {
@@ -308,7 +342,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Finish onboarding first"
-        description="Set your club and fantasy experience level before entering the room."
+        description="Complete your profile to continue."
       />
     );
   }
@@ -502,9 +536,19 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   return (
     <section className="space-y-5">
+      <ConfettiBurst active={showConfetti} />
+      <LiveRegion message={screenReaderAnnouncement} politeness="assertive" />
       {error ? (
         <StatusBanner title="Draft action" message={error} tone="warning" />
       ) : null}
+
+      <FirstPickGuide
+        isFirstDraft={showFirstPickGuide}
+        onDismiss={() => {
+          setShowFirstPickGuide(false);
+          try { window.localStorage.setItem("nwsl-draft-guide-dismissed", "1"); } catch {}
+        }}
+      />
 
       <section className="grid gap-5 xl:grid-cols-[0.78fr_1.2fr_0.82fr]">
         <div className="space-y-5">
@@ -662,7 +706,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-foreground">{pick.player_name}</p>
-                          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
+                          <p className="mt-1 flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-muted">
+                            <ClubLogo club={pick.club_name} size={16} />
                             {pick.club_name} • {pick.player_position} • {pick.source}
                           </p>
                         </div>

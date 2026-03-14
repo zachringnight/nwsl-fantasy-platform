@@ -64,6 +64,24 @@ export function buildLeagueNavigation(leagueId: string): NavigationItem[] {
       requiresAuth: true,
     },
     {
+      href: `/leagues/${leagueId}/trades`,
+      label: "Trades",
+      shortLabel: "Trades",
+      requiresAuth: true,
+    },
+    {
+      href: `/leagues/${leagueId}/chat`,
+      label: "Chat",
+      shortLabel: "Chat",
+      requiresAuth: true,
+    },
+    {
+      href: `/leagues/${leagueId}/achievements`,
+      label: "Badges",
+      shortLabel: "Badges",
+      requiresAuth: true,
+    },
+    {
       href: `/leagues/${leagueId}/draft`,
       label: "Draft",
       shortLabel: "Draft",

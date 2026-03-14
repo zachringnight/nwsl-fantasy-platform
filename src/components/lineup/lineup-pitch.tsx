@@ -112,7 +112,7 @@ export function LineupPitch({
                       <p className="mt-2 text-sm font-semibold text-white">
                         {player ? player.player_name : "Open slot"}
                       </p>
-                      <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                      <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                         {player
                           ? `${player.player_position} • ${player.club_name}`
                           : "Assign an eligible player"}
@@ -140,7 +140,7 @@ export function LineupPitch({
                     <p className="font-medium text-white">
                       {player ? player.player_name : lineupSlotLabels[slot]}
                     </p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                       {player ? `${player.player_position} • ${player.club_name}` : "Bench slot"}
                     </p>
                   </div>

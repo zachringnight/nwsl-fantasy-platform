@@ -162,15 +162,15 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the transaction center."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening transactions."
-      signedOutDescription="Sign in before opening transactions."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
@@ -232,7 +232,7 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                 <SurfaceCard
                   description="Salary-cap formats edit entries before lock instead of claiming exclusive players."
                   eyebrow="Mode split"
-                  title="Classic-only transaction engine"
+                  title="Classic-only transactions"
                   tone="accent"
                 />
               </section>
@@ -338,45 +338,54 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                   tone="accent"
                 >
                   <div className="space-y-4">
-                    <input
-                      className="field-control"
-                      onChange={(event) => {
-                        setSearch(event.target.value);
-                      }}
-                      placeholder="Search claimable player"
-                      type="search"
-                      value={search}
-                    />
-                    <select
-                      className="field-control"
-                      onChange={(event) => {
-                        setSelectedPlayerId(event.target.value);
-                      }}
-                      value={selectedPlayerId}
-                    >
-                      <option value="">Choose a player</option>
-                      {filteredPlayers.map((player) => (
-                        <option key={player.id} value={player.id}>
-                          #{player.rank} {player.display_name} • {player.club_name} • {player.position}
+                    <label className="block">
+                      <span className="sr-only">Search claimable players</span>
+                      <input
+                        className="field-control"
+                        onChange={(event) => {
+                          setSearch(event.target.value);
+                        }}
+                        placeholder="Search claimable player"
+                        type="search"
+                        value={search}
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="sr-only">Select player to claim</span>
+                      <select
+                        className="field-control"
+                        onChange={(event) => {
+                          setSelectedPlayerId(event.target.value);
+                        }}
+                        value={selectedPlayerId}
+                      >
+                        <option value="">Choose a player</option>
+                        {filteredPlayers.map((player) => (
+                          <option key={player.id} value={player.id}>
+                            #{player.rank} {player.display_name} • {player.club_name} • {player.position}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block">
+                      <span className="sr-only">Select player to drop</span>
+                      <select
+                        className="field-control"
+                        onChange={(event) => {
+                          setSelectedDropRosterSlotId(event.target.value);
+                        }}
+                        value={selectedDropRosterSlotId}
+                      >
+                        <option value="">
+                          {rosterIsFull ? "Choose a drop candidate" : "No drop needed"}
                         </option>
-                      ))}
-                    </select>
-                    <select
-                      className="field-control"
-                      onChange={(event) => {
-                        setSelectedDropRosterSlotId(event.target.value);
-                      }}
-                      value={selectedDropRosterSlotId}
-                    >
-                      <option value="">
-                        {rosterIsFull ? "Choose a drop candidate" : "No drop needed"}
-                      </option>
-                      {hubState.roster.map((player) => (
-                        <option key={player.id} value={player.id}>
-                          {player.player_name} • {player.player_position} • {player.club_name}
-                        </option>
-                      ))}
-                    </select>
+                        {hubState.roster.map((player) => (
+                          <option key={player.id} value={player.id}>
+                            {player.player_name} • {player.player_position} • {player.club_name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                     <Button
                       disabled={
                         busyAction === "submit" ||

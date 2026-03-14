@@ -236,7 +236,8 @@ export default function NotificationsPage() {
                       </div>
                       {isUnread && (
                         <button
-                          className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-brand-strong/35 hover:text-brand-strong"
+                          aria-label={`Mark "${notification.title}" as read`}
+                          className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-brand-strong/35 hover:text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                           onClick={() => markRead(notification.id)}
                           title="Mark as read"
                           type="button"
@@ -274,8 +275,10 @@ export default function NotificationsPage() {
                       return (
                         <button
                           key={channel}
+                          aria-label={`${isActive ? "Disable" : "Enable"} ${channelLabels[channel]} for ${pref.label}`}
+                          aria-pressed={isActive}
                           className={[
-                            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition",
+                            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55",
                             isActive
                               ? "border-brand bg-brand/15 text-brand-strong"
                               : "border-line bg-white/4 text-muted hover:border-brand-strong/25",

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
 import { Crown, Users2 } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { GuidedLeagueState } from "@/components/league/guided-setup-state";
@@ -12,6 +12,7 @@ import { getButtonClassName } from "@/components/ui/button";
 import { ClassicMatchupStoryboard } from "@/features/matchup/components/classic-matchup-storyboard";
 import { SalaryCapMatchupPlaceholder } from "@/features/matchup/components/salary-cap-matchup-placeholder";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { useSwipe } from "@/hooks/use-swipe";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type {
@@ -31,6 +32,29 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [leagueDetails, setLeagueDetails] = useState<FantasyLeagueDetails | null>(null);
   const [matchupState, setMatchupState] = useState<FantasyLeagueMatchupState | null>(null);
+  const switchWeekRef = useRef<(direction: -1 | 1) => void>(() => {});
+
+  const swipeRef = useSwipe<HTMLDivElement>({
+    onSwipeLeft: () => switchWeekRef.current(1),
+    onSwipeRight: () => switchWeekRef.current(-1),
+  });
+
+  const loadMatchupForWeek = useCallback(async (weekNumber: number) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      setMatchupState(await dataClient.loadLeagueMatchup(leagueId, { weekNumber }));
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Unable to load the matchup."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [dataClient, leagueId]);
 
   const refreshMatchup = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -80,15 +104,15 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening matchup view."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening matchup view."
-      signedOutDescription="Sign in before opening matchup view."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
@@ -219,12 +243,22 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
           );
         }
 
+        switchWeekRef.current = (direction: -1 | 1) => {
+          const nextWeek = matchupState.week_number + direction;
+
+          if (nextWeek >= 1 && nextWeek <= matchupState.total_weeks) {
+            void loadMatchupForWeek(nextWeek);
+          }
+        };
+
         return (
           <MotionReveal>
-            <ClassicMatchupStoryboard
-              leagueDetails={leagueDetails}
-              matchupState={matchupState}
-            />
+            <div ref={swipeRef}>
+              <ClassicMatchupStoryboard
+                leagueDetails={leagueDetails}
+                matchupState={matchupState}
+              />
+            </div>
           </MotionReveal>
         );
       }}

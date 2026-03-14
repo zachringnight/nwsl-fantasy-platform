@@ -28,7 +28,7 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
         <h2 className="font-display text-4xl uppercase leading-none tracking-[0.01em] text-foreground">
           {title}
         </h2>
-        <p className="mt-3 text-sm leading-7 text-white/72">{description}</p>
+        <p className="mt-3 text-sm leading-7 text-white/78">{description}</p>
         {action ? <div className="mt-5 flex flex-wrap justify-center gap-3">{action}</div> : null}
       </div>
     </div>

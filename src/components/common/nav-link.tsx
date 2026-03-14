@@ -15,7 +15,7 @@ export function NavLink({ href, label, isActive }: NavLinkProps) {
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "rounded-full border px-4 py-2 text-sm font-medium transition duration-300",
+        "rounded-full border px-4 py-2 text-sm font-medium transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 focus-visible:ring-offset-2 focus-visible:ring-offset-night",
         isActive
           ? "border-brand bg-brand text-white shadow-brand"
           : "border-line bg-white/6 text-foreground hover:border-brand-strong/50 hover:bg-white/10 hover:text-brand-strong"

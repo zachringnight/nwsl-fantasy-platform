@@ -24,7 +24,7 @@ export function SiteFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-muted transition hover:text-brand-strong"
+                className="rounded-md text-sm text-muted transition hover:text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 focus-visible:ring-offset-2 focus-visible:ring-offset-night"
               >
                 {link.label}
               </Link>
@@ -34,13 +34,13 @@ export function SiteFooter() {
         <div className="mt-6 flex flex-col gap-2 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {siteConfig.copyrightYear} {siteConfig.owner}. All rights reserved.</p>
           <div className="flex gap-4">
-            <Link href="/privacy" className="transition hover:text-foreground">
+            <Link href="/privacy" className="rounded-md transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55">
               Privacy
             </Link>
-            <Link href="/terms" className="transition hover:text-foreground">
+            <Link href="/terms" className="rounded-md transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55">
               Terms
             </Link>
-            <Link href="/contact" className="transition hover:text-foreground">
+            <Link href="/contact" className="rounded-md transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55">
               Contact
             </Link>
           </div>

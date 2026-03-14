@@ -17,29 +17,37 @@ interface UsePersistedListOptions {
  */
 export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
   const storageKey = `${STORAGE_PREFIX}${key}`;
-  const { session, user } = useFantasyAuth();
-  const [items, setItems] = useState<string[]>([]);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const { session } = useFantasyAuth();
+  const userId = session?.user?.id;
+
+  // Initialize from localStorage synchronously to avoid flash of empty state
+  const [items, setItems] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = window.localStorage.getItem(storageKey);
+      return stored ? (JSON.parse(stored) as string[]) : [];
+    } catch {
+      return [];
+    }
+  });
 
   // Track whether the user has made local mutations before the backend loads
   const hasMutatedRef = useRef(false);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(storageKey);
-      if (stored) {
-        setItems(JSON.parse(stored) as string[]);
-      }
-    } catch {
-      // ignore parse errors
-    }
-    setHasLoaded(true);
-  }, [storageKey]);
+  // Keep refs in sync for use inside callbacks
+  const userIdRef = useRef(userId);
+  const keyRef = useRef(key);
+  const storageKeyRef = useRef(storageKey);
 
-  // Sync to Supabase when authenticated
   useEffect(() => {
-    if (!session?.user?.id || !hasLoaded) return;
+    userIdRef.current = userId;
+    keyRef.current = key;
+    storageKeyRef.current = storageKey;
+  }, [userId, key, storageKey]);
+
+  // Sync from Supabase when authenticated
+  useEffect(() => {
+    if (!userId) return;
 
     // Reset mutation tracking on each backend sync attempt
     hasMutatedRef.current = false;
@@ -50,7 +58,7 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
         const { data } = await supabase
           .from("user_lists")
           .select("item_ids")
-          .eq("user_id", session!.user.id)
+          .eq("user_id", userId!)
           .eq("list_key", key)
           .single();
 
@@ -65,33 +73,32 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
     }
 
     void loadFromBackend();
-  }, [session?.user?.id, key, storageKey, hasLoaded]);
+  }, [userId, key, storageKey]);
 
-  // Persist changes to localStorage and optionally Supabase
-  const persistItems = useCallback(
-    async (nextItems: string[]) => {
-      hasMutatedRef.current = true;
-      window.localStorage.setItem(storageKey, JSON.stringify(nextItems));
+  // Persist helper ref — stable function that reads latest values from refs
+  const persistRef = useRef((nextItems: string[]) => {
+    hasMutatedRef.current = true;
+    window.localStorage.setItem(storageKeyRef.current, JSON.stringify(nextItems));
 
-      if (!session?.user?.id) return;
+    if (!userIdRef.current) return;
 
-      try {
-        const supabase = getSupabaseBrowserClient();
-        await supabase.from("user_lists").upsert(
-          {
-            user_id: session.user.id,
-            list_key: key,
-            item_ids: nextItems,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "user_id,list_key" }
-        );
-      } catch {
-        // Supabase sync is best-effort
-      }
-    },
-    [key, session?.user?.id, storageKey]
-  );
+    const supabase = getSupabaseBrowserClient();
+    void supabase
+      .from("user_lists")
+      .upsert(
+        {
+          user_id: userIdRef.current,
+          list_key: keyRef.current,
+          item_ids: nextItems,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,list_key" }
+      )
+      .then(
+        () => {},
+        () => {}
+      );
+  });
 
   const toggle = useCallback(
     (itemId: string) => {
@@ -101,11 +108,11 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
           : maxItems && current.length >= maxItems
             ? [...current.slice(1), itemId]
             : [...current, itemId];
-        void persistItems(next);
+        persistRef.current(next);
         return next;
       });
     },
-    [maxItems, persistItems]
+    [maxItems]
   );
 
   const add = useCallback(
@@ -116,33 +123,30 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
           maxItems && current.length >= maxItems
             ? [...current.slice(1), itemId]
             : [...current, itemId];
-        void persistItems(next);
+        persistRef.current(next);
         return next;
       });
     },
-    [maxItems, persistItems]
+    [maxItems]
   );
 
-  const remove = useCallback(
-    (itemId: string) => {
-      setItems((current) => {
-        const next = current.filter((id) => id !== itemId);
-        void persistItems(next);
-        return next;
-      });
-    },
-    [persistItems]
-  );
+  const remove = useCallback((itemId: string) => {
+    setItems((current) => {
+      const next = current.filter((id) => id !== itemId);
+      persistRef.current(next);
+      return next;
+    });
+  }, []);
 
   const clear = useCallback(() => {
     setItems([]);
-    void persistItems([]);
-  }, [persistItems]);
+    persistRef.current([]);
+  }, []);
 
   const has = useCallback(
     (itemId: string) => items.includes(itemId),
     [items]
   );
 
-  return { items, toggle, add, remove, clear, has, hasLoaded };
+  return { items, toggle, add, remove, clear, has, hasLoaded: true };
 }

@@ -24,6 +24,7 @@ import {
 } from "@/lib/fantasy-slate-engine";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 import { cn } from "@/lib/utils";
+import { useSwipe } from "@/hooks/use-swipe";
 import {
   buildSalaryCapActionLabel,
   buildSalaryCapEntrySummary,
@@ -141,6 +142,12 @@ export function SalaryCapEntryBuilder({
   const slotPulseTimeoutRef = useRef<number | null>(null);
   const budgetPulseTimeoutRef = useRef<number | null>(null);
   const projectionPulseTimeoutRef = useRef<number | null>(null);
+  const switchSlateRef = useRef<(direction: -1 | 1) => void>(() => {});
+
+  const swipeRef = useSwipe<HTMLElement>({
+    onSwipeLeft: () => switchSlateRef.current(1),
+    onSwipeRight: () => switchSlateRef.current(-1),
+  });
 
   const refreshEntry = useCallback(async (slateKey?: string) => {
     setIsLoading(true);
@@ -374,7 +381,7 @@ export function SalaryCapEntryBuilder({
     return (
       <EmptyState
         title="Loading lineup"
-        description="Reading the saved salary-cap entry and shared player pool from Supabase."
+        description="Loading your saved lineup and the shared player pool."
       />
     );
   }
@@ -538,8 +545,10 @@ export function SalaryCapEntryBuilder({
     void refreshEntry(target.key);
   }
 
+  switchSlateRef.current = handleSwitchSlate;
+
   return (
-    <section className="space-y-5">
+    <section ref={swipeRef} className="space-y-5">
       {error ? (
         <StatusBanner title="Lineup" message={error} tone="warning" />
       ) : null}
@@ -553,7 +562,7 @@ export function SalaryCapEntryBuilder({
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
               <button
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-35"
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={slateIndex <= 0 || isLoading}
                 onClick={() => {
                   handleSwitchSlate(-1);
@@ -583,7 +592,7 @@ export function SalaryCapEntryBuilder({
                 ))}
               </div>
               <button
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-35"
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={
                   slateIndex === -1 ||
                   slateIndex >= availableSlates.length - 1 ||
@@ -704,7 +713,7 @@ export function SalaryCapEntryBuilder({
             <div className="grid gap-4 xl:grid-cols-2">
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Projection model
+                  How projections work
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
                   Current lineup projection is the sum of each selected player&apos;s average fantasy points. That average is now built from real soccer events: finishing, chance creation, passing volume, ball-winning, clean-sheet equity, and goalkeeper work.
@@ -876,7 +885,7 @@ export function SalaryCapEntryBuilder({
                 <p className="mt-2 text-lg font-semibold leading-tight text-white">
                   {topProjectedPlayer ? topProjectedPlayer.display_name : "Awaiting first pick"}
                 </p>
-                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                   {topProjectedPlayer
                     ? `${formatPoints(topProjectedPlayer.average_points)} pts baseline`
                     : `${formatPoints(averageProjectionPerSlot)} avg per filled slot`}
@@ -938,14 +947,14 @@ export function SalaryCapEntryBuilder({
                               <p className="mt-2 text-sm font-semibold text-white">
                                 {selectedPlayer?.display_name ?? "Open slot"}
                               </p>
-                              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                              <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                                 {selectedPlayer
                                   ? `${selectedPlayer.position} • ${selectedPlayer.club_name}`
                                   : `${eligiblePlayers.length} eligible players`}
                               </p>
                             </div>
                             {selectedPlayer ? (
-                              <div className="text-right text-sm text-white/64">
+                              <div className="text-right text-sm text-white/75">
                                 <p>${selectedPlayer.salary_cost}</p>
                                 <p>{formatPoints(selectedPlayer.average_points)} pts</p>
                               </div>
@@ -971,7 +980,7 @@ export function SalaryCapEntryBuilder({
 
                           {selectedPlayer ? (
                             <button
-                              className="mt-3 rounded-full border border-white/12 bg-white/6 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/68"
+                              className="mt-3 rounded-full border border-white/12 bg-white/6 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/78"
                               disabled={!canEditEntry}
                               onClick={() => {
                                 handleAssignPlayer(slot, "");

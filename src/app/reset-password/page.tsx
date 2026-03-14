@@ -2,17 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { CheckCircle, Lock } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type ResetState = "loading" | "ready" | "submitting" | "done" | "error";
 
 export default function ResetPasswordPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [resetState, setResetState] = useState<ResetState>("loading");
@@ -136,15 +135,21 @@ export default function ResetPasswordPage() {
                   New password
                 </span>
                 <input
+                  aria-describedby="password-strength"
                   className="field-control"
                   type="password"
                   placeholder="At least 6 characters"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); setErrorMessage(""); }}
                   required
                   minLength={6}
                   autoFocus
                 />
+                {password.length > 0 && (
+                  <p id="password-strength" className={`text-xs ${password.length >= 10 ? "text-brand-lime" : password.length >= 6 ? "text-warning" : "text-danger"}`}>
+                    {password.length < 6 ? "Too short" : password.length < 10 ? "Acceptable — add more characters for better security" : "Strong password"}
+                  </p>
+                )}
               </label>
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-foreground">
@@ -172,7 +177,7 @@ export default function ResetPasswordPage() {
                   type="submit"
                   disabled={resetState === "submitting"}
                 >
-                  <Lock className="size-4" />
+                  {resetState === "submitting" ? <Spinner /> : <Lock className="size-4" />}
                   {resetState === "submitting"
                     ? "Updating..."
                     : "Update password"}
@@ -204,7 +209,7 @@ export default function ResetPasswordPage() {
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-6 text-foreground">
               <p className="font-semibold">Keep it unique</p>
               <p className="mt-2 text-muted">
-                Use a different password than your other accounts so one breach doesn't affect everything.
+                Use a different password than your other accounts so one breach doesn&apos;t affect everything.
               </p>
             </div>
           </div>

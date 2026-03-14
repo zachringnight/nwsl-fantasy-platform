@@ -8,6 +8,7 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { Pill } from "@/components/ui/pill";
@@ -37,6 +38,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const [refreshToken, setRefreshToken] = useState(0);
 
   const refreshLeague = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -71,7 +73,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
   useEffect(() => {
     void refreshLeague();
-  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id, refreshToken]);
 
   async function handleCopyCode(code: string) {
     try {
@@ -85,6 +87,17 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
   async function handleSettingsSave(event: React.FormEvent) {
     event.preventDefault();
+
+    if (!settingsForm.leagueName.trim()) {
+      setSaveMessage("League name cannot be empty.");
+      return;
+    }
+    const managerCount = Number(settingsForm.managerCountTarget);
+    if (managerCount < 2 || managerCount > 16) {
+      setSaveMessage("Manager capacity must be between 2 and 16.");
+      return;
+    }
+
     setIsSaving(true);
     setSaveMessage("");
 
@@ -95,7 +108,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
         managerCountTarget: Number(settingsForm.managerCountTarget),
       });
       setSaveMessage("Settings saved successfully.");
-      void refreshLeague();
+      setRefreshToken((prev) => prev + 1);
     } catch (err) {
       setSaveMessage(
         err instanceof Error ? err.message : "Unable to save settings. Try again."
@@ -107,15 +120,15 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening league settings."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening league settings."
-      signedOutDescription="Sign in before opening league settings."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
@@ -156,7 +169,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
                 <SurfaceCard
-                  description="League rules stay visible so everyone knows exactly how this room works."
+                  description="Format, roster rules, and key details for this league."
                   eyebrow="League integrity"
                   title={modeConfig.label}
                 >
@@ -186,7 +199,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                           className="absolute right-3 top-3 rounded-full border border-line bg-white/6 p-2 text-muted transition hover:border-brand-strong/35 hover:text-brand-strong"
                           onClick={() => handleCopyCode(leagueDetails.league.code)}
                           type="button"
-                          title="Copy league code"
+                          aria-label="Copy league code"
                         >
                           <Copy className="size-3.5" />
                         </button>
@@ -277,7 +290,11 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                             {isCommissioner &&
                               member.user_id !== leagueDetails.league.commissioner_user_id && (
                                 <button
-                                  className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger"
+                                  aria-label={`Remove ${member.display_name} from league`}
+                                  className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                                  onClick={() => {
+                                    // TODO: Implement remove-manager flow with confirmation dialog
+                                  }}
                                   title="Remove manager"
                                   type="button"
                                 >
@@ -353,6 +370,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
                     <div className="flex items-center gap-3">
                       <Button type="submit" disabled={isSaving}>
+                        {isSaving ? <Spinner /> : null}
                         {isSaving ? "Saving…" : "Save settings"}
                       </Button>
                       {saveMessage && (

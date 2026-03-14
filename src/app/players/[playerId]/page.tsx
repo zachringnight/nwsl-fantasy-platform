@@ -26,7 +26,6 @@ export default async function PlayerDetailPage({
   const { playerId } = await params;
   const player = getFantasyPlayerById(playerId) as PlayerDetailRecord | null;
   const playerName = player?.display_name ?? formatTitleFromSlug(playerId);
-  const sourceSeason = player?.stats_source_season ?? "recent NWSL production";
   const attackLabel = player?.position === "GK" ? "Saves" : "Goals";
   const attackValue =
     player?.position === "GK"
@@ -44,42 +43,42 @@ export default async function PlayerDetailPage({
       title={playerName}
       description={
         player
-          ? `2026 profile with projections based on ${sourceSeason.toLowerCase()}.`
-          : "That player is not on the current NWSL board."
+          ? `${player.club_name} • ${player.position} • #${player.rank} overall`
+          : "Player not found."
       }
     >
       <section className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
         <SurfaceCard
-          eyebrow="Projection snapshot"
-          title={player ? "What this player brings right now" : "Player not found"}
+          eyebrow="Stats"
+          title={player ? player.display_name : "Player not found"}
           description={
             player
-              ? `${player.club_name} • ${player.position} • Ranked #${player.rank} on the live board`
-              : "That player is not on the current board."
+              ? `${player.club_name} • ${player.position} • Rank #${player.rank}`
+              : "This player isn't on the current board."
           }
         >
           {player ? (
             <div className="grid gap-3 sm:grid-cols-2">
               <MetricTile
-                detail="Projected fantasy production"
+                detail="Projected points per match"
                 label="Average points"
                 value={player.average_points.toFixed(1)}
               />
-              <MetricTile detail="Salary-cap price" label="Salary" tone="brand" value={`$${player.salary_cost}`} />
+              <MetricTile detail="Salary-cap cost" label="Salary" tone="brand" value={`$${player.salary_cost}`} />
               <MetricTile
-                detail={`${sourceSeason} workload`}
+                detail="Games played"
                 label="Appearances"
                 value={String(player.appearances_2025 ?? 0)}
               />
               <MetricTile
-                detail={`${sourceSeason} production`}
+                detail="2025 season"
                 label={attackLabel}
                 tone="accent"
                 value={attackValue}
               />
-              <MetricTile detail="Supporting category" label={supportLabel} value={supportValue} />
+              <MetricTile detail="2025 season" label={supportLabel} value={supportValue} />
               <MetricTile
-                detail="Current availability"
+                detail="Availability"
                 label="Status"
                 value={player.availability}
               />
@@ -87,27 +86,27 @@ export default async function PlayerDetailPage({
           ) : null}
         </SurfaceCard>
         <SurfaceCard
-          eyebrow="Manager read"
-          title={player ? "Why the number lands here" : "Search another player"}
+          eyebrow="Season summary"
+          title={player ? "2025 performance" : "Search another player"}
           description={
             player
-              ? "Projections are based on real NWSL stats, adjusted so small sample sizes don't skew the numbers."
-              : "Search the player board for another manager target."
+              ? "Projections based on real NWSL stats."
+              : "Try searching the player board."
           }
           tone="accent"
         >
           {player ? (
             <div className="space-y-3 text-sm leading-6 text-foreground">
               <p>
-                {player.display_name} is on the {player.club_name} roster for 2026. Their board value blends {sourceSeason.toLowerCase()} output into the current fantasy scoring model so managers can compare draft targets and salary plays on one scale.
+                {player.display_name} plays for {player.club_name} in the 2026 season.
               </p>
               <p>
                 {player.position === "GK"
-                  ? `${player.display_name} logged ${player.saves_2025 ?? 0} saves and ${player.clean_sheets_2025 ?? 0} clean sheets in ${player.appearances_2025 ?? 0} appearances, which drives a steadier floor profile.`
-                  : `${player.display_name} posted ${player.goals_2025 ?? 0} goals and ${player.assists_2025 ?? 0} assists in ${player.appearances_2025 ?? 0} appearances, which shapes the current projection and upside read.`}
+                  ? `${player.saves_2025 ?? 0} saves and ${player.clean_sheets_2025 ?? 0} clean sheets in ${player.appearances_2025 ?? 0} appearances.`
+                  : `${player.goals_2025 ?? 0} goals and ${player.assists_2025 ?? 0} assists in ${player.appearances_2025 ?? 0} appearances.`}
               </p>
               <p>
-                Starts: {player.starts_2025 ?? 0} • Minutes: {player.minutes_2025 ?? 0} • Discipline: {player.yellow_cards_2025 ?? 0} yellow, {player.red_cards_2025 ?? 0} red
+                Starts: {player.starts_2025 ?? 0} • Minutes: {player.minutes_2025 ?? 0} • Yellow cards: {player.yellow_cards_2025 ?? 0} • Red cards: {player.red_cards_2025 ?? 0}
               </p>
             </div>
           ) : null}

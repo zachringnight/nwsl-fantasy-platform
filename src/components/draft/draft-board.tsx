@@ -2,6 +2,8 @@
 
 import { BadgeDollarSign, ListPlus, TimerReset } from "lucide-react";
 import { SurfaceCard } from "@/components/common/surface-card";
+import { ClubLogo } from "@/components/ui/club-logo";
+import { feedback } from "@/lib/feedback";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 
 export interface DraftBoardProps {
@@ -64,7 +66,8 @@ export function DraftBoard({
                   <p className="font-display text-2xl uppercase leading-none tracking-[0.05em]">
                     {player.display_name}
                   </p>
-                  <p className="mt-1 text-sm text-muted">
+                  <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
+                    <ClubLogo club={player.club_name} size={18} />
                     {player.club_name} • {player.position}
                   </p>
 
@@ -95,9 +98,10 @@ export function DraftBoard({
 
                 <div className="flex shrink-0 flex-col gap-2">
                   <button
-                    className="rounded-full border border-line bg-panel px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-panel-strong disabled:cursor-not-allowed disabled:opacity-60"
+                    className="min-h-10 rounded-full border border-line bg-panel px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-panel-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={isBusy || isQueued || !onQueue}
                     onClick={() => {
+                      feedback.tap();
                       onQueue?.(player.id);
                     }}
                     type="button"
@@ -105,9 +109,10 @@ export function DraftBoard({
                     {isBusy ? "Working..." : isQueued ? "Queued" : "Queue"}
                   </button>
                   <button
-                    className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-strong disabled:cursor-not-allowed disabled:opacity-60"
+                    className="min-h-10 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={isBusy || !canDraft || !onDraft}
                     onClick={() => {
+                      feedback.pick();
                       onDraft?.(player.id);
                     }}
                     type="button"

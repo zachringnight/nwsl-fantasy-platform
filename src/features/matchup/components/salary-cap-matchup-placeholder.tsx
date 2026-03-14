@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ArrowDown,
   ArrowUp,
-  Clock3,
   Lock,
   Minus,
-  Sparkles,
   Trophy,
   TrendingUp,
 } from "lucide-react";
@@ -16,9 +14,11 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
 import { getButtonClassName } from "@/components/ui/button";
+import { useSwipe } from "@/hooks/use-swipe";
 
 export interface SalaryCapMatchupPlaceholderProps {
   modeDescription: string;
+  onSwitchSlate?: (direction: -1 | 1) => void;
   playersHref: string;
   teamHref: string;
 }
@@ -58,11 +58,22 @@ type LockStatus = "editable" | "locked" | "final";
 
 export function SalaryCapMatchupPlaceholder({
   modeDescription,
+  onSwitchSlate,
   playersHref,
   teamHref,
 }: SalaryCapMatchupPlaceholderProps) {
   const [lockStatus] = useState<LockStatus>("locked");
   const [elapsedMinutes, setElapsedMinutes] = useState(67);
+  const switchRef = useRef(onSwitchSlate);
+
+  useEffect(() => {
+    switchRef.current = onSwitchSlate;
+  }, [onSwitchSlate]);
+
+  const swipeRef = useSwipe<HTMLElement>({
+    onSwipeLeft: () => switchRef.current?.(1),
+    onSwipeRight: () => switchRef.current?.(-1),
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -81,7 +92,7 @@ export function SalaryCapMatchupPlaceholder({
   };
 
   return (
-    <section className="space-y-5">
+    <section ref={swipeRef} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-4">
         <MetricTile
           label="Your rank"

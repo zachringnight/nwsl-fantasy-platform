@@ -9,6 +9,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { MetricTile } from "@/components/ui/metric-tile";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { getButtonClassName } from "@/components/ui/button";
 import { Pill } from "@/components/ui/pill";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
@@ -57,8 +58,8 @@ export function DashboardClient() {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the dashboard."
-      loadingTitle="Checking your account"
+      loadingDescription="Loading your dashboard."
+      loadingTitle="Loading"
       onboardingAction={
         <Link
           className={getButtonClassName()}
@@ -83,14 +84,14 @@ export function DashboardClient() {
           </Link>
         </div>
       }
-      signedOutDescription="Sign in before opening the dashboard."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
         if (isLoadingLeagues) {
           return (
             <EmptyState
-              description="Loading your leagues and current contest windows."
+              description="Loading your leagues."
               title="Loading leagues"
             />
           );
@@ -118,7 +119,7 @@ export function DashboardClient() {
                   </Link>
                 </div>
               }
-              description="Create a league or join one by code to start populating your dashboard."
+              description="Create a league or join one with a code to get started."
               title="No leagues yet"
             />
           );
@@ -147,9 +148,9 @@ export function DashboardClient() {
             <section className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
               <MotionReveal variant="left">
                 <SurfaceCard
-                  description="Next lock, top league, and your next move — all at a glance."
-                  eyebrow="Portfolio view"
-                  title="Run every league from one dashboard"
+                  description="Your leagues, deadlines, and next moves."
+                  eyebrow="Overview"
+                  title="Your leagues"
                 >
                   <div className="space-y-4">
                     <div className="flex flex-wrap gap-2">
@@ -160,19 +161,19 @@ export function DashboardClient() {
 
                     <div className="grid gap-3 sm:grid-cols-3">
                       <MetricTile
-                        detail="Every card below points to a next move."
+                        detail="Leagues you're in."
                         label="Active leagues"
                         value={leagues.length}
                       />
                       <MetricTile
-                        detail="Commissioner tools stay pinned to the right room."
+                        detail="Leagues you manage."
                         label="Commissioner roles"
                         tone="brand"
                         value={commissionerCount}
                       />
                       <MetricTile
-                        detail="Live rooms and active slates get urgency treatment."
-                        label="Live windows"
+                        detail="Leagues with live matches."
+                        label="Live now"
                         tone="accent"
                         value={liveWindowCount}
                       />
@@ -182,7 +183,7 @@ export function DashboardClient() {
                       <div className="rounded-[1.5rem] border border-line bg-white/6 p-4">
                         <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
                           <CalendarClock className="size-3.5" />
-                          Next lock lane
+                          Next deadline
                         </p>
                         <p className="mt-3 text-xl font-semibold leading-tight text-foreground">
                           {buildLeagueWindowSummary(featuredLeague)}
@@ -194,15 +195,15 @@ export function DashboardClient() {
                       <div className="rounded-[1.5rem] border border-line bg-white/6 p-4">
                         <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
                           <Radar className="size-3.5" />
-                          Format split
+                          Your formats
                         </p>
                         <p className="mt-3 text-xl font-semibold leading-tight text-foreground">
                           {salaryCapCount} salary-cap / {leagues.length - salaryCapCount} classic
                         </p>
                         <p className="mt-2 text-sm leading-6 text-muted">
                           {nextSalaryCapLeague
-                            ? `${nextSalaryCapLeague.league.name} is your cleanest salary-cap lane right now.`
-                            : "Classic rooms are leading this portfolio right now."}
+                            ? `${nextSalaryCapLeague.league.name} is your next salary-cap league.`
+                            : "All your leagues are classic format."}
                         </p>
                       </div>
                     </div>
@@ -215,8 +216,8 @@ export function DashboardClient() {
                 variant="right"
               >
                 <SurfaceCard
-                  description="Your featured league stays front and center so the next action is always obvious."
-                  eyebrow="Tonight's pulse"
+                  description="Your most active league right now."
+                  eyebrow="Featured league"
                   title={featuredLeague.league.name}
                   tone={featuredMode.usesSalaryCap ? "brand" : "accent"}
                 >
@@ -231,12 +232,12 @@ export function DashboardClient() {
                     </div>
                     <div className="rounded-[1.5rem] border border-line bg-night/35 p-4">
                       <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
-                        Priority cue
+                        What&apos;s next
                       </p>
                       <p className="mt-3 text-lg font-semibold leading-tight text-foreground">
                         {featuredLeague.league.status === "live"
-                          ? "A live league is active right now."
-                          : "This is the cleanest next move in your portfolio."}
+                          ? "Matches are live — check your scores."
+                          : "Your next move is here."}
                       </p>
                       <p className="mt-2 text-sm leading-6 text-muted">
                         {buildLeagueNextAction(featuredLeague)}
@@ -290,10 +291,8 @@ export function DashboardClient() {
 
             <div className="grid gap-5">
               {prioritizedLeagues.map((summary, index) => (
-                <MotionReveal
+                <ScrollReveal
                   key={summary.league.id}
-                  delay={80 + index * 60}
-                  variant={index % 2 === 0 ? "up" : "scale"}
                 >
                   <LeagueCard
                     league={{
@@ -308,7 +307,7 @@ export function DashboardClient() {
                       draftStatus: buildLeaguePhaseLabel(summary),
                     }}
                   />
-                </MotionReveal>
+                </ScrollReveal>
               ))}
             </div>
           </div>

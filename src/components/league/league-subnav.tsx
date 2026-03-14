@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Award,
   Crown,
+  MessageCircle,
   RadioTower,
+  Repeat2,
   Settings2,
   Shield,
   Sparkles,
@@ -52,6 +55,18 @@ const leagueNavMeta = {
     hint: "Lineup",
     icon: Users2,
   },
+  Trades: {
+    hint: "Deals",
+    icon: Repeat2,
+  },
+  Chat: {
+    hint: "Talk",
+    icon: MessageCircle,
+  },
+  Badges: {
+    hint: "Earn",
+    icon: Award,
+  },
 } as const;
 
 export function LeagueSubnav({ leagueId }: LeagueSubnavProps) {
@@ -61,7 +76,7 @@ export function LeagueSubnav({ leagueId }: LeagueSubnavProps) {
   return (
     <nav
       aria-label="League navigation"
-      className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-8"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11"
     >
       {items.map((item) => (
         <LeagueNavCard
@@ -96,7 +111,7 @@ function LeagueNavCard({
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "league-nav-card group rounded-[1.45rem] border px-3 py-3 transition duration-300",
+        "league-nav-card group rounded-[1.45rem] border px-3 py-3 transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 focus-visible:ring-offset-2 focus-visible:ring-offset-night",
         isActive
           ? "border-white/18 bg-white/14 text-white shadow-[0_22px_60px_rgba(11,28,88,0.35)]"
           : "border-white/10 bg-black/18 text-white/78 hover:border-brand-strong/35 hover:bg-white/10 hover:text-white"
