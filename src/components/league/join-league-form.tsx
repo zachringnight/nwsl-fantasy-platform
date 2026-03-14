@@ -59,7 +59,7 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
       signedOutTitle="Sign in to continue"
     >
       {() => (
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" noValidate onSubmit={handleSubmit}>
           <input
             className="field-control"
             type="text"
@@ -69,8 +69,9 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
             autoCapitalize="characters"
             maxLength={6}
             required
+            aria-invalid={Boolean(error)}
           />
-          {error ? <p className="text-sm text-danger">{error}</p> : null}
+          {error ? <p className="text-sm text-danger" role="alert">{error}</p> : null}
           <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? "Joining league..." : "Join league"}
           </Button>

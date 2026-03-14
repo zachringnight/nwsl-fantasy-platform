@@ -25,7 +25,7 @@ export interface DraftRoomClientProps {
 
 export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const dataClient = useFantasyDataClient();
-  const { hasHydrated, profile, session, supabaseReady } = useFantasyAuth();
+  const { authError, hasHydrated, profile, session, supabaseReady } = useFantasyAuth();
   const [draftState, setDraftState] = useState<FantasyDraftState | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -277,11 +277,11 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     await withDraftAction(nextStatus, () => dataClient.updateDraftStatus(leagueId, nextStatus));
   }
 
-  if (!supabaseReady) {
+  if (!supabaseReady || authError) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="Something went wrong. Please try again in a moment."
+        description={authError ?? "Something went wrong. Please try again in a moment."}
       />
     );
   }

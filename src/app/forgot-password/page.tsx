@@ -6,6 +6,7 @@ import { CheckCircle, Mail } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { normalizeFantasyEmail } from "@/lib/fantasy-profile";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type FormState = "idle" | "sending" | "sent" | "error";
@@ -17,16 +18,13 @@ export default function ForgotPasswordPage() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const trimmed = email.trim();
-
-    if (!trimmed) return;
-
     setFormState("sending");
     setErrorMessage("");
 
     try {
+      const normalizedEmail = normalizeFantasyEmail(email);
       const supabase = getSupabaseBrowserClient();
-      const { error } = await supabase.auth.resetPasswordForEmail(trimmed, {
+      const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
         redirectTo: `${window.location.origin}/reset-password`,
       });
 
@@ -34,6 +32,7 @@ export default function ForgotPasswordPage() {
         throw error;
       }
 
+      setEmail(normalizedEmail);
       setFormState("sent");
     } catch (err) {
       setFormState("error");
@@ -89,7 +88,7 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
           ) : (
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" noValidate onSubmit={handleSubmit}>
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-foreground">Email address</span>
                 <input
@@ -101,11 +100,15 @@ export default function ForgotPasswordPage() {
                   required
                   autoFocus
                   autoComplete="email"
+                  aria-invalid={formState === "error"}
                 />
               </label>
 
               {formState === "error" && errorMessage && (
-                <div className="rounded-[1rem] border border-danger/30 bg-danger/8 p-3 text-sm text-danger">
+                <div
+                  className="rounded-[1rem] border border-danger/30 bg-danger/8 p-3 text-sm text-danger"
+                  role="alert"
+                >
                   {errorMessage}
                 </div>
               )}

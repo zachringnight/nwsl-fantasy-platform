@@ -16,18 +16,18 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export function SignupLocalForm() {
   const router = useRouter();
-  const { hasHydrated, profile, refreshProfile, session, supabaseReady } = useFantasyAuth();
+  const { authError, hasHydrated, profile, refreshProfile, session, supabaseReady } = useFantasyAuth();
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!supabaseReady) {
+  if (!supabaseReady || authError) {
     return (
       <EmptyState
         title="Sign-up temporarily unavailable"
-        description="We're having trouble connecting right now. Please try again in a moment."
+        description={authError ?? "We're having trouble connecting right now. Please try again in a moment."}
       />
     );
   }
@@ -138,6 +138,7 @@ export function SignupLocalForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
+          aria-invalid={Boolean(error)}
         />
       </label>
       <label className="block space-y-2">
@@ -151,6 +152,7 @@ export function SignupLocalForm() {
           required
           minLength={6}
           autoComplete="new-password"
+          aria-invalid={Boolean(error)}
         />
       </label>
       {error ? <p className="text-sm text-danger" role="alert">{error}</p> : null}

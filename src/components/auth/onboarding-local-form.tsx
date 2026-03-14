@@ -125,7 +125,7 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
         </select>
       </label>
 
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
+      {error ? <p className="text-sm text-danger" role="alert">{error}</p> : null}
       <Button disabled={isSubmitting} fullWidth type="submit">
         {isSubmitting ? "Saving onboarding..." : "Save and continue"}
       </Button>

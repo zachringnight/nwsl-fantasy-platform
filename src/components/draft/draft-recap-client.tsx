@@ -23,7 +23,7 @@ export interface DraftRecapClientProps {
 
 export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
   const dataClient = useFantasyDataClient();
-  const { hasHydrated, profile, session, supabaseReady } = useFantasyAuth();
+  const { authError, hasHydrated, profile, session, supabaseReady } = useFantasyAuth();
   const [draftState, setDraftState] = useState<FantasyDraftState | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -79,11 +79,11 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
     };
   }, [draftState?.draft.status, profile?.onboarding_complete, session]);
 
-  if (!supabaseReady) {
+  if (!supabaseReady || authError) {
     return (
       <EmptyState
         title="Draft recap unavailable"
-        description="Something went wrong. Please try again in a moment."
+        description={authError ?? "Something went wrong. Please try again in a moment."}
       />
     );
   }

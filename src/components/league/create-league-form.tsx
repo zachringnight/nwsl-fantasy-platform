@@ -325,7 +325,7 @@ export function CreateLeagueForm() {
                 </div>
               ) : null}
 
-              {error ? <p className="mt-4 text-sm text-danger">{error}</p> : null}
+              {error ? <p className="mt-4 text-sm text-danger" role="alert">{error}</p> : null}
 
               <Button
                 className="mt-5"

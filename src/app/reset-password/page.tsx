@@ -6,9 +6,18 @@ import { CheckCircle, Lock } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { validateFantasyPassword } from "@/lib/fantasy-profile";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type ResetState = "loading" | "ready" | "submitting" | "done" | "error";
+const expiredRecoveryLinkMessage =
+  "This recovery link has expired or was already used. Request a new one.";
+
+function getResetPasswordErrorMessage(error: unknown) {
+  return error instanceof Error && error.message
+    ? error.message
+    : "We could not verify your recovery link. Request a new one.";
+}
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -17,27 +26,87 @@ export default function ResetPasswordPage() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Supabase sends the user here with a session already established
-    // via the recovery token in the URL hash
-    const supabase = getSupabaseBrowserClient();
+    let isActive = true;
+    let resolvedRecovery = false;
+    let fallbackTimer: number | null = null;
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setResetState("ready");
-      } else {
-        setResetState("error");
-        setErrorMessage(
-          "This recovery link has expired or was already used. Request a new one."
-        );
+    const clearFallbackTimer = () => {
+      if (fallbackTimer != null) {
+        window.clearTimeout(fallbackTimer);
+        fallbackTimer = null;
       }
-    });
+    };
+
+    const markReady = () => {
+      if (!isActive) {
+        return;
+      }
+
+      resolvedRecovery = true;
+      clearFallbackTimer();
+      setErrorMessage("");
+      setResetState("ready");
+    };
+
+    const markError = (message: string) => {
+      if (!isActive || resolvedRecovery) {
+        return;
+      }
+
+      clearFallbackTimer();
+      setResetState("error");
+      setErrorMessage(message);
+    };
+
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data } = supabase.auth.onAuthStateChange((event, session) => {
+        if (session || event === "PASSWORD_RECOVERY") {
+          markReady();
+        }
+      });
+
+      void supabase.auth.getSession().then(({ data: { session }, error }) => {
+        if (error) {
+          markError(getResetPasswordErrorMessage(error));
+          return;
+        }
+
+        if (session) {
+          markReady();
+          return;
+        }
+
+        if (!resolvedRecovery) {
+          fallbackTimer = window.setTimeout(() => {
+            markError(expiredRecoveryLinkMessage);
+          }, 1200);
+        }
+      });
+
+      return () => {
+        isActive = false;
+        clearFallbackTimer();
+        data.subscription.unsubscribe();
+      };
+    } catch (error) {
+      markError(getResetPasswordErrorMessage(error));
+    }
+
+    return () => {
+      isActive = false;
+      clearFallbackTimer();
+    };
   }, []);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    setErrorMessage("");
 
-    if (password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters.");
+    try {
+      validateFantasyPassword(password);
+    } catch (error) {
+      setErrorMessage(getResetPasswordErrorMessage(error));
       return;
     }
 
@@ -128,7 +197,7 @@ export default function ResetPasswordPage() {
           )}
 
           {(resetState === "ready" || resetState === "submitting") && (
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" noValidate onSubmit={handleSubmit}>
               <label className="block space-y-2">
                 <span className="text-sm font-medium text-foreground">
                   New password
@@ -143,6 +212,7 @@ export default function ResetPasswordPage() {
                   minLength={6}
                   autoFocus
                   autoComplete="new-password"
+                  aria-invalid={Boolean(errorMessage)}
                 />
               </label>
               <label className="block space-y-2">
@@ -158,11 +228,15 @@ export default function ResetPasswordPage() {
                   required
                   minLength={6}
                   autoComplete="new-password"
+                  aria-invalid={Boolean(errorMessage)}
                 />
               </label>
 
               {errorMessage && (
-                <div className="rounded-[1rem] border border-danger/30 bg-danger/8 p-3 text-sm text-danger">
+                <div
+                  className="rounded-[1rem] border border-danger/30 bg-danger/8 p-3 text-sm text-danger"
+                  role="alert"
+                >
                   {errorMessage}
                 </div>
               )}

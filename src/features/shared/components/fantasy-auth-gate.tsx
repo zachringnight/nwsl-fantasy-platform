@@ -23,6 +23,7 @@ export interface FantasyAuthGateProps {
   signedOutAction?: ReactNode;
   signedOutDescription: string;
   signedOutTitle: string;
+  unavailableAction?: ReactNode;
   unavailableDescription?: string;
   unavailableTitle?: string;
 }
@@ -38,16 +39,17 @@ export function FantasyAuthGate({
   signedOutAction,
   signedOutDescription,
   signedOutTitle,
+  unavailableAction,
   unavailableDescription = "Account services are temporarily unavailable. Try again in a moment.",
   unavailableTitle = "Something went wrong",
 }: FantasyAuthGateProps) {
   const auth = useFantasyAuth();
 
-  if (!auth.supabaseReady) {
+  if (!auth.supabaseReady || auth.authError) {
     return (
       <EmptyState
-        action={signedOutAction}
-        description={unavailableDescription}
+        action={unavailableAction}
+        description={auth.authError ?? unavailableDescription}
         title={unavailableTitle}
       />
     );

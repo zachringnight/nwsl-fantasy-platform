@@ -12,17 +12,17 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export function LoginLocalForm() {
   const router = useRouter();
-  const { hasHydrated, profile, refreshProfile, session, supabaseReady } = useFantasyAuth();
+  const { authError, hasHydrated, profile, refreshProfile, session, supabaseReady } = useFantasyAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  if (!supabaseReady) {
+  if (!supabaseReady || authError) {
     return (
       <EmptyState
         title="Sign-in temporarily unavailable"
-        description="We're having trouble connecting right now. Please try again in a moment."
+        description={authError ?? "We're having trouble connecting right now. Please try again in a moment."}
       />
     );
   }
@@ -88,7 +88,7 @@ export function LoginLocalForm() {
   }
 
   return (
-    <form className="space-y-4" onSubmit={handleEmailLogin}>
+    <form className="space-y-4" noValidate onSubmit={handleEmailLogin}>
       <label className="block space-y-2">
         <span className="text-sm font-medium text-foreground">Email</span>
         <input
@@ -100,6 +100,7 @@ export function LoginLocalForm() {
           required
           autoFocus
           autoComplete="email"
+          aria-invalid={Boolean(error)}
         />
       </label>
       <label className="block space-y-2">
@@ -112,9 +113,10 @@ export function LoginLocalForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
+          aria-invalid={Boolean(error)}
         />
       </label>
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
+      {error ? <p className="text-sm text-danger" role="alert">{error}</p> : null}
       <Button disabled={isSubmitting} fullWidth type="submit">
         <Mail className="size-4" />
         {isSubmitting ? "Signing in…" : "Sign in"}

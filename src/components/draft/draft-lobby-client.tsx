@@ -18,7 +18,7 @@ export interface DraftLobbyClientProps {
 
 export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
   const dataClient = useFantasyDataClient();
-  const { hasHydrated, profile, session, supabaseReady } = useFantasyAuth();
+  const { authError, hasHydrated, profile, session, supabaseReady } = useFantasyAuth();
   const [draftState, setDraftState] = useState<FantasyDraftState | null>(null);
   const [error, setError] = useState("");
   const [busyAction, setBusyAction] = useState("");
@@ -109,11 +109,11 @@ export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
     }
   }
 
-  if (!supabaseReady) {
+  if (!supabaseReady || authError) {
     return (
       <EmptyState
         title="Draft lobby unavailable"
-        description="Something went wrong. Please try again in a moment."
+        description={authError ?? "Something went wrong. Please try again in a moment."}
       />
     );
   }
