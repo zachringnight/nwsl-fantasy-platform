@@ -10,5 +10,8 @@ export function buildLeagueLinks(leagueId: string) {
     standings: `/leagues/${leagueId}/standings`,
     transactions: `/leagues/${leagueId}/transactions`,
     settings: `/leagues/${leagueId}/settings`,
+    chat: `/leagues/${leagueId}/chat`,
+    achievements: `/leagues/${leagueId}/achievements`,
+    trades: `/leagues/${leagueId}/trades`,
   };
 }

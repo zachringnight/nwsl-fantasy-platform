@@ -205,6 +205,37 @@ enum AuditActorType {
   SYSTEM
 }
 
+enum AchievementKey {
+  FIRST_DRAFT_PICK
+  WIN_STREAK_3
+  WIN_STREAK_5
+  WIN_STREAK_7
+  POINTS_100_WEEK
+  POINTS_150_WEEK
+  PERFECT_LINEUP
+  WAIVER_WIRE_HERO
+  COMEBACK_WIN
+  SEASON_CHAMPION
+  CLEAN_SWEEP
+  TOP_SCORER_WEEK
+  TRADE_PARTNER
+  CHAT_STARTER
+}
+
+enum TradeProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  VETOED
+  CANCELED
+  EXPIRED
+}
+
+enum TradeVoteDecision {
+  APPROVE
+  VETO
+}
+
 model User {
   id                    String                 @id @default(cuid())
   name                  String?
@@ -223,6 +254,10 @@ model User {
   notifications         Notification[]
   auditLogs             AuditLog[]             @relation("audit_actor")
   scoringOverrides      ScoringOverride[]      @relation("override_actor")
+  achievements          Achievement[]
+  streaks               Streak[]
+  chatMessages          ChatMessage[]
+  tradeVotes            TradeVote[]
 }
 
 model Account {
@@ -305,6 +340,7 @@ model Player {
   availabilityItems   AvailabilityReportItem[]
   providerMaps        ProviderPlayerMap[]
   scoringOverrides    ScoringOverride[]
+  tradeAssets         TradeAsset[]
 }
 
 model League {
@@ -333,6 +369,10 @@ model League {
   notifications  Notification[]
   scoringOverrides ScoringOverride[]
   auditLogs      AuditLog[]
+  achievements   Achievement[]
+  streaks        Streak[]
+  chatMessages   ChatMessage[]
+  tradeProposals TradeProposal[]
 }
 
 model LeagueSettings {
@@ -423,6 +463,11 @@ model FantasyTeam {
   transactionsFrom Transaction[]  @relation("transaction_from_team")
   transactionsTo   Transaction[]  @relation("transaction_to_team")
   notifications    Notification[]
+  streaks          Streak[]
+  proposedTrades   TradeProposal[]  @relation("trade_proposer")
+  receivedTrades   TradeProposal[]  @relation("trade_receiver")
+  tradeAssets      TradeAsset[]
+  tradeVotes       TradeVote[]
 
   @@index([leagueId])
 }
@@ -919,4 +964,117 @@ model AuditLog {
 
   @@index([leagueId, createdAt])
   @@index([targetType, targetId])
+}
+
+// ───────────────────────────────────────────────────────────
+// Gamification: Achievements, Badges, Streaks
+// ───────────────────────────────────────────────────────────
+
+model Achievement {
+  id          String         @id @default(cuid())
+  userId      String
+  leagueId    String?
+  key         AchievementKey
+  label       String
+  description String
+  earnedAt    DateTime       @default(now())
+  metadata    Json?
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  league      League?        @relation(fields: [leagueId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, leagueId, key])
+  @@index([userId, earnedAt])
+  @@index([leagueId])
+}
+
+model Streak {
+  id            String   @id @default(cuid())
+  userId        String
+  leagueId      String
+  fantasyTeamId String
+  streakType    String
+  currentCount  Int      @default(0)
+  bestCount     Int      @default(0)
+  lastUpdatedAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  league        League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  fantasyTeam   FantasyTeam @relation(fields: [fantasyTeamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, leagueId, streakType])
+  @@index([leagueId])
+}
+
+// ───────────────────────────────────────────────────────────
+// In-League Chat
+// ───────────────────────────────────────────────────────────
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  leagueId  String
+  userId    String
+  body      String
+  createdAt DateTime @default(now())
+  league    League   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([leagueId, createdAt])
+}
+
+// ───────────────────────────────────────────────────────────
+// Trade Proposals
+// ───────────────────────────────────────────────────────────
+
+model TradeProposal {
+  id                String              @id @default(cuid())
+  leagueId          String
+  proposerTeamId    String
+  receiverTeamId    String
+  status            TradeProposalStatus @default(PENDING)
+  message           String?
+  reviewPeriodEndsAt DateTime
+  respondedAt       DateTime?
+  processedAt       DateTime?
+  vetoCount         Int                @default(0)
+  vetoThreshold     Int                @default(0)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  league            League             @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  proposerTeam      FantasyTeam        @relation("trade_proposer", fields: [proposerTeamId], references: [id], onDelete: Cascade)
+  receiverTeam      FantasyTeam        @relation("trade_receiver", fields: [receiverTeamId], references: [id], onDelete: Cascade)
+  assets            TradeAsset[]
+  votes             TradeVote[]
+
+  @@index([leagueId, status, createdAt])
+  @@index([proposerTeamId])
+  @@index([receiverTeamId])
+}
+
+model TradeAsset {
+  id              String        @id @default(cuid())
+  tradeProposalId String
+  fromTeamId      String
+  playerId        String
+  playerName      String
+  playerPosition  PlayerPosition
+  clubName        String
+  tradeProposal   TradeProposal @relation(fields: [tradeProposalId], references: [id], onDelete: Cascade)
+  fromTeam        FantasyTeam   @relation(fields: [fromTeamId], references: [id], onDelete: Cascade)
+  player          Player        @relation(fields: [playerId], references: [id])
+
+  @@index([tradeProposalId])
+}
+
+model TradeVote {
+  id              String            @id @default(cuid())
+  tradeProposalId String
+  fantasyTeamId   String
+  userId          String
+  decision        TradeVoteDecision
+  createdAt       DateTime          @default(now())
+  tradeProposal   TradeProposal     @relation(fields: [tradeProposalId], references: [id], onDelete: Cascade)
+  fantasyTeam     FantasyTeam       @relation(fields: [fantasyTeamId], references: [id], onDelete: Cascade)
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tradeProposalId, fantasyTeamId])
 }

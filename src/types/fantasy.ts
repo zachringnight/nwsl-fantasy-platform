@@ -392,6 +392,109 @@ export interface DemoLeague {
   draftStatus: string;
 }
 
+// ───────────────────────────────────────────────────────────
+// Gamification
+// ───────────────────────────────────────────────────────────
+
+export type AchievementKey =
+  | "FIRST_DRAFT_PICK"
+  | "WIN_STREAK_3"
+  | "WIN_STREAK_5"
+  | "WIN_STREAK_7"
+  | "POINTS_100_WEEK"
+  | "POINTS_150_WEEK"
+  | "PERFECT_LINEUP"
+  | "WAIVER_WIRE_HERO"
+  | "COMEBACK_WIN"
+  | "SEASON_CHAMPION"
+  | "CLEAN_SWEEP"
+  | "TOP_SCORER_WEEK"
+  | "TRADE_PARTNER"
+  | "CHAT_STARTER";
+
+export interface AchievementRecord {
+  id: string;
+  user_id: string;
+  league_id: string | null;
+  key: AchievementKey;
+  label: string;
+  description: string;
+  earned_at: string;
+  metadata: Record<string, unknown> | null;
+}
+
+export interface StreakRecord {
+  id: string;
+  user_id: string;
+  league_id: string;
+  fantasy_team_id: string;
+  streak_type: string;
+  current_count: number;
+  best_count: number;
+  last_updated_at: string;
+}
+
+// ───────────────────────────────────────────────────────────
+// In-League Chat
+// ───────────────────────────────────────────────────────────
+
+export interface ChatMessageRecord {
+  id: string;
+  league_id: string;
+  user_id: string;
+  display_name: string;
+  body: string;
+  created_at: string;
+}
+
+// ───────────────────────────────────────────────────────────
+// Trade Proposals
+// ───────────────────────────────────────────────────────────
+
+export type TradeProposalStatus =
+  | "pending"
+  | "accepted"
+  | "rejected"
+  | "vetoed"
+  | "canceled"
+  | "expired";
+
+export interface TradeAssetRecord {
+  id: string;
+  trade_proposal_id: string;
+  from_team_id: string;
+  player_id: string;
+  player_name: string;
+  player_position: PlayerPosition;
+  club_name: string;
+}
+
+export interface TradeVoteRecord {
+  id: string;
+  trade_proposal_id: string;
+  fantasy_team_id: string;
+  user_id: string;
+  decision: "approve" | "veto";
+  created_at: string;
+}
+
+export interface TradeProposalRecord {
+  id: string;
+  league_id: string;
+  proposer_team_id: string;
+  proposer_team_name: string;
+  receiver_team_id: string;
+  receiver_team_name: string;
+  status: TradeProposalStatus;
+  message: string | null;
+  review_period_ends_at: string;
+  veto_count: number;
+  veto_threshold: number;
+  assets: TradeAssetRecord[];
+  votes: TradeVoteRecord[];
+  created_at: string;
+}
+
 export interface DemoPlayer {
   id: string;
   name: string;

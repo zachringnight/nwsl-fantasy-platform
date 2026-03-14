@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Award,
   Crown,
+  MessageCircle,
   RadioTower,
+  Repeat2,
   Settings2,
   Shield,
   Sparkles,
@@ -52,6 +55,18 @@ const leagueNavMeta = {
     hint: "Lineup",
     icon: Users2,
   },
+  Trades: {
+    hint: "Deals",
+    icon: Repeat2,
+  },
+  Chat: {
+    hint: "Talk",
+    icon: MessageCircle,
+  },
+  Badges: {
+    hint: "Earn",
+    icon: Award,
+  },
 } as const;
 
 export function LeagueSubnav({ leagueId }: LeagueSubnavProps) {
@@ -61,7 +76,7 @@ export function LeagueSubnav({ leagueId }: LeagueSubnavProps) {
   return (
     <nav
       aria-label="League navigation"
-      className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-8"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11"
     >
       {items.map((item) => (
         <LeagueNavCard
