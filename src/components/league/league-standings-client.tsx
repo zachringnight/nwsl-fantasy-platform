@@ -169,8 +169,8 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                 <StatusBanner title="Standings note" message={error} tone="warning" />
               ) : (
                 <StatusBanner
-                  title="Standings engine"
-                  message="The current table is driven by the built-in weekly simulator, so the playoff race still moves and reads like a real season."
+                  title="How standings work"
+                  message="The current table is driven by weekly matchup results, so the playoff race updates automatically and reads like a real season."
                   tone="info"
                 />
               )}
@@ -202,7 +202,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                       value={topSeed ? topSeed.team_name : "N/A"}
                     />
                     <MetricTile
-                      detail="Highest season outlook from the built-in projection model."
+                      detail="Highest season outlook based on projected points."
                       label="Projection leader"
                       tone="accent"
                       value={projectionLeader ? projectionLeader.team_name : "N/A"}

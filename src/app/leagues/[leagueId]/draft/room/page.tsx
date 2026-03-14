@@ -1,6 +1,22 @@
-import { DraftRoomClient } from "@/components/draft/draft-room-client";
+import dynamic from "next/dynamic";
 import { LeaguePageShell } from "@/components/league/league-page-shell";
+import { SkeletonCard } from "@/components/ui/skeleton";
 import type { AsyncRouteProps } from "@/types/routes";
+
+const DraftRoomClient = dynamic(
+  () => import("@/components/draft/draft-room-client").then((m) => m.DraftRoomClient),
+  { loading: () => <DraftRoomSkeleton /> }
+);
+
+function DraftRoomSkeleton() {
+  return (
+    <div className="grid gap-5 lg:grid-cols-3">
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+    </div>
+  );
+}
 
 export default async function LeagueDraftRoomPage({
   params,

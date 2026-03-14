@@ -381,7 +381,7 @@ export function SalaryCapEntryBuilder({
     return (
       <EmptyState
         title="Loading lineup"
-        description="Reading the saved salary-cap entry and shared player pool from Supabase."
+        description="Loading your saved lineup and the shared player pool."
       />
     );
   }
@@ -713,7 +713,7 @@ export function SalaryCapEntryBuilder({
             <div className="grid gap-4 xl:grid-cols-2">
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Projection model
+                  How projections work
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
                   Current lineup projection is the sum of each selected player&apos;s average fantasy points. That average is now built from real soccer events: finishing, chance creation, passing volume, ball-winning, clean-sheet equity, and goalkeeper work.

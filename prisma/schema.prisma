@@ -396,6 +396,7 @@ model LeagueMembership {
   team      FantasyTeam?
 
   @@unique([leagueId, userId])
+  @@index([userId])
 }
 
 model FantasyTeam {
@@ -422,6 +423,8 @@ model FantasyTeam {
   transactionsFrom Transaction[]  @relation("transaction_from_team")
   transactionsTo   Transaction[]  @relation("transaction_to_team")
   notifications    Notification[]
+
+  @@index([leagueId])
 }
 
 model LeagueWeek {

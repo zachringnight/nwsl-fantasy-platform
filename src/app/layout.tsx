@@ -51,7 +51,7 @@ export default function RootLayout({
                   Skip to main content
                 </a>
                 <SiteHeader />
-                <div id="main-content" className="flex-1">{children}</div>
+                <div id="main-content" className="page-enter flex-1">{children}</div>
                 <SiteFooter />
               </div>
             </AnalyticsProvider>

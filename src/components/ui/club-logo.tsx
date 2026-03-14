@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { findClub } from "@/config/nwsl-clubs";
 import { cn } from "@/lib/utils";
 
@@ -46,13 +47,13 @@ export function ClubLogo({ club, size = 24, className }: ClubLogoProps) {
         backgroundColor: `${matched.color}20`,
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         alt=""
         src={matched.logo}
-        width={size * 0.7}
-        height={size * 0.7}
+        width={Math.round(size * 0.7)}
+        height={Math.round(size * 0.7)}
         className="object-contain"
+        unoptimized={!matched.logo.startsWith("/")}
         onError={(e) => {
           // Fallback to abbreviation text on image load failure
           const target = e.currentTarget;

@@ -232,7 +232,7 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                 <SurfaceCard
                   description="Salary-cap formats edit entries before lock instead of claiming exclusive players."
                   eyebrow="Mode split"
-                  title="Classic-only transaction engine"
+                  title="Classic-only transactions"
                   tone="accent"
                 />
               </section>

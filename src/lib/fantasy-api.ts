@@ -1323,32 +1323,20 @@ async function updateMembershipWaiverPriorities(
 ) {
   const supabase = getSupabaseBrowserClient();
 
-  for (const [index, membership] of memberships.entries()) {
-    const { error } = await supabase
-      .from("fantasy_league_memberships")
-      .update({
-        waiver_priority: -(index + 1),
-      })
-      .eq("id", membership.id)
-      .eq("league_id", leagueId);
+  // Batch all priority updates in parallel instead of 2N sequential queries
+  const results = await Promise.all(
+    memberships.map((membership) =>
+      supabase
+        .from("fantasy_league_memberships")
+        .update({ waiver_priority: membership.waiver_priority })
+        .eq("id", membership.id)
+        .eq("league_id", leagueId)
+    )
+  );
 
-    if (error) {
-      throw new Error(assertErrorMessage(error, "Unable to update waiver priority."));
-    }
-  }
-
-  for (const membership of memberships) {
-    const { error } = await supabase
-      .from("fantasy_league_memberships")
-      .update({
-        waiver_priority: membership.waiver_priority,
-      })
-      .eq("id", membership.id)
-      .eq("league_id", leagueId);
-
-    if (error) {
-      throw new Error(assertErrorMessage(error, "Unable to update waiver priority."));
-    }
+  const firstError = results.find((r) => r.error);
+  if (firstError?.error) {
+    throw new Error(assertErrorMessage(firstError.error, "Unable to update waiver priority."));
   }
 }
 
