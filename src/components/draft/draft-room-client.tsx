@@ -12,6 +12,8 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { ConfettiBurst } from "@/components/ui/confetti-burst";
+import { LiveRegion } from "@/components/ui/live-region";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type { FantasyDraftState, PlayerPosition } from "@/types/fantasy";
@@ -37,6 +39,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const [turnPulseActive, setTurnPulseActive] = useState(false);
   const [recentPickPulseId, setRecentPickPulseId] = useState<string | null>(null);
   const [queuePulsePlayerId, setQueuePulsePlayerId] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [screenReaderAnnouncement, setScreenReaderAnnouncement] = useState("");
   const deferredSearch = useDeferredValue(search);
   const links = buildLeagueLinks(leagueId);
   const draftStatus = draftState?.draft.status;
@@ -266,7 +270,16 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   async function handleDraftPlayer(playerId: string) {
     setBusyPlayerId(playerId);
+    const prevPickCount = draftState?.picks.length ?? 0;
     await withDraftAction("pick", () => dataClient.makeDraftPick(leagueId, playerId));
+    // If we got a new pick, celebrate
+    const player = draftState?.availablePlayers.find((p) => p.id === playerId);
+    const playerName = player?.display_name ?? "Player";
+    setScreenReaderAnnouncement(`${playerName} drafted successfully.`);
+    if ((draftState?.picks.length ?? 0) >= prevPickCount) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 100);
+    }
   }
 
   async function handleAutopick() {
@@ -502,6 +515,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   return (
     <section className="space-y-5">
+      <ConfettiBurst active={showConfetti} />
+      <LiveRegion message={screenReaderAnnouncement} politeness="assertive" />
       {error ? (
         <StatusBanner title="Draft action" message={error} tone="warning" />
       ) : null}

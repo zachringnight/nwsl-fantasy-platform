@@ -3,16 +3,39 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { primaryNavigation } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 import { NavLink } from "@/components/common/nav-link";
+import { NotificationBadge } from "@/components/ui/notification-badge";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 
 export function SiteHeader() {
   const pathname = usePathname();
   const { hasHydrated, profile, session, signOut, user } = useFantasyAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    let cancelled = false;
+
+    async function checkNotifications() {
+      try {
+        const res = await fetch(`/api/notifications?userId=${user!.id}&unreadOnly=true&limit=1`);
+        if (res.ok && !cancelled) {
+          const data = (await res.json()) as { notifications: unknown[] };
+          setUnreadCount(data.notifications.length);
+        }
+      } catch {
+        // Silently fail — badge is informational
+      }
+    }
+
+    void checkNotifications();
+    const interval = setInterval(checkNotifications, 60_000);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, [user]);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -75,9 +98,19 @@ export function SiteHeader() {
             {/* Desktop auth controls */}
             <div className="hidden items-center gap-3 md:flex">
               {hasHydrated && profile ? (
-                <div className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted">
-                  {user?.is_anonymous ? "Guest" : profile.display_name}
-                </div>
+                <>
+                  <Link
+                    href="/notifications"
+                    aria-label={unreadCount > 0 ? `${unreadCount} unread notifications` : "Notifications"}
+                    className="relative rounded-full border border-line bg-white/6 p-2 text-muted transition hover:border-brand/30 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                  >
+                    <Bell className="size-4" />
+                    <NotificationBadge count={unreadCount} />
+                  </Link>
+                  <div className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted">
+                    {user?.is_anonymous ? "Guest" : profile.display_name}
+                  </div>
+                </>
               ) : null}
               {hasHydrated && !session ? (
                 <Link
@@ -170,10 +203,15 @@ export function SiteHeader() {
                 </Link>
                 <Link
                   href="/notifications"
-                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                  className="relative flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Notifications
+                  {unreadCount > 0 && (
+                    <span className="ml-1.5 inline-flex min-w-[1.15rem] items-center justify-center rounded-full bg-danger px-1 py-0.5 text-[0.6rem] font-bold leading-none text-white">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
                 </Link>
               </div>
             </div>
