@@ -798,6 +798,10 @@ async function writeLineupAssignments(
 ) {
   const supabase = getSupabaseBrowserClient();
 
+  if (roster.length === 0) {
+    throw new Error("No roster found. Draft or claim players before setting a lineup.");
+  }
+
   for (const player of roster) {
     const slot = assignments.get(player.id) ?? null;
 

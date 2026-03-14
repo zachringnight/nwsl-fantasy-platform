@@ -37,6 +37,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const [refreshToken, setRefreshToken] = useState(0);
 
   const refreshLeague = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -71,7 +72,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
   useEffect(() => {
     void refreshLeague();
-  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id, refreshToken]);
 
   async function handleCopyCode(code: string) {
     try {
@@ -95,7 +96,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
         managerCountTarget: Number(settingsForm.managerCountTarget),
       });
       setSaveMessage("Settings saved successfully.");
-      void refreshLeague();
+      setRefreshToken((prev) => prev + 1);
     } catch (err) {
       setSaveMessage(
         err instanceof Error ? err.message : "Unable to save settings. Try again."

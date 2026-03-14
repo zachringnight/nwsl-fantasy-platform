@@ -5,10 +5,8 @@ import { useState, useEffect } from "react";
 import {
   ArrowDown,
   ArrowUp,
-  Clock3,
   Lock,
   Minus,
-  Sparkles,
   Trophy,
   TrendingUp,
 } from "lucide-react";

@@ -14,7 +14,6 @@ import { LineupPitch } from "@/components/lineup/lineup-pitch";
 import { buildSuggestedLineup } from "@/lib/fantasy-draft";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyPlayerById } from "@/lib/fantasy-player-pool";
-import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 import type { FantasyDraftState, FantasyRosterPlayer } from "@/types/fantasy";
 
 export interface DraftRecapClientProps {

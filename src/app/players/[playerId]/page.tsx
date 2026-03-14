@@ -26,7 +26,6 @@ export default async function PlayerDetailPage({
   const { playerId } = await params;
   const player = getFantasyPlayerById(playerId) as PlayerDetailRecord | null;
   const playerName = player?.display_name ?? formatTitleFromSlug(playerId);
-  const sourceSeason = player?.stats_source_season ?? "recent NWSL production";
   const attackLabel = player?.position === "GK" ? "Saves" : "Goals";
   const attackValue =
     player?.position === "GK"

@@ -231,7 +231,7 @@ export function DashboardClient() {
                     </div>
                     <div className="rounded-[1.5rem] border border-line bg-night/35 p-4">
                       <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
-                        What's next
+                        What&apos;s next
                       </p>
                       <p className="mt-3 text-lg font-semibold leading-tight text-foreground">
                         {featuredLeague.league.status === "live"

@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
     event.preventDefault();
     const trimmed = email.trim();
 
-    if (!trimmed) return;
+    if (!trimmed || formState === "sending") return;
 
     setFormState("sending");
     setErrorMessage("");

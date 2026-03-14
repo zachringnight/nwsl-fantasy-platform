@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { CheckCircle, Lock } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -12,7 +11,6 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 type ResetState = "loading" | "ready" | "submitting" | "done" | "error";
 
 export default function ResetPasswordPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [resetState, setResetState] = useState<ResetState>("loading");
@@ -204,7 +202,7 @@ export default function ResetPasswordPage() {
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-6 text-foreground">
               <p className="font-semibold">Keep it unique</p>
               <p className="mt-2 text-muted">
-                Use a different password than your other accounts so one breach doesn't affect everything.
+                Use a different password than your other accounts so one breach doesn&apos;t affect everything.
               </p>
             </div>
           </div>

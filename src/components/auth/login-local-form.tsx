@@ -66,7 +66,7 @@ export function LoginLocalForm() {
     try {
       await dataClient.ensureHostedSession();
       await refreshProfile();
-      router.push("/signup");
+      router.push("/onboarding");
     } catch (submissionError) {
       setError(
         submissionError instanceof Error
