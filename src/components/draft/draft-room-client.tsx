@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useDeferredValue, useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
 import { Activity, AlarmClockCheck, PlayCircle, ShieldAlert, Sparkles } from "lucide-react";
+import { useDraftRealtime } from "@/hooks/use-draft-realtime";
 import { DraftBoard } from "@/components/draft/draft-board";
 import { DraftQueuePanel } from "@/components/draft/draft-queue-panel";
 import { EmptyState } from "@/components/common/empty-state";
@@ -95,6 +96,17 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     };
   }, []);
 
+  // Subscribe to realtime draft updates — instant push instead of waiting for polls
+  useDraftRealtime({
+    leagueId,
+    enabled: !!session && !!profile?.onboarding_complete && !!draftStatus && draftStatus !== "complete",
+    onDraftUpdate: useCallback(() => {
+      if (document.visibilityState === "visible") {
+        void refreshDraftState();
+      }
+    }, []),
+  });
+
   useEffect(() => {
     if (!session || !profile?.onboarding_complete || !draftStatus || draftStatus === "complete") {
       return;
@@ -106,9 +118,10 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       }
     };
 
+    // Longer poll interval as a fallback — realtime handles the fast path
     const pollId = window.setInterval(
       refreshIfVisible,
-      draftStatus === "live" || draftStatus === "paused" ? 4000 : 3000
+      draftStatus === "live" || draftStatus === "paused" ? 15000 : 10000
     );
 
     window.addEventListener("focus", refreshIfVisible);

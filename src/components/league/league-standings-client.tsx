@@ -8,8 +8,10 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getButtonClassName } from "@/components/ui/button";
+import { AnimatedScore } from "@/components/ui/animated-score";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { MotionReveal } from "@/components/ui/motion-reveal";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
@@ -211,41 +213,44 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
 
                   <div className="mt-4 space-y-3">
                     {standingsState.standings.map((row) => (
-                      <div
+                      <ScrollReveal
                         key={row.membership_id}
-                        className={[
-                          "rounded-[1.2rem] border px-4 py-3",
-                          row.user_id === session?.user.id
-                            ? "border-brand-strong/40 bg-[linear-gradient(135deg,rgba(0,225,255,0.08)_0%,rgba(5,34,255,0.18)_48%,rgba(255,255,255,0.04)_100%)]"
-                            : row.rank <= standingsState.playoff_cutoff
-                            ? "border-brand/25 bg-brand/6"
-                            : "border-line bg-panel-soft",
-                        ].join(" ")}
                       >
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand-strong">
-                              #{row.rank} {row.team_name}
-                            </p>
-                            <p className="mt-1 text-sm text-foreground">{row.display_name}</p>
+                        <div
+                          className={[
+                            "rounded-[1.2rem] border px-4 py-3",
+                            row.user_id === session?.user.id
+                              ? "border-brand-strong/40 bg-[linear-gradient(135deg,rgba(0,225,255,0.08)_0%,rgba(5,34,255,0.18)_48%,rgba(255,255,255,0.04)_100%)]"
+                              : row.rank <= standingsState.playoff_cutoff
+                              ? "border-brand/25 bg-brand/6"
+                              : "border-line bg-panel-soft",
+                          ].join(" ")}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand-strong">
+                                #{row.rank} {row.team_name}
+                              </p>
+                              <p className="mt-1 text-sm text-foreground">{row.display_name}</p>
+                            </div>
+                            <div className="text-right text-sm text-muted">
+                              <p>
+                                {row.wins}-{row.losses}-{row.ties}
+                              </p>
+                              <p>Win% {row.win_pct.toFixed(3)}</p>
+                            </div>
                           </div>
-                          <div className="text-right text-sm text-muted">
+                          <div className="mt-3 grid gap-2 text-sm text-muted sm:grid-cols-4">
+                            <p>PF <AnimatedScore value={row.points_for} /></p>
+                            <p>PA <AnimatedScore value={row.points_against} /></p>
+                            <p>Proj <AnimatedScore value={row.projected_points} /></p>
                             <p>
-                              {row.wins}-{row.losses}-{row.ties}
+                              Pace {row.points_for - row.projected_points > 0 ? "+" : ""}
+                              <AnimatedScore value={row.points_for - row.projected_points} />
                             </p>
-                            <p>Win% {row.win_pct.toFixed(3)}</p>
                           </div>
                         </div>
-                        <div className="mt-3 grid gap-2 text-sm text-muted sm:grid-cols-4">
-                          <p>PF {row.points_for.toFixed(1)}</p>
-                          <p>PA {row.points_against.toFixed(1)}</p>
-                          <p>Proj {row.projected_points.toFixed(1)}</p>
-                          <p>
-                            Pace {row.points_for - row.projected_points > 0 ? "+" : ""}
-                            {(row.points_for - row.projected_points).toFixed(1)}
-                          </p>
-                        </div>
-                      </div>
+                      </ScrollReveal>
                     ))}
                   </div>
                 </SurfaceCard>

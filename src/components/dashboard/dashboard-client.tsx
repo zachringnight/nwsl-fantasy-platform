@@ -9,6 +9,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { MetricTile } from "@/components/ui/metric-tile";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { getButtonClassName } from "@/components/ui/button";
 import { Pill } from "@/components/ui/pill";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
@@ -290,10 +291,8 @@ export function DashboardClient() {
 
             <div className="grid gap-5">
               {prioritizedLeagues.map((summary, index) => (
-                <MotionReveal
+                <ScrollReveal
                   key={summary.league.id}
-                  delay={80 + index * 60}
-                  variant={index % 2 === 0 ? "up" : "scale"}
                 >
                   <LeagueCard
                     league={{
@@ -308,7 +307,7 @@ export function DashboardClient() {
                       draftStatus: buildLeaguePhaseLabel(summary),
                     }}
                   />
-                </MotionReveal>
+                </ScrollReveal>
               ))}
             </div>
           </div>

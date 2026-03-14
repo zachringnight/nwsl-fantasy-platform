@@ -710,21 +710,23 @@ async function renumberQueueItems(
   queue: FantasyDraftQueueItemRecord[]
 ) {
   const supabase = getSupabaseBrowserClient();
+  const now = new Date().toISOString();
 
-  for (const [index, item] of queue.entries()) {
-    const { error } = await supabase
-      .from("fantasy_draft_queue_items")
-      .update({
-        priority: index + 1,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", item.id)
-      .eq("league_id", leagueId)
-      .eq("user_id", userId);
+  // Batch all queue position updates in parallel instead of N sequential queries
+  const results = await Promise.all(
+    queue.map((item, index) =>
+      supabase
+        .from("fantasy_draft_queue_items")
+        .update({ priority: index + 1, updated_at: now })
+        .eq("id", item.id)
+        .eq("league_id", leagueId)
+        .eq("user_id", userId)
+    )
+  );
 
-    if (error) {
-      throw new Error(assertErrorMessage(error, "Unable to reorder the draft queue."));
-    }
+  const firstError = results.find((r) => r.error);
+  if (firstError?.error) {
+    throw new Error(assertErrorMessage(firstError.error, "Unable to reorder the draft queue."));
   }
 }
 
@@ -1032,9 +1034,11 @@ export async function upsertFantasyProfile(input: {
   return data as FantasyProfile;
 }
 
-export async function loadMyLeagues() {
+export async function loadMyLeagues(options?: { limit?: number; offset?: number }) {
   const supabase = getSupabaseBrowserClient();
   const user = await requireUser();
+  const limit = options?.limit ?? 50;
+  const offset = options?.offset ?? 0;
   const { data, error } = await supabase
     .from("fantasy_league_memberships")
     .select(`
@@ -1056,7 +1060,8 @@ export async function loadMyLeagues() {
       )
     `)
     .eq("user_id", user.id)
-    .order("joined_at", { ascending: false });
+    .order("joined_at", { ascending: false })
+    .range(offset, offset + limit - 1);
 
   if (error) {
     throw new Error(assertErrorMessage(error, "Unable to load your leagues."));
@@ -1957,12 +1962,18 @@ export async function processWaiverClaims(leagueId: string) {
       processed_at: new Date().toISOString(),
     });
 
-    for (const queuedClaim of queue) {
-      await updateWaiverClaimRecord(queuedClaim.id, {
-        status: "lost",
-        resolution_note: "Higher-priority claim from the same manager already won this run.",
-        processed_at: new Date().toISOString(),
-      });
+    // Batch-mark remaining claims from the winning manager as lost
+    if (queue.length > 0) {
+      const now = new Date().toISOString();
+      await Promise.all(
+        queue.map((queuedClaim) =>
+          updateWaiverClaimRecord(queuedClaim.id, {
+            status: "lost",
+            resolution_note: "Higher-priority claim from the same manager already won this run.",
+            processed_at: now,
+          })
+        )
+      );
     }
 
     claimsByUserId.delete(nextMembership.user_id);

@@ -1,12 +1,10 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
-import {
-  supabaseFantasyDataClient,
-  type FantasyDataClient,
-} from "@/lib/fantasy-data-client";
+import { cachedFantasyDataClient } from "@/lib/cached-data-client";
+import type { FantasyDataClient } from "@/lib/fantasy-data-client";
 
-const FantasyDataContext = createContext<FantasyDataClient>(supabaseFantasyDataClient);
+const FantasyDataContext = createContext<FantasyDataClient>(cachedFantasyDataClient);
 
 export interface FantasyDataProviderProps {
   children: ReactNode;
@@ -18,7 +16,7 @@ export function FantasyDataProvider({
   client,
 }: FantasyDataProviderProps) {
   return (
-    <FantasyDataContext.Provider value={client ?? supabaseFantasyDataClient}>
+    <FantasyDataContext.Provider value={client ?? cachedFantasyDataClient}>
       {children}
     </FantasyDataContext.Provider>
   );
