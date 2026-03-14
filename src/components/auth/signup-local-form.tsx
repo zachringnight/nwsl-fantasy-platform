@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/common/empty-state";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type SignupMode = "choice" | "email" | "check_email";
@@ -22,6 +23,7 @@ export function SignupLocalForm() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [signupMode, setSignupMode] = useState<SignupMode>("choice");
+  const [fieldErrors, setFieldErrors] = useState<{ displayName?: string; email?: string; password?: string }>({});
 
   if (!supabaseReady) {
     return (
@@ -82,9 +84,22 @@ export function SignupLocalForm() {
     }
   }
 
+  function validateSignupFields(): boolean {
+    const errors: { displayName?: string; email?: string; password?: string } = {};
+    if (!displayName.trim()) errors.displayName = "Display name is required.";
+    if (!email.trim()) errors.email = "Email is required.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) errors.email = "Enter a valid email address.";
+    if (!password) errors.password = "Password is required.";
+    else if (password.length < 6) errors.password = "Password must be at least 6 characters.";
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleEmailSignup(event: React.FormEvent) {
     event.preventDefault();
+    if (!validateSignupFields()) return;
     setError("");
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
@@ -176,10 +191,13 @@ export function SignupLocalForm() {
             type="text"
             placeholder="Rose City Press"
             value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
+            onChange={(e) => { setDisplayName(e.target.value); setFieldErrors((prev) => ({ ...prev, displayName: undefined })); }}
             required
             autoFocus
+            aria-invalid={!!fieldErrors.displayName}
+            aria-describedby={fieldErrors.displayName ? "signup-name-error" : undefined}
           />
+          {fieldErrors.displayName ? <span id="signup-name-error" className="text-xs text-danger">{fieldErrors.displayName}</span> : null}
         </label>
         <label className="block space-y-2">
           <span className="text-sm font-medium text-foreground">Email</span>
@@ -188,9 +206,12 @@ export function SignupLocalForm() {
             type="email"
             placeholder="you@example.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); setFieldErrors((prev) => ({ ...prev, email: undefined })); }}
             required
+            aria-invalid={!!fieldErrors.email}
+            aria-describedby={fieldErrors.email ? "signup-email-error" : undefined}
           />
+          {fieldErrors.email ? <span id="signup-email-error" className="text-xs text-danger">{fieldErrors.email}</span> : null}
         </label>
         <label className="block space-y-2">
           <span className="text-sm font-medium text-foreground">Password</span>
@@ -199,14 +220,17 @@ export function SignupLocalForm() {
             type="password"
             placeholder="At least 6 characters"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => { setPassword(e.target.value); setFieldErrors((prev) => ({ ...prev, password: undefined })); }}
             required
             minLength={6}
+            aria-invalid={!!fieldErrors.password}
+            aria-describedby={fieldErrors.password ? "signup-password-error" : undefined}
           />
+          {fieldErrors.password ? <span id="signup-password-error" className="text-xs text-danger">{fieldErrors.password}</span> : null}
         </label>
         {error ? <p className="text-sm text-danger">{error}</p> : null}
         <Button disabled={isSubmitting} fullWidth type="submit">
-          <Mail className="size-4" />
+          {isSubmitting ? <Spinner /> : <Mail className="size-4" />}
           {isSubmitting ? "Creating account…" : "Create account with email"}
         </Button>
         <button

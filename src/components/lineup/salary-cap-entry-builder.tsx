@@ -553,7 +553,7 @@ export function SalaryCapEntryBuilder({
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
               <button
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-35"
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={slateIndex <= 0 || isLoading}
                 onClick={() => {
                   handleSwitchSlate(-1);
@@ -583,7 +583,7 @@ export function SalaryCapEntryBuilder({
                 ))}
               </div>
               <button
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-35"
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm font-semibold text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={
                   slateIndex === -1 ||
                   slateIndex >= availableSlates.length - 1 ||

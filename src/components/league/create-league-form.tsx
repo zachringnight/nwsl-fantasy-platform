@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { getFantasyModeConfig, getFantasyModeOptions } from "@/lib/fantasy-modes";
 import {
@@ -36,6 +37,7 @@ export function CreateLeagueForm() {
   const [managerCountTarget, setManagerCountTarget] = useState("10");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ leagueName?: string; draftAt?: string }>({});
   const selectedMode = getFantasyModeConfig(gameVariant);
   const salaryCapSlates = selectedMode.usesSalaryCap ? getFantasySlateWindows(gameVariant) : [];
   const firstSlate = salaryCapSlates[0] ?? null;
@@ -44,9 +46,19 @@ export function CreateLeagueForm() {
     ? "Set the draft night and invite the room."
     : "Contest lock windows are pulled directly from the 2026 schedule.";
 
+  function validateLeagueFields(): boolean {
+    const errors: { leagueName?: string; draftAt?: string } = {};
+    if (!leagueName.trim()) errors.leagueName = "Give your league a name.";
+    if (selectedMode.usesLiveDraftRoom && !draftAt) errors.draftAt = "Pick a draft date and time.";
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!validateLeagueFields()) return;
     setError("");
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
@@ -211,9 +223,12 @@ export function CreateLeagueForm() {
                     type="text"
                     placeholder="Founders Cup"
                     value={leagueName}
-                    onChange={(event) => setLeagueName(event.target.value)}
+                    onChange={(event) => { setLeagueName(event.target.value); setFieldErrors((prev) => ({ ...prev, leagueName: undefined })); }}
                     required
+                    aria-invalid={!!fieldErrors.leagueName}
+                    aria-describedby={fieldErrors.leagueName ? "league-name-error" : undefined}
                   />
+                  {fieldErrors.leagueName ? <span id="league-name-error" className="text-xs text-danger">{fieldErrors.leagueName}</span> : null}
                 </label>
 
                 <label className="block space-y-2">
@@ -238,9 +253,12 @@ export function CreateLeagueForm() {
                       className="field-control"
                       type="datetime-local"
                       value={draftAt}
-                      onChange={(event) => setDraftAt(event.target.value)}
+                      onChange={(event) => { setDraftAt(event.target.value); setFieldErrors((prev) => ({ ...prev, draftAt: undefined })); }}
                       required
+                      aria-invalid={!!fieldErrors.draftAt}
+                      aria-describedby={fieldErrors.draftAt ? "draft-time-error" : undefined}
                     />
+                    {fieldErrors.draftAt ? <span id="draft-time-error" className="text-xs text-danger">{fieldErrors.draftAt}</span> : null}
                     <span className="block text-xs leading-5 text-muted">
                       Classic leagues still use a commissioner-set live draft kickoff.
                     </span>
@@ -328,12 +346,13 @@ export function CreateLeagueForm() {
                 disabled={isSubmitting}
                 type="submit"
               >
+                {isSubmitting ? <Spinner /> : null}
                 {isSubmitting
                   ? "Creating league..."
                   : selectedMode.usesSalaryCap
                     ? "Create salary-cap league"
                     : "Create classic league"}
-                <ArrowRight className="size-4" />
+                {!isSubmitting ? <ArrowRight className="size-4" /> : null}
               </Button>
             </SurfaceCard>
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -13,13 +13,57 @@ export function SiteHeader() {
   const pathname = usePathname();
   const { hasHydrated, profile, session, signOut, user } = useFantasyAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const menu = mobileMenuRef.current;
+    if (!menu) return;
+
+    // Focus first focusable element when menu opens
+    const focusable = menu.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    focusable[0]?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+
+      if (event.key !== "Tab" || !menu) return;
+
+      const focusableElements = menu.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
 
   return (
     <header className="pointer-events-none sticky top-0 z-50 px-3 pt-3 sm:px-4 lg:px-5">
       <div className="page-shell pointer-events-auto glass-card edge-field surface-ring rounded-[1.75rem] border border-line bg-panel/90 px-4 py-4 backdrop-blur-xl sm:px-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-4">
-            <Link href="/" className="space-y-2">
+            <Link href="/" className="space-y-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55">
               <div className="space-y-1">
                 <p className="font-display text-4xl uppercase leading-none tracking-[0.02em] text-foreground sm:text-[3.4rem]">
                   {siteConfig.shortName}
@@ -38,7 +82,7 @@ export function SiteHeader() {
               {hasHydrated && !session ? (
                 <Link
                   href="/login"
-                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand"
+                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                 >
                   Sign in
                 </Link>
@@ -46,14 +90,14 @@ export function SiteHeader() {
               {hasHydrated && !session ? (
                 <Link
                   href="/signup"
-                  className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:translate-y-[-1px]"
+                  className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:translate-y-[-1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                 >
                   Create account
                 </Link>
               ) : null}
               {hasHydrated && session ? (
                 <button
-                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand"
+                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                   onClick={() => {
                     void signOut();
                   }}
@@ -66,11 +110,13 @@ export function SiteHeader() {
 
             {/* Mobile menu button */}
             <button
-              className="flex size-10 items-center justify-center rounded-full border border-line bg-white/6 text-foreground transition hover:border-brand-strong/40 md:hidden"
+              ref={menuButtonRef}
+              className="flex size-10 items-center justify-center rounded-full border border-line bg-white/6 text-foreground transition hover:border-brand-strong/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               type="button"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
@@ -78,7 +124,7 @@ export function SiteHeader() {
 
           {/* Mobile menu panel */}
           {mobileMenuOpen ? (
-            <div className="flex flex-col gap-3 border-t border-line pt-4 md:hidden">
+            <div ref={mobileMenuRef} id="mobile-menu" role="dialog" aria-label="Navigation menu" className="flex flex-col gap-3 border-t border-line pt-4 md:hidden">
               {hasHydrated && profile ? (
                 <div className="rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted">
                   {user?.is_anonymous ? "Guest" : profile.display_name}
@@ -88,15 +134,15 @@ export function SiteHeader() {
                 <div className="flex gap-3">
                   <Link
                     href="/login"
-                    className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand"
-                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                    onClick={closeMobileMenu}
                   >
                     Sign in
                   </Link>
                   <Link
                     href="/signup"
-                    className="flex-1 rounded-full bg-brand px-4 py-2 text-center text-sm font-semibold text-white transition"
-                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 rounded-full bg-brand px-4 py-2 text-center text-sm font-semibold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                    onClick={closeMobileMenu}
                   >
                     Create account
                   </Link>
@@ -104,9 +150,9 @@ export function SiteHeader() {
               ) : null}
               {hasHydrated && session ? (
                 <button
-                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand"
+                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                   onClick={() => {
-                    setMobileMenuOpen(false);
+                    closeMobileMenu();
                     void signOut();
                   }}
                   type="button"
@@ -117,14 +163,14 @@ export function SiteHeader() {
               <div className="flex gap-3">
                 <Link
                   href="/settings"
-                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground"
+                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Settings
                 </Link>
                 <Link
                   href="/notifications"
-                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground"
+                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Notifications

@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Heart, Search, Scale, Sparkles, Target } from "lucide-react";
+import { Heart, Search, Scale, SearchX, Sparkles, Target } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
+import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { PlayerCard } from "@/components/player/player-card";
 import { MetricTile } from "@/components/ui/metric-tile";
@@ -164,7 +165,7 @@ export default function PlayersPage() {
                   <button
                     key={boardFilter.key}
                     className={[
-                      "rounded-full border px-4 py-2 text-sm font-medium transition",
+                      "rounded-full border px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55",
                       filter === boardFilter.key
                         ? "border-brand bg-brand text-white"
                         : "border-line bg-panel-soft text-muted hover:border-brand-strong/35 hover:text-foreground",
@@ -302,7 +303,7 @@ export default function PlayersPage() {
               {watchlistPlayers.slice(0, 8).map((player) => (
                 <button
                   key={player.id}
-                  className="rounded-full border border-line bg-white/8 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-strong/35 hover:text-brand-strong"
+                  className="min-h-10 rounded-full border border-line bg-white/8 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-strong/35 hover:text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
                   onClick={() => {
                     setSearch(player.display_name);
                     setFilter("WATCHLIST");
@@ -324,6 +325,25 @@ export default function PlayersPage() {
         </SurfaceCard>
       </section>
 
+      {filteredPlayers.length === 0 ? (
+        <EmptyState
+          title="No players found"
+          description="Try a different search term or filter."
+          action={
+            <button
+              className={getButtonClassName()}
+              onClick={() => {
+                setSearch("");
+                setFilter("ALL");
+              }}
+              type="button"
+            >
+              <SearchX className="size-4" />
+              Reset filters
+            </button>
+          }
+        />
+      ) : (
       <section className="grid gap-5 lg:grid-cols-3">
         {filteredPlayers.map((player) => (
           <PlayerCard
@@ -342,6 +362,7 @@ export default function PlayersPage() {
           />
         ))}
       </section>
+      )}
     </AppShell>
   );
 }

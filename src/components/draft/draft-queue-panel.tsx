@@ -71,7 +71,7 @@ export function DraftQueuePanel({
                     </div>
                     <div className="flex gap-2">
                       <button
-                        className="rounded-full border border-line bg-white/10 px-3 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                        className="min-h-8 rounded-full border border-line bg-white/10 px-3 py-1.5 text-xs font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isBusy || index === 0 || !onMoveUp}
                         onClick={() => {
                           onMoveUp?.(player.player_id);
@@ -81,7 +81,7 @@ export function DraftQueuePanel({
                         Up
                       </button>
                       <button
-                        className="rounded-full border border-line bg-white/10 px-3 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                        className="min-h-8 rounded-full border border-line bg-white/10 px-3 py-1.5 text-xs font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isBusy || index === queue.length - 1 || !onMoveDown}
                         onClick={() => {
                           onMoveDown?.(player.player_id);
@@ -91,7 +91,7 @@ export function DraftQueuePanel({
                         Down
                       </button>
                       <button
-                        className="rounded-full border border-danger/20 bg-danger/10 px-3 py-1 text-xs font-semibold text-danger disabled:opacity-50"
+                        className="min-h-8 rounded-full border border-danger/20 bg-danger/10 px-3 py-1.5 text-xs font-semibold text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isBusy || !onRemove}
                         onClick={() => {
                           onRemove?.(player.player_id);

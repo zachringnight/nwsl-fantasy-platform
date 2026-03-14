@@ -96,7 +96,7 @@ function LeagueNavCard({
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        "league-nav-card group rounded-[1.45rem] border px-3 py-3 transition duration-300",
+        "league-nav-card group rounded-[1.45rem] border px-3 py-3 transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 focus-visible:ring-offset-2 focus-visible:ring-offset-night",
         isActive
           ? "border-white/18 bg-white/14 text-white shadow-[0_22px_60px_rgba(11,28,88,0.35)]"
           : "border-white/10 bg-black/18 text-white/78 hover:border-brand-strong/35 hover:bg-white/10 hover:text-white"

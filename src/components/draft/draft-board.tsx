@@ -95,7 +95,7 @@ export function DraftBoard({
 
                 <div className="flex shrink-0 flex-col gap-2">
                   <button
-                    className="rounded-full border border-line bg-panel px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-panel-strong disabled:cursor-not-allowed disabled:opacity-60"
+                    className="min-h-10 rounded-full border border-line bg-panel px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-panel-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={isBusy || isQueued || !onQueue}
                     onClick={() => {
                       onQueue?.(player.id);
@@ -105,7 +105,7 @@ export function DraftBoard({
                     {isBusy ? "Working..." : isQueued ? "Queued" : "Queue"}
                   </button>
                   <button
-                    className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-strong disabled:cursor-not-allowed disabled:opacity-60"
+                    className="min-h-10 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={isBusy || !canDraft || !onDraft}
                     onClick={() => {
                       onDraft?.(player.id);
