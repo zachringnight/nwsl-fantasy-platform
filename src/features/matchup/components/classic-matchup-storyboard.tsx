@@ -207,14 +207,14 @@ export function ClassicMatchupStoryboard({
       <section className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
         <MatchupScoreCard matchup={matchupState} />
         <SurfaceCard
-          description={`Follow score, leverage, and the next swing for all ${leagueDetails.memberships.length} active managers in one clean view.`}
-          eyebrow="Week pulse"
-          title="Read the leverage before you change the lineup"
+          description={`Follow score, projections, and recent events for all ${leagueDetails.memberships.length} active managers in one view.`}
+          eyebrow="Live matchup"
+          title="Track the matchup before you change your lineup"
           tone="accent"
         >
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <MetricTile
-              detail="Current scoreboard edge for your side."
+              detail="Current scoring margin for your team."
               label="Live edge"
               tone="accent"
               value={liveEdge === 0 ? "Level" : `${liveEdge > 0 ? "+" : ""}${formatPoints(liveEdge)}`}
@@ -252,14 +252,14 @@ export function ClassicMatchupStoryboard({
 
       <section className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
         <SurfaceCard
-          description="Event feed and scoring pressure stay side by side so the matchup is easy to read."
-          eyebrow="Event rail"
+          description="Event updates and scoring stay side by side so the matchup is easy to follow."
+          eyebrow="Event log"
           title="Track the swings without losing the full matchup"
         >
           <div className="space-y-3">
             {matchupState.event_feed.length === 0 ? (
               <p className="rounded-[1.2rem] border border-dashed border-line bg-white/6 px-4 py-3 text-sm text-muted">
-                Event tracking will publish once the first scoring swing lands.
+                Event tracking will appear after the first scoring event.
               </p>
             ) : (
               matchupState.event_feed.slice(-6).reverse().map((event, index) => (

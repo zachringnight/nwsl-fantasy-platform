@@ -1,4 +1,4 @@
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { DashboardClient } from "@/components/dashboard/dashboard-client";
 import {
@@ -12,10 +12,12 @@ const seasonSlate = getFantasySlateWindows("salary_cap_season_long")[0];
 
 export default function DashboardPage() {
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Dashboard"
-      title="Your leagues, locks, and next moves"
+      title="Your leagues, locks, and upcoming actions"
       description="Everything you need to manage in one place."
+      signedOutDescription="Sign in before opening your dashboard."
+      signedOutTitle="Sign in to continue"
     >
       <section className="grid gap-5 lg:grid-cols-3">
         <SurfaceCard
@@ -53,7 +55,7 @@ export default function DashboardPage() {
 
         <SurfaceCard
           eyebrow="How it works"
-          title="Your next action, always front and center"
+          title="Your next action is easy to find"
           description="Each league card shows what needs attention right now."
           tone="accent"
         >
@@ -69,6 +71,6 @@ export default function DashboardPage() {
           </div>
         </SurfaceCard>
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }

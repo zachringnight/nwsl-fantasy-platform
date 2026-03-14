@@ -24,7 +24,7 @@ export function LeaguePageShell({
   const heroHighlights = (
     highlights.length > 0
       ? highlights
-      : ["Quick actions first", "Less scroll fatigue", "Matchday energy"]
+      : ["League updates", "Manager activity", "Next steps"]
   ).slice(0, 3);
 
   return (
@@ -39,7 +39,7 @@ export function LeaguePageShell({
             <div className="space-y-5">
               <div className="flex flex-wrap gap-2">
                 <Pill tone="brand">{eyebrow}</Pill>
-                <Pill tone="accent">League space</Pill>
+                <Pill tone="accent">League view</Pill>
               </div>
 
               <div className="max-w-3xl space-y-3">
@@ -90,13 +90,13 @@ function LeagueMoodboard({ highlights }: { highlights: string[] }) {
       <div className="relative z-10 flex h-full flex-col justify-between gap-5">
         <div className="space-y-3">
           <Pill tone="accent" className="border-white/14 bg-white/10 text-white">
-            Matchday moodboard
+            League snapshot
           </Pill>
           <h2 className="font-display text-[2.6rem] uppercase leading-[0.88] tracking-[0.01em] text-white">
-            Smaller sections. Faster taps.
+            Every key detail stays in view.
           </h2>
           <p className="max-w-md text-sm leading-6 text-white/74">
-            The league flow should feel more like a social feed than a wall of admin copy.
+            Invite code, manager progress, and the next action stay visible so the room is easy to run on matchday.
           </p>
         </div>
 

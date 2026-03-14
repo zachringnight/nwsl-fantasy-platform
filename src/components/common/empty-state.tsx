@@ -17,7 +17,7 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
       <div className="relative z-10 mx-auto max-w-2xl">
         <div className="flex flex-col items-center gap-4">
           <Pill tone="brand" className="border-white/12 bg-white/10 text-white">
-            League signal
+            League update
           </Pill>
 
           <span className="empty-state-icon">

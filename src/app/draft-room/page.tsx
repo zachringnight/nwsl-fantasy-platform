@@ -1,4 +1,4 @@
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { DraftBoard } from "@/components/draft/draft-board";
 import { DraftQueuePanel } from "@/components/draft/draft-queue-panel";
@@ -6,10 +6,12 @@ import { getFantasyPlayerPool } from "@/lib/fantasy-player-pool";
 
 export default function DraftRoomPage() {
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Draft Room"
       title="Draft room layout"
       description="Clock, player board, and your queue — everything you need on draft night."
+      signedOutDescription="Sign in before opening the draft room."
+      signedOutTitle="Sign in to continue"
     >
 
       <section className="grid gap-5 xl:grid-cols-[0.78fr_1.2fr_0.82fr]">
@@ -29,6 +31,6 @@ export default function DraftRoomPage() {
         <DraftBoard players={getFantasyPlayerPool().slice(0, 8)} />
         <DraftQueuePanel queue={[]} roster={[]} />
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }

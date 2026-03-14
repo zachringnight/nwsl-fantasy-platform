@@ -1,7 +1,34 @@
 import { NextResponse } from "next/server";
 import { jobRegistry, getJob } from "@/lib/jobs/registry";
 
-export async function GET() {
+function authorizeJobsRequest(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  const expectedToken = process.env.JOBS_API_SECRET;
+
+  if (!expectedToken) {
+    return {
+      ok: false as const,
+      response: NextResponse.json({ error: "Not found" }, { status: 404 }),
+    };
+  }
+
+  if (authHeader !== `Bearer ${expectedToken}`) {
+    return {
+      ok: false as const,
+      response: NextResponse.json({ error: "Not found" }, { status: 404 }),
+    };
+  }
+
+  return { ok: true as const };
+}
+
+export async function GET(request: Request) {
+  const authorization = authorizeJobsRequest(request);
+
+  if (!authorization.ok) {
+    return authorization.response;
+  }
+
   return NextResponse.json({
     jobs: jobRegistry.map((job) => ({
       id: job.id,
@@ -12,18 +39,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const authHeader = request.headers.get("authorization");
-  const expectedToken = process.env.JOBS_API_SECRET;
+  const authorization = authorizeJobsRequest(request);
 
-  if (!expectedToken) {
-    return NextResponse.json(
-      { error: "JOBS_API_SECRET is not configured" },
-      { status: 503 }
-    );
-  }
-
-  if (authHeader !== `Bearer ${expectedToken}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!authorization.ok) {
+    return authorization.response;
   }
 
   const body = (await request.json()) as { jobId?: string };

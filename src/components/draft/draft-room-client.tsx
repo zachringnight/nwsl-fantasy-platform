@@ -441,7 +441,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
           </div>
         }
         badge="Room closed"
-        description="Every pick is in. The live board is finished, so the next scenes are recap, lineup polish, and week-one prep."
+        description="Every pick is in. The live board is finished, and the next steps are recap, lineup setup, and Week 1 prep."
         eyebrow="Draft complete"
         highlights={["Recap time", "Lineup next", "Board closed"]}
         icon={Sparkles}
@@ -455,8 +455,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
             label: "Set week one",
           },
           {
-            detail: "Use players and transactions to plan the next edge.",
-            label: "Scout next moves",
+            detail: "Use players and transactions to plan your first roster changes.",
+            label: "Scout players",
           },
         ]}
         title="Draft complete"

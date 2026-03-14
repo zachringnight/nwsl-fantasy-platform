@@ -121,7 +121,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               <div>
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
-                  Projection lane
+                  Projection
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
                   {formatPoints(matchup.home_projection)} - {formatPoints(matchup.away_projection)}

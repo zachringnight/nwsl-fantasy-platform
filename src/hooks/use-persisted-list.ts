@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -11,35 +11,53 @@ interface UsePersistedListOptions {
   maxItems?: number;
 }
 
+function readStoredItems(storageKey: string) {
+  const stored = window.localStorage.getItem(storageKey);
+  return stored ? (JSON.parse(stored) as string[]) : null;
+}
+
 /**
  * Manages a list of IDs that syncs to Supabase when authenticated
  * and falls back to localStorage for unauthenticated users.
  */
 export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
   const storageKey = `${STORAGE_PREFIX}${key}`;
-  const { session, user } = useFantasyAuth();
+  const { session } = useFantasyAuth();
   const [items, setItems] = useState<string[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const sessionUserId = session?.user?.id ?? null;
 
   // Track whether the user has made local mutations before the backend loads
   const hasMutatedRef = useRef(false);
 
   // Load from localStorage on mount
   useEffect(() => {
+    let timeoutId: number | null = null;
+    let storedItems: string[] | null = null;
+
     try {
-      const stored = window.localStorage.getItem(storageKey);
-      if (stored) {
-        setItems(JSON.parse(stored) as string[]);
-      }
+      storedItems = readStoredItems(storageKey);
     } catch {
       // ignore parse errors
     }
-    setHasLoaded(true);
+
+    timeoutId = window.setTimeout(() => {
+      if (storedItems) {
+          setItems(storedItems);
+      }
+      setHasLoaded(true);
+    }, 0);
+
+    return () => {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+    };
   }, [storageKey]);
 
   // Sync to Supabase when authenticated
   useEffect(() => {
-    if (!session?.user?.id || !hasLoaded) return;
+    if (!sessionUserId || !hasLoaded) return;
 
     // Reset mutation tracking on each backend sync attempt
     hasMutatedRef.current = false;
@@ -50,9 +68,9 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
         const { data } = await supabase
           .from("user_lists")
           .select("item_ids")
-          .eq("user_id", session!.user.id)
+          .eq("user_id", sessionUserId)
           .eq("list_key", key)
-          .single();
+          .maybeSingle();
 
         if (data?.item_ids && !hasMutatedRef.current) {
           const backendItems = data.item_ids as string[];
@@ -65,84 +83,71 @@ export function usePersistedList({ key, maxItems }: UsePersistedListOptions) {
     }
 
     void loadFromBackend();
-  }, [session?.user?.id, key, storageKey, hasLoaded]);
+  }, [sessionUserId, key, storageKey, hasLoaded]);
 
   // Persist changes to localStorage and optionally Supabase
-  const persistItems = useCallback(
-    async (nextItems: string[]) => {
-      hasMutatedRef.current = true;
-      window.localStorage.setItem(storageKey, JSON.stringify(nextItems));
+  async function persistItems(nextItems: string[]) {
+    hasMutatedRef.current = true;
+    window.localStorage.setItem(storageKey, JSON.stringify(nextItems));
 
-      if (!session?.user?.id) return;
+    if (!sessionUserId) return;
 
-      try {
-        const supabase = getSupabaseBrowserClient();
-        await supabase.from("user_lists").upsert(
-          {
-            user_id: session.user.id,
-            list_key: key,
-            item_ids: nextItems,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "user_id,list_key" }
-        );
-      } catch {
-        // Supabase sync is best-effort
-      }
-    },
-    [key, session?.user?.id, storageKey]
-  );
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.from("user_lists").upsert(
+        {
+          user_id: sessionUserId,
+          list_key: key,
+          item_ids: nextItems,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id,list_key" }
+      );
+    } catch {
+      // Supabase sync is best-effort
+    }
+  }
 
-  const toggle = useCallback(
-    (itemId: string) => {
-      setItems((current) => {
-        const next = current.includes(itemId)
-          ? current.filter((id) => id !== itemId)
-          : maxItems && current.length >= maxItems
-            ? [...current.slice(1), itemId]
-            : [...current, itemId];
-        void persistItems(next);
-        return next;
-      });
-    },
-    [maxItems, persistItems]
-  );
+  function toggle(itemId: string) {
+    setItems((current) => {
+      const next = current.includes(itemId)
+        ? current.filter((id) => id !== itemId)
+        : maxItems && current.length >= maxItems
+          ? [...current.slice(1), itemId]
+          : [...current, itemId];
+      void persistItems(next);
+      return next;
+    });
+  }
 
-  const add = useCallback(
-    (itemId: string) => {
-      setItems((current) => {
-        if (current.includes(itemId)) return current;
-        const next =
-          maxItems && current.length >= maxItems
-            ? [...current.slice(1), itemId]
-            : [...current, itemId];
-        void persistItems(next);
-        return next;
-      });
-    },
-    [maxItems, persistItems]
-  );
+  function add(itemId: string) {
+    setItems((current) => {
+      if (current.includes(itemId)) return current;
+      const next =
+        maxItems && current.length >= maxItems
+          ? [...current.slice(1), itemId]
+          : [...current, itemId];
+      void persistItems(next);
+      return next;
+    });
+  }
 
-  const remove = useCallback(
-    (itemId: string) => {
-      setItems((current) => {
-        const next = current.filter((id) => id !== itemId);
-        void persistItems(next);
-        return next;
-      });
-    },
-    [persistItems]
-  );
+  function remove(itemId: string) {
+    setItems((current) => {
+      const next = current.filter((id) => id !== itemId);
+      void persistItems(next);
+      return next;
+    });
+  }
 
-  const clear = useCallback(() => {
+  function clear() {
     setItems([]);
     void persistItems([]);
-  }, [persistItems]);
+  }
 
-  const has = useCallback(
-    (itemId: string) => items.includes(itemId),
-    [items]
-  );
+  function has(itemId: string) {
+    return items.includes(itemId);
+  }
 
   return { items, toggle, add, remove, clear, has, hasLoaded };
 }

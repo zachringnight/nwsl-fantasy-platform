@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { normalizeFantasyLeagueCode } from "@/lib/fantasy-league-inputs";
 
 export interface JoinLeagueFormProps {
   initialCode?: string;
@@ -24,7 +25,7 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
     setIsSubmitting(true);
 
     try {
-      const league = await dataClient.joinHostedLeagueByCode(code);
+      const league = await dataClient.joinHostedLeagueByCode(normalizeFantasyLeagueCode(code));
       router.push(`/leagues/${league.id}`);
     } catch (submissionError) {
       setError(
@@ -65,6 +66,8 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
             placeholder="Enter league code"
             value={code}
             onChange={(event) => setCode(event.target.value.toUpperCase())}
+            autoCapitalize="characters"
+            maxLength={6}
             required
           />
           {error ? <p className="text-sm text-danger">{error}</p> : null}

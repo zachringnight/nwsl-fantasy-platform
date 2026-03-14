@@ -177,9 +177,9 @@ export function TeamClient({ leagueId }: TeamClientProps) {
                   primaryActionHref={links.players}
                   primaryActionLabel="Browse player salaries"
                   secondaryActionHref={links.matchup}
-                  secondaryActionLabel="Open contest pulse"
+                  secondaryActionLabel="View contest results"
                   slate={slate}
-                  title="Single-entry control room"
+                  title="Single-entry lineup"
                 />
               </MotionReveal>
 
@@ -209,8 +209,8 @@ export function TeamClient({ leagueId }: TeamClientProps) {
                 </>
               }
               badge="Before kickoff"
-              description="This page becomes your lineup studio once the room has real picks. Draft first, then shape the starters."
-              highlights={["Draft board first", "Lineup studio", "Week-one ready"]}
+              description="This page becomes your lineup page once the draft is complete. Draft first, then set your starters."
+              highlights={["Draft first", "Lineup setup", "Week 1 ready"]}
               icon={Crown}
               steps={[
                 {
@@ -222,7 +222,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
                   label: "Build your squad",
                 },
                 {
-                  detail: "Come back here to set starters and save the week-one shape.",
+                  detail: "Come back here to set starters and save your Week 1 lineup.",
                   label: "Set the lineup",
                 },
               ]}

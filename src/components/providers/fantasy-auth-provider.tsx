@@ -20,7 +20,7 @@ export interface FantasyAuthContextValue {
   signOut: () => Promise<void>;
   supabaseReady: boolean;
   user: User | null;
-  refreshProfile: () => Promise<void>;
+  refreshProfile: () => Promise<FantasyProfile | null>;
 }
 
 const FantasyAuthContext = createContext<FantasyAuthContextValue | null>(null);
@@ -36,7 +36,7 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
   const [hasHydrated, setHasHydrated] = useState(false);
   const [supabaseReady, setSupabaseReady] = useState(true);
 
-  async function syncAuthState(nextSession?: Session | null) {
+  async function syncAuthState(nextSession?: Session | null): Promise<FantasyProfile | null> {
     let supabase;
 
     try {
@@ -47,7 +47,7 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
       setSession(null);
       setProfile(null);
       setHasHydrated(true);
-      return;
+      return null;
     }
 
     const activeSession =
@@ -58,13 +58,26 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
     if (!activeSession?.user) {
       setProfile(null);
       setHasHydrated(true);
-      return;
+      return null;
     }
 
-    const nextProfile = await dataClient.fetchCurrentProfile();
+    if (activeSession.user.is_anonymous) {
+      await supabase.auth.signOut();
+      setSession(null);
+      setProfile(null);
+      setHasHydrated(true);
+      return null;
+    }
+
+    let nextProfile = await dataClient.fetchCurrentProfile();
+
+    if (!nextProfile) {
+      nextProfile = await dataClient.ensureCurrentProfile();
+    }
 
     setProfile(nextProfile);
     setHasHydrated(true);
+    return nextProfile;
   }
 
   const handleAuthSync = useEffectEvent(async (nextSession?: Session | null) => {
@@ -124,7 +137,7 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
         supabaseReady,
         user: session?.user ?? null,
         refreshProfile: async () => {
-          await syncAuthState();
+          return syncAuthState();
         },
       }}
     >

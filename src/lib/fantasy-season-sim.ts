@@ -294,7 +294,7 @@ function resolveMatchupWindow(league: FantasyLeagueRecord): MatchupWindow {
     return {
       status: "final",
       statusLabel: `Final • Week ${completedWeeks} closed`,
-      lockLabel: "This seeded result is already reflected in the standings table.",
+      lockLabel: "This result is already reflected in the standings table.",
       weekNumber: completedWeeks,
     };
   }
@@ -305,7 +305,7 @@ function resolveMatchupWindow(league: FantasyLeagueRecord): MatchupWindow {
     return {
       status: "pregame",
       statusLabel: `Pregame • Week ${activeWeekNumber} preview`,
-      lockLabel: `Lineups lock on the first kickoff of seeded Week ${activeWeekNumber}.`,
+      lockLabel: `Lineups lock at the first kickoff of Week ${activeWeekNumber}.`,
       weekNumber: activeWeekNumber,
     };
   }
@@ -316,7 +316,7 @@ function resolveMatchupWindow(league: FantasyLeagueRecord): MatchupWindow {
     return {
       status: "live",
       statusLabel: `Live • ${minute}'`,
-      lockLabel: "Live score movement is seeded until provider-backed stat ingest is connected.",
+      lockLabel: "Scores will keep updating as this week's matches progress.",
       weekNumber: activeWeekNumber,
     };
   }
@@ -324,7 +324,7 @@ function resolveMatchupWindow(league: FantasyLeagueRecord): MatchupWindow {
   return {
     status: "final",
     statusLabel: `Final • Week ${completedWeeks} result`,
-    lockLabel: "This seeded result is already reflected in the standings table.",
+    lockLabel: "This result is already reflected in the standings table.",
     weekNumber: completedWeeks,
   };
 }

@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
       <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
         <SurfaceCard
           eyebrow="Email sign-in"
-          title={formState === "sent" ? "Check your inbox" : "Request a new magic link"}
+          title={formState === "sent" ? "Check your inbox" : "Request a reset link"}
           description={
             formState === "sent"
               ? "Check your email for a link to reset your password."
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
                 <div>
                   <p className="font-semibold text-foreground">Recovery link sent</p>
                   <p className="mt-1 text-sm text-muted">
-                    Check {email} for a link to sign back into your account.
+                    Check {email} for a link to reset your password.
                   </p>
                 </div>
               </div>
@@ -100,6 +100,7 @@ export default function ForgotPasswordPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoFocus
+                  autoComplete="email"
                 />
               </label>
 
@@ -112,7 +113,7 @@ export default function ForgotPasswordPage() {
               <div className="flex flex-wrap gap-3">
                 <Button type="submit" disabled={formState === "sending"}>
                   <Mail className="size-4" />
-                  {formState === "sending" ? "Sending…" : "Send magic link"}
+                  {formState === "sending" ? "Sending…" : "Send reset link"}
                 </Button>
                 <Link
                   className={getButtonClassName({ variant: "secondary" })}
@@ -133,10 +134,10 @@ export default function ForgotPasswordPage() {
         >
           <div className="space-y-3">
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-6 text-foreground">
-              <p className="font-semibold">Why magic links?</p>
+              <p className="font-semibold">How the reset link works</p>
               <p className="mt-2 text-muted">
-                Magic links are a single-use, time-limited token sent directly to your inbox.
-                They expire after use so there is no password to guess or reuse.
+                The reset link is single-use and time-limited. It takes you to a secure screen
+                where you can choose a new password for your account.
               </p>
             </div>
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-6 text-foreground">

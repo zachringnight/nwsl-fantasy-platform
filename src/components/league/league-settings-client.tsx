@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Copy, Settings, Shield, UserMinus, Users } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -37,9 +37,11 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const sessionUserId = session?.user.id;
+  const hasCompletedOnboarding = profile?.onboarding_complete ?? false;
 
-  const refreshLeague = useEffectEvent(async () => {
-    if (!session || !profile?.onboarding_complete) {
+  const refreshLeague = useCallback(async () => {
+    if (!sessionUserId || !hasCompletedOnboarding) {
       setLeagueDetails(null);
       setIsLoading(false);
       return;
@@ -67,11 +69,11 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
     } finally {
       setIsLoading(false);
     }
-  });
+  }, [dataClient, hasCompletedOnboarding, leagueId, sessionUserId]);
 
   useEffect(() => {
     void refreshLeague();
-  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+  }, [refreshLeague]);
 
   async function handleCopyCode(code: string) {
     try {

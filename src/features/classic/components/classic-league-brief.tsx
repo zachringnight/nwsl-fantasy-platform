@@ -58,7 +58,7 @@ export function ClassicLeagueBrief({
             value="Snake draft"
           />
           <MetricTile
-            detail="The room status stays visible before every next move."
+            detail="The league status stays visible before every key action."
             label="Status"
             tone="accent"
             value={leagueDetails.league.status}
@@ -73,14 +73,14 @@ export function ClassicLeagueBrief({
               title: "Scarcity",
             },
             {
-              detail: "Clock energy stays high before the room opens and once it goes live.",
+              detail: "The draft clock keeps the room moving before and during the live draft.",
               icon: Clock3,
               title: "Draft night",
             },
             {
               detail: "Lineups, waivers, and matchups keep the room moving every week.",
               icon: Sparkles,
-              title: "Weekly pulse",
+              title: "Weekly play",
             },
           ].map((beat) => (
             <div

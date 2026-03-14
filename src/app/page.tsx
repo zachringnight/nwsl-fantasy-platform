@@ -35,7 +35,7 @@ const experiencePillars = [
       "Build one lineup, watch the slate window, and make changes right up to lock when the news changes.",
   },
   {
-    eyebrow: "Matchday pulse",
+    eyebrow: "Live scoring",
     title: "Live scoring you can follow at a glance",
     description:
       "See scores, swings, and key match events in one place without digging through menus.",
@@ -156,7 +156,7 @@ export default function Home() {
                   Weekly cap
                 </p>
                 <p className="mt-2 text-sm leading-6 text-white/82">
-                  One entry, one lock, one clear runway from scouting to submission for each scoring cycle.
+                  One entry, one lock, and a clear path from scouting to submission for each scoring cycle.
                 </p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
@@ -165,7 +165,7 @@ export default function Home() {
                   Daily
                 </p>
                 <p className="mt-2 text-sm leading-6 text-white/82">
-                  Fast-turn contest windows built for casual sweats, same-day pivots, and late lineup drama.
+                  Fast-turn contest windows built for same-day lineup changes and late team news.
                 </p>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function Home() {
             </div>
           </SurfaceCard>
           <SurfaceCard
-            eyebrow="Why it hits"
+            eyebrow="Why it works"
             title="Made for matchday, not menus"
             description="Deadlines stay visible, scores stay readable, and every important move is close at hand."
             tone="accent"
@@ -219,7 +219,7 @@ export default function Home() {
               <span className="rounded-full border border-line bg-white/6 px-3 py-1">deadline first</span>
               <span className="rounded-full border border-line bg-white/6 px-3 py-1">mobile sharp</span>
               <span className="rounded-full border border-line bg-white/6 px-3 py-1">easy to manage</span>
-              <span className="rounded-full border border-line bg-white/6 px-3 py-1">matchday energy</span>
+              <span className="rounded-full border border-line bg-white/6 px-3 py-1">live scoring</span>
             </div>
           </SurfaceCard>
         </div>
@@ -248,7 +248,7 @@ export default function Home() {
               ) : (
                 <Waves className="size-4" />
               )}
-              Ready for matchday
+              Ready to play
             </div>
           </SurfaceCard>
         ))}

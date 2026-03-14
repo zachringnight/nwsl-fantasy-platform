@@ -12,7 +12,7 @@ export default async function LeaguePlayersPage({
       leagueId={leagueId}
       eyebrow="League players"
       title="Search, filter, and compare"
-      description="Browse available players, check who's taken, and find your next move."
+      description="Browse available players, check who's taken, and find the right addition."
       highlights={["Scout fast", "Clean filters", "Quick adds"]}
     >
       <LeaguePlayersClient leagueId={leagueId} />

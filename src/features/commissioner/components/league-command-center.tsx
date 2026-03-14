@@ -97,21 +97,21 @@ export function LeagueCommandCenter({
           <div className="league-mood-card rounded-[1.45rem] border border-white/12 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">
               <Shield className="size-4 text-brand-strong" />
-              Invite route
+              Invite link
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Pill tone="brand">Code {leagueDetails.league.code}</Pill>
               <Pill tone="accent">{copyLabel === "Copied invite" ? "Shared" : "Ready to share"}</Pill>
             </div>
             <p className="mt-3 text-sm leading-6 text-white/78">
-              Drop the link in the group chat when the crew is ready.
+              Share the link or code when you are ready to add managers.
             </p>
             <p className="mt-3 break-all text-xs text-white/58">{invitePath}</p>
           </div>
           <div className="rounded-[1.45rem] border border-line bg-night/35 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">
               <Users className="size-4 text-brand-strong" />
-              Manager circle
+              Managers
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {leagueDetails.memberships.map((member) => (

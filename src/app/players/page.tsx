@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Heart, Search, Scale, Sparkles, Target } from "lucide-react";
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { PlayerCard } from "@/components/player/player-card";
 import { MetricTile } from "@/components/ui/metric-tile";
@@ -97,10 +97,12 @@ export default function PlayersPage() {
   }
 
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Players"
       title="Scout with real conviction before the room tilts"
       description="Scout, watchlist, and compare before you commit a pick or salary slot."
+      signedOutDescription="Sign in before scouting players, building a watchlist, or comparing targets."
+      signedOutTitle="Sign in to use the player board"
       actions={
         comparePlayers.length === 2 ? (
           <Link href={compareHref} className={getButtonClassName({ className: "group" })}>
@@ -233,7 +235,7 @@ export default function PlayersPage() {
       <section className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
         <SurfaceCard
           eyebrow="Compare tray"
-          title={comparePlayers.length > 0 ? "Two-player decision lane" : "Select players to compare"}
+          title={comparePlayers.length > 0 ? "Player comparison" : "Select players to compare"}
           description="Pin two players here, then open the compare view when you are down to a real decision."
         >
           {comparePlayers.length > 0 ? (
@@ -342,7 +344,7 @@ export default function PlayersPage() {
           />
         ))}
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }
 

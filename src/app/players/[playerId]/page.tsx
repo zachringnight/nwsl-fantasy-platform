@@ -1,5 +1,5 @@
 import { SurfaceCard } from "@/components/common/surface-card";
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { getFantasyPlayerById } from "@/lib/fantasy-player-pool";
 import { formatTitleFromSlug } from "@/lib/utils";
@@ -39,7 +39,7 @@ export default async function PlayerDetailPage({
       : String(player?.assists_2025 ?? 0);
 
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Player detail"
       title={playerName}
       description={
@@ -47,6 +47,8 @@ export default async function PlayerDetailPage({
           ? `2026 profile with projections based on ${sourceSeason.toLowerCase()}.`
           : "That player is not on the current NWSL board."
       }
+      signedOutDescription="Sign in before opening player details."
+      signedOutTitle="Sign in to continue"
     >
       <section className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
         <SurfaceCard
@@ -113,6 +115,6 @@ export default async function PlayerDetailPage({
           ) : null}
         </SurfaceCard>
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }

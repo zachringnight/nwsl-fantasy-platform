@@ -17,7 +17,7 @@ export interface SalaryCapLeagueBriefProps {
 }
 
 export function SalaryCapLeagueBrief({
-  description = "Shared-pool salary-cap play keeps the active slate, cap pressure, and next actions visible right away.",
+  description = "Shared-pool salary-cap play keeps the active slate, salary cap, and key actions easy to see.",
   leagueDetails,
   primaryActionHref,
   primaryActionLabel,
@@ -72,10 +72,10 @@ export function SalaryCapLeagueBrief({
 
         <div className="rounded-[1.45rem] border border-white/12 bg-black/18 p-4">
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/72">
-            Slate pressure
+            Current slate
           </p>
           <p className="mt-3 text-base leading-7 text-white/86">
-            Every build points to a single clean window. Scout the board, commit once, and keep the entire contest anchored to the live slate instead of a generic season screen.
+            Every entry is built for one slate. Review salaries, submit before lock, and track the contest from here.
           </p>
         </div>
 

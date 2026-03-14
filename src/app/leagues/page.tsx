@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CalendarRange, Crown, Goal, Sparkles } from "lucide-react";
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { fantasyPlayerPool } from "@/lib/fantasy-player-pool";
 import {
@@ -41,10 +41,12 @@ const featuredMarket = fantasyPlayerPool.slice(0, 3);
 
 export default function LeaguesPage() {
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Leagues"
       title="Start or join a league"
       description="Pick your format, invite friends, and get playing."
+      signedOutDescription="Sign in before browsing leagues, invite formats, and join options."
+      signedOutTitle="Sign in to use leagues"
       actions={
         <div className="flex gap-3">
           <Link
@@ -172,6 +174,6 @@ export default function LeaguesPage() {
           </div>
         </SurfaceCard>
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }
