@@ -9,7 +9,6 @@ import {
 
 type ReadyFantasyAuthContext = FantasyAuthContextValue & {
   profile: NonNullable<FantasyAuthContextValue["profile"]>;
-  session: NonNullable<FantasyAuthContextValue["session"]>;
 };
 
 export interface FantasyAuthGateProps {
@@ -43,21 +42,11 @@ export function FantasyAuthGate({
 }: FantasyAuthGateProps) {
   const auth = useFantasyAuth();
 
-  if (!auth.supabaseReady) {
-    return (
-      <EmptyState
-        action={signedOutAction}
-        description={unavailableDescription}
-        title={unavailableTitle}
-      />
-    );
-  }
-
   if (!auth.hasHydrated) {
     return <EmptyState description={loadingDescription} title={loadingTitle} />;
   }
 
-  if (!auth.session || !auth.profile) {
+  if (!auth.profile) {
     return (
       <EmptyState
         action={signedOutAction}

@@ -11,7 +11,22 @@ import {
 import type { Session, User } from "@supabase/supabase-js";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { getCurrentLocalUser, signOutLocalUser } from "@/lib/local-mode-store";
 import type { FantasyProfile } from "@/types/fantasy";
+
+function localUserToProfile(user: ReturnType<typeof getCurrentLocalUser>): FantasyProfile | null {
+  if (!user) return null;
+  return {
+    user_id: user.id,
+    email: user.email || null,
+    display_name: user.displayName,
+    favorite_club: user.favoriteClub ?? null,
+    experience_level: (user.experienceLevel as FantasyProfile["experience_level"]) ?? null,
+    onboarding_complete: user.onboardingComplete,
+    created_at: user.createdAt,
+    updated_at: user.updatedAt,
+  };
+}
 
 export interface FantasyAuthContextValue {
   hasHydrated: boolean;
@@ -45,7 +60,7 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
     } catch {
       setSupabaseReady(false);
       setSession(null);
-      setProfile(null);
+      setProfile(localUserToProfile(getCurrentLocalUser()));
       setHasHydrated(true);
       return;
     }
@@ -91,6 +106,7 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
       } catch {
         if (!unsubscribed) {
           setSupabaseReady(false);
+          setProfile(localUserToProfile(getCurrentLocalUser()));
           setHasHydrated(true);
         }
       }
@@ -108,6 +124,8 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
     try {
       const supabase = getSupabaseBrowserClient();
       await supabase.auth.signOut();
+    } catch {
+      signOutLocalUser();
     } finally {
       setSession(null);
       setProfile(null);
@@ -124,6 +142,10 @@ export function FantasyAuthProvider({ children }: FantasyAuthProviderProps) {
         supabaseReady,
         user: session?.user ?? null,
         refreshProfile: async () => {
+          if (!supabaseReady) {
+            setProfile(localUserToProfile(getCurrentLocalUser()));
+            return;
+          }
           await syncAuthState();
         },
       }}

@@ -10,6 +10,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { registerLocalUser } from "@/lib/local-mode-store";
 
 type SignupMode = "choice" | "email" | "check_email";
 
@@ -24,15 +25,6 @@ export function SignupLocalForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [signupMode, setSignupMode] = useState<SignupMode>("choice");
   const [fieldErrors, setFieldErrors] = useState<{ displayName?: string; email?: string; password?: string }>({});
-
-  if (!supabaseReady) {
-    return (
-      <EmptyState
-        title="Sign-up temporarily unavailable"
-        description="We're having trouble connecting right now. Please try again in a moment."
-      />
-    );
-  }
 
   if (!hasHydrated) {
     return (
@@ -70,6 +62,12 @@ export function SignupLocalForm() {
     setIsSubmitting(true);
 
     try {
+      if (!supabaseReady) {
+        registerLocalUser({ displayName: displayName.trim(), email: "" });
+        await refreshProfile();
+        router.push("/onboarding");
+        return;
+      }
       await dataClient.ensureHostedSession();
       await dataClient.upsertFantasyProfile({
         displayName,
@@ -107,6 +105,13 @@ export function SignupLocalForm() {
     setIsSubmitting(true);
 
     try {
+      if (!supabaseReady) {
+        registerLocalUser({ displayName: displayName.trim(), email: email.trim() });
+        await refreshProfile();
+        router.push("/onboarding");
+        return;
+      }
+
       const supabase = getSupabaseBrowserClient();
       const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: email.trim(),
@@ -144,6 +149,11 @@ export function SignupLocalForm() {
 
   async function handleGoogleSignup() {
     setError("");
+
+    if (!supabaseReady) {
+      setError("Google sign-up requires a hosted connection. Use email or guest sign-up instead.");
+      return;
+    }
 
     try {
       const supabase = getSupabaseBrowserClient();
