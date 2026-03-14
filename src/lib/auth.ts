@@ -1,6 +1,4 @@
 import NextAuth, { type AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
@@ -16,50 +14,6 @@ function buildProviders() {
       })
     );
   }
-
-  if (process.env.AUTH_EMAIL_SERVER && process.env.AUTH_EMAIL_FROM) {
-    providers.push(
-      EmailProvider({
-        server: process.env.AUTH_EMAIL_SERVER,
-        from: process.env.AUTH_EMAIL_FROM,
-      })
-    );
-  }
-
-  // Credentials provider for email/password authentication
-  providers.push(
-    CredentialsProvider({
-      id: "credentials",
-      name: "Email & Password",
-      credentials: {
-        email: { label: "Email", type: "email", placeholder: "you@example.com" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (!user) {
-          return null;
-        }
-
-        // Password verification is delegated to Supabase Auth.
-        // This credentials provider bridges NextAuth session management
-        // with the Supabase-authenticated user record.
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-        };
-      },
-    })
-  );
 
   return providers;
 }
