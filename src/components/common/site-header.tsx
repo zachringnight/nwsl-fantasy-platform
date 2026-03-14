@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import { primaryNavigation } from "@/config/navigation";
 import { siteConfig } from "@/config/site";
 import { NavLink } from "@/components/common/nav-link";
@@ -10,6 +12,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 export function SiteHeader() {
   const pathname = usePathname();
   const { hasHydrated, profile, session, signOut, user } = useFantasyAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="pointer-events-none sticky top-0 z-50 px-3 pt-3 sm:px-4 lg:px-5">
@@ -24,6 +27,8 @@ export function SiteHeader() {
                 <p className="text-sm text-muted">{siteConfig.launchWindow}</p>
               </div>
             </Link>
+
+            {/* Desktop auth controls */}
             <div className="hidden items-center gap-3 md:flex">
               {hasHydrated && profile ? (
                 <div className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted">
@@ -58,7 +63,75 @@ export function SiteHeader() {
                 </button>
               ) : null}
             </div>
+
+            {/* Mobile menu button */}
+            <button
+              className="flex size-10 items-center justify-center rounded-full border border-line bg-white/6 text-foreground transition hover:border-brand-strong/40 md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              type="button"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
           </div>
+
+          {/* Mobile menu panel */}
+          {mobileMenuOpen ? (
+            <div className="flex flex-col gap-3 border-t border-line pt-4 md:hidden">
+              {hasHydrated && profile ? (
+                <div className="rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted">
+                  {user?.is_anonymous ? "Guest" : profile.display_name}
+                </div>
+              ) : null}
+              {hasHydrated && !session ? (
+                <div className="flex gap-3">
+                  <Link
+                    href="/login"
+                    className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="flex-1 rounded-full bg-brand px-4 py-2 text-center text-sm font-semibold text-white transition"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Create account
+                  </Link>
+                </div>
+              ) : null}
+              {hasHydrated && session ? (
+                <button
+                  className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand/30 hover:text-brand"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    void signOut();
+                  }}
+                  type="button"
+                >
+                  Sign out
+                </button>
+              ) : null}
+              <div className="flex gap-3">
+                <Link
+                  href="/settings"
+                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Settings
+                </Link>
+                <Link
+                  href="/notifications"
+                  className="flex-1 rounded-full border border-line bg-white/6 px-4 py-2 text-center text-sm text-muted transition hover:text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Notifications
+                </Link>
+              </div>
+            </div>
+          ) : null}
 
           <nav
             aria-label="Primary"
