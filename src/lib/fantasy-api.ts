@@ -1466,7 +1466,7 @@ export async function loadLeagueStandings(leagueId: string) {
   } satisfies FantasyStandingsState;
 }
 
-export async function loadLeagueMatchup(leagueId: string) {
+export async function loadLeagueMatchup(leagueId: string, options?: { weekNumber?: number }) {
   const { league, memberships, myMembership } = await fetchLeagueContext(leagueId);
   assertClassicLeagueMode(league, "Matchup scoring");
   const rosterSlots = await fetchRostersForLeague(leagueId);
@@ -1485,7 +1485,8 @@ export async function loadLeagueMatchup(leagueId: string) {
     league,
     myMembership,
     memberships,
-    rostersByUserId
+    rostersByUserId,
+    options?.weekNumber
   ) satisfies FantasyLeagueMatchupState;
 }
 

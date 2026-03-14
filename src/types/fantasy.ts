@@ -363,6 +363,8 @@ export interface FantasyMatchupEvent {
 export interface FantasyLeagueMatchupState {
   league: FantasyLeagueRecord;
   myMembership: FantasyLeagueMembershipRecord;
+  week_number: number;
+  total_weeks: number;
   week_label: string;
   status: "pregame" | "live" | "final";
   status_label: string;

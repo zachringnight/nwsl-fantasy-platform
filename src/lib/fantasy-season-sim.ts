@@ -482,14 +482,28 @@ export function buildSimulatedMatchup(
   league: FantasyLeagueRecord,
   myMembership: FantasyLeagueMembershipRecord,
   memberships: FantasyLeagueMembershipRecord[],
-  rostersByUserId: Map<string, FantasyRosterPlayer[]>
+  rostersByUserId: Map<string, FantasyRosterPlayer[]>,
+  requestedWeek?: number
 ) {
   const rotation = buildRotation(memberships);
   const basePointsByMembershipId = buildBasePointsByMembershipId(
     memberships,
     rostersByUserId
   );
-  const window = resolveMatchupWindow(league);
+  const defaultWindow = resolveMatchupWindow(league);
+  const totalWeeks = activeWeekNumber;
+  const targetWeek = requestedWeek
+    ? Math.max(1, Math.min(requestedWeek, totalWeeks))
+    : defaultWindow.weekNumber;
+  const isHistorical = targetWeek < defaultWindow.weekNumber;
+  const window = isHistorical
+    ? {
+        status: "final" as const,
+        statusLabel: `Final • Week ${targetWeek} result`,
+        lockLabel: "This seeded result is already reflected in the standings table.",
+        weekNumber: targetWeek,
+      }
+    : { ...defaultWindow, weekNumber: targetWeek };
 
   if (rotation.length === 0) {
     const myTeamName = myMembership.team_name || myMembership.display_name;
@@ -497,6 +511,8 @@ export function buildSimulatedMatchup(
     return {
       league,
       myMembership,
+      week_number: window.weekNumber,
+      total_weeks: totalWeeks,
       week_label: `Week ${window.weekNumber}`,
       status: window.status,
       status_label: window.statusLabel,
@@ -587,6 +603,8 @@ export function buildSimulatedMatchup(
   return {
     league,
     myMembership,
+    week_number: window.weekNumber,
+    total_weeks: totalWeeks,
     week_label: `Week ${window.weekNumber}`,
     status: window.status,
     status_label:
