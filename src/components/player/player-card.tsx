@@ -3,6 +3,7 @@ import { ArrowUpRight, Heart, Scale, ShieldCheck, Star } from "lucide-react";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { getButtonClassName } from "@/components/ui/button";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { PlayerAvatar } from "@/components/ui/player-avatar";
 import { Pill } from "@/components/ui/pill";
 
@@ -46,7 +47,10 @@ export function PlayerCard({
           />
           <div>
             <p className="text-sm font-semibold text-foreground">{player.display_name}</p>
-            <p className="text-xs text-muted">{player.position} &middot; {player.club_name}</p>
+            <p className="flex items-center gap-1.5 text-xs text-muted">
+              <ClubLogo club={player.club_name} size={16} />
+              {player.position} &middot; {player.club_name}
+            </p>
           </div>
         </div>
 

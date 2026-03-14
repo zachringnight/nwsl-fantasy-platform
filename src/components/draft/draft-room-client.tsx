@@ -14,6 +14,9 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { ConfettiBurst } from "@/components/ui/confetti-burst";
 import { LiveRegion } from "@/components/ui/live-region";
+import { FirstPickGuide } from "@/components/draft/first-pick-guide";
+import { feedback } from "@/lib/feedback";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type { FantasyDraftState, PlayerPosition } from "@/types/fantasy";
@@ -41,6 +44,10 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const [queuePulsePlayerId, setQueuePulsePlayerId] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [screenReaderAnnouncement, setScreenReaderAnnouncement] = useState("");
+  const [showFirstPickGuide, setShowFirstPickGuide] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !window.localStorage.getItem("nwsl-draft-guide-dismissed");
+  });
   const deferredSearch = useDeferredValue(search);
   const links = buildLeagueLinks(leagueId);
   const draftStatus = draftState?.draft.status;
@@ -278,6 +285,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     setScreenReaderAnnouncement(`${playerName} drafted successfully.`);
     if ((draftState?.picks.length ?? 0) >= prevPickCount) {
       setShowConfetti(true);
+      feedback.celebrate();
       setTimeout(() => setShowConfetti(false), 100);
     }
   }
@@ -521,6 +529,14 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
         <StatusBanner title="Draft action" message={error} tone="warning" />
       ) : null}
 
+      <FirstPickGuide
+        isFirstDraft={showFirstPickGuide}
+        onDismiss={() => {
+          setShowFirstPickGuide(false);
+          try { window.localStorage.setItem("nwsl-draft-guide-dismissed", "1"); } catch {}
+        }}
+      />
+
       <section className="grid gap-5 xl:grid-cols-[0.78fr_1.2fr_0.82fr]">
         <div className="space-y-5">
           <SurfaceCard
@@ -677,7 +693,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-foreground">{pick.player_name}</p>
-                          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
+                          <p className="mt-1 flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-muted">
+                            <ClubLogo club={pick.club_name} size={16} />
                             {pick.club_name} • {pick.player_position} • {pick.source}
                           </p>
                         </div>

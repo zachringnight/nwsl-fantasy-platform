@@ -7,6 +7,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getButtonClassName, Button } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { NWSL_CLUBS_LIST } from "@/config/nwsl-clubs";
 import type { FantasyProfile } from "@/types/fantasy";
 
 export function OnboardingLocalForm() {
@@ -87,14 +88,19 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
     <form className="grid gap-4" onSubmit={handleSubmit}>
       <label className="block space-y-2">
         <span className="text-sm font-medium text-foreground">Favorite club</span>
-        <input
+        <select
           className="field-control"
-          type="text"
-          placeholder="Portland Thorns"
           value={favoriteClub}
           onChange={(event) => setFavoriteClub(event.target.value)}
           required
-        />
+        >
+          <option value="">Select a club</option>
+          {NWSL_CLUBS_LIST.map((club) => (
+            <option key={club.abbreviation} value={club.name}>
+              {club.name}
+            </option>
+          ))}
+        </select>
       </label>
 
       <label className="block space-y-2">
