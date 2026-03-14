@@ -13,6 +13,7 @@ export default async function LeagueMatchupPage({
       eyebrow="Matchup"
       title="Pregame, live scoring, and final context"
       description="Follow score swings and key moments as they happen."
+      highlights={["Live swings", "Score pulse", "Rival energy"]}
     >
       <LeagueMatchupClient leagueId={leagueId} />
     </LeaguePageShell>

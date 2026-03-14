@@ -15,8 +15,8 @@ The home for NWSL fantasy football. Build private classic leagues with live snak
 
 ### Prerequisites
 
-- Node.js 20+
-- pnpm 9+
+- Node.js 20.19+ or 24+
+- pnpm 10+
 - A Supabase project (for auth and data)
 
 ### Setup
@@ -24,7 +24,7 @@ The home for NWSL fantasy football. Build private classic leagues with live snak
 ```bash
 pnpm install
 cp .env.example .env.local
-# Fill in your Supabase and database credentials
+# Fill in your Supabase keys, database password, and any optional auth/email settings
 pnpm prisma generate
 pnpm dev
 ```
@@ -61,10 +61,14 @@ See `.env.example` for the full list. The key variables are:
 
 | Variable | Purpose |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase publishable key |
+| `NEXTAUTH_URL` | Base URL for local and deployed Auth.js callbacks |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL used by the browser client |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key for client auth and data access |
+| `SUPABASE_SECRET_KEY` | Supabase secret key for server-side access |
 | `DATABASE_URL` | PostgreSQL connection string |
 | `AUTH_SECRET` | Auth.js session secret |
+
+The app reads Supabase config from environment variables. `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are still accepted as compatibility fallbacks for older local setups.
 
 ## License
 

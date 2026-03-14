@@ -13,6 +13,7 @@ export default async function LeagueTransactionsPage({
       eyebrow="Transactions"
       title="Waivers, adds, and drops"
       description="Waiver priority, pending claims, and recent roster moves."
+      highlights={["Waiver watch", "Fast claims", "Recent moves"]}
     >
       <TransactionsClient leagueId={leagueId} />
     </LeaguePageShell>

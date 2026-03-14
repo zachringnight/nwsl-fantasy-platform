@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { Crown } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { SalaryCapEntryBuilder } from "@/components/lineup/salary-cap-entry-builder";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
@@ -161,9 +163,9 @@ export function TeamClient({ leagueId }: TeamClientProps) {
         }
 
         const modeConfig = getFantasyModeConfig(leagueDetails.league);
+        const links = buildLeagueLinks(leagueId);
 
         if (modeConfig.usesSalaryCap) {
-          const links = buildLeagueLinks(leagueId);
           const slate = getFantasyTargetSlate(leagueDetails.league);
 
           return (
@@ -190,9 +192,43 @@ export function TeamClient({ leagueId }: TeamClientProps) {
 
         if (roster.length === 0) {
           return (
-            <EmptyState
-              description="Once players have been drafted, this editor will let you build a legal week-one lineup."
+            <GuidedLeagueState
+              actions={
+                <>
+                  <Link className={getButtonClassName()} href={links.draft}>
+                    Open draft lobby
+                  </Link>
+                  <Link
+                    className={getButtonClassName({
+                      variant: "secondary",
+                    })}
+                    href={links.players}
+                  >
+                    Scout players
+                  </Link>
+                </>
+              }
+              badge="Before kickoff"
+              description="This page becomes your lineup studio once the room has real picks. Draft first, then shape the starters."
+              highlights={["Draft board first", "Lineup studio", "Week-one ready"]}
+              icon={Crown}
+              steps={[
+                {
+                  detail: "Fill the league and lock the room setup.",
+                  label: "Open the lobby",
+                },
+                {
+                  detail: "Run the draft so your roster has real players to place.",
+                  label: "Build your squad",
+                },
+                {
+                  detail: "Come back here to set starters and save the week-one shape.",
+                  label: "Set the lineup",
+                },
+              ]}
               title="Draft your roster first"
+              tone="brand"
+              eyebrow="Team setup"
             />
           );
         }

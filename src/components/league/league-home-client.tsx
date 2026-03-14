@@ -7,9 +7,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { getButtonClassName } from "@/components/ui/button";
-import { LeagueCommandCenter } from "@/features/commissioner/components/league-command-center";
-import { ClassicLeagueBrief } from "@/features/classic/components/classic-league-brief";
-import { SalaryCapLeagueBrief } from "@/features/salary-cap/components/salary-cap-league-brief";
+import { LeagueHomeFeed } from "@/components/league/league-home-feed";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import {
@@ -122,7 +120,8 @@ export function LeagueHomeClient({ leagueId }: LeagueHomeClientProps) {
                     label: "Set lineup",
                   };
         const secondaryAction =
-          leagueDetails.league.status === "ready" && !modeConfig.usesSalaryCap
+          (leagueDetails.league.status === "setup" || leagueDetails.league.status === "ready") &&
+          !modeConfig.usesSalaryCap
             ? {
                 href: links.players,
                 label: "Scout players",
@@ -164,49 +163,23 @@ export function LeagueHomeClient({ leagueId }: LeagueHomeClientProps) {
 
         return (
           <MotionReveal>
-            <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-              {activeSlate ? (
-                <SalaryCapLeagueBrief
-                  leagueDetails={leagueDetails}
-                  primaryActionHref={primaryAction.href}
-                  primaryActionLabel={primaryAction.label}
-                  secondaryActionHref={secondaryAction.href}
-                  secondaryActionLabel={secondaryAction.label}
-                  slate={activeSlate}
-                />
-              ) : (
-                <ClassicLeagueBrief
-                  description={modeConfig.description}
-                  leagueDetails={leagueDetails}
-                  primaryActionHref={primaryAction.href}
-                  primaryActionLabel={primaryAction.label}
-                  secondaryActionHref={secondaryAction.href}
-                  secondaryActionLabel={secondaryAction.label}
-                />
-              )}
-
-              <LeagueCommandCenter
-                cadenceLabel={cadenceLabel}
-                exploreHref={exploreAction.href}
-                exploreLabel={exploreAction.label}
-                invitePath={invitePath}
-                isCommissioner={isCommissioner}
-                leagueDetails={leagueDetails}
-                ownershipLabel={ownershipLabel}
-                rosterBuilderLabel={
-                  leagueDetails.league.roster_build_mode === "snake_draft"
-                    ? "Snake draft"
-                    : "Salary cap"
-                }
-                scheduleSummary={scheduleSummary}
-                secondarySummary={
-                  activeSlate
-                    ? "Lock times and entry rules follow the active window."
-                    : "Draft, lineup, and waiver info stays visible here."
-                }
-                settingsHref={links.settings}
-              />
-            </section>
+            <LeagueHomeFeed
+              activeSlate={activeSlate}
+              cadenceLabel={cadenceLabel}
+              exploreHref={exploreAction.href}
+              exploreLabel={exploreAction.label}
+              invitePath={invitePath}
+              isCommissioner={isCommissioner}
+              leagueDetails={leagueDetails}
+              modeConfig={modeConfig}
+              ownershipLabel={ownershipLabel}
+              primaryActionHref={primaryAction.href}
+              primaryActionLabel={primaryAction.label}
+              scheduleSummary={scheduleSummary}
+              secondaryActionHref={secondaryAction.href}
+              secondaryActionLabel={secondaryAction.label}
+              settingsHref={links.settings}
+            />
           </MotionReveal>
         );
       }}

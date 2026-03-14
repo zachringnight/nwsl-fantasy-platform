@@ -1,12 +1,58 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Crown,
+  RadioTower,
+  Settings2,
+  Shield,
+  Sparkles,
+  Swords,
+  Trophy,
+  Users2,
+} from "lucide-react";
 import { buildLeagueNavigation } from "@/config/navigation";
-import { NavLink } from "@/components/common/nav-link";
+import { cn } from "@/lib/utils";
 
 export interface LeagueSubnavProps {
   leagueId: string;
 }
+
+const leagueNavMeta = {
+  Draft: {
+    hint: "Room",
+    icon: Crown,
+  },
+  Home: {
+    hint: "Pulse",
+    icon: Sparkles,
+  },
+  Matchup: {
+    hint: "Live",
+    icon: Swords,
+  },
+  Moves: {
+    hint: "Claims",
+    icon: RadioTower,
+  },
+  Players: {
+    hint: "Scout",
+    icon: Shield,
+  },
+  Settings: {
+    hint: "Rules",
+    icon: Settings2,
+  },
+  Standings: {
+    hint: "Race",
+    icon: Trophy,
+  },
+  Team: {
+    hint: "Lineup",
+    icon: Users2,
+  },
+} as const;
 
 export function LeagueSubnav({ leagueId }: LeagueSubnavProps) {
   const pathname = usePathname();
@@ -15,16 +61,65 @@ export function LeagueSubnav({ leagueId }: LeagueSubnavProps) {
   return (
     <nav
       aria-label="League navigation"
-      className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-8"
     >
       {items.map((item) => (
-        <NavLink
+        <LeagueNavCard
           key={item.href}
           href={item.href}
+          isActive={
+            item.href === `/leagues/${leagueId}`
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(`${item.href}/`)
+          }
           label={item.shortLabel}
-          isActive={pathname === item.href}
         />
       ))}
     </nav>
+  );
+}
+
+function LeagueNavCard({
+  href,
+  isActive,
+  label,
+}: {
+  href: string;
+  isActive: boolean;
+  label: string;
+}) {
+  const meta = leagueNavMeta[label as keyof typeof leagueNavMeta] ?? leagueNavMeta.Home;
+  const Icon = meta.icon;
+
+  return (
+    <Link
+      href={href}
+      aria-current={isActive ? "page" : undefined}
+      className={cn(
+        "league-nav-card group rounded-[1.45rem] border px-3 py-3 transition duration-300",
+        isActive
+          ? "border-white/18 bg-white/14 text-white shadow-[0_22px_60px_rgba(11,28,88,0.35)]"
+          : "border-white/10 bg-black/18 text-white/78 hover:border-brand-strong/35 hover:bg-white/10 hover:text-white"
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <span
+          className={cn(
+            "inline-flex size-11 shrink-0 items-center justify-center rounded-[1rem] border transition duration-300",
+            isActive
+              ? "border-white/14 bg-white/12 text-white"
+              : "border-white/10 bg-white/6 text-[#ffd5e5] group-hover:border-white/14 group-hover:bg-white/10"
+          )}
+        >
+          <Icon className="size-4" />
+        </span>
+        <div className="min-w-0">
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
+            {meta.hint}
+          </p>
+          <p className="truncate text-sm font-semibold tracking-[-0.01em]">{label}</p>
+        </div>
+      </div>
+    </Link>
   );
 }

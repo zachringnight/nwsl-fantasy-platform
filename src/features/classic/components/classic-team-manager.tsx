@@ -3,6 +3,7 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { StatusBanner } from "@/components/common/status-banner";
 import { Button } from "@/components/ui/button";
 import { MetricTile } from "@/components/ui/metric-tile";
+import { Pill } from "@/components/ui/pill";
 import {
   getEligibleLineupSlots,
   lineupSlotLabels,
@@ -68,6 +69,13 @@ export function ClassicTeamManager({
   );
   const strongestRole =
     Object.entries(roleLeader).sort((left, right) => right[1] - left[1])[0]?.[0] ?? "MID";
+  const roleMix = (Object.entries(roleLeader) as Array<["GK" | "DEF" | "MID" | "FWD", number]>)
+    .map(([role, points]) => ({
+      points,
+      role,
+      share: starterProjection > 0 ? Math.max((points / starterProjection) * 100, 8) : 0,
+    }))
+    .filter((entry) => entry.points > 0);
   const readinessLabel =
     missingStarterSlots.length === 0
       ? "Lineup is balanced and ready to save."
@@ -123,32 +131,54 @@ export function ClassicTeamManager({
 
               <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Tactical read
+                  Starter mood
                 </p>
                 <p className="mt-3 text-sm leading-7 text-white/84">{readinessLabel}</p>
               </div>
 
-              <div className="grid gap-4 xl:grid-cols-2">
+              <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
                 <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                    Projection model
+                    Role balance
                   </p>
-                  <p className="mt-3 text-sm leading-7 text-white/84">
-                    Weekly lineup projection is the sum of each current starter&apos;s average fantasy points. Live score starts with appearance ({launchScoringRules.appearance}) and 60+ minute ({launchScoringRules.minutes60Plus}) base points, then moves on event scoring.
-                  </p>
+                  <div className="mt-4 space-y-3">
+                    {roleMix.map((entry) => (
+                      <div key={entry.role}>
+                        <div className="flex items-center justify-between gap-3 text-xs uppercase tracking-[0.18em] text-white/62">
+                          <span>{entry.role}</span>
+                          <span>{entry.points.toFixed(1)} pts</span>
+                        </div>
+                        <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/8">
+                          <div
+                            className="h-full rounded-full bg-[linear-gradient(90deg,#ff7eb6_0%,#00e1ff_100%)]"
+                            style={{ width: `${entry.share}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                    Scoring driver
+                    Quick scoring cues
                   </p>
-                  <p className="mt-3 text-sm font-semibold text-white">
-                    {projectionDriver
-                      ? `${projectionDriver.player_name} leads at ${projectionDriver.player.average_points.toFixed(1)} pts`
-                      : "Add starters to create a real projection"}
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-white/74">
-                    Strongest role lane: {strongestRole}. Read goals, assists, clean sheets, and saves against the players currently filling those starter slots.
-                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Pill tone="brand">Appearance +{launchScoringRules.appearance}</Pill>
+                    <Pill tone="accent">60+ mins +{launchScoringRules.minutes60Plus}</Pill>
+                    <Pill tone="success">Role leader {strongestRole}</Pill>
+                  </div>
+                  <div className="mt-4 rounded-[1.2rem] border border-white/10 bg-white/6 p-4">
+                    <p className="text-sm font-semibold text-white">
+                      {projectionDriver
+                        ? `${projectionDriver.player_name} sets the ceiling`
+                        : "Add starters to unlock your ceiling"}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-white/74">
+                      {projectionDriver
+                        ? `${projectionDriver.player.average_points.toFixed(1)} projected points. Strongest lane right now: ${strongestRole}.`
+                        : `Strongest lane right now: ${strongestRole}.`}
+                    </p>
+                  </div>
                 </div>
               </div>
 

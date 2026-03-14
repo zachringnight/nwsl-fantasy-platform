@@ -6,6 +6,7 @@ import { Activity, AlarmClockCheck, PlayCircle, ShieldAlert, Sparkles } from "lu
 import { DraftBoard } from "@/components/draft/draft-board";
 import { DraftQueuePanel } from "@/components/draft/draft-queue-panel";
 import { EmptyState } from "@/components/common/empty-state";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { StatusBanner } from "@/components/common/status-banner";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
@@ -338,10 +339,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   if (!modeConfig.usesLiveDraftRoom) {
     return (
-      <EmptyState
-        title={`${modeConfig.label} does not use a draft room`}
-        description="This format uses the contest-entry hub instead of a live snake draft."
-        action={
+      <GuidedLeagueState
+        actions={
           <Link
             href={links.team}
             className={getButtonClassName()}
@@ -349,34 +348,82 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
             Open team hub
           </Link>
         }
+        badge="No live room"
+        description="This league format uses the roster builder instead of a live snake-draft board."
+        eyebrow="Draft format"
+        highlights={["Contest entry flow", "No live clock", "Team hub first"]}
+        icon={Sparkles}
+        steps={[
+          {
+            detail: "Build entries from the team hub instead of waiting on a live turn.",
+            label: "Open the builder",
+          },
+          {
+            detail: "Use the player board to scan salaries, value, and availability.",
+            label: "Scout the pool",
+          },
+          {
+            detail: "Return here only for classic live-draft leagues.",
+            label: "Stay in the hub",
+          },
+        ]}
+        title={`${modeConfig.label} does not use a draft room`}
+        tone="default"
       />
     );
   }
 
   if (!draftState.memberships.every((membership) => membership.draft_slot != null)) {
     return (
-      <EmptyState
-        title="Reveal the draft order first"
-        description="The commissioner needs to reveal the draft order in the lobby before the room opens."
-        action={
-          <Link
-            href={links.draft}
-            className={getButtonClassName()}
-          >
-            Return to lobby
-          </Link>
+      <GuidedLeagueState
+        actions={
+          <>
+            <Link
+              href={links.draft}
+              className={getButtonClassName()}
+            >
+              Return to lobby
+            </Link>
+            <Link
+              href={links.players}
+              className={getButtonClassName({
+                variant: "secondary",
+              })}
+            >
+              Build your queue
+            </Link>
+          </>
         }
+        badge="Order reveal"
+        description="The room opens after the commissioner reveals the draft order. Until then, use this moment to line up favorites."
+        eyebrow="Draft setup"
+        highlights={["Reveal the order", "Queue your targets", "Room opens next"]}
+        icon={PlayCircle}
+        steps={[
+          {
+            detail: "Head back to the lobby and reveal every manager's slot.",
+            label: "Publish the order",
+          },
+          {
+            detail: "Use the player board to build a quick shortlist before the clock starts.",
+            label: "Queue your names",
+          },
+          {
+            detail: "Return here once the room is ready to go live.",
+            label: "Enter the room",
+          },
+        ]}
+        title="Reveal the draft order first"
+        tone="brand"
       />
     );
   }
 
   if (draftState.draft.status === "complete") {
     return (
-      <EmptyState
-        title="Draft complete"
-        description="The room is closed because all picks are in. Move to the recap or team editor."
-        action={
-          <div className="flex flex-wrap justify-center gap-3">
+      <GuidedLeagueState
+        actions={
+          <div className="flex flex-wrap gap-3">
             <Link
               href={links.draftRecap}
               className={getButtonClassName()}
@@ -393,6 +440,27 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
             </Link>
           </div>
         }
+        badge="Room closed"
+        description="Every pick is in. The live board is finished, so the next scenes are recap, lineup polish, and week-one prep."
+        eyebrow="Draft complete"
+        highlights={["Recap time", "Lineup next", "Board closed"]}
+        icon={Sparkles}
+        steps={[
+          {
+            detail: "Review how the board fell and where your best value landed.",
+            label: "Read the recap",
+          },
+          {
+            detail: "Move into the team editor and shape your opening starters.",
+            label: "Set week one",
+          },
+          {
+            detail: "Use players and transactions to plan the next edge.",
+            label: "Scout next moves",
+          },
+        ]}
+        title="Draft complete"
+        tone="accent"
       />
     );
   }
