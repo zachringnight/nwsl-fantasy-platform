@@ -8,6 +8,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getButtonClassName, Button } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { NWSL_CLUBS_LIST } from "@/config/nwsl-clubs";
+import { completeLocalOnboarding } from "@/lib/local-mode-store";
 import type { FantasyProfile } from "@/types/fantasy";
 
 export function OnboardingLocalForm() {
@@ -40,6 +41,7 @@ interface OnboardingLocalFieldsProps {
 
 function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalFieldsProps) {
   const dataClient = useFantasyDataClient();
+  const { supabaseReady } = useFantasyAuth();
   const router = useRouter();
   const [favoriteClub, setFavoriteClub] = useState(profile.favorite_club ?? "");
   const [experienceLevel, setExperienceLevel] = useState<"new" | "casual" | "experienced">(
@@ -58,13 +60,18 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
     setIsSubmitting(true);
 
     try {
-      await dataClient.upsertFantasyProfile({
-        displayName: profile.display_name,
-        favoriteClub,
-        experienceLevel,
-        onboardingComplete: true,
-      });
-      await refreshProfile();
+      if (!supabaseReady) {
+        completeLocalOnboarding({ favoriteClub, experienceLevel });
+        await refreshProfile();
+      } else {
+        await dataClient.upsertFantasyProfile({
+          displayName: profile.display_name,
+          favoriteClub,
+          experienceLevel,
+          onboardingComplete: true,
+        });
+        await refreshProfile();
+      }
     } catch (submissionError) {
       setError(
         submissionError instanceof Error

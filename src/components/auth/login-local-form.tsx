@@ -10,6 +10,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { loginLocalUser, registerLocalUser } from "@/lib/local-mode-store";
 
 type LoginMode = "choice" | "email";
 
@@ -23,15 +24,6 @@ export function LoginLocalForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
-
-  if (!supabaseReady) {
-    return (
-      <EmptyState
-        title="Sign-in temporarily unavailable"
-        description="We're having trouble connecting right now. Please try again in a moment."
-      />
-    );
-  }
 
   if (!hasHydrated) {
     return (
@@ -64,6 +56,12 @@ export function LoginLocalForm() {
     setIsSubmitting(true);
 
     try {
+      if (!supabaseReady) {
+        registerLocalUser({ displayName: "Guest", email: "" });
+        await refreshProfile();
+        router.push("/onboarding");
+        return;
+      }
       await dataClient.ensureHostedSession();
       await refreshProfile();
       router.push("/onboarding");
@@ -95,6 +93,17 @@ export function LoginLocalForm() {
     setIsSubmitting(true);
 
     try {
+      if (!supabaseReady) {
+        const localUser = loginLocalUser(email.trim());
+        if (!localUser) {
+          setError("No account found with that email. Try signing up first.");
+          return;
+        }
+        await refreshProfile();
+        router.push(localUser.onboardingComplete ? "/dashboard" : "/onboarding");
+        return;
+      }
+
       const supabase = getSupabaseBrowserClient();
       const { error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim(),
@@ -118,6 +127,11 @@ export function LoginLocalForm() {
 
   async function handleGoogleLogin() {
     setError("");
+
+    if (!supabaseReady) {
+      setError("Google sign-in requires a hosted connection. Use email or guest sign-in instead.");
+      return;
+    }
 
     try {
       const supabase = getSupabaseBrowserClient();

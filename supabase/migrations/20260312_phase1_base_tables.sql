@@ -7,7 +7,7 @@ create table if not exists public.fantasy_profiles (
   email text,
   display_name text not null,
   favorite_club text,
-  experience_level text check (experience_level is null or experience_level in ('beginner', 'intermediate', 'advanced')),
+  experience_level text check (experience_level is null or experience_level in ('new', 'casual', 'experienced')),
   onboarding_complete boolean not null default false,
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())
