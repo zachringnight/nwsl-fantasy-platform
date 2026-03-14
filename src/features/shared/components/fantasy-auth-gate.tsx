@@ -57,12 +57,21 @@ export function FantasyAuthGate({
     return <EmptyState description={loadingDescription} title={loadingTitle} />;
   }
 
-  if (!auth.session || !auth.profile) {
+  if (!auth.session) {
     return (
       <EmptyState
         action={signedOutAction}
         description={signedOutDescription}
         title={signedOutTitle}
+      />
+    );
+  }
+
+  if (!auth.profile) {
+    return (
+      <EmptyState
+        description="Preparing your account for the first time."
+        title="Finishing account setup"
       />
     );
   }

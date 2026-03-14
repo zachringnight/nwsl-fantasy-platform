@@ -150,9 +150,9 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
           </>
         }
         badge="Recap unlock"
-        description="This page turns into a visual board once the draft room starts logging real picks."
+        description="This page fills in once the draft room starts recording picks."
         eyebrow="Draft recap"
-        highlights={["Picks first", "Board story next", "Lineup prep after"]}
+        highlights={["All picks", "Roster review", "Lineup prep"]}
         icon={Crown}
         steps={[
           {
@@ -165,7 +165,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
           },
           {
             detail: "Come back here to review your haul before lineup setup.",
-            label: "Read the room",
+            label: "Review your roster",
           },
         ]}
         title="No draft recap yet"
@@ -224,8 +224,8 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-7 text-foreground">
               Weekly score starts with appearance ({launchScoringRules.appearance}) and 60+ minute ({launchScoringRules.minutes60Plus}) base points, then rises on goals, assists, clean sheets, and saves. This roster currently leans on{" "}
               {topProjectionPlayer
-                ? `${topProjectionPlayer.player_name} and the ${getScoringFitLabel(topProjectionPlayer.player_position).toLowerCase()} lane`
-                : "its best projected starter lane"}
+                ? `${topProjectionPlayer.player_name} and its strongest projected position group`
+                : "its strongest projected position group"}
               {" "}to create the early weekly edge.
             </div>
           </div>

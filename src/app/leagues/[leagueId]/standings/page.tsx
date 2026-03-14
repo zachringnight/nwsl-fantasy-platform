@@ -13,7 +13,7 @@ export default async function LeagueStandingsPage({
       eyebrow="Standings"
       title="Regular season table and playoff race"
       description="Track the table, playoff line, and the scoring totals behind every team record."
-      highlights={["Playoff chase", "Big movers", "Table pulse"]}
+      highlights={["Playoff race", "League table", "Weekly results"]}
     >
       <LeagueStandingsClient leagueId={leagueId} />
     </LeaguePageShell>

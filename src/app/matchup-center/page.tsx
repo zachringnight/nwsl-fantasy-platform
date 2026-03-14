@@ -1,5 +1,5 @@
 import { Activity, CalendarRange, Shield, Zap } from "lucide-react";
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { fantasyPlayerPool } from "@/lib/fantasy-player-pool";
 import {
@@ -41,10 +41,12 @@ const scoringEvents = [
 
 export default function MatchupCenterPage() {
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Matchup Center"
       title="Follow every score as it happens"
       description="Live scoring from lock to final whistle."
+      signedOutDescription="Sign in before opening the matchup center."
+      signedOutTitle="Sign in to continue"
     >
       <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
         <SurfaceCard
@@ -167,6 +169,6 @@ export default function MatchupCenterPage() {
           </div>
         </SurfaceCard>
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }

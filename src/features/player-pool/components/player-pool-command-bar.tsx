@@ -49,7 +49,7 @@ export function PlayerPoolCommandBar({
   return (
     <section className="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
       <SurfaceCard
-        description="Use one board to search the pool, check ownership, and line up the next move."
+        description="Use one board to search the pool, check ownership, and decide who to add next."
         eyebrow="Player pool"
         title={usesSalaryCap ? "Shared-pool salary scouting" : "Exclusive ownership scouting board"}
       >

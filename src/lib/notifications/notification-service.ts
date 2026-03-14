@@ -112,16 +112,23 @@ export async function getUserNotifications(
   });
 }
 
-export async function markNotificationRead(notificationId: string): Promise<void> {
-  await prisma.notification.update({
-    where: { id: notificationId },
+export async function markNotificationRead(
+  notificationId: string,
+  userId: string
+): Promise<boolean> {
+  const result = await prisma.notification.updateMany({
+    where: { id: notificationId, userId },
     data: { readAt: new Date() },
   });
+
+  return result.count > 0;
 }
 
-export async function markAllNotificationsRead(userId: string): Promise<void> {
-  await prisma.notification.updateMany({
+export async function markAllNotificationsRead(userId: string): Promise<number> {
+  const result = await prisma.notification.updateMany({
     where: { userId, readAt: null },
     data: { readAt: new Date() },
   });
+
+  return result.count;
 }

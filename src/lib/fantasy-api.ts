@@ -29,10 +29,16 @@ import {
   getFantasyModeConfig,
 } from "@/lib/fantasy-modes";
 import {
-  getFantasyDefaultLockAt,
   getFantasySlateWindows,
   getFantasyTargetSlate,
 } from "@/lib/fantasy-slate-engine";
+import {
+  normalizeFantasyLeagueCode,
+  normalizeFantasyLeagueName,
+  resolveFantasyLeagueStartAt,
+  validateFantasyManagerCountTarget,
+} from "@/lib/fantasy-league-inputs";
+import { buildFantasyProfileSeed, normalizeFantasyDisplayName } from "@/lib/fantasy-profile";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type {
   FantasyDraftPickRecord,
@@ -92,6 +98,14 @@ async function requireUser() {
 
 function createLeagueCode() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
+}
+
+function createHostedLeagueId() {
+  if (typeof crypto?.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  throw new Error("Secure ID generation is unavailable in this browser.");
 }
 
 function createFallbackDraftRecord(leagueId: string): FantasyDraftRecord {
@@ -1008,7 +1022,7 @@ export async function upsertFantasyProfile(input: {
   const payload = {
     user_id: user.id,
     email: normalizedEmail,
-    display_name: input.displayName.trim(),
+    display_name: normalizeFantasyDisplayName(input.displayName),
     favorite_club: input.favoriteClub?.trim() || null,
     experience_level: input.experienceLevel ?? null,
     onboarding_complete: input.onboardingComplete,
@@ -1026,6 +1040,23 @@ export async function upsertFantasyProfile(input: {
   }
 
   return data as FantasyProfile;
+}
+
+export async function ensureCurrentProfile() {
+  const existingProfile = await fetchCurrentProfile();
+
+  if (existingProfile) {
+    return existingProfile;
+  }
+
+  const user = await requireUser();
+  const profileSeed = buildFantasyProfileSeed(user);
+
+  if (!profileSeed) {
+    return null;
+  }
+
+  return upsertFantasyProfile(profileSeed);
 }
 
 export async function loadMyLeagues() {
@@ -1142,42 +1173,37 @@ export async function createHostedLeague(input: {
 }) {
   const supabase = getSupabaseBrowserClient();
   const user = await requireUser();
-  const profile = await fetchCurrentProfile();
+  const profile = await ensureCurrentProfile();
   const modeFields = getFantasyLeagueModeFields(input.gameVariant);
 
   if (!profile) {
     throw new Error("Create a hosted profile before creating a league.");
   }
 
+  const normalizedName = normalizeFantasyLeagueName(input.name);
+  const managerCountTarget = validateFantasyManagerCountTarget(input.managerCountTarget);
+
   for (let attempt = 0; attempt < 5; attempt += 1) {
+    const leagueId = createHostedLeagueId();
     const code = createLeagueCode();
-    const scheduledAt = modeFields.roster_build_mode === "salary_cap"
-      ? getFantasyDefaultLockAt(input.gameVariant)
-      : input.draftAt
-        ? new Date(input.draftAt).toISOString()
-        : null;
+    const scheduledAt = resolveFantasyLeagueStartAt(input.gameVariant, input.draftAt);
 
-    if (!scheduledAt) {
-      throw new Error("Choose a draft date and time for this classic league.");
-    }
-
-    const { data: league, error: leagueError } = await supabase
+    const { error: leagueError } = await supabase
       .from("fantasy_leagues")
       .insert({
+        id: leagueId,
         code,
         commissioner_user_id: user.id,
         contest_horizon: modeFields.contest_horizon,
         draft_at: scheduledAt,
         game_variant: input.gameVariant,
-        manager_count_target: input.managerCountTarget,
-        name: input.name.trim(),
+        manager_count_target: managerCountTarget,
+        name: normalizedName,
         player_ownership_mode: modeFields.player_ownership_mode,
         roster_build_mode: modeFields.roster_build_mode,
         salary_cap_amount: modeFields.salary_cap_amount,
         updated_at: new Date().toISOString(),
-      })
-      .select("id, code")
-      .single();
+      });
 
     if (leagueError) {
       if (leagueError.code === "23505") {
@@ -1191,20 +1217,20 @@ export async function createHostedLeague(input: {
       .from("fantasy_league_memberships")
       .insert({
         display_name: profile.display_name,
-        league_id: league.id,
+        league_id: leagueId,
         role: "commissioner",
         team_name: `${profile.display_name} FC`,
         user_id: user.id,
       });
 
     if (membershipError) {
-      await supabase.from("fantasy_leagues").delete().eq("id", league.id);
+      await supabase.from("fantasy_leagues").delete().eq("id", leagueId);
       throw new Error(assertErrorMessage(membershipError, "Unable to add the commissioner to the league."));
     }
 
     return {
-      code: league.code as string,
-      id: league.id as string,
+      code,
+      id: leagueId,
     };
   }
 
@@ -1230,9 +1256,22 @@ export async function updateLeagueSettings(
   }
 
   const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
-  if (updates.name !== undefined) patch.name = updates.name.trim();
-  if (updates.draftAt !== undefined) patch.draft_at = new Date(updates.draftAt).toISOString();
-  if (updates.managerCountTarget !== undefined) patch.manager_count_target = updates.managerCountTarget;
+  if (updates.name !== undefined) patch.name = normalizeFantasyLeagueName(updates.name);
+  if (updates.draftAt !== undefined) {
+    const { data: leagueRecord } = await supabase
+      .from("fantasy_leagues")
+      .select("game_variant")
+      .eq("id", leagueId)
+      .single();
+
+    patch.draft_at = resolveFantasyLeagueStartAt(
+      (leagueRecord?.game_variant as FantasyGameVariant | undefined) ?? "classic_season_long",
+      updates.draftAt
+    );
+  }
+  if (updates.managerCountTarget !== undefined) {
+    patch.manager_count_target = validateFantasyManagerCountTarget(updates.managerCountTarget);
+  }
 
   const { error } = await supabase
     .from("fantasy_leagues")
@@ -1982,69 +2021,38 @@ export async function processWaiverClaims(leagueId: string) {
 
 export async function joinHostedLeagueByCode(codeInput: string) {
   const supabase = getSupabaseBrowserClient();
-  const user = await requireUser();
-  const profile = await fetchCurrentProfile();
+  await requireUser();
+  const code = normalizeFantasyLeagueCode(codeInput);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  if (!profile) {
-    throw new Error("Create a hosted profile before joining a league.");
+  if (!session?.access_token) {
+    throw new Error("Sign in before joining a league.");
   }
 
-  const code = codeInput.trim().toUpperCase();
-  const { data: league, error: leagueError } = await supabase
-    .from("fantasy_leagues")
-    .select("id, code, manager_count_target")
-    .eq("code", code)
-    .maybeSingle();
+  const response = await fetch("/api/leagues/join", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${session.access_token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ code }),
+  });
 
-  if (leagueError) {
-    throw new Error(assertErrorMessage(leagueError, "Unable to look up that league."));
-  }
+  const result = (await response.json()) as {
+    code?: string;
+    error?: string;
+    id?: string;
+  };
 
-  if (!league) {
-    throw new Error("That league code does not exist.");
-  }
-
-  const { data: memberships, error: membershipsError } = await supabase
-    .from("fantasy_league_memberships")
-    .select("user_id")
-    .eq("league_id", league.id);
-
-  if (membershipsError) {
-    throw new Error(assertErrorMessage(membershipsError, "Unable to load current league members."));
-  }
-
-  const isExistingMember = (memberships ?? []).some(
-    (membership) => membership.user_id === user.id
-  );
-
-  if (isExistingMember) {
-    return {
-      code: league.code as string,
-      id: league.id as string,
-    };
-  }
-
-  if ((memberships ?? []).length >= (league.manager_count_target as number)) {
-    throw new Error("That league is already full.");
-  }
-
-  const { error: insertError } = await supabase
-    .from("fantasy_league_memberships")
-    .insert({
-      display_name: profile.display_name,
-      league_id: league.id,
-      role: "manager",
-      team_name: `${profile.display_name} FC`,
-      user_id: user.id,
-    });
-
-  if (insertError) {
-    throw new Error(assertErrorMessage(insertError, "Unable to join that league."));
+  if (!response.ok || !result.id || !result.code) {
+    throw new Error(result.error ?? "Unable to join that league.");
   }
 
   return {
-    code: league.code as string,
-    id: league.id as string,
+    code: result.code,
+    id: result.id,
   };
 }
 

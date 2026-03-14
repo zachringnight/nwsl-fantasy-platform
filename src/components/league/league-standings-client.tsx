@@ -113,13 +113,13 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-2">
                 <SurfaceCard
-                  description="Contest results and leaderboard for salary-cap leagues."
-                  eyebrow="Salary-cap path"
-                  title={`${modeConfig.label} does not use classic standings`}
+                  description="Contest results and leaderboard are shown for salary-cap leagues."
+                  eyebrow="Salary-cap results"
+                  title={`${modeConfig.label} uses contest results instead of classic standings`}
                 >
                   <div className="flex flex-wrap gap-3">
                     <Link className={getButtonClassName()} href={links.team}>
-                      Open contest hub
+                      Open contest page
                     </Link>
                     <Link
                       className={getButtonClassName({
@@ -127,14 +127,14 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                       })}
                       href={links.matchup}
                     >
-                      View contest pulse
+                      View contest results
                     </Link>
                   </div>
                 </SurfaceCard>
                 <SurfaceCard
                   description="Head to the contest hub to manage your entry."
-                  eyebrow="Contest route"
-                  title="Use the contest hub for entry results"
+                  eyebrow="Contest page"
+                  title="Use the contest page for results and ranking"
                   tone="accent"
                 />
               </section>
@@ -169,8 +169,8 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                 <StatusBanner title="Standings note" message={error} tone="warning" />
               ) : (
                 <StatusBanner
-                  title="Standings engine"
-                  message="The current table is driven by the built-in weekly simulator, so the playoff race still moves and reads like a real season."
+                  title="Standings update"
+                  message="The current table uses the built-in weekly simulator, so the playoff race continues to update week by week."
                   tone="info"
                 />
               )}
@@ -251,7 +251,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                 </SurfaceCard>
 
                 <SurfaceCard
-                  description="See where you rank and why your scoring profile has you there."
+                  description="See where you rank and how weekly scoring shapes the table."
                   eyebrow="How it works"
                   title="How scoring turns into standings"
                   tone="accent"
@@ -261,7 +261,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                       Weekly points-for is built from the same fantasy scoring system used across matchup and lineup views: appearance {launchScoringRules.appearance}, 60+ minutes {launchScoringRules.minutes60Plus}, assists {launchScoringRules.assist}, and position-based goal or clean-sheet bonuses.
                     </div>
                     <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-7 text-foreground">
-                      Projection is the season outlook lane. It does not rank above wins, but it explains who is running hot, who is underperforming, and which teams still profile like contenders over the remaining weeks.
+                      Projection is a season outlook. It does not rank above wins, but it helps explain which teams are overperforming, underperforming, or still positioned to climb over the remaining weeks.
                     </div>
                     <div className="space-y-2 text-sm leading-6 text-foreground">
                       <p>1. Win percentage</p>

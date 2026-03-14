@@ -79,7 +79,7 @@ export function DashboardClient() {
             })}
             href="/login"
           >
-            Start session
+            Sign in
           </Link>
         </div>
       }
@@ -147,8 +147,8 @@ export function DashboardClient() {
             <section className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
               <MotionReveal variant="left">
                 <SurfaceCard
-                  description="Next lock, top league, and your next move — all at a glance."
-                  eyebrow="Portfolio view"
+                  description="Next lock, featured league, and your next action at a glance."
+                  eyebrow="Overview"
                   title="Run every league from one dashboard"
                 >
                   <div className="space-y-4">
@@ -160,18 +160,18 @@ export function DashboardClient() {
 
                     <div className="grid gap-3 sm:grid-cols-3">
                       <MetricTile
-                        detail="Every card below points to a next move."
+                        detail="Every league card shows the most important next step."
                         label="Active leagues"
                         value={leagues.length}
                       />
                       <MetricTile
-                        detail="Commissioner tools stay pinned to the right room."
+                        detail="Commissioner tools stay linked to the leagues you run."
                         label="Commissioner roles"
                         tone="brand"
                         value={commissionerCount}
                       />
                       <MetricTile
-                        detail="Live rooms and active slates get urgency treatment."
+                        detail="Live leagues and active slates appear first."
                         label="Live windows"
                         tone="accent"
                         value={liveWindowCount}
@@ -182,7 +182,7 @@ export function DashboardClient() {
                       <div className="rounded-[1.5rem] border border-line bg-white/6 p-4">
                         <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
                           <CalendarClock className="size-3.5" />
-                          Next lock lane
+                          Next lock
                         </p>
                         <p className="mt-3 text-xl font-semibold leading-tight text-foreground">
                           {buildLeagueWindowSummary(featuredLeague)}
@@ -201,8 +201,8 @@ export function DashboardClient() {
                         </p>
                         <p className="mt-2 text-sm leading-6 text-muted">
                           {nextSalaryCapLeague
-                            ? `${nextSalaryCapLeague.league.name} is your cleanest salary-cap lane right now.`
-                            : "Classic rooms are leading this portfolio right now."}
+                            ? `${nextSalaryCapLeague.league.name} is the next salary-cap league on your schedule.`
+                            : "Your active leagues are classic formats right now."}
                         </p>
                       </div>
                     </div>
@@ -215,8 +215,8 @@ export function DashboardClient() {
                 variant="right"
               >
                 <SurfaceCard
-                  description="Your featured league stays front and center so the next action is always obvious."
-                  eyebrow="Tonight's pulse"
+                  description="Your featured league stays easy to reach when you need it most."
+                  eyebrow="Featured league"
                   title={featuredLeague.league.name}
                   tone={featuredMode.usesSalaryCap ? "brand" : "accent"}
                 >
@@ -231,12 +231,12 @@ export function DashboardClient() {
                     </div>
                     <div className="rounded-[1.5rem] border border-line bg-night/35 p-4">
                       <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
-                        Priority cue
+                        What to do now
                       </p>
                       <p className="mt-3 text-lg font-semibold leading-tight text-foreground">
                         {featuredLeague.league.status === "live"
-                          ? "A live league is active right now."
-                          : "This is the cleanest next move in your portfolio."}
+                          ? "A live league needs attention right now."
+                          : "This is the clearest league to open next."}
                       </p>
                       <p className="mt-2 text-sm leading-6 text-muted">
                         {buildLeagueNextAction(featuredLeague)}
@@ -329,14 +329,14 @@ function buildDashboardCallout(leagues: FantasyLeagueSummary[]) {
   }
 
   const classicLeague = leagues[0];
-  return `${classicLeague.league.name} is your lead classic league. Open it to keep draft, lineup, and waiver moves in one lane.`;
+  return `${classicLeague.league.name} is your top classic league. Open it for draft, lineup, and waiver updates.`;
 }
 
 function buildDashboardHeadline(leagues: FantasyLeagueSummary[]) {
   const liveLeague = leagues.find((league) => league.league.status === "live");
 
   if (liveLeague) {
-    return `${liveLeague.league.name} is live, so the dashboard is leading with the fastest next action.`;
+    return `${liveLeague.league.name} is live, so the dashboard leads with the most urgent action.`;
   }
 
   return buildDashboardCallout(leagues);

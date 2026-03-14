@@ -11,9 +11,9 @@ export default async function DraftRecapPage({
     <LeaguePageShell
       leagueId={leagueId}
       eyebrow="Draft recap"
-      title="See how the room broke"
+      title="See how the draft played out"
       description="See every pick, review your roster, and start building your lineup."
-      highlights={["Pick story", "Roster shape", "Next steps"]}
+      highlights={["All picks", "Your roster", "Next steps"]}
     >
       <DraftRecapClient leagueId={leagueId} />
     </LeaguePageShell>

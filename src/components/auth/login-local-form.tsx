@@ -3,22 +3,18 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Chrome, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
-import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { normalizeFantasyEmail, validateFantasyPassword } from "@/lib/fantasy-profile";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-
-type LoginMode = "choice" | "email";
 
 export function LoginLocalForm() {
   const router = useRouter();
-  const dataClient = useFantasyDataClient();
-  const { hasHydrated, profile, refreshProfile, supabaseReady } = useFantasyAuth();
+  const { hasHydrated, profile, refreshProfile, session, supabaseReady } = useFantasyAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginMode, setLoginMode] = useState<LoginMode>("choice");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -57,34 +53,22 @@ export function LoginLocalForm() {
     );
   }
 
-  async function handleGuestSession() {
-    setError("");
-    setIsSubmitting(true);
-
-    try {
-      await dataClient.ensureHostedSession();
-      await refreshProfile();
-      router.push("/signup");
-    } catch (submissionError) {
-      setError(
-        submissionError instanceof Error
-          ? submissionError.message
-          : "Unable to start your session."
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
   async function handleEmailLogin(event: React.FormEvent) {
     event.preventDefault();
     setError("");
     setIsSubmitting(true);
 
     try {
+      const normalizedEmail = normalizeFantasyEmail(email);
+      validateFantasyPassword(password);
       const supabase = getSupabaseBrowserClient();
+
+      if (session?.user.is_anonymous) {
+        await supabase.auth.signOut();
+      }
+
       const { error: authError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
+        email: normalizedEmail,
         password,
       });
 
@@ -92,8 +76,8 @@ export function LoginLocalForm() {
         throw authError;
       }
 
-      await refreshProfile();
-      router.push("/dashboard");
+      const nextProfile = await refreshProfile();
+      router.push(nextProfile?.onboarding_complete ? "/dashboard" : "/onboarding");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Unable to sign in. Check your credentials."
@@ -103,102 +87,44 @@ export function LoginLocalForm() {
     }
   }
 
-  async function handleGoogleLogin() {
-    setError("");
-
-    try {
-      const supabase = getSupabaseBrowserClient();
-      const { error: authError } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-
-      if (authError) {
-        throw authError;
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to start Google sign-in."
-      );
-    }
-  }
-
-  if (loginMode === "email") {
-    return (
-      <form className="space-y-4" onSubmit={handleEmailLogin}>
-        <label className="block space-y-2">
-          <span className="text-sm font-medium text-foreground">Email</span>
-          <input
-            className="field-control"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoFocus
-          />
-        </label>
-        <label className="block space-y-2">
-          <span className="text-sm font-medium text-foreground">Password</span>
-          <input
-            className="field-control"
-            type="password"
-            placeholder="Your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {error ? <p className="text-sm text-danger">{error}</p> : null}
-        <Button disabled={isSubmitting} fullWidth type="submit">
-          <Mail className="size-4" />
-          {isSubmitting ? "Signing in…" : "Sign in with email"}
-        </Button>
-        <button
-          className={getButtonClassName({ variant: "ghost", fullWidth: true })}
-          onClick={() => setLoginMode("choice")}
-          type="button"
-        >
-          Back to options
-        </button>
-      </form>
-    );
-  }
-
   return (
-    <div className="space-y-4">
-      <div className="rounded-[1.4rem] border border-line bg-panel-soft p-4 text-sm leading-6 text-muted">
-        Sign in with your email and password, continue with Google, or start a quick guest session.
-      </div>
+    <form className="space-y-4" onSubmit={handleEmailLogin}>
+      <label className="block space-y-2">
+        <span className="text-sm font-medium text-foreground">Email</span>
+        <input
+          className="field-control"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoFocus
+          autoComplete="email"
+        />
+      </label>
+      <label className="block space-y-2">
+        <span className="text-sm font-medium text-foreground">Password</span>
+        <input
+          className="field-control"
+          type="password"
+          placeholder="Your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+        />
+      </label>
       {error ? <p className="text-sm text-danger">{error}</p> : null}
-      <div className="space-y-3">
-        <Button
-          fullWidth
-          onClick={() => setLoginMode("email")}
-          type="button"
-        >
-          <Mail className="size-4" />
-          Sign in with email
-        </Button>
-        <button
-          className={getButtonClassName({ variant: "secondary", fullWidth: true })}
-          onClick={handleGoogleLogin}
-          type="button"
-        >
-          <Chrome className="size-4" />
-          Continue with Google
-        </button>
-        <button
-          className={getButtonClassName({ variant: "ghost", fullWidth: true })}
-          disabled={isSubmitting}
-          onClick={handleGuestSession}
-          type="button"
-        >
-          {isSubmitting ? "Starting session…" : "Quick guest session"}
-        </button>
+      <Button disabled={isSubmitting} fullWidth type="submit">
+        <Mail className="size-4" />
+        {isSubmitting ? "Signing in…" : "Sign in"}
+      </Button>
+      <div className="flex flex-wrap gap-3 text-sm leading-6 text-muted">
+        <span>Need an account?</span>
+        <Link className="font-semibold text-brand hover:text-brand-strong" href="/signup">
+          Create one
+        </Link>
       </div>
-    </div>
+    </form>
   );
 }

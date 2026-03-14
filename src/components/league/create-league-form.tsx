@@ -16,6 +16,7 @@ import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { buildLocalDateTimeInputMin } from "@/lib/fantasy-league-inputs";
 import { getFantasyModeConfig, getFantasyModeOptions } from "@/lib/fantasy-modes";
 import {
   formatFantasySlateRange,
@@ -43,6 +44,7 @@ export function CreateLeagueForm() {
   const formStatus = selectedMode.usesLiveDraftRoom
     ? "Set the draft night and invite the room."
     : "Contest lock windows are pulled directly from the 2026 schedule.";
+  const draftInputMin = buildLocalDateTimeInputMin();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -212,6 +214,7 @@ export function CreateLeagueForm() {
                     placeholder="Founders Cup"
                     value={leagueName}
                     onChange={(event) => setLeagueName(event.target.value)}
+                    maxLength={48}
                     required
                   />
                 </label>
@@ -237,6 +240,7 @@ export function CreateLeagueForm() {
                     <input
                       className="field-control"
                       type="datetime-local"
+                      min={draftInputMin}
                       value={draftAt}
                       onChange={(event) => setDraftAt(event.target.value)}
                       required
@@ -329,7 +333,7 @@ export function CreateLeagueForm() {
                 type="submit"
               >
                 {isSubmitting
-                  ? "Creating league..."
+                  ? "Creating league…"
                   : selectedMode.usesSalaryCap
                     ? "Create salary-cap league"
                     : "Create classic league"}

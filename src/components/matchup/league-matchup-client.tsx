@@ -14,6 +14,11 @@ import { SalaryCapMatchupPlaceholder } from "@/features/matchup/components/salar
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
+import {
+  formatFantasySlateRange,
+  getFantasySlateStatus,
+  getFantasyTargetSlate,
+} from "@/lib/fantasy-slate-engine";
 import type {
   FantasyLeagueDetails,
   FantasyLeagueMatchupState,
@@ -117,11 +122,23 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         const modeConfig = getFantasyModeConfig(leagueDetails.league);
 
         if (modeConfig.usesSalaryCap) {
+          const slate = getFantasyTargetSlate(leagueDetails.league);
+          const slateStatus = getFantasySlateStatus(slate);
+
           return (
             <MotionReveal>
               <SalaryCapMatchupPlaceholder
+                entryLabel={leagueDetails.currentMembership?.team_name ?? null}
+                leagueCode={leagueDetails.league.code}
+                managerCount={leagueDetails.memberships.length}
+                managerTarget={leagueDetails.league.manager_count_target}
                 modeDescription={`${modeConfig.label} tracks entry results and slate movement instead of one-on-one weekly matchups.`}
                 playersHref={links.players}
+                salaryCapAmount={leagueDetails.league.salary_cap_amount}
+                slateLabel={slate.label}
+                slateLockLabel={new Date(slate.lock_at).toLocaleString()}
+                slateRangeLabel={formatFantasySlateRange(slate)}
+                slateStatus={slateStatus}
                 teamHref={links.team}
               />
             </MotionReveal>
@@ -158,7 +175,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
                 badge={needsMoreManagers ? "Fill the room" : "Draft still live"}
                 description={
                   needsMoreManagers
-                    ? "Head-to-head matchups unlock after another manager joins the circle."
+                    ? "Head-to-head matchups unlock after another manager joins the league."
                     : "Weekly fixtures publish when the draft flow is done and the room has real teams."
                 }
                 eyebrow="Matchup setup"
@@ -173,7 +190,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
                     ? [
                         {
                           detail: "Share the invite link and get one more manager into the room.",
-                          label: "Expand the circle",
+                          label: "Add managers",
                         },
                         {
                           detail: "Make sure every manager has a team identity before kickoff.",
@@ -194,7 +211,7 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
                           label: "Complete the board",
                         },
                         {
-                          detail: "Return for the first real head-to-head story.",
+                          detail: "Return when the first head-to-head matchup is scheduled.",
                           label: "Check the matchup",
                         },
                       ]

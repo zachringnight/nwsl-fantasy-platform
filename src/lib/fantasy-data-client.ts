@@ -6,6 +6,7 @@ import {
   cancelWaiverClaim,
   clearSalaryCapEntry,
   createHostedLeague,
+  ensureCurrentProfile,
   ensureHostedSession,
   fetchCurrentProfile,
   joinHostedLeagueByCode,
@@ -41,6 +42,7 @@ export interface FantasyDataClient {
   cancelWaiverClaim: typeof cancelWaiverClaim;
   clearSalaryCapEntry: typeof clearSalaryCapEntry;
   createHostedLeague: typeof createHostedLeague;
+  ensureCurrentProfile: typeof ensureCurrentProfile;
   ensureHostedSession: typeof ensureHostedSession;
   fetchCurrentProfile: typeof fetchCurrentProfile;
   joinHostedLeagueByCode: typeof joinHostedLeagueByCode;
@@ -76,6 +78,7 @@ export const supabaseFantasyDataClient: FantasyDataClient = {
   cancelWaiverClaim,
   clearSalaryCapEntry,
   createHostedLeague,
+  ensureCurrentProfile,
   ensureHostedSession,
   fetchCurrentProfile,
   joinHostedLeagueByCode,

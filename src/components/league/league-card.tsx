@@ -33,7 +33,7 @@ export function LeagueCard({ league }: LeagueCardProps) {
 
           <div className="rounded-[1.4rem] border border-line bg-white/6 p-4">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
-              Next move
+              Next action
             </p>
             <p className="mt-3 text-base leading-7 text-foreground">{league.nextAction}</p>
           </div>
@@ -42,7 +42,7 @@ export function LeagueCard({ league }: LeagueCardProps) {
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
           <div className="rounded-[1.4rem] border border-line bg-white/6 p-4">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
-              Surface role
+              Your role
             </p>
             <p className="mt-3 text-2xl font-semibold leading-none text-foreground">
               {league.status}

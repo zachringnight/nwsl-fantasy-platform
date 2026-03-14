@@ -34,7 +34,7 @@ export function OnboardingLocalForm() {
 
 interface OnboardingLocalFieldsProps {
   profile: FantasyProfile;
-  refreshProfile: () => Promise<void>;
+  refreshProfile: () => Promise<FantasyProfile | null>;
 }
 
 function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalFieldsProps) {

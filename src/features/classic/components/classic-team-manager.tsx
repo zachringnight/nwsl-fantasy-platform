@@ -129,12 +129,12 @@ export function ClassicTeamManager({
                 />
               </div>
 
-              <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Starter mood
-                </p>
-                <p className="mt-3 text-sm leading-7 text-white/84">{readinessLabel}</p>
-              </div>
+                <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                    Lineup status
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-white/84">{readinessLabel}</p>
+                </div>
 
               <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
                 <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
@@ -160,7 +160,7 @@ export function ClassicTeamManager({
                 </div>
                 <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                    Quick scoring cues
+                    Scoring summary
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Pill tone="brand">Appearance +{launchScoringRules.appearance}</Pill>
@@ -170,13 +170,13 @@ export function ClassicTeamManager({
                   <div className="mt-4 rounded-[1.2rem] border border-white/10 bg-white/6 p-4">
                     <p className="text-sm font-semibold text-white">
                       {projectionDriver
-                        ? `${projectionDriver.player_name} sets the ceiling`
-                        : "Add starters to unlock your ceiling"}
+                        ? `${projectionDriver.player_name} is your top projected starter`
+                        : "Add starters to build your projected total"}
                     </p>
                     <p className="mt-2 text-sm leading-6 text-white/74">
                       {projectionDriver
-                        ? `${projectionDriver.player.average_points.toFixed(1)} projected points. Strongest lane right now: ${strongestRole}.`
-                        : `Strongest lane right now: ${strongestRole}.`}
+                        ? `${projectionDriver.player.average_points.toFixed(1)} projected points. Strongest position right now: ${strongestRole}.`
+                        : `Strongest position right now: ${strongestRole}.`}
                     </p>
                   </div>
                 </div>

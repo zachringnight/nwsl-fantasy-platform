@@ -9,7 +9,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const { hasHydrated, profile, session, signOut, user } = useFantasyAuth();
+  const { hasHydrated, profile, session, signOut } = useFantasyAuth();
 
   return (
     <header className="pointer-events-none sticky top-0 z-50 px-3 pt-3 sm:px-4 lg:px-5">
@@ -27,7 +27,7 @@ export function SiteHeader() {
             <div className="hidden items-center gap-3 md:flex">
               {hasHydrated && profile ? (
                 <div className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted">
-                  {user?.is_anonymous ? "Guest" : profile.display_name}
+                  {profile.display_name}
                 </div>
               ) : null}
               {hasHydrated && !session ? (

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRightLeft, ShieldCheck, Sparkles, Target, TimerReset } from "lucide-react";
-import { AppShell } from "@/components/common/app-shell";
+import { ProtectedAppShell } from "@/components/common/protected-app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { getButtonClassName } from "@/components/ui/button";
 import { MetricTile } from "@/components/ui/metric-tile";
@@ -28,10 +28,12 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
   const salaryLeader = leftPlayer.salary_cost <= rightPlayer.salary_cost ? leftPlayer : rightPlayer;
 
   return (
-    <AppShell
+    <ProtectedAppShell
       eyebrow="Player compare"
       title="Projection, price, and scoring fit in one decision view"
       description="Side-by-side on projection, price, and scoring fit."
+      signedOutDescription="Sign in before comparing player targets."
+      signedOutTitle="Sign in to continue"
       actions={
         <Link
           href="/players"
@@ -124,7 +126,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
 
         <SurfaceCard
           eyebrow="Scoring system"
-          title="Clear scoring rules and live tracking cues"
+          title="Clear scoring rules and live scoring updates"
           description="See what counts, when it lands, and why each projection moves."
           tone="accent"
         >
@@ -230,7 +232,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                     value={getValueScore(player).toFixed(2)}
                   />
                   <MetricTile
-                    detail="Draft and waiver priority signal across the player pool."
+                    detail="Draft and waiver priority across the player pool."
                     label="Pool rank"
                     value={`#${player.rank}`}
                   />
@@ -261,7 +263,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
           );
         })}
       </section>
-    </AppShell>
+    </ProtectedAppShell>
   );
 }
 

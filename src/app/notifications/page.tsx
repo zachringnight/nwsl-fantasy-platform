@@ -66,19 +66,23 @@ const channelLabels: Record<NotificationChannel, string> = {
 };
 
 export default function NotificationsPage() {
-  const { user } = useFantasyAuth();
+  const { session, user } = useFantasyAuth();
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [notifications, setNotifications] = useState<InAppNotification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchNotifications = useCallback(async () => {
-    if (!user?.id) {
+    if (!user?.id || !session?.access_token) {
       setIsLoading(false);
       return;
     }
 
     try {
-      const res = await fetch(`/api/notifications?userId=${user.id}&limit=20`);
+      const res = await fetch("/api/notifications?limit=20", {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
       if (res.ok) {
         const data = (await res.json()) as { notifications: InAppNotification[] };
         setNotifications(data.notifications);
@@ -88,7 +92,7 @@ export default function NotificationsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.id]);
+  }, [session?.access_token, user?.id]);
 
   useEffect(() => {
     void fetchNotifications();
@@ -97,6 +101,10 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter((n) => !n.readAt).length;
 
   async function markRead(notificationId: string) {
+    if (!session?.access_token) {
+      return;
+    }
+
     // Optimistic update
     setNotifications((prev) =>
       prev.map((n) =>
@@ -105,11 +113,19 @@ export default function NotificationsPage() {
     );
 
     try {
-      await fetch("/api/notifications", {
+      const response = await fetch("/api/notifications", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ notificationId, action: "read" }),
       });
+      const result = (await response.json()) as { success?: boolean };
+
+      if (!response.ok || result.success === false) {
+        throw new Error("Unable to mark that notification as read.");
+      }
     } catch {
       // Revert on failure
       setNotifications((prev) =>
@@ -121,7 +137,7 @@ export default function NotificationsPage() {
   }
 
   async function markAllRead() {
-    if (!user?.id) return;
+    if (!user?.id || !session?.access_token) return;
 
     const previousNotifications = notifications;
     setNotifications((prev) =>
@@ -129,11 +145,19 @@ export default function NotificationsPage() {
     );
 
     try {
-      await fetch("/api/notifications", {
+      const response = await fetch("/api/notifications", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, action: "read_all" }),
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "read_all" }),
       });
+      const result = (await response.json()) as { success?: boolean };
+
+      if (!response.ok || result.success === false) {
+        throw new Error("Unable to mark all notifications as read.");
+      }
     } catch {
       setNotifications(previousNotifications);
     }
