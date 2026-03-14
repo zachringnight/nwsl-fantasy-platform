@@ -80,15 +80,15 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening matchup view."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening matchup view."
-      signedOutDescription="Sign in before opening matchup view."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {

@@ -73,7 +73,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
           {isLeagueMatchup ? (
             <Pill tone="success">
               <Radar className="size-3.5" />
-              {matchup.event_feed.length} swing events
+              {matchup.event_feed.length} events
             </Pill>
           ) : null}
         </div>
@@ -90,7 +90,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
           </div>
           <div className="rounded-[1.6rem] border border-white/10 bg-black/24 p-4 lg:flex lg:w-[13rem] lg:flex-col lg:items-center lg:justify-center">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/75">
-              Match edge
+              Margin
             </p>
             <p className="mt-3 text-center text-2xl font-semibold leading-tight text-white">
               {leadingLabel}
@@ -121,7 +121,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
               <div>
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
-                  Projection lane
+                  Projected score
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
                   {formatPoints(matchup.home_projection)} - {formatPoints(matchup.away_projection)}
@@ -139,7 +139,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
               </div>
               <div>
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
-                  Last swing
+                  Last event
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">
                   {recentEvent ? `${recentEvent.minute}' ${formatDelta(recentEvent.fantasy_delta)}` : "Quiet"}
@@ -147,7 +147,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
               </div>
               <div>
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
-                  Lock window
+                  Lineup lock
                 </p>
                 <p className="mt-2 text-base font-semibold text-white">{matchup.lock_label}</p>
               </div>
@@ -159,7 +159,7 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
                 Score tracking
               </p>
               <p className="mt-2 leading-6 text-white/80">
-                Live score starts with appearance ({launchScoringRules.appearance}) and 60+ minute ({launchScoringRules.minutes60Plus}) base points, then shifts on goals, assists, clean sheets, saves, and discipline events. Projection is the baseline; the event feed explains every swing away from it.
+                Points update live as goals, assists, clean sheets, saves, and cards happen during the match.
               </p>
             </div>
 
@@ -167,10 +167,10 @@ export function MatchupScoreCard({ matchup }: MatchupScoreCardProps) {
               <div className="rounded-[1.15rem] border border-white/10 bg-black/18 px-3 py-3">
                 <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/75">
                   <Target className="size-3.5" />
-                  Scoring anchors
+                  Key points
                 </p>
                 <p className="mt-2 leading-6 text-white/80">
-                  FWD goals {launchScoringRules.goal.FWD}, MID goals {launchScoringRules.goal.MID}, DEF/GK goals {launchScoringRules.goal.DEF}, assists {launchScoringRules.assist}, clean sheets {launchScoringRules.cleanSheet.GK}.
+                  FWD goal +{launchScoringRules.goal.FWD} · MID goal +{launchScoringRules.goal.MID} · DEF/GK goal +{launchScoringRules.goal.DEF} · Assist +{launchScoringRules.assist} · Clean sheet +{launchScoringRules.cleanSheet.GK}
                 </p>
               </div>
               <div className="rounded-[1.15rem] border border-white/10 bg-black/18 px-3 py-3">

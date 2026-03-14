@@ -43,20 +43,20 @@ export interface LeagueHomeFeedProps {
 
 const statusMeta = {
   complete: {
-    kicker: "Season archive",
-    summary: "The room is wrapped. Recap, standings, and roster reads lead the story now.",
+    kicker: "Season complete",
+    summary: "Final standings are in. Review results and see how every roster finished.",
   },
   live: {
     kicker: "Live league",
-    summary: "The room is moving. Surface the sharpest action and keep the next tap obvious.",
+    summary: "Matches are underway. Check scores and make your next move.",
   },
   ready: {
-    kicker: "Locked and ready",
-    summary: "The room is filled and staged. Push lineup moves and matchup energy to the front.",
+    kicker: "Ready to play",
+    summary: "Your league is set. Lock in lineups and get ready for matchups.",
   },
   setup: {
-    kicker: "Room in build mode",
-    summary: "Open the invite lane, fill the manager circle, and make the next action impossible to miss.",
+    kicker: "Setting up",
+    summary: "Invite friends, fill the league, and get ready to draft.",
   },
 } as const;
 
@@ -86,7 +86,7 @@ export function LeagueHomeFeed({
   );
   const statusStory = statusMeta[leagueDetails.league.status];
   const rosterBuilderLabel =
-    leagueDetails.league.roster_build_mode === "snake_draft" ? "Snake draft" : "Salary cap";
+    leagueDetails.league.roster_build_mode === "snake_draft" ? "Classic draft" : "Salary cap";
   const scheduleChip = activeSlate
     ? `${activeSlate.match_count} matches`
     : new Date(leagueDetails.league.draft_at).toLocaleDateString(undefined, {
@@ -112,11 +112,11 @@ export function LeagueHomeFeed({
   ];
   const clubSignals = [
     {
-      label: "Room fill",
+      label: "Managers",
       value: `${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target}`,
     },
     {
-      label: activeSlate ? "Slate" : "Draft",
+      label: activeSlate ? "Matches" : "Draft",
       value: scheduleChip,
     },
     {
@@ -163,7 +163,7 @@ export function LeagueHomeFeed({
 
               <div className="space-y-3">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/75">
-                  Club story
+                  Your league
                 </p>
                 <h2 className="font-display text-[3.6rem] uppercase leading-[0.88] tracking-[0.01em] text-white sm:text-[4.3rem]">
                   {leagueDetails.league.name}
@@ -175,7 +175,7 @@ export function LeagueHomeFeed({
 
               <div className="flex flex-wrap gap-2">
                 <span className="club-sticker">Code {leagueDetails.league.code}</span>
-                <span className="club-sticker">Group chat ready</span>
+                <span className="club-sticker">{leagueDetails.memberships.length} managers</span>
                 {leagueDetails.currentMembership?.team_name ? (
                   <span className="club-sticker">{leagueDetails.currentMembership.team_name}</span>
                 ) : null}
@@ -199,7 +199,7 @@ export function LeagueHomeFeed({
             <div className="grid gap-3">
               <div className="club-score-panel">
                 <p className="text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-white/75">
-                  Room fill
+                  League capacity
                 </p>
                 <div className="mt-4 flex items-end gap-3">
                   <span className="font-display text-[4.4rem] leading-none text-white">
@@ -235,14 +235,14 @@ export function LeagueHomeFeed({
           <div className="relative z-10 space-y-5">
             <div className="flex items-center justify-between gap-3">
               <Pill tone="brand" className="border-white/12 bg-white/10 text-white">
-                Matchday poster
+                Upcoming
               </Pill>
               <span className="club-poster-badge">{cadenceLabel}</span>
             </div>
 
             <div className="space-y-3">
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/75">
-                Schedule signal
+                Schedule
               </p>
               <h3 className="font-display text-[3rem] uppercase leading-[0.9] text-white sm:text-[3.5rem]">
                 {activeSlate ? activeSlate.label : "Draft night locked"}
@@ -255,7 +255,7 @@ export function LeagueHomeFeed({
                 <CalendarClock className="size-5" />
                 <div>
                   <p>Window</p>
-                  <strong>{activeSlate ? "Slate live" : "Draft room"}</strong>
+                  <strong>{activeSlate ? "Matches live" : "Draft"}</strong>
                 </div>
               </div>
               <div className="club-poster-tile">
@@ -275,7 +275,7 @@ export function LeagueHomeFeed({
           <div className="space-y-5">
             <div className="flex items-center justify-between gap-3">
               <Pill tone="accent" className="border-white/10 bg-white/8 text-white">
-                Manager circle
+                Managers
               </Pill>
               <Users2 className="size-5 text-white/78" />
             </div>
@@ -296,7 +296,7 @@ export function LeagueHomeFeed({
 
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-white/75">
-                <span>Crew status</span>
+                <span>Spots filled</span>
                 <span>{managerFillPercentage}% full</span>
               </div>
               <div className="h-2 overflow-hidden rounded-full bg-white/8">
@@ -315,18 +315,18 @@ export function LeagueHomeFeed({
           <div className="space-y-5">
             <div className="flex items-center justify-between gap-3">
               <Pill tone="brand" className="border-white/12 bg-white/10 text-white">
-                Invite studio
+                Invite friends
               </Pill>
               <HeartHandshake className="size-5 text-white/70" />
             </div>
 
             <div className="space-y-3">
               <p className="text-sm leading-7 text-white/74">
-                Drop the link when the crew is ready. Keep the code front and center.
+                Share the link or code to invite players.
               </p>
               <div className="rounded-[1.3rem] border border-white/12 bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/75">
-                  Invite lane
+                  Invite link
                 </p>
                 <p className="mt-3 break-all text-sm text-white/86">{invitePath}</p>
               </div>
@@ -385,7 +385,7 @@ export function LeagueHomeFeed({
           <div className="space-y-5">
             <div className="flex items-center justify-between gap-3">
               <Pill tone="brand" className="border-white/12 bg-white/10 text-white">
-                League DNA
+                League info
               </Pill>
               <Sparkles className="size-5 text-white/70" />
             </div>
@@ -393,15 +393,14 @@ export function LeagueHomeFeed({
             <div className="flex flex-wrap gap-2">
               <span className="club-sticker">{ownershipLabel}</span>
               <span className="club-sticker">{rosterBuilderLabel}</span>
-              <span className="club-sticker">{leagueDetails.league.privacy} room</span>
+              <span className="club-sticker">{leagueDetails.league.privacy} league</span>
               {leagueDetails.league.salary_cap_amount ? (
                 <span className="club-sticker">${leagueDetails.league.salary_cap_amount} cap</span>
               ) : null}
             </div>
 
             <p className="max-w-2xl text-sm leading-7 text-white/74">
-              This league reads best as a visual club board: short moves, visible status, and one
-              clear next tap.
+              Your league format, roster rules, and key settings at a glance.
             </p>
           </div>
         </article>

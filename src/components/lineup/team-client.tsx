@@ -128,15 +128,15 @@ export function TeamClient({ leagueId }: TeamClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the team page."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before editing a lineup."
-      signedOutDescription="Sign in before opening team tools."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {

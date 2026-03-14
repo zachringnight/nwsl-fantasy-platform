@@ -99,8 +99,8 @@ export default function PlayersPage() {
   return (
     <AppShell
       eyebrow="Players"
-      title="Scout with real conviction before the room tilts"
-      description="Scout, watchlist, and compare before you commit a pick or salary slot."
+      title="Scout and compare NWSL players"
+      description="Search, watchlist, and compare players before you draft or set lineups."
       actions={
         comparePlayers.length === 2 ? (
           <Link href={compareHref} className={getButtonClassName({ className: "group" })}>
@@ -121,25 +121,25 @@ export default function PlayersPage() {
     >
       <section className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
         <SurfaceCard
-          eyebrow="Scouting control"
-          title="Watchlist, compare, and project from one board"
-          description="Search, filter, and pin targets from one board."
+          eyebrow="Player board"
+          title="Search and filter players"
+          description="Find players by name, club, or position."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-3">
               <MetricTile
-                detail="Persistent browser watchlist for your strongest targets."
+                detail="Players you're tracking."
                 label="Watchlist"
                 value={watchlistIds.length}
               />
               <MetricTile
-                detail="Two-player compare tray for actual decisions, not just browsing."
-                label="Compare tray"
+                detail="Select two players to compare side-by-side."
+                label="Compare"
                 tone="brand"
                 value={compareIds.length}
               />
               <MetricTile
-                detail="Best value using projected points per $1k of salary."
+                detail="Best points per dollar."
                 label="Top value"
                 tone="accent"
                 value={topValuePlayer ? topValuePlayer.display_name.split(" ")[0] : "N/A"}
@@ -183,9 +183,9 @@ export default function PlayersPage() {
         </SurfaceCard>
 
         <SurfaceCard
-          eyebrow="Scoring clarity"
-          title="Projection readout and rules are visible before you commit"
-          description="Projections reflect real NWSL performance. Value score ranks projected points per $1k of salary."
+          eyebrow="Scoring"
+          title="How players earn points"
+          description="Projections based on real NWSL stats. Value = points per dollar."
           tone="accent"
         >
           <div className="space-y-4">
@@ -232,9 +232,9 @@ export default function PlayersPage() {
 
       <section className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
         <SurfaceCard
-          eyebrow="Compare tray"
-          title={comparePlayers.length > 0 ? "Two-player decision lane" : "Select players to compare"}
-          description="Pin two players here, then open the compare view when you are down to a real decision."
+          eyebrow="Compare"
+          title={comparePlayers.length > 0 ? "Head-to-head comparison" : "Select players to compare"}
+          description="Pick two players, then compare stats side-by-side."
         >
           {comparePlayers.length > 0 ? (
             <div className="space-y-4">
@@ -280,21 +280,21 @@ export default function PlayersPage() {
                   }}
                   type="button"
                 >
-                  Clear compare tray
+                  Clear selection
                 </button>
               </div>
             </div>
           ) : (
             <p className="rounded-[1.2rem] border border-dashed border-line bg-white/6 px-4 py-3 text-sm text-muted">
-              Tap compare on any player card to start a real head-to-head decision.
+              Tap &ldquo;Compare&rdquo; on any two player cards to get started.
             </p>
           )}
         </SurfaceCard>
 
         <SurfaceCard
           eyebrow="Watchlist"
-          title={watchlistPlayers.length > 0 ? "Pinned manager targets" : "No watchlist targets yet"}
-          description="Keep your best targets close before draft day, waiver runs, or salary-cap lock."
+          title={watchlistPlayers.length > 0 ? "Your watchlist" : "No players watchlisted yet"}
+          description="Save players you want to keep an eye on."
           tone="accent"
         >
           {watchlistPlayers.length > 0 ? (
@@ -318,7 +318,7 @@ export default function PlayersPage() {
             </div>
           ) : (
             <p className="rounded-[1.2rem] border border-dashed border-line bg-white/6 px-4 py-3 text-sm text-white/72">
-              Tap watchlist on a player card to pin her here and keep your scouting board tighter.
+              Tap the heart on any player card to add them here.
             </p>
           )}
         </SurfaceCard>

@@ -14,7 +14,7 @@ export function OnboardingLocalForm() {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening onboarding."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       requireOnboarding={false}
       signedOutAction={

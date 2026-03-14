@@ -110,7 +110,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
     return (
       <EmptyState
         title="Finish onboarding first"
-        description="Set your club and fantasy experience level before reviewing the recap."
+        description="Complete your profile to continue."
       />
     );
   }
@@ -191,42 +191,38 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
       <div className="space-y-5">
         <LineupPitch roster={recapRoster} title="Recommended week-one shape" />
         <SurfaceCard
-          eyebrow="Roster read"
-          title="What the draft built"
-          description="How your drafted roster stacks up by position and scoring profile."
+          eyebrow="Your roster"
+          title="Draft results"
+          description="How your roster looks after the draft."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <MetricTile
-                detail="Current roster-wide baseline from average fantasy points."
+                detail="Total projected points for your roster."
                 label="Roster projection"
                 tone="brand"
                 value={rosterProjection.toFixed(1)}
               />
               <MetricTile
-                detail="Player currently driving the most weekly upside."
-                label="Projection driver"
+                detail="Your highest-projected player."
+                label="Top scorer"
                 tone="accent"
                 value={topProjectionPlayer ? topProjectionPlayer.player_name : "N/A"}
               />
               <MetricTile
-                detail="How many selections this manager made in the room."
+                detail="Players you drafted."
                 label="Your picks"
                 value={myPicks.length}
               />
               <MetricTile
-                detail="Immediate scoring anchor after the draft closes."
-                label="Scoring read"
+                detail="Your best scorer's position."
+                label="Strength"
                 value={topProjectionPlayer ? getScoringFitLabel(topProjectionPlayer.player_position) : "Building"}
               />
             </div>
 
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-7 text-foreground">
-              Weekly score starts with appearance ({launchScoringRules.appearance}) and 60+ minute ({launchScoringRules.minutes60Plus}) base points, then rises on goals, assists, clean sheets, and saves. This roster currently leans on{" "}
-              {topProjectionPlayer
-                ? `${topProjectionPlayer.player_name} and the ${getScoringFitLabel(topProjectionPlayer.player_position).toLowerCase()} lane`
-                : "its best projected starter lane"}
-              {" "}to create the early weekly edge.
+              Your roster is projected at {rosterProjection.toFixed(1)} points per week{topProjectionPlayer ? `, led by ${topProjectionPlayer.player_name}` : ""}.
             </div>
           </div>
         </SurfaceCard>

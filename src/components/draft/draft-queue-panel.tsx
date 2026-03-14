@@ -31,13 +31,13 @@ export function DraftQueuePanel({
       <SurfaceCard
         eyebrow="My board"
         title="Queue"
-        description="On mobile this collapses into a bottom sheet so the player pool stays primary."
+        description="Players you want to draft, in order of preference."
         tone="accent"
       >
         <div className="space-y-3 text-sm text-foreground">
           {queue.length === 0 ? (
             <p className="rounded-[1.2rem] border border-dashed border-line bg-white/8 px-4 py-3 text-muted">
-              Queue players from the board so autopick has a clean priority list.
+              Add players from the board to set your autopick order.
             </p>
           ) : (
             queue.map((player, index) => {

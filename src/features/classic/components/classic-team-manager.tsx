@@ -78,7 +78,7 @@ export function ClassicTeamManager({
     .filter((entry) => entry.points > 0);
   const readinessLabel =
     missingStarterSlots.length === 0
-      ? "Lineup is balanced and ready to save."
+      ? "All starters set. Ready to save."
       : `Open starter slots: ${missingStarterSlots.map((slot) => lineupSlotLabels[slot]).join(", ")}`;
 
   return (
@@ -92,15 +92,15 @@ export function ClassicTeamManager({
 
         <div className="space-y-5">
           <SurfaceCard
-            description="Set legal starters, review lineup projection, and save changes from one team view."
+            description="Set your starters, check projections, and save."
             eyebrow="Classic team"
-            title={missingStarterSlots.length === 0 ? "Lineup is legal" : "Finish the starters"}
+            title={missingStarterSlots.length === 0 ? "Lineup ready" : "Finish your starters"}
             tone="accent"
           >
             <div className="space-y-4">
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 <MetricTile
-                  detail="Starter compliance matters more than total roster count."
+                  detail="Fill all starter slots before saving."
                   label="Starters filled"
                   tone={missingStarterSlots.length === 0 ? "brand" : "default"}
                   value={`${starterCount}/${starterLineupCount}`}
@@ -116,14 +116,14 @@ export function ClassicTeamManager({
                   value={missingStarterSlots.length === 0 ? "Ready" : "Incomplete"}
                 />
                 <MetricTile
-                  detail="Sum of current starter average fantasy points."
+                  detail="Total projected points from your starters."
                   label="Lineup projection"
                   tone="brand"
                   value={starterProjection.toFixed(1)}
                 />
                 <MetricTile
-                  detail="Projected points currently waiting on the bench."
-                  label="Bench pressure"
+                  detail="Projected points sitting on your bench."
+                  label="Bench total"
                   tone="accent"
                   value={benchProjection.toFixed(1)}
                 />
@@ -131,7 +131,7 @@ export function ClassicTeamManager({
 
               <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Starter mood
+                  Lineup status
                 </p>
                 <p className="mt-3 text-sm leading-7 text-white/84">{readinessLabel}</p>
               </div>
@@ -139,7 +139,7 @@ export function ClassicTeamManager({
               <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
                 <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                    Role balance
+                    Position mix
                   </p>
                   <div className="mt-4 space-y-3">
                     {roleMix.map((entry) => (
@@ -160,7 +160,7 @@ export function ClassicTeamManager({
                 </div>
                 <div className="rounded-[1.3rem] border border-line bg-black/18 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                    Quick scoring cues
+                    Scoring basics
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Pill tone="brand">Appearance +{launchScoringRules.appearance}</Pill>
@@ -170,13 +170,13 @@ export function ClassicTeamManager({
                   <div className="mt-4 rounded-[1.2rem] border border-white/10 bg-white/6 p-4">
                     <p className="text-sm font-semibold text-white">
                       {projectionDriver
-                        ? `${projectionDriver.player_name} sets the ceiling`
-                        : "Add starters to unlock your ceiling"}
+                        ? `${projectionDriver.player_name} leads your lineup`
+                        : "Add starters to see your top scorer"}
                     </p>
                     <p className="mt-2 text-sm leading-6 text-white/74">
                       {projectionDriver
-                        ? `${projectionDriver.player.average_points.toFixed(1)} projected points. Strongest lane right now: ${strongestRole}.`
-                        : `Strongest lane right now: ${strongestRole}.`}
+                        ? `${projectionDriver.player.average_points.toFixed(1)} projected points. Top position: ${strongestRole}.`
+                        : `Top position: ${strongestRole}.`}
                     </p>
                   </div>
                 </div>

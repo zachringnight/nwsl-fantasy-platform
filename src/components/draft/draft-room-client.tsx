@@ -308,7 +308,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Finish onboarding first"
-        description="Set your club and fantasy experience level before entering the room."
+        description="Complete your profile to continue."
       />
     );
   }

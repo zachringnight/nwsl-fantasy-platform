@@ -63,19 +63,19 @@ export function LeagueCommandCenter({
     <SurfaceCard
       description={scheduleSummary}
       eyebrow={isCommissioner ? "Commissioner view" : "League info"}
-      title={isCommissioner ? "Run league operations" : "League settings at a glance"}
+      title={isCommissioner ? "Manage your league" : "League overview"}
       tone="accent"
     >
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
           <MetricTile
-            detail="Keep an eye on how quickly the room is filling."
+            detail="How many spots are taken."
             label="Managers"
             tone="accent"
             value={`${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target}`}
           />
           <MetricTile
-            detail={secondarySummary ?? "Cadence and roster rules stay pinned here for fast scanning."}
+            detail={secondarySummary ?? "Schedule and roster format for this league."}
             label="Cadence"
             tone="accent"
             value={cadenceLabel}
@@ -97,21 +97,21 @@ export function LeagueCommandCenter({
           <div className="league-mood-card rounded-[1.45rem] border border-white/12 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">
               <Shield className="size-4 text-brand-strong" />
-              Invite route
+              Invite link
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Pill tone="brand">Code {leagueDetails.league.code}</Pill>
               <Pill tone="accent">{copyLabel === "Copied invite" ? "Shared" : "Ready to share"}</Pill>
             </div>
             <p className="mt-3 text-sm leading-6 text-white/78">
-              Drop the link in the group chat when the crew is ready.
+              Share this link with friends to invite them.
             </p>
             <p className="mt-3 break-all text-xs text-white/75">{invitePath}</p>
           </div>
           <div className="rounded-[1.45rem] border border-line bg-night/35 p-4 text-sm leading-6 text-white/74">
             <p className="inline-flex items-center gap-2 font-semibold text-foreground">
               <Users className="size-4 text-brand-strong" />
-              Manager circle
+              Managers
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {leagueDetails.memberships.map((member) => (

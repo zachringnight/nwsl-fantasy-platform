@@ -56,7 +56,7 @@ export function LeagueHomeClient({ leagueId }: LeagueHomeClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the league."
+      loadingDescription="Loading."
       loadingTitle="Loading league"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
@@ -64,7 +64,7 @@ export function LeagueHomeClient({ leagueId }: LeagueHomeClientProps) {
         </Link>
       }
       onboardingDescription="Complete onboarding before opening a league."
-      signedOutDescription="Sign in before opening this league."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {

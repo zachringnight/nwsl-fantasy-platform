@@ -107,15 +107,15 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening league settings."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening league settings."
-      signedOutDescription="Sign in before opening league settings."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
@@ -156,7 +156,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
             <MotionReveal>
               <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
                 <SurfaceCard
-                  description="League rules stay visible so everyone knows exactly how this room works."
+                  description="Format, roster rules, and key details for this league."
                   eyebrow="League integrity"
                   title={modeConfig.label}
                 >

@@ -162,15 +162,15 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the transaction center."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening transactions."
-      signedOutDescription="Sign in before opening transactions."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {

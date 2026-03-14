@@ -72,20 +72,20 @@ export function CreateLeagueForm() {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before league creation."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before creating a league."
+      onboardingDescription="Complete your profile to continue."
       signedOutAction={
         <Link className={getButtonClassName()} href="/signup">
           Create account
         </Link>
       }
-      signedOutDescription="Sign in before creating a league."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to create a league"
     >
       {() => (
@@ -146,8 +146,8 @@ export function CreateLeagueForm() {
                       <div className="space-y-2">
                         <p className="text-xl font-semibold tracking-[-0.02em]">
                           {option.usesSalaryCap
-                            ? `${option.cadenceLabel} shared-pool contest`
-                            : "Season-long head-to-head league"}
+                            ? `${option.cadenceLabel} salary-cap league`
+                            : "Season-long draft league"}
                         </p>
                         <p
                           className={cn(
@@ -270,7 +270,7 @@ export function CreateLeagueForm() {
             <SurfaceCard
               eyebrow="Format readout"
               title={selectedMode.label}
-              description="A quick read on roster rules, lock rhythm, and how this room handles player control."
+              description="Roster rules and league format details."
             >
               <div className="grid gap-3 text-sm text-foreground sm:grid-cols-2">
                 <div className="edge-field rounded-[1.25rem] border border-line bg-white/6 p-4">
@@ -287,7 +287,7 @@ export function CreateLeagueForm() {
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
                     Cadence
                   </p>
-                  <p className="mt-2 font-semibold">{selectedMode.cadenceLabel} contest cycle</p>
+                  <p className="mt-2 font-semibold">{selectedMode.cadenceLabel} schedule</p>
                 </div>
                 <div className="edge-field rounded-[1.25rem] border border-line bg-white/6 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">

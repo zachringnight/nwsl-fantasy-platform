@@ -41,20 +41,20 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before joining a league."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before joining a league."
+      onboardingDescription="Complete your profile to continue."
       signedOutAction={
         <Link className={getButtonClassName()} href="/signup">
           Create account
         </Link>
       }
-      signedOutDescription="Sign in before joining a league."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => (

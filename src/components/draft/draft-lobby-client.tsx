@@ -140,7 +140,7 @@ export function DraftLobbyClient({ leagueId }: DraftLobbyClientProps) {
     return (
       <EmptyState
         title="Finish onboarding first"
-        description="Set your club and fantasy experience level before opening a draft lobby."
+        description="Complete your profile to continue."
       />
     );
   }
