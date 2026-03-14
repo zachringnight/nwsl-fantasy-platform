@@ -12,7 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { registerLocalUser } from "@/lib/local-mode-store";
 
-type SignupMode = "choice" | "email" | "check_email";
+type SignupMode = "choice" | "email";
 
 export function SignupLocalForm() {
   const router = useRouter();
@@ -118,7 +118,6 @@ export function SignupLocalForm() {
         password,
         options: {
           data: { display_name: displayName },
-          emailRedirectTo: `${window.location.origin}/onboarding`,
         },
       });
 
@@ -126,10 +125,17 @@ export function SignupLocalForm() {
         throw authError;
       }
 
-      // If email confirmation is required, the session will be null
+      // If the Supabase project requires email confirmation the signup
+      // call won't return a session.  Sign in immediately so the user
+      // can continue without waiting for a confirmation email.
       if (!signUpData.session) {
-        setSignupMode("check_email");
-        return;
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+        if (signInError) {
+          throw signInError;
+        }
       }
 
       await dataClient.upsertFantasyProfile({
@@ -172,27 +178,6 @@ export function SignupLocalForm() {
         err instanceof Error ? err.message : "Unable to start Google sign-up."
       );
     }
-  }
-
-  if (signupMode === "check_email") {
-    return (
-      <div className="space-y-4">
-        <div className="rounded-[1.4rem] border border-success/30 bg-success/8 p-4 text-sm leading-6 text-foreground">
-          <p className="font-semibold">Check your inbox</p>
-          <p className="mt-2 text-muted">
-            We sent a confirmation link to <strong>{email}</strong>. Click the link
-            to activate your account and continue to onboarding.
-          </p>
-        </div>
-        <button
-          className={getButtonClassName({ variant: "ghost", fullWidth: true })}
-          onClick={() => setSignupMode("choice")}
-          type="button"
-        >
-          Back to options
-        </button>
-      </div>
-    );
   }
 
   if (signupMode === "email") {
@@ -274,14 +259,18 @@ export function SignupLocalForm() {
         </label>
         {error ? <p className="mt-3 text-sm text-danger">{error}</p> : null}
         <div className="mt-4 space-y-3">
-          <Button
-            fullWidth
+          <Button disabled={isSubmitting} fullWidth type="submit">
+            {isSubmitting ? <Spinner /> : null}
+            {isSubmitting ? "Creating account…" : "Get started"}
+          </Button>
+          <button
+            className={getButtonClassName({ variant: "secondary", fullWidth: true })}
             onClick={() => setSignupMode("email")}
             type="button"
           >
             <Mail className="size-4" />
             Sign up with email
-          </Button>
+          </button>
           <button
             className={getButtonClassName({ variant: "secondary", fullWidth: true })}
             onClick={handleGoogleSignup}
@@ -289,13 +278,6 @@ export function SignupLocalForm() {
           >
             <Chrome className="size-4" />
             Continue with Google
-          </button>
-          <button
-            className={getButtonClassName({ variant: "ghost", fullWidth: true })}
-            disabled={isSubmitting}
-            type="submit"
-          >
-            {isSubmitting ? "Starting session…" : "Quick guest session"}
           </button>
         </div>
       </form>

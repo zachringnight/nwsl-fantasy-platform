@@ -1,6 +1,5 @@
 import NextAuth, { type AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
@@ -13,15 +12,6 @@ function buildProviders() {
       GoogleProvider({
         clientId: process.env.AUTH_GOOGLE_ID,
         clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      })
-    );
-  }
-
-  if (process.env.AUTH_EMAIL_SERVER && process.env.AUTH_EMAIL_FROM) {
-    providers.push(
-      EmailProvider({
-        server: process.env.AUTH_EMAIL_SERVER,
-        from: process.env.AUTH_EMAIL_FROM,
       })
     );
   }
