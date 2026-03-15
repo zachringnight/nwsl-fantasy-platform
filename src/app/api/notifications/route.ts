@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getAuthenticatedUser, unauthorized } from "@/lib/api-helpers";
 import {
   getUserNotifications,
   markNotificationRead,
@@ -6,13 +7,13 @@ import {
 } from "@/lib/notifications/notification-service";
 
 export async function GET(request: Request) {
+  const user = await getAuthenticatedUser();
+  if (!user) return unauthorized();
+
+  // Always use the authenticated user's ID — never trust a query param.
+  const userId = user.id;
+
   const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return NextResponse.json({ error: "Missing userId" }, { status: 400 });
-  }
-
   const unreadOnly = searchParams.get("unreadOnly") === "true";
   const limit = Math.min(Math.max(Number(searchParams.get("limit") ?? 20), 1), 100);
 
@@ -25,7 +26,10 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  let body: { notificationId?: string; userId?: string; action?: string };
+  const user = await getAuthenticatedUser();
+  if (!user) return unauthorized();
+
+  let body: { notificationId?: string; action?: string };
 
   try {
     body = (await request.json()) as typeof body;
@@ -39,8 +43,8 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ success: true });
     }
 
-    if (body.action === "read_all" && body.userId) {
-      await markAllNotificationsRead(body.userId);
+    if (body.action === "read_all") {
+      await markAllNotificationsRead(user.id);
       return NextResponse.json({ success: true });
     }
 
