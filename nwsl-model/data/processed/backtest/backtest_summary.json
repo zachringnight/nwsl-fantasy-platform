@@ -1,0 +1,22 @@
+{
+  "metrics_comparison": [
+    {
+      "model": "dixon_coles",
+      "log_loss_1x2": 1.0868982237623515,
+      "brier_score_1x2": 0.6563300427856141,
+      "brier_home_win": 0.2008706532189007,
+      "brier_over_2_5": 0.28104303989370877,
+      "crps_scoreline": 0.9861759027025802
+    },
+    {
+      "model": "bivariate_poisson",
+      "log_loss_1x2": 1.1028626051529768,
+      "brier_score_1x2": 0.6612268797677477,
+      "brier_home_win": 0.2037419142877484,
+      "brier_over_2_5": 0.2808812758751391,
+      "crps_scoreline": 0.9894997226686014
+    }
+  ],
+  "dixon_coles_ece_home_win": 0.10893927008862266,
+  "bivariate_poisson_ece_home_win": 0.1236200757199429
+}

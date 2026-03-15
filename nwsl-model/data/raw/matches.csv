@@ -1,0 +1,183 @@
+match_id,match_date,season,competition,regular_season_flag,home_team,away_team,home_goals_90,away_goals_90,home_npxg,away_npxg,home_xg,away_xg,home_penalties,away_penalties,venue,stadium,surface,altitude_m,weather_temp_c,weather_wind_kph,weather_precip_mm,weather_humidity_pct,match_status,resumed_flag,incomplete_flag
+NWSL2025-001,2025-03-14,2025,NWSL,True,Chicago Stars FC,Orlando Pride,0,6,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-002,2025-03-14,2025,NWSL,True,Washington Spirit,Houston Dash,2,1,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-003,2025-03-15,2025,NWSL,True,Portland Thorns FC,Kansas City Current,0,3,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-004,2025-03-15,2025,NWSL,True,Bay FC,Utah Royals FC,1,1,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-005,2025-03-15,2025,NWSL,True,North Carolina Courage,Racing Louisville FC,1,1,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-006,2025-03-15,2025,NWSL,True,Gotham FC,Seattle Reign FC,1,1,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-007,2025-03-16,2025,NWSL,True,San Diego Wave FC,Angel City FC,1,1,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-008,2025-03-21,2025,NWSL,True,Angel City FC,Portland Thorns FC,1,1,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-009,2025-03-22,2025,NWSL,True,Seattle Reign FC,North Carolina Courage,2,1,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-010,2025-03-22,2025,NWSL,True,Kansas City Current,Washington Spirit,2,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-011,2025-03-22,2025,NWSL,True,Utah Royals FC,San Diego Wave FC,2,3,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-012,2025-03-22,2025,NWSL,True,Racing Louisville FC,Bay FC,1,2,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-013,2025-03-23,2025,NWSL,True,Houston Dash,Chicago Stars FC,2,1,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-014,2025-03-23,2025,NWSL,True,Orlando Pride,Gotham FC,2,0,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-015,2025-03-28,2025,NWSL,True,Gotham FC,Houston Dash,0,0,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-016,2025-03-28,2025,NWSL,True,Bay FC,Washington Spirit,0,2,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-017,2025-03-29,2025,NWSL,True,San Diego Wave FC,Orlando Pride,1,2,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-018,2025-03-29,2025,NWSL,True,Utah Royals FC,Kansas City Current,0,3,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-019,2025-03-29,2025,NWSL,True,North Carolina Courage,Portland Thorns FC,0,0,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-020,2025-03-30,2025,NWSL,True,Racing Louisville FC,Chicago Stars FC,1,0,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-021,2025-03-30,2025,NWSL,True,Seattle Reign FC,Angel City FC,1,2,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-022,2025-04-11,2025,NWSL,True,Portland Thorns FC,Utah Royals FC,1,0,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-023,2025-04-12,2025,NWSL,True,Washington Spirit,Racing Louisville FC,2,0,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-024,2025-04-12,2025,NWSL,True,Angel City FC,Houston Dash,3,1,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-025,2025-04-12,2025,NWSL,True,Orlando Pride,Seattle Reign FC,1,0,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-026,2025-04-12,2025,NWSL,True,Kansas City Current,San Diego Wave FC,2,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-027,2025-04-13,2025,NWSL,True,North Carolina Courage,Gotham FC,1,3,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-028,2025-04-13,2025,NWSL,True,Chicago Stars FC,Bay FC,2,1,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-029,2025-04-18,2025,NWSL,True,Chicago Stars FC,Utah Royals FC,0,1,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-030,2025-04-18,2025,NWSL,True,Portland Thorns FC,Seattle Reign FC,0,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-031,2025-04-18,2025,NWSL,True,Gotham FC,Angel City FC,4,0,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-032,2025-04-19,2025,NWSL,True,San Diego Wave FC,Racing Louisville FC,4,1,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-033,2025-04-19,2025,NWSL,True,Washington Spirit,Orlando Pride,1,0,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-034,2025-04-19,2025,NWSL,True,Bay FC,North Carolina Courage,1,0,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-035,2025-04-19,2025,NWSL,True,Houston Dash,Kansas City Current,0,2,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-036,2025-04-22,2025,NWSL,True,Gotham FC,Portland Thorns FC,1,4,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-037,2025-04-25,2025,NWSL,True,Utah Royals FC,Houston Dash,0,1,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-038,2025-04-25,2025,NWSL,True,Angel City FC,Orlando Pride,2,3,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-039,2025-04-26,2025,NWSL,True,Gotham FC,Washington Spirit,3,0,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-040,2025-04-26,2025,NWSL,True,Kansas City Current,North Carolina Courage,2,3,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-041,2025-04-26,2025,NWSL,True,San Diego Wave FC,Chicago Stars FC,3,0,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-042,2025-04-26,2025,NWSL,True,Seattle Reign FC,Bay FC,1,1,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-043,2025-04-27,2025,NWSL,True,Racing Louisville FC,Portland Thorns FC,3,3,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-044,2025-05-02,2025,NWSL,True,Angel City FC,Washington Spirit,4,3,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-045,2025-05-02,2025,NWSL,True,Racing Louisville FC,Houston Dash,2,1,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-046,2025-05-02,2025,NWSL,True,Kansas City Current,Seattle Reign FC,0,1,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-047,2025-05-03,2025,NWSL,True,Orlando Pride,Portland Thorns FC,0,1,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-048,2025-05-03,2025,NWSL,True,North Carolina Courage,Utah Royals FC,2,0,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-049,2025-05-04,2025,NWSL,True,Chicago Stars FC,Gotham FC,0,0,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-050,2025-05-04,2025,NWSL,True,Bay FC,San Diego Wave FC,1,2,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-051,2025-05-09,2025,NWSL,True,Gotham FC,Racing Louisville FC,0,1,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-052,2025-05-09,2025,NWSL,True,Utah Royals FC,Angel City FC,0,2,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-053,2025-05-10,2025,NWSL,True,Washington Spirit,Chicago Stars FC,3,2,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-054,2025-05-10,2025,NWSL,True,Orlando Pride,North Carolina Courage,1,1,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-055,2025-05-10,2025,NWSL,True,Portland Thorns FC,San Diego Wave FC,1,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-056,2025-05-11,2025,NWSL,True,Bay FC,Kansas City Current,1,4,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-057,2025-05-11,2025,NWSL,True,Houston Dash,Seattle Reign FC,1,0,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-058,2025-05-16,2025,NWSL,True,San Diego Wave FC,Gotham FC,1,0,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-059,2025-05-16,2025,NWSL,True,Portland Thorns FC,Houston Dash,4,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-060,2025-05-16,2025,NWSL,True,Kansas City Current,Orlando Pride,1,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-061,2025-05-17,2025,NWSL,True,Seattle Reign FC,Racing Louisville FC,1,0,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-062,2025-05-17,2025,NWSL,True,Chicago Stars FC,North Carolina Courage,0,2,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-063,2025-05-17,2025,NWSL,True,Utah Royals FC,Washington Spirit,3,3,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-064,2025-05-17,2025,NWSL,True,Angel City FC,Bay FC,0,2,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-065,2025-05-23,2025,NWSL,True,Orlando Pride,Utah Royals FC,3,1,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-066,2025-05-23,2025,NWSL,True,Washington Spirit,Seattle Reign FC,2,1,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-067,2025-05-24,2025,NWSL,True,Kansas City Current,Chicago Stars FC,3,1,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-068,2025-05-24,2025,NWSL,True,Bay FC,Houston Dash,2,2,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-069,2025-05-24,2025,NWSL,True,Racing Louisville FC,Angel City FC,3,2,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-070,2025-05-25,2025,NWSL,True,North Carolina Courage,San Diego Wave FC,2,5,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-071,2025-06-06,2025,NWSL,True,Utah Royals FC,Racing Louisville FC,2,3,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-072,2025-06-06,2025,NWSL,True,Seattle Reign FC,San Diego Wave FC,2,1,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-073,2025-06-07,2025,NWSL,True,Kansas City Current,Gotham FC,2,1,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-074,2025-06-07,2025,NWSL,True,Houston Dash,Orlando Pride,0,1,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-075,2025-06-07,2025,NWSL,True,Portland Thorns FC,Bay FC,0,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-076,2025-06-07,2025,NWSL,True,Chicago Stars FC,Angel City FC,2,2,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-077,2025-06-08,2025,NWSL,True,North Carolina Courage,Washington Spirit,1,3,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-078,2025-06-13,2025,NWSL,True,San Diego Wave FC,Houston Dash,3,2,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-079,2025-06-13,2025,NWSL,True,Gotham FC,Utah Royals FC,3,0,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-080,2025-06-13,2025,NWSL,True,Orlando Pride,Bay FC,1,0,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-081,2025-06-14,2025,NWSL,True,Seattle Reign FC,Chicago Stars FC,2,2,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-082,2025-06-14,2025,NWSL,True,Racing Louisville FC,Kansas City Current,2,4,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-083,2025-06-14,2025,NWSL,True,North Carolina Courage,Angel City FC,2,1,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-084,2025-06-15,2025,NWSL,True,Washington Spirit,Portland Thorns FC,0,2,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-085,2025-06-20,2025,NWSL,True,Orlando Pride,Racing Louisville FC,0,2,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-086,2025-06-20,2025,NWSL,True,Angel City FC,Kansas City Current,0,1,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-087,2025-06-21,2025,NWSL,True,Seattle Reign FC,Utah Royals FC,4,1,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-088,2025-06-21,2025,NWSL,True,Houston Dash,North Carolina Courage,1,2,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-089,2025-06-21,2025,NWSL,True,Bay FC,Gotham FC,1,2,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-090,2025-06-21,2025,NWSL,True,Chicago Stars FC,Portland Thorns FC,0,1,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-091,2025-06-22,2025,NWSL,True,Washington Spirit,San Diego Wave FC,0,0,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-092,2025-08-01,2025,NWSL,True,Kansas City Current,Racing Louisville FC,2,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-093,2025-08-01,2025,NWSL,True,Gotham FC,Chicago Stars FC,1,1,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-094,2025-08-01,2025,NWSL,True,Angel City FC,Seattle Reign FC,0,2,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-095,2025-08-02,2025,NWSL,True,San Diego Wave FC,North Carolina Courage,0,0,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-096,2025-08-02,2025,NWSL,True,Houston Dash,Bay FC,2,2,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-097,2025-08-03,2025,NWSL,True,Portland Thorns FC,Washington Spirit,1,2,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-098,2025-08-03,2025,NWSL,True,Utah Royals FC,Orlando Pride,1,1,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-099,2025-08-08,2025,NWSL,True,North Carolina Courage,Houston Dash,1,2,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-100,2025-08-08,2025,NWSL,True,Kansas City Current,Utah Royals FC,1,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-101,2025-08-09,2025,NWSL,True,Washington Spirit,Gotham FC,0,0,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-102,2025-08-09,2025,NWSL,True,Racing Louisville FC,Orlando Pride,1,1,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-103,2025-08-09,2025,NWSL,True,Angel City FC,San Diego Wave FC,1,1,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-104,2025-08-10,2025,NWSL,True,Bay FC,Chicago Stars FC,1,1,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-105,2025-08-10,2025,NWSL,True,Seattle Reign FC,Portland Thorns FC,2,4,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-106,2025-08-15,2025,NWSL,True,Racing Louisville FC,Washington Spirit,2,2,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-107,2025-08-15,2025,NWSL,True,Angel City FC,Utah Royals FC,0,0,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-108,2025-08-16,2025,NWSL,True,Orlando Pride,Kansas City Current,0,0,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-109,2025-08-16,2025,NWSL,True,Portland Thorns FC,North Carolina Courage,1,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-110,2025-08-16,2025,NWSL,True,San Diego Wave FC,Bay FC,2,1,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-111,2025-08-17,2025,NWSL,True,Houston Dash,Gotham FC,2,1,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-112,2025-08-18,2025,NWSL,True,Chicago Stars FC,Seattle Reign FC,3,3,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-113,2025-08-21,2025,NWSL,True,Orlando Pride,Angel City FC,0,1,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-114,2025-08-22,2025,NWSL,True,North Carolina Courage,Chicago Stars FC,3,3,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-115,2025-08-23,2025,NWSL,True,Washington Spirit,Bay FC,3,2,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-116,2025-08-23,2025,NWSL,True,Utah Royals FC,Gotham FC,0,0,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-117,2025-08-23,2025,NWSL,True,Kansas City Current,Portland Thorns FC,2,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-118,2025-08-24,2025,NWSL,True,Seattle Reign FC,Houston Dash,1,1,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-119,2025-08-24,2025,NWSL,True,Racing Louisville FC,San Diego Wave FC,1,0,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-120,2025-08-29,2025,NWSL,True,Houston Dash,Racing Louisville FC,1,1,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-121,2025-08-29,2025,NWSL,True,Gotham FC,Orlando Pride,2,0,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-122,2025-08-29,2025,NWSL,True,San Diego Wave FC,Seattle Reign FC,0,0,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-123,2025-08-29,2025,NWSL,True,Utah Royals FC,Portland Thorns FC,2,1,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-124,2025-08-30,2025,NWSL,True,North Carolina Courage,Kansas City Current,0,2,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-125,2025-08-31,2025,NWSL,True,Chicago Stars FC,Washington Spirit,1,1,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-126,2025-09-01,2025,NWSL,True,Bay FC,Angel City FC,1,2,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-127,2025-09-05,2025,NWSL,True,Portland Thorns FC,Racing Louisville FC,2,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-128,2025-09-06,2025,NWSL,True,Utah Royals FC,North Carolina Courage,1,1,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-129,2025-09-06,2025,NWSL,True,Kansas City Current,Bay FC,2,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-130,2025-09-07,2025,NWSL,True,Orlando Pride,Chicago Stars FC,2,5,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-131,2025-09-07,2025,NWSL,True,Seattle Reign FC,Washington Spirit,0,2,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-132,2025-09-07,2025,NWSL,True,Angel City FC,Gotham FC,1,3,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-133,2025-09-07,2025,NWSL,True,Houston Dash,San Diego Wave FC,3,0,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-134,2025-09-12,2025,NWSL,True,Gotham FC,San Diego Wave FC,2,0,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-135,2025-09-13,2025,NWSL,True,Angel City FC,North Carolina Courage,1,2,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-136,2025-09-13,2025,NWSL,True,Bay FC,Orlando Pride,1,1,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-137,2025-09-13,2025,NWSL,True,Washington Spirit,Kansas City Current,0,0,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-138,2025-09-14,2025,NWSL,True,Portland Thorns FC,Chicago Stars FC,1,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-139,2025-09-14,2025,NWSL,True,Houston Dash,Utah Royals FC,0,2,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-140,2025-09-16,2025,NWSL,True,Racing Louisville FC,Seattle Reign FC,0,1,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-141,2025-09-18,2025,NWSL,True,Washington Spirit,Angel City FC,2,2,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-142,2025-09-19,2025,NWSL,True,Chicago Stars FC,Houston Dash,0,1,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-143,2025-09-19,2025,NWSL,True,North Carolina Courage,Orlando Pride,1,0,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-144,2025-09-19,2025,NWSL,True,Racing Louisville FC,Utah Royals FC,2,3,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-145,2025-09-20,2025,NWSL,True,Seattle Reign FC,Kansas City Current,0,2,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-146,2025-09-20,2025,NWSL,True,San Diego Wave FC,Portland Thorns FC,1,1,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-147,2025-09-21,2025,NWSL,True,Gotham FC,Bay FC,1,1,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-148,2025-09-26,2025,NWSL,True,Chicago Stars FC,Kansas City Current,1,4,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-149,2025-09-26,2025,NWSL,True,Portland Thorns FC,Gotham FC,0,3,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-150,2025-09-26,2025,NWSL,True,Orlando Pride,San Diego Wave FC,2,1,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-151,2025-09-27,2025,NWSL,True,Angel City FC,Racing Louisville FC,0,1,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False
+NWSL2025-152,2025-09-27,2025,NWSL,True,Utah Royals FC,Bay FC,2,0,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-153,2025-09-28,2025,NWSL,True,Houston Dash,Washington Spirit,0,4,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-154,2025-09-28,2025,NWSL,True,North Carolina Courage,Seattle Reign FC,1,2,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-155,2025-10-03,2025,NWSL,True,Orlando Pride,Houston Dash,1,1,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-156,2025-10-04,2025,NWSL,True,Racing Louisville FC,North Carolina Courage,3,1,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-157,2025-10-04,2025,NWSL,True,Bay FC,Portland Thorns FC,1,2,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-158,2025-10-05,2025,NWSL,True,San Diego Wave FC,Washington Spirit,1,2,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-159,2025-10-05,2025,NWSL,True,Seattle Reign FC,Gotham FC,0,0,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-160,2025-10-05,2025,NWSL,True,Utah Royals FC,Chicago Stars FC,2,2,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-161,2025-10-06,2025,NWSL,True,Kansas City Current,Angel City FC,1,0,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-162,2025-10-10,2025,NWSL,True,Chicago Stars FC,Racing Louisville FC,1,1,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-163,2025-10-10,2025,NWSL,True,Portland Thorns FC,Orlando Pride,0,1,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-164,2025-10-10,2025,NWSL,True,Bay FC,Seattle Reign FC,1,1,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-165,2025-10-11,2025,NWSL,True,Gotham FC,Kansas City Current,0,2,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-166,2025-10-11,2025,NWSL,True,Washington Spirit,North Carolina Courage,1,1,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-167,2025-10-11,2025,NWSL,True,San Diego Wave FC,Utah Royals FC,3,2,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-168,2025-10-12,2025,NWSL,True,Houston Dash,Angel City FC,0,2,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-169,2025-10-17,2025,NWSL,True,North Carolina Courage,Bay FC,4,1,,,,,,,WakeMed Soccer Park,WakeMed Soccer Park,grass,,,,,,completed,False,False
+NWSL2025-170,2025-10-17,2025,NWSL,True,Utah Royals FC,Seattle Reign FC,1,2,,,,,,,America First Field,America First Field,grass,,,,,,completed,False,False
+NWSL2025-171,2025-10-18,2025,NWSL,True,Orlando Pride,Washington Spirit,3,2,,,,,,,Inter&Co Stadium,Inter&Co Stadium,grass,,,,,,completed,False,False
+NWSL2025-172,2025-10-18,2025,NWSL,True,Kansas City Current,Houston Dash,0,1,,,,,,,CPKC Stadium,CPKC Stadium,grass,,,,,,completed,False,False
+NWSL2025-173,2025-10-18,2025,NWSL,True,Chicago Stars FC,San Diego Wave FC,1,6,,,,,,,SeatGeek Stadium,SeatGeek Stadium,grass,,,,,,completed,False,False
+NWSL2025-174,2025-10-19,2025,NWSL,True,Racing Louisville FC,Gotham FC,2,2,,,,,,,Lynn Family Stadium,Lynn Family Stadium,grass,,,,,,completed,False,False
+NWSL2025-175,2025-10-19,2025,NWSL,True,Portland Thorns FC,Angel City FC,2,0,,,,,,,Providence Park,Providence Park,grass,,,,,,completed,False,False
+NWSL2025-176,2025-11-02,2025,NWSL,True,San Diego Wave FC,Kansas City Current,1,2,,,,,,,Snapdragon Stadium,Snapdragon Stadium,grass,,,,,,completed,False,False
+NWSL2025-177,2025-11-02,2025,NWSL,True,Washington Spirit,Utah Royals FC,0,1,,,,,,,Audi Field,Audi Field,grass,,,,,,completed,False,False
+NWSL2025-178,2025-11-02,2025,NWSL,True,Houston Dash,Portland Thorns FC,0,2,,,,,,,Shell Energy Stadium,Shell Energy Stadium,grass,,,,,,completed,False,False
+NWSL2025-179,2025-11-02,2025,NWSL,True,Seattle Reign FC,Orlando Pride,1,1,,,,,,,Lumen Field,Lumen Field,grass,,,,,,completed,False,False
+NWSL2025-180,2025-11-02,2025,NWSL,True,Gotham FC,North Carolina Courage,2,3,,,,,,,Red Bull Arena,Red Bull Arena,grass,,,,,,completed,False,False
+NWSL2025-181,2025-11-02,2025,NWSL,True,Bay FC,Racing Louisville FC,0,1,,,,,,,PayPal Park,PayPal Park,grass,,,,,,completed,False,False
+NWSL2025-182,2025-11-02,2025,NWSL,True,Angel City FC,Chicago Stars FC,1,2,,,,,,,BMO Stadium,BMO Stadium,grass,,,,,,completed,False,False

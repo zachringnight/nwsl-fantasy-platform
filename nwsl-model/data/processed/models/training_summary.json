@@ -1,0 +1,26 @@
+{
+  "models": {
+    "dixon_coles": {
+      "converged": true,
+      "log_likelihood": -234.89997048148035,
+      "n_teams": 14,
+      "parameters": {
+        "home_advantage": -0.1649576270734564,
+        "intercept": 0.3328193824066851,
+        "rho": -0.13845729110723792
+      }
+    },
+    "bivariate_poisson": {
+      "converged": true,
+      "log_likelihood": -234.96400483275292,
+      "n_teams": 14,
+      "parameters": {
+        "home_advantage": -0.15988183503735315,
+        "intercept": 0.32564771017615135,
+        "lambda3": 0.141232717589964
+      }
+    }
+  },
+  "n_matches": 182,
+  "n_teams": 14
+}
