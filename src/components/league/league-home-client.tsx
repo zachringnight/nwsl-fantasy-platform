@@ -7,6 +7,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { getButtonClassName } from "@/components/ui/button";
+import { CommissionerChecklist } from "@/components/league/commissioner-checklist";
 import { LeagueHomeFeed } from "@/components/league/league-home-feed";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
@@ -162,25 +163,39 @@ export function LeagueHomeClient({ leagueId }: LeagueHomeClientProps) {
           : `${modeConfig.scheduleLabel}: ${new Date(leagueDetails.league.draft_at).toLocaleString()}`;
 
         return (
-          <MotionReveal>
-            <LeagueHomeFeed
-              activeSlate={activeSlate}
-              cadenceLabel={cadenceLabel}
-              exploreHref={exploreAction.href}
-              exploreLabel={exploreAction.label}
-              invitePath={invitePath}
-              isCommissioner={isCommissioner}
-              leagueDetails={leagueDetails}
-              modeConfig={modeConfig}
-              ownershipLabel={ownershipLabel}
-              primaryActionHref={primaryAction.href}
-              primaryActionLabel={primaryAction.label}
-              scheduleSummary={scheduleSummary}
-              secondaryActionHref={secondaryAction.href}
-              secondaryActionLabel={secondaryAction.label}
-              settingsHref={links.settings}
-            />
-          </MotionReveal>
+          <div className="space-y-5">
+            {isCommissioner && leagueDetails.league.status === "setup" && (
+              <CommissionerChecklist
+                draftAt={leagueDetails.league.draft_at}
+                draftScheduled={!!leagueDetails.league.draft_at}
+                gameVariant={modeConfig.usesLiveDraftRoom ? "classic" : "salary_cap"}
+                leagueCode={leagueDetails.league.code}
+                leagueId={leagueId}
+                leagueName={leagueDetails.league.name}
+                memberCount={leagueDetails.memberships.length}
+                targetMemberCount={leagueDetails.league.manager_count_target}
+              />
+            )}
+            <MotionReveal>
+              <LeagueHomeFeed
+                activeSlate={activeSlate}
+                cadenceLabel={cadenceLabel}
+                exploreHref={exploreAction.href}
+                exploreLabel={exploreAction.label}
+                invitePath={invitePath}
+                isCommissioner={isCommissioner}
+                leagueDetails={leagueDetails}
+                modeConfig={modeConfig}
+                ownershipLabel={ownershipLabel}
+                primaryActionHref={primaryAction.href}
+                primaryActionLabel={primaryAction.label}
+                scheduleSummary={scheduleSummary}
+                secondaryActionHref={secondaryAction.href}
+                secondaryActionLabel={secondaryAction.label}
+                settingsHref={links.settings}
+              />
+            </MotionReveal>
+          </div>
         );
       }}
     </FantasyAuthGate>

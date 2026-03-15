@@ -19,6 +19,8 @@ import {
   getFantasyTargetSlate,
 } from "@/lib/fantasy-slate-engine";
 import { LeagueCard } from "@/components/league/league-card";
+import { WelcomeTour } from "@/components/onboarding/welcome-tour";
+import type { ExperienceLevel } from "@/components/onboarding/welcome-tour";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import type { FantasyLeagueSummary } from "@/types/fantasy";
 
@@ -28,6 +30,7 @@ export function DashboardClient() {
   const [error, setError] = useState("");
   const [isLoadingLeagues, setIsLoadingLeagues] = useState(false);
   const [leagues, setLeagues] = useState<FantasyLeagueSummary[]>([]);
+  const [tourDismissed, setTourDismissed] = useState(false);
 
   const refreshLeagues = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -102,26 +105,41 @@ export function DashboardClient() {
         }
 
         if (leagues.length === 0) {
+          const experienceLevel: ExperienceLevel =
+            (profile?.experience_level as ExperienceLevel) ?? "new";
+          const displayName = profile?.display_name ?? "there";
+          const favoriteClub = profile?.favorite_club ?? null;
+
           return (
-            <EmptyState
-              action={
-                <div className="flex flex-wrap justify-center gap-3">
-                  <Link className={getButtonClassName()} href="/leagues/create">
-                    Create league
-                  </Link>
-                  <Link
-                    className={getButtonClassName({
-                      variant: "secondary",
-                    })}
-                    href="/leagues/join"
-                  >
-                    Join league
-                  </Link>
-                </div>
-              }
-              description="Create a league or join one with a code to get started."
-              title="No leagues yet"
-            />
+            <div className="space-y-5">
+              <WelcomeTour
+                displayName={displayName}
+                experienceLevel={experienceLevel}
+                favoriteClub={favoriteClub}
+                onDismiss={() => setTourDismissed(true)}
+              />
+              {tourDismissed && (
+                <EmptyState
+                  action={
+                    <div className="flex flex-wrap justify-center gap-3">
+                      <Link className={getButtonClassName()} href="/leagues/create">
+                        Create league
+                      </Link>
+                      <Link
+                        className={getButtonClassName({
+                          variant: "secondary",
+                        })}
+                        href="/leagues/join"
+                      >
+                        Join league
+                      </Link>
+                    </div>
+                  }
+                  description="Create a league or join one with a code to get started."
+                  title="No leagues yet"
+                />
+              )}
+            </div>
           );
         }
 
