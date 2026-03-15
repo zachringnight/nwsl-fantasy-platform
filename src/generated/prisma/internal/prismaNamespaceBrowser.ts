@@ -89,7 +89,13 @@ export const ModelName = {
   NotificationPreference: 'NotificationPreference',
   Notification: 'Notification',
   ScoringOverride: 'ScoringOverride',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Achievement: 'Achievement',
+  Streak: 'Streak',
+  ChatMessage: 'ChatMessage',
+  TradeProposal: 'TradeProposal',
+  TradeAsset: 'TradeAsset',
+  TradeVote: 'TradeVote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -706,6 +712,90 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const AchievementScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  leagueId: 'leagueId',
+  key: 'key',
+  label: 'label',
+  description: 'description',
+  earnedAt: 'earnedAt',
+  metadata: 'metadata'
+} as const
+
+export type AchievementScalarFieldEnum = (typeof AchievementScalarFieldEnum)[keyof typeof AchievementScalarFieldEnum]
+
+
+export const StreakScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  leagueId: 'leagueId',
+  fantasyTeamId: 'fantasyTeamId',
+  streakType: 'streakType',
+  currentCount: 'currentCount',
+  bestCount: 'bestCount',
+  lastUpdatedAt: 'lastUpdatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StreakScalarFieldEnum = (typeof StreakScalarFieldEnum)[keyof typeof StreakScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  userId: 'userId',
+  body: 'body',
+  createdAt: 'createdAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const TradeProposalScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  proposerTeamId: 'proposerTeamId',
+  receiverTeamId: 'receiverTeamId',
+  status: 'status',
+  message: 'message',
+  reviewPeriodEndsAt: 'reviewPeriodEndsAt',
+  respondedAt: 'respondedAt',
+  processedAt: 'processedAt',
+  vetoCount: 'vetoCount',
+  vetoThreshold: 'vetoThreshold',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TradeProposalScalarFieldEnum = (typeof TradeProposalScalarFieldEnum)[keyof typeof TradeProposalScalarFieldEnum]
+
+
+export const TradeAssetScalarFieldEnum = {
+  id: 'id',
+  tradeProposalId: 'tradeProposalId',
+  fromTeamId: 'fromTeamId',
+  playerId: 'playerId',
+  playerName: 'playerName',
+  playerPosition: 'playerPosition',
+  clubName: 'clubName'
+} as const
+
+export type TradeAssetScalarFieldEnum = (typeof TradeAssetScalarFieldEnum)[keyof typeof TradeAssetScalarFieldEnum]
+
+
+export const TradeVoteScalarFieldEnum = {
+  id: 'id',
+  tradeProposalId: 'tradeProposalId',
+  fantasyTeamId: 'fantasyTeamId',
+  userId: 'userId',
+  decision: 'decision',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeVoteScalarFieldEnum = (typeof TradeVoteScalarFieldEnum)[keyof typeof TradeVoteScalarFieldEnum]
 
 
 export const SortOrder = {

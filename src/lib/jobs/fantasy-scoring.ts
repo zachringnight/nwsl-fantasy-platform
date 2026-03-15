@@ -5,7 +5,7 @@ import { calculateFantasyScore, type StatLineInput } from "@/lib/scoring/scoring
 async function run(context: JobContext): Promise<JobResult> {
   const jobId = "fantasy-scoring";
 
-  // Find all stat lines from live or recently final fixtures that need scoring
+  // Find all stat lines from live or recently final fixtures
   const unscoredStatLines = await prisma.playerMatchStatLine.findMany({
     where: {
       fixture: {
@@ -14,7 +14,7 @@ async function run(context: JobContext): Promise<JobResult> {
     },
     include: {
       fixture: true,
-      player: { select: { primaryPosition: true } },
+      player: { select: { id: true, primaryPosition: true } },
     },
     take: 500,
   });
@@ -27,7 +27,20 @@ async function run(context: JobContext): Promise<JobResult> {
     };
   }
 
+  // Find leagues with active weeks to create per-league snapshots
+  const liveLeagues = await prisma.league.findMany({
+    where: { status: "LIVE" },
+    include: {
+      weeks: {
+        where: { status: { in: ["LIVE", "UPCOMING"] } },
+        orderBy: { sequence: "asc" },
+        take: 1,
+      },
+    },
+  });
+
   let scored = 0;
+  let snapshotsWritten = 0;
 
   for (const statLine of unscoredStatLines) {
     const input: StatLineInput = {
@@ -44,19 +57,57 @@ async function run(context: JobContext): Promise<JobResult> {
       penaltyMisses: statLine.penaltyMisses,
     };
 
-    calculateFantasyScore(input);
-
-    // The actual FantasyPointSnapshot upsert requires leagueId and leagueWeekId.
-    // In a full implementation, we would look up which leagues/weeks reference
-    // this fixture and create per-league snapshots.
-    // For now, we verify that scoring completes without error.
+    const result = calculateFantasyScore(input);
+    const isFinal = statLine.fixture.status === "FINAL";
     scored++;
+
+    for (const league of liveLeagues) {
+      const activeWeek = league.weeks[0];
+      if (!activeWeek) continue;
+
+      // Check if the fixture falls within this league week
+      if (
+        statLine.fixture.startsAt < activeWeek.startsAt ||
+        statLine.fixture.startsAt > activeWeek.endsAt
+      ) {
+        continue;
+      }
+
+      // Upsert the fantasy point snapshot
+      await prisma.fantasyPointSnapshot.upsert({
+        where: {
+          leagueId_leagueWeekId_fixtureId_playerId: {
+            leagueId: league.id,
+            leagueWeekId: activeWeek.id,
+            fixtureId: statLine.fixtureId,
+            playerId: statLine.player.id,
+          },
+        },
+        update: {
+          totalPoints: result.total,
+          breakdown: result.breakdown,
+          statLineId: statLine.id,
+          isFinal,
+        },
+        create: {
+          leagueId: league.id,
+          leagueWeekId: activeWeek.id,
+          fixtureId: statLine.fixtureId,
+          playerId: statLine.player.id,
+          statLineId: statLine.id,
+          totalPoints: result.total,
+          breakdown: result.breakdown,
+          isFinal,
+        },
+      });
+      snapshotsWritten++;
+    }
   }
 
   return {
     jobId,
     status: "success",
-    summary: `Scored ${scored} player stat lines. Started at ${context.startedAt}.`,
+    summary: `Scored ${scored} player stat lines, wrote ${snapshotsWritten} snapshots. Started at ${context.startedAt}.`,
   };
 }
 

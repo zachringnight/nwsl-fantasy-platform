@@ -22,6 +22,7 @@ import {
   moveDraftQueueItem,
   processWaiverClaims,
   revealDraftOrder,
+  removeLeagueMember,
   removePlayerFromDraftQueue,
   reopenSalaryCapEntry,
   saveRosterLineup,
@@ -57,6 +58,7 @@ export interface FantasyDataClient {
   moveDraftQueueItem: typeof moveDraftQueueItem;
   processWaiverClaims: typeof processWaiverClaims;
   revealDraftOrder: typeof revealDraftOrder;
+  removeLeagueMember: typeof removeLeagueMember;
   removePlayerFromDraftQueue: typeof removePlayerFromDraftQueue;
   reopenSalaryCapEntry: typeof reopenSalaryCapEntry;
   saveRosterLineup: typeof saveRosterLineup;
@@ -92,6 +94,7 @@ export const supabaseFantasyDataClient: FantasyDataClient = {
   moveDraftQueueItem,
   processWaiverClaims,
   revealDraftOrder,
+  removeLeagueMember,
   removePlayerFromDraftQueue,
   reopenSalaryCapEntry,
   saveRosterLineup,

@@ -215,6 +215,10 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
+  achievements?: Prisma.AchievementListRelationFilter
+  streaks?: Prisma.StreakListRelationFilter
+  chatMessages?: Prisma.ChatMessageListRelationFilter
+  tradeVotes?: Prisma.TradeVoteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -235,6 +239,10 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   scoringOverrides?: Prisma.ScoringOverrideOrderByRelationAggregateInput
+  achievements?: Prisma.AchievementOrderByRelationAggregateInput
+  streaks?: Prisma.StreakOrderByRelationAggregateInput
+  chatMessages?: Prisma.ChatMessageOrderByRelationAggregateInput
+  tradeVotes?: Prisma.TradeVoteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -258,6 +266,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
+  achievements?: Prisma.AchievementListRelationFilter
+  streaks?: Prisma.StreakListRelationFilter
+  chatMessages?: Prisma.ChatMessageListRelationFilter
+  tradeVotes?: Prisma.TradeVoteListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -306,6 +318,10 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -326,6 +342,10 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -346,6 +366,10 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -366,6 +390,10 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -588,6 +616,62 @@ export type UserUpdateOneWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateNestedOneWithoutAchievementsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAchievementsInput, Prisma.UserUncheckedCreateWithoutAchievementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAchievementsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAchievementsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAchievementsInput, Prisma.UserUncheckedCreateWithoutAchievementsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAchievementsInput
+  upsert?: Prisma.UserUpsertWithoutAchievementsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAchievementsInput, Prisma.UserUpdateWithoutAchievementsInput>, Prisma.UserUncheckedUpdateWithoutAchievementsInput>
+}
+
+export type UserCreateNestedOneWithoutStreaksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStreaksInput, Prisma.UserUncheckedCreateWithoutStreaksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStreaksInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStreaksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStreaksInput, Prisma.UserUncheckedCreateWithoutStreaksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStreaksInput
+  upsert?: Prisma.UserUpsertWithoutStreaksInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStreaksInput, Prisma.UserUpdateWithoutStreaksInput>, Prisma.UserUncheckedUpdateWithoutStreaksInput>
+}
+
+export type UserCreateNestedOneWithoutChatMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutChatMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChatMessagesInput
+  upsert?: Prisma.UserUpsertWithoutChatMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChatMessagesInput, Prisma.UserUpdateWithoutChatMessagesInput>, Prisma.UserUncheckedUpdateWithoutChatMessagesInput>
+}
+
+export type UserCreateNestedOneWithoutTradeVotesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTradeVotesInput, Prisma.UserUncheckedCreateWithoutTradeVotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTradeVotesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTradeVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTradeVotesInput, Prisma.UserUncheckedCreateWithoutTradeVotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTradeVotesInput
+  upsert?: Prisma.UserUpsertWithoutTradeVotesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTradeVotesInput, Prisma.UserUpdateWithoutTradeVotesInput>, Prisma.UserUncheckedUpdateWithoutTradeVotesInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -605,6 +689,10 @@ export type UserCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -624,6 +712,10 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -659,6 +751,10 @@ export type UserUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -678,6 +774,10 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -697,6 +797,10 @@ export type UserCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -716,6 +820,10 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -751,6 +859,10 @@ export type UserUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -770,6 +882,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommissionedLeaguesInput = {
@@ -789,6 +905,10 @@ export type UserCreateWithoutCommissionedLeaguesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommissionedLeaguesInput = {
@@ -808,6 +928,10 @@ export type UserUncheckedCreateWithoutCommissionedLeaguesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommissionedLeaguesInput = {
@@ -843,6 +967,10 @@ export type UserUpdateWithoutCommissionedLeaguesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommissionedLeaguesInput = {
@@ -862,6 +990,10 @@ export type UserUncheckedUpdateWithoutCommissionedLeaguesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedLeagueInvitesInput = {
@@ -881,6 +1013,10 @@ export type UserCreateWithoutCreatedLeagueInvitesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedLeagueInvitesInput = {
@@ -900,6 +1036,10 @@ export type UserUncheckedCreateWithoutCreatedLeagueInvitesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedLeagueInvitesInput = {
@@ -935,6 +1075,10 @@ export type UserUpdateWithoutCreatedLeagueInvitesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedLeagueInvitesInput = {
@@ -954,6 +1098,10 @@ export type UserUncheckedUpdateWithoutCreatedLeagueInvitesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -973,6 +1121,10 @@ export type UserCreateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -992,6 +1144,10 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -1027,6 +1183,10 @@ export type UserUpdateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -1046,6 +1206,10 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationPreferenceInput = {
@@ -1065,6 +1229,10 @@ export type UserCreateWithoutNotificationPreferenceInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationPreferenceInput = {
@@ -1084,6 +1252,10 @@ export type UserUncheckedCreateWithoutNotificationPreferenceInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationPreferenceInput = {
@@ -1119,6 +1291,10 @@ export type UserUpdateWithoutNotificationPreferenceInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationPreferenceInput = {
@@ -1138,6 +1314,10 @@ export type UserUncheckedUpdateWithoutNotificationPreferenceInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1157,6 +1337,10 @@ export type UserCreateWithoutNotificationsInput = {
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1176,6 +1360,10 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1211,6 +1399,10 @@ export type UserUpdateWithoutNotificationsInput = {
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1230,6 +1422,10 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutScoringOverridesInput = {
@@ -1249,6 +1445,10 @@ export type UserCreateWithoutScoringOverridesInput = {
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutScoringOverridesInput = {
@@ -1268,6 +1468,10 @@ export type UserUncheckedCreateWithoutScoringOverridesInput = {
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutScoringOverridesInput = {
@@ -1303,6 +1507,10 @@ export type UserUpdateWithoutScoringOverridesInput = {
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutScoringOverridesInput = {
@@ -1322,6 +1530,10 @@ export type UserUncheckedUpdateWithoutScoringOverridesInput = {
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1341,6 +1553,10 @@ export type UserCreateWithoutAuditLogsInput = {
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1360,6 +1576,10 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1395,6 +1615,10 @@ export type UserUpdateWithoutAuditLogsInput = {
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1414,6 +1638,442 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAchievementsInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAchievementsInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueUncheckedCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAchievementsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAchievementsInput, Prisma.UserUncheckedCreateWithoutAchievementsInput>
+}
+
+export type UserUpsertWithoutAchievementsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAchievementsInput, Prisma.UserUncheckedUpdateWithoutAchievementsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAchievementsInput, Prisma.UserUncheckedCreateWithoutAchievementsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAchievementsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAchievementsInput, Prisma.UserUncheckedUpdateWithoutAchievementsInput>
+}
+
+export type UserUpdateWithoutAchievementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAchievementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUncheckedUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStreaksInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutStreaksInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueUncheckedCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutStreaksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStreaksInput, Prisma.UserUncheckedCreateWithoutStreaksInput>
+}
+
+export type UserUpsertWithoutStreaksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStreaksInput, Prisma.UserUncheckedUpdateWithoutStreaksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStreaksInput, Prisma.UserUncheckedCreateWithoutStreaksInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStreaksInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStreaksInput, Prisma.UserUncheckedUpdateWithoutStreaksInput>
+}
+
+export type UserUpdateWithoutStreaksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStreaksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUncheckedUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutChatMessagesInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutChatMessagesInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueUncheckedCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutChatMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+}
+
+export type UserUpsertWithoutChatMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChatMessagesInput, Prisma.UserUncheckedUpdateWithoutChatMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChatMessagesInput, Prisma.UserUncheckedCreateWithoutChatMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChatMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChatMessagesInput, Prisma.UserUncheckedUpdateWithoutChatMessagesInput>
+}
+
+export type UserUpdateWithoutChatMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChatMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUncheckedUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTradeVotesInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTradeVotesInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  timeZone?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutUserInput
+  commissionedLeagues?: Prisma.LeagueUncheckedCreateNestedManyWithoutCommissionerInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorUserInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutCreatedByInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutUserInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTradeVotesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTradeVotesInput, Prisma.UserUncheckedCreateWithoutTradeVotesInput>
+}
+
+export type UserUpsertWithoutTradeVotesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTradeVotesInput, Prisma.UserUncheckedUpdateWithoutTradeVotesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTradeVotesInput, Prisma.UserUncheckedCreateWithoutTradeVotesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTradeVotesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTradeVotesInput, Prisma.UserUncheckedUpdateWithoutTradeVotesInput>
+}
+
+export type UserUpdateWithoutTradeVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTradeVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeZone?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutUserNestedInput
+  commissionedLeagues?: Prisma.LeagueUncheckedUpdateManyWithoutCommissionerNestedInput
+  createdLeagueInvites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorUserNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutCreatedByNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutUserNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1430,6 +2090,10 @@ export type UserCountOutputType = {
   notifications: number
   auditLogs: number
   scoringOverrides: number
+  achievements: number
+  streaks: number
+  chatMessages: number
+  tradeVotes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1441,6 +2105,10 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   scoringOverrides?: boolean | UserCountOutputTypeCountScoringOverridesArgs
+  achievements?: boolean | UserCountOutputTypeCountAchievementsArgs
+  streaks?: boolean | UserCountOutputTypeCountStreaksArgs
+  chatMessages?: boolean | UserCountOutputTypeCountChatMessagesArgs
+  tradeVotes?: boolean | UserCountOutputTypeCountTradeVotesArgs
 }
 
 /**
@@ -1509,6 +2177,34 @@ export type UserCountOutputTypeCountScoringOverridesArgs<ExtArgs extends runtime
   where?: Prisma.ScoringOverrideWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAchievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AchievementWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StreakWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountChatMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatMessageWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTradeVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeVoteWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1528,6 +2224,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.User$scoringOverridesArgs<ExtArgs>
+  achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
+  streaks?: boolean | Prisma.User$streaksArgs<ExtArgs>
+  chatMessages?: boolean | Prisma.User$chatMessagesArgs<ExtArgs>
+  tradeVotes?: boolean | Prisma.User$tradeVotesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1575,6 +2275,10 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.User$scoringOverridesArgs<ExtArgs>
+  achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
+  streaks?: boolean | Prisma.User$streaksArgs<ExtArgs>
+  chatMessages?: boolean | Prisma.User$chatMessagesArgs<ExtArgs>
+  tradeVotes?: boolean | Prisma.User$tradeVotesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1592,6 +2296,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     scoringOverrides: Prisma.$ScoringOverridePayload<ExtArgs>[]
+    achievements: Prisma.$AchievementPayload<ExtArgs>[]
+    streaks: Prisma.$StreakPayload<ExtArgs>[]
+    chatMessages: Prisma.$ChatMessagePayload<ExtArgs>[]
+    tradeVotes: Prisma.$TradeVotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2005,6 +2713,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scoringOverrides<T extends Prisma.User$scoringOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$scoringOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoringOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  achievements<T extends Prisma.User$achievementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  streaks<T extends Prisma.User$streaksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$streaksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StreakPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chatMessages<T extends Prisma.User$chatMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chatMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeVotes<T extends Prisma.User$tradeVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tradeVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2643,6 +3355,102 @@ export type User$scoringOverridesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ScoringOverrideScalarFieldEnum | Prisma.ScoringOverrideScalarFieldEnum[]
+}
+
+/**
+ * User.achievements
+ */
+export type User$achievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Achievement
+   */
+  select?: Prisma.AchievementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Achievement
+   */
+  omit?: Prisma.AchievementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AchievementInclude<ExtArgs> | null
+  where?: Prisma.AchievementWhereInput
+  orderBy?: Prisma.AchievementOrderByWithRelationInput | Prisma.AchievementOrderByWithRelationInput[]
+  cursor?: Prisma.AchievementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AchievementScalarFieldEnum | Prisma.AchievementScalarFieldEnum[]
+}
+
+/**
+ * User.streaks
+ */
+export type User$streaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Streak
+   */
+  select?: Prisma.StreakSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Streak
+   */
+  omit?: Prisma.StreakOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StreakInclude<ExtArgs> | null
+  where?: Prisma.StreakWhereInput
+  orderBy?: Prisma.StreakOrderByWithRelationInput | Prisma.StreakOrderByWithRelationInput[]
+  cursor?: Prisma.StreakWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StreakScalarFieldEnum | Prisma.StreakScalarFieldEnum[]
+}
+
+/**
+ * User.chatMessages
+ */
+export type User$chatMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChatMessage
+   */
+  select?: Prisma.ChatMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChatMessage
+   */
+  omit?: Prisma.ChatMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatMessageInclude<ExtArgs> | null
+  where?: Prisma.ChatMessageWhereInput
+  orderBy?: Prisma.ChatMessageOrderByWithRelationInput | Prisma.ChatMessageOrderByWithRelationInput[]
+  cursor?: Prisma.ChatMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatMessageScalarFieldEnum | Prisma.ChatMessageScalarFieldEnum[]
+}
+
+/**
+ * User.tradeVotes
+ */
+export type User$tradeVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeVote
+   */
+  select?: Prisma.TradeVoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeVote
+   */
+  omit?: Prisma.TradeVoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeVoteInclude<ExtArgs> | null
+  where?: Prisma.TradeVoteWhereInput
+  orderBy?: Prisma.TradeVoteOrderByWithRelationInput | Prisma.TradeVoteOrderByWithRelationInput[]
+  cursor?: Prisma.TradeVoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeVoteScalarFieldEnum | Prisma.TradeVoteScalarFieldEnum[]
 }
 
 /**

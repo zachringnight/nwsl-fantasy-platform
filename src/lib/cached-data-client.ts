@@ -145,6 +145,12 @@ export const cachedFantasyDataClient: FantasyDataClient = {
     invalidateCache("loadDraftState");
     return result;
   },
+  removeLeagueMember: async (...args) => {
+    const result = await supabaseFantasyDataClient.removeLeagueMember(...args);
+    invalidateCache("loadLeagueById");
+    invalidateCache("loadMyLeagues");
+    return result;
+  },
   removePlayerFromDraftQueue: async (...args) => {
     const result = await supabaseFantasyDataClient.removePlayerFromDraftQueue(...args);
     invalidateCache("loadDraftState");

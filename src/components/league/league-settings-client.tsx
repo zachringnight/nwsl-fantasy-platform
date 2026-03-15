@@ -39,6 +39,11 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [refreshToken, setRefreshToken] = useState(0);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
+  const [confirmRemoveMember, setConfirmRemoveMember] = useState<{
+    userId: string;
+    displayName: string;
+  } | null>(null);
 
   const refreshLeague = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -82,6 +87,23 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
       setTimeout(() => setCodeCopied(false), 2000);
     } catch {
       // Clipboard API may be unavailable in non-HTTPS contexts
+    }
+  }
+
+  async function handleRemoveMember() {
+    if (!confirmRemoveMember) return;
+
+    setRemovingMemberId(confirmRemoveMember.userId);
+    try {
+      await dataClient.removeLeagueMember(leagueId, confirmRemoveMember.userId);
+      setRefreshToken((prev) => prev + 1);
+    } catch (err) {
+      setSaveMessage(
+        err instanceof Error ? err.message : "Unable to remove manager."
+      );
+    } finally {
+      setRemovingMemberId(null);
+      setConfirmRemoveMember(null);
     }
   }
 
@@ -292,13 +314,21 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                                 <button
                                   aria-label={`Remove ${member.display_name} from league`}
                                   className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
-                                  onClick={() => {
-                                    // TODO: Implement remove-manager flow with confirmation dialog
-                                  }}
+                                  disabled={removingMemberId === member.user_id}
+                                  onClick={() =>
+                                    setConfirmRemoveMember({
+                                      userId: member.user_id,
+                                      displayName: member.display_name,
+                                    })
+                                  }
                                   title="Remove manager"
                                   type="button"
                                 >
-                                  <UserMinus className="size-3.5" />
+                                  {removingMemberId === member.user_id ? (
+                                    <Spinner className="size-3.5" />
+                                  ) : (
+                                    <UserMinus className="size-3.5" />
+                                  )}
                                 </button>
                               )}
                           </div>
@@ -311,6 +341,49 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                 </SurfaceCard>
               </section>
             </MotionReveal>
+
+            {confirmRemoveMember && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+                onClick={() => setConfirmRemoveMember(null)}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Confirm manager removal"
+              >
+                <div
+                  className="mx-4 w-full max-w-md rounded-2xl border border-line bg-panel p-6 shadow-xl"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 className="text-lg font-semibold text-foreground">
+                    Remove manager
+                  </h3>
+                  <p className="mt-2 text-sm text-muted">
+                    Are you sure you want to remove{" "}
+                    <span className="font-medium text-foreground">
+                      {confirmRemoveMember.displayName}
+                    </span>{" "}
+                    from this league? Their team, roster, and lineup data will be
+                    permanently deleted.
+                  </p>
+                  <div className="mt-5 flex gap-3">
+                    <Button
+                      onClick={handleRemoveMember}
+                      disabled={removingMemberId !== null}
+                      className="bg-danger text-white hover:bg-danger/85"
+                    >
+                      {removingMemberId ? <Spinner /> : null}
+                      {removingMemberId ? "Removing…" : "Remove"}
+                    </Button>
+                    <Button
+                      onClick={() => setConfirmRemoveMember(null)}
+                      disabled={removingMemberId !== null}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {isCommissioner && (
               <MotionReveal>
