@@ -1465,3 +1465,5 @@
 2026-03-15 01:22:37 | nwsl_model.models.team_ratings | INFO | Computed ratings for 12 teams (league avg attack=1.622, defense=1.622)
 2026-03-15 01:22:44 | nwsl_model.models.bivariate_poisson | INFO | Bivariate Poisson fit: converged=True, home_adv=0.0958, lambda3=0.0998, intercept=0.2516, n_teams=12
 2026-03-15 01:22:44 | nwsl_model.models.team_ratings | INFO | Computed ratings for 12 teams (league avg attack=1.620, defense=1.620)
+2026-03-15 01:22:58 | nwsl_model.models.bivariate_poisson | INFO | Bivariate Poisson fit: converged=True, home_adv=0.0894, lambda3=0.0831, intercept=0.2606, n_teams=12
+2026-03-15 01:22:58 | nwsl_model.models.team_ratings | INFO | Computed ratings for 12 teams (league avg attack=1.615, defense=1.615)
