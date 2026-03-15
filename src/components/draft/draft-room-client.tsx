@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useDeferredValue, useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Activity, AlarmClockCheck, PlayCircle, ShieldAlert, Sparkles } from "lucide-react";
 import { useDraftRealtime } from "@/hooks/use-draft-realtime";
 import { DraftBoard } from "@/components/draft/draft-board";
@@ -296,6 +297,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     const player = draftState?.availablePlayers.find((p) => p.id === playerId);
     const playerName = player?.display_name ?? "Player";
     setScreenReaderAnnouncement(`${playerName} drafted successfully.`);
+    toast.success(`${playerName} drafted!`);
     if ((draftState?.picks.length ?? 0) >= prevPickCount) {
       setShowConfetti(true);
       feedback.celebrate();

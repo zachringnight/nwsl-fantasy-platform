@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import {
   ArrowRight,
   ChevronLeft,
@@ -484,6 +485,7 @@ export function SalaryCapEntryBuilder({
       setEntryState(nextState);
       setEntryName(nextState.entry.entry_name);
       setAssignments(createAssignmentState(nextState));
+      toast.success("Entry submitted.");
     } catch (actionError) {
       setError(
         actionError instanceof Error

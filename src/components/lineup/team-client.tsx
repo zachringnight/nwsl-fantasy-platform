@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { lazy, Suspense, useEffect, useEffectEvent, useState } from "react";
+import { toast } from "sonner";
 import { Crown } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { GuidedLeagueState } from "@/components/league/guided-setup-state";
@@ -120,6 +121,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
 
       setRoster(nextState.roster);
       setAssignments(createAssignmentState(nextState.roster));
+      toast.success("Lineup saved.");
     } catch (actionError) {
       setError(
         actionError instanceof Error

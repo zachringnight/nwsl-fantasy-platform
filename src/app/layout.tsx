@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { SiteHeader } from "@/components/common/site-header";
 import { SiteFooter } from "@/components/common/site-footer";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
@@ -54,6 +55,13 @@ export default function RootLayout({
                 <div id="main-content" className="page-enter flex-1">{children}</div>
                 <SiteFooter />
               </div>
+              <Toaster
+                position="bottom-right"
+                toastOptions={{
+                  className: "!rounded-xl !border-line !bg-night/95 !text-foreground !backdrop-blur-xl",
+                }}
+                theme="dark"
+              />
             </AnalyticsProvider>
           </FantasyAuthProvider>
         </FantasyDataProvider>

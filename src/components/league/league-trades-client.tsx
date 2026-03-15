@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { toast } from "sonner";
 import { ArrowRightLeft, Ban, Check, ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -105,6 +106,7 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
       setSelectedReceivePlayers([]);
       setSelectedReceiverTeamId("");
       setTradeMessage("");
+      toast.success("Trade proposal sent.");
       void refreshTrades();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unable to create trade.");
@@ -117,6 +119,7 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
     setBusyId(proposalId);
     try {
       await respondToTrade(proposalId, decision);
+      toast.success(decision === "accepted" ? "Trade accepted." : "Trade rejected.");
       void refreshTrades();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unable to respond.");
@@ -129,6 +132,7 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
     setBusyId(proposalId);
     try {
       await voteOnTrade(proposalId, fantasyTeamId, decision);
+      toast.success(decision === "approve" ? "Vote cast: approve." : "Vote cast: veto.");
       void refreshTrades();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unable to vote.");
@@ -141,6 +145,7 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
     setBusyId(proposalId);
     try {
       await cancelTrade(proposalId);
+      toast.success("Trade cancelled.");
       void refreshTrades();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unable to cancel.");
@@ -306,6 +311,17 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
                     </Button>
                   </div>
                 </SurfaceCard>
+              </MotionReveal>
+            ) : null}
+
+            {proposals.length === 0 && !showForm ? (
+              <MotionReveal delay={60}>
+                <div className="rounded-[1.35rem] border border-dashed border-line bg-white/4 px-5 py-8 text-center">
+                  <p className="text-sm font-semibold text-foreground">No trades yet</p>
+                  <p className="mt-1 text-sm text-muted">
+                    Propose a trade above to start swapping players with other managers.
+                  </p>
+                </div>
               </MotionReveal>
             ) : null}
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { toast } from "sonner";
 import { Copy, Settings, Shield, UserMinus, Users } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -96,6 +97,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
     setRemovingMemberId(confirmRemoveMember.userId);
     try {
       await dataClient.removeLeagueMember(leagueId, confirmRemoveMember.userId);
+      toast.success("Manager removed.");
       setRefreshToken((prev) => prev + 1);
     } catch (err) {
       setSaveMessage(
@@ -130,6 +132,7 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
         managerCountTarget: Number(settingsForm.managerCountTarget),
       });
       setSaveMessage("Settings saved successfully.");
+      toast.success("Settings saved.");
       setRefreshToken((prev) => prev + 1);
     } catch (err) {
       setSaveMessage(
