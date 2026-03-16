@@ -266,6 +266,11 @@ export type FantasyTeamWhereInput = {
   transactionsFrom?: Prisma.TransactionListRelationFilter
   transactionsTo?: Prisma.TransactionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  streaks?: Prisma.StreakListRelationFilter
+  proposedTrades?: Prisma.TradeProposalListRelationFilter
+  receivedTrades?: Prisma.TradeProposalListRelationFilter
+  tradeAssets?: Prisma.TradeAssetListRelationFilter
+  tradeVotes?: Prisma.TradeVoteListRelationFilter
 }
 
 export type FantasyTeamOrderByWithRelationInput = {
@@ -292,6 +297,11 @@ export type FantasyTeamOrderByWithRelationInput = {
   transactionsFrom?: Prisma.TransactionOrderByRelationAggregateInput
   transactionsTo?: Prisma.TransactionOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  streaks?: Prisma.StreakOrderByRelationAggregateInput
+  proposedTrades?: Prisma.TradeProposalOrderByRelationAggregateInput
+  receivedTrades?: Prisma.TradeProposalOrderByRelationAggregateInput
+  tradeAssets?: Prisma.TradeAssetOrderByRelationAggregateInput
+  tradeVotes?: Prisma.TradeVoteOrderByRelationAggregateInput
 }
 
 export type FantasyTeamWhereUniqueInput = Prisma.AtLeast<{
@@ -321,6 +331,11 @@ export type FantasyTeamWhereUniqueInput = Prisma.AtLeast<{
   transactionsFrom?: Prisma.TransactionListRelationFilter
   transactionsTo?: Prisma.TransactionListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  streaks?: Prisma.StreakListRelationFilter
+  proposedTrades?: Prisma.TradeProposalListRelationFilter
+  receivedTrades?: Prisma.TradeProposalListRelationFilter
+  tradeAssets?: Prisma.TradeAssetListRelationFilter
+  tradeVotes?: Prisma.TradeVoteListRelationFilter
 }, "id" | "membershipId">
 
 export type FantasyTeamOrderByWithAggregationInput = {
@@ -377,6 +392,11 @@ export type FantasyTeamCreateInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateInput = {
@@ -401,6 +421,11 @@ export type FantasyTeamUncheckedCreateInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUpdateInput = {
@@ -425,6 +450,11 @@ export type FantasyTeamUpdateInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateInput = {
@@ -449,6 +479,11 @@ export type FantasyTeamUncheckedUpdateInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateManyInput = {
@@ -799,6 +834,76 @@ export type FantasyTeamUpdateOneWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FantasyTeamUpdateToOneWithWhereWithoutNotificationsInput, Prisma.FantasyTeamUpdateWithoutNotificationsInput>, Prisma.FantasyTeamUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type FantasyTeamCreateNestedOneWithoutStreaksInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutStreaksInput, Prisma.FantasyTeamUncheckedCreateWithoutStreaksInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutStreaksInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+}
+
+export type FantasyTeamUpdateOneRequiredWithoutStreaksNestedInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutStreaksInput, Prisma.FantasyTeamUncheckedCreateWithoutStreaksInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutStreaksInput
+  upsert?: Prisma.FantasyTeamUpsertWithoutStreaksInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FantasyTeamUpdateToOneWithWhereWithoutStreaksInput, Prisma.FantasyTeamUpdateWithoutStreaksInput>, Prisma.FantasyTeamUncheckedUpdateWithoutStreaksInput>
+}
+
+export type FantasyTeamCreateNestedOneWithoutProposedTradesInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutProposedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutProposedTradesInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutProposedTradesInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+}
+
+export type FantasyTeamCreateNestedOneWithoutReceivedTradesInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutReceivedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutReceivedTradesInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutReceivedTradesInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+}
+
+export type FantasyTeamUpdateOneRequiredWithoutProposedTradesNestedInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutProposedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutProposedTradesInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutProposedTradesInput
+  upsert?: Prisma.FantasyTeamUpsertWithoutProposedTradesInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FantasyTeamUpdateToOneWithWhereWithoutProposedTradesInput, Prisma.FantasyTeamUpdateWithoutProposedTradesInput>, Prisma.FantasyTeamUncheckedUpdateWithoutProposedTradesInput>
+}
+
+export type FantasyTeamUpdateOneRequiredWithoutReceivedTradesNestedInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutReceivedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutReceivedTradesInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutReceivedTradesInput
+  upsert?: Prisma.FantasyTeamUpsertWithoutReceivedTradesInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FantasyTeamUpdateToOneWithWhereWithoutReceivedTradesInput, Prisma.FantasyTeamUpdateWithoutReceivedTradesInput>, Prisma.FantasyTeamUncheckedUpdateWithoutReceivedTradesInput>
+}
+
+export type FantasyTeamCreateNestedOneWithoutTradeAssetsInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeAssetsInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeAssetsInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutTradeAssetsInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+}
+
+export type FantasyTeamUpdateOneRequiredWithoutTradeAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeAssetsInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeAssetsInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutTradeAssetsInput
+  upsert?: Prisma.FantasyTeamUpsertWithoutTradeAssetsInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FantasyTeamUpdateToOneWithWhereWithoutTradeAssetsInput, Prisma.FantasyTeamUpdateWithoutTradeAssetsInput>, Prisma.FantasyTeamUncheckedUpdateWithoutTradeAssetsInput>
+}
+
+export type FantasyTeamCreateNestedOneWithoutTradeVotesInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeVotesInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeVotesInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutTradeVotesInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+}
+
+export type FantasyTeamUpdateOneRequiredWithoutTradeVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeVotesInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeVotesInput>
+  connectOrCreate?: Prisma.FantasyTeamCreateOrConnectWithoutTradeVotesInput
+  upsert?: Prisma.FantasyTeamUpsertWithoutTradeVotesInput
+  connect?: Prisma.FantasyTeamWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FantasyTeamUpdateToOneWithWhereWithoutTradeVotesInput, Prisma.FantasyTeamUpdateWithoutTradeVotesInput>, Prisma.FantasyTeamUncheckedUpdateWithoutTradeVotesInput>
+}
+
 export type FantasyTeamCreateWithoutLeagueInput = {
   id?: string
   name: string
@@ -820,6 +925,11 @@ export type FantasyTeamCreateWithoutLeagueInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutLeagueInput = {
@@ -843,6 +953,11 @@ export type FantasyTeamUncheckedCreateWithoutLeagueInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutLeagueInput = {
@@ -907,6 +1022,11 @@ export type FantasyTeamCreateWithoutMembershipInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutMembershipInput = {
@@ -930,6 +1050,11 @@ export type FantasyTeamUncheckedCreateWithoutMembershipInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutMembershipInput = {
@@ -969,6 +1094,11 @@ export type FantasyTeamUpdateWithoutMembershipInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutMembershipInput = {
@@ -992,6 +1122,11 @@ export type FantasyTeamUncheckedUpdateWithoutMembershipInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutDraftSlotsInput = {
@@ -1015,6 +1150,11 @@ export type FantasyTeamCreateWithoutDraftSlotsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutDraftSlotsInput = {
@@ -1038,6 +1178,11 @@ export type FantasyTeamUncheckedCreateWithoutDraftSlotsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutDraftSlotsInput = {
@@ -1077,6 +1222,11 @@ export type FantasyTeamUpdateWithoutDraftSlotsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutDraftSlotsInput = {
@@ -1100,6 +1250,11 @@ export type FantasyTeamUncheckedUpdateWithoutDraftSlotsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutDraftPicksInput = {
@@ -1123,6 +1278,11 @@ export type FantasyTeamCreateWithoutDraftPicksInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutDraftPicksInput = {
@@ -1146,6 +1306,11 @@ export type FantasyTeamUncheckedCreateWithoutDraftPicksInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutDraftPicksInput = {
@@ -1185,6 +1350,11 @@ export type FantasyTeamUpdateWithoutDraftPicksInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutDraftPicksInput = {
@@ -1208,6 +1378,11 @@ export type FantasyTeamUncheckedUpdateWithoutDraftPicksInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutDraftQueueItemsInput = {
@@ -1231,6 +1406,11 @@ export type FantasyTeamCreateWithoutDraftQueueItemsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutDraftQueueItemsInput = {
@@ -1254,6 +1434,11 @@ export type FantasyTeamUncheckedCreateWithoutDraftQueueItemsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutDraftQueueItemsInput = {
@@ -1293,6 +1478,11 @@ export type FantasyTeamUpdateWithoutDraftQueueItemsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutDraftQueueItemsInput = {
@@ -1316,6 +1506,11 @@ export type FantasyTeamUncheckedUpdateWithoutDraftQueueItemsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutRosterSpotsInput = {
@@ -1339,6 +1534,11 @@ export type FantasyTeamCreateWithoutRosterSpotsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutRosterSpotsInput = {
@@ -1362,6 +1562,11 @@ export type FantasyTeamUncheckedCreateWithoutRosterSpotsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutRosterSpotsInput = {
@@ -1401,6 +1606,11 @@ export type FantasyTeamUpdateWithoutRosterSpotsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutRosterSpotsInput = {
@@ -1424,6 +1634,11 @@ export type FantasyTeamUncheckedUpdateWithoutRosterSpotsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutLineupEntriesInput = {
@@ -1447,6 +1662,11 @@ export type FantasyTeamCreateWithoutLineupEntriesInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutLineupEntriesInput = {
@@ -1470,6 +1690,11 @@ export type FantasyTeamUncheckedCreateWithoutLineupEntriesInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutLineupEntriesInput = {
@@ -1509,6 +1734,11 @@ export type FantasyTeamUpdateWithoutLineupEntriesInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutLineupEntriesInput = {
@@ -1532,6 +1762,11 @@ export type FantasyTeamUncheckedUpdateWithoutLineupEntriesInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutHomeMatchupsInput = {
@@ -1555,6 +1790,11 @@ export type FantasyTeamCreateWithoutHomeMatchupsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutHomeMatchupsInput = {
@@ -1578,6 +1818,11 @@ export type FantasyTeamUncheckedCreateWithoutHomeMatchupsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutHomeMatchupsInput = {
@@ -1606,6 +1851,11 @@ export type FantasyTeamCreateWithoutAwayMatchupsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutAwayMatchupsInput = {
@@ -1629,6 +1879,11 @@ export type FantasyTeamUncheckedCreateWithoutAwayMatchupsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutAwayMatchupsInput = {
@@ -1668,6 +1923,11 @@ export type FantasyTeamUpdateWithoutHomeMatchupsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutHomeMatchupsInput = {
@@ -1691,6 +1951,11 @@ export type FantasyTeamUncheckedUpdateWithoutHomeMatchupsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUpsertWithoutAwayMatchupsInput = {
@@ -1725,6 +1990,11 @@ export type FantasyTeamUpdateWithoutAwayMatchupsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutAwayMatchupsInput = {
@@ -1748,6 +2018,11 @@ export type FantasyTeamUncheckedUpdateWithoutAwayMatchupsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutStandingsInput = {
@@ -1771,6 +2046,11 @@ export type FantasyTeamCreateWithoutStandingsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutStandingsInput = {
@@ -1794,6 +2074,11 @@ export type FantasyTeamUncheckedCreateWithoutStandingsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutStandingsInput = {
@@ -1833,6 +2118,11 @@ export type FantasyTeamUpdateWithoutStandingsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutStandingsInput = {
@@ -1856,6 +2146,11 @@ export type FantasyTeamUncheckedUpdateWithoutStandingsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutTransactionsFromInput = {
@@ -1879,6 +2174,11 @@ export type FantasyTeamCreateWithoutTransactionsFromInput = {
   waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutTransactionsFromInput = {
@@ -1902,6 +2202,11 @@ export type FantasyTeamUncheckedCreateWithoutTransactionsFromInput = {
   waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutTransactionsFromInput = {
@@ -1930,6 +2235,11 @@ export type FantasyTeamCreateWithoutTransactionsToInput = {
   waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutTransactionsToInput = {
@@ -1953,6 +2263,11 @@ export type FantasyTeamUncheckedCreateWithoutTransactionsToInput = {
   waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutTransactionsToInput = {
@@ -1992,6 +2307,11 @@ export type FantasyTeamUpdateWithoutTransactionsFromInput = {
   waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutTransactionsFromInput = {
@@ -2015,6 +2335,11 @@ export type FantasyTeamUncheckedUpdateWithoutTransactionsFromInput = {
   waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUpsertWithoutTransactionsToInput = {
@@ -2049,6 +2374,11 @@ export type FantasyTeamUpdateWithoutTransactionsToInput = {
   waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutTransactionsToInput = {
@@ -2072,6 +2402,11 @@ export type FantasyTeamUncheckedUpdateWithoutTransactionsToInput = {
   waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutWaiverClaimsInput = {
@@ -2095,6 +2430,11 @@ export type FantasyTeamCreateWithoutWaiverClaimsInput = {
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutWaiverClaimsInput = {
@@ -2118,6 +2458,11 @@ export type FantasyTeamUncheckedCreateWithoutWaiverClaimsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutWaiverClaimsInput = {
@@ -2157,6 +2502,11 @@ export type FantasyTeamUpdateWithoutWaiverClaimsInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutWaiverClaimsInput = {
@@ -2180,6 +2530,11 @@ export type FantasyTeamUncheckedUpdateWithoutWaiverClaimsInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamCreateWithoutNotificationsInput = {
@@ -2203,6 +2558,11 @@ export type FantasyTeamCreateWithoutNotificationsInput = {
   waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
   transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamUncheckedCreateWithoutNotificationsInput = {
@@ -2226,6 +2586,11 @@ export type FantasyTeamUncheckedCreateWithoutNotificationsInput = {
   waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
   transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
   transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
 }
 
 export type FantasyTeamCreateOrConnectWithoutNotificationsInput = {
@@ -2265,6 +2630,11 @@ export type FantasyTeamUpdateWithoutNotificationsInput = {
   waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutNotificationsInput = {
@@ -2288,6 +2658,651 @@ export type FantasyTeamUncheckedUpdateWithoutNotificationsInput = {
   waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamCreateWithoutStreaksInput = {
+  id?: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
+  membership: Prisma.LeagueMembershipCreateNestedOneWithoutTeamInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamUncheckedCreateWithoutStreaksInput = {
+  id?: string
+  leagueId: string
+  membershipId: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamCreateOrConnectWithoutStreaksInput = {
+  where: Prisma.FantasyTeamWhereUniqueInput
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutStreaksInput, Prisma.FantasyTeamUncheckedCreateWithoutStreaksInput>
+}
+
+export type FantasyTeamUpsertWithoutStreaksInput = {
+  update: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutStreaksInput, Prisma.FantasyTeamUncheckedUpdateWithoutStreaksInput>
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutStreaksInput, Prisma.FantasyTeamUncheckedCreateWithoutStreaksInput>
+  where?: Prisma.FantasyTeamWhereInput
+}
+
+export type FantasyTeamUpdateToOneWithWhereWithoutStreaksInput = {
+  where?: Prisma.FantasyTeamWhereInput
+  data: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutStreaksInput, Prisma.FantasyTeamUncheckedUpdateWithoutStreaksInput>
+}
+
+export type FantasyTeamUpdateWithoutStreaksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
+  membership?: Prisma.LeagueMembershipUpdateOneRequiredWithoutTeamNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamUncheckedUpdateWithoutStreaksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamCreateWithoutProposedTradesInput = {
+  id?: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
+  membership: Prisma.LeagueMembershipCreateNestedOneWithoutTeamInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamUncheckedCreateWithoutProposedTradesInput = {
+  id?: string
+  leagueId: string
+  membershipId: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamCreateOrConnectWithoutProposedTradesInput = {
+  where: Prisma.FantasyTeamWhereUniqueInput
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutProposedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutProposedTradesInput>
+}
+
+export type FantasyTeamCreateWithoutReceivedTradesInput = {
+  id?: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
+  membership: Prisma.LeagueMembershipCreateNestedOneWithoutTeamInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamUncheckedCreateWithoutReceivedTradesInput = {
+  id?: string
+  leagueId: string
+  membershipId: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamCreateOrConnectWithoutReceivedTradesInput = {
+  where: Prisma.FantasyTeamWhereUniqueInput
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutReceivedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutReceivedTradesInput>
+}
+
+export type FantasyTeamUpsertWithoutProposedTradesInput = {
+  update: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutProposedTradesInput, Prisma.FantasyTeamUncheckedUpdateWithoutProposedTradesInput>
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutProposedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutProposedTradesInput>
+  where?: Prisma.FantasyTeamWhereInput
+}
+
+export type FantasyTeamUpdateToOneWithWhereWithoutProposedTradesInput = {
+  where?: Prisma.FantasyTeamWhereInput
+  data: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutProposedTradesInput, Prisma.FantasyTeamUncheckedUpdateWithoutProposedTradesInput>
+}
+
+export type FantasyTeamUpdateWithoutProposedTradesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
+  membership?: Prisma.LeagueMembershipUpdateOneRequiredWithoutTeamNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamUncheckedUpdateWithoutProposedTradesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamUpsertWithoutReceivedTradesInput = {
+  update: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutReceivedTradesInput, Prisma.FantasyTeamUncheckedUpdateWithoutReceivedTradesInput>
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutReceivedTradesInput, Prisma.FantasyTeamUncheckedCreateWithoutReceivedTradesInput>
+  where?: Prisma.FantasyTeamWhereInput
+}
+
+export type FantasyTeamUpdateToOneWithWhereWithoutReceivedTradesInput = {
+  where?: Prisma.FantasyTeamWhereInput
+  data: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutReceivedTradesInput, Prisma.FantasyTeamUncheckedUpdateWithoutReceivedTradesInput>
+}
+
+export type FantasyTeamUpdateWithoutReceivedTradesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
+  membership?: Prisma.LeagueMembershipUpdateOneRequiredWithoutTeamNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamUncheckedUpdateWithoutReceivedTradesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamCreateWithoutTradeAssetsInput = {
+  id?: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
+  membership: Prisma.LeagueMembershipCreateNestedOneWithoutTeamInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeVotes?: Prisma.TradeVoteCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamUncheckedCreateWithoutTradeAssetsInput = {
+  id?: string
+  leagueId: string
+  membershipId: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeVotes?: Prisma.TradeVoteUncheckedCreateNestedManyWithoutFantasyTeamInput
+}
+
+export type FantasyTeamCreateOrConnectWithoutTradeAssetsInput = {
+  where: Prisma.FantasyTeamWhereUniqueInput
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeAssetsInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeAssetsInput>
+}
+
+export type FantasyTeamUpsertWithoutTradeAssetsInput = {
+  update: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutTradeAssetsInput, Prisma.FantasyTeamUncheckedUpdateWithoutTradeAssetsInput>
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeAssetsInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeAssetsInput>
+  where?: Prisma.FantasyTeamWhereInput
+}
+
+export type FantasyTeamUpdateToOneWithWhereWithoutTradeAssetsInput = {
+  where?: Prisma.FantasyTeamWhereInput
+  data: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutTradeAssetsInput, Prisma.FantasyTeamUncheckedUpdateWithoutTradeAssetsInput>
+}
+
+export type FantasyTeamUpdateWithoutTradeAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
+  membership?: Prisma.LeagueMembershipUpdateOneRequiredWithoutTeamNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamUncheckedUpdateWithoutTradeAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
+}
+
+export type FantasyTeamCreateWithoutTradeVotesInput = {
+  id?: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  league: Prisma.LeagueCreateNestedOneWithoutTeamsInput
+  membership: Prisma.LeagueMembershipCreateNestedOneWithoutTeamInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutFromTeamInput
+}
+
+export type FantasyTeamUncheckedCreateWithoutTradeVotesInput = {
+  id?: string
+  leagueId: string
+  membershipId: string
+  name: string
+  abbreviation: string
+  draftSlot?: number | null
+  waiverPriority?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftSlots?: Prisma.DraftSlotUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutFantasyTeamInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutFantasyTeamInput
+  homeMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutHomeTeamInput
+  awayMatchups?: Prisma.MatchupUncheckedCreateNestedManyWithoutAwayTeamInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutFantasyTeamInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutFantasyTeamInput
+  transactionsFrom?: Prisma.TransactionUncheckedCreateNestedManyWithoutFromTeamInput
+  transactionsTo?: Prisma.TransactionUncheckedCreateNestedManyWithoutToTeamInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFantasyTeamInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutFantasyTeamInput
+  proposedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutProposerTeamInput
+  receivedTrades?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutReceiverTeamInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutFromTeamInput
+}
+
+export type FantasyTeamCreateOrConnectWithoutTradeVotesInput = {
+  where: Prisma.FantasyTeamWhereUniqueInput
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeVotesInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeVotesInput>
+}
+
+export type FantasyTeamUpsertWithoutTradeVotesInput = {
+  update: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutTradeVotesInput, Prisma.FantasyTeamUncheckedUpdateWithoutTradeVotesInput>
+  create: Prisma.XOR<Prisma.FantasyTeamCreateWithoutTradeVotesInput, Prisma.FantasyTeamUncheckedCreateWithoutTradeVotesInput>
+  where?: Prisma.FantasyTeamWhereInput
+}
+
+export type FantasyTeamUpdateToOneWithWhereWithoutTradeVotesInput = {
+  where?: Prisma.FantasyTeamWhereInput
+  data: Prisma.XOR<Prisma.FantasyTeamUpdateWithoutTradeVotesInput, Prisma.FantasyTeamUncheckedUpdateWithoutTradeVotesInput>
+}
+
+export type FantasyTeamUpdateWithoutTradeVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  league?: Prisma.LeagueUpdateOneRequiredWithoutTeamsNestedInput
+  membership?: Prisma.LeagueMembershipUpdateOneRequiredWithoutTeamNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+}
+
+export type FantasyTeamUncheckedUpdateWithoutTradeVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  leagueId?: Prisma.StringFieldUpdateOperationsInput | string
+  membershipId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  abbreviation?: Prisma.StringFieldUpdateOperationsInput | string
+  draftSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  waiverPriority?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftSlots?: Prisma.DraftSlotUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  draftQueueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  homeMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutHomeTeamNestedInput
+  awayMatchups?: Prisma.MatchupUncheckedUpdateManyWithoutAwayTeamNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
+  transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
 }
 
 export type FantasyTeamCreateManyLeagueInput = {
@@ -2322,6 +3337,11 @@ export type FantasyTeamUpdateWithoutLeagueInput = {
   transactionsFrom?: Prisma.TransactionUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateWithoutLeagueInput = {
@@ -2345,6 +3365,11 @@ export type FantasyTeamUncheckedUpdateWithoutLeagueInput = {
   transactionsFrom?: Prisma.TransactionUncheckedUpdateManyWithoutFromTeamNestedInput
   transactionsTo?: Prisma.TransactionUncheckedUpdateManyWithoutToTeamNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutFantasyTeamNestedInput
+  proposedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutProposerTeamNestedInput
+  receivedTrades?: Prisma.TradeProposalUncheckedUpdateManyWithoutReceiverTeamNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutFromTeamNestedInput
+  tradeVotes?: Prisma.TradeVoteUncheckedUpdateManyWithoutFantasyTeamNestedInput
 }
 
 export type FantasyTeamUncheckedUpdateManyWithoutLeagueInput = {
@@ -2376,6 +3401,11 @@ export type FantasyTeamCountOutputType = {
   transactionsFrom: number
   transactionsTo: number
   notifications: number
+  streaks: number
+  proposedTrades: number
+  receivedTrades: number
+  tradeAssets: number
+  tradeVotes: number
 }
 
 export type FantasyTeamCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2391,6 +3421,11 @@ export type FantasyTeamCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   transactionsFrom?: boolean | FantasyTeamCountOutputTypeCountTransactionsFromArgs
   transactionsTo?: boolean | FantasyTeamCountOutputTypeCountTransactionsToArgs
   notifications?: boolean | FantasyTeamCountOutputTypeCountNotificationsArgs
+  streaks?: boolean | FantasyTeamCountOutputTypeCountStreaksArgs
+  proposedTrades?: boolean | FantasyTeamCountOutputTypeCountProposedTradesArgs
+  receivedTrades?: boolean | FantasyTeamCountOutputTypeCountReceivedTradesArgs
+  tradeAssets?: boolean | FantasyTeamCountOutputTypeCountTradeAssetsArgs
+  tradeVotes?: boolean | FantasyTeamCountOutputTypeCountTradeVotesArgs
 }
 
 /**
@@ -2487,6 +3522,41 @@ export type FantasyTeamCountOutputTypeCountNotificationsArgs<ExtArgs extends run
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * FantasyTeamCountOutputType without action
+ */
+export type FantasyTeamCountOutputTypeCountStreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StreakWhereInput
+}
+
+/**
+ * FantasyTeamCountOutputType without action
+ */
+export type FantasyTeamCountOutputTypeCountProposedTradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeProposalWhereInput
+}
+
+/**
+ * FantasyTeamCountOutputType without action
+ */
+export type FantasyTeamCountOutputTypeCountReceivedTradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeProposalWhereInput
+}
+
+/**
+ * FantasyTeamCountOutputType without action
+ */
+export type FantasyTeamCountOutputTypeCountTradeAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeAssetWhereInput
+}
+
+/**
+ * FantasyTeamCountOutputType without action
+ */
+export type FantasyTeamCountOutputTypeCountTradeVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeVoteWhereInput
+}
+
 
 export type FantasyTeamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2512,6 +3582,11 @@ export type FantasyTeamSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   transactionsFrom?: boolean | Prisma.FantasyTeam$transactionsFromArgs<ExtArgs>
   transactionsTo?: boolean | Prisma.FantasyTeam$transactionsToArgs<ExtArgs>
   notifications?: boolean | Prisma.FantasyTeam$notificationsArgs<ExtArgs>
+  streaks?: boolean | Prisma.FantasyTeam$streaksArgs<ExtArgs>
+  proposedTrades?: boolean | Prisma.FantasyTeam$proposedTradesArgs<ExtArgs>
+  receivedTrades?: boolean | Prisma.FantasyTeam$receivedTradesArgs<ExtArgs>
+  tradeAssets?: boolean | Prisma.FantasyTeam$tradeAssetsArgs<ExtArgs>
+  tradeVotes?: boolean | Prisma.FantasyTeam$tradeVotesArgs<ExtArgs>
   _count?: boolean | Prisma.FantasyTeamCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fantasyTeam"]>
 
@@ -2571,6 +3646,11 @@ export type FantasyTeamInclude<ExtArgs extends runtime.Types.Extensions.Internal
   transactionsFrom?: boolean | Prisma.FantasyTeam$transactionsFromArgs<ExtArgs>
   transactionsTo?: boolean | Prisma.FantasyTeam$transactionsToArgs<ExtArgs>
   notifications?: boolean | Prisma.FantasyTeam$notificationsArgs<ExtArgs>
+  streaks?: boolean | Prisma.FantasyTeam$streaksArgs<ExtArgs>
+  proposedTrades?: boolean | Prisma.FantasyTeam$proposedTradesArgs<ExtArgs>
+  receivedTrades?: boolean | Prisma.FantasyTeam$receivedTradesArgs<ExtArgs>
+  tradeAssets?: boolean | Prisma.FantasyTeam$tradeAssetsArgs<ExtArgs>
+  tradeVotes?: boolean | Prisma.FantasyTeam$tradeVotesArgs<ExtArgs>
   _count?: boolean | Prisma.FantasyTeamCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FantasyTeamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2599,6 +3679,11 @@ export type $FantasyTeamPayload<ExtArgs extends runtime.Types.Extensions.Interna
     transactionsFrom: Prisma.$TransactionPayload<ExtArgs>[]
     transactionsTo: Prisma.$TransactionPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    streaks: Prisma.$StreakPayload<ExtArgs>[]
+    proposedTrades: Prisma.$TradeProposalPayload<ExtArgs>[]
+    receivedTrades: Prisma.$TradeProposalPayload<ExtArgs>[]
+    tradeAssets: Prisma.$TradeAssetPayload<ExtArgs>[]
+    tradeVotes: Prisma.$TradeVotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3018,6 +4103,11 @@ export interface Prisma__FantasyTeamClient<T, Null = never, ExtArgs extends runt
   transactionsFrom<T extends Prisma.FantasyTeam$transactionsFromArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$transactionsFromArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactionsTo<T extends Prisma.FantasyTeam$transactionsToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$transactionsToArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.FantasyTeam$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  streaks<T extends Prisma.FantasyTeam$streaksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$streaksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StreakPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  proposedTrades<T extends Prisma.FantasyTeam$proposedTradesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$proposedTradesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  receivedTrades<T extends Prisma.FantasyTeam$receivedTradesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$receivedTradesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeAssets<T extends Prisma.FantasyTeam$tradeAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$tradeAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeVotes<T extends Prisma.FantasyTeam$tradeVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FantasyTeam$tradeVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3742,6 +4832,126 @@ export type FantasyTeam$notificationsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * FantasyTeam.streaks
+ */
+export type FantasyTeam$streaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Streak
+   */
+  select?: Prisma.StreakSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Streak
+   */
+  omit?: Prisma.StreakOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StreakInclude<ExtArgs> | null
+  where?: Prisma.StreakWhereInput
+  orderBy?: Prisma.StreakOrderByWithRelationInput | Prisma.StreakOrderByWithRelationInput[]
+  cursor?: Prisma.StreakWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StreakScalarFieldEnum | Prisma.StreakScalarFieldEnum[]
+}
+
+/**
+ * FantasyTeam.proposedTrades
+ */
+export type FantasyTeam$proposedTradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeProposal
+   */
+  select?: Prisma.TradeProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeProposal
+   */
+  omit?: Prisma.TradeProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeProposalInclude<ExtArgs> | null
+  where?: Prisma.TradeProposalWhereInput
+  orderBy?: Prisma.TradeProposalOrderByWithRelationInput | Prisma.TradeProposalOrderByWithRelationInput[]
+  cursor?: Prisma.TradeProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeProposalScalarFieldEnum | Prisma.TradeProposalScalarFieldEnum[]
+}
+
+/**
+ * FantasyTeam.receivedTrades
+ */
+export type FantasyTeam$receivedTradesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeProposal
+   */
+  select?: Prisma.TradeProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeProposal
+   */
+  omit?: Prisma.TradeProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeProposalInclude<ExtArgs> | null
+  where?: Prisma.TradeProposalWhereInput
+  orderBy?: Prisma.TradeProposalOrderByWithRelationInput | Prisma.TradeProposalOrderByWithRelationInput[]
+  cursor?: Prisma.TradeProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeProposalScalarFieldEnum | Prisma.TradeProposalScalarFieldEnum[]
+}
+
+/**
+ * FantasyTeam.tradeAssets
+ */
+export type FantasyTeam$tradeAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeAsset
+   */
+  select?: Prisma.TradeAssetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeAsset
+   */
+  omit?: Prisma.TradeAssetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeAssetInclude<ExtArgs> | null
+  where?: Prisma.TradeAssetWhereInput
+  orderBy?: Prisma.TradeAssetOrderByWithRelationInput | Prisma.TradeAssetOrderByWithRelationInput[]
+  cursor?: Prisma.TradeAssetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeAssetScalarFieldEnum | Prisma.TradeAssetScalarFieldEnum[]
+}
+
+/**
+ * FantasyTeam.tradeVotes
+ */
+export type FantasyTeam$tradeVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeVote
+   */
+  select?: Prisma.TradeVoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeVote
+   */
+  omit?: Prisma.TradeVoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeVoteInclude<ExtArgs> | null
+  where?: Prisma.TradeVoteWhereInput
+  orderBy?: Prisma.TradeVoteOrderByWithRelationInput | Prisma.TradeVoteOrderByWithRelationInput[]
+  cursor?: Prisma.TradeVoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeVoteScalarFieldEnum | Prisma.TradeVoteScalarFieldEnum[]
 }
 
 /**

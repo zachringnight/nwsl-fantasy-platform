@@ -212,3 +212,33 @@ export type ScoringOverride = Prisma.ScoringOverrideModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model Achievement
+ * 
+ */
+export type Achievement = Prisma.AchievementModel
+/**
+ * Model Streak
+ * 
+ */
+export type Streak = Prisma.StreakModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
+/**
+ * Model TradeProposal
+ * 
+ */
+export type TradeProposal = Prisma.TradeProposalModel
+/**
+ * Model TradeAsset
+ * 
+ */
+export type TradeAsset = Prisma.TradeAssetModel
+/**
+ * Model TradeVote
+ * 
+ */
+export type TradeVote = Prisma.TradeVoteModel

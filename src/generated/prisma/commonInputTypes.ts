@@ -800,6 +800,57 @@ export type EnumAuditActorTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAuditActorTypeFilter<$PrismaModel>
 }
 
+export type EnumAchievementKeyFilter<$PrismaModel = never> = {
+  equals?: $Enums.AchievementKey | Prisma.EnumAchievementKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAchievementKeyFilter<$PrismaModel> | $Enums.AchievementKey
+}
+
+export type EnumAchievementKeyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AchievementKey | Prisma.EnumAchievementKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAchievementKeyWithAggregatesFilter<$PrismaModel> | $Enums.AchievementKey
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAchievementKeyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAchievementKeyFilter<$PrismaModel>
+}
+
+export type EnumTradeProposalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeProposalStatus | Prisma.EnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeProposalStatusFilter<$PrismaModel> | $Enums.TradeProposalStatus
+}
+
+export type EnumTradeProposalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeProposalStatus | Prisma.EnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeProposalStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeProposalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeProposalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeProposalStatusFilter<$PrismaModel>
+}
+
+export type EnumTradeVoteDecisionFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeVoteDecision | Prisma.EnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeVoteDecisionFilter<$PrismaModel> | $Enums.TradeVoteDecision
+}
+
+export type EnumTradeVoteDecisionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeVoteDecision | Prisma.EnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeVoteDecisionWithAggregatesFilter<$PrismaModel> | $Enums.TradeVoteDecision
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeVoteDecisionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeVoteDecisionFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1521,6 +1572,57 @@ export type NestedEnumAuditActorTypeWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAuditActorTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAuditActorTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumAchievementKeyFilter<$PrismaModel = never> = {
+  equals?: $Enums.AchievementKey | Prisma.EnumAchievementKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAchievementKeyFilter<$PrismaModel> | $Enums.AchievementKey
+}
+
+export type NestedEnumAchievementKeyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AchievementKey | Prisma.EnumAchievementKeyFieldRefInput<$PrismaModel>
+  in?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AchievementKey[] | Prisma.ListEnumAchievementKeyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAchievementKeyWithAggregatesFilter<$PrismaModel> | $Enums.AchievementKey
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAchievementKeyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAchievementKeyFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeProposalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeProposalStatus | Prisma.EnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeProposalStatusFilter<$PrismaModel> | $Enums.TradeProposalStatus
+}
+
+export type NestedEnumTradeProposalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeProposalStatus | Prisma.EnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeProposalStatus[] | Prisma.ListEnumTradeProposalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeProposalStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeProposalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeProposalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeProposalStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeVoteDecisionFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeVoteDecision | Prisma.EnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeVoteDecisionFilter<$PrismaModel> | $Enums.TradeVoteDecision
+}
+
+export type NestedEnumTradeVoteDecisionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeVoteDecision | Prisma.EnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeVoteDecision[] | Prisma.ListEnumTradeVoteDecisionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeVoteDecisionWithAggregatesFilter<$PrismaModel> | $Enums.TradeVoteDecision
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeVoteDecisionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeVoteDecisionFilter<$PrismaModel>
 }
 
 
