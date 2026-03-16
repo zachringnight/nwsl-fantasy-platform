@@ -61,11 +61,6 @@ describe("SignupLocalForm", () => {
     expect(screen.getByText("Sign up with email")).toBeInTheDocument();
   });
 
-  it("renders Google signup option", () => {
-    render(<SignupLocalForm />);
-    expect(screen.getByText("Continue with Google")).toBeInTheDocument();
-  });
-
   it("switches to email form when email button clicked", () => {
     render(<SignupLocalForm />);
     fireEvent.click(screen.getByText("Sign up with email"));

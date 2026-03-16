@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Chrome, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
@@ -153,32 +153,6 @@ export function SignupLocalForm() {
     }
   }
 
-  async function handleGoogleSignup() {
-    setError("");
-
-    if (!supabaseReady) {
-      setError("Google sign-up requires a hosted connection. Use email or guest sign-up instead.");
-      return;
-    }
-
-    try {
-      const supabase = getSupabaseBrowserClient();
-      const { error: authError } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/onboarding`,
-        },
-      });
-
-      if (authError) {
-        throw authError;
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to start Google sign-up."
-      );
-    }
-  }
 
   if (signupMode === "email") {
     return (
@@ -270,14 +244,6 @@ export function SignupLocalForm() {
           >
             <Mail className="size-4" />
             Sign up with email
-          </button>
-          <button
-            className={getButtonClassName({ variant: "secondary", fullWidth: true })}
-            onClick={handleGoogleSignup}
-            type="button"
-          >
-            <Chrome className="size-4" />
-            Continue with Google
           </button>
         </div>
       </form>

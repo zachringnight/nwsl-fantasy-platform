@@ -7,8 +7,8 @@
 
 type AnalyticsEvent =
   | { name: "page_view"; properties: { path: string; referrer?: string } }
-  | { name: "sign_up"; properties: { method: "email" | "google" | "guest" } }
-  | { name: "sign_in"; properties: { method: "email" | "google" | "guest" } }
+  | { name: "sign_up"; properties: { method: "email" | "guest" } }
+  | { name: "sign_in"; properties: { method: "email" | "guest" } }
   | { name: "league_created"; properties: { variant: string; build_mode: string } }
   | { name: "league_joined"; properties: { league_id: string } }
   | { name: "draft_pick"; properties: { league_id: string; player_id: string; pick_number: number } }

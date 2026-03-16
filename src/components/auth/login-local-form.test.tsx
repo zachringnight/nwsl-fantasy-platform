@@ -49,7 +49,6 @@ describe("LoginLocalForm", () => {
   it("renders sign-in options in choice mode", () => {
     render(<LoginLocalForm />);
     expect(screen.getByText("Sign in with email")).toBeInTheDocument();
-    expect(screen.getByText("Continue with Google")).toBeInTheDocument();
     expect(screen.getByText("Quick guest session")).toBeInTheDocument();
   });
 
