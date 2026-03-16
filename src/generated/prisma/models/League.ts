@@ -282,6 +282,10 @@ export type LeagueWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  achievements?: Prisma.AchievementListRelationFilter
+  streaks?: Prisma.StreakListRelationFilter
+  chatMessages?: Prisma.ChatMessageListRelationFilter
+  tradeProposals?: Prisma.TradeProposalListRelationFilter
 }
 
 export type LeagueOrderByWithRelationInput = {
@@ -310,6 +314,10 @@ export type LeagueOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   scoringOverrides?: Prisma.ScoringOverrideOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  achievements?: Prisma.AchievementOrderByRelationAggregateInput
+  streaks?: Prisma.StreakOrderByRelationAggregateInput
+  chatMessages?: Prisma.ChatMessageOrderByRelationAggregateInput
+  tradeProposals?: Prisma.TradeProposalOrderByRelationAggregateInput
 }
 
 export type LeagueWhereUniqueInput = Prisma.AtLeast<{
@@ -341,6 +349,10 @@ export type LeagueWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  achievements?: Prisma.AchievementListRelationFilter
+  streaks?: Prisma.StreakListRelationFilter
+  chatMessages?: Prisma.ChatMessageListRelationFilter
+  tradeProposals?: Prisma.TradeProposalListRelationFilter
 }, "id" | "slug">
 
 export type LeagueOrderByWithAggregationInput = {
@@ -404,6 +416,10 @@ export type LeagueCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateInput = {
@@ -431,6 +447,10 @@ export type LeagueUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUpdateInput = {
@@ -458,6 +478,10 @@ export type LeagueUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateInput = {
@@ -485,6 +509,10 @@ export type LeagueUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateManyInput = {
@@ -844,6 +872,64 @@ export type LeagueUpdateOneWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.LeagueUpdateWithoutAuditLogsInput>, Prisma.LeagueUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type LeagueCreateNestedOneWithoutAchievementsInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutAchievementsInput, Prisma.LeagueUncheckedCreateWithoutAchievementsInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutAchievementsInput
+  connect?: Prisma.LeagueWhereUniqueInput
+}
+
+export type LeagueUpdateOneWithoutAchievementsNestedInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutAchievementsInput, Prisma.LeagueUncheckedCreateWithoutAchievementsInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutAchievementsInput
+  upsert?: Prisma.LeagueUpsertWithoutAchievementsInput
+  disconnect?: Prisma.LeagueWhereInput | boolean
+  delete?: Prisma.LeagueWhereInput | boolean
+  connect?: Prisma.LeagueWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutAchievementsInput, Prisma.LeagueUpdateWithoutAchievementsInput>, Prisma.LeagueUncheckedUpdateWithoutAchievementsInput>
+}
+
+export type LeagueCreateNestedOneWithoutStreaksInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutStreaksInput, Prisma.LeagueUncheckedCreateWithoutStreaksInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutStreaksInput
+  connect?: Prisma.LeagueWhereUniqueInput
+}
+
+export type LeagueUpdateOneRequiredWithoutStreaksNestedInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutStreaksInput, Prisma.LeagueUncheckedCreateWithoutStreaksInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutStreaksInput
+  upsert?: Prisma.LeagueUpsertWithoutStreaksInput
+  connect?: Prisma.LeagueWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutStreaksInput, Prisma.LeagueUpdateWithoutStreaksInput>, Prisma.LeagueUncheckedUpdateWithoutStreaksInput>
+}
+
+export type LeagueCreateNestedOneWithoutChatMessagesInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutChatMessagesInput, Prisma.LeagueUncheckedCreateWithoutChatMessagesInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutChatMessagesInput
+  connect?: Prisma.LeagueWhereUniqueInput
+}
+
+export type LeagueUpdateOneRequiredWithoutChatMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutChatMessagesInput, Prisma.LeagueUncheckedCreateWithoutChatMessagesInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutChatMessagesInput
+  upsert?: Prisma.LeagueUpsertWithoutChatMessagesInput
+  connect?: Prisma.LeagueWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutChatMessagesInput, Prisma.LeagueUpdateWithoutChatMessagesInput>, Prisma.LeagueUncheckedUpdateWithoutChatMessagesInput>
+}
+
+export type LeagueCreateNestedOneWithoutTradeProposalsInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutTradeProposalsInput, Prisma.LeagueUncheckedCreateWithoutTradeProposalsInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutTradeProposalsInput
+  connect?: Prisma.LeagueWhereUniqueInput
+}
+
+export type LeagueUpdateOneRequiredWithoutTradeProposalsNestedInput = {
+  create?: Prisma.XOR<Prisma.LeagueCreateWithoutTradeProposalsInput, Prisma.LeagueUncheckedCreateWithoutTradeProposalsInput>
+  connectOrCreate?: Prisma.LeagueCreateOrConnectWithoutTradeProposalsInput
+  upsert?: Prisma.LeagueUpsertWithoutTradeProposalsInput
+  connect?: Prisma.LeagueWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LeagueUpdateToOneWithWhereWithoutTradeProposalsInput, Prisma.LeagueUpdateWithoutTradeProposalsInput>, Prisma.LeagueUncheckedUpdateWithoutTradeProposalsInput>
+}
+
 export type LeagueCreateWithoutCommissionerInput = {
   id?: string
   name: string
@@ -868,6 +954,10 @@ export type LeagueCreateWithoutCommissionerInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutCommissionerInput = {
@@ -894,6 +984,10 @@ export type LeagueUncheckedCreateWithoutCommissionerInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutCommissionerInput = {
@@ -963,6 +1057,10 @@ export type LeagueCreateWithoutSettingsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutSettingsInput = {
@@ -989,6 +1087,10 @@ export type LeagueUncheckedCreateWithoutSettingsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutSettingsInput = {
@@ -1031,6 +1133,10 @@ export type LeagueUpdateWithoutSettingsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutSettingsInput = {
@@ -1057,6 +1163,10 @@ export type LeagueUncheckedUpdateWithoutSettingsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutInvitesInput = {
@@ -1083,6 +1193,10 @@ export type LeagueCreateWithoutInvitesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutInvitesInput = {
@@ -1109,6 +1223,10 @@ export type LeagueUncheckedCreateWithoutInvitesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutInvitesInput = {
@@ -1151,6 +1269,10 @@ export type LeagueUpdateWithoutInvitesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutInvitesInput = {
@@ -1177,6 +1299,10 @@ export type LeagueUncheckedUpdateWithoutInvitesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutMembershipsInput = {
@@ -1203,6 +1329,10 @@ export type LeagueCreateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutMembershipsInput = {
@@ -1229,6 +1359,10 @@ export type LeagueUncheckedCreateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutMembershipsInput = {
@@ -1271,6 +1405,10 @@ export type LeagueUpdateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutMembershipsInput = {
@@ -1297,6 +1435,10 @@ export type LeagueUncheckedUpdateWithoutMembershipsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutTeamsInput = {
@@ -1323,6 +1465,10 @@ export type LeagueCreateWithoutTeamsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutTeamsInput = {
@@ -1349,6 +1495,10 @@ export type LeagueUncheckedCreateWithoutTeamsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutTeamsInput = {
@@ -1391,6 +1541,10 @@ export type LeagueUpdateWithoutTeamsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutTeamsInput = {
@@ -1417,6 +1571,10 @@ export type LeagueUncheckedUpdateWithoutTeamsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutWeeksInput = {
@@ -1443,6 +1601,10 @@ export type LeagueCreateWithoutWeeksInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutWeeksInput = {
@@ -1469,6 +1631,10 @@ export type LeagueUncheckedCreateWithoutWeeksInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutWeeksInput = {
@@ -1511,6 +1677,10 @@ export type LeagueUpdateWithoutWeeksInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutWeeksInput = {
@@ -1537,6 +1707,10 @@ export type LeagueUncheckedUpdateWithoutWeeksInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutDraftInput = {
@@ -1563,6 +1737,10 @@ export type LeagueCreateWithoutDraftInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutDraftInput = {
@@ -1589,6 +1767,10 @@ export type LeagueUncheckedCreateWithoutDraftInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutDraftInput = {
@@ -1631,6 +1813,10 @@ export type LeagueUpdateWithoutDraftInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutDraftInput = {
@@ -1657,6 +1843,10 @@ export type LeagueUncheckedUpdateWithoutDraftInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutPointSnapshotsInput = {
@@ -1683,6 +1873,10 @@ export type LeagueCreateWithoutPointSnapshotsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutPointSnapshotsInput = {
@@ -1709,6 +1903,10 @@ export type LeagueUncheckedCreateWithoutPointSnapshotsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutPointSnapshotsInput = {
@@ -1751,6 +1949,10 @@ export type LeagueUpdateWithoutPointSnapshotsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutPointSnapshotsInput = {
@@ -1777,6 +1979,10 @@ export type LeagueUncheckedUpdateWithoutPointSnapshotsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutStandingsInput = {
@@ -1803,6 +2009,10 @@ export type LeagueCreateWithoutStandingsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutStandingsInput = {
@@ -1829,6 +2039,10 @@ export type LeagueUncheckedCreateWithoutStandingsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutStandingsInput = {
@@ -1871,6 +2085,10 @@ export type LeagueUpdateWithoutStandingsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutStandingsInput = {
@@ -1897,6 +2115,10 @@ export type LeagueUncheckedUpdateWithoutStandingsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutTransactionsInput = {
@@ -1923,6 +2145,10 @@ export type LeagueCreateWithoutTransactionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutTransactionsInput = {
@@ -1949,6 +2175,10 @@ export type LeagueUncheckedCreateWithoutTransactionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutTransactionsInput = {
@@ -1991,6 +2221,10 @@ export type LeagueUpdateWithoutTransactionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutTransactionsInput = {
@@ -2017,6 +2251,10 @@ export type LeagueUncheckedUpdateWithoutTransactionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutWaiverClaimsInput = {
@@ -2043,6 +2281,10 @@ export type LeagueCreateWithoutWaiverClaimsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutWaiverClaimsInput = {
@@ -2069,6 +2311,10 @@ export type LeagueUncheckedCreateWithoutWaiverClaimsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutWaiverClaimsInput = {
@@ -2111,6 +2357,10 @@ export type LeagueUpdateWithoutWaiverClaimsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutWaiverClaimsInput = {
@@ -2137,6 +2387,10 @@ export type LeagueUncheckedUpdateWithoutWaiverClaimsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutNotificationsInput = {
@@ -2163,6 +2417,10 @@ export type LeagueCreateWithoutNotificationsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutNotificationsInput = {
@@ -2189,6 +2447,10 @@ export type LeagueUncheckedCreateWithoutNotificationsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutNotificationsInput = {
@@ -2231,6 +2493,10 @@ export type LeagueUpdateWithoutNotificationsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutNotificationsInput = {
@@ -2257,6 +2523,10 @@ export type LeagueUncheckedUpdateWithoutNotificationsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutScoringOverridesInput = {
@@ -2283,6 +2553,10 @@ export type LeagueCreateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutScoringOverridesInput = {
@@ -2309,6 +2583,10 @@ export type LeagueUncheckedCreateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutScoringOverridesInput = {
@@ -2351,6 +2629,10 @@ export type LeagueUpdateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutScoringOverridesInput = {
@@ -2377,6 +2659,10 @@ export type LeagueUncheckedUpdateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateWithoutAuditLogsInput = {
@@ -2403,6 +2689,10 @@ export type LeagueCreateWithoutAuditLogsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueUncheckedCreateWithoutAuditLogsInput = {
@@ -2429,6 +2719,10 @@ export type LeagueUncheckedCreateWithoutAuditLogsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
 }
 
 export type LeagueCreateOrConnectWithoutAuditLogsInput = {
@@ -2471,6 +2765,10 @@ export type LeagueUpdateWithoutAuditLogsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutAuditLogsInput = {
@@ -2497,6 +2795,554 @@ export type LeagueUncheckedUpdateWithoutAuditLogsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueCreateWithoutAchievementsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  commissioner: Prisma.UserCreateNestedOneWithoutCommissionedLeaguesInput
+  settings?: Prisma.LeagueSettingsCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueUncheckedCreateWithoutAchievementsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  commissionerId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.LeagueSettingsUncheckedCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamUncheckedCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekUncheckedCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftUncheckedCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueCreateOrConnectWithoutAchievementsInput = {
+  where: Prisma.LeagueWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutAchievementsInput, Prisma.LeagueUncheckedCreateWithoutAchievementsInput>
+}
+
+export type LeagueUpsertWithoutAchievementsInput = {
+  update: Prisma.XOR<Prisma.LeagueUpdateWithoutAchievementsInput, Prisma.LeagueUncheckedUpdateWithoutAchievementsInput>
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutAchievementsInput, Prisma.LeagueUncheckedCreateWithoutAchievementsInput>
+  where?: Prisma.LeagueWhereInput
+}
+
+export type LeagueUpdateToOneWithWhereWithoutAchievementsInput = {
+  where?: Prisma.LeagueWhereInput
+  data: Prisma.XOR<Prisma.LeagueUpdateWithoutAchievementsInput, Prisma.LeagueUncheckedUpdateWithoutAchievementsInput>
+}
+
+export type LeagueUpdateWithoutAchievementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commissioner?: Prisma.UserUpdateOneRequiredWithoutCommissionedLeaguesNestedInput
+  settings?: Prisma.LeagueSettingsUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueUncheckedUpdateWithoutAchievementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  commissionerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.LeagueSettingsUncheckedUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUncheckedUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUncheckedUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUncheckedUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueCreateWithoutStreaksInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  commissioner: Prisma.UserCreateNestedOneWithoutCommissionedLeaguesInput
+  settings?: Prisma.LeagueSettingsCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueUncheckedCreateWithoutStreaksInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  commissionerId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.LeagueSettingsUncheckedCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamUncheckedCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekUncheckedCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftUncheckedCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueCreateOrConnectWithoutStreaksInput = {
+  where: Prisma.LeagueWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutStreaksInput, Prisma.LeagueUncheckedCreateWithoutStreaksInput>
+}
+
+export type LeagueUpsertWithoutStreaksInput = {
+  update: Prisma.XOR<Prisma.LeagueUpdateWithoutStreaksInput, Prisma.LeagueUncheckedUpdateWithoutStreaksInput>
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutStreaksInput, Prisma.LeagueUncheckedCreateWithoutStreaksInput>
+  where?: Prisma.LeagueWhereInput
+}
+
+export type LeagueUpdateToOneWithWhereWithoutStreaksInput = {
+  where?: Prisma.LeagueWhereInput
+  data: Prisma.XOR<Prisma.LeagueUpdateWithoutStreaksInput, Prisma.LeagueUncheckedUpdateWithoutStreaksInput>
+}
+
+export type LeagueUpdateWithoutStreaksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commissioner?: Prisma.UserUpdateOneRequiredWithoutCommissionedLeaguesNestedInput
+  settings?: Prisma.LeagueSettingsUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueUncheckedUpdateWithoutStreaksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  commissionerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.LeagueSettingsUncheckedUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUncheckedUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUncheckedUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUncheckedUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueCreateWithoutChatMessagesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  commissioner: Prisma.UserCreateNestedOneWithoutCommissionedLeaguesInput
+  settings?: Prisma.LeagueSettingsCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueUncheckedCreateWithoutChatMessagesInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  commissionerId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.LeagueSettingsUncheckedCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamUncheckedCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekUncheckedCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftUncheckedCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  tradeProposals?: Prisma.TradeProposalUncheckedCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueCreateOrConnectWithoutChatMessagesInput = {
+  where: Prisma.LeagueWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutChatMessagesInput, Prisma.LeagueUncheckedCreateWithoutChatMessagesInput>
+}
+
+export type LeagueUpsertWithoutChatMessagesInput = {
+  update: Prisma.XOR<Prisma.LeagueUpdateWithoutChatMessagesInput, Prisma.LeagueUncheckedUpdateWithoutChatMessagesInput>
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutChatMessagesInput, Prisma.LeagueUncheckedCreateWithoutChatMessagesInput>
+  where?: Prisma.LeagueWhereInput
+}
+
+export type LeagueUpdateToOneWithWhereWithoutChatMessagesInput = {
+  where?: Prisma.LeagueWhereInput
+  data: Prisma.XOR<Prisma.LeagueUpdateWithoutChatMessagesInput, Prisma.LeagueUncheckedUpdateWithoutChatMessagesInput>
+}
+
+export type LeagueUpdateWithoutChatMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commissioner?: Prisma.UserUpdateOneRequiredWithoutCommissionedLeaguesNestedInput
+  settings?: Prisma.LeagueSettingsUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueUncheckedUpdateWithoutChatMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  commissionerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.LeagueSettingsUncheckedUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUncheckedUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUncheckedUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUncheckedUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueCreateWithoutTradeProposalsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  commissioner: Prisma.UserCreateNestedOneWithoutCommissionedLeaguesInput
+  settings?: Prisma.LeagueSettingsCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueUncheckedCreateWithoutTradeProposalsInput = {
+  id?: string
+  name: string
+  slug: string
+  description?: string | null
+  privacy?: $Enums.LeaguePrivacy
+  status?: $Enums.LeagueStatus
+  seasonYear?: number
+  managerCountTarget?: number
+  commissionerId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.LeagueSettingsUncheckedCreateNestedOneWithoutLeagueInput
+  invites?: Prisma.LeagueInviteUncheckedCreateNestedManyWithoutLeagueInput
+  memberships?: Prisma.LeagueMembershipUncheckedCreateNestedManyWithoutLeagueInput
+  teams?: Prisma.FantasyTeamUncheckedCreateNestedManyWithoutLeagueInput
+  weeks?: Prisma.LeagueWeekUncheckedCreateNestedManyWithoutLeagueInput
+  draft?: Prisma.DraftUncheckedCreateNestedOneWithoutLeagueInput
+  standings?: Prisma.StandingEntryUncheckedCreateNestedManyWithoutLeagueInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutLeagueInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutLeagueInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutLeagueInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutLeagueInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutLeagueInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutLeagueInput
+  achievements?: Prisma.AchievementUncheckedCreateNestedManyWithoutLeagueInput
+  streaks?: Prisma.StreakUncheckedCreateNestedManyWithoutLeagueInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutLeagueInput
+}
+
+export type LeagueCreateOrConnectWithoutTradeProposalsInput = {
+  where: Prisma.LeagueWhereUniqueInput
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutTradeProposalsInput, Prisma.LeagueUncheckedCreateWithoutTradeProposalsInput>
+}
+
+export type LeagueUpsertWithoutTradeProposalsInput = {
+  update: Prisma.XOR<Prisma.LeagueUpdateWithoutTradeProposalsInput, Prisma.LeagueUncheckedUpdateWithoutTradeProposalsInput>
+  create: Prisma.XOR<Prisma.LeagueCreateWithoutTradeProposalsInput, Prisma.LeagueUncheckedCreateWithoutTradeProposalsInput>
+  where?: Prisma.LeagueWhereInput
+}
+
+export type LeagueUpdateToOneWithWhereWithoutTradeProposalsInput = {
+  where?: Prisma.LeagueWhereInput
+  data: Prisma.XOR<Prisma.LeagueUpdateWithoutTradeProposalsInput, Prisma.LeagueUncheckedUpdateWithoutTradeProposalsInput>
+}
+
+export type LeagueUpdateWithoutTradeProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  commissioner?: Prisma.UserUpdateOneRequiredWithoutCommissionedLeaguesNestedInput
+  settings?: Prisma.LeagueSettingsUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+}
+
+export type LeagueUncheckedUpdateWithoutTradeProposalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacy?: Prisma.EnumLeaguePrivacyFieldUpdateOperationsInput | $Enums.LeaguePrivacy
+  status?: Prisma.EnumLeagueStatusFieldUpdateOperationsInput | $Enums.LeagueStatus
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  managerCountTarget?: Prisma.IntFieldUpdateOperationsInput | number
+  commissionerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.LeagueSettingsUncheckedUpdateOneWithoutLeagueNestedInput
+  invites?: Prisma.LeagueInviteUncheckedUpdateManyWithoutLeagueNestedInput
+  memberships?: Prisma.LeagueMembershipUncheckedUpdateManyWithoutLeagueNestedInput
+  teams?: Prisma.FantasyTeamUncheckedUpdateManyWithoutLeagueNestedInput
+  weeks?: Prisma.LeagueWeekUncheckedUpdateManyWithoutLeagueNestedInput
+  draft?: Prisma.DraftUncheckedUpdateOneWithoutLeagueNestedInput
+  standings?: Prisma.StandingEntryUncheckedUpdateManyWithoutLeagueNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutLeagueNestedInput
+  waiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutLeagueNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutLeagueNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueCreateManyCommissionerInput = {
@@ -2536,6 +3382,10 @@ export type LeagueUpdateWithoutCommissionerInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateWithoutCommissionerInput = {
@@ -2562,6 +3412,10 @@ export type LeagueUncheckedUpdateWithoutCommissionerInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutLeagueNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutLeagueNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutLeagueNestedInput
+  achievements?: Prisma.AchievementUncheckedUpdateManyWithoutLeagueNestedInput
+  streaks?: Prisma.StreakUncheckedUpdateManyWithoutLeagueNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutLeagueNestedInput
+  tradeProposals?: Prisma.TradeProposalUncheckedUpdateManyWithoutLeagueNestedInput
 }
 
 export type LeagueUncheckedUpdateManyWithoutCommissionerInput = {
@@ -2594,6 +3448,10 @@ export type LeagueCountOutputType = {
   notifications: number
   scoringOverrides: number
   auditLogs: number
+  achievements: number
+  streaks: number
+  chatMessages: number
+  tradeProposals: number
 }
 
 export type LeagueCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2608,6 +3466,10 @@ export type LeagueCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   notifications?: boolean | LeagueCountOutputTypeCountNotificationsArgs
   scoringOverrides?: boolean | LeagueCountOutputTypeCountScoringOverridesArgs
   auditLogs?: boolean | LeagueCountOutputTypeCountAuditLogsArgs
+  achievements?: boolean | LeagueCountOutputTypeCountAchievementsArgs
+  streaks?: boolean | LeagueCountOutputTypeCountStreaksArgs
+  chatMessages?: boolean | LeagueCountOutputTypeCountChatMessagesArgs
+  tradeProposals?: boolean | LeagueCountOutputTypeCountTradeProposalsArgs
 }
 
 /**
@@ -2697,6 +3559,34 @@ export type LeagueCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * LeagueCountOutputType without action
+ */
+export type LeagueCountOutputTypeCountAchievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AchievementWhereInput
+}
+
+/**
+ * LeagueCountOutputType without action
+ */
+export type LeagueCountOutputTypeCountStreaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StreakWhereInput
+}
+
+/**
+ * LeagueCountOutputType without action
+ */
+export type LeagueCountOutputTypeCountChatMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChatMessageWhereInput
+}
+
+/**
+ * LeagueCountOutputType without action
+ */
+export type LeagueCountOutputTypeCountTradeProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeProposalWhereInput
+}
+
 
 export type LeagueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2724,6 +3614,10 @@ export type LeagueSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   notifications?: boolean | Prisma.League$notificationsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.League$scoringOverridesArgs<ExtArgs>
   auditLogs?: boolean | Prisma.League$auditLogsArgs<ExtArgs>
+  achievements?: boolean | Prisma.League$achievementsArgs<ExtArgs>
+  streaks?: boolean | Prisma.League$streaksArgs<ExtArgs>
+  chatMessages?: boolean | Prisma.League$chatMessagesArgs<ExtArgs>
+  tradeProposals?: boolean | Prisma.League$tradeProposalsArgs<ExtArgs>
   _count?: boolean | Prisma.LeagueCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["league"]>
 
@@ -2787,6 +3681,10 @@ export type LeagueInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   notifications?: boolean | Prisma.League$notificationsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.League$scoringOverridesArgs<ExtArgs>
   auditLogs?: boolean | Prisma.League$auditLogsArgs<ExtArgs>
+  achievements?: boolean | Prisma.League$achievementsArgs<ExtArgs>
+  streaks?: boolean | Prisma.League$streaksArgs<ExtArgs>
+  chatMessages?: boolean | Prisma.League$chatMessagesArgs<ExtArgs>
+  tradeProposals?: boolean | Prisma.League$tradeProposalsArgs<ExtArgs>
   _count?: boolean | Prisma.LeagueCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LeagueIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2813,6 +3711,10 @@ export type $LeaguePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     scoringOverrides: Prisma.$ScoringOverridePayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    achievements: Prisma.$AchievementPayload<ExtArgs>[]
+    streaks: Prisma.$StreakPayload<ExtArgs>[]
+    chatMessages: Prisma.$ChatMessagePayload<ExtArgs>[]
+    tradeProposals: Prisma.$TradeProposalPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3234,6 +4136,10 @@ export interface Prisma__LeagueClient<T, Null = never, ExtArgs extends runtime.T
   notifications<T extends Prisma.League$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scoringOverrides<T extends Prisma.League$scoringOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$scoringOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoringOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.League$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  achievements<T extends Prisma.League$achievementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  streaks<T extends Prisma.League$streaksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$streaksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StreakPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chatMessages<T extends Prisma.League$chatMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$chatMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChatMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeProposals<T extends Prisma.League$tradeProposalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.League$tradeProposalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeProposalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3974,6 +4880,102 @@ export type League$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * League.achievements
+ */
+export type League$achievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Achievement
+   */
+  select?: Prisma.AchievementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Achievement
+   */
+  omit?: Prisma.AchievementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AchievementInclude<ExtArgs> | null
+  where?: Prisma.AchievementWhereInput
+  orderBy?: Prisma.AchievementOrderByWithRelationInput | Prisma.AchievementOrderByWithRelationInput[]
+  cursor?: Prisma.AchievementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AchievementScalarFieldEnum | Prisma.AchievementScalarFieldEnum[]
+}
+
+/**
+ * League.streaks
+ */
+export type League$streaksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Streak
+   */
+  select?: Prisma.StreakSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Streak
+   */
+  omit?: Prisma.StreakOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StreakInclude<ExtArgs> | null
+  where?: Prisma.StreakWhereInput
+  orderBy?: Prisma.StreakOrderByWithRelationInput | Prisma.StreakOrderByWithRelationInput[]
+  cursor?: Prisma.StreakWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StreakScalarFieldEnum | Prisma.StreakScalarFieldEnum[]
+}
+
+/**
+ * League.chatMessages
+ */
+export type League$chatMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChatMessage
+   */
+  select?: Prisma.ChatMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChatMessage
+   */
+  omit?: Prisma.ChatMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChatMessageInclude<ExtArgs> | null
+  where?: Prisma.ChatMessageWhereInput
+  orderBy?: Prisma.ChatMessageOrderByWithRelationInput | Prisma.ChatMessageOrderByWithRelationInput[]
+  cursor?: Prisma.ChatMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChatMessageScalarFieldEnum | Prisma.ChatMessageScalarFieldEnum[]
+}
+
+/**
+ * League.tradeProposals
+ */
+export type League$tradeProposalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeProposal
+   */
+  select?: Prisma.TradeProposalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeProposal
+   */
+  omit?: Prisma.TradeProposalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeProposalInclude<ExtArgs> | null
+  where?: Prisma.TradeProposalWhereInput
+  orderBy?: Prisma.TradeProposalOrderByWithRelationInput | Prisma.TradeProposalOrderByWithRelationInput[]
+  cursor?: Prisma.TradeProposalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeProposalScalarFieldEnum | Prisma.TradeProposalScalarFieldEnum[]
 }
 
 /**
