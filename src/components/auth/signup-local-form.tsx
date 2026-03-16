@@ -112,30 +112,25 @@ export function SignupLocalForm() {
         return;
       }
 
-      const supabase = getSupabaseBrowserClient();
-      const { data: signUpData, error: authError } = await supabase.auth.signUp({
-        email: email.trim(),
-        password,
-        options: {
-          data: { display_name: displayName },
-        },
+      // Create the user server-side (auto-confirms email)
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password, displayName }),
       });
-
-      if (authError) {
-        throw authError;
+      const body = await res.json();
+      if (!res.ok) {
+        throw new Error(body.error ?? "Unable to create your account.");
       }
 
-      // If the Supabase project requires email confirmation the signup
-      // call won't return a session.  Sign in immediately so the user
-      // can continue without waiting for a confirmation email.
-      if (!signUpData.session) {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password,
-        });
-        if (signInError) {
-          throw signInError;
-        }
+      // Sign in immediately — the account is already confirmed
+      const supabase = getSupabaseBrowserClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+      if (signInError) {
+        throw signInError;
       }
 
       await dataClient.upsertFantasyProfile({
