@@ -133,6 +133,12 @@ export function SignupLocalForm() {
         throw signInError;
       }
 
+      // Wait for the session to be fully established before writing profile
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) {
+        throw new Error("Session not established after sign-in.");
+      }
+
       await dataClient.upsertFantasyProfile({
         displayName,
         onboardingComplete: false,

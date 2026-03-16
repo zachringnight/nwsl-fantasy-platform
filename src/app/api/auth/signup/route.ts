@@ -30,12 +30,31 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      // Supabase returns "A user with this email address has already been registered"
-      // for duplicates — pass that through directly.
       return NextResponse.json(
         { error: error.message },
         { status: error.status ?? 422 }
       );
+    }
+
+    // Create the fantasy profile server-side so it's immediately available
+    // after the client signs in. The service role key bypasses RLS.
+    const { error: profileError } = await supabase
+      .from("fantasy_profiles")
+      .upsert(
+        {
+          user_id: data.user.id,
+          email: email.trim(),
+          display_name: displayName.trim(),
+          onboarding_complete: false,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id" }
+      );
+
+    if (profileError) {
+      // User was created but profile insert failed — log but don't block.
+      // The client-side upsertFantasyProfile call will retry.
+      console.error("Profile insert failed after signup:", profileError.message);
     }
 
     return NextResponse.json({ userId: data.user.id });
