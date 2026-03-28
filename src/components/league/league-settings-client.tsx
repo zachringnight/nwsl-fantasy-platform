@@ -31,6 +31,11 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [leagueDetails, setLeagueDetails] = useState<FantasyLeagueDetails | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
+  const [removingMember, setRemovingMember] = useState<{
+    userId: string;
+    displayName: string;
+  } | null>(null);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [settingsForm, setSettingsForm] = useState({
     leagueName: "",
     draftAt: "",
@@ -115,6 +120,23 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
       );
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  async function handleRemoveMember() {
+    if (!removingMember) return;
+
+    setIsRemoving(true);
+    try {
+      await dataClient.removeLeagueMember(leagueId, removingMember.userId);
+      setRemovingMember(null);
+      setRefreshToken((prev) => prev + 1);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Unable to remove manager."
+      );
+    } finally {
+      setIsRemoving(false);
     }
   }
 
@@ -292,9 +314,12 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                                 <button
                                   aria-label={`Remove ${member.display_name} from league`}
                                   className="rounded-full border border-line bg-white/6 p-1.5 text-muted transition hover:border-danger/35 hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
-                                  onClick={() => {
-                                    // TODO: Implement remove-manager flow with confirmation dialog
-                                  }}
+                                  onClick={() =>
+                                    setRemovingMember({
+                                      userId: member.user_id,
+                                      displayName: member.display_name,
+                                    })
+                                  }
                                   title="Remove manager"
                                   type="button"
                                 >
@@ -380,6 +405,51 @@ export function LeagueSettingsClient({ leagueId }: LeagueSettingsClientProps) {
                   </form>
                 </SurfaceCard>
               </MotionReveal>
+            )}
+
+            {removingMember && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+                onClick={() => !isRemoving && setRemovingMember(null)}
+                role="presentation"
+              >
+                <div
+                  className="mx-4 w-full max-w-md rounded-[1.75rem] border border-line bg-panel p-6"
+                  onClick={(e) => e.stopPropagation()}
+                  role="alertdialog"
+                  aria-labelledby="remove-dialog-title"
+                  aria-describedby="remove-dialog-desc"
+                >
+                  <p id="remove-dialog-title" className="text-lg font-semibold text-foreground">
+                    Remove manager
+                  </p>
+                  <p id="remove-dialog-desc" className="mt-2 text-sm text-muted">
+                    Are you sure you want to remove{" "}
+                    <span className="font-semibold text-foreground">
+                      {removingMember.displayName}
+                    </span>{" "}
+                    from this league? Their roster and lineup data will be deleted. This cannot be undone.
+                  </p>
+                  <div className="mt-5 flex gap-3">
+                    <Button
+                      disabled={isRemoving}
+                      onClick={handleRemoveMember}
+                      className="!bg-danger !text-white hover:!bg-danger/85"
+                    >
+                      {isRemoving ? <Spinner /> : null}
+                      {isRemoving ? "Removing…" : "Remove"}
+                    </Button>
+                    <button
+                      className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-strong/40 hover:text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                      disabled={isRemoving}
+                      onClick={() => setRemovingMember(null)}
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
           </section>
         );
