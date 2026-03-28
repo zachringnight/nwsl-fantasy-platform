@@ -180,6 +180,11 @@ export const cachedFantasyDataClient: FantasyDataClient = {
     invalidateCache("loadDraftState");
     return result;
   },
+  removeLeagueMember: async (...args) => {
+    const result = await supabaseFantasyDataClient.removeLeagueMember(...args);
+    invalidateCache("loadLeagueById");
+    return result;
+  },
   updateLeagueSettings: async (...args) => {
     const result = await supabaseFantasyDataClient.updateLeagueSettings(...args);
     invalidateCache("loadLeagueById");

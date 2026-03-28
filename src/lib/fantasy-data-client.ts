@@ -29,6 +29,7 @@ import {
   submitWaiverClaim,
   submitSalaryCapEntry,
   updateDraftStatus,
+  removeLeagueMember,
   updateLeagueSettings,
   upsertFantasyProfile,
 } from "@/lib/fantasy-api";
@@ -63,6 +64,7 @@ export interface FantasyDataClient {
   saveSalaryCapEntry: typeof saveSalaryCapEntry;
   submitWaiverClaim: typeof submitWaiverClaim;
   submitSalaryCapEntry: typeof submitSalaryCapEntry;
+  removeLeagueMember: typeof removeLeagueMember;
   updateDraftStatus: typeof updateDraftStatus;
   updateLeagueSettings: typeof updateLeagueSettings;
   upsertFantasyProfile: typeof upsertFantasyProfile;
@@ -98,6 +100,7 @@ export const supabaseFantasyDataClient: FantasyDataClient = {
   saveSalaryCapEntry,
   submitWaiverClaim,
   submitSalaryCapEntry,
+  removeLeagueMember,
   updateDraftStatus,
   updateLeagueSettings,
   upsertFantasyProfile,

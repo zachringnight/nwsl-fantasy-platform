@@ -1253,6 +1253,43 @@ export async function updateLeagueSettings(
   }
 }
 
+export async function removeLeagueMember(leagueId: string, targetUserId: string) {
+  const supabase = getSupabaseBrowserClient();
+  const user = await requireUser();
+
+  const { data: league } = await supabase
+    .from("fantasy_leagues")
+    .select("commissioner_user_id")
+    .eq("id", leagueId)
+    .single();
+
+  if (!league || league.commissioner_user_id !== user.id) {
+    throw new Error("Only the commissioner can remove managers.");
+  }
+
+  if (targetUserId === user.id) {
+    throw new Error("The commissioner cannot be removed from the league.");
+  }
+
+  // Remove roster slots for this member
+  await supabase
+    .from("fantasy_roster_slots")
+    .delete()
+    .eq("league_id", leagueId)
+    .eq("user_id", targetUserId);
+
+  // Remove the membership
+  const { error } = await supabase
+    .from("fantasy_league_memberships")
+    .delete()
+    .eq("league_id", leagueId)
+    .eq("user_id", targetUserId);
+
+  if (error) {
+    throw new Error(assertErrorMessage(error, "Unable to remove manager from league."));
+  }
+}
+
 export async function loadLeaguePlayerListings(leagueId: string) {
   const supabase = getSupabaseBrowserClient();
   const { league, memberships } = await fetchLeagueContext(leagueId);
