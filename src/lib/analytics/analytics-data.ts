@@ -39,6 +39,8 @@ import {
   loadModelPerformance,
 } from "@/lib/analytics/model-data-loader";
 
+import { getEspnMatchDetail } from "@/lib/analytics/espn-data-loader";
+
 // ── Team data (real ESPN standings + aggregated player stats) ───────────────
 
 export function getLeagueTable(): TeamStanding[] {
@@ -85,25 +87,29 @@ export function getMatchResults(): MatchResult[] {
   return getRealMatchResults();
 }
 
-/** Detailed match stats require API-Football. Returns basic data from ESPN. */
+/** Returns match detail with ESPN stats when available. */
 export function getMatchDetail(matchId: string): MatchDetail | undefined {
   const match = getRealMatchResults().find((m) => m.matchId === matchId);
   if (!match) return undefined;
 
-  // We have the core result from ESPN but not detailed stats
+  const detail = getEspnMatchDetail(matchId);
+
   return {
     ...match,
-    homeShots: 0,
-    awayShots: 0,
-    homeShotsOnTarget: 0,
-    awayShotsOnTarget: 0,
-    homePossession: 0,
-    awayPossession: 0,
-    homeCorners: 0,
-    awayCorners: 0,
-    homeFouls: 0,
-    awayFouls: 0,
-    events: [],
+    homeShots: detail?.homeShots ?? 0,
+    awayShots: detail?.awayShots ?? 0,
+    homeShotsOnTarget: detail?.homeShotsOnTarget ?? 0,
+    awayShotsOnTarget: detail?.awayShotsOnTarget ?? 0,
+    homePossession: detail?.homePossession ?? 0,
+    awayPossession: detail?.awayPossession ?? 0,
+    homeCorners: detail?.homeCorners ?? 0,
+    awayCorners: detail?.awayCorners ?? 0,
+    homeFouls: detail?.homeFouls ?? 0,
+    awayFouls: detail?.awayFouls ?? 0,
+    events: (detail?.events ?? []).map((e) => ({
+      ...e,
+      detail: undefined,
+    })),
   };
 }
 

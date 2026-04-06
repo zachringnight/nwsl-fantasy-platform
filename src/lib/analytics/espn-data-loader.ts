@@ -10,6 +10,7 @@ import standings2026 from "@/data/espn/standings-2026.json";
 import matches2025 from "@/data/espn/matches-2025.json";
 import matches2026 from "@/data/espn/matches-2026.json";
 import teams from "@/data/espn/teams.json";
+import matchDetailsRaw from "@/data/espn/match-details.json";
 
 // ── Types for the JSON shape ───────────────────────────────────────────────
 
@@ -68,4 +69,33 @@ export function getAllEspnMatches(): EspnMatch[] {
 
 export function getEspnTeams(): EspnTeam[] {
   return teams as EspnTeam[];
+}
+
+// ── Match Details ──────────────────────────────────────────────────────────
+
+export interface EspnMatchEvent {
+  minute: number;
+  type: "goal" | "yellow_card" | "red_card" | "substitution";
+  team: string;
+  playerName: string;
+}
+
+export interface EspnMatchDetail {
+  homeShots: number;
+  awayShots: number;
+  homeShotsOnTarget: number;
+  awayShotsOnTarget: number;
+  homePossession: number;
+  awayPossession: number;
+  homeCorners: number;
+  awayCorners: number;
+  homeFouls: number;
+  awayFouls: number;
+  events: EspnMatchEvent[];
+}
+
+const matchDetails = matchDetailsRaw as Record<string, EspnMatchDetail>;
+
+export function getEspnMatchDetail(matchId: string): EspnMatchDetail | undefined {
+  return matchDetails[matchId];
 }

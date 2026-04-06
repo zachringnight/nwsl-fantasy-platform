@@ -28,6 +28,7 @@ export default function MatchDetailPage() {
   }
 
   const isCompleted = match.status === "completed";
+  const hasDetailedStats = match.homeShots > 0 || match.awayShots > 0;
 
   return (
     <AppShell
@@ -61,20 +62,33 @@ export default function MatchDetailPage() {
         </section>
       )}
 
-      {/* Match Info */}
-      {isCompleted && (
+      {/* Stats Comparison */}
+      {isCompleted && hasDetailedStats && (
         <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5 space-y-4">
           <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Match Info
+            Match Stats
           </h3>
+          <StatComparisonBar label="Shots" homeValue={match.homeShots} awayValue={match.awayShots} />
+          <StatComparisonBar label="On Target" homeValue={match.homeShotsOnTarget} awayValue={match.awayShotsOnTarget} />
+          <StatComparisonBar
+            label="Possession"
+            homeValue={match.homePossession}
+            awayValue={match.awayPossession}
+            format={(v) => `${v.toFixed(0)}%`}
+          />
+          <StatComparisonBar label="Corners" homeValue={match.homeCorners} awayValue={match.awayCorners} />
+          <StatComparisonBar label="Fouls" homeValue={match.homeFouls} awayValue={match.awayFouls} />
+        </section>
+      )}
+
+      {/* Match Info (when no detailed stats) */}
+      {isCompleted && !hasDetailedStats && (
+        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
           <div className="grid gap-4 sm:grid-cols-3">
             <MetricTile label="Venue" value={match.venue} />
             <MetricTile label="Date" value={match.date} />
             <MetricTile label="Status" value="Full Time" />
           </div>
-          <p className="text-xs text-muted mt-2">
-            Detailed match stats (shots, possession, corners) available with API-Football integration.
-          </p>
         </section>
       )}
 
