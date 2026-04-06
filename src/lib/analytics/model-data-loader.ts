@@ -44,6 +44,8 @@ interface RawModelPrediction {
   lambdaAway: number;
   bttsYesProb: number;
   overUnder: Record<string, { over: number; under: number }>;
+  asianHandicap?: Record<string, { home: number; away: number }>;
+  scoreMatrix?: number[][];
   model: string;
   timestamp: string;
 }
@@ -103,10 +105,10 @@ export function loadModelPredictions(): MatchPrediction[] {
     awayProb: p.awayProb,
     bttsYesProb: p.bttsYesProb,
     overUnder: p.overUnder ?? {},
-    asianHandicap: {},
+    asianHandicap: p.asianHandicap ?? {},
     lambdaHome: p.lambdaHome,
     lambdaAway: p.lambdaAway,
-    scoreMatrix: generateScoreMatrix(p.lambdaHome, p.lambdaAway),
+    scoreMatrix: p.scoreMatrix ?? generateScoreMatrix(p.lambdaHome, p.lambdaAway),
     model: p.model,
     timestamp: p.timestamp,
   }));

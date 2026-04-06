@@ -1,0 +1,178 @@
+[
+  {
+    "teamId": "bay-fc",
+    "team": "Bay FC",
+    "overallRating": 56.6,
+    "attackRating": 51.4,
+    "defenseRating": 61.8,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 1,
+    "currentRank": 1
+  },
+  {
+    "teamId": "kansas-city-current",
+    "team": "Kansas City Current",
+    "overallRating": 54,
+    "attackRating": 47.6,
+    "defenseRating": 60.3,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 2,
+    "currentRank": 2
+  },
+  {
+    "teamId": "houston-dash",
+    "team": "Houston Dash",
+    "overallRating": 53.3,
+    "attackRating": 65.8,
+    "defenseRating": 40.9,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 3,
+    "currentRank": 3
+  },
+  {
+    "teamId": "racing-louisville-fc",
+    "team": "Racing Louisville FC",
+    "overallRating": 52.7,
+    "attackRating": 55.2,
+    "defenseRating": 50.2,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 4,
+    "currentRank": 4
+  },
+  {
+    "teamId": "seattle-reign-fc",
+    "team": "Seattle Reign FC",
+    "overallRating": 52.6,
+    "attackRating": 56,
+    "defenseRating": 49.3,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 5,
+    "currentRank": 5
+  },
+  {
+    "teamId": "north-carolina-courage",
+    "team": "North Carolina Courage",
+    "overallRating": 52.6,
+    "attackRating": 48.8,
+    "defenseRating": 56.4,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 6,
+    "currentRank": 6
+  },
+  {
+    "teamId": "angel-city-fc",
+    "team": "Angel City FC",
+    "overallRating": 52.3,
+    "attackRating": 62.7,
+    "defenseRating": 41.9,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 7,
+    "currentRank": 7
+  },
+  {
+    "teamId": "utah-royals",
+    "team": "Utah Royals",
+    "overallRating": 51.6,
+    "attackRating": 48.1,
+    "defenseRating": 55,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 8,
+    "currentRank": 8
+  },
+  {
+    "teamId": "orlando-pride",
+    "team": "Orlando Pride",
+    "overallRating": 51.1,
+    "attackRating": 52.4,
+    "defenseRating": 49.7,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 9,
+    "currentRank": 9
+  },
+  {
+    "teamId": "san-diego-wave-fc",
+    "team": "San Diego Wave FC",
+    "overallRating": 50.9,
+    "attackRating": 57.7,
+    "defenseRating": 44,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 10,
+    "currentRank": 10
+  },
+  {
+    "teamId": "chicago-stars-fc",
+    "team": "Chicago Stars FC",
+    "overallRating": 49.8,
+    "attackRating": 41.3,
+    "defenseRating": 58.3,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 11,
+    "currentRank": 11
+  },
+  {
+    "teamId": "portland-thorns-fc",
+    "team": "Portland Thorns FC",
+    "overallRating": 49.2,
+    "attackRating": 52.2,
+    "defenseRating": 46.2,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 12,
+    "currentRank": 12
+  },
+  {
+    "teamId": "denver-summit-fc",
+    "team": "Denver Summit FC",
+    "overallRating": 45.7,
+    "attackRating": 45.7,
+    "defenseRating": 45.7,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 13,
+    "currentRank": 13
+  },
+  {
+    "teamId": "gotham-fc",
+    "team": "Gotham FC",
+    "overallRating": 43.7,
+    "attackRating": 38.8,
+    "defenseRating": 48.7,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 14,
+    "currentRank": 14
+  },
+  {
+    "teamId": "washington-spirit",
+    "team": "Washington Spirit",
+    "overallRating": 42.4,
+    "attackRating": 40.1,
+    "defenseRating": 44.7,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 15,
+    "currentRank": 15
+  },
+  {
+    "teamId": "boston-legacy-fc",
+    "team": "Boston Legacy FC",
+    "overallRating": 41.2,
+    "attackRating": 36.8,
+    "defenseRating": 45.7,
+    "homeAdvantage": 0.35,
+    "trend": "stable",
+    "previousRank": 16,
+    "currentRank": 16
+  }
+]
