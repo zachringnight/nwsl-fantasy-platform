@@ -72,8 +72,8 @@ export default function PlayerDetailPage() {
     >
       {/* Key Stats */}
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <MetricTile label="Goals" value={player.goals} detail={`xG: ${player.xg.toFixed(1)}`} tone="brand" />
-        <MetricTile label="Assists" value={player.assists} detail={`xA: ${player.xa.toFixed(1)}`} tone="brand" />
+        <MetricTile label="Goals" value={player.goals} detail={`${player.shots} shots`} tone="brand" />
+        <MetricTile label="Assists" value={player.assists} detail={`${player.shotsOnTarget} on target`} tone="brand" />
         <MetricTile label="Fantasy Pts" value={player.fantasyPoints} detail={`${player.pointsPer90}/90`} tone="accent" />
         <MetricTile label="Minutes" value={player.minutes} detail={`${player.appearances} apps`} />
         <MetricTile label="Pass Acc." value={`${player.passAccuracy.toFixed(0)}%`} />

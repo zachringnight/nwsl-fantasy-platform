@@ -50,7 +50,6 @@ export default function MatchDetailPage() {
           <div className="text-center">
             <p className="text-lg font-medium text-foreground">{match.homeTeam}</p>
             <p className="font-display text-7xl leading-none text-foreground">{match.homeGoals}</p>
-            <p className="mt-1 text-sm text-muted">xG {match.homeXg.toFixed(2)}</p>
           </div>
           <div className="text-center">
             <Pill tone="default">FT</Pill>
@@ -58,33 +57,24 @@ export default function MatchDetailPage() {
           <div className="text-center">
             <p className="text-lg font-medium text-foreground">{match.awayTeam}</p>
             <p className="font-display text-7xl leading-none text-foreground">{match.awayGoals}</p>
-            <p className="mt-1 text-sm text-muted">xG {match.awayXg.toFixed(2)}</p>
           </div>
         </section>
       )}
 
-      {/* Stats Comparison */}
+      {/* Match Info */}
       {isCompleted && (
         <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5 space-y-4">
           <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Match Stats
+            Match Info
           </h3>
-          <StatComparisonBar label="Shots" homeValue={match.homeShots} awayValue={match.awayShots} />
-          <StatComparisonBar label="On Target" homeValue={match.homeShotsOnTarget} awayValue={match.awayShotsOnTarget} />
-          <StatComparisonBar
-            label="Possession"
-            homeValue={match.homePossession}
-            awayValue={match.awayPossession}
-            format={(v) => `${v.toFixed(0)}%`}
-          />
-          <StatComparisonBar label="Corners" homeValue={match.homeCorners} awayValue={match.awayCorners} />
-          <StatComparisonBar label="Fouls" homeValue={match.homeFouls} awayValue={match.awayFouls} />
-          <StatComparisonBar
-            label="xG"
-            homeValue={match.homeXg}
-            awayValue={match.awayXg}
-            format={(v) => v.toFixed(2)}
-          />
+          <div className="grid gap-4 sm:grid-cols-3">
+            <MetricTile label="Venue" value={match.venue} />
+            <MetricTile label="Date" value={match.date} />
+            <MetricTile label="Status" value="Full Time" />
+          </div>
+          <p className="text-xs text-muted mt-2">
+            Detailed match stats (shots, possession, corners) available with API-Football integration.
+          </p>
         </section>
       )}
 

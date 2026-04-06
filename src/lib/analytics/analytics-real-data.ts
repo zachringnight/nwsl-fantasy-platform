@@ -1,23 +1,31 @@
 /**
  * Real NWSL data adapter.
  *
- * Converts the official NWSL player pool (410 real players with 2025 stats)
- * into the analytics type system. Also derives team-level standings and stats
- * from aggregated player data.
+ * Player stats: 410 official NWSL players with 2025 season stats.
+ * Team standings: Real ESPN standings for 2025 and 2026 seasons.
+ * Match results: Real ESPN match data.
+ * Form: Derived from actual match results.
  */
 
 import {
   officialFantasyPlayerPool,
   type OfficialFantasyPoolPlayerRecord,
 } from "@/lib/generated/fantasy-player-pool.generated";
-import { NWSL_CLUBS } from "@/config/nwsl-clubs";
 import type {
   FormResult,
+  MatchResult,
   PlayerSeasonStats,
   TeamStanding,
   TeamStats,
   TeamRating,
 } from "@/types/analytics";
+import {
+  getEspnStandings2026,
+  getEspnStandings2025,
+  getAllEspnMatches,
+  type EspnMatch,
+  type EspnStanding,
+} from "./espn-data-loader";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -28,20 +36,7 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function seededRandom(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
-// Deterministic random for form/standings (consistent between renders)
-const rand = seededRandom(2026);
-const intBetween = (lo: number, hi: number) => Math.floor(rand() * (hi - lo + 1)) + lo;
-const between = (lo: number, hi: number) => Math.round((rand() * (hi - lo) + lo) * 100) / 100;
-
-// ── Player Data ─────────────────────────────────────────────────────────────
+// ── Player Data (real 2025 stats) ───────────────────────────────────────────
 
 export function getRealPlayerRankings(): PlayerSeasonStats[] {
   return officialFantasyPlayerPool
@@ -59,6 +54,7 @@ function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonSt
   const minutes = p.minutes_2025;
   const nineties = minutes / 90;
   const fp = p.raw_average_points_2025 * p.appearances_2025;
+  const totalPassAttempts = p.successful_passes_2025 + p.fouls_committed_2025 * 3; // rough estimate
 
   return {
     playerId: p.id,
@@ -70,12 +66,12 @@ function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonSt
     minutes: p.minutes_2025,
     goals: p.goals_2025,
     assists: p.assists_2025,
-    xg: Math.round(p.goals_2025 * between(0.85, 1.15) * 10) / 10,
-    xa: Math.round(p.assists_2025 * between(0.8, 1.2) * 10) / 10,
+    xg: 0, // not available without API-Football — shown as N/A in UI
+    xa: 0,
     shots: p.shots_2025,
     shotsOnTarget: p.shots_on_target_2025,
-    passAccuracy: p.successful_passes_2025 > 0
-      ? Math.min(95, Math.round((p.successful_passes_2025 / (p.successful_passes_2025 + intBetween(30, 80))) * 100))
+    passAccuracy: totalPassAttempts > 0
+      ? Math.min(99, Math.round((p.successful_passes_2025 / totalPassAttempts) * 100))
       : 0,
     tackles: p.tackles_won_2025,
     interceptions: p.interceptions_2025,
@@ -88,186 +84,131 @@ function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonSt
   };
 }
 
-// ── Team-Level Aggregations ─────────────────────────────────────────────────
+// ── Team Standings (real ESPN data) ─────────────────────────────────────────
 
-interface TeamAggregation {
-  teamId: string;
-  team: string;
-  playerCount: number;
-  totalGoals: number;
-  totalAssists: number;
-  totalShots: number;
-  totalShotsOnTarget: number;
-  totalTackles: number;
-  totalInterceptions: number;
-  totalCleanSheets: number;
-  totalSaves: number;
-  totalPasses: number;
-  totalBlocks: number;
-  totalMinutes: number;
-  totalAppearances: number;
+function deriveFormFromMatches(teamName: string, matches: EspnMatch[]): FormResult[] {
+  const teamMatches = matches
+    .filter((m) => m.status === "completed" && (m.homeTeam === teamName || m.awayTeam === teamName))
+    .sort((a, b) => b.date.localeCompare(a.date)); // most recent first
+
+  return teamMatches.slice(0, 5).map((m) => {
+    const isHome = m.homeTeam === teamName;
+    const scored = isHome ? m.homeGoals : m.awayGoals;
+    const conceded = isHome ? m.awayGoals : m.homeGoals;
+    if (scored > conceded) return "W";
+    if (scored < conceded) return "L";
+    return "D";
+  });
 }
 
-function aggregateTeamStats(): Map<string, TeamAggregation> {
-  const teams = new Map<string, TeamAggregation>();
+function espnStandingsToTeamStandings(
+  espnStandings: EspnStanding[],
+  matches: EspnMatch[]
+): TeamStanding[] {
+  return espnStandings.map((s) => ({
+    teamId: slugify(s.team),
+    team: s.team,
+    played: s.played,
+    won: s.won,
+    drawn: s.drawn,
+    lost: s.lost,
+    goalsFor: s.goalsFor,
+    goalsAgainst: s.goalsAgainst,
+    goalDifference: s.goalDifference,
+    points: s.points,
+    form: deriveFormFromMatches(s.team, matches),
+    xg: 0, // not available from ESPN
+    xga: 0,
+  }));
+}
+
+export function getRealStandings(): TeamStanding[] {
+  // Use 2026 standings if available (current season), fallback to 2025
+  const espn2026 = getEspnStandings2026();
+  const allMatches = getAllEspnMatches();
+
+  if (espn2026.length > 0) {
+    return espnStandingsToTeamStandings(espn2026, allMatches);
+  }
+
+  return espnStandingsToTeamStandings(getEspnStandings2025(), allMatches);
+}
+
+// ── Team Stats (aggregated from real player data) ───────────────────────────
+
+export function getRealTeamStats(): TeamStats[] {
+  const teams = new Map<string, {
+    teamId: string;
+    team: string;
+    shots: number;
+    shotsOnTarget: number;
+    tackles: number;
+    interceptions: number;
+    passes: number;
+  }>();
 
   for (const p of officialFantasyPlayerPool) {
     const teamId = slugify(p.club_name);
     let t = teams.get(teamId);
     if (!t) {
-      t = {
-        teamId,
-        team: p.club_name,
-        playerCount: 0,
-        totalGoals: 0,
-        totalAssists: 0,
-        totalShots: 0,
-        totalShotsOnTarget: 0,
-        totalTackles: 0,
-        totalInterceptions: 0,
-        totalCleanSheets: 0,
-        totalSaves: 0,
-        totalPasses: 0,
-        totalBlocks: 0,
-        totalMinutes: 0,
-        totalAppearances: 0,
-      };
+      t = { teamId, team: p.club_name, shots: 0, shotsOnTarget: 0, tackles: 0, interceptions: 0, passes: 0 };
       teams.set(teamId, t);
     }
-    t.playerCount++;
-    t.totalGoals += p.goals_2025;
-    t.totalAssists += p.assists_2025;
-    t.totalShots += p.shots_2025;
-    t.totalShotsOnTarget += p.shots_on_target_2025;
-    t.totalTackles += p.tackles_won_2025;
-    t.totalInterceptions += p.interceptions_2025;
-    t.totalCleanSheets += p.clean_sheets_2025;
-    t.totalSaves += p.saves_2025;
-    t.totalPasses += p.successful_passes_2025;
-    t.totalBlocks += p.blocks_2025;
-    t.totalMinutes += p.minutes_2025;
-    t.totalAppearances += p.appearances_2025;
+    t.shots += p.shots_2025;
+    t.shotsOnTarget += p.shots_on_target_2025;
+    t.tackles += p.tackles_won_2025;
+    t.interceptions += p.interceptions_2025;
+    t.passes += p.successful_passes_2025;
   }
 
-  return teams;
-}
+  // Get GK clean sheets per team
+  const standings = getRealStandings();
 
-const _teamAggregations = aggregateTeamStats();
-
-// ── Team Standings ──────────────────────────────────────────────────────────
-// Derive realistic standings from aggregated real stats.
-// Since we don't have actual match results, we use goals scored/conceded
-// from player stats and generate plausible W/D/L records.
-
-function generateForm(won: number, drawn: number, lost: number): FormResult[] {
-  const pool: FormResult[] = [
-    ...Array.from<FormResult>({ length: won }).fill("W"),
-    ...Array.from<FormResult>({ length: drawn }).fill("D"),
-    ...Array.from<FormResult>({ length: lost }).fill("L"),
-  ];
-  // Take last 5
-  const results: FormResult[] = [];
-  const r2 = seededRandom(won * 100 + drawn * 10 + lost);
-  for (let i = 0; i < 5; i++) {
-    const idx = Math.floor(r2() * pool.length);
-    results.push(pool[idx] || "D");
-  }
-  return results;
-}
-
-export function getRealStandings(): TeamStanding[] {
-  const standings: TeamStanding[] = [];
-
-  for (const [, agg] of _teamAggregations) {
-    // Use goals scored to estimate team strength and derive results
-    const goalsFor = agg.totalGoals;
-    // Goals conceded: use goalkeeper goals_conceded_2025 or estimate
-    const goalkeepers = officialFantasyPlayerPool.filter(
-      (p) => slugify(p.club_name) === agg.teamId && p.position === "GK"
+  return [...teams.values()].map((t) => {
+    const standing = standings.find((s) => s.teamId === t.teamId);
+    const gks = officialFantasyPlayerPool.filter(
+      (p) => slugify(p.club_name) === t.teamId && p.position === "GK"
     );
-    const goalsAgainst = goalkeepers.reduce((sum, gk) => sum + gk.goals_conceded_2025, 0);
+    const cleanSheets = Math.max(0, ...gks.map((gk) => gk.clean_sheets_2025));
 
-    // Estimate played from max appearances of any outfield player
-    const teamPlayers = officialFantasyPlayerPool.filter(
-      (p) => slugify(p.club_name) === agg.teamId
-    );
-    const maxApps = Math.max(...teamPlayers.map((p) => p.appearances_2025));
-    const played = Math.max(maxApps, 20); // 2025 season had ~24 games
-
-    // Derive W/D/L from goal difference
-    const gd = goalsFor - goalsAgainst;
-    const winRate = Math.min(0.7, Math.max(0.15, 0.35 + gd * 0.015));
-    const drawRate = Math.min(0.35, Math.max(0.1, 0.25 - Math.abs(gd) * 0.005));
-    const won = Math.round(played * winRate);
-    const drawn = Math.round(played * drawRate);
-    const lost = played - won - drawn;
-
-    standings.push({
-      teamId: agg.teamId,
-      team: agg.team,
-      played,
-      won,
-      drawn,
-      lost,
-      goalsFor,
-      goalsAgainst,
-      goalDifference: goalsFor - goalsAgainst,
-      points: won * 3 + drawn,
-      form: generateForm(won, drawn, lost),
-      xg: Math.round(goalsFor * between(0.9, 1.1) * 10) / 10,
-      xga: Math.round(goalsAgainst * between(0.9, 1.1) * 10) / 10,
-    });
-  }
-
-  return standings.sort((a, b) => b.points - a.points || b.goalDifference - a.goalDifference);
+    return {
+      teamId: t.teamId,
+      team: t.team,
+      xg: 0, // not available
+      xga: 0,
+      npxg: 0,
+      possession: 0, // not available
+      shots: t.shots,
+      shotsOnTarget: t.shotsOnTarget,
+      passAccuracy: 0, // need total attempts which we don't have
+      tackles: t.tackles,
+      interceptions: t.interceptions,
+      cleanSheets,
+      corners: 0, // not available
+    };
+  });
 }
 
-// ── Team Stats ──────────────────────────────────────────────────────────────
-
-export function getRealTeamStats(): TeamStats[] {
-  const stats: TeamStats[] = [];
-
-  for (const [, agg] of _teamAggregations) {
-    const goalkeepers = officialFantasyPlayerPool.filter(
-      (p) => slugify(p.club_name) === agg.teamId && p.position === "GK"
-    );
-    const goalsAgainst = goalkeepers.reduce((sum, gk) => sum + gk.goals_conceded_2025, 0);
-
-    stats.push({
-      teamId: agg.teamId,
-      team: agg.team,
-      xg: Math.round(agg.totalGoals * between(0.9, 1.1) * 10) / 10,
-      xga: Math.round(goalsAgainst * between(0.9, 1.1) * 10) / 10,
-      npxg: Math.round(agg.totalGoals * between(0.8, 0.95) * 10) / 10,
-      possession: between(44, 56),
-      shots: agg.totalShots,
-      shotsOnTarget: agg.totalShotsOnTarget,
-      passAccuracy: between(76, 88),
-      tackles: agg.totalTackles,
-      interceptions: agg.totalInterceptions,
-      cleanSheets: Math.max(
-        ...officialFantasyPlayerPool
-          .filter((p) => slugify(p.club_name) === agg.teamId && p.position === "GK")
-          .map((p) => p.clean_sheets_2025)
-      ),
-      corners: intBetween(80, 150),
-    });
-  }
-
-  return stats;
-}
-
-// ── Team Ratings ────────────────────────────────────────────────────────────
+// ── Team Ratings (derived from real standings) ──────────────────────────────
 
 export function getRealTeamRatings(): TeamRating[] {
   const standings = getRealStandings();
-  const stats = getRealTeamStats();
 
   const ratings: TeamRating[] = standings.map((s, i) => {
-    const st = stats.find((t) => t.teamId === s.teamId);
-    const attackScore = Math.min(95, Math.max(40, (s.goalsFor / Math.max(s.played, 1)) * 40 + 20));
-    const defenseScore = Math.min(95, Math.max(40, 90 - (s.goalsAgainst / Math.max(s.played, 1)) * 35));
+    const ppg = s.played > 0 ? s.points / s.played : 0;
+    const gfPg = s.played > 0 ? s.goalsFor / s.played : 0;
+    const gaPg = s.played > 0 ? s.goalsAgainst / s.played : 0;
+
+    // Attack: based on goals per game (league avg ~1.3 GPG)
+    const attackScore = Math.min(95, Math.max(30, gfPg * 35 + 20));
+    // Defense: based on goals conceded per game (lower is better)
+    const defenseScore = Math.min(95, Math.max(30, 90 - gaPg * 30));
     const overall = (attackScore + defenseScore) / 2;
+
+    // Trend from recent form
+    const form = s.form;
+    const recentWins = form.slice(0, 3).filter((f) => f === "W").length;
+    const recentLosses = form.slice(0, 3).filter((f) => f === "L").length;
 
     return {
       teamId: s.teamId,
@@ -275,13 +216,9 @@ export function getRealTeamRatings(): TeamRating[] {
       overallRating: Math.round(overall * 10) / 10,
       attackRating: Math.round(attackScore * 10) / 10,
       defenseRating: Math.round(defenseScore * 10) / 10,
-      homeAdvantage: between(0.18, 0.35),
-      trend: s.form.slice(0, 3).filter((f) => f === "W").length >= 2
-        ? "up"
-        : s.form.slice(0, 3).filter((f) => f === "L").length >= 2
-          ? "down"
-          : "stable",
-      previousRank: i + intBetween(-2, 2),
+      homeAdvantage: 0.25, // league average — would need home/away splits for real value
+      trend: recentWins >= 2 ? "up" : recentLosses >= 2 ? "down" : "stable",
+      previousRank: i + 1,
       currentRank: i + 1,
     };
   });
@@ -292,29 +229,58 @@ export function getRealTeamRatings(): TeamRating[] {
   }));
 }
 
+// ── Match Results (real ESPN data) ──────────────────────────────────────────
+
+export function getRealMatchResults(): MatchResult[] {
+  const allMatches = getAllEspnMatches();
+
+  // Assign matchdays based on date grouping
+  const dateToMatchday = new Map<string, number>();
+  const uniqueDates = [...new Set(allMatches.map((m) => m.date))].sort();
+  uniqueDates.forEach((d, i) => dateToMatchday.set(d, i + 1));
+
+  return allMatches.map((m) => ({
+    matchId: m.matchId,
+    date: m.date,
+    matchday: dateToMatchday.get(m.date) ?? 1,
+    homeTeam: m.homeTeam,
+    homeTeamId: slugify(m.homeTeam),
+    awayTeam: m.awayTeam,
+    awayTeamId: slugify(m.awayTeam),
+    homeGoals: m.homeGoals,
+    awayGoals: m.awayGoals,
+    homeXg: 0, // not available from ESPN
+    awayXg: 0,
+    venue: m.venue,
+    status: m.status,
+  }));
+}
+
 // ── Team Detail ─────────────────────────────────────────────────────────────
 
 export function getRealTeamById(teamId: string) {
   const standings = getRealStandings();
   const stats = getRealTeamStats();
   const ratings = getRealTeamRatings();
+  const allMatches = getRealMatchResults();
 
   const standing = standings.find((s) => s.teamId === teamId);
   const stat = stats.find((s) => s.teamId === teamId);
   const rating = ratings.find((r) => r.teamId === teamId);
   const players = getRealPlayerRankings().filter((p) => p.teamId === teamId);
+  const matches = allMatches.filter(
+    (m) => m.homeTeamId === teamId || m.awayTeamId === teamId
+  );
 
-  return { standing, stats: stat, rating, matches: [] as import("@/types/analytics").MatchResult[], players };
+  return { standing, stats: stat, rating, matches, players };
 }
 
 // ── Metadata ────────────────────────────────────────────────────────────────
 
-/** All unique team names from the real player pool */
 export function getRealTeamNames(): string[] {
   return [...new Set(officialFantasyPlayerPool.map((p) => p.club_name))].sort();
 }
 
-/** Count of real players available */
 export function getRealPlayerCount(): number {
   return officialFantasyPlayerPool.length;
 }

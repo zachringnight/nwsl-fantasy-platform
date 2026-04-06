@@ -25,7 +25,7 @@ export default function RatingsPage() {
     <AppShell
       eyebrow="Predictive Models"
       title="Power Ratings"
-      description="Model-derived team strength ratings based on non-penalty expected goals (npxG) with exponential decay weighting."
+      description="Team strength ratings derived from real 2026 season results — goals scored, goals conceded, and recent form."
     >
       {/* Summary */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">

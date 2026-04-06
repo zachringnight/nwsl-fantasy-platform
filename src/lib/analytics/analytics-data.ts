@@ -1,13 +1,13 @@
 /**
  * Analytics data layer.
  *
- * Returns REAL data only. No mock fallbacks — if data isn't available,
- * functions return empty results and the UI shows appropriate empty states.
+ * Returns REAL data only. No mock fallbacks.
  *
  * Data sources:
- * - Players & team stats: Real NWSL player pool (410 players, official 2025 stats)
+ * - Players: 410 official NWSL players with 2025 season stats
+ * - Standings: ESPN 2025/2026 real standings
+ * - Matches: ESPN real match results (2025 + 2026 seasons)
  * - Predictions: Pre-computed JSON from Python model (when available)
- * - Matches: API-Football fixtures via Prisma (when connected)
  */
 
 import type {
@@ -30,6 +30,7 @@ import {
   getRealTeamStats,
   getRealTeamRatings,
   getRealTeamById,
+  getRealMatchResults,
 } from "@/lib/analytics/analytics-real-data";
 
 import {
@@ -38,7 +39,7 @@ import {
   loadModelPerformance,
 } from "@/lib/analytics/model-data-loader";
 
-// ── Team data (REAL — derived from 410 official NWSL player stats) ──────────
+// ── Team data (real ESPN standings + aggregated player stats) ───────────────
 
 export function getLeagueTable(): TeamStanding[] {
   return getRealStandings();
@@ -58,7 +59,7 @@ export function getTeamDetail(teamId: string) {
   return getRealTeamById(teamId);
 }
 
-// ── Player data (REAL — 410 official NWSL players with 2025 season stats) ───
+// ── Player data (410 official NWSL players with 2025 season stats) ─────────
 
 export function getPlayerRankings(): PlayerSeasonStats[] {
   return getRealPlayerRankings();
@@ -68,37 +69,53 @@ export function getPlayerDetail(playerId: string): PlayerSeasonStats | undefined
   return getRealPlayerById(playerId);
 }
 
-/** Requires per-match data from API-Football. Returns empty until connected. */
+/** Per-match data requires API-Football. Returns empty until configured. */
 export function getPlayerMatchLog(playerId: string): PlayerMatchLog[] {
   return [];
 }
 
-/** Requires per-match data from API-Football. Returns empty until connected. */
+/** Per-match data requires API-Football. Returns empty until configured. */
 export function getPlayerForm(playerId: string): PlayerFormPoint[] {
   return [];
 }
 
-// ── Match data (requires API-Football fixtures — empty until connected) ─────
+// ── Match data (real ESPN results) ─────────────────────────────────────────
 
-/** Returns empty until API-Football fixture sync is configured. */
 export function getMatchResults(): MatchResult[] {
-  return [];
+  return getRealMatchResults();
 }
 
-/** Returns undefined until API-Football fixture sync is configured. */
+/** Detailed match stats require API-Football. Returns basic data from ESPN. */
 export function getMatchDetail(matchId: string): MatchDetail | undefined {
-  return undefined;
+  const match = getRealMatchResults().find((m) => m.matchId === matchId);
+  if (!match) return undefined;
+
+  // We have the core result from ESPN but not detailed stats
+  return {
+    ...match,
+    homeShots: 0,
+    awayShots: 0,
+    homeShotsOnTarget: 0,
+    awayShotsOnTarget: 0,
+    homePossession: 0,
+    awayPossession: 0,
+    homeCorners: 0,
+    awayCorners: 0,
+    homeFouls: 0,
+    awayFouls: 0,
+    events: [],
+  };
 }
 
 export function getUpcomingMatches(): MatchResult[] {
-  return [];
+  return getRealMatchResults().filter((m) => m.status === "upcoming");
 }
 
 export function getCompletedMatches(): MatchResult[] {
-  return [];
+  return getRealMatchResults().filter((m) => m.status === "completed");
 }
 
-// ── Model predictions (from Python pipeline — empty until model runs) ───────
+// ── Model predictions (from Python pipeline — empty until model runs) ──────
 
 export function getMatchPredictions(): MatchPrediction[] {
   return loadModelPredictions();

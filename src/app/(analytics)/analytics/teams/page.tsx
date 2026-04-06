@@ -15,7 +15,7 @@ export default function TeamsPage() {
     <AppShell
       eyebrow="Team Analytics"
       title="League Table"
-      description="Full NWSL standings with xG-based advanced metrics and recent form."
+      description="Full NWSL standings with real W/D/L records, goal difference, and recent form from ESPN."
     >
       <div className="overflow-x-auto rounded-[1.4rem] border border-line bg-white/4">
         <table className="w-full min-w-[900px] text-sm">
@@ -30,8 +30,6 @@ export default function TeamsPage() {
               <th className="px-4 py-3 text-right">GF</th>
               <th className="px-4 py-3 text-right">GA</th>
               <th className="px-4 py-3 text-right">GD</th>
-              <th className="px-4 py-3 text-right">xG</th>
-              <th className="px-4 py-3 text-right">xGA</th>
               <th className="px-4 py-3 text-right">Pts</th>
               <th className="px-4 py-3 text-center">Form</th>
             </tr>
@@ -72,8 +70,6 @@ export default function TeamsPage() {
                       {team.goalDifference}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono">{team.xg.toFixed(1)}</td>
-                  <td className="px-4 py-3 text-right font-mono">{team.xga.toFixed(1)}</td>
                   <td className="px-4 py-3 text-right font-mono text-lg font-semibold text-brand-strong">
                     {team.points}
                   </td>

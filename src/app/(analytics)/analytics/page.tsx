@@ -32,7 +32,7 @@ export default function AnalyticsPage() {
     <AppShell
       eyebrow="NWSL Analytics"
       title="The Pulse"
-      description={`Real stats from ${playerCount} NWSL players across ${teamCount} teams. Powered by official 2025 season data.`}
+      description={`Real stats from ${playerCount} players, ${teamCount} teams, and ${matches.length} matches. Powered by official NWSL data and ESPN.`}
     >
       {/* Key metrics */}
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -178,8 +178,8 @@ export default function AnalyticsPage() {
                 <Pill tone="success">{teamCount} teams</Pill>
               </div>
               <div className="flex items-center justify-between">
-                <span>Match fixtures</span>
-                <Pill tone="default">Awaiting API-Football</Pill>
+                <span>Match results</span>
+                <Pill tone="success">{matches.length} from ESPN</Pill>
               </div>
               <div className="flex items-center justify-between">
                 <span>Model predictions</span>
@@ -228,9 +228,7 @@ export default function AnalyticsPage() {
                     {match.awayGoals}
                   </span>
                 </div>
-                <div className="mt-2 text-xs text-muted">
-                  xG: {match.homeXg.toFixed(1)} - {match.awayXg.toFixed(1)}
-                </div>
+                <div className="mt-1 text-xs text-muted/70">{match.venue}</div>
               </Link>
             ))}
           </div>

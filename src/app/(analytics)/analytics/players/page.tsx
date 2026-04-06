@@ -23,9 +23,9 @@ const sortOptions: Array<{ key: PlayerSortKey; label: string }> = [
   { key: "fantasyPoints", label: "Fantasy Pts" },
   { key: "goals", label: "Goals" },
   { key: "assists", label: "Assists" },
-  { key: "xg", label: "xG" },
   { key: "pointsPer90", label: "Pts/90" },
   { key: "minutes", label: "Minutes" },
+  { key: "appearances", label: "Appearances" },
 ];
 
 export default function PlayerRankingsPage() {
@@ -51,7 +51,7 @@ export default function PlayerRankingsPage() {
     <AppShell
       eyebrow="Player Analytics"
       title="Rankings"
-      description="Every player in the NWSL ranked by performance, goals, assists, xG, and fantasy points."
+      description="Every player in the NWSL ranked by performance, goals, assists, and fantasy points. Real 2025 stats."
     >
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
@@ -115,8 +115,8 @@ export default function PlayerRankingsPage() {
               <th className="px-4 py-3 text-right">Min</th>
               <th className="px-4 py-3 text-right">G</th>
               <th className="px-4 py-3 text-right">A</th>
-              <th className="px-4 py-3 text-right">xG</th>
-              <th className="px-4 py-3 text-right">xA</th>
+              <th className="px-4 py-3 text-right">Shots</th>
+              <th className="px-4 py-3 text-right">Tkl</th>
               <th className="px-4 py-3 text-right">FP</th>
               <th className="px-4 py-3 text-right">FP/90</th>
             </tr>
@@ -144,8 +144,8 @@ export default function PlayerRankingsPage() {
                 <td className="px-4 py-3 text-right font-mono">{player.minutes}</td>
                 <td className="px-4 py-3 text-right font-mono">{player.goals}</td>
                 <td className="px-4 py-3 text-right font-mono">{player.assists}</td>
-                <td className="px-4 py-3 text-right font-mono">{player.xg.toFixed(1)}</td>
-                <td className="px-4 py-3 text-right font-mono">{player.xa.toFixed(1)}</td>
+                <td className="px-4 py-3 text-right font-mono">{player.shots}</td>
+                <td className="px-4 py-3 text-right font-mono">{player.tackles}</td>
                 <td className="px-4 py-3 text-right font-mono font-semibold text-brand-strong">
                   {player.fantasyPoints}
                 </td>

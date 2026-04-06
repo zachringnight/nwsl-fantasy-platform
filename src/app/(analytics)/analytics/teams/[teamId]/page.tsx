@@ -32,11 +32,11 @@ export default function TeamDetailPage() {
   // Radar data for team profile
   const radarData = stats
     ? [
-        { subject: "Attack (xG)", value: Math.min(100, (stats.xg / 25) * 100) },
-        { subject: "Defense (xGA)", value: Math.min(100, ((25 - stats.xga) / 25) * 100) },
-        { subject: "Possession", value: stats.possession },
-        { subject: "Pass Acc.", value: stats.passAccuracy },
-        { subject: "Shooting", value: Math.min(100, (stats.shotsOnTarget / 80) * 100) },
+        { subject: "Goals", value: Math.min(100, (standing.goalsFor / Math.max(standing.played, 1)) * 40) },
+        { subject: "Defense", value: Math.min(100, Math.max(0, 90 - (standing.goalsAgainst / Math.max(standing.played, 1)) * 30)) },
+        { subject: "Shots", value: Math.min(100, (stats.shots / 200) * 100) },
+        { subject: "Shooting Acc.", value: stats.shots > 0 ? (stats.shotsOnTarget / stats.shots) * 100 : 0 },
+        { subject: "Tackles", value: Math.min(100, (stats.tackles / 200) * 100) },
         { subject: "Pressing", value: Math.min(100, ((stats.tackles + stats.interceptions) / 400) * 100) },
       ]
     : [];
@@ -66,8 +66,8 @@ export default function TeamDetailPage() {
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         <MetricTile label="Position" value={`#${getStandingPosition(standing.teamId)}`} tone="brand" />
         <MetricTile label="Points" value={standing.points} detail={`${standing.won}W ${standing.drawn}D ${standing.lost}L`} tone="brand" />
-        <MetricTile label="Goals For" value={standing.goalsFor} detail={`xG: ${standing.xg.toFixed(1)}`} />
-        <MetricTile label="Goals Against" value={standing.goalsAgainst} detail={`xGA: ${standing.xga.toFixed(1)}`} />
+        <MetricTile label="Goals For" value={standing.goalsFor} detail={`${standing.played} games`} />
+        <MetricTile label="Goals Against" value={standing.goalsAgainst} detail={`GD: ${standing.goalDifference >= 0 ? "+" : ""}${standing.goalDifference}`} />
         <MetricTile label="Clean Sheets" value={stats?.cleanSheets ?? 0} />
         <MetricTile
           label="Form"
@@ -118,8 +118,8 @@ export default function TeamDetailPage() {
               <MetricTile label="On Target" value={stats.shotsOnTarget} />
               <MetricTile label="Tackles" value={stats.tackles} />
               <MetricTile label="Interceptions" value={stats.interceptions} />
-              <MetricTile label="Corners" value={stats.corners} />
-              <MetricTile label="Pass Acc." value={`${stats.passAccuracy.toFixed(0)}%`} />
+              <MetricTile label="Clean Sheets" value={stats.cleanSheets} />
+              <MetricTile label="Shot Acc." value={stats.shots > 0 ? `${Math.round((stats.shotsOnTarget / stats.shots) * 100)}%` : "—"} />
             </div>
           </section>
         )}

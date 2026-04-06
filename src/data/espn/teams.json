@@ -1,0 +1,18 @@
+[
+  { "espnId": "21422", "name": "Angel City FC", "abbreviation": "LA" },
+  { "espnId": "22187", "name": "Bay FC", "abbreviation": "BAY" },
+  { "espnId": "131562", "name": "Boston Legacy FC", "abbreviation": "BOS" },
+  { "espnId": "15360", "name": "Chicago Stars FC", "abbreviation": "CHI" },
+  { "espnId": "131563", "name": "Denver Summit FC", "abbreviation": "DEN" },
+  { "espnId": "15364", "name": "Gotham FC", "abbreviation": "GFC" },
+  { "espnId": "17346", "name": "Houston Dash", "abbreviation": "HOU" },
+  { "espnId": "20907", "name": "Kansas City Current", "abbreviation": "KC" },
+  { "espnId": "15366", "name": "North Carolina Courage", "abbreviation": "NC" },
+  { "espnId": "18206", "name": "Orlando Pride", "abbreviation": "ORL" },
+  { "espnId": "15362", "name": "Portland Thorns FC", "abbreviation": "POR" },
+  { "espnId": "20905", "name": "Racing Louisville FC", "abbreviation": "LOU" },
+  { "espnId": "21423", "name": "San Diego Wave FC", "abbreviation": "SD" },
+  { "espnId": "15363", "name": "Seattle Reign FC", "abbreviation": "SEA" },
+  { "espnId": "19141", "name": "Utah Royals", "abbreviation": "UTA" },
+  { "espnId": "15365", "name": "Washington Spirit", "abbreviation": "WAS" }
+]

@@ -41,7 +41,7 @@ export default function MatchesPage() {
     <AppShell
       eyebrow="Match Analytics"
       title="Match Center"
-      description="Every NWSL match — results, xG, and upcoming fixtures with model predictions."
+      description={`${matches.length} real NWSL matches from the 2025 and 2026 seasons. Data from ESPN.`}
     >
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
@@ -120,12 +120,7 @@ export default function MatchesPage() {
                         </span>
                       </div>
                     </div>
-                    {match.status === "completed" && (
-                      <div className="mt-2 text-xs text-muted">
-                        xG: {match.homeXg.toFixed(1)} - {match.awayXg.toFixed(1)}
-                      </div>
-                    )}
-                    <div className="mt-1 text-xs text-muted/70">{match.venue}</div>
+                    <div className="mt-2 text-xs text-muted/70">{match.venue}</div>
                   </Link>
                 ))}
               </div>
