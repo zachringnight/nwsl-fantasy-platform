@@ -5,11 +5,20 @@ import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { Pill } from "@/components/ui/pill";
 import { getMatchResults } from "@/lib/analytics/analytics-data";
+import { useAnalyticsSeason } from "@/components/analytics/season-selector";
 
 type StatusFilter = "all" | "completed" | "upcoming";
 
 export default function MatchesPage() {
-  const matches = useMemo(() => getMatchResults(), []);
+  const season = useAnalyticsSeason();
+  const allMatches = useMemo(() => getMatchResults(), []);
+  // Filter by season based on date
+  const matches = useMemo(() => {
+    return allMatches.filter((m) => {
+      const year = m.date.substring(0, 4);
+      return year === season;
+    });
+  }, [allMatches, season]);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [matchdayFilter, setMatchdayFilter] = useState<number | null>(null);
 

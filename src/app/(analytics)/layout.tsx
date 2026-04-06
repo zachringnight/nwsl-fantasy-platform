@@ -6,11 +6,14 @@ import {
   BarChart3,
   Brain,
   Gauge,
+  GitCompareArrows,
   Swords,
   Trophy,
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Suspense } from "react";
+import { SeasonSelector } from "@/components/analytics/season-selector";
 
 const analyticsNav = [
   { href: "/analytics", label: "Overview", icon: BarChart3, exact: true },
@@ -18,6 +21,7 @@ const analyticsNav = [
   { href: "/analytics/teams", label: "Teams", icon: Trophy },
   { href: "/analytics/matches", label: "Matches", icon: Swords },
   { href: "/analytics/predictions", label: "Predictions", icon: Brain },
+  { href: "/analytics/compare", label: "Compare", icon: GitCompareArrows },
   { href: "/analytics/ratings", label: "Ratings", icon: Gauge },
 ];
 
@@ -34,7 +38,7 @@ export default function AnalyticsLayout({
         aria-label="Analytics"
         className="page-shell sticky top-[5.5rem] z-40 border-b border-line bg-panel-strong/80 backdrop-blur-xl"
       >
-        <div className="flex gap-1 overflow-x-auto px-4 py-2.5 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex items-center gap-1 overflow-x-auto px-4 py-2.5 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {analyticsNav.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
@@ -57,6 +61,11 @@ export default function AnalyticsLayout({
               </Link>
             );
           })}
+          <div className="ml-auto shrink-0 pl-4">
+            <Suspense>
+              <SeasonSelector />
+            </Suspense>
+          </div>
         </div>
       </nav>
       {children}

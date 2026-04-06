@@ -23,9 +23,13 @@ import {
   getEspnStandings2026,
   getEspnStandings2025,
   getAllEspnMatches,
+  getEspnMatchesBySeason,
+  getEspnStandingsBySeason,
   type EspnMatch,
   type EspnStanding,
 } from "./espn-data-loader";
+
+export type Season = "2025" | "2026";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -273,6 +277,37 @@ export function getRealTeamById(teamId: string) {
   );
 
   return { standing, stats: stat, rating, matches, players };
+}
+
+// ── Season-aware accessors ──────────────────────────────────────────────────
+
+export function getStandingsBySeason(season: Season): TeamStanding[] {
+  const espn = getEspnStandingsBySeason(season);
+  const matches = getEspnMatchesBySeason(season);
+  return espnStandingsToTeamStandings(espn, matches);
+}
+
+export function getMatchResultsBySeason(season: Season): MatchResult[] {
+  const matches = getEspnMatchesBySeason(season);
+  const dateToMatchday = new Map<string, number>();
+  const uniqueDates = [...new Set(matches.map((m) => m.date))].sort();
+  uniqueDates.forEach((d, i) => dateToMatchday.set(d, i + 1));
+
+  return matches.map((m) => ({
+    matchId: m.matchId,
+    date: m.date,
+    matchday: dateToMatchday.get(m.date) ?? 1,
+    homeTeam: m.homeTeam,
+    homeTeamId: slugify(m.homeTeam),
+    awayTeam: m.awayTeam,
+    awayTeamId: slugify(m.awayTeam),
+    homeGoals: m.homeGoals,
+    awayGoals: m.awayGoals,
+    homeXg: 0,
+    awayXg: 0,
+    venue: m.venue,
+    status: m.status,
+  }));
 }
 
 // ── Metadata ────────────────────────────────────────────────────────────────

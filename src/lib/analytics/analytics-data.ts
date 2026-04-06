@@ -31,7 +31,12 @@ import {
   getRealTeamRatings,
   getRealTeamById,
   getRealMatchResults,
+  getStandingsBySeason,
+  getMatchResultsBySeason,
+  type Season,
 } from "@/lib/analytics/analytics-real-data";
+
+export type { Season } from "@/lib/analytics/analytics-real-data";
 
 import {
   loadModelPredictions,
@@ -134,4 +139,14 @@ export function getMatchPrediction(matchId: string): MatchPrediction | undefined
 
 export function getModelPerformance(): ModelPerformance | null {
   return loadModelPerformance();
+}
+
+// ── Season-aware data ──────────────────────────────────────────────────────
+
+export function getLeagueTableBySeason(season: Season): TeamStanding[] {
+  return getStandingsBySeason(season);
+}
+
+export function getMatchResultsBySeason_(season: Season): MatchResult[] {
+  return getMatchResultsBySeason(season);
 }

@@ -9,13 +9,15 @@ import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
 import { FormIndicator } from "@/components/analytics/form-indicator";
 import { ThemedRadarChart } from "@/components/analytics/charts/themed-radar-chart";
-import { getTeamDetail, getLeagueTable } from "@/lib/analytics/analytics-data";
+import { ScoringTrends } from "@/components/analytics/scoring-trends";
+import { getTeamDetail, getLeagueTable, getMatchResults } from "@/lib/analytics/analytics-data";
 
 export default function TeamDetailPage() {
   const params = useParams<{ teamId: string }>();
   const teamId = params.teamId;
 
   const data = useMemo(() => getTeamDetail(teamId), [teamId]);
+  const allMatches = useMemo(() => getMatchResults(), []);
 
   if (!data.standing) {
     return (
@@ -91,6 +93,14 @@ export default function TeamDetailPage() {
             />
           </section>
         )}
+
+        {/* Scoring Trends */}
+        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+            Goals Per Match
+          </h3>
+          <ScoringTrends matches={allMatches} teamId={teamId} />
+        </section>
 
         {/* Model Rating */}
         {rating && (

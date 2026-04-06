@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
+import { ScoringTrends } from "@/components/analytics/scoring-trends";
 import {
   getLeagueTable,
   getPlayerRankings,
@@ -189,6 +190,16 @@ export default function AnalyticsPage() {
           </div>
         )}
       </section>
+
+      {/* League-wide Scoring Trends */}
+      {matches.length > 0 && (
+        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+            Scoring Trends
+          </h3>
+          <ScoringTrends matches={matches} />
+        </section>
+      )}
 
       {/* Recent Results or Empty State */}
       <section>

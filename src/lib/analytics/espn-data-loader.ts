@@ -67,6 +67,14 @@ export function getAllEspnMatches(): EspnMatch[] {
   return [...getEspnMatches2025(), ...getEspnMatches2026()];
 }
 
+export function getEspnMatchesBySeason(season: "2025" | "2026"): EspnMatch[] {
+  return season === "2025" ? getEspnMatches2025() : getEspnMatches2026();
+}
+
+export function getEspnStandingsBySeason(season: "2025" | "2026"): EspnStanding[] {
+  return season === "2025" ? getEspnStandings2025() : getEspnStandings2026();
+}
+
 export function getEspnTeams(): EspnTeam[] {
   return teams as EspnTeam[];
 }

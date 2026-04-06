@@ -1,24 +1,30 @@
 import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { FormIndicator } from "@/components/analytics/form-indicator";
-import { getLeagueTable } from "@/lib/analytics/analytics-data";
+import { getLeagueTableBySeason, type Season } from "@/lib/analytics/analytics-data";
 
 export const metadata = {
   title: "League Table",
-  description: "NWSL standings, points, goal difference, and recent form for all 14 teams.",
+  description: "NWSL standings, points, goal difference, and recent form for all teams.",
 };
 
-export default function TeamsPage() {
-  const standings = getLeagueTable();
+export default async function TeamsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ season?: string }>;
+}) {
+  const params = await searchParams;
+  const season: Season = params.season === "2025" ? "2025" : "2026";
+  const standings = getLeagueTableBySeason(season);
 
   return (
     <AppShell
       eyebrow="Team Analytics"
       title="League Table"
-      description="Full NWSL standings with real W/D/L records, goal difference, and recent form from ESPN."
+      description={`${season} NWSL standings with real W/D/L records, goal difference, and recent form from ESPN.`}
     >
       <div className="overflow-x-auto rounded-[1.4rem] border border-line bg-white/4">
-        <table className="w-full min-w-[900px] text-sm">
+        <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="border-b border-line text-left text-xs uppercase tracking-widest text-muted">
               <th className="px-4 py-3 w-10">#</th>
@@ -36,13 +42,13 @@ export default function TeamsPage() {
           </thead>
           <tbody>
             {standings.map((team, i) => {
-              const isTop = i < 4;
+              const isPlayoff = season === "2025" ? i < 8 : i < 4;
               const isBottom = i >= standings.length - 2;
               return (
                 <tr
                   key={team.teamId}
                   className={`border-b border-line/50 transition hover:bg-white/4 ${
-                    isTop
+                    isPlayoff
                       ? "border-l-2 border-l-brand-strong"
                       : isBottom
                         ? "border-l-2 border-l-danger/60"
