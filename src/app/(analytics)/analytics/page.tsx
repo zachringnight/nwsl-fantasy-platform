@@ -8,6 +8,7 @@ import {
   getMatchResults,
   getMatchPredictions,
 } from "@/lib/analytics/analytics-data";
+import { getRealPlayerCount, getRealTeamNames } from "@/lib/analytics/analytics-real-data";
 
 export const metadata = {
   title: "Analytics",
@@ -19,19 +20,19 @@ export default function AnalyticsPage() {
   const players = getPlayerRankings();
   const matches = getMatchResults();
   const predictions = getMatchPredictions();
+  const playerCount = getRealPlayerCount();
+  const teamCount = getRealTeamNames().length;
 
   const leader = standings[0];
   const topScorer = [...players].sort((a, b) => b.goals - a.goals)[0];
   const topAssister = [...players].sort((a, b) => b.assists - a.assists)[0];
   const topFP = players[0];
-  const completedMatches = matches.filter((m) => m.status === "completed");
-  const upcomingMatches = matches.filter((m) => m.status === "upcoming");
 
   return (
     <AppShell
       eyebrow="NWSL Analytics"
       title="The Pulse"
-      description="Real-time stats, advanced metrics, and model-powered predictions for every team and player in the NWSL."
+      description={`Real stats from ${playerCount} NWSL players across ${teamCount} teams. Powered by official 2025 season data.`}
     >
       {/* Key metrics */}
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -100,7 +101,7 @@ export default function AnalyticsPage() {
             <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
               Top Players
             </h2>
-            <Pill tone="brand">View all</Pill>
+            <Pill tone="brand">{playerCount} players</Pill>
           </div>
           <div className="space-y-2">
             {players.slice(0, 5).map((player, i) => (
@@ -123,94 +124,126 @@ export default function AnalyticsPage() {
           </div>
         </Link>
 
-        {/* Upcoming Predictions Preview */}
-        <Link
-          href="/analytics/predictions"
-          className="group glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
-              Predictions
-            </h2>
-            <Pill tone="accent">AI Model</Pill>
-          </div>
-          <div className="space-y-3">
-            {predictions.slice(0, 4).map((pred) => (
-              <div key={pred.matchId} className="space-y-1">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground">{pred.homeTeam}</span>
-                  <span className="font-mono text-brand-strong">
-                    {(pred.homeProb * 100).toFixed(0)}%
-                  </span>
+        {/* Predictions or Data Status */}
+        {predictions.length > 0 ? (
+          <Link
+            href="/analytics/predictions"
+            className="group glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+                Predictions
+              </h2>
+              <Pill tone="accent">AI Model</Pill>
+            </div>
+            <div className="space-y-3">
+              {predictions.slice(0, 4).map((pred) => (
+                <div key={pred.matchId} className="space-y-1">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground">{pred.homeTeam}</span>
+                    <span className="font-mono text-brand-strong">
+                      {(pred.homeProb * 100).toFixed(0)}%
+                    </span>
+                  </div>
+                  <div className="flex h-1.5 overflow-hidden rounded-full">
+                    <div className="bg-brand-strong" style={{ width: `${pred.homeProb * 100}%` }} />
+                    <div className="bg-muted/40" style={{ width: `${pred.drawProb * 100}%` }} />
+                    <div className="bg-accent" style={{ width: `${pred.awayProb * 100}%` }} />
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-foreground">{pred.awayTeam}</span>
+                    <span className="font-mono text-accent">
+                      {(pred.awayProb * 100).toFixed(0)}%
+                    </span>
+                  </div>
                 </div>
-                {/* Probability bar */}
-                <div className="flex h-1.5 overflow-hidden rounded-full">
-                  <div
-                    className="bg-brand-strong"
-                    style={{ width: `${pred.homeProb * 100}%` }}
-                  />
-                  <div
-                    className="bg-muted/40"
-                    style={{ width: `${pred.drawProb * 100}%` }}
-                  />
-                  <div
-                    className="bg-accent"
-                    style={{ width: `${pred.awayProb * 100}%` }}
-                  />
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground">{pred.awayTeam}</span>
-                  <span className="font-mono text-accent">
-                    {(pred.awayProb * 100).toFixed(0)}%
-                  </span>
-                </div>
+              ))}
+            </div>
+          </Link>
+        ) : (
+          <div className="glass-card rounded-[1.4rem] border border-line bg-white/6 p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+                Data Pipeline
+              </h2>
+              <Pill tone="default">Status</Pill>
+            </div>
+            <div className="space-y-3 text-sm text-muted">
+              <div className="flex items-center justify-between">
+                <span>Player stats</span>
+                <Pill tone="success">{playerCount} loaded</Pill>
               </div>
-            ))}
+              <div className="flex items-center justify-between">
+                <span>Team standings</span>
+                <Pill tone="success">{teamCount} teams</Pill>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Match fixtures</span>
+                <Pill tone="default">Awaiting API-Football</Pill>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Model predictions</span>
+                <Pill tone="default">Awaiting model run</Pill>
+              </div>
+            </div>
           </div>
-        </Link>
+        )}
       </section>
 
-      {/* Recent Results */}
+      {/* Recent Results or Empty State */}
       <section>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
             Recent Results
           </h2>
-          <Link
-            href="/analytics/matches"
-            className="text-sm text-muted transition hover:text-brand-strong"
-          >
-            All matches
-          </Link>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {completedMatches.slice(-8).reverse().map((match) => (
+          {matches.length > 0 && (
             <Link
-              key={match.matchId}
-              href={`/analytics/matches/${match.matchId}`}
-              className="glass-card rounded-xl border border-line bg-white/6 p-4 transition hover:border-brand/30"
+              href="/analytics/matches"
+              className="text-sm text-muted transition hover:text-brand-strong"
             >
-              <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-widest text-muted">
-                Matchday {match.matchday}
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-foreground">{match.homeTeam}</span>
-                <span className="font-mono text-lg font-semibold text-foreground">
-                  {match.homeGoals}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-foreground">{match.awayTeam}</span>
-                <span className="font-mono text-lg font-semibold text-foreground">
-                  {match.awayGoals}
-                </span>
-              </div>
-              <div className="mt-2 flex gap-2 text-xs text-muted">
-                <span>xG: {match.homeXg.toFixed(1)} - {match.awayXg.toFixed(1)}</span>
-              </div>
+              All matches
             </Link>
-          ))}
+          )}
         </div>
+        {matches.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {matches.filter((m) => m.status === "completed").slice(-8).reverse().map((match) => (
+              <Link
+                key={match.matchId}
+                href={`/analytics/matches/${match.matchId}`}
+                className="glass-card rounded-xl border border-line bg-white/6 p-4 transition hover:border-brand/30"
+              >
+                <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-widest text-muted">
+                  Matchday {match.matchday}
+                </p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground">{match.homeTeam}</span>
+                  <span className="font-mono text-lg font-semibold text-foreground">
+                    {match.homeGoals}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground">{match.awayTeam}</span>
+                  <span className="font-mono text-lg font-semibold text-foreground">
+                    {match.awayGoals}
+                  </span>
+                </div>
+                <div className="mt-2 text-xs text-muted">
+                  xG: {match.homeXg.toFixed(1)} - {match.awayXg.toFixed(1)}
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-8 text-center">
+            <p className="text-sm text-muted">
+              Match results will appear here once the API-Football fixture sync is configured.
+            </p>
+            <p className="mt-1 text-xs text-muted/60">
+              Set the <code className="font-mono text-brand-strong">API_FOOTBALL_KEY</code> environment variable to enable live match data.
+            </p>
+          </div>
+        )}
       </section>
     </AppShell>
   );

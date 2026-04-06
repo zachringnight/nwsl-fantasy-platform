@@ -78,59 +78,70 @@ export default function MatchesPage() {
       </div>
 
       {/* Match Groups */}
-      <div className="space-y-8">
-        {grouped.map((group) => (
-          <section key={group.matchday}>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted">
-              Matchday {group.matchday}
-            </h3>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {group.matches.map((match) => (
-                <Link
-                  key={match.matchId}
-                  href={`/analytics/matches/${match.matchId}`}
-                  className="glass-card rounded-xl border border-line bg-white/6 p-4 transition hover:border-brand/30"
-                >
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="text-[0.65rem] font-medium uppercase tracking-widest text-muted">
-                      {match.date}
-                    </span>
-                    <Pill
-                      tone={
-                        match.status === "completed"
-                          ? "default"
-                          : "brand"
-                      }
-                    >
-                      {match.status === "completed" ? "FT" : "Upcoming"}
-                    </Pill>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-foreground">{match.homeTeam}</span>
-                      <span className="font-mono text-lg font-semibold text-foreground">
-                        {match.status === "completed" ? match.homeGoals : "-"}
+      {matches.length > 0 ? (
+        <div className="space-y-8">
+          {grouped.map((group) => (
+            <section key={group.matchday}>
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-muted">
+                Matchday {group.matchday}
+              </h3>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {group.matches.map((match) => (
+                  <Link
+                    key={match.matchId}
+                    href={`/analytics/matches/${match.matchId}`}
+                    className="glass-card rounded-xl border border-line bg-white/6 p-4 transition hover:border-brand/30"
+                  >
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="text-[0.65rem] font-medium uppercase tracking-widest text-muted">
+                        {match.date}
                       </span>
+                      <Pill
+                        tone={
+                          match.status === "completed"
+                            ? "default"
+                            : "brand"
+                        }
+                      >
+                        {match.status === "completed" ? "FT" : "Upcoming"}
+                      </Pill>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-foreground">{match.awayTeam}</span>
-                      <span className="font-mono text-lg font-semibold text-foreground">
-                        {match.status === "completed" ? match.awayGoals : "-"}
-                      </span>
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-foreground">{match.homeTeam}</span>
+                        <span className="font-mono text-lg font-semibold text-foreground">
+                          {match.status === "completed" ? match.homeGoals : "-"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-foreground">{match.awayTeam}</span>
+                        <span className="font-mono text-lg font-semibold text-foreground">
+                          {match.status === "completed" ? match.awayGoals : "-"}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  {match.status === "completed" && (
-                    <div className="mt-2 text-xs text-muted">
-                      xG: {match.homeXg.toFixed(1)} - {match.awayXg.toFixed(1)}
-                    </div>
-                  )}
-                  <div className="mt-1 text-xs text-muted/70">{match.venue}</div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+                    {match.status === "completed" && (
+                      <div className="mt-2 text-xs text-muted">
+                        xG: {match.homeXg.toFixed(1)} - {match.awayXg.toFixed(1)}
+                      </div>
+                    )}
+                    <div className="mt-1 text-xs text-muted/70">{match.venue}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-8 text-center">
+          <p className="text-sm text-muted">
+            Match fixtures and results will appear here once the API-Football fixture sync is configured.
+          </p>
+          <p className="mt-1 text-xs text-muted/60">
+            Set the <code className="font-mono text-brand-strong">API_FOOTBALL_KEY</code> environment variable to enable live match data.
+          </p>
+        </div>
+      )}
     </AppShell>
   );
 }

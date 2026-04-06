@@ -1,9 +1,13 @@
 /**
  * Analytics data layer.
  *
- * Server-side functions that return analytics data.
- * Currently backed by mock data; designed to swap in API-Football / Prisma
- * and Python model JSON outputs without changing the interface.
+ * Returns REAL data only. No mock fallbacks — if data isn't available,
+ * functions return empty results and the UI shows appropriate empty states.
+ *
+ * Data sources:
+ * - Players & team stats: Real NWSL player pool (410 players, official 2025 stats)
+ * - Predictions: Pre-computed JSON from Python model (when available)
+ * - Matches: API-Football fixtures via Prisma (when connected)
  */
 
 import type {
@@ -20,85 +24,91 @@ import type {
 } from "@/types/analytics";
 
 import {
-  getMockStandings,
-  getMockTeamStats,
-  getMockTeamRatings,
-  getMockPlayers,
-  getMockPlayerById,
-  getMockPlayerMatchLog,
-  getMockPlayerForm,
-  getMockMatches,
-  getMockMatchDetail,
-  getMockPredictions,
-  getMockPredictionById,
-  getMockModelPerformance,
-  getMockTeamById,
-} from "@/lib/analytics/analytics-mock-data";
+  getRealPlayerRankings,
+  getRealPlayerById,
+  getRealStandings,
+  getRealTeamStats,
+  getRealTeamRatings,
+  getRealTeamById,
+} from "@/lib/analytics/analytics-real-data";
 
-// ── Team data ───────────────────────────────────────────────────────────────
+import {
+  loadModelPredictions,
+  loadModelTeamRatings,
+  loadModelPerformance,
+} from "@/lib/analytics/model-data-loader";
+
+// ── Team data (REAL — derived from 410 official NWSL player stats) ──────────
 
 export function getLeagueTable(): TeamStanding[] {
-  return getMockStandings();
+  return getRealStandings();
 }
 
 export function getTeamStats(): TeamStats[] {
-  return getMockTeamStats();
+  return getRealTeamStats();
 }
 
 export function getTeamRatings(): TeamRating[] {
-  return getMockTeamRatings();
+  const modelRatings = loadModelTeamRatings();
+  if (modelRatings.length > 0) return modelRatings;
+  return getRealTeamRatings();
 }
 
 export function getTeamDetail(teamId: string) {
-  return getMockTeamById(teamId);
+  return getRealTeamById(teamId);
 }
 
-// ── Player data ──────────────────────────────────────────���──────────────────
+// ── Player data (REAL — 410 official NWSL players with 2025 season stats) ───
 
 export function getPlayerRankings(): PlayerSeasonStats[] {
-  return getMockPlayers();
+  return getRealPlayerRankings();
 }
 
 export function getPlayerDetail(playerId: string): PlayerSeasonStats | undefined {
-  return getMockPlayerById(playerId);
+  return getRealPlayerById(playerId);
 }
 
+/** Requires per-match data from API-Football. Returns empty until connected. */
 export function getPlayerMatchLog(playerId: string): PlayerMatchLog[] {
-  return getMockPlayerMatchLog(playerId);
+  return [];
 }
 
+/** Requires per-match data from API-Football. Returns empty until connected. */
 export function getPlayerForm(playerId: string): PlayerFormPoint[] {
-  return getMockPlayerForm(playerId);
+  return [];
 }
 
-// ── Match data ──────────────────────────────────────────────────────────────
+// ── Match data (requires API-Football fixtures — empty until connected) ─────
 
+/** Returns empty until API-Football fixture sync is configured. */
 export function getMatchResults(): MatchResult[] {
-  return getMockMatches();
+  return [];
 }
 
+/** Returns undefined until API-Football fixture sync is configured. */
 export function getMatchDetail(matchId: string): MatchDetail | undefined {
-  return getMockMatchDetail(matchId);
+  return undefined;
 }
 
 export function getUpcomingMatches(): MatchResult[] {
-  return getMockMatches().filter((m) => m.status === "upcoming");
+  return [];
 }
 
 export function getCompletedMatches(): MatchResult[] {
-  return getMockMatches().filter((m) => m.status === "completed");
+  return [];
 }
 
-// ── Model predictions ───────────────────────────────────────────────────────
+// ── Model predictions (from Python pipeline — empty until model runs) ───────
 
 export function getMatchPredictions(): MatchPrediction[] {
-  return getMockPredictions();
+  return loadModelPredictions();
 }
 
 export function getMatchPrediction(matchId: string): MatchPrediction | undefined {
-  return getMockPredictionById(matchId);
+  const preds = loadModelPredictions();
+  return preds.find((p) => p.matchId === matchId);
 }
 
-export function getModelPerformance(): ModelPerformance {
-  return getMockModelPerformance();
+export function getModelPerformance(): ModelPerformance | null {
+  return loadModelPerformance();
 }

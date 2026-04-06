@@ -8,8 +8,6 @@ import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
 import { FormIndicator } from "@/components/analytics/form-indicator";
-import { ThemedLineChart } from "@/components/analytics/charts/themed-line-chart";
-import { ThemedBarChart } from "@/components/analytics/charts/themed-bar-chart";
 import { ThemedRadarChart } from "@/components/analytics/charts/themed-radar-chart";
 import { getTeamDetail, getLeagueTable } from "@/lib/analytics/analytics-data";
 
@@ -31,36 +29,23 @@ export default function TeamDetailPage() {
 
   const { standing, stats, rating, matches, players } = data;
 
-  // Match results for chart
-  const matchChartData = matches
-    .filter((m) => m.status === "completed")
-    .map((m, i) => {
-      const isHome = m.homeTeamId === teamId;
-      const goalsFor = isHome ? m.homeGoals : m.awayGoals;
-      const goalsAgainst = isHome ? m.awayGoals : m.homeGoals;
-      const xgFor = isHome ? m.homeXg : m.awayXg;
-      return {
-        match: `MD ${m.matchday}`,
-        "Goals Scored": goalsFor,
-        "Goals Conceded": goalsAgainst,
-        xG: Number(xgFor.toFixed(1)),
-      };
-    });
-
   // Radar data for team profile
   const radarData = stats
     ? [
-        { subject: "Attack (xG)", value: Math.min(100, (stats.xg / 22) * 100) },
-        { subject: "Defense (xGA)", value: Math.min(100, ((22 - stats.xga) / 22) * 100) },
+        { subject: "Attack (xG)", value: Math.min(100, (stats.xg / 25) * 100) },
+        { subject: "Defense (xGA)", value: Math.min(100, ((25 - stats.xga) / 25) * 100) },
         { subject: "Possession", value: stats.possession },
         { subject: "Pass Acc.", value: stats.passAccuracy },
-        { subject: "Shooting", value: Math.min(100, (stats.shotsOnTarget / 70) * 100) },
-        { subject: "Pressing", value: Math.min(100, ((stats.tackles + stats.interceptions) / 300) * 100) },
+        { subject: "Shooting", value: Math.min(100, (stats.shotsOnTarget / 80) * 100) },
+        { subject: "Pressing", value: Math.min(100, ((stats.tackles + stats.interceptions) / 400) * 100) },
       ]
     : [];
 
   // Top players
   const topPlayers = [...players].sort((a, b) => b.fantasyPoints - a.fantasyPoints).slice(0, 5);
+
+  // Match data (empty until API-Football is connected)
+  const completedMatches = matches.filter((m) => m.status === "completed");
 
   return (
     <AppShell
@@ -92,49 +77,20 @@ export default function TeamDetailPage() {
 
       {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Goals & xG Trend */}
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Goals & xG Per Match
-          </h3>
-          <ThemedLineChart
-            data={matchChartData}
-            xKey="match"
-            lines={[
-              { dataKey: "Goals Scored", label: "Goals Scored", color: "#00e1ff" },
-              { dataKey: "Goals Conceded", label: "Conceded", color: "#ff3c22" },
-              { dataKey: "xG", label: "xG", color: "#00e1ff", dashed: true },
-            ]}
-          />
-        </section>
-
         {/* Team Profile Radar */}
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Team Profile
-          </h3>
-          <ThemedRadarChart
-            data={radarData}
-            radars={[
-              { dataKey: "value", label: standing.team, color: "#00e1ff" },
-            ]}
-          />
-        </section>
-
-        {/* Goals Distribution */}
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Goals Per Matchday
-          </h3>
-          <ThemedBarChart
-            data={matchChartData}
-            xKey="match"
-            bars={[
-              { dataKey: "Goals Scored", label: "Scored", color: "#00e1ff" },
-              { dataKey: "Goals Conceded", label: "Conceded", color: "#ff3c22" },
-            ]}
-          />
-        </section>
+        {radarData.length > 0 && (
+          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Team Profile
+            </h3>
+            <ThemedRadarChart
+              data={radarData}
+              radars={[
+                { dataKey: "value", label: standing.team, color: "#00e1ff" },
+              ]}
+            />
+          </section>
+        )}
 
         {/* Model Rating */}
         {rating && (
@@ -150,6 +106,23 @@ export default function TeamDetailPage() {
             </div>
           </section>
         )}
+
+        {/* Team Stats Detail */}
+        {stats && (
+          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Season Stats
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              <MetricTile label="Total Shots" value={stats.shots} />
+              <MetricTile label="On Target" value={stats.shotsOnTarget} />
+              <MetricTile label="Tackles" value={stats.tackles} />
+              <MetricTile label="Interceptions" value={stats.interceptions} />
+              <MetricTile label="Corners" value={stats.corners} />
+              <MetricTile label="Pass Acc." value={`${stats.passAccuracy.toFixed(0)}%`} />
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Top Players */}
@@ -157,33 +130,37 @@ export default function TeamDetailPage() {
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
           Top Players
         </h3>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {topPlayers.map((player, i) => (
-            <Link
-              key={player.playerId}
-              href={`/analytics/players/${player.playerId}`}
-              className="glass-card rounded-xl border border-line bg-white/4 p-4 transition hover:border-brand/30"
-            >
-              <div className="flex items-center gap-3">
-                <span className="flex size-8 items-center justify-center rounded-full bg-brand/20 text-xs font-bold text-brand-strong">
-                  {i + 1}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-foreground">{player.name}</p>
-                  <div className="flex items-center gap-2">
-                    <Pill tone="default">{player.position}</Pill>
-                    <span className="text-xs text-muted">{player.fantasyPoints} FP</span>
+        {topPlayers.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {topPlayers.map((player, i) => (
+              <Link
+                key={player.playerId}
+                href={`/analytics/players/${player.playerId}`}
+                className="glass-card rounded-xl border border-line bg-white/4 p-4 transition hover:border-brand/30"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex size-8 items-center justify-center rounded-full bg-brand/20 text-xs font-bold text-brand-strong">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-foreground">{player.name}</p>
+                    <div className="flex items-center gap-2">
+                      <Pill tone="default">{player.position}</Pill>
+                      <span className="text-xs text-muted">{player.fantasyPoints} FP</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="mt-3 flex gap-4 text-xs text-muted">
-                <span>{player.goals}G</span>
-                <span>{player.assists}A</span>
-                <span>{player.appearances} app</span>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div className="mt-3 flex gap-4 text-xs text-muted">
+                  <span>{player.goals}G</span>
+                  <span>{player.assists}A</span>
+                  <span>{player.appearances} app</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted">No player data available for this team.</p>
+        )}
       </section>
 
       {/* Recent Results */}
@@ -191,12 +168,9 @@ export default function TeamDetailPage() {
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
           Recent Matches
         </h3>
-        <div className="space-y-2">
-          {matches
-            .filter((m) => m.status === "completed")
-            .slice(-5)
-            .reverse()
-            .map((match) => {
+        {completedMatches.length > 0 ? (
+          <div className="space-y-2">
+            {completedMatches.slice(-5).reverse().map((match) => {
               const isHome = match.homeTeamId === teamId;
               const gf = isHome ? match.homeGoals : match.awayGoals;
               const ga = isHome ? match.awayGoals : match.homeGoals;
@@ -217,16 +191,20 @@ export default function TeamDetailPage() {
                       {isHome ? "vs" : "@"} {opponent}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-lg font-semibold text-foreground">
-                      {match.homeGoals} - {match.awayGoals}
-                    </span>
-                    <span className="text-xs text-muted">MD {match.matchday}</span>
-                  </div>
+                  <span className="font-mono text-lg font-semibold text-foreground">
+                    {match.homeGoals} - {match.awayGoals}
+                  </span>
                 </Link>
               );
             })}
-        </div>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-dashed border-line bg-white/4 p-6 text-center">
+            <p className="text-sm text-muted">
+              Match results will appear here once API-Football fixture sync is configured.
+            </p>
+          </div>
+        )}
       </section>
     </AppShell>
   );

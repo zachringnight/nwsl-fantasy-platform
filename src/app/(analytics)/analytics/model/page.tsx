@@ -10,6 +10,29 @@ import { getModelPerformance } from "@/lib/analytics/analytics-data";
 export default function ModelPage() {
   const perf = useMemo(() => getModelPerformance(), []);
 
+  if (!perf) {
+    return (
+      <AppShell
+        eyebrow="Predictive Models"
+        title="Model Transparency"
+        description="How our prediction model works, its accuracy metrics, and calibration performance."
+      >
+        {/* Methodology (always shown) */}
+        <MethodologySection />
+
+        {/* Empty state for metrics */}
+        <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-8 text-center">
+          <p className="text-sm text-muted">
+            Model performance metrics will appear here after the prediction model has been trained and backtested.
+          </p>
+          <p className="mt-1 text-xs text-muted/60">
+            Run <code className="font-mono text-brand-strong">pnpm model:export</code> after training to generate performance data.
+          </p>
+        </div>
+      </AppShell>
+    );
+  }
+
   const calibrationData = perf.calibrationBuckets.map((b) => ({
     predicted: `${(b.predicted * 100).toFixed(0)}%`,
     "Predicted": b.predicted * 100,
@@ -100,61 +123,67 @@ export default function ModelPage() {
       </section>
 
       {/* Methodology */}
-      <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5 space-y-6">
-        <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
-          Methodology
-        </h3>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-3">
-            <h4 className="text-base font-semibold text-foreground">Score Prediction Framework</h4>
-            <p className="text-sm text-muted leading-relaxed">
-              We predict the full regulation-time scoreline distribution P(home_goals=i, away_goals=j)
-              and derive all betting markets from a single 9x9 score matrix. This ensures mathematical
-              consistency across all markets: 1X2, over/under, BTTS, and Asian handicaps all come from
-              the same probability distribution.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="text-base font-semibold text-foreground">Dynamic Dixon-Coles</h4>
-            <p className="text-sm text-muted leading-relaxed">
-              Our primary model uses independent Poisson distributions with a low-score correction
-              (rho parameter) to adjust for the empirical under-representation of 0-0 and 1-1 draws.
-              Team attack and defense parameters are estimated via maximum likelihood with exponential
-              decay weighting, giving recent matches more influence.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="text-base font-semibold text-foreground">Team Ratings</h4>
-            <p className="text-sm text-muted leading-relaxed">
-              Team strength ratings are driven by non-penalty expected goals (npxG) rather than raw
-              goals, reducing noise from penalty kicks and luck. New teams receive league-average priors
-              with configurable shrinkage. Season-to-season carryover is 60% by default.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="text-base font-semibold text-foreground">Backtesting</h4>
-            <p className="text-sm text-muted leading-relaxed">
-              All metrics use strict expanding-window time splits with no random shuffling. Each fold
-              trains only on past data and predicts future matches, ensuring no information leakage.
-              We benchmark against market-implied probabilities to validate model edge.
-            </p>
-          </div>
-        </div>
-
-        <div className="border-t border-line pt-4">
-          <h4 className="mb-2 text-base font-semibold text-foreground">Data Sources</h4>
-          <ul className="list-disc pl-5 space-y-1 text-sm text-muted">
-            <li>Match results and xG data from API-Football</li>
-            <li>NWSL regular season matches (2022-2026)</li>
-            <li>Models retrained weekly during the active season</li>
-            <li>Feature pipeline includes schedule, travel, and weather context</li>
-          </ul>
-        </div>
-      </section>
+      <MethodologySection />
     </AppShell>
+  );
+}
+
+function MethodologySection() {
+  return (
+    <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5 space-y-6">
+      <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+        Methodology
+      </h3>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-3">
+          <h4 className="text-base font-semibold text-foreground">Score Prediction Framework</h4>
+          <p className="text-sm text-muted leading-relaxed">
+            We predict the full regulation-time scoreline distribution P(home_goals=i, away_goals=j)
+            and derive all betting markets from a single 9x9 score matrix. This ensures mathematical
+            consistency across all markets: 1X2, over/under, BTTS, and Asian handicaps all come from
+            the same probability distribution.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <h4 className="text-base font-semibold text-foreground">Dynamic Dixon-Coles</h4>
+          <p className="text-sm text-muted leading-relaxed">
+            Our primary model uses independent Poisson distributions with a low-score correction
+            (rho parameter) to adjust for the empirical under-representation of 0-0 and 1-1 draws.
+            Team attack and defense parameters are estimated via maximum likelihood with exponential
+            decay weighting, giving recent matches more influence.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <h4 className="text-base font-semibold text-foreground">Team Ratings</h4>
+          <p className="text-sm text-muted leading-relaxed">
+            Team strength ratings are driven by non-penalty expected goals (npxG) rather than raw
+            goals, reducing noise from penalty kicks and luck. New teams receive league-average priors
+            with configurable shrinkage. Season-to-season carryover is 60% by default.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <h4 className="text-base font-semibold text-foreground">Backtesting</h4>
+          <p className="text-sm text-muted leading-relaxed">
+            All metrics use strict expanding-window time splits with no random shuffling. Each fold
+            trains only on past data and predicts future matches, ensuring no information leakage.
+            We benchmark against market-implied probabilities to validate model edge.
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-line pt-4">
+        <h4 className="mb-2 text-base font-semibold text-foreground">Data Sources</h4>
+        <ul className="list-disc pl-5 space-y-1 text-sm text-muted">
+          <li>Match results and xG data from API-Football</li>
+          <li>NWSL regular season matches (2022-2026)</li>
+          <li>Models retrained weekly during the active season</li>
+          <li>Feature pipeline includes schedule, travel, and weather context</li>
+        </ul>
+      </div>
+    </section>
   );
 }

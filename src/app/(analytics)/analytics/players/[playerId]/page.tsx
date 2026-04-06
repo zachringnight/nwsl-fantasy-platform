@@ -93,21 +93,32 @@ export default function PlayerDetailPage() {
       {/* Charts Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Fantasy Points Over Time */}
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Fantasy Points Trend
-          </h3>
-          <ThemedLineChart
-            data={form.map((f) => ({
-              matchday: `MD ${f.matchday}`,
-              points: f.fantasyPoints,
-            }))}
-            xKey="matchday"
-            lines={[
-              { dataKey: "points", label: "Fantasy Pts", color: "#00e1ff" },
-            ]}
-          />
-        </section>
+        {form.length > 0 ? (
+          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Fantasy Points Trend
+            </h3>
+            <ThemedLineChart
+              data={form.map((f) => ({
+                matchday: `MD ${f.matchday}`,
+                points: f.fantasyPoints,
+              }))}
+              xKey="matchday"
+              lines={[
+                { dataKey: "points", label: "Fantasy Pts", color: "#00e1ff" },
+              ]}
+            />
+          </section>
+        ) : (
+          <section className="glass-card rounded-[1.4rem] border border-dashed border-line bg-white/4 p-5 flex flex-col items-center justify-center text-center">
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Fantasy Points Trend
+            </h3>
+            <p className="text-sm text-muted">
+              Per-match data will appear here once API-Football fixture sync is configured.
+            </p>
+          </section>
+        )}
 
         {/* Performance Radar */}
         <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
@@ -138,19 +149,30 @@ export default function PlayerDetailPage() {
         </section>
 
         {/* Minutes Per Match */}
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Minutes Per Match
-          </h3>
-          <ThemedBarChart
-            data={matchLog.map((m, i) => ({
-              match: `MD ${i + 1}`,
-              minutes: m.minutes,
-            }))}
-            xKey="match"
-            bars={[{ dataKey: "minutes", label: "Minutes", color: "#0522ff" }]}
-          />
-        </section>
+        {matchLog.length > 0 ? (
+          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Minutes Per Match
+            </h3>
+            <ThemedBarChart
+              data={matchLog.map((m, i) => ({
+                match: `MD ${i + 1}`,
+                minutes: m.minutes,
+              }))}
+              xKey="match"
+              bars={[{ dataKey: "minutes", label: "Minutes", color: "#0522ff" }]}
+            />
+          </section>
+        ) : (
+          <section className="glass-card rounded-[1.4rem] border border-dashed border-line bg-white/4 p-5 flex flex-col items-center justify-center text-center">
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Minutes Per Match
+            </h3>
+            <p className="text-sm text-muted">
+              Per-match minutes data will appear here once API-Football fixture sync is configured.
+            </p>
+          </section>
+        )}
       </div>
 
       {/* Match Log Table */}
@@ -158,44 +180,55 @@ export default function PlayerDetailPage() {
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
           Match Log
         </h3>
-        <div className="overflow-x-auto rounded-[1.4rem] border border-line bg-white/4">
-          <table className="w-full min-w-[700px] text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs uppercase tracking-widest text-muted">
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Opponent</th>
-                <th className="px-4 py-3">H/A</th>
-                <th className="px-4 py-3 text-right">Min</th>
-                <th className="px-4 py-3 text-right">G</th>
-                <th className="px-4 py-3 text-right">A</th>
-                <th className="px-4 py-3 text-right">Shots</th>
-                <th className="px-4 py-3 text-right">Pass%</th>
-                <th className="px-4 py-3 text-right">FP</th>
-              </tr>
-            </thead>
-            <tbody>
-              {matchLog.map((m) => (
-                <tr key={m.matchId} className="border-b border-line/50 transition hover:bg-white/4">
-                  <td className="px-4 py-3 text-muted">{m.date}</td>
-                  <td className="px-4 py-3 text-foreground">{m.opponent}</td>
-                  <td className="px-4 py-3">
-                    <Pill tone={m.home ? "brand" : "default"}>
-                      {m.home ? "H" : "A"}
-                    </Pill>
-                  </td>
-                  <td className="px-4 py-3 text-right font-mono">{m.minutes}</td>
-                  <td className="px-4 py-3 text-right font-mono">{m.goals}</td>
-                  <td className="px-4 py-3 text-right font-mono">{m.assists}</td>
-                  <td className="px-4 py-3 text-right font-mono">{m.shots}</td>
-                  <td className="px-4 py-3 text-right font-mono">{m.passAccuracy.toFixed(0)}%</td>
-                  <td className="px-4 py-3 text-right font-mono font-semibold text-brand-strong">
-                    {m.fantasyPoints.toFixed(1)}
-                  </td>
+        {matchLog.length > 0 ? (
+          <div className="overflow-x-auto rounded-[1.4rem] border border-line bg-white/4">
+            <table className="w-full min-w-[700px] text-sm">
+              <thead>
+                <tr className="border-b border-line text-left text-xs uppercase tracking-widest text-muted">
+                  <th className="px-4 py-3">Date</th>
+                  <th className="px-4 py-3">Opponent</th>
+                  <th className="px-4 py-3">H/A</th>
+                  <th className="px-4 py-3 text-right">Min</th>
+                  <th className="px-4 py-3 text-right">G</th>
+                  <th className="px-4 py-3 text-right">A</th>
+                  <th className="px-4 py-3 text-right">Shots</th>
+                  <th className="px-4 py-3 text-right">Pass%</th>
+                  <th className="px-4 py-3 text-right">FP</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {matchLog.map((m) => (
+                  <tr key={m.matchId} className="border-b border-line/50 transition hover:bg-white/4">
+                    <td className="px-4 py-3 text-muted">{m.date}</td>
+                    <td className="px-4 py-3 text-foreground">{m.opponent}</td>
+                    <td className="px-4 py-3">
+                      <Pill tone={m.home ? "brand" : "default"}>
+                        {m.home ? "H" : "A"}
+                      </Pill>
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono">{m.minutes}</td>
+                    <td className="px-4 py-3 text-right font-mono">{m.goals}</td>
+                    <td className="px-4 py-3 text-right font-mono">{m.assists}</td>
+                    <td className="px-4 py-3 text-right font-mono">{m.shots}</td>
+                    <td className="px-4 py-3 text-right font-mono">{m.passAccuracy.toFixed(0)}%</td>
+                    <td className="px-4 py-3 text-right font-mono font-semibold text-brand-strong">
+                      {m.fantasyPoints.toFixed(1)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-6 text-center">
+            <p className="text-sm text-muted">
+              Match-by-match performance data will appear here once API-Football fixture sync is configured.
+            </p>
+            <p className="mt-1 text-xs text-muted/60">
+              Set the <code className="font-mono text-brand-strong">API_FOOTBALL_KEY</code> environment variable to enable per-match stats.
+            </p>
+          </div>
+        )}
       </section>
     </AppShell>
   );
