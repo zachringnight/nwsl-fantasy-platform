@@ -5,6 +5,7 @@ export const primaryNavigation: NavigationItem[] = [
   { href: "/dashboard", label: "Dashboard", shortLabel: "Dash", requiresAuth: true },
   { href: "/leagues", label: "Leagues", shortLabel: "Leagues", requiresAuth: true },
   { href: "/players", label: "Players", shortLabel: "Players", requiresAuth: true },
+  { href: "/analytics", label: "Analytics", shortLabel: "Stats" },
   { href: "/help", label: "Help", shortLabel: "Help" },
 ];
 

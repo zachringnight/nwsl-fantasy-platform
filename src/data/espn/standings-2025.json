@@ -1,0 +1,16 @@
+[
+  { "rank": 1, "team": "Kansas City Current", "abbreviation": "KC", "played": 26, "won": 21, "drawn": 2, "lost": 3, "goalsFor": 49, "goalsAgainst": 13, "goalDifference": 36, "points": 65 },
+  { "rank": 2, "team": "Washington Spirit", "abbreviation": "WAS", "played": 26, "won": 12, "drawn": 8, "lost": 6, "goalsFor": 42, "goalsAgainst": 33, "goalDifference": 9, "points": 44 },
+  { "rank": 3, "team": "Portland Thorns FC", "abbreviation": "POR", "played": 26, "won": 11, "drawn": 7, "lost": 8, "goalsFor": 36, "goalsAgainst": 29, "goalDifference": 7, "points": 40 },
+  { "rank": 4, "team": "Orlando Pride", "abbreviation": "ORL", "played": 26, "won": 11, "drawn": 7, "lost": 8, "goalsFor": 33, "goalsAgainst": 27, "goalDifference": 6, "points": 40 },
+  { "rank": 5, "team": "Seattle Reign FC", "abbreviation": "SEA", "played": 26, "won": 10, "drawn": 9, "lost": 7, "goalsFor": 32, "goalsAgainst": 29, "goalDifference": 3, "points": 39 },
+  { "rank": 6, "team": "San Diego Wave FC", "abbreviation": "SD", "played": 26, "won": 10, "drawn": 7, "lost": 9, "goalsFor": 41, "goalsAgainst": 34, "goalDifference": 7, "points": 37 },
+  { "rank": 7, "team": "Racing Louisville FC", "abbreviation": "LOU", "played": 26, "won": 10, "drawn": 7, "lost": 9, "goalsFor": 35, "goalsAgainst": 38, "goalDifference": -3, "points": 37 },
+  { "rank": 8, "team": "Gotham FC", "abbreviation": "GFC", "played": 26, "won": 9, "drawn": 9, "lost": 8, "goalsFor": 35, "goalsAgainst": 25, "goalDifference": 10, "points": 36 },
+  { "rank": 9, "team": "North Carolina Courage", "abbreviation": "NC", "played": 26, "won": 9, "drawn": 8, "lost": 9, "goalsFor": 37, "goalsAgainst": 39, "goalDifference": -2, "points": 35 },
+  { "rank": 10, "team": "Houston Dash", "abbreviation": "HOU", "played": 26, "won": 8, "drawn": 6, "lost": 12, "goalsFor": 27, "goalsAgainst": 39, "goalDifference": -12, "points": 30 },
+  { "rank": 11, "team": "Angel City FC", "abbreviation": "LA", "played": 26, "won": 7, "drawn": 6, "lost": 13, "goalsFor": 31, "goalsAgainst": 41, "goalDifference": -10, "points": 27 },
+  { "rank": 12, "team": "Utah Royals", "abbreviation": "UTA", "played": 26, "won": 6, "drawn": 7, "lost": 13, "goalsFor": 28, "goalsAgainst": 42, "goalDifference": -14, "points": 25 },
+  { "rank": 13, "team": "Bay FC", "abbreviation": "BAY", "played": 26, "won": 4, "drawn": 8, "lost": 14, "goalsFor": 26, "goalsAgainst": 41, "goalDifference": -15, "points": 20 },
+  { "rank": 14, "team": "Chicago Stars FC", "abbreviation": "CHI", "played": 26, "won": 3, "drawn": 11, "lost": 12, "goalsFor": 32, "goalsAgainst": 54, "goalDifference": -22, "points": 20 }
+]

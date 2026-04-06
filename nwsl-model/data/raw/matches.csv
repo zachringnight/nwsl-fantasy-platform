@@ -1,0 +1,111 @@
+match_id,match_date,season,competition,regular_season_flag,home_team,away_team,home_goals_90,away_goals_90,venue,match_status
+731390,2025-03-15,2025,NWSL,true,"Houston Dash","Washington Spirit",1,2,"Shell Energy Stadium",completed
+731391,2025-03-15,2025,NWSL,true,"Orlando Pride","Chicago Stars FC",6,0,"Inter&Co Stadium",completed
+731392,2025-03-15,2025,NWSL,true,"Kansas City Current","Portland Thorns FC",3,1,"CPKC Stadium",completed
+731394,2025-03-15,2025,NWSL,true,"Utah Royals","Bay FC",1,1,"America First Field",completed
+731393,2025-03-16,2025,NWSL,true,"Racing Louisville FC","North Carolina Courage",1,1,"Lynn Family Stadium",completed
+731395,2025-03-16,2025,NWSL,true,"Seattle Reign FC","Gotham FC",1,1,"Lumen Field",completed
+731396,2025-03-16,2025,NWSL,true,"Angel City FC","San Diego Wave FC",1,1,"BMO Stadium",completed
+731397,2025-03-22,2025,NWSL,true,"Portland Thorns FC","Angel City FC",1,1,"Providence Park",completed
+731398,2025-03-22,2025,NWSL,true,"North Carolina Courage","Seattle Reign FC",1,2,"WakeMed Soccer Park",completed
+731399,2025-03-22,2025,NWSL,true,"Washington Spirit","Kansas City Current",0,2,"Audi Field",completed
+731400,2025-03-23,2025,NWSL,true,"Bay FC","Racing Louisville FC",2,0,"PayPal Park",completed
+731401,2025-03-23,2025,NWSL,true,"San Diego Wave FC","Utah Royals",3,2,"Snapdragon Stadium",completed
+731403,2025-03-23,2025,NWSL,true,"Chicago Stars FC","Houston Dash",1,2,"SeatGeek Stadium",completed
+731402,2025-03-23,2025,NWSL,true,"Gotham FC","Orlando Pride",0,2,"Sports Illustrated Stadium",completed
+731404,2025-03-29,2025,NWSL,true,"Houston Dash","Gotham FC",0,0,"Shell Energy Stadium",completed
+731405,2025-03-29,2025,NWSL,true,"Washington Spirit","Bay FC",2,0,"Audi Field",completed
+731406,2025-03-29,2025,NWSL,true,"Orlando Pride","San Diego Wave FC",2,1,"Inter&Co Stadium",completed
+731407,2025-03-29,2025,NWSL,true,"Kansas City Current","Utah Royals",3,0,"CPKC Stadium",completed
+731408,2025-03-30,2025,NWSL,true,"Portland Thorns FC","North Carolina Courage",0,0,"Providence Park",completed
+731409,2025-03-30,2025,NWSL,true,"Chicago Stars FC","Racing Louisville FC",0,1,"SeatGeek Stadium",completed
+731411,2025-04-12,2025,NWSL,true,"Utah Royals","Portland Thorns FC",0,1,"America First Field",completed
+731412,2025-04-12,2025,NWSL,true,"Houston Dash","Angel City FC",1,3,"Shell Energy Stadium",completed
+731413,2025-04-12,2025,NWSL,true,"Racing Louisville FC","Washington Spirit",0,2,"Lynn Family Stadium",completed
+731414,2025-04-12,2025,NWSL,true,"Seattle Reign FC","Orlando Pride",0,1,"Lumen Field",completed
+731415,2025-04-13,2025,NWSL,true,"San Diego Wave FC","Kansas City Current",0,2,"Snapdragon Stadium",completed
+731416,2025-04-13,2025,NWSL,true,"Gotham FC","North Carolina Courage",3,1,"Sports Illustrated Stadium",completed
+731417,2025-04-13,2025,NWSL,true,"Bay FC","Chicago Stars FC",1,2,"PayPal Park",completed
+731418,2025-04-19,2025,NWSL,true,"Utah Royals","Chicago Stars FC",1,0,"America First Field",completed
+731419,2025-04-19,2025,NWSL,true,"Seattle Reign FC","Portland Thorns FC",1,0,"Lumen Field",completed
+731420,2025-04-19,2025,NWSL,true,"Angel City FC","Gotham FC",0,4,"BMO Stadium",completed
+731421,2025-04-19,2025,NWSL,true,"Racing Louisville FC","San Diego Wave FC",1,4,"Lynn Family Stadium",completed
+731422,2025-04-19,2025,NWSL,true,"Orlando Pride","Washington Spirit",0,1,"Inter&Co Stadium",completed
+731460,2025-06-07,2025,NWSL,true,"Racing Louisville FC","Utah Royals",3,2,"Lynn Family Stadium",completed
+731461,2025-06-07,2025,NWSL,true,"San Diego Wave FC","Seattle Reign FC",1,2,"Snapdragon Stadium",completed
+731462,2025-06-07,2025,NWSL,true,"Gotham FC","Kansas City Current",1,2,"Sports Illustrated Stadium",completed
+731463,2025-06-07,2025,NWSL,true,"Orlando Pride","Houston Dash",1,0,"Inter&Co Stadium",completed
+731464,2025-06-07,2025,NWSL,true,"Bay FC","Portland Thorns FC",1,0,"PayPal Park",completed
+731465,2025-06-08,2025,NWSL,true,"Angel City FC","Chicago Stars FC",2,2,"BMO Stadium",completed
+731466,2025-06-08,2025,NWSL,true,"Washington Spirit","North Carolina Courage",3,1,"Audi Field",completed
+731467,2025-06-14,2025,NWSL,true,"Houston Dash","San Diego Wave FC",2,3,"Shell Energy Stadium",completed
+731468,2025-06-14,2025,NWSL,true,"Utah Royals","Gotham FC",0,3,"America First Field",completed
+731469,2025-06-14,2025,NWSL,true,"Bay FC","Orlando Pride",0,1,"PayPal Park",completed
+731470,2025-06-14,2025,NWSL,true,"Chicago Stars FC","Seattle Reign FC",2,2,"Soldier Field",completed
+731471,2025-06-14,2025,NWSL,true,"Kansas City Current","Racing Louisville FC",4,2,"CPKC Stadium",completed
+731473,2025-06-15,2025,NWSL,true,"Portland Thorns FC","Washington Spirit",2,0,"Providence Park",completed
+731474,2025-06-21,2025,NWSL,true,"Kansas City Current","Angel City FC",1,0,"CPKC Stadium",completed
+731475,2025-06-21,2025,NWSL,true,"Racing Louisville FC","Orlando Pride",2,0,"Lynn Family Stadium",completed
+731476,2025-06-21,2025,NWSL,true,"Utah Royals","Seattle Reign FC",1,4,"America First Field",completed
+731477,2025-06-21,2025,NWSL,true,"Gotham FC","Bay FC",2,1,"Sports Illustrated Stadium",completed
+731478,2025-06-21,2025,NWSL,true,"North Carolina Courage","Houston Dash",2,1,"WakeMed Soccer Park",completed
+731479,2025-06-22,2025,NWSL,true,"Portland Thorns FC","Chicago Stars FC",1,0,"Providence Park",completed
+731480,2025-06-23,2025,NWSL,true,"San Diego Wave FC","Washington Spirit",0,0,"Snapdragon Stadium",completed
+731481,2025-08-02,2025,NWSL,true,"Chicago Stars FC","Gotham FC",1,1,"SeatGeek Stadium",completed
+731482,2025-08-02,2025,NWSL,true,"Racing Louisville FC","Kansas City Current",0,2,"Lynn Family Stadium",completed
+731483,2025-08-02,2025,NWSL,true,"Seattle Reign FC","Angel City FC",2,0,"Lumen Field",completed
+731484,2025-08-02,2025,NWSL,true,"North Carolina Courage","San Diego Wave FC",0,0,"WakeMed Soccer Park",completed
+731485,2025-08-03,2025,NWSL,true,"Bay FC","Houston Dash",2,2,"PayPal Park",completed
+731486,2025-08-03,2025,NWSL,true,"Washington Spirit","Portland Thorns FC",2,1,"Audi Field",completed
+731487,2025-08-03,2025,NWSL,true,"Orlando Pride","Utah Royals",1,1,"Inter&Co Stadium",completed
+731488,2025-08-09,2025,NWSL,true,"Houston Dash","North Carolina Courage",2,1,"Shell Energy Stadium",completed
+731489,2025-08-09,2025,NWSL,true,"Utah Royals","Kansas City Current",0,1,"America First Field",completed
+731490,2025-08-09,2025,NWSL,true,"Gotham FC","Washington Spirit",0,0,"Sports Illustrated Stadium",completed
+731491,2025-08-09,2025,NWSL,true,"Orlando Pride","Racing Louisville FC",1,1,"Inter&Co Stadium",completed
+731492,2025-08-10,2025,NWSL,true,"San Diego Wave FC","Angel City FC",1,1,"Snapdragon Stadium",completed
+731515,2025-09-02,2025,NWSL,true,"Angel City FC","Bay FC",2,1,"BMO Stadium",completed
+731516,2025-09-06,2025,NWSL,true,"Racing Louisville FC","Portland Thorns FC",1,2,"Lynn Family Stadium",completed
+731517,2025-09-06,2025,NWSL,true,"North Carolina Courage","Utah Royals",1,1,"WakeMed Soccer Park",completed
+731518,2025-09-07,2025,NWSL,true,"Bay FC","Kansas City Current",0,2,"PayPal Park",completed
+731519,2025-09-07,2025,NWSL,true,"Chicago Stars FC","Orlando Pride",5,2,"Northwestern Medicine Field",completed
+731520,2025-09-07,2025,NWSL,true,"Washington Spirit","Seattle Reign FC",2,0,"Audi Field",completed
+731521,2025-09-07,2025,NWSL,true,"Gotham FC","Angel City FC",3,1,"Sports Illustrated Stadium",completed
+731522,2025-09-08,2025,NWSL,true,"San Diego Wave FC","Houston Dash",0,3,"Snapdragon Stadium",completed
+731523,2025-09-13,2025,NWSL,true,"San Diego Wave FC","Gotham FC",0,2,"Snapdragon Stadium",completed
+731524,2025-09-13,2025,NWSL,true,"North Carolina Courage","Angel City FC",2,1,"WakeMed Soccer Park",completed
+731525,2025-09-13,2025,NWSL,true,"Orlando Pride","Bay FC",1,1,"Inter&Co Stadium",completed
+731526,2025-09-13,2025,NWSL,true,"Kansas City Current","Washington Spirit",2,0,"CPKC Stadium",completed
+401853857,2026-03-14,2026,NWSL,true,"Washington Spirit","Portland Thorns FC",0,1,"Audi Field",completed
+401854039,2026-03-14,2026,NWSL,true,"Boston Legacy FC","Gotham FC",0,1,"Gillette Stadium",completed
+401853858,2026-03-14,2026,NWSL,true,"Kansas City Current","Utah Royals",2,1,"CPKC Stadium",completed
+401854040,2026-03-14,2026,NWSL,true,"Bay FC","Denver Summit FC",2,1,"PayPal Park",completed
+401853859,2026-03-14,2026,NWSL,true,"North Carolina Courage","Racing Louisville FC",2,1,"WakeMed Soccer Park",completed
+401853860,2026-03-15,2026,NWSL,true,"San Diego Wave FC","Houston Dash",0,1,"Snapdragon Stadium",completed
+401853861,2026-03-15,2026,NWSL,true,"Orlando Pride","Seattle Reign FC",1,2,"Inter&Co Stadium",completed
+401853862,2026-03-15,2026,NWSL,true,"Angel City FC","Chicago Stars FC",4,0,"BMO Stadium",completed
+401854041,2026-03-21,2026,NWSL,true,"Orlando Pride","Denver Summit FC",1,1,"Inter&Co Stadium",completed
+401853863,2026-03-21,2026,NWSL,true,"Racing Louisville FC","Washington Spirit",2,2,"Lynn Family Stadium",completed
+401853864,2026-03-21,2026,NWSL,true,"Portland Thorns FC","Seattle Reign FC",2,0,"Providence Park",completed
+401854042,2026-03-21,2026,NWSL,true,"Houston Dash","Boston Legacy FC",3,0,"Shell Energy Stadium",completed
+401853865,2026-03-21,2026,NWSL,true,"Gotham FC","North Carolina Courage",0,0,"Red Bull Arena",completed
+401853866,2026-03-22,2026,NWSL,true,"Bay FC","Angel City FC",1,3,"PayPal Park",completed
+401853867,2026-03-22,2026,NWSL,true,"Chicago Stars FC","Kansas City Current",2,1,"Northwestern Medicine Field",completed
+401853868,2026-03-22,2026,NWSL,true,"Utah Royals","San Diego Wave FC",1,2,"America First Field",completed
+401854043,2026-03-25,2026,NWSL,true,"Gotham FC","Denver Summit FC",0,2,"Red Bull Arena",completed
+401853869,2026-03-25,2026,NWSL,true,"Washington Spirit","Utah Royals",1,1,"Audi Field",completed
+401853870,2026-03-26,2026,NWSL,true,"Chicago Stars FC","Orlando Pride",0,3,"Northwestern Medicine Field",completed
+401853871,2026-03-26,2026,NWSL,true,"Seattle Reign FC","Kansas City Current",3,0,"ONE Spokane Stadium",completed
+401853872,2026-03-26,2026,NWSL,true,"San Diego Wave FC","Portland Thorns FC",3,1,"Snapdragon Stadium",completed
+401853873,2026-03-28,2026,NWSL,true,"Angel City FC","Houston Dash",2,1,"BMO Stadium",completed
+401854044,2026-03-28,2026,NWSL,true,"Boston Legacy FC","Utah Royals",1,0,"Gillette Stadium",completed
+401853874,2026-03-28,2026,NWSL,true,"North Carolina Courage","Bay FC",3,1,"WakeMed Soccer Park",completed
+401853875,2026-03-29,2026,NWSL,true,"Kansas City Current","Racing Louisville FC",0,2,"CPKC Stadium",completed
+401854045,2026-03-29,2026,NWSL,true,"Denver Summit FC","Washington Spirit",0,0,"Dick's Sporting Goods Park",completed
+401853876,2026-04-04,2026,NWSL,true,"Portland Thorns FC","Orlando Pride",2,1,"Providence Park",completed
+401853877,2026-04-04,2026,NWSL,true,"San Diego Wave FC","Gotham FC",3,0,"Snapdragon Stadium",completed
+401854046,2026-04-04,2026,NWSL,true,"Denver Summit FC","Racing Louisville FC",1,2,"Dick's Sporting Goods Park",completed
+401853878,2026-04-04,2026,NWSL,true,"Houston Dash","North Carolina Courage",5,0,"Shell Energy Stadium",completed
+401853879,2026-04-05,2026,NWSL,true,"Angel City FC","Washington Spirit",1,0,"BMO Stadium",completed
+401853880,2026-04-05,2026,NWSL,true,"Seattle Reign FC","Bay FC",2,2,"Lumen Field",completed
+401854047,2026-04-05,2026,NWSL,true,"Boston Legacy FC","Chicago Stars FC",0,0,"Gillette Stadium",completed
+401853881,2026-04-05,2026,NWSL,true,"Utah Royals","Kansas City Current",3,2,"America First Field",completed

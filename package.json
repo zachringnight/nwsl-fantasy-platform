@@ -10,6 +10,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "players:sync": "tsx scripts/sync-official-nwsl-player-pool.ts",
+    "espn:fetch": "tsx scripts/fetch-espn-nwsl.ts",
+    "model:input": "tsx scripts/generate-model-input.ts",
+    "model:export": "tsx scripts/export-model-web.ts",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
     "prisma:migrate:dev": "prisma migrate dev",
@@ -38,6 +41,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "7.71.2",
+    "recharts": "^3.8.1",
     "tailwind-merge": "3.5.0",
     "zod": "4.1.0"
   },

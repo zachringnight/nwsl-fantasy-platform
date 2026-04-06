@@ -1,0 +1,286 @@
+{
+  "401853857": {
+    "homeShots": 12, "awayShots": 9, "homeShotsOnTarget": 1, "awayShotsOnTarget": 3,
+    "homePossession": 61, "awayPossession": 39, "homeCorners": 3, "awayCorners": 2,
+    "homeFouls": 8, "awayFouls": 10,
+    "events": [
+      { "minute": 64, "type": "goal", "team": "Portland Thorns FC", "playerName": "Unknown" }
+    ]
+  },
+  "401854039": {
+    "homeShots": 9, "awayShots": 7, "homeShotsOnTarget": 2, "awayShotsOnTarget": 4,
+    "homePossession": 48, "awayPossession": 52, "homeCorners": 3, "awayCorners": 1,
+    "homeFouls": 20, "awayFouls": 13,
+    "events": [
+      { "minute": 77, "type": "red_card", "team": "Boston Legacy FC", "playerName": "Bianca St-Georges" }
+    ]
+  },
+  "401853858": {
+    "homeShots": 18, "awayShots": 13, "homeShotsOnTarget": 5, "awayShotsOnTarget": 4,
+    "homePossession": 48, "awayPossession": 52, "homeCorners": 8, "awayCorners": 6,
+    "homeFouls": 8, "awayFouls": 15,
+    "events": [
+      { "minute": 57, "type": "goal", "team": "Kansas City Current", "playerName": "Croix Bethune" },
+      { "minute": 57, "type": "goal", "team": "Kansas City Current", "playerName": "Ally Sentnor" },
+      { "minute": 69, "type": "goal", "team": "Utah Royals", "playerName": "Debinha" }
+    ]
+  },
+  "401854040": {
+    "homeShots": 10, "awayShots": 8, "homeShotsOnTarget": 4, "awayShotsOnTarget": 3,
+    "homePossession": 55, "awayPossession": 45, "homeCorners": 5, "awayCorners": 3,
+    "homeFouls": 10, "awayFouls": 12,
+    "events": [
+      { "minute": 25, "type": "goal", "team": "Bay FC", "playerName": "Racheal Kundananji" },
+      { "minute": 63, "type": "goal", "team": "Bay FC", "playerName": "Racheal Kundananji" },
+      { "minute": 78, "type": "goal", "team": "Denver Summit FC", "playerName": "Unknown" }
+    ]
+  },
+  "401853859": {
+    "homeShots": 14, "awayShots": 10, "homeShotsOnTarget": 5, "awayShotsOnTarget": 3,
+    "homePossession": 52, "awayPossession": 48, "homeCorners": 6, "awayCorners": 4,
+    "homeFouls": 11, "awayFouls": 9,
+    "events": [
+      { "minute": 22, "type": "goal", "team": "North Carolina Courage", "playerName": "Manaka Matsukubo" },
+      { "minute": 55, "type": "goal", "team": "North Carolina Courage", "playerName": "Kerolin" },
+      { "minute": 70, "type": "goal", "team": "Racing Louisville FC", "playerName": "Savannah DeMelo" }
+    ]
+  },
+  "401853860": {
+    "homeShots": 15, "awayShots": 11, "homeShotsOnTarget": 3, "awayShotsOnTarget": 4,
+    "homePossession": 54, "awayPossession": 46, "homeCorners": 7, "awayCorners": 3,
+    "homeFouls": 9, "awayFouls": 11,
+    "events": [
+      { "minute": 37, "type": "goal", "team": "Houston Dash", "playerName": "Kiki Van Zanten" }
+    ]
+  },
+  "401853861": {
+    "homeShots": 22, "awayShots": 13, "homeShotsOnTarget": 8, "awayShotsOnTarget": 5,
+    "homePossession": 48, "awayPossession": 52, "homeCorners": 5, "awayCorners": 2,
+    "homeFouls": 12, "awayFouls": 12,
+    "events": [
+      { "minute": 18, "type": "goal", "team": "Seattle Reign FC", "playerName": "Veronica Latsko" },
+      { "minute": 72, "type": "goal", "team": "Seattle Reign FC", "playerName": "Ji So-yun" },
+      { "minute": 44, "type": "goal", "team": "Orlando Pride", "playerName": "Barbra Banda" }
+    ]
+  },
+  "401853862": {
+    "homeShots": 17, "awayShots": 7, "homeShotsOnTarget": 6, "awayShotsOnTarget": 2,
+    "homePossession": 61, "awayPossession": 39, "homeCorners": 10, "awayCorners": 3,
+    "homeFouls": 8, "awayFouls": 13,
+    "events": [
+      { "minute": 33, "type": "goal", "team": "Angel City FC", "playerName": "Kennedy Fuller" },
+      { "minute": 53, "type": "goal", "team": "Angel City FC", "playerName": "Evelyn Shores" },
+      { "minute": 66, "type": "goal", "team": "Angel City FC", "playerName": "Ary Borges" },
+      { "minute": 70, "type": "goal", "team": "Angel City FC", "playerName": "Maiara Niehues" }
+    ]
+  },
+  "401854041": {
+    "homeShots": 13, "awayShots": 9, "homeShotsOnTarget": 4, "awayShotsOnTarget": 3,
+    "homePossession": 56, "awayPossession": 44, "homeCorners": 6, "awayCorners": 3,
+    "homeFouls": 10, "awayFouls": 14,
+    "events": [
+      { "minute": 30, "type": "goal", "team": "Orlando Pride", "playerName": "Barbra Banda" },
+      { "minute": 65, "type": "goal", "team": "Denver Summit FC", "playerName": "Mallory Swanson" }
+    ]
+  },
+  "401853863": {
+    "homeShots": 16, "awayShots": 12, "homeShotsOnTarget": 5, "awayShotsOnTarget": 4,
+    "homePossession": 50, "awayPossession": 50, "homeCorners": 4, "awayCorners": 5,
+    "homeFouls": 13, "awayFouls": 11,
+    "events": [
+      { "minute": 23, "type": "goal", "team": "Racing Louisville FC", "playerName": "Savannah DeMelo" },
+      { "minute": 45, "type": "goal", "team": "Washington Spirit", "playerName": "Trinity Rodman" },
+      { "minute": 67, "type": "goal", "team": "Racing Louisville FC", "playerName": "Janine Beckie" },
+      { "minute": 80, "type": "goal", "team": "Washington Spirit", "playerName": "Ashley Sanchez" }
+    ]
+  },
+  "401853864": {
+    "homeShots": 8, "awayShots": 17, "homeShotsOnTarget": 4, "awayShotsOnTarget": 4,
+    "homePossession": 38, "awayPossession": 62, "homeCorners": 4, "awayCorners": 8,
+    "homeFouls": 7, "awayFouls": 13,
+    "events": [
+      { "minute": 28, "type": "goal", "team": "Portland Thorns FC", "playerName": "Pietra Tordin" },
+      { "minute": 37, "type": "goal", "team": "Portland Thorns FC", "playerName": "Reilyn Turner" },
+      { "minute": 57, "type": "red_card", "team": "Portland Thorns FC", "playerName": "Reyna Reyes" }
+    ]
+  },
+  "401854042": {
+    "homeShots": 16, "awayShots": 11, "homeShotsOnTarget": 7, "awayShotsOnTarget": 2,
+    "homePossession": 41, "awayPossession": 59, "homeCorners": 3, "awayCorners": 5,
+    "homeFouls": 16, "awayFouls": 17,
+    "events": [
+      { "minute": 43, "type": "goal", "team": "Houston Dash", "playerName": "Kiki Van Zanten" },
+      { "minute": 59, "type": "goal", "team": "Houston Dash", "playerName": "Kiki Van Zanten" },
+      { "minute": 82, "type": "goal", "team": "Houston Dash", "playerName": "Kat Rader" }
+    ]
+  },
+  "401853865": {
+    "homeShots": 8, "awayShots": 10, "homeShotsOnTarget": 2, "awayShotsOnTarget": 3,
+    "homePossession": 49, "awayPossession": 51, "homeCorners": 3, "awayCorners": 5,
+    "homeFouls": 15, "awayFouls": 12,
+    "events": []
+  },
+  "401853866": {
+    "homeShots": 12, "awayShots": 14, "homeShotsOnTarget": 3, "awayShotsOnTarget": 5,
+    "homePossession": 45, "awayPossession": 55, "homeCorners": 4, "awayCorners": 6,
+    "homeFouls": 11, "awayFouls": 10,
+    "events": [
+      { "minute": 15, "type": "goal", "team": "Bay FC", "playerName": "Racheal Kundananji" },
+      { "minute": 40, "type": "goal", "team": "Angel City FC", "playerName": "Kennedy Fuller" },
+      { "minute": 62, "type": "goal", "team": "Angel City FC", "playerName": "Ary Borges" },
+      { "minute": 78, "type": "goal", "team": "Angel City FC", "playerName": "Claire Emslie" }
+    ]
+  },
+  "401853867": {
+    "homeShots": 4, "awayShots": 10, "homeShotsOnTarget": 2, "awayShotsOnTarget": 2,
+    "homePossession": 50, "awayPossession": 50, "homeCorners": 5, "awayCorners": 3,
+    "homeFouls": 13, "awayFouls": 8,
+    "events": [
+      { "minute": 42, "type": "goal", "team": "Chicago Stars FC", "playerName": "Tessa Dellarose" },
+      { "minute": 50, "type": "goal", "team": "Chicago Stars FC", "playerName": "Jordyn Huitema" },
+      { "minute": 75, "type": "goal", "team": "Kansas City Current", "playerName": "Temwa Chawinga" }
+    ]
+  },
+  "401853868": {
+    "homeShots": 11, "awayShots": 15, "homeShotsOnTarget": 3, "awayShotsOnTarget": 5,
+    "homePossession": 46, "awayPossession": 54, "homeCorners": 3, "awayCorners": 7,
+    "homeFouls": 12, "awayFouls": 9,
+    "events": [
+      { "minute": 31, "type": "goal", "team": "San Diego Wave FC", "playerName": "Naomi Girma" },
+      { "minute": 55, "type": "goal", "team": "Utah Royals", "playerName": "Mina Tanaka" },
+      { "minute": 82, "type": "goal", "team": "San Diego Wave FC", "playerName": "Jaedyn Shaw" }
+    ]
+  },
+  "401854043": {
+    "homeShots": 7, "awayShots": 12, "homeShotsOnTarget": 1, "awayShotsOnTarget": 4,
+    "homePossession": 48, "awayPossession": 52, "homeCorners": 2, "awayCorners": 5,
+    "homeFouls": 14, "awayFouls": 10,
+    "events": [
+      { "minute": 38, "type": "goal", "team": "Denver Summit FC", "playerName": "Mallory Swanson" },
+      { "minute": 72, "type": "goal", "team": "Denver Summit FC", "playerName": "Trinity Rodman" }
+    ]
+  },
+  "401853869": {
+    "homeShots": 14, "awayShots": 8, "homeShotsOnTarget": 4, "awayShotsOnTarget": 2,
+    "homePossession": 57, "awayPossession": 43, "homeCorners": 6, "awayCorners": 3,
+    "homeFouls": 10, "awayFouls": 13,
+    "events": [
+      { "minute": 22, "type": "goal", "team": "Washington Spirit", "playerName": "Ashley Sanchez" },
+      { "minute": 56, "type": "goal", "team": "Utah Royals", "playerName": "Mina Tanaka" }
+    ]
+  },
+  "401853870": {
+    "homeShots": 7, "awayShots": 11, "homeShotsOnTarget": 2, "awayShotsOnTarget": 4,
+    "homePossession": 52, "awayPossession": 48, "homeCorners": 4, "awayCorners": 4,
+    "homeFouls": 16, "awayFouls": 19,
+    "events": [
+      { "minute": 20, "type": "goal", "team": "Orlando Pride", "playerName": "Barbra Banda" },
+      { "minute": 54, "type": "goal", "team": "Orlando Pride", "playerName": "Marta" },
+      { "minute": 78, "type": "goal", "team": "Orlando Pride", "playerName": "Adriana" }
+    ]
+  },
+  "401853871": {
+    "homeShots": 15, "awayShots": 6, "homeShotsOnTarget": 4, "awayShotsOnTarget": 3,
+    "homePossession": 55, "awayPossession": 45, "homeCorners": 1, "awayCorners": 4,
+    "homeFouls": 15, "awayFouls": 10,
+    "events": [
+      { "minute": 18, "type": "goal", "team": "Seattle Reign FC", "playerName": "Angharad James-Turner" },
+      { "minute": 26, "type": "goal", "team": "Seattle Reign FC", "playerName": "Brittany Ratcliffe" },
+      { "minute": 33, "type": "goal", "team": "Seattle Reign FC", "playerName": "Maddie Mercado" }
+    ]
+  },
+  "401853872": {
+    "homeShots": 14, "awayShots": 9, "homeShotsOnTarget": 6, "awayShotsOnTarget": 3,
+    "homePossession": 53, "awayPossession": 47, "homeCorners": 5, "awayCorners": 3,
+    "homeFouls": 11, "awayFouls": 14,
+    "events": [
+      { "minute": 12, "type": "goal", "team": "San Diego Wave FC", "playerName": "Jaedyn Shaw" },
+      { "minute": 35, "type": "goal", "team": "Portland Thorns FC", "playerName": "Sophia Smith" },
+      { "minute": 56, "type": "goal", "team": "San Diego Wave FC", "playerName": "Naomi Girma" },
+      { "minute": 81, "type": "goal", "team": "San Diego Wave FC", "playerName": "Alex Morgan" }
+    ]
+  },
+  "401853873": {
+    "homeShots": 13, "awayShots": 10, "homeShotsOnTarget": 5, "awayShotsOnTarget": 3,
+    "homePossession": 54, "awayPossession": 46, "homeCorners": 6, "awayCorners": 4,
+    "homeFouls": 9, "awayFouls": 12,
+    "events": [
+      { "minute": 29, "type": "goal", "team": "Angel City FC", "playerName": "Kennedy Fuller" },
+      { "minute": 68, "type": "goal", "team": "Angel City FC", "playerName": "Claire Emslie" },
+      { "minute": 74, "type": "goal", "team": "Houston Dash", "playerName": "Kiki Van Zanten" }
+    ]
+  },
+  "401854044": {
+    "homeShots": 10, "awayShots": 8, "homeShotsOnTarget": 3, "awayShotsOnTarget": 2,
+    "homePossession": 52, "awayPossession": 48, "homeCorners": 4, "awayCorners": 3,
+    "homeFouls": 13, "awayFouls": 15,
+    "events": [
+      { "minute": 45, "type": "goal", "team": "Boston Legacy FC", "playerName": "Midge Purce" }
+    ]
+  },
+  "401853876": {
+    "homeShots": 13, "awayShots": 12, "homeShotsOnTarget": 2, "awayShotsOnTarget": 6,
+    "homePossession": 51, "awayPossession": 49, "homeCorners": 4, "awayCorners": 4,
+    "homeFouls": 12, "awayFouls": 11,
+    "events": [
+      { "minute": 21, "type": "goal", "team": "Portland Thorns FC", "playerName": "Sophia Smith" },
+      { "minute": 55, "type": "goal", "team": "Portland Thorns FC", "playerName": "Olivia Moultrie" },
+      { "minute": 78, "type": "goal", "team": "Orlando Pride", "playerName": "Barbra Banda" }
+    ]
+  },
+  "401853877": {
+    "homeShots": 20, "awayShots": 2, "homeShotsOnTarget": 8, "awayShotsOnTarget": 1,
+    "homePossession": 59, "awayPossession": 41, "homeCorners": 4, "awayCorners": 0,
+    "homeFouls": 10, "awayFouls": 12,
+    "events": [
+      { "minute": 56, "type": "goal", "team": "San Diego Wave FC", "playerName": "Lia Godfrey" },
+      { "minute": 56, "type": "goal", "team": "San Diego Wave FC", "playerName": "Dudinha" },
+      { "minute": 72, "type": "goal", "team": "San Diego Wave FC", "playerName": "Dudinha" }
+    ]
+  },
+  "401853878": {
+    "homeShots": 18, "awayShots": 6, "homeShotsOnTarget": 8, "awayShotsOnTarget": 2,
+    "homePossession": 57, "awayPossession": 43, "homeCorners": 7, "awayCorners": 2,
+    "homeFouls": 10, "awayFouls": 14,
+    "events": [
+      { "minute": 11, "type": "goal", "team": "Houston Dash", "playerName": "Kiki Van Zanten" },
+      { "minute": 28, "type": "goal", "team": "Houston Dash", "playerName": "Kiki Van Zanten" },
+      { "minute": 40, "type": "goal", "team": "Houston Dash", "playerName": "Linda Ullmark" },
+      { "minute": 62, "type": "goal", "team": "Houston Dash", "playerName": "Kat Rader" },
+      { "minute": 85, "type": "goal", "team": "Houston Dash", "playerName": "Nichelle Prince" }
+    ]
+  },
+  "401853879": {
+    "homeShots": 15, "awayShots": 9, "homeShotsOnTarget": 5, "awayShotsOnTarget": 2,
+    "homePossession": 56, "awayPossession": 44, "homeCorners": 7, "awayCorners": 3,
+    "homeFouls": 8, "awayFouls": 11,
+    "events": [
+      { "minute": 43, "type": "goal", "team": "Angel City FC", "playerName": "Kennedy Fuller" }
+    ]
+  },
+  "401853880": {
+    "homeShots": 14, "awayShots": 11, "homeShotsOnTarget": 5, "awayShotsOnTarget": 4,
+    "homePossession": 52, "awayPossession": 48, "homeCorners": 5, "awayCorners": 4,
+    "homeFouls": 12, "awayFouls": 10,
+    "events": [
+      { "minute": 20, "type": "goal", "team": "Seattle Reign FC", "playerName": "Ji So-yun" },
+      { "minute": 35, "type": "goal", "team": "Bay FC", "playerName": "Racheal Kundananji" },
+      { "minute": 58, "type": "goal", "team": "Seattle Reign FC", "playerName": "Rose Lavelle" },
+      { "minute": 75, "type": "goal", "team": "Bay FC", "playerName": "Alex Loera" }
+    ]
+  },
+  "401854047": {
+    "homeShots": 8, "awayShots": 6, "homeShotsOnTarget": 2, "awayShotsOnTarget": 1,
+    "homePossession": 50, "awayPossession": 50, "homeCorners": 4, "awayCorners": 3,
+    "homeFouls": 14, "awayFouls": 11,
+    "events": []
+  },
+  "401853881": {
+    "homeShots": 27, "awayShots": 3, "homeShotsOnTarget": 10, "awayShotsOnTarget": 1,
+    "homePossession": 61, "awayPossession": 39, "homeCorners": 14, "awayCorners": 1,
+    "homeFouls": 11, "awayFouls": 6,
+    "events": [
+      { "minute": 74, "type": "goal", "team": "Utah Royals", "playerName": "Mina Tanaka" }
+    ]
+  }
+}

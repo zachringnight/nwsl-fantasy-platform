@@ -1,0 +1,106 @@
+{
+  "data": {
+    "matches_path": "data/raw/matches.csv",
+    "odds_path": "data/raw/odds.csv",
+    "venues_path": "data/raw/venues.csv",
+    "appearances_path": "data/raw/appearances.csv",
+    "projected_lineups_path": "data/raw/projected_lineups.csv",
+    "output_dir": "data/processed",
+    "format": "csv"
+  },
+  "model": {
+    "primary_model": "dixon_coles",
+    "max_goals": 8,
+    "random_seed": 42
+  },
+  "team_ratings": {
+    "half_life_days": 90,
+    "prior_weight": 5.0,
+    "season_carryover": 0.6,
+    "multi_season_decay": true
+  },
+  "dixon_coles": {
+    "rho_init": -0.05,
+    "rho_bounds": [
+      -0.5,
+      0.5
+    ],
+    "home_advantage_init": 0.25,
+    "max_iter": 2000,
+    "tol": 1e-08
+  },
+  "bivariate_poisson": {
+    "lambda3_init": 0.1,
+    "lambda3_bounds": [
+      0.001,
+      2.0
+    ],
+    "home_advantage_init": 0.25,
+    "max_iter": 2000,
+    "tol": 1e-08
+  },
+  "lineup_adjustment": {
+    "ridge_alpha": 100.0,
+    "min_minutes": 200,
+    "split_attack_defense": true
+  },
+  "features": {
+    "rolling_windows": [
+      3,
+      5,
+      10
+    ],
+    "short_rest_days": 4,
+    "use_travel_distance": true,
+    "use_weather": true,
+    "use_surface": true
+  },
+  "market_blend": {
+    "alpha": 0.5,
+    "alpha_schedule_enabled": true,
+    "alpha_schedule": [
+      {
+        "matches_played_lt": 5,
+        "alpha": 0.3
+      },
+      {
+        "matches_played_lt": 10,
+        "alpha": 0.4
+      },
+      {
+        "matches_played_lt": 20,
+        "alpha": 0.5
+      },
+      {
+        "matches_played_lt": 999,
+        "alpha": 0.55
+      }
+    ],
+    "devig_method": "multiplicative"
+  },
+  "betting": {
+    "min_edge": 0.02,
+    "kelly_fraction": 0.25,
+    "max_stake_pct": 0.01,
+    "starting_bankroll": 10000.0,
+    "markets": [
+      "1x2",
+      "asian_handicap",
+      "totals"
+    ]
+  },
+  "backtest": {
+    "min_train_matches": 50,
+    "step_size": 1,
+    "benchmarks": [
+      "market_implied",
+      "dixon_coles",
+      "bivariate_poisson",
+      "full_blend"
+    ]
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/nwsl_model.log"
+  }
+}

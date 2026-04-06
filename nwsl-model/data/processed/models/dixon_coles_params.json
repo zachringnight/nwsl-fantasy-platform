@@ -1,0 +1,41 @@
+{
+  "home_advantage": 0.35237907854242356,
+  "intercept": 0.028844068107201654,
+  "rho": -0.047561400107564225,
+  "attack": {
+    "Angel City FC": 0.5238296114068945,
+    "Bay FC": 0.3362395601627471,
+    "Boston Legacy FC": -1.8664494974208328,
+    "Chicago Stars FC": -0.36863068917013625,
+    "Denver Summit FC": -0.16174005724446894,
+    "Gotham FC": -0.38138693823936853,
+    "Houston Dash": 1.0041491334038513,
+    "Kansas City Current": -0.240520416399512,
+    "North Carolina Courage": -0.005901734166757128,
+    "Orlando Pride": 0.15247067538310255,
+    "Portland Thorns FC": 0.35172594232361837,
+    "Racing Louisville FC": 0.4611179113140021,
+    "San Diego Wave FC": 0.40344448457322596,
+    "Seattle Reign FC": 0.26371998824737636,
+    "Utah Royals": 0.04876573695793296,
+    "Washington Spirit": -0.5208337111316755
+  },
+  "defense": {
+    "Angel City FC": 0.45079753165295755,
+    "Bay FC": -0.4575090427729726,
+    "Boston Legacy FC": 0.35895155075902424,
+    "Chicago Stars FC": -0.5921991942474288,
+    "Denver Summit FC": 0.16828530412203313,
+    "Gotham FC": -0.08950944104273995,
+    "Houston Dash": 0.5950635841980494,
+    "Kansas City Current": -0.3771244022648398,
+    "North Carolina Courage": 0.008082783173603308,
+    "Orlando Pride": -0.0825374544183696,
+    "Portland Thorns FC": 0.18333527707347663,
+    "Racing Louisville FC": -0.3247817462403941,
+    "San Diego Wave FC": 0.3795703149577975,
+    "Seattle Reign FC": 0.017098828252484627,
+    "Utah Royals": -0.6554665391343365,
+    "Washington Spirit": 0.41794264593165475
+  }
+}
