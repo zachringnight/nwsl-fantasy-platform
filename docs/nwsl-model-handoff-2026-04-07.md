@@ -198,20 +198,69 @@ Latest verified test results:
   - `pytest tests/test_backtest_runner.py tests/test_pipeline_smoke.py tests/test_artifacts.py -q`
   - `5 passed in 25.61s`
 
+## FBref Advanced Stats Integration
+
+### What was done
+
+- Built a Playwright-based FBref scraper (`scripts/scrape-fbref-nwsl.py`) that bypasses Cloudflare using system Chrome (non-headless)
+- Scraped 92 CSV files across 4 seasons (2023–2026), all 11 stat categories (standard, shooting, passing, passing_types, goal_shot_creation, defense, possession, misc, keeper, keeper_adv, playing_time)
+- Data lives in `data/fbref/nwsl_{season}_{player|team}_{stat_type}.csv`
+- Schedule data also scraped: `data/fbref/nwsl_{season}_schedule.csv`
+
+### Critical discovery: no xG for NWSL
+
+FBref does **not** provide xG, npxG, or xAG for NWSL — those are only available for top-5 European leagues. The integration plan needs to pivot to the advanced stats that **are** available:
+
+- **SCA/GCA per 90** (shot- and goal-creating actions) — best proxy for creative output
+- **Carries into final third / penalty area** — progressive ball-carrying
+- **Passes into final third** — progressive passing
+- **xg_assist_net** in passing tables — the one xG-adjacent metric available
+- **Take-ons won, touches by zone** — possession quality
+- **Tackles won, interceptions, clearances** — defensive actions
+
+### Data quality fixes applied
+
+1. **Comma-stripping bug (critical)**: FBref formats numbers with locale commas (e.g., "2,106"). `pd.to_numeric` silently converted these to NaN, corrupting ~44% of minutes data. Fixed by adding `.str.replace(",", "")` before conversion.
+2. **"matches" column**: Every table included a column that always contained the literal string "Matches". Now dropped automatically.
+3. **"team" link extraction**: Added `"team"` to the list of columns where `<a>` tag text is extracted instead of raw cell text.
+
+### Known data gaps
+
+- 16 GCA/possession CSV files have headers but all-NaN stat values — likely an FBref HTML structure issue for those specific pages. Needs investigation.
+- The existing 92 CSVs were scraped **before** the comma fix. They need to be re-scraped to get clean numeric data.
+
+### Remaining integration work
+
+The plan at `docs/superpowers/plans/2026-04-06-fbref-advanced-stats-integration.md` has 9 tasks (enrichment script, sync integration, UI, model schema, rolling features, pipeline). Tasks 2–9 are pending. The plan also needs updating to reflect the actual available columns (no xG) and correct column names (`team` not `squad`).
+
+## Python 3.9 Compatibility Fix
+
+Replaced `datetime.UTC` (requires Python 3.11+) with `timezone.utc` across 13 files in `nwsl-model/`. Without this fix, every script and test crashes on import with Python 3.9/3.10.
+
+Files fixed:
+- `src/data/dataset_builder.py`, `src/utils/artifacts.py`, `src/odds/quality.py`, `src/odds/provider.py`
+- `src/betting/ledger.py`, `src/betting/recommendations.py`, `src/betting/staking.py`
+- `scripts/evaluate.py`, `scripts/predict.py`, `scripts/promote.py`, `scripts/run_operator_report.py`
+- `tests/test_recommendations.py`, `tests/test_odds_quality.py`
+
 ## Worktree State
 
-The worktree is dirty.
-
-This includes:
-
-- code changes across `nwsl-model`
-- newly generated raw datasets under `nwsl-model/data/raw`
-- newly generated processed artifacts under `nwsl-model/data/processed/models`
-- operator output under `nwsl-model/data/processed/operator`
-
-No commit was made in this phase.
+Working tree is clean. All changes committed.
 
 ## What Should Happen Next
+
+### Highest-priority: FBref integration
+
+1. Re-scrape all 4 seasons with the fixed scraper to get clean numeric data:
+   ```bash
+   python3 scripts/scrape-fbref-nwsl.py --season 2023
+   python3 scripts/scrape-fbref-nwsl.py --season 2024
+   python3 scripts/scrape-fbref-nwsl.py --season 2025
+   python3 scripts/scrape-fbref-nwsl.py --season 2026
+   ```
+2. Update the integration plan to use actual NWSL columns (SCA/GCA, carries, passes — not xG)
+3. Build the enrichment script (Task 2 in plan) and continue through Tasks 3–9
+4. Investigate empty GCA/possession tables
 
 ### Highest-priority model work
 
