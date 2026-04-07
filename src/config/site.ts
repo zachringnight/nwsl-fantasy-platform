@@ -2,9 +2,9 @@ export const siteConfig = {
   name: "NWSL Fantasy",
   shortName: "NWSL Fantasy",
   description:
-    "The home for NWSL fantasy with private classic leagues, weekly salary-cap contests, daily slate entries, and live 2026 match windows.",
+    "Matchup previews, fantasy projections, fair prices, and player research tools for every NWSL slate.",
   owner: "NWSL Fantasy",
-  launchWindow: "2026 season",
+  launchWindow: "2026 projections + previews",
   repositoryStatus: "Live",
   supportEmail: "support@nwslfantasy.com",
   copyrightYear: 2026,

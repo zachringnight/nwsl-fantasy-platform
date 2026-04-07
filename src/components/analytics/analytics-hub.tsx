@@ -5,92 +5,91 @@ import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { Pill } from "@/components/ui/pill";
 import type {
-  FixtureAnalyticsRecord,
   TeamAnalyticsRecord,
   TeamGameLogEntry,
 } from "@/lib/analytics/fbref";
-import type { MultiSourceAnalyticsHubData } from "@/lib/analytics/hub";
+import type { MatchupPreviewRecord, PredictiveHubData } from "@/lib/analytics/predictive";
 
 const MENU_ITEMS = [
   {
     id: "player-overview",
-    title: "Player Overview",
-    description: "Two-way player profile table with finishing, creation, progression, and defending.",
+    title: "Projection Board",
+    description: "Compare the players most likely to drive goals, chances, progression, and defensive points.",
   },
   {
     id: "player-quick-reference",
-    title: "Player Quick Reference",
-    description: "Position buckets that surface the most useful season-long profiles in one glance.",
+    title: "Fantasy Targets",
+    description: "Quick position-by-position shortlists for lineup builds and prop research.",
   },
   {
     id: "player-game-log",
-    title: "Player Game Log",
-    description: "Season usage proxy built from starts, minutes, plus-minus, and points per game.",
+    title: "Form & Minutes",
+    description: "See recent minutes, production, and involvement before lock.",
   },
   {
     id: "player-leaders",
-    title: "Stat Leaders (Players)",
-    description: "Top performers across finishing, playmaking, progression, and defensive work.",
+    title: "Player Edges",
+    description: "Find the finishers, creators, carriers, and ball-winners shaping fantasy ceilings and prop volume.",
   },
   {
     id: "team-overview",
-    title: "Team Overview & Roster",
-    description: "Club-level strength, form, points, goal difference, and rotation profile by roster.",
+    title: "Team Ratings",
+    description: "See who is controlling games, creating chances, and showing the most stable team strength.",
   },
   {
     id: "team-offense",
-    title: "Team Offensive Metrics",
-    description: "Scoring pressure, creation volume, and progression profile across the league.",
+    title: "Attack Signals",
+    description: "Compare the clubs creating pressure, shots, and goal-scoring environments.",
   },
   {
     id: "team-defense",
-    title: "Team Defensive Metrics",
-    description: "Goals allowed, clean sheets, duel success, and defensive event profiles.",
+    title: "Defense Signals",
+    description: "See which clubs suppress chances, protect clean sheets, and lower opponent ceilings.",
   },
   {
     id: "team-leaders",
-    title: "Stat Leaders (Teams)",
-    description: "League-leading clubs by attack, defense, control, and season output.",
+    title: "Team Edges",
+    description: "A quick leaderboard view for the strongest teams in attack, defense, and control.",
   },
   {
     id: "team-game-log",
-    title: "Team Game Log",
-    description: "Fixture-by-fixture ledger for every club with venue, scoreline, and result.",
+    title: "Club Results",
+    description: "Every club's recent results, venues, and scorelines in one place.",
   },
   {
     id: "game-preview",
-    title: "Game Preview",
-    description: "Fixture cards that compare both clubs’ season-long profiles before kickoff.",
+    title: "Matchup Previews",
+    description: "Get a fast preview of upcoming games using season form, team style, and likely edge.",
   },
   {
     id: "game-recap",
-    title: "Game Recap",
-    description: "Recent scorelines, venue context, and whether the profile edge held up.",
+    title: "Result Recaps",
+    description: "Catch the latest scorelines and see whether the pre-match read held up.",
   },
   {
     id: "goalkeepers",
-    title: "Goalkeepers",
-    description: "Shot-stopping, clean-sheet, and goalkeeper-only leaderboard view.",
+    title: "Keeper Outlook",
+    description: "Shot-stopping, clean sheets, and the keepers shaping fantasy and prop markets.",
   },
   {
     id: "glossary",
-    title: "Glossary/Explainer",
-    description: "Definitions for each composite score and how to read the pages above.",
+    title: "Model Notes",
+    description: "Plain-English help for the scores, terms, and leaderboards behind the projections.",
   },
   {
     id: "official-live",
-    title: "Official Live Data",
-    description: "Current official leaders, standings, fixtures, and real player match logs from the league feed.",
+    title: "Standings & Fixtures",
+    description: "Standings, leaders, recent results, and the next matches that can move projections and prices.",
   },
   {
     id: "historical-archive",
-    title: "Historical Archive",
-    description: "Season archive, franchise context, and nwslR historical leaderboards across older league eras.",
+    title: "Historical Baselines",
+    description: "Zoom out and use league history as context for team strength, player roles, and long-run production.",
   },
   {
     id: "open-data",
-    title: "Open Data Lens",
-    description: "Event-level shot and xG summaries from StatsBomb Open Data for the 2018 season.",
+    title: "xG & Shot Quality",
+    description: "A closer look at shot quality and xG for matchup research and market context.",
   },
 ] as const;
 
@@ -131,6 +130,10 @@ function formatSigned(value: number) {
 
 function formatPercent(value: number) {
   return `${value.toFixed(1)}%`;
+}
+
+function formatProbability(value: number) {
+  return `${Math.round(value * 100)}%`;
 }
 
 function formatShortDate(value: string) {
@@ -176,9 +179,17 @@ function formatResultPills(sequence: string) {
   return sequence.split("").join(" ");
 }
 
-function matchupTone(fixture: FixtureAnalyticsRecord) {
-  if (fixture.profileEdge === "Even profile") return "default";
-  return fixture.recapTag === "Upset" ? "accent" : "brand";
+function formatSourceLabel(source: string) {
+  switch (source) {
+    case "Official NWSL API":
+      return "Official NWSL";
+    case "nwslR archive":
+      return "League Archive";
+    case "StatsBomb Open Data":
+      return "StatsBomb";
+    default:
+      return source;
+  }
 }
 
 function MetricLine({
@@ -349,7 +360,7 @@ function CompactLeaderboardCard({
 function OfficialPlayerLogCard({
   player,
 }: {
-  player: MultiSourceAnalyticsHubData["official"]["currentPlayerLogs"][number];
+  player: PredictiveHubData["official"]["currentPlayerLogs"][number];
 }) {
   return (
     <details className="rounded-[1.6rem] border border-line bg-white/5 p-4">
@@ -415,7 +426,7 @@ function OfficialFixtureListCard({
   eyebrow: string;
   title: string;
   description: string;
-  fixtures: MultiSourceAnalyticsHubData["official"]["recentFixtures"];
+  fixtures: PredictiveHubData["official"]["recentFixtures"];
   emptyMessage: string;
 }) {
   return (
@@ -455,67 +466,126 @@ function OfficialFixtureListCard({
   );
 }
 
-export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
+function AnalyticsMatchupCard({ matchup }: { matchup: MatchupPreviewRecord }) {
+  const favoriteIsHome = matchup.homeWinProb >= matchup.awayWinProb;
+  const favoriteTeam = favoriteIsHome ? matchup.homeTeam : matchup.awayTeam;
+  const favoriteProb = favoriteIsHome ? matchup.homeWinProb : matchup.awayWinProb;
+
+  return (
+    <SurfaceCard
+      eyebrow={matchup.matchDateLabel}
+      title={`${matchup.homeTeam} vs ${matchup.awayTeam}`}
+      description={matchup.summary}
+      tone={favoriteProb >= 0.56 ? "brand" : "default"}
+    >
+      <div className="space-y-4">
+        <div className="flex flex-wrap gap-2">
+          <Pill tone={favoriteProb >= 0.56 ? "brand" : "accent"}>
+            {favoriteTeam} {formatProbability(favoriteProb)}
+          </Pill>
+          <Pill tone="default">{matchup.tempoLabel}</Pill>
+          <Pill tone="default">{matchup.volatilityLabel}</Pill>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <MetricLine label="Home / draw / away" value={`${formatProbability(matchup.homeWinProb)} / ${formatProbability(matchup.drawProb)} / ${formatProbability(matchup.awayWinProb)}`} />
+          <MetricLine label="xG" value={`${matchup.lambdaHome.toFixed(1)} - ${matchup.lambdaAway.toFixed(1)}`} />
+          <MetricLine label="Over 2.5 / BTTS" value={`${formatProbability(matchup.over25Prob)} / ${formatProbability(matchup.bttsYesProb)}`} />
+          <MetricLine label="Clean sheets" value={`${formatProbability(matchup.homeCleanSheetProb)} / ${formatProbability(matchup.awayCleanSheetProb)}`} />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {matchup.fairPrices.slice(0, 3).map((price) => (
+            <Pill key={`${matchup.matchKey}-${price.label}`} tone="default">
+              {price.label}: {price.decimalOdds.toFixed(2)}
+            </Pill>
+          ))}
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-[1.3rem] border border-line bg-white/6 p-4">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+              Home targets
+            </p>
+            <div className="mt-3 space-y-2">
+              {matchup.homeTargets.slice(0, 2).map((player) => (
+                <div key={`${matchup.matchKey}-${player.id}`} className="rounded-full border border-line px-4 py-2 text-sm text-foreground">
+                  {player.player} • {player.projection.toFixed(1)}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-[1.3rem] border border-line bg-white/6 p-4">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+              Away targets
+            </p>
+            <div className="mt-3 space-y-2">
+              {matchup.awayTargets.slice(0, 2).map((player) => (
+                <div key={`${matchup.matchKey}-${player.id}`} className="rounded-full border border-line px-4 py-2 text-sm text-foreground">
+                  {player.player} • {player.projection.toFixed(1)}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2 text-sm text-muted">
+          {matchup.angles.map((angle) => (
+            <span key={`${matchup.matchKey}-${angle}`}>{angle}</span>
+          ))}
+        </div>
+      </div>
+    </SurfaceCard>
+  );
+}
+
+export function AnalyticsHub({ data }: { data: PredictiveHubData }) {
   if (data.availableSeasons.length === 0) {
     return (
       <AppShell
-        eyebrow="Analytics"
-        title="No analytics data yet"
-        description="Run the FBref scrape first so the hub has player, team, and fixture data to work with."
+        eyebrow="Research Hub"
+        title="Research tools are on the way"
+        description="We're still loading league data for this page. Check back once the latest season stats are available."
       >
         <EmptyState
-          title="No FBref data found"
-          description="The analytics hub reads from data/fbref. Add at least one season of player, team, and schedule CSVs to unlock the dashboards."
+          title="No research data available yet"
+          description="Once season data is loaded, you'll be able to compare players, clubs, fixtures, and league trends here."
         />
       </AppShell>
     );
   }
 
-  const topOverallPlayers = topRows(
-    data.players,
-    "overallIndex",
-    18,
-    (player) => Number(player.minutes90) >= 5
-  );
   const quickReferenceGroups = [
     {
       title: "Forwards",
-      rows: topRows(
-        data.players,
-        "overallIndex",
-        4,
-        (player) => player.positionGroup === "Forward" && Number(player.minutes90) >= 6
-      ),
+      rows: data.predictive.playerBoard
+        .filter((player) => player.position === "FWD")
+        .slice(0, 4),
     },
     {
       title: "Midfielders",
-      rows: topRows(
-        data.players,
-        "overallIndex",
-        4,
-        (player) => player.positionGroup === "Midfielder" && Number(player.minutes90) >= 6
-      ),
+      rows: data.predictive.playerBoard
+        .filter((player) => player.position === "MID")
+        .slice(0, 4),
     },
     {
       title: "Defenders",
-      rows: topRows(
-        data.players,
-        "overallIndex",
-        4,
-        (player) => player.positionGroup === "Defender" && Number(player.minutes90) >= 6
-      ),
+      rows: data.predictive.playerBoard
+        .filter((player) => player.position === "DEF")
+        .slice(0, 4),
     },
     {
       title: "Goalkeepers",
-      rows: topRows(
-        data.goalkeepers,
-        "goalkeeperIndex",
-        4,
-        (player) => Number(player.goalkeeperMinutes90) >= 4
-      ),
+      rows: data.predictive.playerBoard
+        .filter((player) => player.position === "GK")
+        .slice(0, 4),
     },
   ];
 
+  const predictiveLeaders = data.predictive.playerBoard.slice(0, 18);
+  const predictiveMatchups = data.predictive.matchups.slice(0, 6);
+  const fairPriceRows = data.predictive.matchups.slice(0, 4).flatMap((matchup) =>
+    matchup.fairPrices.slice(0, 2).map((price) => ({
+      matchup,
+      price,
+    }))
+  );
   const topTeams = data.teams.slice(0, 8);
   const officialArchiveRows = data.official.archive.slice(0, 6);
   const officialStandings = data.official.standings.slice(0, 8);
@@ -530,7 +600,7 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
   }));
   const statsbombTeamRows = data.statsbomb.teamXgLeaders.map((row) => ({
     label: row.label,
-    sublabel: "2018 open-data sample",
+    sublabel: "2018 season sample",
     value: formatDecimal(row.value),
     meta: `${formatInteger(row.secondaryValue)} G • ${formatInteger(row.tertiaryValue)} shots`,
   }));
@@ -562,7 +632,7 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
     <div className="flex flex-wrap gap-2">
       {data.dataSources.map((source) => (
         <Pill key={source} tone="default">
-          {source}
+          {formatSourceLabel(source)}
         </Pill>
       ))}
     </div>
@@ -588,9 +658,9 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
 
   return (
     <AppShell
-      eyebrow="Analytics"
-      title={`NWSL advanced stats hub ${data.season}`}
-      description="A public-facing analytics surface modeled after the Tableau-style stats hub, now backed by FBref, the official NWSL API, nwslR historical tables, and StatsBomb Open Data."
+      eyebrow="Research Hub"
+      title={`${data.season} NWSL research hub`}
+      description="Use player form, team strength, fixtures, and league trends to build sharper fantasy projections, betting reads, and matchup previews."
       actions={
         <div className="space-y-3">
           {seasonLinks}
@@ -600,16 +670,16 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
     >
       <section className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
         <SurfaceCard
-          eyebrow="Benchmark"
-          title="Tableau-level shape"
-          description="The menu mirrors the benchmark dashboard surface: player, team, game, keeper, and glossary views."
+          eyebrow="At a glance"
+          title="Built for picks, projections, and previews"
+          description="Move from player targets to team form, matchup edges, and historical context without leaving the page."
           tone="brand"
         >
           <div className="grid gap-3 sm:grid-cols-2">
-            <MetricLine label="Player rows" value={formatInteger(data.players.length)} />
-            <MetricLine label="Team rows" value={formatInteger(data.teams.length)} />
-            <MetricLine label="Goalkeeper rows" value={formatInteger(data.goalkeepers.length)} />
-            <MetricLine label="Fixture rows" value={formatInteger(data.fixtures.length)} />
+            <MetricLine label="Players tracked" value={formatInteger(data.players.length)} />
+            <MetricLine label="Teams tracked" value={formatInteger(data.teams.length)} />
+            <MetricLine label="Goalkeepers tracked" value={formatInteger(data.goalkeepers.length)} />
+            <MetricLine label="Matches tracked" value={formatInteger(data.fixtures.length)} />
           </div>
         </SurfaceCard>
 
@@ -623,7 +693,7 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-2">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-brand-strong">
-                    Analytics view
+                    Jump to
                   </p>
                   <h2 className="font-display text-2xl uppercase leading-tight text-foreground">
                     {item.title}
@@ -640,48 +710,46 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="player-overview" className="space-y-5">
         <SectionHeader
           eyebrow="Players"
-          title="Player overview"
-          description="Season-wide player profiles blended from finishing, chance creation, ball progression, ball-winning, and workload."
+          title="Projection board"
+          description="This is the consumer-facing board: matchup-adjusted fantasy projections, floor/ceiling ranges, and the role notes behind them."
         />
-        <SurfaceCard title="Top overall profiles" description="Filtered to meaningful minute loads so the leaderboard stays useful.">
+        <SurfaceCard title="Top projected players" description="The next-slate board blends historical fantasy output with the current team environment, role stability, clean-sheet equity, and projected pace.">
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-[0.24em] text-muted">
                 <tr>
                   <th className="px-2 py-3">Player</th>
                   <th className="px-2 py-3">Team</th>
-                  <th className="px-2 py-3">Pos</th>
-                  <th className="px-2 py-3">90s</th>
-                  <th className="px-2 py-3">G+A</th>
-                  <th className="px-2 py-3">SCA/90</th>
-                  <th className="px-2 py-3">Pass %</th>
-                  <th className="px-2 py-3">Tkl Won</th>
-                  <th className="px-2 py-3">Profile</th>
-                  <th className="px-2 py-3">Overall</th>
+                  <th className="px-2 py-3">Opp</th>
+                  <th className="px-2 py-3">Proj</th>
+                  <th className="px-2 py-3">Floor</th>
+                  <th className="px-2 py-3">Ceiling</th>
+                  <th className="px-2 py-3">Value</th>
+                  <th className="px-2 py-3">Confidence</th>
+                  <th className="px-2 py-3">Tag</th>
                 </tr>
               </thead>
               <tbody>
-                {topOverallPlayers.map((player) => (
-                  <tr key={player.key} className="border-t border-line/60 text-foreground">
+                {predictiveLeaders.map((player) => (
+                  <tr key={player.id} className="border-t border-line/60 text-foreground">
                     <td className="px-2 py-3">
                       <div>
                         <p className="font-semibold">{player.player}</p>
-                        <p className="text-xs text-muted">{player.profileBlurb}</p>
+                        <p className="text-xs text-muted">
+                          {player.position} • {player.reasons[0] ?? player.trendLabel}
+                        </p>
                       </div>
                     </td>
                     <td className="px-2 py-3">{player.team}</td>
-                    <td className="px-2 py-3">{player.position}</td>
-                    <td className="px-2 py-3">{formatDecimal(player.minutes90)}</td>
-                    <td className="px-2 py-3">{formatInteger(player.goals + player.assists)}</td>
-                    <td className="px-2 py-3">{formatDecimal(player.scaPer90)}</td>
-                    <td className="px-2 py-3">{formatPercent(player.passesPct)}</td>
-                    <td className="px-2 py-3">{formatInteger(player.tacklesWon)}</td>
+                    <td className="px-2 py-3">{player.opponent ?? "TBD"}</td>
+                    <td className="px-2 py-3 font-semibold">{player.projection.toFixed(1)}</td>
+                    <td className="px-2 py-3">{player.floor.toFixed(1)}</td>
+                    <td className="px-2 py-3">{player.ceiling.toFixed(1)}</td>
+                    <td className="px-2 py-3">{player.valueScore.toFixed(2)}</td>
+                    <td className="px-2 py-3">{formatProbability(player.confidence)}</td>
                     <td className="px-2 py-3">
-                      <div className="flex flex-wrap gap-2">
-                        <Pill tone="default">{player.positionGroup}</Pill>
-                      </div>
+                      <Pill tone="default">{player.matchupTag}</Pill>
                     </td>
-                    <td className="px-2 py-3 font-semibold">{formatSigned(player.overallIndex)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -693,8 +761,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="player-quick-reference" className="space-y-5">
         <SectionHeader
           eyebrow="Players"
-          title="Player quick reference"
-          description="Compact scout-board cards for the strongest season profiles at each position group."
+          title="Fantasy targets"
+          description="Position-by-position quick lists for lineup builds, props, and same-day research."
         />
         <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
           {quickReferenceGroups.map((group) => (
@@ -702,12 +770,12 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
               key={group.title}
               eyebrow="Quick reference"
               title={group.title}
-              description="Top four profiles by composite index."
+              description="Four names worth checking before you lock anything in."
             >
               <div className="space-y-3">
                 {group.rows.map((player) => (
                   <div
-                    key={player.key}
+                    key={player.id}
                     className="rounded-[1.5rem] border border-line bg-white/6 px-4 py-4"
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -717,15 +785,19 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
                           {player.team} • {player.position}
                         </p>
                       </div>
-                      <Pill tone={player.isGoalkeeper ? "accent" : "brand"}>
-                        {formatSigned(player.overallIndex)}
+                      <Pill tone={player.position === "GK" ? "accent" : "brand"}>
+                        {player.projection.toFixed(1)}
                       </Pill>
                     </div>
                     <div className="mt-4 grid gap-2">
-                      <MetricLine label="90s" value={formatDecimal(player.minutes90)} />
+                      <MetricLine label="Floor / ceiling" value={`${player.floor.toFixed(1)} / ${player.ceiling.toFixed(1)}`} />
                       <MetricLine
-                        label={player.isGoalkeeper ? "Save %" : "SCA/90"}
-                        value={player.isGoalkeeper ? formatPercent(player.savePct) : formatDecimal(player.scaPer90)}
+                        label={player.position === "GK" ? "Clean sheet" : "Value"}
+                        value={
+                          player.position === "GK" && player.cleanSheetChance != null
+                            ? formatProbability(player.cleanSheetChance)
+                            : player.valueScore.toFixed(2)
+                        }
                       />
                     </div>
                   </div>
@@ -739,8 +811,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="player-game-log" className="space-y-5">
         <SectionHeader
           eyebrow="Players"
-          title="Player game log"
-          description="Official current-season player match logs are now live for heavy-minute players. The season usage proxy remains below as a fallback scouting view for the merged aggregate dataset."
+          title="Form and minutes"
+          description="See who is holding minutes, staying involved, and carrying usable form into the next matchday."
         />
         {data.official.currentPlayerLogs.length > 0 ? (
           <div className="grid gap-4 xl:grid-cols-2">
@@ -749,7 +821,7 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
             ))}
           </div>
         ) : null}
-        <SurfaceCard title="Usage board" description="Best available proxy until event-level player game logs are ingested.">
+        <SurfaceCard title="Usage board" description="Minutes-and-role context for the rest of the player pool.">
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-[0.24em] text-muted">
@@ -784,8 +856,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="player-leaders" className="space-y-5">
         <SectionHeader
           eyebrow="Players"
-          title="Stat leaders"
-          description="Single-metric player leaderboards built from the merged season table."
+          title="Player edges"
+          description="The fastest way to find the names driving fantasy ceilings, prop volume, and all-around production."
         />
         <div className="grid gap-5 xl:grid-cols-3">
           {PLAYER_LEADER_METRICS.map((metric) => (
@@ -809,8 +881,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="team-overview" className="space-y-5">
         <SectionHeader
           eyebrow="Teams"
-          title="Team overview & roster"
-          description="Club cards summarize style and season output, with rosters ranked by minutes underneath."
+          title="Team ratings"
+          description="A team-level read on strength, style, and lineup stability before you price the matchup."
         />
         <div className="grid gap-5 xl:grid-cols-2">
           {topTeams.map((team) => (
@@ -852,10 +924,10 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="team-offense" className="space-y-5">
         <SectionHeader
           eyebrow="Teams"
-          title="Team offensive metrics"
-          description="Attack-centric team comparison across scoring, shot volume, and creation pressure."
+          title="Attack signals"
+          description="Compare the clubs most likely to generate shots, chances, and strong fantasy scoring environments."
         />
-        <SurfaceCard title="Offense board" description="Sorted by composite offense index.">
+        <SurfaceCard title="Offense board" description="A quick ranking of the league's most dangerous attacking environments.">
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-[0.24em] text-muted">
@@ -890,10 +962,10 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="team-defense" className="space-y-5">
         <SectionHeader
           eyebrow="Teams"
-          title="Team defensive metrics"
-          description="Defense-oriented comparison across goals allowed, duel success, interceptions, and goalkeeper support."
+          title="Defense signals"
+          description="See which clubs limit danger, protect clean-sheet chances, and lower opponent ceilings."
         />
-        <SurfaceCard title="Defense board" description="Sorted by composite defense index.">
+        <SurfaceCard title="Defense board" description="A quick ranking of the teams most likely to make life difficult for opponents.">
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-[0.24em] text-muted">
@@ -928,8 +1000,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="team-leaders" className="space-y-5">
         <SectionHeader
           eyebrow="Teams"
-          title="Team stat leaders"
-          description="Single-metric team leaderboards that complement the offense and defense tables."
+          title="Team edges"
+          description="Quick-hit leaderboards for the strongest teams in attack, defense, and overall matchup strength."
         />
         <div className="grid gap-5 xl:grid-cols-3">
           {TEAM_LEADER_METRICS.map((metric) => (
@@ -948,8 +1020,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="team-game-log" className="space-y-5">
         <SectionHeader
           eyebrow="Teams"
-          title="Team game log"
-          description="Every club’s most recent fixture ledger with venue and result context."
+          title="Club results"
+          description="Every club's recent scorelines, venues, and results in one easy scan before preview work."
         />
         <div className="grid gap-4 xl:grid-cols-2">
           {data.teams.map((team) => (
@@ -961,34 +1033,62 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="game-preview" className="space-y-5">
         <SectionHeader
           eyebrow="Matches"
-          title="Game preview"
-          description="Fixture cards compare club profile strength before kickoff. If the selected season is already complete, these cards run in replay mode."
+          title="Matchup previews"
+          description="This is the pre-match layer: win probabilities, fair prices, projected totals, clean-sheet odds, and the top player targets in each game."
         />
         <div className="grid gap-5 xl:grid-cols-2">
-          {data.previewFixtures.map((fixture) => (
-            <SurfaceCard
-              key={`preview-${fixture.matchKey}`}
-              eyebrow={fixture.dateLabel}
-              title={`${fixture.homeTeam} vs ${fixture.awayTeam}`}
-              description={fixture.profileEdge}
-              tone={matchupTone(fixture)}
-            >
-              <div className="grid gap-3 sm:grid-cols-2">
-                <MetricLine label="Round" value={fixture.round ?? "Regular season"} />
-                <MetricLine label="Venue" value={fixture.venue ?? "TBD"} />
-                <MetricLine label="Referee" value={fixture.referee ?? "TBD"} />
-                <MetricLine label="Result state" value={fixture.resultLabel} />
-              </div>
-            </SurfaceCard>
+          {predictiveMatchups.map((matchup) => (
+            <AnalyticsMatchupCard key={`predictive-${matchup.matchKey}`} matchup={matchup} />
           ))}
         </div>
+        <SurfaceCard
+          eyebrow="Fair price board"
+          title="Quick research prices"
+          description="Model prices to compare against sportsbook numbers before you place a bet or build a same-game stack."
+        >
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="text-xs uppercase tracking-[0.24em] text-muted">
+                <tr>
+                  <th className="px-2 py-3">Matchup</th>
+                  <th className="px-2 py-3">Market</th>
+                  <th className="px-2 py-3">Prob</th>
+                  <th className="px-2 py-3">Fair decimal</th>
+                  <th className="px-2 py-3">Fair American</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fairPriceRows.map(({ matchup, price }) => (
+                  <tr
+                    key={`${matchup.matchKey}-${price.label}`}
+                    className="border-t border-line/60 text-foreground"
+                  >
+                    <td className="px-2 py-3 font-semibold">
+                      {matchup.homeTeam} vs {matchup.awayTeam}
+                    </td>
+                    <td className="px-2 py-3">{price.label}</td>
+                    <td className="px-2 py-3">{formatProbability(price.probability)}</td>
+                    <td className="px-2 py-3">{price.decimalOdds.toFixed(2)}</td>
+                    <td className="px-2 py-3">{price.americanOdds}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4">
+            <Link href="/matchups" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-strong">
+              Open full matchup board
+              <ArrowUpRight className="size-4" />
+            </Link>
+          </div>
+        </SurfaceCard>
       </section>
 
       <section id="game-recap" className="space-y-5">
         <SectionHeader
           eyebrow="Matches"
-          title="Game recap"
-          description="Recent results with scoreline context and whether the season profile edge held."
+          title="Result recaps"
+          description="Catch the latest scorelines and see whether the pre-match angle held up."
         />
         <div className="grid gap-5 xl:grid-cols-2">
           {data.recentRecaps.map((fixture) => (
@@ -1011,15 +1111,15 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
 
       <section id="official-live" className="space-y-5">
         <SectionHeader
-          eyebrow="Official Feed"
-          title="Official live data"
-          description={`Direct league-feed coverage across ${data.official.archive.length} seasons, with standings, leaders, and fixture pulse for ${data.official.selectedSeason ?? "the selected season"} plus current-season player match logs for ${data.official.latestSeason ?? "the latest season"}.`}
+          eyebrow="Live View"
+          title="Standings and fixtures"
+          description={`Track standings, leaders, recent results, and the next fixtures for ${data.official.selectedSeason ?? "this season"}, with recent player logs from ${data.official.latestSeason ?? "the latest campaign"}.`}
         />
         <div className="grid gap-5 xl:grid-cols-2">
           <SurfaceCard
             eyebrow="Standings"
             title={`${data.official.selectedSeason ?? "Current"} table`}
-            description="Derived from official team summaries, then sorted like a live league table."
+            description="Table context for form, urgency, and matchup pressure."
           >
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm">
@@ -1054,7 +1154,7 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
           <SurfaceCard
             eyebrow="Leaders"
             title={`${data.official.selectedSeason ?? "Current"} player leaders`}
-            description="Official season leaderboard rows with minutes, xG, passing, and defensive volume."
+            description="The official leaders driving goals, assists, xG, passing volume, and defensive work."
           >
             <div className="overflow-x-auto">
               <table className="min-w-full text-left text-sm">
@@ -1092,16 +1192,16 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
           <OfficialFixtureListCard
             eyebrow="Results"
             title={`${data.official.selectedSeason ?? "Current"} recent official fixtures`}
-            description="Most recent completed official fixtures from the selected season feed."
+            description="The latest finals feeding your form read."
             fixtures={officialRecentFixtures}
-            emptyMessage="No completed official fixtures are available for this season yet."
+            emptyMessage="Final scores will show up here once this season gets underway."
           />
           <OfficialFixtureListCard
             eyebrow="Schedule"
             title={`${data.official.selectedSeason ?? "Current"} upcoming official fixtures`}
-            description="Next scheduled official fixtures from the selected season feed."
+            description="The next matches on the board."
             fixtures={officialUpcomingFixtures}
-            emptyMessage="No upcoming official fixtures are available in the selected season feed."
+            emptyMessage="There are no upcoming matches listed for this season right now."
           />
         </div>
       </section>
@@ -1109,10 +1209,10 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="goalkeepers" className="space-y-5">
         <SectionHeader
           eyebrow="Goalkeepers"
-          title="Goalkeepers"
-          description="Goalkeeper-only board centered on shot-stopping, clean-sheet rate, and goals allowed."
+          title="Keeper outlook"
+          description="Save volume, clean-sheet chances, and goals allowed for fantasy builds and prop research."
         />
-        <SurfaceCard title="Goalkeeper board" description="Sorted by goalkeeper index with meaningful workload filters.">
+        <SurfaceCard title="Goalkeeper board" description="A clear ranking of the keepers most likely to matter on the slate.">
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
               <thead className="text-xs uppercase tracking-[0.24em] text-muted">
@@ -1152,8 +1252,8 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="glossary" className="space-y-5">
         <SectionHeader
           eyebrow="Glossary"
-          title="Glossary & explainer"
-          description="Definitions for the custom composite metrics used throughout the hub."
+          title="Model notes"
+          description="Plain-English definitions for the scores and stats behind the projections and previews."
         />
         <div className="grid gap-5 xl:grid-cols-2">
           {data.glossary.map((entry) => (
@@ -1165,7 +1265,7 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
             >
               <div className="flex items-center gap-3 text-sm text-muted">
                 <BookOpenText className="size-4" />
-                Built from the currently ingested FBref columns in this repo.
+                Built from season-long league data used throughout the models and previews on this page.
               </div>
             </SurfaceCard>
           ))}
@@ -1175,21 +1275,21 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
       <section id="historical-archive" className="space-y-5">
         <SectionHeader
           eyebrow="Archive"
-          title="Historical archive"
-          description="A league-history layer built from official season snapshots plus nwslR historical tables for older player and goalkeeper archive work."
+          title="Historical baselines"
+          description="Use league history as context for team strength, player roles, and long-run production."
         />
         <div className="grid gap-5 xl:grid-cols-4">
-          <SurfaceCard eyebrow="Coverage" title={`${data.official.archive.length} official seasons`} description="Official season snapshots available in this repo.">
+          <SurfaceCard eyebrow="Seasons" title={`${data.official.archive.length} seasons tracked`} description="Season snapshots currently available for historical context.">
             <MetricLine label="Latest season" value={String(data.official.latestSeason ?? "N/A")} />
           </SurfaceCard>
-          <SurfaceCard eyebrow="Franchises" title={`${formatInteger(data.nwslr.franchiseCount)} franchise rows`} description="Team-history and naming coverage from the nwslR archive." />
-          <SurfaceCard eyebrow="Stadiums" title={`${formatInteger(data.nwslr.stadiumCount)} stadium rows`} description="Venue archive coverage from nwslR." />
-          <SurfaceCard eyebrow="Awards" title={`${formatInteger(data.nwslr.awardCount)} award rows`} description="Historical award archive from nwslR." />
+          <SurfaceCard eyebrow="Clubs" title={`${formatInteger(data.nwslr.franchiseCount)} club history records`} description="Franchise history and naming across earlier seasons." />
+          <SurfaceCard eyebrow="Venues" title={`${formatInteger(data.nwslr.stadiumCount)} stadium records`} description="Venue history across earlier league seasons." />
+          <SurfaceCard eyebrow="Awards" title={`${formatInteger(data.nwslr.awardCount)} award records`} description="Past award winners from earlier seasons." />
         </div>
         <SurfaceCard
-          eyebrow="Season archive"
-          title="Official season snapshot"
-          description="Top team and top scorer by season from the official league feed."
+          eyebrow="Season by season"
+          title="League snapshot"
+          description="A year-by-year look at the team on top and the player who led the scoring race."
         >
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
@@ -1224,27 +1324,27 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
         </SurfaceCard>
         <div className="grid gap-5 xl:grid-cols-2">
           <CompactLeaderboardCard
-            eyebrow="nwslR"
+            eyebrow="Archive"
             title="Archive goal scorers"
-            description="Career goals across the 2013-2019 nwslR field-player archive."
+            description="The most productive scorers across earlier seasons."
             rows={nwslrScorerRows}
           />
           <CompactLeaderboardCard
-            eyebrow="nwslR"
+            eyebrow="Archive"
             title="Archive playmakers"
-            description="Career assists across the 2013-2019 nwslR field-player archive."
+            description="The players who created the most goals across earlier seasons."
             rows={nwslrPlaymakerRows}
           />
           <CompactLeaderboardCard
-            eyebrow="nwslR"
+            eyebrow="Archive"
             title="Archive keepers"
-            description="Clean-sheet leaders from the 2013-2019 nwslR goalkeeper archive."
+            description="The keepers with the most shutouts across earlier seasons."
             rows={nwslrKeeperRows}
           />
           <CompactLeaderboardCard
-            eyebrow="nwslR"
+            eyebrow="Archive"
             title="Archive ball-winners"
-            description="Recoveries, interceptions, and tackles aggregated from nwslR advanced match stats."
+            description="The players who piled up recoveries, interceptions, and tackles."
             rows={nwslrBallWinnerRows}
           />
         </div>
@@ -1252,27 +1352,27 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
 
       <section id="open-data" className="space-y-5">
         <SectionHeader
-          eyebrow="Open Data"
-          title="Event-level lens"
-          description="StatsBomb Open Data adds a true event-level xG sample for the 2018 NWSL season, which complements the broader aggregate feeds above."
+          eyebrow="xG View"
+          title="xG and shot quality"
+          description="A closer look at shot quality and chance volume for matchup research and market context."
         />
         <div className="grid gap-5 xl:grid-cols-3">
           <CompactLeaderboardCard
-            eyebrow="StatsBomb"
+            eyebrow="xG view"
             title="2018 player xG leaders"
-            description="Highest total expected goals in the open-data season."
+            description="Players who generated the most xG in the event sample."
             rows={statsbombPlayerRows}
           />
           <CompactLeaderboardCard
-            eyebrow="StatsBomb"
+            eyebrow="xG view"
             title="2018 team xG leaders"
-            description="Highest team-level xG totals in the open-data sample."
+            description="Teams that created the most xG in the event sample."
             rows={statsbombTeamRows}
           />
           <SurfaceCard
-            eyebrow="StatsBomb"
-            title="Highest-event matches"
-            description="Open-data matches with the biggest combined xG totals."
+            eyebrow="xG view"
+            title="Highest-chance matches"
+            description="Matches with the biggest combined xG totals in the event sample."
           >
             <div className="space-y-3">
               {data.statsbomb.matchXgLeaders.map((match) => (
@@ -1301,52 +1401,52 @@ export function AnalyticsHub({ data }: { data: MultiSourceAnalyticsHubData }) {
 
       <section className="grid gap-5 xl:grid-cols-4">
         <SurfaceCard
-          eyebrow="Source status"
-          title="What’s live"
-          description="The hub now combines FBref season aggregates, official NWSL season tables and logs, nwslR history, and StatsBomb open-event data."
+          eyebrow="Why it helps"
+          title="Built for picks, projections, and previews"
+          description="Use the hub to compare players, track form, pressure-test betting angles, and sharpen fantasy decisions."
           tone="accent"
         >
           <div className="space-y-3 text-sm text-white/82">
             <div className="flex items-center gap-2">
               <Sparkles className="size-4" />
-              Public analytics hub route
+              Player, club, and goalkeeper rankings
             </div>
             <div className="flex items-center gap-2">
               <Target className="size-4" />
-              Composite player and team scores
+              Team form, standings, and matchup context
             </div>
             <div className="flex items-center gap-2">
               <Shield className="size-4" />
-              Goalkeeper board and team defense tables
+              Recent player logs and fixture tracking
             </div>
             <div className="flex items-center gap-2">
               <CalendarRange className="size-4" />
-              Fixture preview and recap cards
+              League history and chance-quality views
             </div>
           </div>
         </SurfaceCard>
         <SurfaceCard
-          eyebrow="Open gap"
-          title="Remaining gap"
-          description="The deepest remaining hole is multi-season player match logs outside the current official season plus broader public event data beyond the 2018 open-data sample."
+          eyebrow="Still growing"
+          title="More depth coming"
+          description="The next big step is deeper match-by-match history across more seasons, which will sharpen props, projections, and preview work."
         />
         <SurfaceCard
-          eyebrow="Navigation"
-          title="Open analytics"
-          description="The route is public so you can share it as a scouting and storytelling surface."
+          eyebrow="Share it"
+          title="Open the stats hub"
+          description="Use the full page as a pre-lock scouting board or drop it into your league chat."
         >
           <Link
             href="/analytics"
             className="inline-flex items-center gap-2 rounded-full border border-brand bg-brand px-5 py-3 text-sm font-semibold text-white"
           >
-            Open hub
+            Open stats hub
             <ArrowUpRight className="size-4" />
           </Link>
         </SurfaceCard>
         <SurfaceCard
-          eyebrow="Coverage"
-          title={`${data.availableSeasons.length} FBref seasons`}
-          description={`FBref seasons: ${data.availableSeasons.join(", ")}. Official archive seasons: ${data.official.archive.map((season) => season.season).join(", ")}.`}
+          eyebrow="Model history"
+          title={`${data.availableSeasons.length} recent seasons`}
+          description={`Recent seasons currently span ${data.availableSeasons.join(", ")} with added historical context from ${data.official.archive.map((season) => season.season).join(", ")}.`}
         />
       </section>
     </AppShell>

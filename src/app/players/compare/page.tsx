@@ -1,17 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRightLeft, ShieldCheck, Sparkles, Target, TimerReset } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRightLeft,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  TimerReset,
+} from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { getButtonClassName } from "@/components/ui/button";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
-import { getFantasyPlayerById, getFantasyPlayerPool } from "@/lib/fantasy-player-pool";
-import { launchScoringRules } from "@/lib/scoring/scoring-rules";
-import type { FantasyPoolPlayer } from "@/types/fantasy";
+import {
+  getPredictiveHubData,
+  type PlayerProjectionRecord,
+} from "@/lib/analytics/predictive";
 
 export const metadata: Metadata = {
   title: "Compare Players",
+  description:
+    "Compare two NWSL players by matchup-aware projection, range, confidence, and value before lock.",
 };
 
 interface PlayerComparePageProps {
@@ -30,7 +40,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
       <AppShell
         eyebrow="Player compare"
         title="Compare players side-by-side"
-        description="Points, salary, and value at a glance."
+        description="Projection, range, salary, and role confidence in one screen."
         actions={
           <Link
             href="/players"
@@ -44,7 +54,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
         <section className="rounded-[1.35rem] border border-dashed border-line bg-white/4 px-6 py-8 text-center">
           <p className="text-sm font-semibold text-foreground">No players selected</p>
           <p className="mt-1 text-sm text-muted">
-            Select two or more players to compare their stats and projections side by side.
+            Pick two projected players from the board to compare their next-slate outlook.
           </p>
           <div className="mt-3 flex justify-center">
             <Link href="/players" className={getButtonClassName()}>
@@ -56,19 +66,39 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
     );
   }
 
-  const players = getFantasyPlayerPool();
-  const [leftPlayer, rightPlayer] = resolveComparePlayers(players, leftId, rightId);
+  const data = await getPredictiveHubData();
+  const playerBoard = data.predictive.playerBoard;
 
+  if (playerBoard.length === 0) {
+    return (
+      <AppShell
+        eyebrow="Player compare"
+        title="Player comparisons are loading"
+        description="The next-slate projection board is still being generated."
+      >
+        <section className="rounded-[1.35rem] border border-dashed border-line bg-white/4 px-6 py-8 text-center">
+          <p className="text-sm font-semibold text-foreground">No projection data yet</p>
+          <p className="mt-1 text-sm text-muted">
+            Come back once the next slate is available and this page will compare projected
+            starters, values, and ranges.
+          </p>
+        </section>
+      </AppShell>
+    );
+  }
+
+  const [leftPlayer, rightPlayer] = resolveComparePlayers(playerBoard, leftId, rightId);
   const projectionLeader =
-    leftPlayer.average_points >= rightPlayer.average_points ? leftPlayer : rightPlayer;
-  const valueLeader = getValueScore(leftPlayer) >= getValueScore(rightPlayer) ? leftPlayer : rightPlayer;
-  const salaryLeader = leftPlayer.salary_cost <= rightPlayer.salary_cost ? leftPlayer : rightPlayer;
+    leftPlayer.projection >= rightPlayer.projection ? leftPlayer : rightPlayer;
+  const ceilingLeader = leftPlayer.ceiling >= rightPlayer.ceiling ? leftPlayer : rightPlayer;
+  const floorLeader = leftPlayer.floor >= rightPlayer.floor ? leftPlayer : rightPlayer;
+  const valueLeader = leftPlayer.valueScore >= rightPlayer.valueScore ? leftPlayer : rightPlayer;
 
   return (
     <AppShell
       eyebrow="Player compare"
-      title="Compare players side-by-side"
-      description="Points, salary, and value at a glance."
+      title="Compare next-slate player outlooks"
+      description="Use matchup-adjusted projections, range, and role confidence to break close calls before lock."
       actions={
         <Link
           href="/players"
@@ -84,71 +114,85 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
       <section className="grid gap-5 xl:grid-cols-[1.08fr_0.92fr]">
         <SurfaceCard
           eyebrow="Head-to-head summary"
-          title="Who gives you the edge?"
-          description="Compare projected points, value, and salary."
+          title="Who gives you the stronger slate profile?"
+          description="Compare matchup-adjusted projection, range, salary, and value."
         >
           <div className="space-y-5">
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-4">
               <MetricTile
-                detail="Who scores more points."
-                label="Points edge"
+                detail="Higher projected fantasy output."
+                label="Projection edge"
                 tone="brand"
-                value={`${getCallsign(projectionLeader)} +${Math.abs(leftPlayer.average_points - rightPlayer.average_points).toFixed(1)}`}
+                value={`${getCallsign(projectionLeader)} +${Math.abs(
+                  leftPlayer.projection - rightPlayer.projection
+                ).toFixed(1)}`}
               />
               <MetricTile
-                detail="Better points per dollar."
-                label="Value edge"
+                detail="Higher single-match upside."
+                label="Ceiling edge"
                 tone="accent"
-                value={`${getCallsign(valueLeader)} +${Math.abs(getValueScore(leftPlayer) - getValueScore(rightPlayer)).toFixed(2)}`}
+                value={`${getCallsign(ceilingLeader)} +${Math.abs(
+                  leftPlayer.ceiling - rightPlayer.ceiling
+                ).toFixed(1)}`}
               />
               <MetricTile
-                detail="Cheaper option when points are close."
-                label="Salary edge"
-                value={`${getCallsign(salaryLeader)} $${Math.abs(leftPlayer.salary_cost - rightPlayer.salary_cost)}`}
+                detail="Safer outcome band."
+                label="Floor edge"
+                value={`${getCallsign(floorLeader)} +${Math.abs(
+                  leftPlayer.floor - rightPlayer.floor
+                ).toFixed(1)}`}
+              />
+              <MetricTile
+                detail="Better projection per salary."
+                label="Value edge"
+                value={`${getCallsign(valueLeader)} +${Math.abs(
+                  leftPlayer.valueScore - rightPlayer.valueScore
+                ).toFixed(2)}`}
               />
             </div>
 
             <div className="grid gap-4 lg:grid-cols-[1fr_auto_1fr]">
-              {[leftPlayer, rightPlayer].map((player, index) => {
-                const fit = getScoringFit(player);
-
-                return (
-                  <div
-                    key={player.id}
-                    className={[
-                      "rounded-[1.6rem] border p-5",
-                      index === 0
-                        ? "border-brand/28 bg-[linear-gradient(140deg,rgba(0,225,255,0.08)_0%,rgba(5,34,255,0.22)_46%,rgba(2,7,22,0.94)_100%)]"
-                        : "border-accent/28 bg-[linear-gradient(140deg,rgba(255,60,34,0.08)_0%,rgba(18,26,106,0.76)_46%,rgba(2,7,22,0.96)_100%)]",
-                    ].join(" ")}
-                  >
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                      {index === 0 ? "Player A" : "Player B"}
-                    </p>
-                    <div className="mt-4 space-y-3">
-                      <div>
-                        <p className="text-2xl font-semibold leading-tight tracking-[-0.03em] text-white">
-                          {player.display_name}
-                        </p>
-                        <p className="mt-1 text-sm text-white/72">
-                          {player.club_name} • {player.position} • rank #{player.rank}
-                        </p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Pill tone={player.availability === "available" ? "success" : "default"}>
-                          <ShieldCheck className="size-3.5" />
-                          {player.availability}
-                        </Pill>
-                        <Pill tone={index === 0 ? "brand" : "accent"}>
-                          <Sparkles className="size-3.5" />
-                          {fit.label}
-                        </Pill>
-                      </div>
-                      <p className="text-sm leading-7 text-white/78">{fit.detail}</p>
+              {[leftPlayer, rightPlayer].map((player, index) => (
+                <div
+                  key={player.id}
+                  className={[
+                    "rounded-[1.6rem] border p-5",
+                    index === 0
+                      ? "border-brand/28 bg-[linear-gradient(140deg,rgba(0,225,255,0.08)_0%,rgba(5,34,255,0.22)_46%,rgba(2,7,22,0.94)_100%)]"
+                      : "border-accent/28 bg-[linear-gradient(140deg,rgba(255,60,34,0.08)_0%,rgba(18,26,106,0.76)_46%,rgba(2,7,22,0.96)_100%)]",
+                  ].join(" ")}
+                >
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                    {index === 0 ? "Player A" : "Player B"}
+                  </p>
+                  <div className="mt-4 space-y-3">
+                    <div>
+                      <p className="text-2xl font-semibold leading-tight tracking-[-0.03em] text-white">
+                        {player.player}
+                      </p>
+                      <p className="mt-1 text-sm text-white/72">
+                        {player.team} • {player.position} • {formatMatchup(player)}
+                      </p>
                     </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Pill tone={player.availability === "available" ? "success" : "default"}>
+                        <ShieldCheck className="size-3.5" />
+                        {player.availability}
+                      </Pill>
+                      <Pill tone={index === 0 ? "brand" : "accent"}>
+                        <Sparkles className="size-3.5" />
+                        {player.matchupTag}
+                      </Pill>
+                    </div>
+                    <p className="text-sm leading-7 text-white/78">
+                      {player.reasons[0] ?? player.trendLabel}
+                    </p>
+                    <p className="text-xs uppercase tracking-[0.18em] text-white/58">
+                      {player.matchDateLabel ?? "Match date pending"}
+                    </p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
 
               <div className="flex items-center justify-center">
                 <div className="flex size-14 items-center justify-center rounded-full border border-line bg-white/8 text-brand-strong shadow-[0_18px_42px_rgba(0,225,255,0.18)]">
@@ -160,66 +204,70 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
         </SurfaceCard>
 
         <SurfaceCard
-          eyebrow="Scoring system"
-          title="How points are scored"
-          description="Key scoring actions for every position."
+          eyebrow="How to read it"
+          title="These numbers are built for pre-lock decisions"
+          description="The compare view turns the model into fast signals you can use."
           tone="accent"
         >
           <div className="space-y-4">
             <div className="flex flex-wrap gap-2">
               <Pill tone="brand">
                 <Target className="size-3.5" />
-                Projection = avg fantasy points
+                Projection = matchup-adjusted points
               </Pill>
               <Pill tone="success">
                 <TimerReset className="size-3.5" />
-                Live score updates by event
+                Confidence = role stability + minutes
               </Pill>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Attacking rewards
+                  Ceiling
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Forward goals score {launchScoringRules.goal.FWD}, midfielder goals {launchScoringRules.goal.MID}, defender and keeper goals {launchScoringRules.goal.DEF}. Assists add {launchScoringRules.assist}.
+                  High-end outcome if the game opens up and the player sees her normal attacking or
+                  defensive workload.
                 </p>
               </div>
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Defensive base
+                  Floor
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Appearance adds {launchScoringRules.appearance}, 60+ minutes adds {launchScoringRules.minutes60Plus}, clean sheets pay {launchScoringRules.cleanSheet.GK} for GK and DEF, and each save adds {launchScoringRules.save}.
+                  Safer range built from minutes, base involvement, and clean-sheet or save equity
+                  where relevant.
                 </p>
               </div>
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Discipline swings
+                  Confidence
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Yellow cards cost {launchScoringRules.yellowCard}, red cards cost {launchScoringRules.redCard}, penalty misses cost {launchScoringRules.penaltyMiss}, and goals conceded reduce GK and DEF by {launchScoringRules.goalsConceded.DEF} each.
+                  Higher confidence means the role and minutes look stable. Lower confidence means
+                  more volatility or injury risk.
                 </p>
               </div>
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  How scores move
+                  Reasons
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Points start with appearance, increase at 60 minutes, then change with goals, assists, and other match events.
+                  Each player card highlights the one or two matchup or role factors driving the
+                  projection upward.
                 </p>
               </div>
             </div>
 
             <Link
-              href="/rules"
+              href="/matchups"
               className={getButtonClassName({
                 className: "justify-center",
                 variant: "secondary",
               })}
             >
-              Open full scoring rules
+              Open matchup board
             </Link>
           </div>
         </SurfaceCard>
@@ -228,56 +276,87 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
       <section className="grid gap-5 lg:grid-cols-2">
         {[leftPlayer, rightPlayer].map((player, index) => {
           const otherPlayer = index === 0 ? rightPlayer : leftPlayer;
-          const fit = getScoringFit(player);
-          const projectionGap = player.average_points - otherPlayer.average_points;
-          const valueGap = getValueScore(player) - getValueScore(otherPlayer);
+          const projectionGap = player.projection - otherPlayer.projection;
+          const valueGap = player.valueScore - otherPlayer.valueScore;
 
           return (
             <SurfaceCard
               key={player.id}
               eyebrow={index === 0 ? "Player A profile" : "Player B profile"}
-              title={player.display_name}
-              description={`${player.club_name} • ${player.position} • ${fit.label}`}
+              title={player.player}
+              description={`${player.team} • ${player.position} • ${player.matchupTag}`}
               tone={index === 0 ? "brand" : "accent"}
             >
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  <Pill tone={index === 0 ? "brand" : "accent"}>Rank #{player.rank}</Pill>
+                  <Pill tone={index === 0 ? "brand" : "accent"}>{player.matchupTag}</Pill>
                   <Pill tone={player.availability === "available" ? "success" : "default"}>
                     {player.availability}
                   </Pill>
+                  <Pill tone="default">{player.riskLabel}</Pill>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <MetricTile
-                    detail={projectionGap >= 0 ? "Higher projected points." : "Lower projected points."}
+                    detail={projectionGap >= 0 ? "Higher projected output." : "Lower projected output."}
                     label="Projection"
                     tone={projectionGap >= 0 ? "brand" : "default"}
-                    value={player.average_points.toFixed(1)}
+                    value={player.projection.toFixed(1)}
                   />
                   <MetricTile
-                    detail="Salary-cap cost."
-                    label="Salary"
-                    value={`$${player.salary_cost}`}
+                    detail="High-end outcome."
+                    label="Ceiling"
+                    value={player.ceiling.toFixed(1)}
                   />
                   <MetricTile
-                    detail={valueGap >= 0 ? "Better value per dollar." : "Less value per dollar."}
+                    detail="Safer outcome band."
+                    label="Floor"
+                    tone="accent"
+                    value={player.floor.toFixed(1)}
+                  />
+                  <MetricTile
+                    detail={valueGap >= 0 ? "Better projection per salary." : "Less value per salary."}
                     label="Value / $1k"
-                    tone={valueGap >= 0 ? "accent" : "default"}
-                    value={getValueScore(player).toFixed(2)}
+                    value={player.valueScore.toFixed(2)}
                   />
-                  <MetricTile
-                    detail="Overall ranking."
-                    label="Pool rank"
-                    value={`#${player.rank}`}
-                  />
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-[1.2rem] border border-line bg-white/6 p-4">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                      Salary
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">${player.salary}</p>
+                  </div>
+                  <div className="rounded-[1.2rem] border border-line bg-white/6 p-4">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                      Minutes
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">
+                      {player.expectedMinutes.toFixed(0)}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.2rem] border border-line bg-white/6 p-4">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                      Confidence
+                    </p>
+                    <p className="mt-2 text-lg font-semibold text-foreground">
+                      {formatPercent(player.confidence)}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                    Scoring fit
+                    Why the model likes this spot
                   </p>
-                  <p className="mt-3 text-sm leading-7 text-foreground">{fit.detail}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {player.reasons.slice(0, 3).map((reason) => (
+                      <Pill key={`${player.id}-${reason}`} tone="default">
+                        {reason}
+                      </Pill>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-3">
@@ -303,76 +382,44 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
 }
 
 function resolveComparePlayers(
-  players: FantasyPoolPlayer[],
+  players: PlayerProjectionRecord[],
   leftId: string | null,
   rightId: string | null
 ) {
-  const candidateIds =
-    leftId && rightId
-      ? [leftId, rightId]
-      : players.slice(0, 2).map((player) => player.id);
+  const preferredIds = [leftId, rightId].filter((playerId): playerId is string => Boolean(playerId));
+  const chosenPlayers: PlayerProjectionRecord[] = [];
 
-  const uniqueIds: string[] = [];
-
-  for (const playerId of candidateIds) {
-    if (!uniqueIds.includes(playerId)) {
-      uniqueIds.push(playerId);
+  for (const playerId of preferredIds) {
+    const player = players.find((candidate) => candidate.id === playerId);
+    if (player && !chosenPlayers.some((candidate) => candidate.id === player.id)) {
+      chosenPlayers.push(player);
     }
   }
 
   for (const player of players) {
-    if (uniqueIds.length >= 2) {
+    if (chosenPlayers.length >= 2) {
       break;
     }
 
-    if (!uniqueIds.includes(player.id)) {
-      uniqueIds.push(player.id);
+    if (!chosenPlayers.some((candidate) => candidate.id === player.id)) {
+      chosenPlayers.push(player);
     }
   }
 
-  return uniqueIds.slice(0, 2).map((playerId) => getFantasyPlayerById(playerId) ?? players[0]) as [
-    FantasyPoolPlayer,
-    FantasyPoolPlayer,
-  ];
+  return chosenPlayers.slice(0, 2) as [PlayerProjectionRecord, PlayerProjectionRecord];
 }
 
-function getValueScore(player: FantasyPoolPlayer) {
-  if (player.salary_cost <= 0) {
-    return player.average_points;
-  }
-
-  return (player.average_points / player.salary_cost) * 1000;
+function getCallsign(player: PlayerProjectionRecord) {
+  const parts = player.player.split(" ");
+  return parts[parts.length - 1] ?? player.player;
 }
 
-function getCallsign(player: FantasyPoolPlayer) {
-  const parts = player.display_name.split(" ");
-  return parts[parts.length - 1] ?? player.display_name;
+function formatPercent(probability: number) {
+  return `${Math.round(probability * 100)}%`;
 }
 
-function getScoringFit(player: FantasyPoolPlayer) {
-  if (player.position === "GK") {
-    return {
-      label: "Goalkeeper",
-      detail: `Earns points from saves (${launchScoringRules.save}), clean sheets (${launchScoringRules.cleanSheet.GK}), and goals (${launchScoringRules.goal.GK}).`,
-    };
-  }
-
-  if (player.position === "DEF") {
-    return {
-      label: "Defender",
-      detail: `Earns consistent points from minutes played, plus clean sheet bonus (${launchScoringRules.cleanSheet.DEF}) and goals (${launchScoringRules.goal.DEF}).`,
-    };
-  }
-
-  if (player.position === "MID") {
-    return {
-      label: "Midfielder",
-      detail: `Scores from assists (${launchScoringRules.assist}), goals (${launchScoringRules.goal.MID}), and steady minutes.`,
-    };
-  }
-
-  return {
-    label: "Forward",
-    detail: `Highest ceiling from goals (${launchScoringRules.goal.FWD}) and assists (${launchScoringRules.assist}).`,
-  };
+function formatMatchup(player: PlayerProjectionRecord) {
+  const opponent = player.opponent ?? "TBD";
+  const venue = player.venue ? `${player.venue} vs ${opponent}` : `vs ${opponent}`;
+  return venue;
 }

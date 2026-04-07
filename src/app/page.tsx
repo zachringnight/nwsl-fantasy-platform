@@ -1,236 +1,280 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  CalendarRange,
-  Crown,
-  Flame,
-  Goal,
-  Radar,
-  Sparkles,
-  Trophy,
-  Waves,
-} from "lucide-react";
+import { ArrowRight, Radar, Sparkles, Target } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
-import { fantasyPlayerPool } from "@/lib/fantasy-player-pool";
-import {
-  formatFantasySlateRange,
-  getFantasySlateStatus,
-  getFantasyTargetSlate,
-  getFantasySlateWindows,
-} from "@/lib/fantasy-slate-engine";
+import { getPredictiveHubData } from "@/lib/analytics/predictive";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 
 export const metadata: Metadata = {
-  title: "Model-Powered Fantasy Soccer",
+  title: "NWSL Fantasy Soccer",
   description:
-    "The home for NWSL fantasy with model-powered predictions, player projections, and edge indicators.",
+    "Use matchup previews, fair prices, fantasy projections, and player research tools for every NWSL slate.",
 };
 
-const experiencePillars = [
+const researchPillars = [
   {
-    eyebrow: "Classic leagues",
-    title: "Private leagues with your crew",
-    description: "Draft players, set lineups, and compete head-to-head each week.",
+    eyebrow: "Matchup board",
+    title: "Start with game scripts, not guesses",
+    description: "See the strongest sides, best totals, clean-sheet spots, and fair prices before you touch a player pool.",
   },
   {
-    eyebrow: "Weekly contests",
-    title: "Salary-cap lineups every week",
-    description: "Build a lineup under the cap and edit until lock time.",
+    eyebrow: "Player board",
+    title: "Sort the slate by ceiling, value, and role",
+    description: "Player rankings move with opponent strength, expected minutes, team environment, and shot or creation volume.",
   },
   {
-    eyebrow: "Live scoring",
-    title: "Follow every point as it happens",
-    description: "Scores, goals, and key events update in real time.",
+    eyebrow: "Betting context",
+    title: "Turn model probabilities into usable prices",
+    description: "Keep the numbers actionable for fantasy decisions, prop research, and straight-match reads.",
   },
-];
-
-const firstDailySlate = getFantasySlateWindows("salary_cap_daily")[0];
-const finalDailySlate = getFantasySlateWindows("salary_cap_daily").at(-1);
-const weeklySlateCount = getFantasySlateWindows("salary_cap_weekly").length;
-const currentDailySlate = getFantasyTargetSlate("salary_cap_daily");
-const currentWeeklySlate = getFantasyTargetSlate("salary_cap_weekly");
-const featuredPlayers = fantasyPlayerPool.slice(0, 4);
+] as const;
 
 const scoringAnchors = [
   {
+    label: "Role",
+    value: "Expected minutes, starting probability, and injury status drive the baseline.",
+  },
+  {
     label: "Attack",
-    value: `${launchScoringRules.goal.FWD} for a forward goal`,
-  },
-  {
-    label: "Creation",
-    value: `${launchScoringRules.assist} assist • ${launchScoringRules.chanceCreated} chance created`,
-  },
-  {
-    label: "Pressure",
-    value: `${launchScoringRules.shotOnTarget} shot on target • ${launchScoringRules.successfulCross} cross`,
+    value: `${launchScoringRules.goal.FWD} for a forward goal, ${launchScoringRules.assist} per assist, plus chance creation and shot volume.`,
   },
   {
     label: "Defense",
-    value: `${launchScoringRules.cleanSheet.GK} clean sheet • ${launchScoringRules.save} per save`,
+    value: `${launchScoringRules.cleanSheet.GK} for keeper clean sheets, ${launchScoringRules.save} per save, and clean-sheet equity for defenders.`,
   },
-];
+  {
+    label: "Environment",
+    value: "Win chances, projected totals, and opponent resistance push players up or down before lock.",
+  },
+] as const;
 
-function formatSlateStatusLabel() {
-  const status = getFantasySlateStatus(currentDailySlate);
-
-  if (status === "live") {
-    return "Live now";
+function formatPercent(probability: number | null | undefined) {
+  if (probability == null) {
+    return "N/A";
   }
 
-  if (status === "complete") {
-    return "Recently settled";
-  }
-
-  return "Next to lock";
+  return `${Math.round(probability * 100)}%`;
 }
 
-export default function Home() {
+export default async function Home() {
+  const data = await getPredictiveHubData();
+  const featuredPlayers = data.predictive.playerBoard.slice(0, 4);
+  const featuredMatchup = data.predictive.matchups[0] ?? null;
+  const bestValue = data.predictive.bestValues[0] ?? null;
+  const topCeiling = data.predictive.bestCeilings[0] ?? null;
+  const safestFloor = data.predictive.safestFloors[0] ?? null;
+  const propFavorite = data.predictive.propTargets[0] ?? null;
+
   return (
     <AppShell
-      eyebrow="NWSL fantasy"
-      title="Fantasy for every NWSL match window"
-      description="Leagues, contests, and daily lineups — all in one place."
+      eyebrow="NWSL projections"
+      title="Sharper NWSL reads for fantasy builds, prop angles, and matchup previews"
+      description="Start with the slate context, move to the player board, and use fair prices and role-based projections to make better calls before kickoff."
       actions={
         <div className="flex flex-wrap gap-3">
           <Link
-            href="/leagues/create"
+            href="/matchups"
             className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:translate-y-[-1px]"
           >
-            Start a league
+            Open matchup board
             <ArrowRight className="size-4" />
           </Link>
           <Link
             href="/players"
             className="rounded-full border border-line bg-white/6 px-5 py-3 text-sm font-semibold text-foreground transition hover:border-brand-strong/40 hover:text-brand-strong"
           >
-            Scout players
+            Browse player projections
           </Link>
         </div>
       }
     >
-      <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+      <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
         <SurfaceCard
-          eyebrow="Play now"
-          title="Draft nights, weekly contests, and daily slates"
-          description="Pick the format that fits you. Same players and scoring across every mode."
+          eyebrow="Research first"
+          title="See the next slate before you pick a side or build a lineup"
+          description="The board is organized around the things that actually move outcomes: projected totals, fair prices, clean-sheet leverage, and matchup-aware player ranges."
           tone="brand"
           className="section-fade"
         >
           <div className="grid gap-4 edge-frame">
-            <div className="grid gap-3 md:grid-cols-3">
-              <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
-                  Opening daily slate
-                </p>
-                <p className="mt-2 text-lg font-semibold text-white">
-                  {firstDailySlate ? formatFantasySlateRange(firstDailySlate) : "Unavailable"}
-                </p>
-              </div>
-              <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
-                  Weekly windows
-                </p>
-                <p className="mt-2 text-lg font-semibold text-white">{weeklySlateCount} windows</p>
-              </div>
-              <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
-                  Final daily lock
-                </p>
-                <p className="mt-2 text-lg font-semibold text-white">
-                  {finalDailySlate?.label ?? "Unavailable"}
-                </p>
-              </div>
+            <div className="grid gap-3 md:grid-cols-4">
+              {data.predictive.matchupBoard.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4"
+                >
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
+                    {item.label}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold text-white">{item.value}</p>
+                  <p className="mt-2 text-sm leading-6 text-white/72">{item.detail}</p>
+                </div>
+              ))}
             </div>
 
-            <div className="grid gap-3 md:grid-cols-3">
-              <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
-                  <Crown className="size-3.5" />
-                  Classic
-                </p>
-                <p className="mt-2 text-sm leading-6 text-white/82">
-                  Private leagues with a live draft and weekly head-to-head matchups.
-                </p>
-              </div>
-              <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
-                  <Flame className="size-3.5" />
-                  Weekly cap
-                </p>
-                <p className="mt-2 text-sm leading-6 text-white/82">
-                  Build one lineup per week and lock it before kickoff.
-                </p>
-              </div>
-              <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
-                  <Goal className="size-3.5" />
-                  Daily
-                </p>
-                <p className="mt-2 text-sm leading-6 text-white/82">
-                  Pick players for a single matchday and see results the same night.
-                </p>
-              </div>
-            </div>
+            {featuredMatchup ? (
+              <div className="grid gap-3 lg:grid-cols-[1.1fr_0.9fr]">
+                <div className="rounded-[1.5rem] border border-white/12 bg-black/20 p-5">
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
+                    Featured matchup
+                  </p>
+                  <h2 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">
+                    {featuredMatchup.homeTeam} vs {featuredMatchup.awayTeam}
+                  </h2>
+                  <p className="mt-2 text-sm text-white/72">
+                    {featuredMatchup.matchDateLabel} • {featuredMatchup.tempoLabel} •{" "}
+                    {featuredMatchup.volatilityLabel}
+                  </p>
+                  <p className="mt-4 text-sm leading-7 text-white/82">
+                    {featuredMatchup.summary}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2 text-sm text-white/72">
+                    {featuredMatchup.angles.slice(0, 4).map((angle) => (
+                      <span
+                        key={`${featuredMatchup.matchKey}-${angle}`}
+                        className="rounded-full border border-white/12 px-3 py-1"
+                      >
+                        {angle}
+                      </span>
+                    ))}
+                  </div>
+                </div>
 
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-2 rounded-full bg-night px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-black"
-              >
-                Create account
-                <ArrowRight className="size-4" />
-              </Link>
-              <Link
-                href="/leagues/join"
-                className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/8"
-              >
-                Join with code
-              </Link>
-            </div>
+                <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                  <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
+                      Home win
+                    </p>
+                    <p className="mt-2 text-2xl font-semibold text-white">
+                      {formatPercent(featuredMatchup.homeWinProb)}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
+                      Draw
+                    </p>
+                    <p className="mt-2 text-2xl font-semibold text-white">
+                      {formatPercent(featuredMatchup.drawProb)}
+                    </p>
+                  </div>
+                  <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/72">
+                      Away win
+                    </p>
+                    <p className="mt-2 text-2xl font-semibold text-white">
+                      {formatPercent(featuredMatchup.awayWinProb)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-[1.5rem] border border-dashed border-white/12 bg-black/10 p-5 text-sm text-white/72">
+                Upcoming fixtures are still loading. Once the next slate is available, this space
+                will show the strongest game environment on the board.
+              </div>
+            )}
           </div>
         </SurfaceCard>
 
         <div className="grid gap-4 section-fade section-fade-delay-1">
           <SurfaceCard
-            eyebrow="Schedule"
-            title="Always know when lineups lock"
-            description="Deadlines and matchday times — always visible."
+            eyebrow="Quick answers"
+            title="The fastest way to narrow the slate"
+            description="Three high-signal calls to start with when time is short."
           >
             <div className="space-y-3 text-sm text-muted">
-              <div className="flex items-center gap-3">
-                <CalendarRange className="size-4 text-brand-strong" />
-                <p>Daily lineups lock at the first kickoff of each matchday.</p>
+              <div className="rounded-[1.25rem] border border-line bg-white/6 px-4 py-4">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                  Best value
+                </p>
+                <p className="mt-2 text-lg font-semibold text-foreground">
+                  {bestValue ? bestValue.player : "Waiting on slate"}
+                </p>
+                <p className="mt-1 text-sm text-muted">
+                  {bestValue
+                    ? `${bestValue.projection.toFixed(1)} projection at $${bestValue.salary} against ${bestValue.opponent ?? "TBD"}`
+                    : "Projected player values appear once the next slate is available."}
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <Radar className="size-4 text-brand-strong" />
-                <p>Weekly lineups cover an entire round of matches.</p>
+              <div className="rounded-[1.25rem] border border-line bg-white/6 px-4 py-4">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                  Best ceiling
+                </p>
+                <p className="mt-2 text-lg font-semibold text-foreground">
+                  {topCeiling ? topCeiling.player : "Waiting on slate"}
+                </p>
+                <p className="mt-1 text-sm text-muted">
+                  {topCeiling
+                    ? `${topCeiling.ceiling.toFixed(1)} ceiling with ${topCeiling.shotVolume.toFixed(1)} shot volume`
+                    : "The board will surface the highest-upside spots for the next card."}
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <Trophy className="size-4 text-[#C5FF5F]" />
-                <p>Season-long lineups lock once and ride all year.</p>
+              <div className="rounded-[1.25rem] border border-line bg-white/6 px-4 py-4">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                  Safest floor
+                </p>
+                <p className="mt-2 text-lg font-semibold text-foreground">
+                  {safestFloor ? safestFloor.player : "Waiting on slate"}
+                </p>
+                <p className="mt-1 text-sm text-muted">
+                  {safestFloor
+                    ? `${safestFloor.floor.toFixed(1)} floor with ${formatPercent(
+                        safestFloor.confidence
+                      )} confidence`
+                    : "Role-stable players with the safest ranges show up here."}
+                </p>
+              </div>
+              <div className="rounded-[1.25rem] border border-line bg-white/6 px-4 py-4">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                  Best prop spot
+                </p>
+                <p className="mt-2 text-lg font-semibold text-foreground">
+                  {propFavorite ? propFavorite.player : "Waiting on slate"}
+                </p>
+                <p className="mt-1 text-sm text-muted">
+                  {propFavorite
+                    ? `${propFavorite.shotVolume.toFixed(1)} shots and ${propFavorite.creationVolume.toFixed(
+                        1
+                      )} creation volume vs ${propFavorite.opponent ?? "TBD"}`
+                    : "Shot and creation leaders appear here for prop-style research."}
+                </p>
               </div>
             </div>
           </SurfaceCard>
+
           <SurfaceCard
-            eyebrow="Why NWSL Fantasy"
-            title="Built for matchday"
-            description="Clear deadlines, live scores, and easy lineup management."
+            eyebrow="Workflow"
+            title="How sharper users work the board"
+            description="The product is built around one consistent sequence."
             tone="accent"
           >
-            <div className="flex flex-wrap gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted">
-              <span className="rounded-full border border-line bg-white/6 px-3 py-1">deadline first</span>
-              <span className="rounded-full border border-line bg-white/6 px-3 py-1">mobile sharp</span>
-              <span className="rounded-full border border-line bg-white/6 px-3 py-1">easy to manage</span>
-              <span className="rounded-full border border-line bg-white/6 px-3 py-1">matchday energy</span>
+            <div className="grid gap-3">
+              <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+                <p className="text-sm font-semibold text-foreground">1. Open matchups first</p>
+                <p className="mt-1 text-sm text-muted">
+                  Find the likely scripts, totals, and clean-sheet spots before selecting players.
+                </p>
+              </div>
+              <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+                <p className="text-sm font-semibold text-foreground">2. Filter the player board</p>
+                <p className="mt-1 text-sm text-muted">
+                  Sort by value, ceiling, floor, or prop-friendly volume depending on the decision.
+                </p>
+              </div>
+              <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+                <p className="text-sm font-semibold text-foreground">3. Check fair prices last</p>
+                <p className="mt-1 text-sm text-muted">
+                  Compare model probabilities with market prices only after the matchup context makes sense.
+                </p>
+              </div>
             </div>
           </SurfaceCard>
         </div>
       </section>
 
       <section className="grid gap-5 lg:grid-cols-3">
-        {experiencePillars.map((pillar, index) => (
+        {researchPillars.map((pillar, index) => (
           <SurfaceCard
             key={pillar.title}
             eyebrow={pillar.eyebrow}
@@ -246,13 +290,13 @@ export default function Home() {
           >
             <div className="mt-2 flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
               {index === 0 ? (
-                <Crown className="size-4" />
+                <Radar className="size-4" />
               ) : index === 1 ? (
                 <Sparkles className="size-4" />
               ) : (
-                <Waves className="size-4" />
+                <Target className="size-4" />
               )}
-              Ready for matchday
+              Consumer-ready slate read
             </div>
           </SurfaceCard>
         ))}
@@ -260,57 +304,86 @@ export default function Home() {
 
       <section className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
         <SurfaceCard
-          eyebrow="Player market"
-          title="Real NWSL players power every format"
-          description="Browse real NWSL players with salaries and projected points."
+          eyebrow="Player board"
+          title="Top targets on the next slate"
+          description="These are matchup-aware projections for the upcoming fixtures, not season-long averages."
           className="section-fade"
         >
-          <div className="grid gap-3 md:grid-cols-2">
-            {featuredPlayers.map((player) => (
-              <div
-                key={player.id}
-                className="rounded-[1.35rem] border border-line bg-panel-soft px-4 py-4"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                      #{player.rank} overall
-                    </p>
-                    <h3 className="mt-2 text-lg font-semibold text-foreground">{player.display_name}</h3>
-                    <p className="mt-1 text-sm text-muted">
-                      {player.club_name} • {player.position}
-                    </p>
+          {featuredPlayers.length > 0 ? (
+            <div className="grid gap-3 md:grid-cols-2">
+              {featuredPlayers.map((player) => (
+                <div
+                  key={player.id}
+                  className="rounded-[1.35rem] border border-line bg-panel-soft px-4 py-4"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                        {player.matchupTag}
+                      </p>
+                      <h3 className="mt-2 text-lg font-semibold text-foreground">
+                        {player.player}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted">
+                        {player.team} • {player.position} • vs {player.opponent ?? "TBD"}
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-brand/30 bg-brand/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-brand-strong">
+                      ${player.salary}
+                    </span>
                   </div>
-                  <span className="rounded-full border border-brand/30 bg-brand/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-brand-strong">
-                    ${player.salary_cost}
-                  </span>
-                </div>
-                <div className="mt-4 flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted">
-                      Projection
-                    </p>
-                    <p className="mt-1 text-2xl font-semibold text-foreground">
-                      {player.average_points.toFixed(1)}
-                    </p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                    <div>
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted">
+                        Projection
+                      </p>
+                      <p className="mt-1 text-xl font-semibold text-foreground">
+                        {player.projection.toFixed(1)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted">
+                        Ceiling
+                      </p>
+                      <p className="mt-1 text-xl font-semibold text-foreground">
+                        {player.ceiling.toFixed(1)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted">
+                        Confidence
+                      </p>
+                      <p className="mt-1 text-xl font-semibold text-foreground">
+                        {formatPercent(player.confidence)}
+                      </p>
+                    </div>
                   </div>
-                  <Link
-                    href={`/players/${player.id}`}
-                    className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-strong/40 hover:text-brand-strong"
-                  >
-                    View profile
-                  </Link>
+                  <p className="mt-4 text-sm text-muted">
+                    {player.reasons[0] ?? player.trendLabel}
+                  </p>
+                  <div className="mt-4">
+                    <Link
+                      href={`/players/${player.id}`}
+                      className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-strong/40 hover:text-brand-strong"
+                    >
+                      View profile
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[1.35rem] border border-dashed border-line bg-white/4 px-5 py-8 text-sm text-muted">
+              Player projections will appear here once the next slate is available.
+            </div>
+          )}
         </SurfaceCard>
 
         <div className="grid gap-5 section-fade section-fade-delay-1">
           <SurfaceCard
-            eyebrow="Scoring"
-            title="Points that reward real soccer"
-            description="Goals, assists, clean sheets, and more — every stat counts."
+            eyebrow="Projection inputs"
+            title="What actually moves a player up the board"
+            description="The model leans on role, matchup, and event volume instead of one blunt season average."
           >
             <div className="grid gap-3">
               {scoringAnchors.map((anchor) => (
@@ -319,77 +392,107 @@ export default function Home() {
                   className="flex items-center justify-between gap-4 rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3"
                 >
                   <p className="text-sm font-semibold text-foreground">{anchor.label}</p>
-                  <p className="text-sm text-muted">{anchor.value}</p>
+                  <p className="max-w-[25rem] text-right text-sm text-muted">{anchor.value}</p>
                 </div>
               ))}
             </div>
           </SurfaceCard>
           <SurfaceCard
-            eyebrow="Live now"
-            title={`${formatSlateStatusLabel()} for matchday`}
-            description="See current deadlines and upcoming matchdays."
+            eyebrow="Research stack"
+            title="Use the full board in three tabs"
+            description="The public product is organized around the exact questions you ask before lock."
           >
             <div className="grid gap-3">
               <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Daily
+                  Matchups
                 </p>
-                <p className="mt-2 text-sm font-semibold text-foreground">
-                  {formatFantasySlateRange(currentDailySlate)}
-                </p>
-                <p className="mt-1 text-sm text-muted">
-                  Locks {new Date(currentDailySlate.lock_at).toLocaleString()}
+                <p className="mt-2 text-sm text-muted">
+                  Win chances, totals, clean-sheet probabilities, and fair prices.
                 </p>
               </div>
               <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                  Weekly
+                  Players
                 </p>
-                <p className="mt-2 text-sm font-semibold text-foreground">
-                  {formatFantasySlateRange(currentWeeklySlate)}
+                <p className="mt-2 text-sm text-muted">
+                  Projection ranges, value, prop-friendly volume, and role notes.
                 </p>
-                <p className="mt-1 text-sm text-muted">
-                  Covers {currentWeeklySlate.slate_keys.length} matchdays
+              </div>
+              <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                  Research
+                </p>
+                <p className="mt-2 text-sm text-muted">
+                  Team form, archive context, and multi-source stats when you need a deeper read.
                 </p>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
-                href="/dashboard"
+                href="/matchups"
                 className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white"
               >
-                Open dashboard
+                Matchups
               </Link>
               <Link
-                href="/rules"
+                href="/players"
                 className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground hover:border-brand-strong/40 hover:text-brand-strong"
               >
-                Full scoring rules
+                Players
+              </Link>
+              <Link
+                href="/analytics"
+                className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-semibold text-foreground hover:border-brand-strong/40 hover:text-brand-strong"
+              >
+                Research
               </Link>
             </div>
           </SurfaceCard>
         </div>
       </section>
+
       <section className="space-y-6 text-center">
-        <h2 className="text-2xl font-bold text-white">Powered by Professional-Grade Models</h2>
-        <p className="text-white/60 max-w-2xl mx-auto">
-          Our Dixon-Coles and Bivariate Poisson models analyze every NWSL match to produce win
-          probabilities, expected goals, and player projections. The same statistical models
-          used by professional sports betting syndicates — now powering your fantasy decisions.
+        <h2 className="text-2xl font-bold text-white">Sharper calls before every lock</h2>
+        <p className="mx-auto max-w-2xl text-white/60">
+          Match forecasts, player projections, and price-sensitive signals are built for fantasy
+          decisions, prop research, and matchup previews. Use them to break close calls, find value,
+          and get to kickoff with a stronger read than raw box scores can give you.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="glass-card rounded-xl border border-line p-4">
-            <p className="text-lg font-bold text-white">Match Predictions</p>
-            <p className="text-sm text-white/50">Win probabilities and projected scorelines for every fixture</p>
+            <p className="text-lg font-bold text-white">Matchup Previews</p>
+            <p className="text-sm text-white/50">
+              See expected scorelines, win chances, and fair prices before kickoff
+            </p>
           </div>
           <div className="glass-card rounded-xl border border-line p-4">
             <p className="text-lg font-bold text-white">Player Projections</p>
-            <p className="text-sm text-white/50">Projected points with floor-ceiling ranges and value ratings</p>
+            <p className="text-sm text-white/50">
+              Compare expected output, range, value, and role confidence
+            </p>
           </div>
           <div className="glass-card rounded-xl border border-line p-4">
-            <p className="text-lg font-bold text-white">Sharp Indicators</p>
-            <p className="text-sm text-white/50">See where model-optimal lineups diverge from popular picks</p>
+            <p className="text-lg font-bold text-white">Betting Angles</p>
+            <p className="text-sm text-white/50">
+              Find pace, clean-sheet, and shot-volume spots worth a second look
+            </p>
           </div>
+        </div>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link
+            href="/matchups"
+            className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white"
+          >
+            Start with matchups
+            <ArrowRight className="size-4" />
+          </Link>
+          <Link
+            href="/players"
+            className="rounded-full border border-line bg-white/6 px-5 py-3 text-sm font-semibold text-foreground transition hover:border-brand-strong/40 hover:text-brand-strong"
+          >
+            Explore player board
+          </Link>
         </div>
       </section>
     </AppShell>

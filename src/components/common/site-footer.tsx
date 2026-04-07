@@ -2,10 +2,11 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 
 const footerLinks = [
+  { href: "/matchups", label: "Matchups" },
+  { href: "/analytics", label: "Research" },
   { href: "/rules", label: "Rules" },
   { href: "/help", label: "Help" },
   { href: "/players", label: "Players" },
-  { href: "/leagues", label: "Leagues" },
 ];
 
 export function SiteFooter() {

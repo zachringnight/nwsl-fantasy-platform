@@ -8,7 +8,7 @@ const OFFICIAL_DIR = path.join(process.cwd(), "data", "nwsl-official");
 const STATSBOMB_DIR = path.join(process.cwd(), "data", "statsbomb");
 const NWSLR_DIR = path.join(process.cwd(), "data", "nwslr");
 
-type CsvValue = string | number | boolean | null;
+type CsvValue = string | number | boolean | Date | null;
 type CsvRow = Record<string, CsvValue>;
 
 export interface OfficialSeasonArchiveRecord {
@@ -201,6 +201,10 @@ function toNumber(value: CsvValue | undefined) {
 function toText(value: CsvValue | undefined) {
   if (typeof value === "string") {
     return value.trim();
+  }
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
   }
 
   if (typeof value === "number" && Number.isFinite(value)) {
