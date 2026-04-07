@@ -6,7 +6,9 @@ import json
 import logging
 import os
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+UTC = timezone.utc
 from pathlib import Path
 from typing import Any, Callable, Iterable, Optional
 from urllib.parse import urlencode

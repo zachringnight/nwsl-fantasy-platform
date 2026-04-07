@@ -134,7 +134,7 @@ def parse_table(html: str, table_id: str) -> pd.DataFrame | None:
             a_tag = cell.find("a")
             value = (
                 a_tag.get_text(strip=True)
-                if a_tag and stat in ("player", "squad")
+                if a_tag and stat in ("player", "squad", "team")
                 else cell.get_text(strip=True)
             )
             row[stat] = value
@@ -154,7 +154,13 @@ def parse_table(html: str, table_id: str) -> pd.DataFrame | None:
         text_cols |= SCHEDULE_TEXT_COLUMNS
     for col in df.columns:
         if col not in text_cols:
+            # Strip commas from locale-formatted numbers (e.g. "2,106" -> "2106")
+            df[col] = df[col].astype(str).str.replace(",", "", regex=False)
             df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Drop the "matches" column — always contains the literal string "Matches"
+    if "matches" in df.columns:
+        df = df.drop(columns=["matches"])
 
     if table_id.startswith("sched_"):
         for col in SCHEDULE_TEXT_COLUMNS & set(df.columns):
