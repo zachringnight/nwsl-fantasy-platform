@@ -53,6 +53,13 @@ def brier_score_multiclass(
     return float(np.mean(np.sum((probs - one_hot) ** 2, axis=1)))
 
 
+def root_mean_squared_error(
+    predicted: NDArray[np.float64],
+    actual: NDArray[np.float64],
+) -> float:
+    return float(np.sqrt(np.mean((predicted - actual) ** 2)))
+
+
 def crps_scoreline(
     score_matrices: list[NDArray[np.float64]],
     actual_home: NDArray[np.int64],
@@ -141,16 +148,41 @@ def compute_all_metrics(
         )
         metrics["log_loss_1x2"] = log_loss_1x2(probs, outcomes)
         metrics["brier_score_1x2"] = brier_score_multiclass(probs, outcomes)
+        metrics["top1_accuracy_1x2"] = float((np.argmax(probs, axis=1) == outcomes).mean())
+        metrics["forecast_entropy_1x2"] = float(
+            np.mean(-np.sum(np.clip(probs, 1e-15, 1.0) * np.log(np.clip(probs, 1e-15, 1.0)), axis=1))
+        )
 
     # Binary Brier scores for specific markets
-    for prob_col, actual_col, name in [
-        ("prob_home", "home_win", "brier_home_win"),
-        ("prob_over_2.5", "over_2_5", "brier_over_2_5"),
-    ]:
+    for prob_col, actual_col, name in [("prob_home", "home_win", "brier_home_win")]:
         if prob_col in df.columns and actual_col in df.columns:
             metrics[name] = brier_score(
                 df[prob_col].values, df[actual_col].values.astype(int)
             )
+
+    total_goals_actual = (df["home_goals_90"] + df["away_goals_90"]).astype(float).values
+    if "lambda_home" in df.columns and "lambda_away" in df.columns:
+        expected_total_goals = df["lambda_home"].astype(float).values + df["lambda_away"].astype(float).values
+        metrics["expected_total_goals_mae"] = float(np.mean(np.abs(expected_total_goals - total_goals_actual)))
+        metrics["expected_total_goals_rmse"] = root_mean_squared_error(expected_total_goals, total_goals_actual)
+    if "lambda_home" in df.columns:
+        metrics["expected_home_goals_mae"] = float(np.mean(np.abs(df["lambda_home"].astype(float).values - df["home_goals_90"].astype(float).values)))
+        metrics["expected_home_goals_rmse"] = root_mean_squared_error(
+            df["lambda_home"].astype(float).values,
+            df["home_goals_90"].astype(float).values,
+        )
+    if "lambda_away" in df.columns:
+        metrics["expected_away_goals_mae"] = float(np.mean(np.abs(df["lambda_away"].astype(float).values - df["away_goals_90"].astype(float).values)))
+        metrics["expected_away_goals_rmse"] = root_mean_squared_error(
+            df["lambda_away"].astype(float).values,
+            df["away_goals_90"].astype(float).values,
+        )
+
+    for line in (1.5, 2.5, 3.5, 4.5):
+        prob_col = f"prob_over_{line}"
+        if prob_col in df.columns:
+            actual = (total_goals_actual > line).astype(int)
+            metrics[f"brier_over_{line}"] = brier_score(df[prob_col].astype(float).values, actual)
 
     # CRPS if score matrices available
     if "score_matrix" in df.columns:
@@ -160,6 +192,7 @@ def compute_all_metrics(
             df["home_goals_90"].values.astype(int),
             df["away_goals_90"].values.astype(int),
         )
+        metrics["rps_scoreline"] = metrics["crps_scoreline"]
 
     # Betting metrics
     if bet_log is not None and len(bet_log) > 0:

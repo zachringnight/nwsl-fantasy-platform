@@ -56,7 +56,8 @@ class DixonColesModel(BaseScoreModel):
         self._home_adv: float = config.home_advantage_init
         self._intercept: float = 0.0
         self._rho: float = config.rho_init
-        self._contextual_betas: NDArray[np.float64] = np.array([])
+        self._contextual_home_betas: NDArray[np.float64] = np.array([])
+        self._contextual_away_betas: NDArray[np.float64] = np.array([])
         self._contextual_cols: list[str] = []
 
     def fit(
@@ -92,13 +93,14 @@ class DixonColesModel(BaseScoreModel):
         n_ctx = 0
         if contextual_cols:
             self._contextual_cols = contextual_cols
-            ctx_matrix = matches[contextual_cols].fillna(0).values.astype(np.float64)
+            ctx_matrix = matches[contextual_cols].values.astype(np.float64)
             n_ctx = ctx_matrix.shape[1]
 
         n_teams = self._n_teams
 
-        # Parameter vector: [attack(n), defense(n), home_adv, intercept, rho, betas(n_ctx)]
-        n_params = 2 * n_teams + 3 + n_ctx
+        # Parameter vector:
+        # [attack(n), defense(n), home_adv, intercept, rho, home_betas(n_ctx), away_betas(n_ctx)]
+        n_params = 2 * n_teams + 3 + (2 * n_ctx)
 
         # Initial values
         x0 = np.zeros(n_params, dtype=np.float64)
@@ -113,7 +115,7 @@ class DixonColesModel(BaseScoreModel):
             + [(-1.0, 1.5)]  # home_adv
             + [(-1.0, 1.5)]  # intercept
             + [self.dc_config.rho_bounds]  # rho
-            + [(-1.0, 1.0)] * n_ctx  # contextual betas
+            + [(-1.0, 1.0)] * (2 * n_ctx)  # contextual betas
         )
 
         def neg_log_likelihood(params: NDArray) -> float:
@@ -122,7 +124,8 @@ class DixonColesModel(BaseScoreModel):
             home_adv = params[2 * n_teams]
             intercept = params[2 * n_teams + 1]
             rho = params[2 * n_teams + 2]
-            betas = params[2 * n_teams + 3:] if n_ctx > 0 else np.array([])
+            home_betas = params[2 * n_teams + 3:2 * n_teams + 3 + n_ctx] if n_ctx > 0 else np.array([])
+            away_betas = params[2 * n_teams + 3 + n_ctx:] if n_ctx > 0 else np.array([])
 
             # Sum-to-zero constraint via penalty
             att_penalty = self.dc_config.regularization * np.sum(att ** 2)
@@ -138,8 +141,8 @@ class DixonColesModel(BaseScoreModel):
                 log_lam_a = intercept + att[a] - defe[h]
 
                 if ctx_matrix is not None and n_ctx > 0:
-                    log_lam_h += np.dot(betas, ctx_matrix[i])
-                    log_lam_a += np.dot(betas, ctx_matrix[i])
+                    log_lam_h += np.dot(home_betas, ctx_matrix[i])
+                    log_lam_a += np.dot(away_betas, ctx_matrix[i])
 
                 lam_h = np.exp(np.clip(log_lam_h, -5, 3))
                 lam_a = np.exp(np.clip(log_lam_a, -5, 3))
@@ -173,7 +176,8 @@ class DixonColesModel(BaseScoreModel):
         self._intercept = float(params[2 * n_teams + 1])
         self._rho = float(params[2 * n_teams + 2])
         if n_ctx > 0:
-            self._contextual_betas = params[2 * n_teams + 3:]
+            self._contextual_home_betas = params[2 * n_teams + 3:2 * n_teams + 3 + n_ctx]
+            self._contextual_away_betas = params[2 * n_teams + 3 + n_ctx:]
 
         # Center attack/defense (sum-to-zero)
         self._attack -= self._attack.mean()
@@ -196,6 +200,7 @@ class DixonColesModel(BaseScoreModel):
                 "home_advantage": self._home_adv,
                 "intercept": self._intercept,
                 "rho": self._rho,
+                "contextual_columns": self._contextual_cols,
             },
         )
 
@@ -227,9 +232,10 @@ class DixonColesModel(BaseScoreModel):
             ctx_vec = np.array([
                 contextual_features.get(c, 0.0) for c in self._contextual_cols
             ])
-            if len(self._contextual_betas) == len(ctx_vec):
-                log_lam_h += np.dot(self._contextual_betas, ctx_vec)
-                log_lam_a += np.dot(self._contextual_betas, ctx_vec)
+            if len(self._contextual_home_betas) == len(ctx_vec):
+                log_lam_h += np.dot(self._contextual_home_betas, ctx_vec)
+            if len(self._contextual_away_betas) == len(ctx_vec):
+                log_lam_a += np.dot(self._contextual_away_betas, ctx_vec)
 
         lam_h = np.exp(np.clip(log_lam_h, -5, 3))
         lam_a = np.exp(np.clip(log_lam_a, -5, 3))

@@ -57,7 +57,8 @@ class BivariatePoissonModel(BaseScoreModel):
         self._home_adv: float = config.home_advantage_init
         self._intercept: float = 0.0
         self._lambda3: float = config.lambda3_init
-        self._contextual_betas: NDArray[np.float64] = np.array([])
+        self._contextual_home_betas: NDArray[np.float64] = np.array([])
+        self._contextual_away_betas: NDArray[np.float64] = np.array([])
         self._contextual_cols: list[str] = []
 
     def _bvp_log_pmf(
@@ -111,12 +112,12 @@ class BivariatePoissonModel(BaseScoreModel):
         n_ctx = 0
         if contextual_cols:
             self._contextual_cols = contextual_cols
-            ctx_matrix = matches[contextual_cols].fillna(0).values.astype(np.float64)
+            ctx_matrix = matches[contextual_cols].values.astype(np.float64)
             n_ctx = ctx_matrix.shape[1]
 
         n_teams = self._n_teams
-        # Parameters: attack(n), defense(n), home_adv, intercept, log_lambda3, betas(n_ctx)
-        n_params = 2 * n_teams + 3 + n_ctx
+        # Parameters: attack(n), defense(n), home_adv, intercept, log_lambda3, home_betas(n_ctx), away_betas(n_ctx)
+        n_params = 2 * n_teams + 3 + (2 * n_ctx)
 
         x0 = np.zeros(n_params, dtype=np.float64)
         x0[2 * n_teams] = self.bp_config.home_advantage_init
@@ -130,7 +131,7 @@ class BivariatePoissonModel(BaseScoreModel):
             + [(-1.0, 1.5)]  # intercept
             + [(math.log(self.bp_config.lambda3_bounds[0]),
                 math.log(self.bp_config.lambda3_bounds[1]))]  # log_lambda3
-            + [(-1.0, 1.0)] * n_ctx
+            + [(-1.0, 1.0)] * (2 * n_ctx)
         )
 
         def neg_log_likelihood(params: NDArray) -> float:
@@ -139,7 +140,8 @@ class BivariatePoissonModel(BaseScoreModel):
             home_adv = params[2 * n_teams]
             intercept = params[2 * n_teams + 1]
             log_lam3 = params[2 * n_teams + 2]
-            betas = params[2 * n_teams + 3:] if n_ctx > 0 else np.array([])
+            home_betas = params[2 * n_teams + 3:2 * n_teams + 3 + n_ctx] if n_ctx > 0 else np.array([])
+            away_betas = params[2 * n_teams + 3 + n_ctx:] if n_ctx > 0 else np.array([])
 
             lam3 = np.exp(log_lam3)
 
@@ -155,8 +157,8 @@ class BivariatePoissonModel(BaseScoreModel):
                 log_mu_a = intercept + att[a] - defe[h]
 
                 if ctx_matrix is not None and n_ctx > 0:
-                    log_mu_h += np.dot(betas, ctx_matrix[i])
-                    log_mu_a += np.dot(betas, ctx_matrix[i])
+                    log_mu_h += np.dot(home_betas, ctx_matrix[i])
+                    log_mu_a += np.dot(away_betas, ctx_matrix[i])
 
                 mu_h = np.exp(np.clip(log_mu_h, -5, 3))
                 mu_a = np.exp(np.clip(log_mu_a, -5, 3))
@@ -185,7 +187,8 @@ class BivariatePoissonModel(BaseScoreModel):
         self._intercept = float(params[2 * n_teams + 1])
         self._lambda3 = float(np.exp(params[2 * n_teams + 2]))
         if n_ctx > 0:
-            self._contextual_betas = params[2 * n_teams + 3:]
+            self._contextual_home_betas = params[2 * n_teams + 3:2 * n_teams + 3 + n_ctx]
+            self._contextual_away_betas = params[2 * n_teams + 3 + n_ctx:]
 
         self._attack -= self._attack.mean()
         self._defense -= self._defense.mean()
@@ -207,6 +210,7 @@ class BivariatePoissonModel(BaseScoreModel):
                 "home_advantage": self._home_adv,
                 "intercept": self._intercept,
                 "lambda3": self._lambda3,
+                "contextual_columns": self._contextual_cols,
             },
         )
 
@@ -237,9 +241,10 @@ class BivariatePoissonModel(BaseScoreModel):
             ctx_vec = np.array([
                 contextual_features.get(c, 0.0) for c in self._contextual_cols
             ])
-            if len(self._contextual_betas) == len(ctx_vec):
-                log_mu_h += np.dot(self._contextual_betas, ctx_vec)
-                log_mu_a += np.dot(self._contextual_betas, ctx_vec)
+            if len(self._contextual_home_betas) == len(ctx_vec):
+                log_mu_h += np.dot(self._contextual_home_betas, ctx_vec)
+            if len(self._contextual_away_betas) == len(ctx_vec):
+                log_mu_a += np.dot(self._contextual_away_betas, ctx_vec)
 
         mu_h = np.exp(np.clip(log_mu_h, -5, 3))
         mu_a = np.exp(np.clip(log_mu_a, -5, 3))

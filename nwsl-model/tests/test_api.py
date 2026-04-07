@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import pickle
 from dataclasses import dataclass, field
@@ -60,10 +61,26 @@ class FakeModel:
         return FakePredictionResult(home_team=home_team, away_team=away_team)
 
 
+class FakeContextProvider:
+    def for_match(self, home_team: str, away_team: str, match_date: object | None = None) -> dict[str, float]:
+        return {"rest_diff": 0.0}
+
+
+@dataclass
+class FakeModelBundle:
+    model: Any = field(default_factory=FakeModel)
+    context_provider: Any = field(default_factory=FakeContextProvider)
+    model_family: str = "dixon_coles"
+    version: str = "test-version"
+    blended: bool = False
+    gating_status: str = "passed"
+    metadata: dict = field(default_factory=lambda: {"alias": "champion_pure"})
+
+
 @pytest.fixture(autouse=True)
-def _patch_load_model():
-    """Patch load_model to return a FakeModel without touching the filesystem."""
-    with patch("api.deps.load_model", return_value=FakeModel()) as mock:
+def _patch_load_model_bundle():
+    """Patch champion artifact loading so API tests stay isolated from disk."""
+    with patch("api.main.load_model_bundle", return_value=FakeModelBundle()) as mock:
         yield mock
 
 
@@ -116,6 +133,13 @@ class TestPredict:
         assert "projected_home_goals" in data
         assert "projected_away_goals" in data
         assert "score_matrix" in data
+        assert "fair_odds" in data
+        assert "totals" in data
+        assert "projection_quality" in data
+        assert data["model_version"] == "test-version"
+        assert data["model_family"] == "dixon_coles"
+        assert data["gating_status"] == "passed"
+        assert data["projection_quality"]["confidence_band"] in {"low", "medium", "high"}
         assert isinstance(data["score_matrix"], list)
         assert isinstance(data["score_matrix"][0], list)
         # Probabilities should sum close to 1
@@ -150,7 +174,7 @@ class TestPredict:
     def test_predict_missing_auth(self, client: TestClient) -> None:
         payload = {"home_team": "A", "away_team": "B"}
         resp = client.post("/predict", json=payload)
-        assert resp.status_code == 403  # HTTPBearer returns 403 when header absent
+        assert resp.status_code == 401
 
     def test_predict_wrong_token(self, client: TestClient) -> None:
         payload = {"home_team": "A", "away_team": "B"}
@@ -188,7 +212,7 @@ class TestBatchPredict:
     def test_batch_predict_requires_auth(self, client: TestClient) -> None:
         payload = {"matches": []}
         resp = client.post("/batch-predict", json=payload)
-        assert resp.status_code == 403
+        assert resp.status_code == 401
 
 
 # ---------- /backtest-summary ----------
@@ -200,11 +224,77 @@ class TestBacktestSummary:
             resp = client.get("/backtest-summary", headers=AUTH_HEADER)
         assert resp.status_code == 200
         data = resp.json()
-        assert "No backtest summary found" in data["message"]
+        assert "No promoted artifact summary found" in data["message"]
+
+    def test_backtest_summary_reads_promoted_bundle(self, client: TestClient, tmp_path: Path) -> None:
+        version_dir = tmp_path / "data" / "processed" / "models" / "v1"
+        version_dir.mkdir(parents=True)
+        (version_dir / "backtest_summary.json").write_text(
+            json.dumps(
+                {
+                    "models": {
+                        "dixon_coles": {"brier_score_1x2": 0.19, "log_loss_1x2": 0.64},
+                    },
+                    "report_summary": {"metrics_comparison": [{"n_matches": 123}]},
+                }
+            )
+        )
+        (version_dir / "promotion_summary.json").write_text(
+            json.dumps(
+                {
+                    "gate_results": {
+                        "dixon_coles": {"passed": True, "gating_status": "passed"},
+                    }
+                }
+            )
+        )
+        (version_dir / "evaluation_summary.json").write_text(
+            json.dumps(
+                {
+                    "models": {
+                        "dixon_coles": {
+                            "classwise_ece": {"home": 0.03, "draw": 0.04, "away": 0.04},
+                        }
+                    }
+                }
+            )
+        )
+        (version_dir / "dataset_manifest.json").write_text(
+            json.dumps(
+                {
+                    "odds_quality": {
+                        "source_available": True,
+                        "close_coverage_pct": {"1x2": 88.0, "total": 86.0},
+                    }
+                }
+            )
+        )
+
+        registry = {
+            "aliases": {
+                "champion_pure": {
+                    "version": "v1",
+                    "model_family": "dixon_coles",
+                    "gating_status": "passed",
+                    "blended": False,
+                }
+            }
+        }
+        with patch("api.main.PROJECT_ROOT", tmp_path):
+            with patch("api.main.load_champion_registry", return_value=registry):
+                resp = client.get("/backtest-summary", headers=AUTH_HEADER)
+
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["version"] == "v1"
+        assert data["n_matches"] == 123
+        assert data["gate_results"]["dixon_coles"]["passed"] is True
+        assert data["readiness"]["pure_model_passed"] is True
+        assert data["odds_quality"]["close_coverage_pct"]["1x2"] == 88.0
 
     def test_backtest_summary_requires_auth(self, client: TestClient) -> None:
         resp = client.get("/backtest-summary")
-        assert resp.status_code == 403
+        assert resp.status_code == 401
 
 
 # ---------- /retrain ----------
@@ -247,7 +337,7 @@ class TestRetrain:
 
     def test_retrain_requires_auth(self, client: TestClient) -> None:
         resp = client.post("/retrain", json={})
-        assert resp.status_code == 403
+        assert resp.status_code == 401
 
 
 # ---------- Auth edge cases ----------

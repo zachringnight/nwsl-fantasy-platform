@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 
 import numpy as np
 
@@ -24,6 +25,16 @@ class BetRecommendation:
     market_odds: float = 0.0
     fair_odds: float = 0.0
     edge: float = 0.0
+    sportsbook: str = "consensus"
+    source_type: str = "close"
+    market_timestamp: str | None = None
+    confidence: float = 0.0
+    confidence_band: str = "low"
+    slate_key: str = ""
+    model_version: str = ""
+    model_family: str = ""
+    blended: bool = False
+    gating_status: str = "unknown"
     kelly_fraction: float = 0.0
     stake: float = 0.0
     stake_pct: float = 0.0
@@ -35,6 +46,7 @@ class StakingConfig:
     min_edge: float = 0.02
     kelly_fraction: float = 0.25
     max_stake_pct: float = 0.01
+    max_slate_exposure_pct: float = 0.01
     bankroll: float = 10000.0
 
 
@@ -46,6 +58,7 @@ class StakingEngine:
         self.bankroll = config.bankroll
         self.initial_bankroll = config.bankroll
         self.bet_log: list[dict] = []
+        self.slate_exposure: dict[str, float] = {}
 
     def compute_edge(self, model_prob: float, market_odds: float) -> float:
         """Compute edge: model_prob * odds - 1."""
@@ -103,6 +116,20 @@ class StakingEngine:
             stake_pct=stake_pct,
         )
 
+    def can_allocate(self, slate_key: str, stake: float) -> bool:
+        """Check whether a stake fits inside the slate exposure cap."""
+        if not slate_key:
+            return True
+        max_exposure = self.bankroll * self.config.max_slate_exposure_pct
+        current_exposure = self.slate_exposure.get(slate_key, 0.0)
+        return (current_exposure + stake) <= max_exposure + 1e-9
+
+    def reserve_exposure(self, slate_key: str, stake: float) -> None:
+        """Reserve exposure for an accepted recommendation."""
+        if not slate_key:
+            return
+        self.slate_exposure[slate_key] = self.slate_exposure.get(slate_key, 0.0) + stake
+
     def update_bankroll(self, pnl: float) -> float:
         """Update bankroll after a bet settles."""
         self.bankroll += pnl
@@ -111,13 +138,25 @@ class StakingEngine:
     def log_bet(self, rec: BetRecommendation, pnl: float, result: str) -> None:
         """Record a settled bet."""
         self.bet_log.append({
+            "logged_at": datetime.now(UTC).isoformat(),
             "match_id": rec.match_id,
             "market": rec.market,
             "side": rec.side,
             "line": rec.line,
+            "sportsbook": rec.sportsbook,
+            "source_type": rec.source_type,
+            "timestamp": rec.market_timestamp,
             "model_prob": rec.model_prob,
             "market_odds": rec.market_odds,
+            "fair_odds": rec.fair_odds,
             "edge": rec.edge,
+            "confidence": rec.confidence,
+            "confidence_band": rec.confidence_band,
+            "slate_key": rec.slate_key,
+            "model_version": rec.model_version,
+            "model_family": rec.model_family,
+            "blended": rec.blended,
+            "gating_status": rec.gating_status,
             "stake": rec.stake,
             "stake_pct": rec.stake_pct,
             "pnl": pnl,

@@ -8,6 +8,8 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+from src.odds.provider import build_consensus_match_odds
+
 logger = logging.getLogger("nwsl_model.data.transforms")
 
 
@@ -103,33 +105,18 @@ def merge_odds_to_matches(
     matches: pd.DataFrame,
     odds: Optional[pd.DataFrame],
     source_type: str = "close",
-    market_type: str = "1x2",
 ) -> pd.DataFrame:
-    """Merge odds into matches for a given source_type and market_type."""
+    """Merge consensus 1X2 and main total odds into matches."""
     if odds is None or odds.empty:
-        for col in ["home_odds", "draw_odds", "away_odds"]:
+        for col in ["home_odds", "draw_odds", "away_odds", "total_line", "over_odds", "under_odds"]:
             if col not in matches.columns:
                 matches[col] = np.nan
         return matches
 
-    mask = odds["market_type"].str.lower() == market_type.lower()
-    if "source_type" in odds.columns:
-        mask &= odds["source_type"].str.lower() == source_type.lower()
-    filtered = odds[mask].copy()
-
-    if filtered.empty:
-        logger.warning(f"No odds found for {market_type}/{source_type}")
+    odds_agg = build_consensus_match_odds(odds, source_type=source_type)
+    if odds_agg.empty:
+        logger.warning(f"No odds found for source_type={source_type}")
         return matches
-
-    # If multiple sportsbooks, average them
-    agg_cols = {}
-    for col in ["home_odds", "draw_odds", "away_odds", "over_odds", "under_odds"]:
-        if col in filtered.columns:
-            agg_cols[col] = "mean"
-    if "line" in filtered.columns:
-        agg_cols["line"] = "first"
-
-    odds_agg = filtered.groupby("match_id").agg(agg_cols).reset_index()
 
     result = matches.merge(odds_agg, on="match_id", how="left", suffixes=("", "_mkt"))
     return result

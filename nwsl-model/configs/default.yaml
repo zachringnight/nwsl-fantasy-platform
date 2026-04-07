@@ -7,9 +7,27 @@ data:
   venues_path: "data/raw/venues.csv"
   appearances_path: "data/raw/appearances.csv"
   projected_lineups_path: "data/raw/projected_lineups.csv"
+  team_season_priors_path: "data/raw/team_season_priors.csv"
+  player_season_priors_path: "data/raw/player_season_priors.csv"
+  history_start_season: 2025
   output_dir: "data/processed"
   # Supported formats: csv, parquet
   format: "csv"
+
+odds_provider:
+  provider: "the_odds_api"
+  api_key_env: "THE_ODDS_API_KEY"
+  sport_title: "NWSL"
+  sport_key: ""
+  regions: ["us"]
+  markets: ["h2h", "totals"]
+  bookmakers: []
+  odds_format: "decimal"
+  date_format: "iso"
+  stale_line_minutes: 180
+  max_match_delta_hours: 18
+  historical_snapshot_offset_minutes: 5
+  main_total_strategy: "median"
 
 model:
   # Which model to use: "dixon_coles" or "bivariate_poisson"
@@ -63,11 +81,11 @@ features:
   # Rest day thresholds
   short_rest_days: 4
   # Travel distance computation
-  use_travel_distance: true
+  use_travel_distance: false
   # Weather features
-  use_weather: true
+  use_weather: false
   # Surface adjustment
-  use_surface: true
+  use_surface: false
 
 market_blend:
   # Default blend weight: p_final = alpha * p_model + (1-alpha) * p_market
@@ -90,29 +108,42 @@ market_blend:
 betting:
   # Minimum edge to place a bet
   min_edge: 0.02
+  # Minimum confidence score above a neutral market baseline
+  min_confidence: 0.08
   # Kelly fraction
   kelly_fraction: 0.25
-  # Maximum stake as fraction of bankroll
-  max_stake_pct: 0.01
+  # Maximum stake as fraction of bankroll (0.25% launch cap)
+  max_stake_pct: 0.0025
+  # Maximum exposure across one slate / match date
+  max_slate_exposure_pct: 0.01
   # Starting bankroll
   starting_bankroll: 10000.0
-  # Markets to bet on
-  markets:
+  # Launch markets only
+  allowed_markets:
     - "1x2"
-    - "asian_handicap"
-    - "totals"
+    - "total"
+
+operator:
+  days_ahead: 7
+  ledger_path: "data/processed/ops/bet_ledger.csv"
+  output_dir: "data/processed/operator"
+  append_candidates_to_ledger: true
 
 backtest:
   # Minimum training matches before first prediction
-  min_train_matches: 50
+  min_train_matches: 189
   # Step size: predict this many matches at a time
-  step_size: 1
+  step_size: 8
+  # Run feature-family ablation variants alongside the main pure models
+  run_ablations: false
   # Benchmark models to compare
   benchmarks:
-    - "market_implied"
+    - "uniform_baseline"
+    - "home_field_baseline"
+    - "team_ratings_poisson"
+    - "rolling_npxg_poisson"
     - "dixon_coles"
     - "bivariate_poisson"
-    - "full_blend"
 
 logging:
   level: "INFO"
