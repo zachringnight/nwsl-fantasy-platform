@@ -1,0 +1,20 @@
+ranker,player,nationality,position,team,age,birth_year,minutes_90s,gk_goals_against,gk_pens_allowed,gk_free_kick_goals_against,gk_corner_kick_goals_against,gk_own_goals_against,gk_psxg,gk_psnpxg_per_shot_on_target_against,gk_psxg_net,gk_psxg_net_per90,gk_passes_completed_launched,gk_passes_launched,gk_passes_pct_launched,gk_passes,gk_passes_throws,gk_pct_passes_launched,gk_passes_length_avg,gk_goal_kicks,gk_pct_goal_kicks_launched,gk_goal_kick_length_avg,gk_crosses,gk_crosses_stopped,gk_crosses_stopped_pct,gk_def_actions_outside_pen_area,gk_def_actions_outside_pen_area_per90,gk_avg_distance_def_actions,matches
+1,Angelina Anderson,usUSA,GK,Angel City FC,25-016,2001,4.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+2,Mackenzie Arnold,auAUS,GK,Portland Thorns,32-041,1994,2.0,2,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+3,Ann-Katrin Berger,deGER,GK,Gotham FC,35-180,1990,5.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+4,Jordyn Bloomer,usUSA,GK,Racing Louisville,28-175,1997,4.0,10,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+5,Jane Campbell,usUSA,GK,Houston Dash,31-049,1995,4.0,5,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+6,Claudia Dickey,usUSA,GK,Reign,26-091,2000,5.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+7,Leah Freeman,usUSA,GK,SD Wave,24-060,2002,4.0,2,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+8,DiDi Haracic,baBIH,GK,SD Wave,33-360,1992,1.0,1,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+9,Mia Justus,usUSA,GK,Royals,23-216,2002,5.0,6,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+10,Lorena,brBRA,GK,Current,28-336,1997,5.0,9,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+11,Katie Lund,usUSA,GK,Chicago Stars,29-131,1996,1.0,1,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+12,Sandy MacIver,sctSCO,GK,Washington Spirit,27-293,1998,5.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+13,Morgan Messner,usUSA,GK,Portland Thorns,26-049,2000,3.0,3,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+14,Anna Moorhouse,engENG,GK,Orlando Pride,31-008,1995,5.0,3,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+15,Casey Murphy,usUSA,GK,Boston Legacy,29-347,1996,4.0,7,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+16,Alyssa Naeher,usUSA,GK,Chicago Stars,37-352,1988,4.0,10,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+17,Kailen Sheridan,caCAN,GK,NC Courage,30-265,1995,4.0,6,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+18,Jordan Silkowitz,usUSA,GK,Bay FC,26-011,2000,4.0,7,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+19,Abby Smith,usUSA,GK,Denver Summit,32-185,1993,5.0,3,0,,,,,,,,,,,,,,,,,,,,,,,,Matches

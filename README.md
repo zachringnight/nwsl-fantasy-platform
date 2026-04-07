@@ -47,6 +47,26 @@ pnpm lint         # Lint
 pnpm typecheck    # Type check
 ```
 
+## Analytics Hub
+
+The repo now includes a public analytics surface at `/analytics` that combines multiple NWSL data sources:
+
+- `data/fbref` for advanced aggregate season stats
+- `data/nwsl-official` for official teams, matches, standings, leaders, and current-season player logs
+- `data/nwslr` for older historical archive coverage
+- `data/statsbomb` for public event-level xG and shot data
+
+Refresh the data with:
+
+```bash
+python3 scripts/fetch-nwsl-official-data.py
+python3 scripts/import-nwslr-data.py
+python3 scripts/fetch-statsbomb-nwsl.py
+python3 scripts/scrape-fbref-nwsl.py --season 2026
+```
+
+See [docs/nwsl-data-sources.md](docs/nwsl-data-sources.md) for the source map.
+
 ## Tech stack
 
 - **Framework** — Next.js 16 with App Router

@@ -1,0 +1,24 @@
+ranker,player,nationality,position,team,age,birth_year,minutes_90s,gk_goals_against,gk_pens_allowed,gk_free_kick_goals_against,gk_corner_kick_goals_against,gk_own_goals_against,gk_psxg,gk_psnpxg_per_shot_on_target_against,gk_psxg_net,gk_psxg_net_per90,gk_passes_completed_launched,gk_passes_launched,gk_passes_pct_launched,gk_passes,gk_passes_throws,gk_pct_passes_launched,gk_passes_length_avg,gk_goal_kicks,gk_pct_goal_kicks_launched,gk_goal_kick_length_avg,gk_crosses,gk_crosses_stopped,gk_crosses_stopped_pct,gk_def_actions_outside_pen_area,gk_def_actions_outside_pen_area_per90,gk_avg_distance_def_actions,matches
+1,Angelina Anderson,usUSA,GK,Angel City FC,21,2001,4.0,3,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+2,Nicole Barnhart,usUSA,GK,Washington Spirit,41,1981,2.0,5,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+3,Bella Bixby,usUSA,GK,Portland Thorns,27,1995,21.0,30,3,,,,,,,,,,,,,,,,,,,,,,,,Matches
+4,Emily Boyd,usUSA,GK,Red Stars,26,1996,2.0,0,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+5,Jane Campbell,usUSA,GK,Houston Dash,27,1995,22.0,18,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+6,Kaylie Collins,usUSA,GK,Orlando Pride,24,1998,1.0,2,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+7,Claudia Dickey,usUSA,GK,Reign,23,2000,6.0,5,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+8,Adrianna Franch,usUSA,GK,Current,32,1990,12.0,23,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+9,DiDi Haracic,baBIH,GK,Angel City FC,30,1992,18.0,27,5,,,,,,,,,,,,,,,,,,,,,,,,Matches
+10,Shelby Hogan,usUSA,GK,Portland Thorns,24,1998,1.0,2,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+11,Aubrey Kingsbury,usUSA,GK,Washington Spirit,31,1991,20.0,24,5,,,,,,,,,,,,,,,,,,,,,,,,Matches
+12,Katie Lund,usUSA,GK,Racing Louisville,26,1996,22.0,24,3,,,,,,,,,,,,,,,,,,,,,,,,Matches
+13,Amanda McGlynn,usUSA,GK,Gotham FC,24,1998,7.0,9,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+14,Cassie Miller,usUSA,GK,Current,27,1995,10.0,13,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+15,Anna Moorhouse,engENG,GK,Orlando Pride,27,1995,18.0,22,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+16,Casey Murphy,usUSA,GK,NC Courage,26,1996,20.0,19,3,,,,,,,,,,,,,,,,,,,,,,,,Matches
+17,Alyssa Naeher,usUSA,GK,Red Stars,34,1988,20.0,50,4,,,,,,,,,,,,,,,,,,,,,,,,Matches
+18,Carly Nelson,usUSA,GK,Orlando Pride,24,1998,3.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+19,Katelyn Rowland,usUSA,GK,NC Courage,28,1994,2.0,2,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+20,Kailen Sheridan,caCAN,GK,SD Wave,27,1995,19.0,18,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+21,Abby Smith,usUSA,GK,Gotham FC,29,1993,15.0,15,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+22,Phallon Tullis-Joyce,usUSA,GK,Reign,26,1996,16.0,19,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+23,Shae Yanez,usUSA,GK,SD Wave,25,1997,3.0,4,1,,,,,,,,,,,,,,,,,,,,,,,,Matches

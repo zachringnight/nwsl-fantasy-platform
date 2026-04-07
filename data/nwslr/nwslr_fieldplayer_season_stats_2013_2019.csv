@@ -1,0 +1,1492 @@
+season,Rk,Player,Nation,Pos,Squad,Age,Born,MP,Starts,Min,Gls,Ast,PK,PKatt,CrdY,CrdR
+2013,1,Marisa Abegg,us USA,DF,Washington Spirit,25.0,1987.0,5,4,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,2,Danesha Adams,us USA,"FW,MF",Sky Blue FC,26.0,1986.0,20,20,,3.0,3.0,1.0,1.0,0.0,0.0
+2013,3,Adriana,es ESP,FW,Western New York Flash,26.0,1986.0,15,14,3.0,1.0,,0.0,1.0,2.0,0.0
+2013,4,Leigh Ann Brown,us USA,"DF,MF",FC Kansas City,26.0,1986.0,22,22,1900.0,0.0,5.0,0.0,0.0,1.0,0.0
+2013,5,Jazmyne Avant,us USA,DF,Portland Thorns FC,23.0,1990.0,4,2,212.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,6,Jazmyne Avant,us USA,DF,Boston Breakers,23.0,1990.0,11,11,990.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,7,Ashley Baker,,GK,Sky Blue FC,22.0,1990.0,1,0,1.0,,,0.0,0.0,,
+2013,8,Amy Barczuk,us USA,DF,Western New York Flash,22.0,1990.0,7,2,,0.0,,0.0,0.0,0.0,0.0
+2013,9,Lauren Barnes,us USA,DF,Seattle,23.0,1989.0,22,22,,0.0,1.0,0.0,0.0,0.0,0.0
+2013,10,Nicole Barnhart,us USA,GK,FC Kansas City,31.0,1981.0,20,20,1800.0,,,0.0,0.0,,
+2013,11,Michelle Betos,us USA,GK,Seattle,24.0,1988.0,7,7,630.0,,,0.0,0.0,,
+2013,12,Brittany Bock,us USA,MF,Sky Blue FC,25.0,1987.0,7,5,,0.0,0.0,0.0,0.0,1.0,0.0
+2013,13,Liz Bogus,us USA,FW,Seattle,28.0,1984.0,20,11,,1.0,2.0,0.0,0.0,0.0,0.0
+2013,14,Melanie Booth,ca CAN,DF,Sky Blue FC,28.0,1984.0,3,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,15,Shannon Boxx,us USA,MF,Chicago Red Stars,35.0,1977.0,2,1,123.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,16,Rachel Breton,us USA,"DF,FW",Sky Blue FC,22.0,1990.0,1,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,17,Jen Buczkowski,us USA,"DF,MF",FC Kansas City,27.0,1985.0,22,22,1980.0,0.0,2.0,0.0,0.0,0.0,0.0
+2013,18,Mariah Bullock,us USA,"DF,MF",Boston Breakers,21.0,1991.0,20,16,1408.0,3.0,1.0,0.0,0.0,1.0,0.0
+2013,19,Zakiya Bywaters,us USA,FW,Chicago Red Stars,21.0,1991.0,6,5,372.0,2.0,0.0,0.0,0.0,0.0,0.0
+2013,20,Brittany Cameron,us USA,GK,Sky Blue FC,26.0,1986.0,18,18,1619.0,,,0.0,0.0,,
+2013,21,Tiffany Cameron,jm JAM,FW,FC Kansas City,21.0,1991.0,1,0,4.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,22,Tiffany Cameron,jm JAM,FW,Seattle,21.0,1991.0,7,4,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,23,Lori Chalupny,us USA,MF,Chicago Red Stars,29.0,1984.0,18,17,1500.0,5.0,4.0,0.0,0.0,3.0,0.0
+2013,24,Candace Chapman,ca CAN,DF,Washington Spirit,29.0,1983.0,8,8,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,25,Kennya Cordner,tt TRI,FW,Seattle,24.0,1988.0,3,2,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,26,Stephanie Cox,us USA,DF,Seattle,26.0,1986.0,4,4,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,27,Renae Cuéllar,mx MEX,FW,Seattle,22.0,1990.0,7,3,,0.0,0.0,0.0,0.0,1.0,0.0
+2013,28,Renae Cuéllar,mx MEX,FW,FC Kansas City,22.0,1990.0,11,8,682.0,5.0,0.0,0.0,0.0,0.0,0.0
+2013,29,Kiersten Dallstream,us USA,"DF,FW",Seattle,24.0,1988.0,20,14,,0.0,0.0,0.0,0.0,1.0,2.0
+2013,30,Lisa De Vanna,au AUS,FW,Sky Blue FC,28.0,1984.0,16,15,,5.0,2.0,0.0,1.0,1.0,0.0
+2013,31,Kate Deines,us USA,"DF,MF",Seattle,23.0,1989.0,17,11,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,32,Vicki DiMartino,us USA,"DF,FW",Western New York Flash,21.0,1991.0,12,4,2.0,1.0,,0.0,0.0,1.0,0.0
+2013,33,Maribel Domínguez,mx MEX,FW,Chicago Red Stars,34.0,1978.0,16,9,710.0,2.0,0.0,0.0,0.0,0.0,0.0
+2013,34,Marian Dougherty,us USA,DF,Portland Thorns FC,28.0,1984.0,19,19,1666.0,1.0,1.0,0.0,0.0,2.0,0.0
+2013,35,Jo Dragotta,us USA,"DF,MF",Boston Breakers,21.0,1991.0,10,6,565.0,0.0,0.0,0.0,0.0,1.0,0.0
+2013,36,Becky Edwards,us USA,"DF,MF",Portland Thorns FC,24.0,1988.0,10,10,900.0,0.0,0.0,0.0,0.0,3.0,0.0
+2013,37,Emily van Egmond,au AUS,MF,Seattle,19.0,1993.0,6,4,,0.0,0.0,0.0,0.0,1.0,0.0
+2013,38,Tina Ellertson,us USA,DF,Portland Thorns FC,30.0,1982.0,3,0,40.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,39,Maddy Evans,us USA,"DF,MF",Boston Breakers,21.0,1991.0,11,2,370.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,40,Sinead Farrelly,us USA,MF,FC Kansas City,23.0,1989.0,16,10,896.0,1.0,0.0,0.0,0.0,0.0,0.0
+2013,41,Jess Fishlock,wal WAL,MF,Seattle,26.0,1987.0,21,21,,4.0,0.0,0.0,0.0,4.0,0.0
+2013,42,Caitlin Foord,au AUS,"DF,FW",Sky Blue FC,18.0,1994.0,15,15,,0.0,1.0,0.0,0.0,1.0,0.0
+2013,43,Lauren Fowlkes,us USA,"DF,FW",Chicago Red Stars,24.0,1988.0,4,4,291.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,44,Danielle Foxhoven,us USA,"FW,MF",Portland Thorns FC,23.0,1989.0,21,7,997.0,4.0,0.0,0.0,0.0,1.0,0.0
+2013,45,Adrianna Franch,us USA,GK,Western New York Flash,22.0,1990.0,22,22,1978.0,,,0.0,0.0,,
+2013,46,Katy Freels,us USA,MF,Sky Blue FC,22.0,1990.0,22,21,,1.0,6.0,0.0,0.0,0.0,0.0
+2013,47,Jaime French,us USA,FW,FC Kansas City,23.0,1989.0,1,0,11.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,48,Sonja Fuss,de GER,DF,Chicago Red Stars,34.0,1978.0,16,16,1440.0,2.0,1.0,2.0,2.0,0.0,0.0
+2013,49,Dinora Garza,mx MEX,"FW,MF",Chicago Red Stars,25.0,1988.0,2,2,93.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,50,Robyn Gayle,ca CAN,DF,Washington Spirit,27.0,1985.0,14,14,,0.0,1.0,0.0,0.0,2.0,0.0
+2013,51,Missy Geha,us USA,MF,FC Kansas City,25.0,1987.0,1,0,1.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,52,CoCo Goodson,us USA,DF,Sky Blue FC,22.0,1990.0,22,22,,1.0,1.0,0.0,0.0,1.0,0.0
+2013,53,Inka Grings,de GER,FW,Chicago Red Stars,34.0,1978.0,16,14,1295.0,3.0,1.0,0.0,2.0,2.0,0.0
+2013,54,Ashley Grove,us USA,MF,Western New York Flash,22.0,1990.0,2,0,,0.0,,0.0,0.0,0.0,0.0
+2013,55,Elizabeth Guess,us USA,"FW,MF",Boston Breakers,28.0,1985.0,1,0,15.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,56,Elizabeth Guess,us USA,"FW,MF",Portland Thorns FC,28.0,1985.0,4,1,67.0,0.0,0.0,0.0,0.0,2.0,0.0
+2013,57,Ashlyn Harris,us USA,GK,Washington Spirit,27.0,1985.0,18,18,1620.0,,,0.0,0.0,,
+2013,58,Tobin Heath,us USA,MF,Portland Thorns FC,24.0,1988.0,7,7,630.0,0.0,3.0,0.0,0.0,4.0,0.0
+2013,59,Taryn Hemmings,us USA,DF,Chicago Red Stars,26.0,1986.0,14,14,1245.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,60,Melissa Henderson,us USA,"FW,MF",FC Kansas City,23.0,1989.0,17,13,1030.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,61,Bianca Henninger,us USA,GK,FC Kansas City,22.0,1990.0,2,2,180.0,,,0.0,0.0,,
+2013,62,Laura Heyboer,us USA,"FW,MF",Western New York Flash,23.0,1989.0,6,3,,1.0,,0.0,0.0,0.0,0.0
+2013,63,Domenica Hodak,us USA,DF,Washington Spirit,21.0,1991.0,11,6,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,64,Lauren Holiday,us USA,"FW,MF",FC Kansas City,25.0,1987.0,18,18,1620.0,12.0,9.0,1.0,1.0,0.0,0.0
+2013,65,Kate Howarth,us USA,FW,Boston Breakers,21.0,1991.0,4,0,26.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,66,Jen Hoy,us USA,"FW,MF",Chicago Red Stars,22.0,1991.0,9,4,471.0,3.0,1.0,0.0,0.0,1.0,0.0
+2013,67,Sarah Huffman,us USA,MF,Western New York Flash,28.0,1984.0,14,11,,1.0,,0.0,0.0,1.0,0.0
+2013,68,Tori Huster,us USA,MF,Washington Spirit,23.0,1989.0,21,21,,1.0,0.0,0.0,0.0,1.0,0.0
+2013,69,Estelle Johnson,cm CMR,DF,Western New York Flash,24.0,1988.0,22,22,,0.0,,0.0,0.0,0.0,0.0
+2013,70,Kendall Johnson,us USA,"DF,MF",Sky Blue FC,21.0,1991.0,22,22,,0.0,2.0,0.0,0.0,0.0,0.0
+2013,71,Chantel Jones,us USA,GK,Washington Spirit,24.0,1988.0,4,4,350.0,,,0.0,0.0,,
+2013,72,Courtney Jones,us USA,"DF,FW",FC Kansas City,22.0,1990.0,22,6,670.0,4.0,1.0,0.0,0.0,0.0,0.0
+2013,73,Katie Kelly,us USA,DF,FC Kansas City,25.0,1987.0,7,2,207.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,74,Angie Kerr,us USA,MF,Portland Thorns FC,27.0,1985.0,15,9,762.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,75,Sam Kerr,au AUS,"FW,MF",Western New York Flash,19.0,1993.0,19,17,1440.0,5.0,,0.0,0.0,1.0,0.0
+2013,76,Holly King,us USA,MF,Washington Spirit,21.0,1991.0,11,6,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,77,Julie King,us USA,DF,Boston Breakers,23.0,1989.0,21,21,1862.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,78,Brittany Kolmel,us USA,DF,Western New York Flash,25.0,1987.0,21,21,3.0,4.0,,0.0,0.0,2.0,0.0
+2013,79,Haley Kopmeyer,us USA,GK,Seattle,22.0,1990.0,1,1,90.0,,,0.0,0.0,,
+2013,80,Ali Krieger,us USA,"DF,MF",Washington Spirit,28.0,1984.0,18,16,,1.0,0.0,0.0,0.0,2.0,0.0
+2013,81,Kaylyn Kyle,ca CAN,MF,Seattle,24.0,1988.0,21,19,,3.0,0.0,3.0,3.0,4.0,0.0
+2013,82,Kristina Larsen,us USA,FW,Seattle,24.0,1988.0,9,4,,0.0,1.0,0.0,0.0,1.0,0.0
+2013,83,Karina LeBlanc,ca CAN,GK,Portland Thorns FC,32.0,1980.0,21,21,1890.0,,,0.0,0.0,,
+2013,84,Adriana Leon,ca CAN,"FW,MF",Boston Breakers,20.0,1992.0,6,1,163.0,1.0,0.0,0.0,0.0,0.0,0.0
+2013,85,Adriana Leon,ca CAN,"FW,MF",Chicago Red Stars,20.0,1992.0,10,9,800.0,1.0,1.0,0.0,0.0,1.0,0.0
+2013,86,Sydney Leroux,us USA,FW,Boston Breakers,22.0,1990.0,19,19,1694.0,11.0,2.0,0.0,0.0,1.0,0.0
+2013,87,Cris Lewis,us USA,GK,Portland Thorns FC,24.0,1988.0,1,1,90.0,,,0.0,0.0,,
+2013,88,Lori Lindsey,us USA,MF,Washington Spirit,32.0,1980.0,21,21,,1.0,2.0,0.0,0.0,0.0,0.0
+2013,89,Lindsi Lisonbee-Cutshall,us USA,DF,Sky Blue FC,22.0,1990.0,7,1,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,90,Carli Lloyd,us USA,MF,Western New York Flash,30.0,1982.0,15,14,8.0,0.0,,0.0,0.0,4.0,0.0
+2013,91,Joanna Lohman,us USA,"DF,MF",Boston Breakers,30.0,1982.0,22,21,1897.0,2.0,0.0,0.0,0.0,2.0,0.0
+2013,92,Michelle Lomnicki,us USA,DF,Chicago Red Stars,25.0,1987.0,18,17,1478.0,1.0,1.0,0.0,0.0,2.0,0.0
+2013,93,Allie Long,us USA,MF,Portland Thorns FC,25.0,1987.0,22,22,1956.0,3.0,3.0,0.0,0.0,2.0,0.0
+2013,94,Casey Loyd,us USA,MF,FC Kansas City,23.0,1989.0,4,3,275.0,1.0,1.0,1.0,1.0,0.0,0.0
+2013,95,Jillian Loyden,us USA,GK,Sky Blue FC,27.0,1985.0,4,4,360.0,,,0.0,0.0,,
+2013,96,Taylor Lytle,us USA,MF,Sky Blue FC,23.0,1989.0,21,12,,4.0,0.0,0.0,0.0,0.0,0.0
+2013,97,Manya Makoski,us USA,MF,Sky Blue FC,28.0,1984.0,20,19,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,98,Nikki Marshall,us USA,"DF,FW",Portland Thorns FC,24.0,1988.0,22,22,1871.0,0.0,1.0,0.0,0.0,1.0,0.0
+2013,99,Ella Masar,us USA,FW,Chicago Red Stars,26.0,1986.0,20,14,1206.0,3.0,2.0,0.0,0.0,0.0,0.0
+2013,100,Diana Matheson,ca CAN,MF,Washington Spirit,28.0,1984.0,19,19,,8.0,3.0,4.0,4.0,0.0,0.0
+2013,101,Merritt Mathias,us USA,"DF,MF",FC Kansas City,22.0,1990.0,22,19,1738.0,2.0,3.0,0.0,0.0,3.0,0.0
+2013,102,Alyssa Mautz,us USA,"FW,MF",Chicago Red Stars,23.0,1989.0,18,8,901.0,4.0,0.0,0.0,0.0,3.0,0.0
+2013,103,Bryanna McCarthy,ca CAN,DF,Western New York Flash,21.0,1991.0,1,0,,0.0,,0.0,0.0,0.0,0.0
+2013,104,Tiffany McCarty,us USA,FW,Washington Spirit,22.0,1990.0,21,12,,2.0,0.0,0.0,0.0,0.0,0.0
+2013,105,Jessica McDonald,us USA,FW,Chicago Red Stars,24.0,1988.0,9,3,323.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,106,Jessica McDonald,us USA,FW,Seattle,24.0,1988.0,7,6,,3.0,1.0,0.0,0.0,0.0,0.0
+2013,107,Erin McLeod,ca CAN,GK,Chicago Red Stars,29.0,1983.0,16,16,1440.0,,,0.0,0.0,,
+2013,108,Kia McNeill,us USA,DF,Boston Breakers,26.0,1986.0,21,21,1890.0,0.0,0.0,0.0,0.0,2.0,0.0
+2013,109,Kristen Meier,us USA,"DF,MF",Seattle,21.0,1991.0,6,4,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,110,Melinda Mercado,us USA,DF,Boston Breakers,22.0,1990.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,111,Kristie Mewis,us USA,"DF,MF",FC Kansas City,21.0,1991.0,20,20,1784.0,1.0,0.0,0.0,0.0,2.0,0.0
+2013,112,Caroline Miller,us USA,FW,Washington Spirit,21.0,1991.0,7,1,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,113,Alex Morgan,us USA,FW,Portland Thorns FC,23.0,1989.0,18,18,1525.0,8.0,5.0,1.0,1.0,4.0,0.0
+2013,114,Carmelina Moscato,ca CAN,DF,Boston Breakers,28.0,1984.0,5,1,76.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,115,Carmelina Moscato,ca CAN,DF,Chicago Red Stars,28.0,1984.0,5,4,363.0,0.0,0.0,0.0,0.0,1.0,0.0
+2013,116,Alyssa Naeher,us USA,GK,Boston Breakers,24.0,1988.0,9,8,765.0,,,0.0,0.0,,
+2013,117,Christine Nairn,us USA,MF,Seattle,22.0,1990.0,22,22,,3.0,5.0,0.0,1.0,2.0,0.0
+2013,118,Ashley Nick,us USA,MF,Sky Blue FC,25.0,1987.0,3,2,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,119,Natalie Norris,us USA,DF,FC Kansas City,22.0,1990.0,1,0,1.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,120,Teresa Noyola,mx MEX,"FW,MF",Seattle,22.0,1990.0,11,8,,1.0,1.0,0.0,0.0,0.0,0.0
+2013,121,Teresa Noyola,mx MEX,"FW,MF",FC Kansas City,22.0,1990.0,7,1,155.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,122,Kelley O'Hara,us USA,"DF,FW",Sky Blue FC,24.0,1988.0,12,10,,0.0,3.0,0.0,0.0,2.0,0.0
+2013,123,Emilee O'Neil,us USA,"DF,MF",Portland Thorns FC,29.0,1983.0,4,1,141.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,124,Heather O'Reilly,us USA,"FW,MF",Boston Breakers,28.0,1985.0,20,20,1734.0,5.0,6.0,1.0,1.0,1.0,0.0
+2013,125,Mónica Ocampo,mx MEX,FW,Sky Blue FC,26.0,1987.0,16,9,,8.0,2.0,0.0,0.0,0.0,0.0
+2013,126,Stephanie Ochs,us USA,FW,Washington Spirit,22.0,1990.0,22,21,,1.0,2.0,0.0,0.0,0.0,0.0
+2013,127,Leslie Osborne,us USA,MF,Chicago Red Stars,29.0,1983.0,18,18,1550.0,1.0,0.0,0.0,0.0,2.0,0.0
+2013,128,Lyndsey Patterson,us USA,"FW,MF",Seattle,30.0,1982.0,3,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,129,Christie Pearce,us USA,DF,Sky Blue FC,37.0,1975.0,20,20,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,130,Veronica Perez,,,Western New York Flash,34.0,1979.0,22,11,1.0,1.0,,0.0,0.0,0.0,0.0
+2013,131,Ashley Phillips,us USA,GK,Boston Breakers,26.0,1986.0,11,11,945.0,,,0.0,0.0,,
+2013,132,Conny Pohlers,de GER,FW,Washington Spirit,34.0,1978.0,13,12,,1.0,0.0,0.0,0.0,2.0,0.0
+2013,133,Toni Pressley,us USA,DF,Washington Spirit,22.0,1990.0,8,8,,0.0,0.0,0.0,0.0,1.0,0.0
+2013,134,Rachel Quon,ca CAN,DF,Chicago Red Stars,21.0,1991.0,19,16,1531.0,0.0,1.0,0.0,0.0,1.0,0.0
+2013,135,Casey Ramirez,us USA,DF,Portland Thorns FC,23.0,1989.0,4,1,159.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,136,Nayeli Rangel,mx MEX,MF,Sky Blue FC,20.0,1992.0,10,5,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,137,Megan Rapinoe,us USA,"FW,MF",Seattle,27.0,1985.0,12,11,,5.0,1.0,0.0,0.0,1.0,0.0
+2013,138,Elli Reed,us USA,"DF,MF",Seattle,23.0,1989.0,17,17,,0.0,2.0,0.0,0.0,2.0,0.0
+2013,139,Katherine Reynolds,us USA,DF,Western New York Flash,25.0,1987.0,22,22,,2.0,,0.0,0.0,2.0,0.0
+2013,140,Julia Roberts,us USA,MF,Washington Spirit,21.0,1991.0,20,19,,0.0,0.0,0.0,0.0,1.0,0.0
+2013,141,Jodi-Ann Robinson,ca CAN,"FW,MF",Western New York Flash,23.0,1989.0,13,0,1.0,0.0,,0.0,0.0,1.0,0.0
+2013,142,Jenny Ruiz,mx MEX,"DF,MF",Seattle,29.0,1983.0,7,4,,0.0,0.0,0.0,0.0,1.0,2.0
+2013,143,Alex Sahlen,us USA,DF,Western New York Flash,30.0,1982.0,18,18,,3.0,,0.0,0.0,0.0,0.0
+2013,144,Angela Salem,us USA,MF,Western New York Flash,24.0,1988.0,21,20,,0.0,,0.0,0.0,1.0,0.0
+2013,145,Lianne Sanderson,eng ENG,FW,Boston Breakers,24.0,1988.0,22,21,1913.0,5.0,7.0,0.0,1.0,0.0,0.0
+2013,146,Jackie Santacaterina,us USA,DF,Chicago Red Stars,25.0,1987.0,18,14,1316.0,3.0,1.0,0.0,0.0,1.0,0.0
+2013,147,Cecilia Santiago,mx MEX,GK,Boston Breakers,18.0,1994.0,3,3,270.0,,,0.0,0.0,,
+2013,148,Becky Sauerbrunn,us USA,DF,FC Kansas City,27.0,1985.0,19,19,1710.0,0.0,1.0,0.0,0.0,0.0,0.0
+2013,149,Sophie Schmidt,ca CAN,MF,Sky Blue FC,24.0,1988.0,19,18,,7.0,1.0,1.0,1.0,0.0,1.0
+2013,150,Katie Schoepfer,us USA,FW,Boston Breakers,24.0,1988.0,20,14,1080.0,2.0,1.0,0.0,0.0,0.0,0.0
+2013,151,Desiree Scott,ca CAN,MF,FC Kansas City,25.0,1987.0,20,20,1800.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,152,Lauren Sesselmann,ca CAN,"DF,FW",FC Kansas City,29.0,1983.0,19,19,1633.0,0.0,0.0,0.0,0.0,3.0,1.0
+2013,153,Meleana Shim,us USA,MF,Portland Thorns FC,21.0,1991.0,19,17,1416.0,5.0,2.0,0.0,0.0,1.0,0.0
+2013,154,Jessica Shufelt,us USA,FW,Portland Thorns FC,22.0,1990.0,4,0,31.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,155,Kyah Simon,au AUS,FW,Boston Breakers,21.0,1991.0,17,11,1068.0,3.0,3.0,0.0,0.0,0.0,0.0
+2013,156,Christine Sinclair,ca CAN,"FW,MF",Portland Thorns FC,29.0,1983.0,20,20,1783.0,8.0,2.0,2.0,2.0,2.0,0.0
+2013,157,Julianne Sitch,us USA,"DF,MF",Chicago Red Stars,29.0,1983.0,20,18,1577.0,1.0,4.0,0.0,0.0,1.0,0.0
+2013,158,Hope Solo,us USA,GK,Seattle,31.0,1981.0,14,14,1260.0,,,0.0,0.0,,
+2013,159,Jasmyne Spencer,us USA,FW,Washington Spirit,22.0,1990.0,17,6,,0.0,1.0,0.0,0.0,0.0,0.0
+2013,160,Pamela Tajonar,mx MEX,GK,Western New York Flash,28.0,1984.0,1,0,2.0,,,0.0,0.0,,
+2013,161,Lindsay Taylor,us USA,FW,Seattle,23.0,1989.0,6,4,,1.0,0.0,0.0,0.0,0.0,0.0
+2013,162,Lindsay Taylor,us USA,FW,Washington Spirit,23.0,1989.0,6,2,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,163,Maddie Thompson,us USA,DF,Sky Blue FC,22.0,1990.0,14,4,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,164,Kika Toulouse,us USA,DF,Washington Spirit,23.0,1989.0,16,9,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,165,Erika Tymrak,us USA,"FW,MF",FC Kansas City,21.0,1991.0,21,16,1453.0,6.0,4.0,0.0,0.0,0.0,0.0
+2013,166,Rachel Van Hollebeke,us USA,DF,Portland Thorns FC,27.0,1985.0,20,20,1800.0,0.0,2.0,0.0,0.0,2.0,0.0
+2013,167,Taylor Vancil,us USA,GK,Chicago Red Stars,21.0,1991.0,6,6,540.0,,,0.0,0.0,,
+2013,168,Lydia Vandenbergh,au AUS,"DF,MF",Chicago Red Stars,29.0,1984.0,17,13,1195.0,0.0,2.0,0.0,0.0,1.0,0.0
+2013,169,Abby Wambach,us USA,FW,Western New York Flash,32.0,1980.0,19,19,11.0,8.0,,2.0,4.0,2.0,0.0
+2013,170,Nikki Washington,us USA,"FW,MF",Portland Thorns FC,24.0,1988.0,11,10,776.0,1.0,2.0,0.0,0.0,3.0,0.0
+2013,171,Tiffany Weimer,us USA,FW,Portland Thorns FC,29.0,1983.0,10,5,522.0,1.0,1.0,0.0,0.0,0.0,0.0
+2013,172,Ingrid Wells,us USA,MF,Washington Spirit,23.0,1989.0,8,8,,0.0,0.0,0.0,0.0,1.0,0.0
+2013,173,Ingrid Wells,us USA,MF,Western New York Flash,23.0,1989.0,10,0,,0.0,,0.0,0.0,0.0,0.0
+2013,174,Courtney Wetzel,us USA,"DF,MF",Portland Thorns FC,23.0,1989.0,16,6,602.0,1.0,1.0,0.0,0.0,0.0,0.0
+2013,175,Cat Whitehill,us USA,DF,Boston Breakers,30.0,1982.0,22,22,1978.0,1.0,2.0,0.0,0.0,1.0,0.0
+2013,176,Rhian Wilkinson,ca CAN,"DF,FW",Boston Breakers,30.0,1982.0,14,11,913.0,2.0,1.0,0.0,0.0,1.0,0.0
+2013,177,Colleen Williams,us USA,"FW,MF",Washington Spirit,21.0,1991.0,6,2,,0.0,0.0,0.0,0.0,0.0,0.0
+2013,178,Nia Williams,us USA,DF,FC Kansas City,22.0,1990.0,4,2,182.0,0.0,0.0,0.0,0.0,1.0,0.0
+2013,179,Kat Williamson,us USA,DF,Portland Thorns FC,23.0,1989.0,22,22,1944.0,0.0,0.0,0.0,0.0,1.0,0.0
+2013,180,Keelin Winters,us USA,MF,Seattle,24.0,1988.0,21,19,,1.0,1.0,0.0,0.0,1.0,0.0
+2013,181,Lisa-Marie Woods,no NOR,MF,Boston Breakers,28.0,1984.0,4,1,68.0,0.0,0.0,0.0,0.0,0.0,0.0
+2013,182,Lupita Worbis,mx MEX,"FW,MF",Washington Spirit,29.0,1983.0,11,5,,1.0,1.0,0.0,0.0,0.0,0.0
+2013,183,Kimberly Yokers,us USA,MF,Western New York Flash,30.0,1982.0,3,2,,0.0,,0.0,0.0,0.0,0.0
+2013,184,McCall Zerboni,us USA,MF,Western New York Flash,26.0,1986.0,20,20,1706.0,0.0,,0.0,0.0,1.0,0.0
+2013,185,Emily Zurrer,ca CAN,DF,Seattle,25.0,1987.0,7,6,,0.0,0.0,0.0,0.0,1.0,0.0
+2014,1,Jackie Acevedo,mx MEX,FW,Portland Thorns FC,27.0,1987.0,2,0,15.0,0.0,0.0,,,0.0,0.0
+2014,2,Danesha Adams,us USA,"FW,MF",Washington Spirit,27.0,1986.0,13,9,802.0,1.0,1.0,,,1.0,0.0
+2014,3,Adriana,es ESP,FW,Western New York Flash,27.0,1986.0,19,12,1195.0,3.0,4.0,,,0.0,0.0
+2014,4,Teigen Allen,au AUS,DF,Western New York Flash,19.0,1994.0,4,2,258.0,0.0,0.0,,,2.0,0.0
+2014,5,Jordan Angeli,us USA,"DF,FW",Washington Spirit,27.0,1986.0,10,2,235.0,0.0,0.0,,,1.0,1.0
+2014,6,Nadine Angerer,de GER,GK,Portland Thorns FC,35.0,1978.0,22,22,1917.0,,,,,,
+2014,7,Leigh Ann Brown,us USA,"DF,MF",FC Kansas City,27.0,1986.0,23,23,2012.0,0.0,2.0,,,0.0,0.0
+2014,8,Jazmyne Avant,us USA,DF,Boston Breakers,24.0,1990.0,12,9,778.0,0.0,0.0,,,2.0,0.0
+2014,9,Yael Averbuch,us USA,MF,Washington Spirit,27.0,1986.0,22,17,1562.0,1.0,1.0,,,1.0,0.0
+2014,10,Amy Barczuk,us USA,DF,Western New York Flash,23.0,1990.0,19,9,886.0,0.0,0.0,,,0.0,0.0
+2014,11,Lauren Barnes,us USA,DF,Seattle,24.0,1989.0,23,22,1898.0,0.0,0.0,,,2.0,0.0
+2014,12,Nicole Barnhart,us USA,GK,FC Kansas City,32.0,1981.0,22,22,1935.0,,,,,,
+2014,13,Sonia Bermúdez,es ESP,FW,Western New York Flash,29.0,1984.0,21,9,837.0,4.0,1.0,,,2.0,0.0
+2014,14,Michelle Betos,us USA,GK,Portland Thorns FC,25.0,1988.0,3,2,243.0,,,,,,
+2014,15,Brittany Bock,us USA,MF,Houston Dash,26.0,1987.0,1,1,23.0,0.0,0.0,,,0.0,0.0
+2014,16,Liz Bogus,us USA,FW,FC Kansas City,29.0,1984.0,13,8,598.0,1.0,2.0,,,0.0,0.0
+2014,17,Verónica Boquete,es ESP,"FW,MF",Portland Thorns FC,26.0,1987.0,15,15,1335.0,4.0,6.0,,,0.0,0.0
+2014,18,Shannon Boxx,us USA,MF,Chicago Red Stars,36.0,1977.0,5,4,245.0,0.0,0.0,,,1.0,0.0
+2014,19,Megan Brigman,us USA,DF,Seattle,23.0,1990.0,2,0,17.0,0.0,0.0,,,0.0,0.0
+2014,20,Hayley Brock,us USA,FW,Chicago Red Stars,21.0,1992.0,8,3,238.0,1.0,1.0,,,0.0,0.0
+2014,21,Amber Brooks,us USA,"DF,MF",Portland Thorns FC,23.0,1991.0,20,19,1598.0,1.0,2.0,,,4.0,0.0
+2014,22,Jen Buczkowski,us USA,"DF,MF",FC Kansas City,28.0,1985.0,24,24,2087.0,1.0,3.0,,,2.0,0.0
+2014,23,Mariah Bullock,us USA,"DF,MF",Seattle,22.0,1991.0,15,6,588.0,0.0,1.0,,,2.0,0.0
+2014,24,Nina Burger,at AUT,FW,Houston Dash,26.0,1987.0,17,15,978.0,4.0,1.0,,,1.0,0.0
+2014,25,Zakiya Bywaters,us USA,FW,Chicago Red Stars,22.0,1991.0,19,10,1086.0,2.0,0.0,,,1.0,0.0
+2014,26,Brittany Cameron,us USA,GK,Sky Blue FC,27.0,1986.0,7,7,630.0,,,,,,
+2014,27,Steph Catley,au AUS,DF,Portland Thorns FC,20.0,1994.0,14,13,1141.0,0.0,5.0,,,0.0,0.0
+2014,28,Lori Chalupny,us USA,MF,Chicago Red Stars,30.0,1984.0,23,22,2003.0,5.0,0.0,,,1.0,0.0
+2014,29,Stephanie Cox,us USA,DF,Seattle,27.0,1986.0,21,20,1776.0,0.0,1.0,,,0.0,0.0
+2014,30,Niki Cross,us USA,DF,Washington Spirit,28.0,1985.0,10,8,740.0,0.0,0.0,,,0.0,0.0
+2014,31,Renae Cuéllar,mx MEX,FW,Washington Spirit,23.0,1990.0,10,4,408.0,0.0,0.0,,,0.0,0.0
+2014,32,Bianca D'Agostino,us USA,MF,Boston Breakers,25.0,1989.0,16,6,679.0,0.0,0.0,,,1.0,0.0
+2014,33,Kiersten Dallstream,us USA,"DF,FW",Seattle,25.0,1988.0,15,8,768.0,0.0,1.0,,,0.0,0.0
+2014,34,Lisa De Vanna,au AUS,FW,Washington Spirit,29.0,1984.0,11,9,794.0,1.0,4.0,,,1.0,0.0
+2014,35,Lisa De Vanna,au AUS,FW,Boston Breakers,29.0,1984.0,6,5,448.0,0.0,1.0,,,0.0,1.0
+2014,36,Kim DeCesare,us USA,"FW,MF",Boston Breakers,22.0,1991.0,1,0,9.0,0.0,0.0,,,0.0,0.0
+2014,37,Kate Deines,us USA,"DF,MF",Seattle,24.0,1989.0,18,9,859.0,0.0,0.0,,,1.0,0.0
+2014,38,Vanessa DiBernardo,us USA,MF,Chicago Red Stars,21.0,1992.0,23,19,1782.0,1.0,3.0,,,0.0,0.0
+2014,39,Marissa Diggs,us USA,DF,Houston Dash,21.0,1992.0,13,11,1080.0,1.0,1.0,,,0.0,0.0
+2014,40,Molly Dreska,us USA,MF,FC Kansas City,25.0,1988.0,1,0,52.0,0.0,0.0,,,0.0,0.0
+2014,41,Crystal Dunn,us USA,"DF,MF",Washington Spirit,21.0,1992.0,21,18,1488.0,0.0,3.0,,,1.0,0.0
+2014,42,Kristen Edmonds,us USA,DF,Western New York Flash,26.0,1987.0,22,19,1739.0,0.0,1.0,,,1.0,0.0
+2014,43,Becky Edwards,us USA,"DF,MF",Houston Dash,25.0,1988.0,23,23,2070.0,0.0,2.0,,,3.0,0.0
+2014,44,Emily van Egmond,au AUS,MF,Chicago Red Stars,20.0,1993.0,10,6,633.0,2.0,2.0,,,1.0,0.0
+2014,45,Lindsay Elston,us USA,"FW,MF",Houston Dash,21.0,1992.0,5,1,206.0,0.0,0.0,,,0.0,0.0
+2014,46,Whitney Engen,us USA,DF,Houston Dash,26.0,1987.0,11,11,978.0,0.0,0.0,,,0.0,0.0
+2014,47,Abby Erceg,nz NZL,"DF,FW",Chicago Red Stars,24.0,1989.0,11,11,990.0,0.0,0.0,,,2.0,0.0
+2014,48,Julie Ertz,us USA,"DF,MF",Chicago Red Stars,21.0,1992.0,21,21,1890.0,2.0,2.0,,,4.0,0.0
+2014,49,Maddy Evans,us USA,"DF,MF",Boston Breakers,22.0,1991.0,17,8,730.0,0.0,3.0,,,1.0,1.0
+2014,50,Nkem Ezurike,ca CAN,FW,Boston Breakers,21.0,1992.0,11,6,503.0,2.0,0.0,,,0.0,0.0
+2014,51,Sinead Farrelly,us USA,MF,Portland Thorns FC,24.0,1989.0,17,16,1303.0,0.0,0.0,,,0.0,0.0
+2014,52,Jonelle Filigno,ca CAN,"FW,MF",Sky Blue FC,23.0,1990.0,17,6,697.0,1.0,1.0,,,1.0,0.0
+2014,53,Jess Fishlock,wal WAL,MF,Seattle,27.0,1987.0,22,22,1976.0,4.0,8.0,,,4.0,0.0
+2014,54,Kendall Fletcher,us USA,"DF,MF",Seattle,29.0,1984.0,23,22,1917.0,2.0,1.0,,,0.0,0.0
+2014,55,Caitlin Foord,au AUS,"DF,FW",Sky Blue FC,19.0,1994.0,21,20,1825.0,0.0,2.0,,,4.0,0.0
+2014,56,Danielle Foxhoven,us USA,"FW,MF",Seattle,24.0,1989.0,12,3,340.0,0.0,0.0,,,0.0,0.0
+2014,57,Katy Freels,us USA,MF,Sky Blue FC,23.0,1990.0,23,23,2021.0,5.0,4.0,,,2.0,0.0
+2014,58,Kerstin Garefrekes,de GER,"FW,MF",Washington Spirit,34.0,1979.0,10,6,591.0,1.0,0.0,,,0.0,0.0
+2014,59,Robyn Gayle,ca CAN,DF,Washington Spirit,28.0,1985.0,16,13,1143.0,2.0,1.0,,,4.0,0.0
+2014,60,Missy Geha,us USA,MF,FC Kansas City,26.0,1987.0,1,0,21.0,0.0,0.0,,,0.0,0.0
+2014,61,CoCo Goodson,us USA,DF,Sky Blue FC,23.0,1990.0,21,18,1652.0,0.0,0.0,,,1.0,0.0
+2014,62,Katrina Gorry,au AUS,MF,FC Kansas City,21.0,1992.0,9,3,376.0,1.0,0.0,,,0.0,0.0
+2014,63,Ashley Grove,us USA,MF,Boston Breakers,23.0,1990.0,9,7,586.0,0.0,0.0,,,1.0,0.0
+2014,64,Sarah Hagen,us USA,FW,FC Kansas City,24.0,1989.0,9,7,529.0,4.0,1.0,,,1.0,0.0
+2014,65,DiDi Haracic,ba BIH,GK,Western New York Flash,21.0,1992.0,1,1,90.0,,,,,,
+2014,66,Ashlyn Harris,us USA,GK,Washington Spirit,28.0,1985.0,19,19,1710.0,,,,,,
+2014,67,Maya Hayes,us USA,FW,Sky Blue FC,21.0,1992.0,23,13,1146.0,1.0,1.0,,,0.0,0.0
+2014,68,Tobin Heath,us USA,MF,Portland Thorns FC,25.0,1988.0,5,5,401.0,0.0,0.0,,,1.0,0.0
+2014,69,Holly Hein,us USA,"DF,MF",Houston Dash,22.0,1991.0,8,7,657.0,0.0,0.0,,,1.0,0.0
+2014,70,Taryn Hemmings,us USA,DF,Chicago Red Stars,27.0,1986.0,15,9,893.0,0.0,2.0,,,2.0,0.0
+2014,71,Melissa Henderson,us USA,"FW,MF",FC Kansas City,24.0,1989.0,5,3,185.0,0.0,0.0,,,0.0,0.0
+2014,72,Melissa Henderson,us USA,"FW,MF",Houston Dash,24.0,1989.0,9,8,629.0,0.0,0.0,,,0.0,0.0
+2014,73,Bianca Henninger,us USA,GK,Houston Dash,23.0,1990.0,5,5,405.0,,,,,,
+2014,74,Lauren Holiday,us USA,"FW,MF",FC Kansas City,26.0,1987.0,21,21,1766.0,8.0,7.0,,,0.0,0.0
+2014,75,Jen Hoy,us USA,"FW,MF",Chicago Red Stars,23.0,1991.0,21,16,1354.0,4.0,3.0,,,2.0,0.0
+2014,76,Sarah Huffman,us USA,MF,Portland Thorns FC,29.0,1984.0,22,9,962.0,1.0,1.0,,,2.0,0.0
+2014,77,Tori Huster,us USA,MF,Washington Spirit,24.0,1989.0,22,22,1980.0,1.0,1.0,,,0.0,0.0
+2014,78,Jordan Jackson,us USA,MF,Houston Dash,23.0,1990.0,20,13,1206.0,2.0,1.0,,,0.0,0.0
+2014,79,Kendall Johnson,us USA,"DF,MF",Sky Blue FC,22.0,1991.0,15,12,1123.0,0.0,0.0,,,0.0,0.0
+2014,80,Samantha Johnson,us USA,"DF,MF",Chicago Red Stars,22.0,1991.0,12,11,956.0,0.0,1.0,,,1.0,0.0
+2014,81,Chantel Jones,us USA,GK,Washington Spirit,25.0,1988.0,5,5,450.0,,,,,,
+2014,82,Courtney Jones,us USA,"DF,FW",Boston Breakers,23.0,1990.0,18,13,1296.0,3.0,1.0,,,6.0,0.0
+2014,83,Kassey Kallman,us USA,DF,FC Kansas City,21.0,1992.0,18,18,1479.0,0.0,1.0,,,1.0,0.0
+2014,84,Nahomi Kawasumi,jp JPN,"FW,MF",Seattle,28.0,1985.0,20,17,1531.0,9.0,5.0,,,0.0,0.0
+2014,85,Sara Keane,us USA,GK,FC Kansas City,21.0,1992.0,2,2,180.0,,,,,,
+2014,86,Angie Kerr,us USA,MF,Portland Thorns FC,28.0,1985.0,14,8,676.0,0.0,3.0,,,0.0,0.0
+2014,87,Sam Kerr,au AUS,"FW,MF",Western New York Flash,20.0,1993.0,20,20,1660.0,9.0,4.0,,,1.0,0.0
+2014,88,Emma Kete,nz NZL,FW,Western New York Flash,26.0,1987.0,3,0,25.0,0.0,0.0,,,0.0,0.0
+2014,89,Julie King,us USA,DF,Boston Breakers,24.0,1989.0,17,17,1530.0,1.0,1.0,,,1.0,0.0
+2014,90,Nanase Kiryu,jp JPN,FW,Sky Blue FC,24.0,1989.0,16,12,909.0,0.0,1.0,,,0.0,0.0
+2014,91,Meghan Klingenberg,us USA,"DF,MF",Houston Dash,25.0,1988.0,7,7,607.0,0.0,0.0,,,0.0,0.0
+2014,92,Brittany Kolmel,us USA,DF,Western New York Flash,26.0,1987.0,24,24,2160.0,2.0,1.0,,,2.0,0.0
+2014,93,Haley Kopmeyer,us USA,GK,Seattle,23.0,1990.0,4,4,360.0,,,,,,
+2014,94,Ali Krieger,us USA,"DF,MF",Washington Spirit,29.0,1984.0,22,22,1935.0,1.0,0.0,,,1.0,0.0
+2014,95,Kaylyn Kyle,ca CAN,MF,Boston Breakers,25.0,1988.0,2,2,155.0,0.0,0.0,,,0.0,0.0
+2014,96,Kaylyn Kyle,ca CAN,MF,Houston Dash,25.0,1988.0,19,18,1626.0,0.0,2.0,,,2.0,0.0
+2014,97,Mandy Laddish,us USA,MF,FC Kansas City,21.0,1992.0,2,0,15.0,0.0,0.0,,,0.0,0.0
+2014,98,Karina LeBlanc,ca CAN,GK,Chicago Red Stars,33.0,1980.0,21,21,1890.0,,,,,,
+2014,99,Adriana Leon,ca CAN,"FW,MF",Chicago Red Stars,21.0,1992.0,20,15,1173.0,1.0,3.0,,,2.0,0.0
+2014,100,Amy LePeilbet,us USA,DF,FC Kansas City,31.0,1982.0,11,4,512.0,0.0,0.0,,,2.0,0.0
+2014,101,Sydney Leroux,us USA,FW,Seattle,23.0,1990.0,22,21,1873.0,5.0,0.0,,,2.0,0.0
+2014,102,Camille Levin,us USA,DF,Sky Blue FC,23.0,1990.0,23,21,1884.0,0.0,0.0,,,3.0,0.0
+2014,103,Lori Lindsey,us USA,MF,Washington Spirit,33.0,1980.0,22,19,1509.0,1.0,1.0,,,0.0,0.0
+2014,104,Lindsi Lisonbee-Cutshall,us USA,DF,Sky Blue FC,23.0,1990.0,14,11,943.0,3.0,0.0,,,0.0,0.0
+2014,105,Kim Little,sco SCO,"FW,MF",Seattle,23.0,1990.0,23,22,1966.0,16.0,7.0,,,0.0,0.0
+2014,106,Carli Lloyd,us USA,MF,Western New York Flash,31.0,1982.0,19,19,1710.0,8.0,5.0,,,5.0,0.0
+2014,107,Joanna Lohman,us USA,"DF,MF",Boston Breakers,31.0,1982.0,17,14,1231.0,1.0,0.0,,,2.0,0.0
+2014,108,Michelle Lomnicki,us USA,DF,Chicago Red Stars,26.0,1987.0,18,15,1380.0,2.0,1.0,,,1.0,0.0
+2014,109,Allie Long,us USA,MF,Portland Thorns FC,26.0,1987.0,22,20,1809.0,9.0,3.0,,,1.0,0.0
+2014,110,Vicky Losada,es ESP,MF,Western New York Flash,22.0,1991.0,23,18,1624.0,3.0,6.0,,,2.0,0.0
+2014,111,Jillian Loyden,us USA,GK,Sky Blue FC,28.0,1985.0,17,17,1530.0,,,,,,
+2014,112,Taylor Lytle,us USA,MF,Sky Blue FC,24.0,1989.0,7,5,481.0,0.0,1.0,,,0.0,0.0
+2014,113,Morgan Marlborough,us USA,FW,FC Kansas City,23.0,1990.0,9,2,247.0,2.0,0.0,,,0.0,0.0
+2014,114,Nikki Marshall,us USA,"DF,FW",Portland Thorns FC,25.0,1988.0,24,24,2072.0,0.0,0.0,,,3.0,0.0
+2014,115,Ella Masar,us USA,FW,Houston Dash,27.0,1986.0,18,14,1152.0,3.0,1.0,,,4.0,0.0
+2014,116,Diana Matheson,ca CAN,MF,Washington Spirit,29.0,1984.0,23,21,1970.0,8.0,6.0,,,2.0,0.0
+2014,117,Merritt Mathias,us USA,"DF,MF",FC Kansas City,23.0,1990.0,20,16,1436.0,0.0,2.0,,,1.0,0.0
+2014,118,Alyssa Mautz,us USA,"FW,MF",Chicago Red Stars,24.0,1989.0,20,12,1053.0,3.0,0.0,,,5.0,0.0
+2014,119,Tiffany McCarty,us USA,FW,Houston Dash,23.0,1990.0,20,11,1148.0,4.0,1.0,,,0.0,0.0
+2014,120,Tori McCombs,us USA,MF,Houston Dash,21.0,1992.0,1,0,19.0,0.0,0.0,,,0.0,0.0
+2014,121,Jessica McDonald,us USA,FW,Portland Thorns FC,25.0,1988.0,24,13,1310.0,11.0,1.0,,,0.0,0.0
+2014,122,Kelly McFarlane,us USA,MF,Houston Dash,21.0,1992.0,13,5,596.0,0.0,1.0,,,0.0,0.0
+2014,123,Erin McLeod,ca CAN,GK,Houston Dash,30.0,1983.0,20,19,1755.0,,,,,,
+2014,124,Emily Menges,us USA,DF,Portland Thorns FC,21.0,1992.0,23,22,1972.0,0.0,0.0,,,3.0,0.0
+2014,125,Kristie Mewis,us USA,"DF,MF",Boston Breakers,22.0,1991.0,17,15,1191.0,3.0,2.0,,,0.0,0.0
+2014,126,Alex Morgan,us USA,FW,Portland Thorns FC,24.0,1989.0,14,13,1135.0,6.0,4.0,,,0.0,0.0
+2014,127,Rebecca Moros,us USA,"DF,MF",Portland Thorns FC,28.0,1985.0,18,13,1171.0,0.0,0.0,,,0.0,0.0
+2014,128,Meg Morris,us USA,MF,Sky Blue FC,21.0,1992.0,3,1,96.0,0.0,0.0,,,1.0,0.0
+2014,129,Kecia Morway,us USA,DF,Chicago Red Stars,22.0,1991.0,12,10,907.0,0.0,0.0,,,2.0,0.0
+2014,130,Carmelina Moscato,ca CAN,DF,Seattle,29.0,1984.0,1,0,12.0,0.0,0.0,,,0.0,0.0
+2014,131,Nadia Nadim,dk DEN,FW,Sky Blue FC,26.0,1988.0,6,5,495.0,7.0,3.0,,,3.0,0.0
+2014,132,Alyssa Naeher,us USA,GK,Boston Breakers,25.0,1988.0,24,24,2160.0,,,,,,
+2014,133,Christine Nairn,us USA,MF,Washington Spirit,23.0,1990.0,23,21,1838.0,6.0,2.0,,,2.0,0.0
+2014,134,Ashley Nick,us USA,MF,Sky Blue FC,26.0,1987.0,22,17,1612.0,1.0,0.0,,,3.0,0.0
+2014,135,Courtney Niemiec,us USA,DF,Portland Thorns FC,21.0,1992.0,11,10,824.0,0.0,0.0,,,0.0,0.0
+2014,136,Teresa Noyola,mx MEX,"FW,MF",Houston Dash,23.0,1990.0,10,3,431.0,3.0,0.0,,,0.0,0.0
+2014,137,Kelley O'Hara,us USA,"DF,FW",Sky Blue FC,25.0,1988.0,22,22,1917.0,7.0,5.0,,,0.0,0.0
+2014,138,Heather O'Reilly,us USA,"FW,MF",Boston Breakers,29.0,1985.0,22,21,1874.0,9.0,5.0,,,3.0,0.0
+2014,139,Mónica Ocampo,mx MEX,FW,Sky Blue FC,27.0,1987.0,18,13,996.0,3.0,0.0,,,0.0,0.0
+2014,140,Stephanie Ochs,us USA,FW,Houston Dash,23.0,1990.0,24,19,1804.0,0.0,2.0,,,0.0,0.0
+2014,141,Kealia Ohai,us USA,"FW,MF",Houston Dash,22.0,1992.0,23,21,1817.0,4.0,1.0,,,1.0,0.0
+2014,142,Osinachi Ohale,ng NGA,DF,Houston Dash,21.0,1992.0,19,18,1555.0,1.0,0.0,,,4.0,1.0
+2014,143,Haley Palmer,us USA,DF,Western New York Flash,21.0,1992.0,7,5,357.0,0.0,1.0,,,0.0,0.0
+2014,144,Kelsey Pardue,us USA,MF,Washington Spirit,14.0,2000.0,1,0,9.0,0.0,0.0,,,0.0,0.0
+2014,145,Mollie Pathman,us USA,"FW,MF",Boston Breakers,21.0,1992.0,21,18,1519.0,0.0,1.0,,,0.0,0.0
+2014,146,Christie Pearce,us USA,DF,Sky Blue FC,38.0,1975.0,19,18,1665.0,1.0,2.0,,,0.0,0.0
+2014,147,Veronica Perez,,,Washington Spirit,35.0,1979.0,16,6,657.0,0.0,1.0,,,1.0,0.0
+2014,148,Nikki Phillips,pl POL,"DF,MF",FC Kansas City,26.0,1987.0,23,23,1970.0,1.0,0.0,,,1.0,0.0
+2014,149,Christen Press,us USA,FW,Chicago Red Stars,25.0,1988.0,12,12,1080.0,6.0,0.0,,,0.0,0.0
+2014,150,Toni Pressley,us USA,DF,Washington Spirit,23.0,1990.0,9,8,701.0,0.0,0.0,,,0.0,0.0
+2014,151,Rachel Quon,ca CAN,DF,Chicago Red Stars,22.0,1991.0,19,19,1693.0,0.0,0.0,,,2.0,0.0
+2014,152,Megan Rapinoe,us USA,"FW,MF",Seattle,28.0,1985.0,9,6,567.0,4.0,1.0,,,3.0,0.0
+2014,153,Niki Read,us USA,FW,Chicago Red Stars,22.0,1991.0,1,0,6.0,0.0,0.0,,,0.0,0.0
+2014,154,Elli Reed,us USA,"DF,MF",Seattle,24.0,1989.0,22,19,1813.0,0.0,1.0,,,3.0,0.0
+2014,155,Jazmine Reeves,us USA,FW,Boston Breakers,22.0,1992.0,17,13,1151.0,7.0,1.0,,,1.0,0.0
+2014,156,Katherine Reynolds,us USA,DF,Western New York Flash,26.0,1987.0,19,19,1628.0,0.0,0.0,,,2.0,1.0
+2014,157,Dominique Richardson,bm BER,MF,Houston Dash,21.0,1992.0,2,1,92.0,0.0,0.0,,,0.0,0.0
+2014,158,Jenna Richmond,us USA,MF,FC Kansas City,22.0,1991.0,22,20,1754.0,1.0,4.0,,,2.0,0.0
+2014,159,Amy Rodriguez,us USA,"FW,MF",FC Kansas City,26.0,1987.0,22,21,1808.0,13.0,3.0,,,0.0,0.0
+2014,160,Arianna Romero,mx MEX,DF,Houston Dash,21.0,1992.0,21,19,1765.0,0.0,0.0,,,1.0,0.0
+2014,161,Angela Salem,us USA,MF,Western New York Flash,25.0,1988.0,23,22,1858.0,0.0,0.0,,,4.0,1.0
+2014,162,Lianne Sanderson,eng ENG,FW,Boston Breakers,25.0,1988.0,19,17,1524.0,5.0,3.0,,,2.0,1.0
+2014,163,Jackie Santacaterina,us USA,DF,Chicago Red Stars,26.0,1987.0,13,9,779.0,0.0,0.0,,,3.0,0.0
+2014,164,Becky Sauerbrunn,us USA,DF,FC Kansas City,28.0,1985.0,22,22,1935.0,1.0,0.0,,,1.0,0.0
+2014,165,Sophie Schmidt,ca CAN,MF,Sky Blue FC,25.0,1988.0,22,22,1964.0,1.0,0.0,,,1.0,0.0
+2014,166,Katie Schoepfer,us USA,FW,Boston Breakers,25.0,1988.0,17,12,989.0,4.0,0.0,,,0.0,0.0
+2014,167,Meleana Shim,us USA,MF,Portland Thorns FC,22.0,1991.0,17,4,530.0,0.0,2.0,,,1.0,0.0
+2014,168,Bianca Sierra,mx MEX,DF,Boston Breakers,21.0,1992.0,11,9,798.0,0.0,1.0,,,1.0,0.0
+2014,169,Bianca Sierra,mx MEX,DF,Washington Spirit,21.0,1992.0,9,5,520.0,0.0,0.0,,,1.0,0.0
+2014,170,Frances Silva,us USA,"FW,MF",FC Kansas City,21.0,1992.0,18,5,568.0,2.0,1.0,,,0.0,0.0
+2014,171,Christine Sinclair,ca CAN,"FW,MF",Portland Thorns FC,30.0,1983.0,23,22,1987.0,7.0,1.0,,,2.0,0.0
+2014,172,Alex Singer,us USA,DF,Washington Spirit,26.0,1987.0,11,11,972.0,0.0,0.0,,,0.0,0.0
+2014,173,Julianne Sitch,us USA,"DF,MF",Chicago Red Stars,30.0,1983.0,11,9,762.0,0.0,0.0,,,1.0,0.0
+2014,174,Jennifer Skogerboe,us USA,MF,Washington Spirit,21.0,1992.0,1,0,15.0,0.0,0.0,,,0.0,0.0
+2014,175,Hope Solo,us USA,GK,Seattle,32.0,1981.0,20,20,1800.0,,,,,,
+2014,176,Rafaelle Souza,br BRA,"FW,MF",Houston Dash,22.0,1991.0,16,6,507.0,0.0,1.0,,,1.0,0.0
+2014,177,Jasmyne Spencer,us USA,FW,Western New York Flash,23.0,1990.0,22,9,933.0,3.0,1.0,,,1.0,0.0
+2014,178,Nikki Stanton,us USA,MF,Sky Blue FC,23.0,1990.0,4,0,78.0,0.0,0.0,,,1.0,0.0
+2014,179,Chelsea Stewart,ca CAN,MF,Boston Breakers,23.0,1990.0,10,7,512.0,0.0,0.0,,,0.0,0.0
+2014,180,Elisabeth Sullivan,us USA,FW,Portland Thorns FC,22.0,1991.0,1,0,1.0,0.0,0.0,,,0.0,0.0
+2014,181,Melissa Tancredi,ca CAN,FW,Chicago Red Stars,32.0,1981.0,13,7,682.0,3.0,1.0,,,2.0,1.0
+2014,182,Katarina Tarr,us USA,DF,Portland Thorns FC,26.0,1987.0,6,5,405.0,0.0,0.0,,,1.0,1.0
+2014,183,Jodie Taylor,eng ENG,FW,Washington Spirit,27.0,1986.0,21,19,1727.0,11.0,2.0,,,1.0,0.0
+2014,184,Hanna Terry,us USA,FW,Portland Thorns FC,23.0,1990.0,2,0,8.0,0.0,0.0,,,0.0,0.0
+2014,185,Maddie Thompson,us USA,DF,Sky Blue FC,23.0,1990.0,2,1,96.0,0.0,0.0,,,0.0,0.0
+2014,186,Kika Toulouse,us USA,DF,Houston Dash,24.0,1989.0,7,5,375.0,0.0,0.0,,,0.0,0.0
+2014,187,Erika Tymrak,us USA,"FW,MF",FC Kansas City,22.0,1991.0,21,18,1540.0,4.0,4.0,,,0.0,0.0
+2014,188,Rachel Van Hollebeke,us USA,DF,Portland Thorns FC,28.0,1985.0,12,9,835.0,0.0,1.0,,,1.0,0.0
+2014,189,Taylor Vancil,us USA,GK,Chicago Red Stars,22.0,1991.0,3,3,270.0,,,,,,
+2014,190,Courtney Verloo,us USA,"DF,FW",Western New York Flash,22.0,1991.0,1,0,1.0,0.0,0.0,,,0.0,0.0
+2014,191,Abby Wambach,us USA,FW,Western New York Flash,33.0,1980.0,10,10,835.0,6.0,4.0,,,1.0,0.0
+2014,192,Nikki Washington,us USA,"FW,MF",Boston Breakers,25.0,1988.0,15,10,939.0,1.0,0.0,,,1.0,0.0
+2014,193,Nikki Washington,us USA,"FW,MF",Houston Dash,25.0,1988.0,3,3,247.0,0.0,0.0,,,0.0,0.0
+2014,194,Michele Weissenhofer,us USA,FW,Chicago Red Stars,26.0,1987.0,1,0,14.0,0.0,0.0,,,0.0,0.0
+2014,195,Courtney Wetzel,us USA,"DF,MF",Western New York Flash,24.0,1989.0,8,0,122.0,0.0,0.0,,,0.0,0.0
+2014,196,Cat Whitehill,us USA,DF,Boston Breakers,31.0,1982.0,24,24,2101.0,0.0,1.0,,,1.0,0.0
+2014,197,Lydia Williams,au AUS,GK,Western New York Flash,25.0,1988.0,14,14,1183.0,,,,,,
+2014,198,Nia Williams,us USA,DF,FC Kansas City,23.0,1990.0,5,2,260.0,0.0,0.0,,,0.0,0.0
+2014,199,Kat Williamson,us USA,DF,Western New York Flash,24.0,1989.0,21,20,1699.0,0.0,0.0,,,2.0,0.0
+2014,200,Keelin Winters,us USA,MF,Seattle,25.0,1988.0,23,22,1963.0,3.0,0.0,,,5.0,0.0
+2014,201,Rachel Wood,us USA,"DF,MF",Boston Breakers,23.0,1990.0,7,7,585.0,1.0,1.0,,,0.0,0.0
+2014,202,Kelsey Wys,us USA,GK,Western New York Flash,22.0,1991.0,10,9,887.0,,,,,,
+2014,203,Beverly Yanez,us USA,"FW,MF",Seattle,25.0,1988.0,24,21,1736.0,5.0,4.0,,,1.0,0.0
+2014,204,McCall Zerboni,us USA,MF,Western New York Flash,27.0,1986.0,24,23,2036.0,3.0,2.0,,,2.0,0.0
+2015,1,Lady Andrade,co COL,"FW,MF",Western New York Flash,23.0,1992.0,6,4,328.0,1.0,0.0,,,0.0,0.0
+2015,2,Andressinha,br BRA,MF,Houston Dash,19.0,1995.0,7,7,630.0,0.0,0.0,,,0.0,0.0
+2015,3,Jordan Angeli,us USA,"DF,FW",Western New York Flash,28.0,1986.0,3,0,63.0,1.0,0.0,,,1.0,0.0
+2015,4,Nadine Angerer,de GER,GK,Portland Thorns FC,36.0,1978.0,6,6,540.0,,,,,,
+2015,5,Leigh Ann Brown,us USA,"DF,MF",FC Kansas City,28.0,1986.0,20,20,1800.0,1.0,3.0,,,0.0,0.0
+2015,6,Genoveva Añonma,gq EQG,"FW,MF",Portland Thorns FC,27.0,1987.0,12,8,759.0,1.0,1.0,,,1.0,0.0
+2015,7,Jazmyne Avant,us USA,DF,Houston Dash,25.0,1990.0,2,2,171.0,0.0,0.0,,,0.0,0.0
+2015,8,Yael Averbuch,us USA,MF,FC Kansas City,28.0,1986.0,18,13,1250.0,2.0,0.0,,,0.0,0.0
+2015,9,Rachael Axon,,MF,Houston Dash,29.0,1985.0,15,11,1004.0,1.0,0.0,,,0.0,0.0
+2015,10,Halimatu Ayinde,ng NGA,MF,Western New York Flash,19.0,1995.0,8,4,388.0,1.0,0.0,,,0.0,0.0
+2015,11,Allie Bailey,us USA,FW,Houston Dash,21.0,1993.0,7,0,126.0,1.0,0.0,,,0.0,0.0
+2015,12,Estefanía Banini,ar ARG,"FW,MF",Washington Spirit,24.0,1990.0,4,4,308.0,0.0,0.0,,,0.0,0.0
+2015,13,Amy Barczuk,us USA,DF,Boston Breakers,24.0,1990.0,20,18,1612.0,0.0,0.0,,,0.0,0.0
+2015,14,Lauren Barnes,us USA,DF,Seattle,25.0,1989.0,20,20,1800.0,1.0,1.0,,,1.0,0.0
+2015,15,Nicole Barnhart,us USA,GK,FC Kansas City,33.0,1981.0,17,17,1530.0,,,,,,
+2015,16,Kate Bennett,,MF,Portland Thorns FC,,,1,1,45.0,0.0,0.0,,,0.0,0.0
+2015,17,Michelle Betos,us USA,GK,Portland Thorns FC,26.0,1988.0,14,14,1260.0,,,,,,
+2015,18,Bia,br BRA,MF,Boston Breakers,29.0,1985.0,10,3,369.0,0.0,0.0,,,0.0,0.0
+2015,19,Aubrey Bledsoe,us USA,GK,Sky Blue FC,23.0,1991.0,1,0,8.0,,,,,,
+2015,20,Brittany Bock,us USA,MF,Houston Dash,27.0,1987.0,5,5,352.0,0.0,0.0,,,1.0,0.0
+2015,21,Liz Bogus,us USA,FW,FC Kansas City,30.0,1984.0,18,10,882.0,3.0,0.0,,,1.0,0.0
+2015,22,Shannon Boxx,us USA,MF,Chicago Red Stars,37.0,1977.0,4,2,231.0,0.0,0.0,,,0.0,0.0
+2015,23,Morgan Brian,us USA,MF,Houston Dash,21.0,1993.0,10,10,810.0,0.0,3.0,,,0.0,0.0
+2015,24,Amber Brooks,us USA,"DF,MF",Seattle,24.0,1991.0,12,4,429.0,1.0,0.0,,,0.0,0.0
+2015,25,Ellie Brush,au AUS,DF,Houston Dash,26.0,1988.0,15,14,1274.0,1.0,1.0,,,3.0,0.0
+2015,26,Jen Buczkowski,us USA,"DF,MF",FC Kansas City,29.0,1985.0,20,20,1781.0,1.0,2.0,,,1.0,0.0
+2015,27,Mariah Bullock,us USA,"DF,MF",Seattle,23.0,1991.0,13,4,441.0,0.0,0.0,,,0.0,0.0
+2015,28,Brittany Cameron,us USA,GK,Sky Blue FC,28.0,1986.0,20,20,1792.0,,,,,,
+2015,29,Camila,br BRA,DF,Houston Dash,20.0,1994.0,12,6,511.0,0.0,0.0,,,2.0,0.0
+2015,30,Steph Catley,au AUS,DF,Portland Thorns FC,21.0,1994.0,3,2,179.0,0.0,0.0,,,0.0,0.0
+2015,31,Lori Chalupny,us USA,MF,Chicago Red Stars,31.0,1984.0,11,11,944.0,1.0,3.0,,,1.0,0.0
+2015,32,Allysha Chapman,ca CAN,DF,Houston Dash,26.0,1989.0,5,4,376.0,0.0,0.0,,,0.0,0.0
+2015,33,Josephine Chukwunonye,ng NGA,DF,Washington Spirit,22.0,1992.0,2,1,55.0,0.0,0.0,,,0.0,0.0
+2015,34,Whitney Church,us USA,DF,Washington Spirit,21.0,1993.0,16,15,1364.0,0.0,0.0,,,0.0,0.0
+2015,35,Kaysie Clark,us USA,MF,FC Kansas City,22.0,1993.0,1,0,6.0,0.0,0.0,,,0.0,0.0
+2015,36,Danielle Colaprico,us USA,MF,Chicago Red Stars,21.0,1993.0,20,20,1776.0,1.0,0.0,,,3.0,0.0
+2015,37,Taylor Comeau,us USA,DF,Portland Thorns FC,21.0,1993.0,9,5,377.0,0.0,0.0,,,0.0,0.0
+2015,38,Rachel Corsie,sco SCO,DF,Seattle,25.0,1989.0,16,14,1273.0,2.0,0.0,,,1.0,0.0
+2015,39,Stephanie Cox,us USA,DF,Seattle,28.0,1986.0,20,20,1800.0,0.0,4.0,,,1.0,0.0
+2015,40,Niki Cross,us USA,DF,Houston Dash,29.0,1985.0,15,12,1148.0,0.0,1.0,,,1.0,0.0
+2015,41,Michelle Cruz,us USA,DF,Seattle,22.0,1992.0,1,0,9.0,0.0,0.0,,,0.0,0.0
+2015,42,Sabrina D'Angelo,ca CAN,GK,Western New York Flash,21.0,1993.0,7,7,555.0,,,,,,
+2015,43,Amanda DaCosta,pt POR,MF,Washington Spirit,25.0,1989.0,17,7,646.0,3.0,0.0,,,0.0,0.0
+2015,44,Abby Dahlkemper,us USA,MF,Western New York Flash,21.0,1993.0,20,20,1784.0,0.0,1.0,,,1.0,0.0
+2015,45,Kiersten Dallstream,us USA,"DF,FW",Seattle,26.0,1988.0,8,2,229.0,0.0,0.0,,,0.0,0.0
+2015,46,Michele Dalton,us USA,GK,Chicago Red Stars,26.0,1988.0,12,12,1080.0,,,,,,
+2015,47,Rafaela De Miranda Travalao,br BRA,MF,Boston Breakers,26.0,1988.0,13,8,790.0,0.0,1.0,,,0.0,0.0
+2015,48,Kim DeCesare,us USA,"FW,MF",Sky Blue FC,23.0,1991.0,9,4,395.0,0.0,0.0,,,1.0,0.0
+2015,49,Laura del Río,es ESP,FW,Washington Spirit,32.0,1982.0,11,8,698.0,0.0,2.0,,,1.0,0.0
+2015,50,Vanessa DiBernardo,us USA,MF,Chicago Red Stars,22.0,1992.0,20,19,1733.0,2.0,5.0,,,2.0,0.0
+2015,51,Theresa Diederich,us USA,MF,Sky Blue FC,22.0,1992.0,3,0,18.0,0.0,0.0,,,0.0,0.0
+2015,52,Crystal Dunn,us USA,"DF,MF",Washington Spirit,22.0,1992.0,20,19,1711.0,15.0,3.0,,,0.0,0.0
+2015,53,Caprice Dydasco,us USA,DF,Washington Spirit,21.0,1993.0,6,1,196.0,0.0,0.0,,,0.0,0.0
+2015,54,Elizabeth Eddy,us USA,MF,Western New York Flash,23.0,1991.0,15,4,664.0,3.0,2.0,,,0.0,0.0
+2015,55,Kristen Edmonds,us USA,DF,Western New York Flash,27.0,1987.0,11,10,850.0,0.0,1.0,,,1.0,0.0
+2015,56,Becky Edwards,us USA,"DF,MF",Western New York Flash,26.0,1988.0,20,20,1800.0,2.0,3.0,,,2.0,0.0
+2015,57,Whitney Engen,us USA,DF,Western New York Flash,27.0,1987.0,12,12,1080.0,0.0,0.0,,,0.0,0.0
+2015,58,Abby Erceg,nz NZL,"DF,FW",Chicago Red Stars,25.0,1989.0,14,12,1085.0,0.0,0.0,,,2.0,0.0
+2015,59,Julie Ertz,us USA,"DF,MF",Chicago Red Stars,22.0,1992.0,11,11,990.0,0.0,2.0,,,1.0,0.0
+2015,60,Maddy Evans,us USA,"DF,MF",Boston Breakers,23.0,1991.0,18,13,1150.0,2.0,0.0,,,2.0,0.0
+2015,61,Nkem Ezurike,ca CAN,FW,Boston Breakers,22.0,1992.0,12,3,417.0,1.0,1.0,,,1.0,0.0
+2015,62,Sinead Farrelly,us USA,MF,Portland Thorns FC,25.0,1989.0,19,19,1652.0,2.0,2.0,,,2.0,0.0
+2015,63,Jamia Fields,us USA,FW,Western New York Flash,21.0,1993.0,10,7,582.0,1.0,0.0,,,0.0,0.0
+2015,64,Jonelle Filigno,ca CAN,"FW,MF",Sky Blue FC,24.0,1990.0,5,1,98.0,0.0,0.0,,,0.0,0.0
+2015,65,Jess Fishlock,wal WAL,MF,Seattle,28.0,1987.0,19,19,1699.0,8.0,3.0,,,0.0,1.0
+2015,66,Kendall Fletcher,us USA,"DF,MF",Seattle,30.0,1984.0,19,19,1704.0,2.0,1.0,,,0.0,0.0
+2015,67,Caitlin Foord,au AUS,"DF,FW",Sky Blue FC,20.0,1994.0,10,10,895.0,0.0,0.0,,,1.0,0.0
+2015,68,Danielle Foxhoven,us USA,"FW,MF",Seattle,25.0,1989.0,16,2,359.0,0.0,1.0,,,1.0,0.0
+2015,69,Katy Freels,us USA,MF,Sky Blue FC,24.0,1990.0,20,20,1754.0,5.0,2.0,,,1.0,0.0
+2015,70,Amanda Frisbie,us USA,DF,Western New York Flash,22.0,1992.0,4,2,169.0,1.0,0.0,,,0.0,0.0
+2015,71,CoCo Goodson,us USA,DF,Sky Blue FC,24.0,1990.0,3,0,47.0,0.0,0.0,,,0.0,0.0
+2015,72,Shawna Gordon,us USA,MF,Sky Blue FC,25.0,1990.0,13,10,768.0,0.0,0.0,,,0.0,0.0
+2015,73,Shea Groom,us USA,FW,FC Kansas City,21.0,1993.0,13,9,788.0,4.0,2.0,,,4.0,0.0
+2015,74,Kristin Grubka,us USA,DF,Sky Blue FC,22.0,1992.0,14,14,1214.0,0.0,1.0,,,1.0,0.0
+2015,75,Sarah Hagen,us USA,FW,FC Kansas City,25.0,1989.0,17,11,994.0,4.0,2.0,,,2.0,0.0
+2015,76,Kristen Hamilton,us USA,FW,Western New York Flash,22.0,1992.0,11,3,313.0,0.0,0.0,,,0.0,0.0
+2015,77,Ashlyn Harris,us USA,GK,Washington Spirit,29.0,1985.0,9,9,810.0,,,,,,
+2015,78,Kelsey Haycook,us USA,FW,Portland Thorns FC,21.0,1993.0,4,1,81.0,0.0,0.0,,,0.0,0.0
+2015,79,Maya Hayes,us USA,FW,Sky Blue FC,22.0,1992.0,13,10,899.0,0.0,1.0,,,0.0,0.0
+2015,80,Tobin Heath,us USA,MF,Portland Thorns FC,26.0,1988.0,12,12,1062.0,1.0,1.0,,,0.0,0.0
+2015,81,Taryn Hemmings,us USA,DF,Chicago Red Stars,28.0,1986.0,18,17,1528.0,1.0,1.0,,,1.0,0.0
+2015,82,Melissa Henderson,us USA,"FW,MF",Houston Dash,25.0,1989.0,20,14,1123.0,0.0,2.0,,,0.0,0.0
+2015,83,Bianca Henninger,us USA,GK,Houston Dash,24.0,1990.0,10,9,868.0,,,,,,
+2015,84,Michelle Heyman,au AUS,FW,Western New York Flash,26.0,1988.0,9,9,798.0,1.0,1.0,,,0.0,0.0
+2015,85,Jaelene Hinkle,us USA,DF,Western New York Flash,21.0,1993.0,20,20,1800.0,1.0,1.0,,,0.0,0.0
+2015,86,Lauren Holiday,us USA,"FW,MF",FC Kansas City,27.0,1987.0,9,9,757.0,2.0,2.0,,,0.0,0.0
+2015,87,Riley Houle,,MF,Boston Breakers,,,1,0,19.0,0.0,0.0,,,0.0,0.0
+2015,88,Jen Hoy,us USA,"FW,MF",Chicago Red Stars,24.0,1991.0,18,14,1110.0,4.0,4.0,,,0.0,0.0
+2015,89,Sofia Huerta,mx MEX,FW,Chicago Red Stars,22.0,1992.0,19,15,1343.0,6.0,3.0,,,0.0,0.0
+2015,90,Tori Huster,us USA,MF,Washington Spirit,25.0,1989.0,17,13,1177.0,0.0,0.0,,,3.0,0.0
+2015,91,Jordan Jackson,us USA,MF,Houston Dash,24.0,1990.0,9,3,334.0,0.0,0.0,,,0.0,0.0
+2015,92,Sarah Jackson,us USA,FW,Portland Thorns FC,23.0,1991.0,7,2,201.0,0.0,0.0,,,1.0,0.0
+2015,93,Leigh Jakes,us USA,DF,Chicago Red Stars,26.0,1988.0,1,0,7.0,0.0,0.0,,,0.0,0.0
+2015,94,Chanel Johnson,,MF,Boston Breakers,21.0,1993.0,1,0,14.0,0.0,0.0,,,0.0,0.0
+2015,95,Estelle Johnson,cm CMR,DF,Washington Spirit,26.0,1988.0,19,18,1685.0,0.0,0.0,,,3.0,0.0
+2015,96,Kendall Johnson,us USA,"DF,MF",Portland Thorns FC,23.0,1991.0,17,12,1218.0,0.0,1.0,,,2.0,0.0
+2015,97,Samantha Johnson,us USA,"DF,MF",Chicago Red Stars,23.0,1991.0,14,13,1215.0,0.0,0.0,,,3.0,0.0
+2015,98,Chantel Jones,us USA,GK,Western New York Flash,26.0,1988.0,13,12,1155.0,,,,,,
+2015,99,Robyn Jones,us USA,GK,Western New York Flash,30.0,1985.0,1,1,90.0,,,,,,
+2015,100,Kassey Kallman,us USA,DF,Boston Breakers,22.0,1992.0,20,20,1800.0,0.0,0.0,,,1.0,0.0
+2015,101,Caroline Kastor,us USA,FW,FC Kansas City,23.0,1991.0,8,1,161.0,0.0,0.0,,,0.0,0.0
+2015,102,Sam Kerr,au AUS,"FW,MF",Sky Blue FC,21.0,1993.0,9,9,766.0,6.0,2.0,,,0.0,0.0
+2015,103,Sarah Killion,us USA,MF,Sky Blue FC,22.0,1992.0,17,13,1233.0,0.0,1.0,,,3.0,0.0
+2015,104,Julie King,us USA,DF,Boston Breakers,25.0,1989.0,18,18,1580.0,2.0,0.0,,,3.0,1.0
+2015,105,Alyssa Kleiner,us USA,DF,Portland Thorns FC,21.0,1993.0,8,4,418.0,0.0,1.0,,,0.0,0.0
+2015,106,Meghan Klingenberg,us USA,"DF,MF",Houston Dash,26.0,1988.0,12,12,1046.0,0.0,2.0,,,0.0,0.0
+2015,107,Brittany Kolmel,us USA,DF,Western New York Flash,27.0,1987.0,18,18,1620.0,0.0,0.0,,,2.0,0.0
+2015,108,Haley Kopmeyer,us USA,GK,Seattle,24.0,1990.0,11,11,990.0,,,,,,
+2015,109,Jami Kranich,us USA,GK,Boston Breakers,22.0,1992.0,8,8,720.0,,,,,,
+2015,110,Ali Krieger,us USA,"DF,MF",Washington Spirit,30.0,1984.0,8,8,655.0,0.0,0.0,,,0.0,0.0
+2015,111,Camilla Kur Larsen,dk DEN,FW,Western New York Flash,25.0,1989.0,3,1,57.0,0.0,0.0,,,0.0,0.0
+2015,112,Kaylyn Kyle,ca CAN,MF,Portland Thorns FC,26.0,1988.0,12,6,587.0,0.0,0.0,,,1.0,0.0
+2015,113,Lo'eau LaBonta,us USA,MF,Sky Blue FC,21.0,1993.0,6,0,80.0,0.0,0.0,,,0.0,0.0
+2015,114,Mandy Laddish,us USA,MF,FC Kansas City,22.0,1992.0,16,13,1180.0,1.0,3.0,,,0.0,0.0
+2015,115,Jen LaPonte,us USA,DF,Houston Dash,25.0,1989.0,6,3,315.0,0.0,0.0,,,0.0,0.0
+2015,116,Lauren Lazo,us USA,DF,Boston Breakers,21.0,1993.0,14,11,1025.0,1.0,0.0,,,0.0,0.0
+2015,117,Karina LeBlanc,ca CAN,GK,Chicago Red Stars,34.0,1980.0,8,8,720.0,,,,,,
+2015,118,Adriana Leon,ca CAN,"FW,MF",Chicago Red Stars,22.0,1992.0,5,4,277.0,1.0,0.0,,,1.0,0.0
+2015,119,Amy LePeilbet,us USA,DF,FC Kansas City,32.0,1982.0,20,20,1800.0,2.0,0.0,,,1.0,0.0
+2015,120,Sydney Leroux,us USA,FW,Western New York Flash,24.0,1990.0,3,3,269.0,1.0,0.0,,,0.0,0.0
+2015,121,Camille Levin,us USA,DF,Sky Blue FC,24.0,1990.0,19,18,1605.0,0.0,1.0,,,0.0,1.0
+2015,122,Meghan Lisenby,us USA,DF,FC Kansas City,22.0,1992.0,5,0,14.0,0.0,0.0,,,0.0,0.0
+2015,123,Lindsi Lisonbee-Cutshall,us USA,DF,Sky Blue FC,24.0,1990.0,18,18,1571.0,0.0,0.0,,,0.0,0.0
+2015,124,Kim Little,sco SCO,"FW,MF",Seattle,24.0,1990.0,20,20,1784.0,10.0,7.0,,,2.0,0.0
+2015,125,Carli Lloyd,us USA,MF,Houston Dash,32.0,1982.0,12,12,1080.0,4.0,0.0,,,0.0,0.0
+2015,126,Joanna Lohman,us USA,"DF,MF",Washington Spirit,32.0,1982.0,17,15,1216.0,1.0,0.0,,,0.0,0.0
+2015,127,Michelle Lomnicki,us USA,DF,Chicago Red Stars,27.0,1987.0,12,7,614.0,0.0,1.0,,,2.0,0.0
+2015,128,Allie Long,us USA,MF,Portland Thorns FC,27.0,1987.0,20,20,1793.0,10.0,4.0,,,3.0,0.0
+2015,129,Mary Luba,us USA,MF,Chicago Red Stars,21.0,1993.0,3,0,40.0,0.0,0.0,,,0.0,0.0
+2015,130,Taylor Lytle,us USA,MF,Sky Blue FC,25.0,1989.0,15,11,962.0,0.0,1.0,,,1.0,0.0
+2015,131,Morgan Marlborough,us USA,FW,Boston Breakers,24.0,1990.0,16,8,677.0,3.0,0.0,,,1.0,0.0
+2015,132,Ella Masar,us USA,FW,Houston Dash,28.0,1986.0,19,18,1606.0,2.0,0.0,,,6.0,0.0
+2015,133,Diana Matheson,ca CAN,MF,Washington Spirit,30.0,1984.0,9,7,633.0,3.0,2.0,,,2.0,0.0
+2015,134,Merritt Mathias,us USA,"DF,MF",Seattle,24.0,1990.0,18,17,1327.0,2.0,2.0,,,1.0,0.0
+2015,135,Alyssa Mautz,us USA,"FW,MF",Chicago Red Stars,25.0,1989.0,15,13,1076.0,2.0,3.0,,,0.0,0.0
+2015,136,Stephanie McCaffrey,us USA,FW,Boston Breakers,21.0,1993.0,19,17,1418.0,3.0,3.0,,,1.0,0.0
+2015,137,Hayley McCall,us USA,DF,Sky Blue FC,22.0,1992.0,16,15,1339.0,1.0,1.0,,,2.0,0.0
+2015,138,Tiffany McCarty,us USA,FW,Houston Dash,24.0,1990.0,17,7,741.0,1.0,0.0,,,0.0,0.0
+2015,139,Kelley McCloskey,,DF,Chicago Red Stars,23.0,1991.0,1,0,3.0,0.0,0.0,,,0.0,0.0
+2015,140,Jessica McDonald,us USA,FW,Houston Dash,26.0,1988.0,20,19,1675.0,7.0,1.0,,,0.0,0.0
+2015,141,Erin McLeod,ca CAN,GK,Houston Dash,31.0,1983.0,11,11,932.0,,,,,,
+2015,142,Emily Menges,us USA,DF,Portland Thorns FC,22.0,1992.0,17,17,1529.0,0.0,0.0,,,1.0,0.0
+2015,143,Kristie Mewis,us USA,"DF,MF",Boston Breakers,23.0,1991.0,20,20,1785.0,6.0,2.0,,,0.0,0.0
+2015,144,Sam Mewis,us USA,MF,Western New York Flash,22.0,1992.0,20,20,1685.0,4.0,4.0,,,2.0,0.0
+2015,145,Caroline Miller,us USA,FW,Washington Spirit,23.0,1991.0,2,0,5.0,0.0,0.0,,,0.0,0.0
+2015,146,Alex Morgan,us USA,FW,Portland Thorns FC,25.0,1989.0,4,3,285.0,1.0,2.0,,,1.0,0.0
+2015,147,Rebecca Moros,us USA,"DF,MF",FC Kansas City,29.0,1985.0,20,20,1730.0,0.0,1.0,,,1.0,0.0
+2015,148,Meg Morris,us USA,MF,Sky Blue FC,22.0,1992.0,9,4,453.0,0.0,1.0,,,0.0,0.0
+2015,149,Nadia Nadim,dk DEN,FW,Sky Blue FC,27.0,1988.0,18,18,1551.0,6.0,1.0,,,2.0,0.0
+2015,150,Alyssa Naeher,us USA,GK,Boston Breakers,26.0,1988.0,12,12,1080.0,,,,,,
+2015,151,Christine Nairn,us USA,MF,Washington Spirit,24.0,1990.0,20,19,1701.0,5.0,4.0,,,2.0,0.0
+2015,152,Ajara Nchout,cm CMR,FW,Western New York Flash,22.0,1993.0,7,1,128.0,0.0,0.0,,,0.0,0.0
+2015,153,Ashley Nick,us USA,MF,Houston Dash,27.0,1987.0,3,2,182.0,0.0,0.0,,,0.0,0.0
+2015,154,Ashley Nick,us USA,MF,Western New York Flash,27.0,1987.0,13,7,610.0,0.0,1.0,,,0.0,0.0
+2015,155,Courtney Niemiec,us USA,DF,Portland Thorns FC,22.0,1992.0,4,3,273.0,0.0,0.0,,,0.0,0.0
+2015,156,Kelley O'Hara,us USA,"DF,FW",Sky Blue FC,26.0,1988.0,11,11,989.0,3.0,5.0,,,1.0,0.0
+2015,157,Heather O'Reilly,us USA,"FW,MF",FC Kansas City,30.0,1985.0,11,11,928.0,2.0,3.0,,,0.0,0.0
+2015,158,Stephanie Ochs,us USA,FW,Houston Dash,24.0,1990.0,3,2,154.0,0.0,0.0,,,0.0,0.0
+2015,159,Kealia Ohai,us USA,"FW,MF",Houston Dash,23.0,1992.0,19,19,1692.0,4.0,5.0,,,0.0,0.0
+2015,160,Ngozi Okobi,ng NGA,FW,Washington Spirit,21.0,1993.0,4,0,67.0,0.0,0.0,,,1.0,0.0
+2015,161,Francisca Ordega,ng NGA,"FW,MF",Washington Spirit,21.0,1993.0,13,11,996.0,3.0,2.0,,,0.0,0.0
+2015,162,Megan Oyster,us USA,DF,Washington Spirit,22.0,1992.0,20,20,1800.0,1.0,0.0,,,3.0,0.0
+2015,163,Mollie Pathman,us USA,"FW,MF",Boston Breakers,22.0,1992.0,20,20,1800.0,0.0,0.0,,,2.0,0.0
+2015,164,Christie Pearce,us USA,DF,Sky Blue FC,39.0,1975.0,11,11,962.0,1.0,0.0,,,0.0,0.0
+2015,165,Suzane Pires,pt POR,MF,Boston Breakers,22.0,1992.0,12,6,447.0,0.0,1.0,,,2.0,0.0
+2015,166,Clare Polkinghorne,au AUS,DF,Portland Thorns FC,25.0,1989.0,9,9,779.0,0.0,0.0,,,0.0,0.0
+2015,167,Shade Pratt,us USA,DF,Sky Blue FC,21.0,1993.0,1,0,20.0,0.0,0.0,,,0.0,0.0
+2015,168,Christen Press,us USA,FW,Chicago Red Stars,26.0,1988.0,11,10,931.0,10.0,2.0,,,0.0,0.0
+2015,169,Toni Pressley,us USA,DF,Houston Dash,24.0,1990.0,15,15,1306.0,0.0,0.0,,,1.0,0.0
+2015,170,Toni Pressley,us USA,DF,Western New York Flash,24.0,1990.0,1,1,90.0,0.0,0.0,,,0.0,0.0
+2015,171,Cami Privett,us USA,MF,Houston Dash,21.0,1993.0,4,2,205.0,0.0,0.0,,,0.0,0.0
+2015,172,Rachel Quon,ca CAN,DF,Chicago Red Stars,23.0,1991.0,17,12,1046.0,0.0,0.0,,,1.0,0.0
+2015,173,Megan Rapinoe,us USA,"FW,MF",Seattle,29.0,1985.0,10,10,824.0,5.0,5.0,,,0.0,0.0
+2015,174,Hayley Raso,au AUS,"FW,MF",Washington Spirit,20.0,1994.0,8,1,182.0,0.0,0.0,,,1.0,0.0
+2015,175,Elli Reed,us USA,"DF,MF",Seattle,25.0,1989.0,18,9,912.0,0.0,1.0,,,0.0,0.0
+2015,176,Katherine Reynolds,us USA,DF,Washington Spirit,27.0,1987.0,18,18,1611.0,0.0,0.0,,,1.0,0.0
+2015,177,Sarah Robbins,ca CAN,MF,Portland Thorns FC,22.0,1992.0,1,0,2.0,0.0,0.0,,,0.0,0.0
+2015,178,Stephanie Roche,ie IRL,FW,Houston Dash,25.0,1989.0,2,0,24.0,0.0,0.0,,,1.0,0.0
+2015,179,Amy Rodriguez,us USA,"FW,MF",FC Kansas City,27.0,1987.0,11,11,956.0,6.0,4.0,,,0.0,0.0
+2015,180,Katelyn Rowland,us USA,GK,FC Kansas City,20.0,1994.0,3,3,270.0,,,,,,
+2015,181,Angela Salem,us USA,MF,Washington Spirit,26.0,1988.0,15,12,981.0,0.0,1.0,,,2.0,0.0
+2015,182,Lianne Sanderson,eng ENG,FW,Portland Thorns FC,26.0,1988.0,5,2,275.0,0.0,1.0,,,0.0,0.0
+2015,183,Becky Sauerbrunn,us USA,DF,FC Kansas City,29.0,1985.0,11,11,990.0,0.0,0.0,,,1.0,0.0
+2015,184,Katie Schoepfer,us USA,FW,Boston Breakers,26.0,1988.0,19,17,1421.0,0.0,2.0,,,2.0,0.0
+2015,185,Lauren Sesselmann,ca CAN,"DF,FW",Houston Dash,31.0,1983.0,1,1,45.0,0.0,0.0,,,0.0,0.0
+2015,186,Meleana Shim,us USA,MF,Portland Thorns FC,23.0,1991.0,18,13,1127.0,4.0,4.0,,,0.0,0.0
+2015,187,Frances Silva,us USA,"FW,MF",FC Kansas City,22.0,1992.0,15,3,437.0,0.0,3.0,,,1.0,0.0
+2015,188,Kyah Simon,au AUS,FW,Boston Breakers,23.0,1991.0,7,7,630.0,2.0,0.0,,,1.0,0.0
+2015,189,Christine Sinclair,ca CAN,"FW,MF",Portland Thorns FC,31.0,1983.0,9,8,735.0,2.0,2.0,,,0.0,0.0
+2015,190,Alex Singer,us USA,DF,Washington Spirit,27.0,1987.0,5,3,274.0,0.0,0.0,,,0.0,0.0
+2015,191,Jennifer Skogerboe,us USA,MF,Washington Spirit,22.0,1992.0,1,0,1.0,0.0,0.0,,,0.0,0.0
+2015,192,Hope Solo,us USA,GK,Seattle,33.0,1981.0,8,8,720.0,,,,,,
+2015,193,Jasmyne Spencer,us USA,FW,Western New York Flash,24.0,1990.0,20,19,1596.0,3.0,1.0,,,1.0,0.0
+2015,194,Caroline Stanley,us USA,GK,Seattle,21.0,1993.0,1,1,90.0,,,,,,
+2015,195,Nikki Stanton,us USA,MF,Sky Blue FC,24.0,1990.0,9,3,352.0,0.0,0.0,,,1.0,0.0
+2015,196,Chelsea Stewart,ca CAN,MF,Western New York Flash,24.0,1990.0,3,2,150.0,0.0,0.0,,,0.0,0.0
+2015,197,Melissa Tancredi,ca CAN,FW,Chicago Red Stars,33.0,1981.0,8,2,246.0,2.0,0.0,,,0.0,0.0
+2015,198,Jodie Taylor,eng ENG,FW,Portland Thorns FC,28.0,1986.0,7,5,385.0,3.0,0.0,,,0.0,0.0
+2015,199,Rachel Tejada,,MF,Chicago Red Stars,21.0,1993.0,2,0,16.0,0.0,0.0,,,0.0,0.0
+2015,200,Hanna Terry,us USA,FW,Portland Thorns FC,24.0,1990.0,6,0,130.0,0.0,0.0,,,1.0,0.0
+2015,201,Erika Tymrak,us USA,"FW,MF",FC Kansas City,23.0,1991.0,19,18,1546.0,3.0,1.0,,,0.0,0.0
+2015,202,Rachel Van Hollebeke,us USA,DF,Portland Thorns FC,29.0,1985.0,13,10,879.0,0.0,0.0,,,1.0,0.0
+2015,203,Katrine Veje,dk DEN,MF,Seattle,23.0,1991.0,9,4,419.0,0.0,0.0,,,1.0,0.0
+2015,204,Stephanie Verdoia,us USA,MF,Boston Breakers,22.0,1993.0,8,1,186.0,0.0,0.0,,,0.0,0.0
+2015,205,Maruschka Waldus,nl NED,DF,Sky Blue FC,22.0,1992.0,1,0,8.0,0.0,0.0,,,0.0,0.0
+2015,206,Cara Walls,us USA,FW,Chicago Red Stars,21.0,1993.0,10,1,256.0,1.0,1.0,,,0.0,0.0
+2015,207,Tiffany Weimer,us USA,FW,Washington Spirit,31.0,1983.0,4,0,38.0,0.0,0.0,,,0.0,0.0
+2015,208,Cat Whitehill,us USA,DF,Boston Breakers,32.0,1982.0,1,1,90.0,0.0,0.0,,,0.0,0.0
+2015,209,Ketlen Wiggers,br BRA,FW,Boston Breakers,23.0,1992.0,1,1,61.0,0.0,0.0,,,0.0,0.0
+2015,210,Rhian Wilkinson,ca CAN,"DF,FW",Portland Thorns FC,32.0,1982.0,1,0,45.0,0.0,0.0,,,1.0,0.0
+2015,211,Carleigh Williams,us USA,DF,Houston Dash,22.0,1992.0,2,1,151.0,0.0,0.0,,,0.0,0.0
+2015,212,Lynn Williams,us USA,FW,Western New York Flash,21.0,1993.0,17,13,1176.0,4.0,4.0,,,1.0,0.0
+2015,213,Kat Williamson,us USA,DF,Portland Thorns FC,25.0,1989.0,20,20,1705.0,0.0,1.0,,,4.0,0.0
+2015,214,Keelin Winters,us USA,MF,Seattle,26.0,1988.0,19,19,1654.0,1.0,0.0,,,1.0,0.0
+2015,215,Rachel Wood,us USA,"DF,MF",Boston Breakers,24.0,1990.0,10,8,701.0,0.0,0.0,,,0.0,0.0
+2015,216,Arin Wright,us USA,DF,Chicago Red Stars,22.0,1992.0,19,17,1533.0,0.0,2.0,,,0.0,0.0
+2015,217,Kelsey Wys,us USA,GK,Washington Spirit,23.0,1991.0,11,11,990.0,,,,,,
+2015,218,Beverly Yanez,us USA,"FW,MF",Seattle,26.0,1988.0,17,17,1337.0,9.0,1.0,,,0.0,0.0
+2015,219,McCall Zerboni,us USA,MF,Portland Thorns FC,28.0,1986.0,18,18,1459.0,2.0,0.0,,,2.0,1.0
+2016,1,Laura Alleway,au AUS,DF,Orlando Pride,26.0,1989.0,11,9,783.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,2,Lady Andrade,co COL,"FW,MF",Western New York Flash,24.0,1992.0,2,0,52.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,3,Andressinha,br BRA,MF,Houston Dash,20.0,1995.0,15,15,1297.0,1.0,1.0,0.0,0.0,1.0,0.0
+2016,4,Alex Arlitt,us USA,DF,FC Kansas City,22.0,1993.0,11,8,712.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,5,Yael Averbuch,us USA,MF,FC Kansas City,29.0,1986.0,20,20,1788.0,3.0,0.0,1.0,1.0,1.0,0.0
+2016,6,Halimatu Ayinde,ng NGA,MF,Western New York Flash,20.0,1995.0,1,1,45.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,7,Estefanía Banini,ar ARG,"FW,MF",Washington Spirit,25.0,1990.0,13,9,887.0,5.0,1.0,0.0,0.0,0.0,0.0
+2016,8,Lauren Barnes,us USA,DF,Seattle,26.0,1989.0,20,20,1776.0,1.0,2.0,0.0,0.0,1.0,0.0
+2016,9,Nicole Barnhart,us USA,GK,FC Kansas City,34.0,1981.0,20,20,1800.0,,,,,0.0,0.0
+2016,10,Janine Beckie,ca CAN,FW,Houston Dash,21.0,1994.0,14,11,917.0,3.0,2.0,0.0,0.0,0.0,0.0
+2016,11,Eunice Beckmann,de GER,FW,Boston Breakers,23.0,1992.0,11,8,658.0,0.0,1.0,0.0,0.0,3.0,0.0
+2016,12,Josée Bélanger,ca CAN,FW,Orlando Pride,29.0,1986.0,14,14,1082.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,13,McKenzie Berryhill,us USA,DF,Portland Thorns FC,22.0,1993.0,5,2,182.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,14,Michelle Betos,us USA,GK,Portland Thorns FC,27.0,1988.0,14,14,1260.0,,,,,1.0,0.0
+2016,15,Aubrey Bledsoe,us USA,GK,Orlando Pride,24.0,1991.0,1,1,90.0,,,,,0.0,0.0
+2016,16,Celeste Boureille,us USA,MF,Portland Thorns FC,21.0,1994.0,6,5,466.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,17,Katie Bowen,nz NZL,"DF,MF",FC Kansas City,21.0,1994.0,13,11,959.0,0.0,1.0,0.0,0.0,0.0,0.0
+2016,18,Morgan Brian,us USA,MF,Houston Dash,22.0,1993.0,13,13,1005.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,19,Amber Brooks,us USA,"DF,MF",Houston Dash,25.0,1991.0,19,11,1085.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,20,Ellie Brush,au AUS,DF,Houston Dash,27.0,1988.0,15,15,1336.0,0.0,0.0,0.0,0.0,4.0,0.0
+2016,21,Dagný Brynjarsdóttir,is ISL,MF,Portland Thorns FC,24.0,1991.0,17,12,1072.0,5.0,0.0,0.0,0.0,1.0,0.0
+2016,22,Jen Buczkowski,us USA,"DF,MF",FC Kansas City,30.0,1985.0,5,5,426.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,23,Christina Burkenroad,us USA,MF,Orlando Pride,22.0,1993.0,7,2,252.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,24,Caroline Casey,us USA,GK,Sky Blue FC,21.0,1994.0,10,9,860.0,,,,,0.0,0.0
+2016,25,Steph Catley,au AUS,DF,Orlando Pride,22.0,1994.0,11,11,990.0,1.0,1.0,0.0,0.0,0.0,0.0
+2016,26,Janice Cayman,be BEL,"FW,MF",Western New York Flash,27.0,1988.0,3,1,96.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,27,Allysha Chapman,ca CAN,DF,Houston Dash,27.0,1989.0,9,8,711.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,28,Whitney Church,us USA,DF,Washington Spirit,22.0,1993.0,11,7,612.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,29,Danielle Colaprico,us USA,MF,Chicago Red Stars,22.0,1993.0,20,20,1784.0,0.0,2.0,0.0,0.0,0.0,0.0
+2016,30,Taylor Comeau,us USA,DF,Chicago Red Stars,22.0,1993.0,16,6,667.0,1.0,1.0,0.0,0.0,0.0,0.0
+2016,31,Kelly Conheeney,us USA,MF,Sky Blue FC,25.0,1991.0,13,6,588.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,32,Rachel Corsie,sco SCO,DF,Seattle,26.0,1989.0,12,11,1005.0,1.0,0.0,0.0,0.0,3.0,0.0
+2016,33,Megan Crosson,,DF,Houston Dash,21.0,1994.0,4,1,115.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,34,Michelle Cruz,us USA,DF,Seattle,23.0,1992.0,4,0,46.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,35,Sabrina D'Angelo,ca CAN,GK,Western New York Flash,22.0,1993.0,11,11,990.0,,,,,0.0,0.0
+2016,36,Amanda DaCosta,pt POR,MF,Chicago Red Stars,26.0,1989.0,13,8,664.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,37,Abby Dahlkemper,us USA,MF,Western New York Flash,22.0,1993.0,20,20,1800.0,2.0,1.0,2.0,2.0,2.0,0.0
+2016,38,Kiersten Dallstream,us USA,"DF,FW",Seattle,27.0,1988.0,12,2,274.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,39,Michele Dalton,us USA,GK,Chicago Red Stars,27.0,1988.0,7,7,630.0,,,,,0.0,0.0
+2016,40,Rachel Daly,eng ENG,FW,Houston Dash,24.0,1991.0,16,12,1186.0,4.0,3.0,0.0,0.0,2.0,0.0
+2016,41,Lisa De Vanna,au AUS,FW,Orlando Pride,31.0,1984.0,3,2,153.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,42,Kim DeCesare,us USA,"FW,MF",Sky Blue FC,24.0,1991.0,6,3,244.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,43,Vanessa DiBernardo,us USA,MF,Chicago Red Stars,23.0,1992.0,20,20,1785.0,0.0,6.0,0.0,0.0,0.0,0.0
+2016,44,Makenzy Doniak,us USA,FW,Western New York Flash,21.0,1994.0,20,15,1141.0,3.0,4.0,0.0,0.0,1.0,0.0
+2016,45,Natasha Dowie,eng ENG,FW,Boston Breakers,27.0,1988.0,7,7,605.0,3.0,0.0,0.0,0.0,1.0,0.0
+2016,46,Crystal Dunn,us USA,"DF,MF",Washington Spirit,23.0,1992.0,13,12,1140.0,2.0,5.0,0.0,0.0,0.0,0.0
+2016,47,Caprice Dydasco,us USA,DF,Washington Spirit,22.0,1993.0,12,12,1080.0,0.0,2.0,0.0,0.0,1.0,0.0
+2016,48,Britt Eckerstrom,us USA,GK,Western New York Flash,22.0,1993.0,3,3,270.0,,,,,0.0,0.0
+2016,49,Elizabeth Eddy,us USA,MF,Western New York Flash,24.0,1991.0,20,20,1753.0,0.0,2.0,0.0,0.0,3.0,0.0
+2016,50,Kristen Edmonds,us USA,DF,Orlando Pride,28.0,1987.0,19,19,1701.0,6.0,2.0,0.0,0.0,1.0,0.0
+2016,51,Becky Edwards,us USA,"DF,MF",Orlando Pride,27.0,1988.0,16,10,806.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,52,Brooke Elby,us USA,MF,Boston Breakers,22.0,1993.0,13,11,917.0,0.0,0.0,0.0,0.0,0.0,1.0
+2016,53,Lindsay Elston,us USA,"FW,MF",Seattle,23.0,1992.0,12,0,157.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,54,Whitney Engen,us USA,DF,Boston Breakers,28.0,1987.0,14,14,1260.0,1.0,1.0,0.0,0.0,2.0,0.0
+2016,55,Abby Erceg,nz NZL,"DF,FW",Western New York Flash,26.0,1989.0,17,16,1474.0,2.0,1.0,0.0,0.0,0.0,1.0
+2016,56,Julie Ertz,us USA,"DF,MF",Chicago Red Stars,23.0,1992.0,12,12,1080.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,57,Maddy Evans,us USA,"DF,MF",Orlando Pride,24.0,1991.0,16,12,1111.0,0.0,1.0,0.0,0.0,2.0,0.0
+2016,58,Cali Farquharson,us USA,FW,Washington Spirit,22.0,1993.0,16,8,559.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,59,Jamia Fields,us USA,FW,Orlando Pride,22.0,1993.0,12,6,627.0,0.0,1.0,0.0,0.0,0.0,0.0
+2016,60,Jess Fishlock,wal WAL,MF,Seattle,29.0,1987.0,16,16,1390.0,1.0,4.0,0.0,0.0,4.0,0.0
+2016,61,Maureen Fitzgerald,us USA,MF,Portland Thorns FC,2016.0,0.0,3,2,134.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,62,Kendall Fletcher,us USA,"DF,MF",Seattle,31.0,1984.0,20,20,1755.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,63,Tessa Florio-Gavilsky,us USA,FW,Houston Dash,26.0,1989.0,3,0,54.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,64,Leah Fortune,br BRA,"DF,MF",Orlando Pride,25.0,1990.0,3,0,44.0,0.0,1.0,0.0,0.0,0.0,0.0
+2016,65,Adrianna Franch,us USA,GK,Portland Thorns FC,25.0,1990.0,6,6,540.0,,,,,0.0,0.0
+2016,66,Amanda Frisbie,us USA,DF,FC Kansas City,23.0,1992.0,3,3,270.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,67,Jeon Ga-eul,kr KOR,FW,Western New York Flash,27.0,1988.0,2,1,86.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,68,Leah Galton,eng ENG,FW,Sky Blue FC,21.0,1994.0,14,10,1022.0,3.0,4.0,0.0,0.0,1.0,0.0
+2016,69,CoCo Goodson,us USA,DF,Sky Blue FC,25.0,1990.0,1,0,8.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,70,Sarah Gorden,us USA,DF,Chicago Red Stars,23.0,1992.0,4,0,110.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,71,Shawna Gordon,us USA,MF,Sky Blue FC,26.0,1990.0,11,5,444.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,72,Shea Groom,us USA,FW,FC Kansas City,22.0,1993.0,19,19,1660.0,8.0,0.0,0.0,1.0,1.0,1.0
+2016,73,Kristin Grubka,us USA,DF,Sky Blue FC,23.0,1992.0,15,14,1267.0,0.0,1.0,0.0,0.0,2.0,0.0
+2016,74,Sarah Hagen,us USA,FW,Orlando Pride,26.0,1989.0,17,8,588.0,2.0,2.0,0.0,0.0,0.0,0.0
+2016,75,Michaela Hahn,us USA,MF,Western New York Flash,21.0,1994.0,13,8,659.0,1.0,1.0,0.0,0.0,2.0,0.0
+2016,76,Kristen Hamilton,us USA,FW,Western New York Flash,23.0,1992.0,12,0,126.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,77,Ashlyn Harris,us USA,GK,Orlando Pride,30.0,1985.0,15,15,1350.0,,,,,0.0,0.0
+2016,78,Maya Hayes,us USA,FW,Sky Blue FC,23.0,1992.0,16,8,749.0,3.0,0.0,0.0,0.0,0.0,0.0
+2016,79,Caity Heap,,MF,Houston Dash,21.0,1994.0,6,2,127.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,80,Tobin Heath,us USA,MF,Portland Thorns FC,27.0,1988.0,14,13,1159.0,1.0,10.0,0.0,0.0,1.0,1.0
+2016,81,Melissa Henderson,us USA,"FW,MF",Houston Dash,26.0,1989.0,7,4,321.0,0.0,1.0,0.0,0.0,0.0,0.0
+2016,82,Bianca Henninger,us USA,GK,Houston Dash,25.0,1990.0,5,5,450.0,,,,,0.0,0.0
+2016,83,Amandine Henry,fr FRA,MF,Portland Thorns FC,26.0,1989.0,9,8,638.0,0.0,1.0,0.0,0.0,0.0,0.0
+2016,84,Jaelene Hinkle,us USA,DF,Western New York Flash,22.0,1993.0,15,15,1327.0,1.0,3.0,1.0,1.0,2.0,0.0
+2016,85,Lindsey Horan,us USA,FW,Portland Thorns FC,21.0,1994.0,15,15,1304.0,5.0,0.0,0.0,0.0,4.0,0.0
+2016,86,Jen Hoy,us USA,"FW,MF",Chicago Red Stars,25.0,1991.0,15,9,673.0,2.0,0.0,0.0,0.0,1.0,0.0
+2016,87,Sofia Huerta,mx MEX,FW,Chicago Red Stars,23.0,1992.0,20,20,1742.0,7.0,2.0,0.0,0.0,2.0,0.0
+2016,88,Tori Huster,us USA,MF,Washington Spirit,26.0,1989.0,19,19,1667.0,1.0,1.0,0.0,0.0,0.0,0.0
+2016,89,Line Jensen,dk DEN,DF,Washington Spirit,24.0,1991.0,3,2,141.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,90,Estelle Johnson,cm CMR,DF,Washington Spirit,27.0,1988.0,11,11,990.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,91,Samantha Johnson,us USA,"DF,MF",Chicago Red Stars,24.0,1991.0,19,19,1676.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,92,Natasha Kai,us USA,FW,Sky Blue FC,32.0,1983.0,20,17,1401.0,4.0,1.0,0.0,0.0,3.0,0.0
+2016,93,Kassey Kallman,us USA,DF,Boston Breakers,23.0,1992.0,20,20,1800.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,94,Janelle Kalyn Flaws,us USA,FW,Chicago Red Stars,24.0,1991.0,1,0,45.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,95,Ghoutia Karchouni,fr FRA,MF,Boston Breakers,20.0,1995.0,3,1,100.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,96,Caroline Kastor,us USA,FW,FC Kansas City,24.0,1991.0,15,3,296.0,0.0,2.0,0.0,0.0,0.0,0.0
+2016,97,Nahomi Kawasumi,jp JPN,"FW,MF",Seattle,30.0,1985.0,10,8,750.0,3.0,2.0,0.0,0.0,0.0,0.0
+2016,98,Alanna Kennedy,au AUS,MF,Western New York Flash,21.0,1995.0,15,15,1298.0,0.0,0.0,0.0,0.0,3.0,0.0
+2016,99,Sam Kerr,au AUS,"FW,MF",Sky Blue FC,22.0,1993.0,9,6,616.0,5.0,0.0,0.0,0.0,0.0,0.0
+2016,100,Sarah Killion,us USA,MF,Sky Blue FC,23.0,1992.0,18,18,1606.0,3.0,1.0,3.0,4.0,0.0,0.0
+2016,101,Julie King,us USA,DF,Boston Breakers,26.0,1989.0,18,17,1524.0,2.0,1.0,0.0,0.0,5.0,0.0
+2016,102,Alyssa Kleiner,us USA,DF,Washington Spirit,22.0,1993.0,17,12,1111.0,1.0,1.0,0.0,0.0,1.0,0.0
+2016,103,Meghan Klingenberg,us USA,"DF,MF",Portland Thorns FC,27.0,1988.0,14,14,1259.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,104,Brittany Kolmel,us USA,DF,FC Kansas City,28.0,1987.0,20,20,1800.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,105,Haley Kopmeyer,us USA,GK,Seattle,25.0,1990.0,11,11,944.0,,,,,0.0,0.0
+2016,106,Jami Kranich,us USA,GK,Boston Breakers,23.0,1992.0,9,9,810.0,,,,,1.0,0.0
+2016,107,Ali Krieger,us USA,"DF,MF",Washington Spirit,31.0,1984.0,15,14,1267.0,1.0,0.0,0.0,0.0,2.0,0.0
+2016,108,Elise Krieghoff,us USA,FW,Boston Breakers,22.0,1993.0,6,0,142.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,109,Kaylyn Kyle,ca CAN,MF,Orlando Pride,27.0,1988.0,18,16,1441.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,110,Stephanie Labbé,ca CAN,GK,Washington Spirit,29.0,1986.0,8,8,720.0,,,,,0.0,0.0
+2016,111,Lo'eau LaBonta,us USA,MF,FC Kansas City,22.0,1993.0,11,7,693.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,112,Mandy Laddish,us USA,MF,FC Kansas City,23.0,1992.0,19,19,1679.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,113,Adriana Leon,ca CAN,"FW,MF",Western New York Flash,23.0,1992.0,10,3,345.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,114,Camille Levin,us USA,DF,Orlando Pride,25.0,1990.0,10,9,836.0,0.0,1.0,0.0,0.0,0.0,0.0
+2016,115,Kim Little,sco SCO,"FW,MF",Seattle,25.0,1990.0,20,20,1795.0,6.0,2.0,3.0,3.0,0.0,0.0
+2016,116,Carli Lloyd,us USA,MF,Houston Dash,33.0,1982.0,7,7,553.0,5.0,3.0,1.0,1.0,0.0,0.0
+2016,117,Sam Lofton,us USA,DF,Portland Thorns FC,23.0,1992.0,3,0,54.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,118,Joanna Lohman,us USA,"DF,MF",Washington Spirit,33.0,1982.0,20,17,1538.0,4.0,1.0,0.0,0.0,1.0,0.0
+2016,119,Allie Long,us USA,MF,Portland Thorns FC,28.0,1987.0,15,15,1350.0,6.0,2.0,0.0,0.0,0.0,0.0
+2016,120,Mary Luba,us USA,MF,Chicago Red Stars,22.0,1993.0,1,0,10.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,121,Taylor Lytle,us USA,MF,Sky Blue FC,26.0,1989.0,18,18,1506.0,1.0,2.0,0.0,0.0,0.0,0.0
+2016,122,Morgan Marlborough,us USA,FW,Boston Breakers,25.0,1990.0,1,0,23.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,123,Diana Matheson,ca CAN,MF,Washington Spirit,31.0,1984.0,12,9,799.0,4.0,0.0,1.0,1.0,1.0,0.0
+2016,124,Merritt Mathias,us USA,"DF,MF",Seattle,25.0,1990.0,19,17,1431.0,1.0,0.0,0.0,0.0,2.0,0.0
+2016,125,Cheyna Matthews,jm JAM,FW,Washington Spirit,22.0,1993.0,17,8,780.0,3.0,0.0,0.0,0.0,1.0,0.0
+2016,126,Alyssa Mautz,us USA,"FW,MF",Chicago Red Stars,26.0,1989.0,18,10,1037.0,0.0,2.0,0.0,0.0,4.0,0.0
+2016,127,Stephanie McCaffrey,us USA,FW,Chicago Red Stars,22.0,1993.0,18,15,1276.0,2.0,0.0,0.0,0.0,0.0,0.0
+2016,128,Tiffany McCarty,us USA,FW,FC Kansas City,25.0,1990.0,16,10,916.0,2.0,4.0,0.0,0.0,0.0,0.0
+2016,129,Jessica McDonald,us USA,FW,Western New York Flash,27.0,1988.0,19,19,1665.0,10.0,7.0,0.0,0.0,0.0,0.0
+2016,130,Manon Melis,nl NED,"FW,MF",Seattle,29.0,1986.0,16,15,1051.0,7.0,1.0,0.0,0.0,0.0,0.0
+2016,131,Molly Menchel,us USA,DF,FC Kansas City,24.0,1991.0,3,2,185.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,132,Emily Menges,us USA,DF,Portland Thorns FC,23.0,1992.0,20,20,1800.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,133,Kristie Mewis,us USA,"DF,MF",Boston Breakers,24.0,1991.0,14,13,1122.0,1.0,1.0,0.0,1.0,0.0,0.0
+2016,134,Sam Mewis,us USA,MF,Western New York Flash,23.0,1992.0,14,14,1260.0,5.0,2.0,1.0,2.0,1.0,0.0
+2016,135,Mônica,br BRA,DF,Orlando Pride,37.0,1978.0,16,15,1377.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,136,Alex Morgan,us USA,FW,Orlando Pride,26.0,1989.0,15,15,1350.0,4.0,1.0,0.0,0.0,1.0,0.0
+2016,137,Rebecca Moros,us USA,"DF,MF",Houston Dash,30.0,1985.0,17,17,1521.0,0.0,2.0,0.0,0.0,0.0,0.0
+2016,138,Meg Morris,us USA,MF,Portland Thorns FC,23.0,1992.0,7,3,274.0,1.0,1.0,0.0,0.0,2.0,0.0
+2016,139,Nadia Nadim,dk DEN,FW,Portland Thorns FC,28.0,1988.0,20,20,1649.0,9.0,3.0,4.0,4.0,4.0,0.0
+2016,140,Alyssa Naeher,us USA,GK,Chicago Red Stars,27.0,1988.0,13,13,1170.0,,,,,0.0,0.0
+2016,141,Christine Nairn,us USA,MF,Washington Spirit,25.0,1990.0,20,18,1618.0,3.0,3.0,1.0,2.0,1.0,0.0
+2016,142,Katie Naughton,us USA,DF,Chicago Red Stars,21.0,1994.0,16,9,861.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,143,Alexa Newfield,us USA,FW,FC Kansas City,24.0,1991.0,8,2,236.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,144,Ashley Nick,us USA,MF,Sky Blue FC,28.0,1987.0,3,1,103.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,145,Paige Nielsen,us USA,FW,Seattle,22.0,1993.0,2,0,26.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,146,Courtney Niemiec,us USA,DF,Western New York Flash,23.0,1992.0,6,4,395.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,147,Kelley O'Hara,us USA,"DF,FW",Sky Blue FC,27.0,1988.0,12,11,1033.0,1.0,2.0,0.0,0.0,1.0,0.0
+2016,148,Heather O'Reilly,us USA,"FW,MF",FC Kansas City,31.0,1985.0,14,14,1206.0,1.0,2.0,1.0,2.0,2.0,0.0
+2016,149,Denise O'Sullivan,ie IRL,FW,Houston Dash,21.0,1994.0,18,14,1313.0,2.0,5.0,0.0,0.0,1.0,0.0
+2016,150,Stephanie Ochs,us USA,FW,Houston Dash,25.0,1990.0,12,3,381.0,0.0,2.0,0.0,0.0,0.0,0.0
+2016,151,Kealia Ohai,us USA,"FW,MF",Houston Dash,24.0,1992.0,20,18,1626.0,11.0,3.0,0.0,0.0,0.0,0.0
+2016,152,Francisca Ordega,ng NGA,"FW,MF",Washington Spirit,22.0,1993.0,13,7,630.0,2.0,1.0,0.0,0.0,1.0,0.0
+2016,153,Megan Oyster,us USA,DF,Washington Spirit,23.0,1992.0,15,15,1341.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,154,Mollie Pathman,us USA,"FW,MF",Boston Breakers,23.0,1992.0,13,12,1055.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,155,Christie Pearce,us USA,DF,Sky Blue FC,40.0,1975.0,20,20,1800.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,156,Carson Pickett,us USA,DF,Seattle,22.0,1993.0,15,8,841.0,0.0,1.0,0.0,0.0,0.0,1.0
+2016,157,Poliana,br BRA,DF,Houston Dash,24.0,1991.0,15,15,1324.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,158,Shade Pratt,us USA,DF,Portland Thorns FC,22.0,1993.0,5,1,140.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,159,Christen Press,us USA,FW,Chicago Red Stars,27.0,1988.0,14,14,1260.0,8.0,0.0,1.0,1.0,0.0,0.0
+2016,160,Toni Pressley,us USA,DF,Orlando Pride,25.0,1990.0,14,11,1028.0,0.0,0.0,0.0,0.0,3.0,0.0
+2016,161,Cami Privett,us USA,MF,Houston Dash,22.0,1993.0,15,11,1056.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,162,Courtney Raetzman,us USA,MF,Chicago Red Stars,21.0,1994.0,6,0,52.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,163,Megan Rapinoe,us USA,"FW,MF",Seattle,30.0,1985.0,5,2,205.0,1.0,1.0,0.0,0.0,0.0,0.0
+2016,164,Hayley Raso,au AUS,"FW,MF",Portland Thorns FC,21.0,1994.0,20,6,751.0,0.0,2.0,0.0,0.0,3.0,0.0
+2016,165,Brittany Ratcliffe,us USA,FW,Boston Breakers,21.0,1994.0,15,5,546.0,0.0,0.0,0.0,0.0,3.0,0.0
+2016,166,Brianne Reed,us USA,DF,FC Kansas City,21.0,1994.0,7,5,441.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,167,Elli Reed,us USA,"DF,MF",Seattle,26.0,1989.0,16,14,1284.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,168,Katherine Reynolds,us USA,DF,Portland Thorns FC,28.0,1987.0,20,18,1671.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,169,Dominique Richardson,bm BER,MF,Sky Blue FC,23.0,1992.0,2,0,54.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,170,Cari Roccaro,us USA,DF,Houston Dash,21.0,1994.0,15,14,1267.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,171,Raquel Rodríguez,cr CRC,FW,Sky Blue FC,22.0,1993.0,18,17,1464.0,1.0,1.0,0.0,0.0,1.0,0.0
+2016,172,Katelyn Rowland,us USA,GK,Western New York Flash,21.0,1994.0,6,6,540.0,,,,,0.0,0.0
+2016,173,Angela Salem,us USA,MF,Boston Breakers,27.0,1988.0,19,19,1700.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,174,Lianne Sanderson,eng ENG,FW,Western New York Flash,27.0,1988.0,17,11,1120.0,5.0,1.0,0.0,0.0,0.0,0.0
+2016,175,Becky Sauerbrunn,us USA,DF,FC Kansas City,30.0,1985.0,14,14,1260.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,176,Kaitlyn Savage,,GK,Orlando Pride,25.0,1990.0,4,4,360.0,,,,,0.0,0.0
+2016,177,Louise Schillgard,se SWE,MF,Boston Breakers,26.0,1989.0,18,16,1428.0,1.0,2.0,1.0,1.0,4.0,0.0
+2016,178,Katie Schoepfer,us USA,FW,Boston Breakers,27.0,1988.0,12,8,597.0,1.0,0.0,0.0,0.0,1.0,0.0
+2016,179,Danielle Schulmann,il ISR,FW,Sky Blue FC,26.0,1989.0,3,0,42.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,180,Desiree Scott,ca CAN,MF,FC Kansas City,28.0,1987.0,14,14,1260.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,181,Meleana Shim,us USA,MF,Portland Thorns FC,24.0,1991.0,14,9,812.0,0.0,1.0,0.0,0.0,1.0,0.0
+2016,182,Casey Short,us USA,DF,Chicago Red Stars,25.0,1990.0,20,20,1781.0,2.0,0.0,0.0,0.0,0.0,0.0
+2016,183,Frances Silva,us USA,"FW,MF",FC Kansas City,23.0,1992.0,19,10,990.0,2.0,0.0,0.0,0.0,1.0,0.0
+2016,184,Erin Simon,us USA,DF,Sky Blue FC,21.0,1994.0,19,18,1590.0,0.0,2.0,0.0,0.0,1.0,0.0
+2016,185,Kyah Simon,au AUS,FW,Boston Breakers,24.0,1991.0,17,14,1292.0,1.0,1.0,0.0,0.0,1.0,0.0
+2016,186,Christine Sinclair,ca CAN,"FW,MF",Portland Thorns FC,32.0,1983.0,11,10,826.0,6.0,2.0,0.0,0.0,0.0,0.0
+2016,187,Jennifer Skogerboe,us USA,MF,Portland Thorns FC,23.0,1992.0,3,2,210.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,188,Erica Skroski,us USA,DF,Sky Blue FC,21.0,1994.0,20,20,1798.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,189,Abby Smith,us USA,GK,Boston Breakers,22.0,1993.0,2,2,122.0,,,,,0.0,0.0
+2016,190,Taylor Smith,us USA,FW,Western New York Flash,22.0,1993.0,18,5,725.0,2.0,0.0,0.0,0.0,1.0,0.0
+2016,191,Havana Solaun,jm JAM,MF,Seattle,22.0,1993.0,6,3,274.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,192,Hope Solo,us USA,GK,Seattle,34.0,1981.0,8,8,720.0,,,,,2.0,0.0
+2016,193,Emily Sonnett,us USA,DF,Portland Thorns FC,22.0,1993.0,15,15,1350.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,194,Meredith Speck,us USA,MF,Western New York Flash,22.0,1993.0,6,5,369.0,0.0,1.0,0.0,0.0,1.0,0.0
+2016,195,Jasmyne Spencer,us USA,FW,Orlando Pride,25.0,1990.0,20,17,1564.0,4.0,0.0,0.0,0.0,3.0,0.0
+2016,196,Caroline Stanley,us USA,GK,Sky Blue FC,22.0,1993.0,11,11,940.0,,,,,1.0,0.0
+2016,197,Nikki Stanton,us USA,MF,Sky Blue FC,25.0,1990.0,12,4,407.0,0.0,0.0,0.0,0.0,3.0,0.0
+2016,198,Katie Stengel,us USA,FW,Washington Spirit,23.0,1992.0,19,10,929.0,4.0,1.0,0.0,0.0,0.0,0.0
+2016,199,Libby Stout,us USA,GK,Boston Breakers,25.0,1990.0,10,9,868.0,,,,,0.0,0.0
+2016,200,Kylie Strom,us USA,DF,Boston Breakers,23.0,1992.0,7,3,343.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,201,Andi Tostanoski,us USA,GK,Seattle,21.0,1994.0,2,1,136.0,,,,,0.0,0.0
+2016,202,Erika Tymrak,us USA,"FW,MF",FC Kansas City,24.0,1991.0,17,14,1164.0,1.0,2.0,0.0,0.0,0.0,0.0
+2016,203,Chioma Ubogagu,us USA,FW,Houston Dash,23.0,1992.0,15,9,805.0,1.0,1.0,0.0,0.0,0.0,0.0
+2016,204,Rumi Utsugi,jp JPN,MF,Seattle,27.0,1988.0,7,6,554.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,205,Stephanie Verdoia,us USA,MF,Boston Breakers,23.0,1993.0,10,5,452.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,206,Cara Walls,us USA,FW,Chicago Red Stars,22.0,1993.0,12,8,702.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,207,Dani Weatherholt,us USA,MF,Orlando Pride,21.0,1994.0,12,9,786.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,208,Mallory Weber,us USA,FW,Portland Thorns FC,21.0,1994.0,13,7,699.0,0.0,0.0,0.0,0.0,1.0,0.0
+2016,209,Tiffany Weimer,us USA,FW,FC Kansas City,32.0,1983.0,4,0,17.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,210,Christen Westphal,us USA,DF,Boston Breakers,22.0,1993.0,13,7,580.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,211,Lydia Williams,au AUS,GK,Houston Dash,27.0,1988.0,15,15,1350.0,,,,,0.0,0.0
+2016,212,Lynn Williams,us USA,FW,Western New York Flash,22.0,1993.0,19,19,1671.0,11.0,5.0,0.0,0.0,0.0,0.0
+2016,213,Kat Williamson,us USA,DF,Portland Thorns FC,26.0,1989.0,5,3,198.0,1.0,0.0,0.0,0.0,0.0,0.0
+2016,214,Keelin Winters,us USA,MF,Seattle,27.0,1988.0,20,20,1750.0,1.0,2.0,0.0,0.0,2.0,0.0
+2016,215,Sam Witteman,us USA,DF,Orlando Pride,21.0,1994.0,16,12,1062.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,216,Rachel Wood,us USA,"DF,MF",Boston Breakers,25.0,1990.0,7,2,260.0,0.0,0.0,0.0,0.0,0.0,0.0
+2016,217,Arin Wright,us USA,DF,Chicago Red Stars,23.0,1992.0,20,20,1718.0,0.0,4.0,0.0,0.0,2.0,0.0
+2016,218,Kelsey Wys,us USA,GK,Washington Spirit,24.0,1991.0,12,12,1080.0,,,,,0.0,0.0
+2016,219,Beverly Yanez,us USA,"FW,MF",Seattle,27.0,1988.0,20,18,1543.0,3.0,3.0,0.0,0.0,0.0,0.0
+2016,220,Shelina Zadorsky,ca CAN,DF,Washington Spirit,23.0,1992.0,11,10,911.0,0.0,0.0,0.0,0.0,2.0,0.0
+2016,221,McCall Zerboni,us USA,MF,Western New York Flash,29.0,1986.0,20,19,1681.0,0.0,1.0,0.0,0.0,4.0,0.0
+2017,1,Lindsay Agnew,ca CAN,FW,Washington,21.0,1995.0,8,2,290.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,2,Laura Alleway,au AUS,DF,Orlando,27.0,1989.0,2,1,136.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,3,Andressinha,br BRA,MF,Houston,21.0,1995.0,21,17,1557.0,2.0,3.0,0.0,0.0,1.0,0.0
+2017,4,Morgan Andrews,us USA,MF,Boston,21.0,1995.0,18,10,1033.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,5,Alex Arlitt,us USA,DF,Kansas City,23.0,1993.0,1,0,33.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,6,Rosana dos Santos Augusto,br BRA,"DF,FW",North Carolina,34.0,1982.0,4,1,68.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,7,Yael Averbuch,us USA,MF,Kansas City,30.0,1986.0,23,23,2045.0,1.0,1.0,0.0,0.0,0.0,0.0
+2017,8,Estefanía Banini,ar ARG,"FW,MF",Washington,26.0,1990.0,9,6,546.0,1.0,0.0,0.0,0.0,0.0,0.0
+2017,9,Lauren Barnes,us USA,DF,Seattle,27.0,1989.0,22,21,1810.0,0.0,0.0,0.0,0.0,5.0,1.0
+2017,10,Nicole Barnhart,us USA,GK,Kansas City,35.0,1981.0,24,24,2160.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,11,Maddie Bauer,us USA,DF,Seattle,21.0,1995.0,5,1,151.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,12,Janine Beckie,ca CAN,FW,Houston,22.0,1994.0,24,21,1829.0,2.0,1.0,0.0,0.0,2.0,0.0
+2017,13,Cassidy Benintente,us USA,DF,Sky Blue,,,1,0,30.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,14,Aubrey Bledsoe,us USA,GK,Orlando,25.0,1991.0,11,11,990.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,15,Celeste Boureille,us USA,MF,Portland,22.0,1994.0,17,13,1179.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,16,Katie Bowen,nz NZL,"DF,MF",Kansas City,22.0,1994.0,21,13,1059.0,2.0,1.0,0.0,0.0,0.0,0.0
+2017,17,Morgan Brian,us USA,MF,Houston,23.0,1993.0,10,9,664.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,18,Morgan Brian,us USA,MF,Chicago,23.0,1993.0,2,1,85.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,19,Amber Brooks,us USA,"DF,MF",Houston,26.0,1991.0,24,24,2160.0,1.0,3.0,1.0,1.0,3.0,0.0
+2017,20,Bruna,br BRA,DF,Houston,31.0,1985.0,14,8,841.0,0.0,0.0,0.0,0.0,6.0,0.0
+2017,21,Dagný Brynjarsdóttir,is ISL,MF,Portland,25.0,1991.0,11,6,511.0,0.0,1.0,0.0,0.0,3.0,0.0
+2017,22,Christina Burkenroad,us USA,MF,Orlando,23.0,1993.0,1,0,8.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,23,Camila,br BRA,DF,Orlando,22.0,1994.0,24,22,1900.0,4.0,5.0,0.0,0.0,4.0,0.0
+2017,24,Jane Campbell,us USA,GK,Houston,21.0,1995.0,16,16,1440.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,25,Caroline Casey,us USA,GK,Sky Blue,22.0,1994.0,2,2,180.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,26,Cameron Castleberry,us USA,MF,Washington,21.0,1995.0,2,0,26.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,27,Steph Catley,au AUS,DF,Orlando,23.0,1994.0,23,23,2030.0,0.0,2.0,0.0,0.0,1.0,0.0
+2017,28,Allysha Chapman,ca CAN,DF,Boston,28.0,1989.0,19,19,1642.0,0.0,0.0,0.0,0.0,5.0,1.0
+2017,29,Whitney Church,us USA,DF,Washington,23.0,1993.0,22,22,1980.0,1.0,1.0,0.0,0.0,1.0,0.0
+2017,30,Danielle Colaprico,us USA,MF,Chicago,23.0,1993.0,23,21,1905.0,1.0,1.0,0.0,0.0,3.0,0.0
+2017,31,Taylor Comeau,us USA,DF,Chicago,23.0,1993.0,20,10,1096.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,32,Daphne Corboz,us USA,MF,Sky Blue,23.0,1993.0,19,12,1161.0,1.0,5.0,0.0,0.0,0.0,0.0
+2017,33,Rachel Corsie,sco SCO,DF,Seattle,27.0,1989.0,14,12,1126.0,0.0,1.0,0.0,0.0,1.0,0.0
+2017,34,Meghan Cox,us USA,DF,Houston,22.0,1994.0,1,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2017,35,Meghan Cox,us USA,DF,Portland,22.0,1994.0,9,2,261.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,36,Larissa Crummer,au AUS,FW,Seattle,21.0,1996.0,4,0,47.0,1.0,0.0,0.0,0.0,0.0,0.0
+2017,37,Sabrina D'Angelo,ca CAN,GK,North Carolina,23.0,1993.0,8,8,720.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,38,Amanda DaCosta,pt POR,MF,Boston,27.0,1989.0,11,4,382.0,1.0,0.0,1.0,1.0,0.0,0.0
+2017,39,Abby Dahlkemper,us USA,MF,North Carolina,23.0,1993.0,24,24,2160.0,0.0,2.0,0.0,0.0,3.0,0.0
+2017,40,Kiersten Dallstream,us USA,"DF,FW",Seattle,28.0,1988.0,14,3,351.0,1.0,2.0,0.0,0.0,0.0,0.0
+2017,41,Michele Dalton,us USA,GK,Chicago,28.0,1988.0,2,2,180.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,42,Rachel Daly,eng ENG,FW,Houston,25.0,1991.0,23,23,2024.0,5.0,2.0,0.0,0.0,2.0,1.0
+2017,43,Debinha,br BRA,FW,North Carolina,25.0,1991.0,24,16,1472.0,4.0,2.0,0.0,0.0,0.0,0.0
+2017,44,Vanessa DiBernardo,us USA,MF,Chicago,24.0,1992.0,20,20,1708.0,3.0,2.0,0.0,0.0,0.0,0.0
+2017,45,Makenzy Doniak,us USA,FW,North Carolina,22.0,1994.0,22,15,1213.0,0.0,3.0,0.0,0.0,0.0,0.0
+2017,46,Meggie Dougherty Howard,us USA,MF,Washington,21.0,1995.0,23,21,1911.0,1.0,1.0,0.0,0.0,2.0,0.0
+2017,47,Hayley Dowd,us USA,FW,Boston,22.0,1994.0,1,0,25.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,48,Natasha Dowie,eng ENG,FW,Boston,28.0,1988.0,23,18,1658.0,7.0,2.0,0.0,0.0,1.0,0.0
+2017,49,Nickolette Driesse,us USA,MF,Orlando,22.0,1994.0,4,0,47.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,50,Caprice Dydasco,us USA,DF,Washington,23.0,1993.0,16,11,1118.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,51,Elizabeth Eddy,us USA,MF,North Carolina,25.0,1991.0,5,0,55.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,52,Kristen Edmonds,us USA,DF,Orlando,29.0,1987.0,22,20,1802.0,2.0,0.0,0.0,0.0,1.0,0.0
+2017,53,Brooke Elby,us USA,MF,Boston,23.0,1993.0,13,10,848.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,54,Lindsay Elston,us USA,"FW,MF",Seattle,24.0,1992.0,15,11,945.0,1.0,1.0,0.0,0.0,1.0,0.0
+2017,55,Abby Erceg,nz NZL,"DF,FW",North Carolina,27.0,1989.0,22,22,1946.0,1.0,2.0,0.0,0.0,3.0,1.0
+2017,56,Julie Ertz,us USA,"DF,MF",Chicago,24.0,1992.0,22,21,1933.0,4.0,3.0,0.0,0.0,3.0,0.0
+2017,57,Danica Evans,us USA,FW,Orlando,21.0,1995.0,11,1,191.0,1.0,0.0,0.0,0.0,0.0,0.0
+2017,58,Maddy Evans,us USA,"DF,MF",Orlando,25.0,1991.0,12,4,482.0,0.0,0.0,0.0,1.0,2.0,0.0
+2017,59,Claire Falknor,us USA,DF,Houston,23.0,1993.0,7,3,275.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,60,Cali Farquharson,us USA,FW,Washington,23.0,1993.0,10,3,352.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,61,Jamia Fields,us USA,FW,Orlando,23.0,1993.0,16,7,596.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,62,Jess Fishlock,wal WAL,MF,Seattle,30.0,1987.0,20,20,1743.0,7.0,2.0,1.0,2.0,3.0,0.0
+2017,63,Caroline Flynn,us USA,MF,Kansas City,,,10,0,152.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,64,Adrianna Franch,us USA,GK,Portland,26.0,1990.0,24,24,2160.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,65,Mandy Freeman,us USA,DF,Sky Blue,21.0,1995.0,21,20,1802.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,66,Amanda Frisbie,us USA,DF,Boston,24.0,1992.0,12,9,751.0,0.0,1.0,0.0,0.0,1.0,0.0
+2017,67,Leah Galton,eng ENG,FW,Sky Blue,22.0,1994.0,16,6,661.0,2.0,1.0,0.0,0.0,0.0,0.0
+2017,68,Christina Gibbons,us USA,DF,Kansas City,22.0,1994.0,24,23,2084.0,1.0,3.0,0.0,0.0,2.0,0.0
+2017,69,Sarah Gorden,us USA,DF,Chicago,24.0,1992.0,5,3,223.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,70,Summer Green,us USA,FW,Chicago,21.0,1995.0,7,1,136.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,71,Shea Groom,us USA,FW,Kansas City,23.0,1993.0,22,21,1779.0,5.0,6.0,0.0,0.0,4.0,1.0
+2017,72,Emilie Haavi,no NOR,"FW,MF",Boston,24.0,1992.0,7,5,458.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,73,Sarah Hagen,us USA,FW,Houston,27.0,1989.0,18,7,674.0,2.0,0.0,0.0,0.0,0.0,0.0
+2017,74,Kristen Hamilton,us USA,FW,North Carolina,24.0,1992.0,16,12,1073.0,3.0,2.0,0.0,0.0,0.0,0.0
+2017,75,DiDi Haracic,ba BIH,GK,Washington,24.0,1992.0,7,7,630.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,76,Ashlyn Harris,us USA,GK,Orlando,31.0,1985.0,13,13,1106.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,77,Ashley Hatch,us USA,FW,North Carolina,21.0,1995.0,22,13,1200.0,7.0,2.0,0.0,0.0,2.0,0.0
+2017,78,Maya Hayes,us USA,FW,Sky Blue,24.0,1992.0,22,13,1064.0,5.0,4.0,0.0,0.0,1.0,0.0
+2017,79,Caity Heap,,MF,Houston,22.0,1994.0,13,2,337.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,80,Tobin Heath,us USA,MF,Portland,28.0,1988.0,2,0,75.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,81,Melissa Henderson,us USA,"FW,MF",Houston,27.0,1989.0,1,0,19.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,82,Amandine Henry,fr FRA,MF,Portland,27.0,1989.0,21,19,1616.0,3.0,0.0,1.0,1.0,3.0,0.0
+2017,83,Ashley Herndon,us USA,MF,Portland,22.0,1994.0,1,0,6.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,84,Rachel Hill,us USA,FW,Orlando,21.0,1995.0,14,8,714.0,3.0,1.0,0.0,0.0,0.0,0.0
+2017,85,Jaelene Hinkle,us USA,DF,North Carolina,23.0,1993.0,20,20,1775.0,0.0,2.0,0.0,0.0,0.0,0.0
+2017,86,Nora Holstad Berge,no NOR,DF,North Carolina,29.0,1987.0,2,1,89.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,87,Lindsey Horan,us USA,FW,Portland,22.0,1994.0,24,24,2126.0,4.0,2.0,0.0,0.0,4.0,0.0
+2017,88,Jen Hoy,us USA,"FW,MF",Chicago,26.0,1991.0,13,8,635.0,2.0,2.0,0.0,0.0,0.0,0.0
+2017,89,Kelli Hubly,us USA,DF,Portland,22.0,1994.0,2,0,13.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,90,Sofia Huerta,mx MEX,FW,Chicago,24.0,1992.0,24,21,1966.0,6.0,4.0,0.0,0.0,0.0,0.0
+2017,91,Tori Huster,us USA,MF,Washington,27.0,1989.0,20,19,1714.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,92,Line Jensen,dk DEN,DF,Washington,25.0,1991.0,9,6,569.0,1.0,1.0,0.0,0.0,0.0,0.0
+2017,93,Estelle Johnson,cm CMR,DF,Washington,28.0,1988.0,20,20,1680.0,2.0,0.0,0.0,0.0,2.0,0.0
+2017,94,Katie Johnson,mx MEX,FW,Seattle,22.0,1994.0,23,5,794.0,4.0,2.0,0.0,0.0,0.0,0.0
+2017,95,Kendall Johnson,us USA,"DF,MF",Portland,25.0,1991.0,4,0,8.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,96,Samantha Johnson,us USA,"DF,MF",Chicago,25.0,1991.0,22,22,1786.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,97,Savannah Jordan,us USA,,Portland,22.0,1995.0,2,0,9.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,98,Natasha Kai,us USA,FW,Sky Blue,33.0,1983.0,1,0,19.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,99,Kassey Kallman,us USA,DF,Washington,24.0,1992.0,17,16,1400.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,100,Lauren Kaskie,us USA,MF,Chicago,21.0,1995.0,7,2,212.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,101,Yuri Kawamura,jp JPN,MF,North Carolina,27.0,1989.0,8,7,588.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,102,Nahomi Kawasumi,jp JPN,"FW,MF",Seattle,31.0,1985.0,24,22,1917.0,6.0,8.0,0.0,0.0,0.0,0.0
+2017,103,Maegan Kelly,ca CAN,MF,Kansas City,24.0,1992.0,22,5,664.0,5.0,2.0,0.0,0.0,2.0,0.0
+2017,104,Alanna Kennedy,au AUS,MF,Orlando,22.0,1995.0,24,23,2101.0,4.0,1.0,0.0,0.0,3.0,0.0
+2017,105,Sam Kerr,au AUS,"FW,MF",Sky Blue,23.0,1993.0,22,21,1918.0,17.0,4.0,0.0,1.0,2.0,0.0
+2017,106,Sarah Killion,us USA,MF,Sky Blue,24.0,1992.0,23,22,2034.0,5.0,2.0,4.0,7.0,1.0,0.0
+2017,107,Julie King,us USA,DF,Boston,27.0,1989.0,21,21,1890.0,1.0,0.0,0.0,0.0,4.0,0.0
+2017,108,Alyssa Kleiner,us USA,DF,Washington,23.0,1993.0,18,11,998.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,109,Meghan Klingenberg,us USA,"DF,MF",Portland,28.0,1988.0,23,22,1935.0,0.0,6.0,0.0,0.0,1.0,0.0
+2017,110,Brittany Kolmel,us USA,DF,Kansas City,29.0,1987.0,23,22,1980.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,111,Haley Kopmeyer,us USA,GK,Seattle,26.0,1990.0,20,20,1800.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,112,Ali Krieger,us USA,"DF,MF",Orlando,32.0,1984.0,24,24,2160.0,0.0,2.0,0.0,0.0,2.0,0.0
+2017,113,Stephanie Labbé,ca CAN,GK,Washington,30.0,1986.0,17,17,1530.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,114,Lo'eau LaBonta,us USA,MF,Kansas City,23.0,1993.0,22,21,1727.0,2.0,2.0,0.0,0.0,4.0,1.0
+2017,115,Rose Lavelle,us USA,MF,Boston,21.0,1995.0,10,8,764.0,2.0,1.0,0.0,0.0,0.0,0.0
+2017,116,Adriana Leon,ca CAN,"FW,MF",Boston,24.0,1992.0,24,21,1780.0,6.0,6.0,0.0,0.0,2.0,0.0
+2017,117,Sydney Leroux,us USA,FW,Kansas City,26.0,1990.0,23,23,2013.0,6.0,2.0,0.0,0.0,2.0,0.0
+2017,118,Camille Levin,us USA,DF,Houston,26.0,1990.0,22,22,1980.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,119,Carli Lloyd,us USA,MF,Houston,34.0,1982.0,8,8,647.0,2.0,0.0,1.0,1.0,2.0,1.0
+2017,120,Joanna Lohman,us USA,"DF,MF",Washington,34.0,1982.0,1,1,22.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,121,Allie Long,us USA,MF,Portland,29.0,1987.0,21,17,1600.0,2.0,1.0,0.0,0.0,1.0,0.0
+2017,122,Tyler Lussi,us USA,FW,Portland,22.0,1995.0,5,3,291.0,1.0,2.0,0.0,0.0,0.0,0.0
+2017,123,Taylor Lytle,us USA,MF,Sky Blue,27.0,1989.0,21,20,1688.0,0.0,5.0,0.0,0.0,0.0,0.0
+2017,124,Marta,br BRA,FW,Orlando,30.0,1986.0,23,21,1940.0,13.0,6.0,2.0,2.0,3.0,0.0
+2017,125,Merritt Mathias,us USA,"DF,MF",Seattle,26.0,1990.0,21,18,1461.0,2.0,1.0,0.0,0.0,4.0,0.0
+2017,126,Cheyna Matthews,jm JAM,FW,Washington,23.0,1993.0,21,16,1258.0,5.0,1.0,0.0,0.0,1.0,0.0
+2017,127,Alyssa Mautz,us USA,"FW,MF",Chicago,27.0,1989.0,24,15,1415.0,2.0,0.0,0.0,0.0,2.0,0.0
+2017,128,Stephanie McCaffrey,us USA,FW,Chicago,23.0,1993.0,12,4,362.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,129,Jessica McDonald,us USA,FW,North Carolina,28.0,1988.0,19,11,1064.0,4.0,2.0,0.0,0.0,0.0,0.0
+2017,130,Kristen McNabb,us USA,DF,Seattle,22.0,1994.0,18,14,1306.0,1.0,0.0,0.0,0.0,3.0,0.0
+2017,131,McKenzie Meehan,us USA,FW,Sky Blue,22.0,1994.0,17,5,599.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,132,Emily Menges,us USA,DF,Portland,24.0,1992.0,23,23,2063.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,133,Kristie Mewis,us USA,"DF,MF",Chicago,25.0,1991.0,1,1,81.0,1.0,0.0,0.0,0.0,0.0,0.0
+2017,134,Kristie Mewis,us USA,"DF,MF",Houston,25.0,1991.0,5,5,444.0,0.0,2.0,0.0,0.0,0.0,0.0
+2017,135,Kristie Mewis,us USA,"DF,MF",Washington,25.0,1991.0,14,10,899.0,2.0,2.0,0.0,0.0,1.0,0.0
+2017,136,Sam Mewis,us USA,MF,North Carolina,24.0,1992.0,24,23,2097.0,6.0,3.0,1.0,3.0,2.0,0.0
+2017,137,Kayla Mills,us USA,DF,Sky Blue,21.0,1995.0,16,13,1161.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,138,Sydney Miramontez,us USA,DF,Kansas City,22.0,1994.0,5,5,450.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,139,Mônica,br BRA,DF,Orlando,38.0,1978.0,19,16,1284.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,140,Alex Morgan,us USA,FW,Orlando,27.0,1989.0,13,12,1058.0,9.0,4.0,1.0,1.0,0.0,0.0
+2017,141,Rebecca Moros,us USA,"DF,MF",Kansas City,31.0,1985.0,19,17,1552.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,142,Meg Morris,us USA,MF,Portland,24.0,1992.0,1,0,11.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,143,Nadia Nadim,dk DEN,FW,Portland,29.0,1988.0,16,13,1158.0,6.0,3.0,4.0,5.0,1.0,0.0
+2017,144,Alyssa Naeher,us USA,GK,Chicago,28.0,1988.0,22,22,1980.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,145,Yūki Nagasato,jp JPN,FW,Chicago,29.0,1987.0,6,3,310.0,1.0,2.0,0.0,0.0,0.0,1.0
+2017,146,Christine Nairn,us USA,MF,Seattle,26.0,1990.0,23,21,1648.0,1.0,5.0,0.0,0.0,1.0,0.0
+2017,147,Katie Naughton,us USA,DF,Chicago,22.0,1994.0,22,22,1958.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,148,Alexa Newfield,us USA,FW,Kansas City,25.0,1991.0,17,8,658.0,2.0,1.0,0.0,0.0,4.0,1.0
+2017,149,Kelley O'Hara,us USA,"DF,FW",Sky Blue,28.0,1988.0,18,17,1561.0,4.0,3.0,2.0,2.0,3.0,0.0
+2017,150,Denise O'Sullivan,ie IRL,FW,Houston,22.0,1994.0,11,5,447.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,151,Denise O'Sullivan,ie IRL,FW,North Carolina,22.0,1994.0,7,6,505.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,152,Stephanie Ochs,us USA,FW,North Carolina,26.0,1990.0,5,0,52.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,153,Kealia Ohai,us USA,"FW,MF",Houston,25.0,1992.0,10,10,864.0,2.0,2.0,0.0,0.0,0.0,0.0
+2017,154,Ifeoma Onumonu,us USA,FW,Boston,22.0,1994.0,18,3,509.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,155,Francisca Ordega,ng NGA,"FW,MF",Washington,23.0,1993.0,14,8,923.0,4.0,3.0,0.0,0.0,2.0,0.0
+2017,156,Megan Oyster,us USA,DF,Boston,24.0,1992.0,23,23,2070.0,0.0,0.0,0.0,0.0,3.0,0.0
+2017,157,Christie Pearce,us USA,DF,Sky Blue,41.0,1975.0,16,16,1440.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,158,Carson Pickett,us USA,DF,Seattle,23.0,1993.0,21,21,1870.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,159,Poliana,br BRA,DF,Houston,25.0,1991.0,22,17,1563.0,4.0,2.0,0.0,0.0,0.0,0.0
+2017,160,Christen Press,us USA,FW,Chicago,28.0,1988.0,23,22,1997.0,11.0,5.0,4.0,6.0,2.0,0.0
+2017,161,Toni Pressley,us USA,DF,Orlando,26.0,1990.0,18,13,1218.0,1.0,0.0,0.0,0.0,1.0,0.0
+2017,162,Nichelle Prince,ca CAN,FW,Houston,21.0,1995.0,23,18,1540.0,3.0,1.0,0.0,0.0,0.0,0.0
+2017,163,Cami Privett,us USA,MF,Houston,23.0,1993.0,16,8,748.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,164,Morgan Proffitt,us USA,MF,Chicago,22.0,1994.0,7,1,110.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,165,Morgan Proffitt,us USA,MF,Washington,22.0,1994.0,3,3,255.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,166,Sammy Prudhomme,us USA,GK,Boston,23.0,1993.0,5,5,450.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,167,Mallory Pugh,us USA,FW,Washington,18.0,1998.0,16,13,1203.0,6.0,1.0,1.0,1.0,0.0,0.0
+2017,168,Margaret Purce,us USA,FW,Boston,21.0,1995.0,22,13,1384.0,1.0,2.0,0.0,0.0,1.0,0.0
+2017,169,Megan Rapinoe,us USA,"FW,MF",Seattle,31.0,1985.0,18,17,1522.0,12.0,1.0,4.0,4.0,5.0,0.0
+2017,170,Hayley Raso,au AUS,"FW,MF",Portland,22.0,1994.0,22,20,1785.0,6.0,3.0,0.0,0.0,5.0,0.0
+2017,171,Brittany Ratcliffe,us USA,FW,Kansas City,22.0,1994.0,21,12,1074.0,1.0,3.0,0.0,0.0,1.0,0.0
+2017,172,Elli Reed,us USA,"DF,MF",Seattle,27.0,1989.0,4,1,101.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,173,Katherine Reynolds,us USA,DF,Portland,29.0,1987.0,10,10,883.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,174,Domi Richardson,us USA,"DF,MF",Sky Blue,24.0,1992.0,7,7,630.0,0.0,1.0,0.0,0.0,0.0,0.0
+2017,175,Cari Roccaro,us USA,DF,Houston,22.0,1994.0,18,16,1500.0,0.0,0.0,0.0,0.0,3.0,0.0
+2017,176,Amy Rodriguez,us USA,"FW,MF",Kansas City,29.0,1987.0,1,1,57.0,1.0,0.0,0.0,0.0,0.0,0.0
+2017,177,Raquel Rodríguez,cr CRC,FW,Sky Blue,23.0,1993.0,21,17,1456.0,4.0,0.0,0.0,0.0,2.0,0.0
+2017,178,Katelyn Rowland,us USA,GK,North Carolina,22.0,1994.0,16,16,1440.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,179,Angela Salem,us USA,MF,Boston,28.0,1988.0,24,24,2117.0,0.0,0.0,0.0,0.0,3.0,0.0
+2017,180,Becky Sauerbrunn,us USA,DF,Kansas City,31.0,1985.0,22,22,1980.0,1.0,2.0,0.0,0.0,2.0,0.0
+2017,181,Madalyn Schiffel,de GER,GK,Seattle,22.0,1994.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,182,Desiree Scott,ca CAN,MF,Kansas City,29.0,1987.0,21,20,1803.0,0.0,2.0,0.0,0.0,0.0,0.0
+2017,183,Kailen Sheridan,ca CAN,GK,Sky Blue,21.0,1995.0,22,22,1980.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,184,Meleana Shim,us USA,MF,Portland,25.0,1991.0,6,3,209.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,185,Arielle Ship,us USA,FW,Washington,21.0,1995.0,14,9,688.0,1.0,2.0,0.0,0.0,1.0,0.0
+2017,186,Casey Short,us USA,DF,Chicago,26.0,1990.0,22,21,1914.0,1.0,1.0,0.0,0.0,2.0,0.0
+2017,187,Erin Simon,us USA,DF,Sky Blue,22.0,1994.0,7,7,516.0,0.0,0.0,0.0,0.0,1.0,0.0
+2017,188,Christine Sinclair,ca CAN,"FW,MF",Portland,33.0,1983.0,24,24,2143.0,8.0,0.0,0.0,1.0,3.0,0.0
+2017,189,Erica Skroski,us USA,DF,Sky Blue,22.0,1994.0,21,20,1763.0,1.0,0.0,0.0,0.0,3.0,0.0
+2017,190,Abby Smith,us USA,GK,Boston,23.0,1993.0,19,19,1710.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,191,Taylor Smith,us USA,FW,North Carolina,23.0,1993.0,24,18,1750.0,0.0,2.0,0.0,0.0,2.0,0.0
+2017,192,Havana Solaun,jm JAM,MF,Washington,23.0,1993.0,24,20,1728.0,5.0,4.0,2.0,2.0,0.0,0.0
+2017,193,Emily Sonnett,us USA,DF,Portland,23.0,1993.0,24,24,2160.0,3.0,1.0,0.0,0.0,2.0,0.0
+2017,194,Meredith Speck,us USA,MF,North Carolina,23.0,1993.0,4,2,197.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,195,Jasmyne Spencer,us USA,FW,Orlando,26.0,1990.0,20,12,1101.0,3.0,5.0,0.0,0.0,1.0,0.0
+2017,196,Caroline Stanley,us USA,GK,Orlando,23.0,1993.0,1,0,64.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,197,Nikki Stanton,us USA,MF,Sky Blue,26.0,1990.0,16,13,1045.0,0.0,1.0,0.0,0.0,6.0,0.0
+2017,198,Katie Stengel,us USA,FW,Boston,24.0,1992.0,12,7,556.0,0.0,1.0,0.0,0.0,1.0,0.0
+2017,199,Katie Stengel,us USA,FW,Washington,24.0,1992.0,5,3,222.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,200,Rebekah Stott,nz NZL,"DF,MF",Seattle,23.0,1993.0,22,18,1711.0,0.0,1.0,0.0,0.0,1.0,0.0
+2017,201,Ashleigh Sykes,au AUS,FW,Portland,25.0,1991.0,15,12,995.0,1.0,1.0,0.0,0.0,1.0,0.0
+2017,202,Crystal Thomas,us USA,FW,Washington,23.0,1994.0,1,0,25.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,203,Madison Tiernan,us USA,MF,Sky Blue,21.0,1995.0,20,11,1038.0,3.0,1.0,0.0,0.0,4.0,0.0
+2017,204,Erika Tymrak,us USA,"FW,MF",Kansas City,25.0,1991.0,12,4,394.0,2.0,1.0,0.0,0.0,0.0,0.0
+2017,205,Chioma Ubogagu,us USA,FW,Orlando,24.0,1992.0,19,16,1346.0,4.0,3.0,0.0,0.0,1.0,0.0
+2017,206,Rumi Utsugi,jp JPN,MF,Seattle,28.0,1988.0,20,18,1665.0,1.0,2.0,0.0,0.0,0.0,0.0
+2017,207,Dani Weatherholt,us USA,MF,Orlando,22.0,1994.0,19,17,1486.0,1.0,1.0,0.0,0.0,1.0,0.0
+2017,208,Mallory Weber,us USA,FW,Portland,22.0,1994.0,17,5,563.0,1.0,1.0,0.0,0.0,1.0,0.0
+2017,209,Tiffany Weimer,us USA,FW,Boston,33.0,1983.0,17,11,809.0,0.0,1.0,0.0,0.0,1.0,0.0
+2017,210,Christen Westphal,us USA,DF,Boston,23.0,1993.0,13,13,1129.0,0.0,1.0,0.0,0.0,1.0,0.0
+2017,211,Rosie White,nz NZL,FW,Boston,23.0,1993.0,22,21,1794.0,4.0,1.0,0.0,0.0,7.0,0.0
+2017,212,Lydia Williams,au AUS,GK,Seattle,28.0,1988.0,3,3,270.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,213,Lydia Williams,au AUS,GK,Houston,28.0,1988.0,8,8,720.0,0.0,0.0,0.0,0.0,0.0,0.0
+2017,214,Lynn Williams,us USA,FW,North Carolina,23.0,1993.0,21,21,1826.0,9.0,5.0,1.0,1.0,0.0,0.0
+2017,215,Sam Witteman,us USA,DF,North Carolina,22.0,1994.0,12,5,419.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,216,Arin Wright,us USA,DF,Chicago,24.0,1992.0,22,21,1766.0,0.0,0.0,0.0,0.0,2.0,0.0
+2017,217,Janine van Wyk,za RSA,DF,Houston,29.0,1987.0,17,17,1474.0,0.0,0.0,0.0,0.0,4.0,0.0
+2017,218,Beverly Yanez,us USA,"FW,MF",Seattle,28.0,1988.0,22,17,1345.0,4.0,1.0,0.0,0.0,0.0,0.0
+2017,219,Shelina Zadorsky,ca CAN,DF,Washington,24.0,1992.0,21,20,1793.0,0.0,1.0,0.0,0.0,2.0,0.0
+2017,220,McCall Zerboni,us USA,MF,North Carolina,30.0,1986.0,23,23,2017.0,3.0,0.0,0.0,0.0,4.0,0.0
+2018,1,Michaela Abam,cm CMR,FW,Sky Blue,20.0,1997.0,4,0,49.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,2,Elizabeth Addo,gh GHA,FW,Seattle,24.0,1993.0,12,8,688.0,0.0,1.0,0.0,0.0,2.0,0.0
+2018,3,Lindsay Agnew,ca CAN,FW,Houston,22.0,1995.0,12,6,609.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,4,Andressinha,br BRA,MF,Portland,22.0,1995.0,18,9,847.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,5,Morgan Andrews,us USA,MF,Seattle,22.0,1995.0,15,7,768.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,6,Yael Averbuch,us USA,MF,Seattle,31.0,1986.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,7,Elizabeth Ball,us USA,DF,Portland,22.0,1995.0,6,0,100.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,8,Estefanía Banini,ar ARG,"FW,MF",Washington,27.0,1990.0,12,11,891.0,1.0,1.0,0.0,0.0,0.0,0.0
+2018,9,Lauren Barnes,us USA,DF,Seattle,28.0,1989.0,19,18,1679.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,10,Nicole Barnhart,us USA,GK,Utah,36.0,1981.0,8,7,648.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,11,Maddie Bauer,us USA,DF,Seattle,22.0,1995.0,1,0,16.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,12,Janine Beckie,ca CAN,FW,Sky Blue,23.0,1994.0,15,11,1049.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,13,Michelle Betos,us USA,GK,Seattle,29.0,1988.0,8,8,720.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,14,Aubrey Bledsoe,us USA,GK,Washington,26.0,1991.0,21,21,1890.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,15,Eliza Bona,us USA,MF,Sky Blue,,,2,0,25.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,16,Celeste Boureille,us USA,MF,Portland,23.0,1994.0,21,18,1587.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,17,Katie Bowen,nz NZL,"DF,MF",Utah,23.0,1994.0,19,16,1434.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,18,Emily Boyd,us USA,GK,Chicago,21.0,1996.0,2,2,180.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,19,Morgan Brian,us USA,MF,Chicago,24.0,1993.0,8,6,497.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,20,Amber Brooks,us USA,"DF,MF",Houston,27.0,1991.0,24,24,2160.0,1.0,0.0,0.0,0.0,3.0,0.0
+2018,21,Bridget Callahan,us USA,MF,Orlando,21.0,1996.0,1,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2018,22,Camila,br BRA,DF,Orlando,23.0,1994.0,9,3,318.0,0.0,0.0,0.0,0.0,3.0,0.0
+2018,23,Jane Campbell,us USA,GK,Houston,22.0,1995.0,24,24,2160.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,24,Ellie Carpenter,au AUS,DF,Portland,17.0,2000.0,17,14,1299.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,25,Caroline Casey,us USA,GK,Sky Blue,23.0,1994.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,26,Steph Catley,au AUS,DF,Seattle,24.0,1994.0,16,16,1436.0,0.0,3.0,0.0,0.0,2.0,0.0
+2018,27,Allysha Chapman,ca CAN,DF,Houston,29.0,1989.0,15,15,1331.0,0.0,1.0,0.0,0.0,2.0,0.0
+2018,28,Allysha Chapman,ca CAN,DF,North Carolina,29.0,1989.0,1,0,19.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,29,Whitney Church,us USA,DF,Washington,24.0,1993.0,22,21,1898.0,0.0,1.0,0.0,0.0,2.0,0.0
+2018,30,Zoe Clark,us USA,DF,Washington,22.0,1995.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,31,Danielle Colaprico,us USA,MF,Chicago,24.0,1993.0,24,21,1906.0,1.0,4.0,0.0,0.0,3.0,0.0
+2018,32,Taylor Comeau,us USA,DF,Chicago,24.0,1993.0,11,10,932.0,1.0,0.0,0.0,0.0,2.0,0.0
+2018,33,Taylor Comeau,us USA,DF,Houston,24.0,1993.0,12,12,1072.0,0.0,2.0,0.0,0.0,0.0,0.0
+2018,34,Rachel Corsie,sco SCO,DF,Utah,28.0,1989.0,24,23,2088.0,0.0,1.0,0.0,0.0,3.0,0.0
+2018,35,Ana-Maria Crnogorčević,ch SUI,FW,Portland,27.0,1990.0,20,17,1407.0,5.0,3.0,0.0,0.0,0.0,0.0
+2018,36,Megan Crosson,,DF,Washington,23.0,1994.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,37,Frannie Crouse,us USA,FW,North Carolina,22.0,1995.0,1,0,27.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,38,Sabrina D'Angelo,ca CAN,GK,North Carolina,24.0,1993.0,6,6,540.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,39,Abby Dahlkemper,us USA,MF,North Carolina,24.0,1993.0,19,19,1710.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,40,Kiersten Dallstream,us USA,"DF,FW",Seattle,29.0,1988.0,3,2,163.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,41,Rachel Daly,eng ENG,FW,Houston,26.0,1991.0,24,24,2155.0,10.0,2.0,2.0,2.0,4.0,0.0
+2018,42,Debinha,br BRA,FW,North Carolina,26.0,1991.0,21,20,1731.0,8.0,2.0,0.0,0.0,0.0,0.0
+2018,43,Vanessa DiBernardo,us USA,MF,Chicago,25.0,1992.0,11,7,679.0,2.0,2.0,0.0,0.0,0.0,0.0
+2018,44,Imani Dorsey,us USA,FW,Sky Blue,,,13,12,1048.0,4.0,1.0,0.0,0.0,0.0,0.0
+2018,45,Meggie Dougherty Howard,us USA,MF,Washington,22.0,1995.0,23,14,1448.0,0.0,0.0,0.0,0.0,3.0,0.0
+2018,46,Nickolette Driesse,us USA,MF,Sky Blue,23.0,1994.0,1,0,7.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,47,Crystal Dunn,us USA,"DF,MF",North Carolina,25.0,1992.0,22,21,1801.0,8.0,5.0,0.0,0.0,0.0,0.0
+2018,48,Caprice Dydasco,us USA,DF,Washington,24.0,1993.0,24,21,1948.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,49,Britt Eckerstrom,us USA,GK,Portland,24.0,1993.0,10,10,900.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,50,Elizabeth Eddy,us USA,MF,North Carolina,26.0,1991.0,2,1,94.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,51,Kristen Edmonds,us USA,DF,Orlando,30.0,1987.0,15,13,1091.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,52,Emily van Egmond,au AUS,MF,Orlando,24.0,1993.0,17,12,1098.0,0.0,1.0,0.0,0.0,2.0,0.0
+2018,53,Brooke Elby,us USA,MF,Utah,24.0,1993.0,7,6,577.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,54,Brooke Elby,us USA,MF,Chicago,24.0,1993.0,4,3,269.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,55,Abby Elinsky,us USA,MF,Orlando,22.0,1996.0,2,0,32.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,56,Abby Erceg,nz NZL,"DF,FW",North Carolina,28.0,1989.0,24,24,2160.0,2.0,2.0,0.0,0.0,1.0,0.0
+2018,57,Julie Ertz,us USA,"DF,MF",Chicago,25.0,1992.0,14,13,1126.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,58,Mallory Eubanks,us USA,FW,Washington,21.0,1996.0,12,5,516.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,59,Danica Evans,us USA,FW,Orlando,22.0,1995.0,5,0,48.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,60,Claire Falknor,us USA,DF,Houston,24.0,1993.0,2,0,27.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,61,Cali Farquharson,us USA,FW,Washington,24.0,1993.0,5,1,152.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,62,Jess Fishlock,wal WAL,MF,Seattle,31.0,1987.0,18,18,1543.0,2.0,1.0,0.0,0.0,2.0,0.0
+2018,63,Caitlin Foord,au AUS,"DF,FW",Portland,23.0,1994.0,6,2,276.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,64,Adrianna Franch,us USA,GK,Portland,27.0,1990.0,14,14,1260.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,65,Mandy Freeman,us USA,DF,Sky Blue,22.0,1995.0,21,21,1826.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,66,Amanda Frisbie,us USA,DF,Sky Blue,25.0,1992.0,17,15,1285.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,67,Christina Gibbons,us USA,DF,Sky Blue,23.0,1994.0,18,16,1431.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,68,Sarah Gorden,us USA,DF,Chicago,25.0,1992.0,17,12,1246.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,69,Katrina Gorry,au AUS,MF,Utah,25.0,1992.0,16,13,1068.0,0.0,1.0,0.0,0.0,1.0,0.0
+2018,70,Summer Green,us USA,FW,Chicago,22.0,1995.0,8,4,318.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,71,Shea Groom,us USA,FW,Sky Blue,24.0,1993.0,21,17,1535.0,2.0,3.0,0.0,1.0,0.0,0.0
+2018,72,Kristen Hamilton,us USA,FW,North Carolina,25.0,1992.0,23,8,783.0,3.0,4.0,0.0,0.0,4.0,0.0
+2018,73,Haley Hanson,us USA,MF,Houston,21.0,1996.0,19,15,1463.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,74,DiDi Haracic,ba BIH,GK,Washington,25.0,1992.0,2,2,180.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,75,Ashlyn Harris,us USA,GK,Orlando,32.0,1985.0,21,21,1890.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,76,Ashley Hatch,us USA,FW,Washington,22.0,1995.0,22,22,1927.0,4.0,1.0,0.0,0.0,2.0,0.0
+2018,77,Tobin Heath,us USA,MF,Portland,29.0,1988.0,17,14,1269.0,7.0,7.0,0.0,0.0,0.0,0.0
+2018,78,Rachel Hill,us USA,FW,Orlando,22.0,1995.0,21,7,814.0,4.0,0.0,0.0,0.0,1.0,0.0
+2018,79,Jaelene Hinkle,us USA,DF,North Carolina,24.0,1993.0,20,20,1779.0,0.0,4.0,0.0,0.0,1.0,0.0
+2018,80,Lindsey Horan,us USA,FW,Portland,23.0,1994.0,22,22,1980.0,13.0,2.0,0.0,1.0,5.0,0.0
+2018,81,Jen Hoy,us USA,"FW,MF",Sky Blue,27.0,1991.0,10,2,217.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,82,Kelli Hubly,us USA,DF,Portland,23.0,1994.0,11,9,818.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,83,Sofia Huerta,mx MEX,FW,Houston,25.0,1992.0,12,12,1068.0,5.0,4.0,1.0,1.0,1.0,0.0
+2018,84,Sofia Huerta,mx MEX,FW,Chicago,25.0,1992.0,11,11,964.0,3.0,2.0,1.0,1.0,0.0,0.0
+2018,85,Tori Huster,us USA,MF,Washington,28.0,1989.0,17,15,1283.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,86,Darian Jenkins,us USA,FW,North Carolina,23.0,1995.0,12,0,176.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,87,Estelle Johnson,cm CMR,DF,Washington,29.0,1988.0,21,21,1890.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,88,Jaycie Johnson,us USA,FW,Seattle,22.0,1995.0,3,0,3.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,89,Katie Johnson,mx MEX,FW,Sky Blue,23.0,1994.0,19,13,1166.0,4.0,2.0,0.0,0.0,1.0,0.0
+2018,90,Samantha Johnson,us USA,"DF,MF",Chicago,26.0,1991.0,10,10,900.0,0.0,0.0,0.0,0.0,3.0,0.0
+2018,91,Samantha Johnson,us USA,"DF,MF",Utah,26.0,1991.0,6,5,433.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,92,Savannah Jordan,us USA,,Houston,23.0,1995.0,10,5,412.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,93,Lauren Kaskie,us USA,MF,Chicago,22.0,1995.0,7,3,214.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,94,Yuri Kawamura,jp JPN,MF,North Carolina,28.0,1989.0,2,1,98.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,95,Nahomi Kawasumi,jp JPN,"FW,MF",Seattle,32.0,1985.0,14,11,875.0,0.0,3.0,0.0,0.0,0.0,0.0
+2018,96,Kimberly Keever,us USA,FW,Houston,22.0,1995.0,11,9,727.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,97,Alanna Kennedy,au AUS,MF,Orlando,23.0,1995.0,20,20,1800.0,2.0,1.0,0.0,0.0,2.0,0.0
+2018,98,Sam Kerr,au AUS,"FW,MF",Chicago,24.0,1993.0,19,19,1704.0,16.0,4.0,0.0,0.0,2.0,0.0
+2018,99,Thembi Kgatlana,za RSA,FW,Houston,21.0,1996.0,16,2,375.0,2.0,3.0,0.0,0.0,1.0,0.0
+2018,100,Sarah Killion,us USA,MF,Sky Blue,25.0,1992.0,24,24,2132.0,2.0,2.0,0.0,0.0,3.0,0.0
+2018,101,Alyssa Kleiner,us USA,DF,Seattle,24.0,1993.0,10,4,414.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,102,Meghan Klingenberg,us USA,"DF,MF",Portland,29.0,1988.0,20,20,1751.0,0.0,2.0,0.0,0.0,1.0,0.0
+2018,103,Haley Kopmeyer,us USA,GK,Orlando,27.0,1990.0,3,3,270.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,104,Ali Krieger,us USA,"DF,MF",Orlando,33.0,1984.0,19,19,1675.0,0.0,2.0,0.0,0.0,1.0,0.0
+2018,105,Kaleigh Kurtz,us USA,DF,North Carolina,20.0,1997.0,6,6,540.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,106,Lo'eau LaBonta,us USA,MF,Utah,24.0,1993.0,16,8,823.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,107,Veronica Latsko,us USA,MF,Houston,22.0,1995.0,21,9,972.0,4.0,2.0,0.0,0.0,0.0,0.0
+2018,108,Rose Lavelle,us USA,MF,Washington,22.0,1995.0,11,5,423.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,109,Adriana Leon,ca CAN,"FW,MF",Sky Blue,25.0,1992.0,2,0,33.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,110,Adriana Leon,ca CAN,"FW,MF",Seattle,25.0,1992.0,6,1,152.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,111,Sydney Leroux,us USA,FW,Orlando,27.0,1990.0,20,15,1431.0,6.0,2.0,0.0,0.0,2.0,0.0
+2018,112,Carli Lloyd,us USA,MF,Sky Blue,35.0,1982.0,18,17,1563.0,4.0,1.0,1.0,2.0,4.0,1.0
+2018,113,Joanna Lohman,us USA,"DF,MF",Washington,35.0,1982.0,13,4,429.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,114,Allie Long,us USA,MF,Seattle,30.0,1987.0,19,19,1710.0,3.0,1.0,0.0,0.0,2.0,0.0
+2018,115,Tyler Lussi,us USA,FW,Portland,23.0,1995.0,15,3,370.0,1.0,1.0,0.0,0.0,1.0,0.0
+2018,116,Taylor Lytle,us USA,MF,Utah,28.0,1989.0,10,4,450.0,0.0,2.0,0.0,0.0,0.0,0.0
+2018,117,Marta,br BRA,FW,Orlando,31.0,1986.0,17,15,1310.0,4.0,4.0,1.0,2.0,2.0,1.0
+2018,118,Diana Matheson,ca CAN,MF,Utah,33.0,1984.0,21,18,1396.0,2.0,0.0,0.0,1.0,2.0,0.0
+2018,119,Merritt Mathias,us USA,"DF,MF",North Carolina,27.0,1990.0,22,22,1961.0,3.0,2.0,0.0,0.0,4.0,0.0
+2018,120,Alyssa Mautz,us USA,"FW,MF",Chicago,28.0,1989.0,23,20,1716.0,5.0,3.0,0.0,0.0,3.0,0.0
+2018,121,Stephanie McCaffrey,us USA,FW,Chicago,24.0,1993.0,2,0,9.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,122,Tiffany McCarty,us USA,FW,Washington,27.0,1990.0,1,1,70.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,123,Savannah McCaskill,us USA,FW,Sky Blue,21.0,1996.0,20,17,1510.0,3.0,3.0,0.0,0.0,3.0,0.0
+2018,124,Jessica McDonald,us USA,FW,North Carolina,29.0,1988.0,23,21,1686.0,7.0,9.0,0.0,0.0,1.0,0.0
+2018,125,Kristen McNabb,us USA,DF,Seattle,23.0,1994.0,20,12,1156.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,126,McKenzie Meehan,us USA,FW,Sky Blue,23.0,1994.0,11,3,350.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,127,Emily Menges,us USA,DF,Portland,25.0,1992.0,15,15,1305.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,128,Kristie Mewis,us USA,"DF,MF",Houston,26.0,1991.0,11,11,919.0,2.0,0.0,0.0,0.0,0.0,0.0
+2018,129,Sam Mewis,us USA,MF,North Carolina,25.0,1992.0,17,11,1088.0,3.0,2.0,0.0,0.0,1.0,0.0
+2018,130,Sydney Miramontez,us USA,DF,Utah,23.0,1994.0,10,6,639.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,131,Mônica,br BRA,DF,Orlando,39.0,1978.0,17,15,1400.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,132,Alex Morgan,us USA,FW,Orlando,28.0,1989.0,19,17,1511.0,5.0,2.0,1.0,2.0,0.0,0.0
+2018,133,Rebecca Moros,us USA,"DF,MF",Utah,32.0,1985.0,22,22,1869.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,134,Linda Motlhalo,za RSA,MF,Houston,19.0,1998.0,21,20,1788.0,1.0,1.0,0.0,0.0,0.0,0.0
+2018,135,Alli Murphy,us USA,MF,Houston,23.0,1994.0,1,0,13.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,136,Alyssa Naeher,us USA,GK,Chicago,29.0,1988.0,22,22,1980.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,137,Yūki Nagasato,jp JPN,FW,Chicago,30.0,1987.0,22,17,1608.0,4.0,7.0,1.0,2.0,4.0,0.0
+2018,138,Christine Nairn,us USA,MF,Orlando,27.0,1990.0,20,13,1116.0,1.0,4.0,0.0,0.0,1.0,0.0
+2018,139,Katie Naughton,us USA,DF,Chicago,23.0,1994.0,23,23,2059.0,1.0,0.0,0.0,0.0,2.0,0.0
+2018,140,Alexa Newfield,us USA,FW,Washington,26.0,1991.0,1,0,20.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,141,Theresa Nielsen,dk DEN,DF,Seattle,31.0,1986.0,20,18,1654.0,1.0,1.0,0.0,0.0,0.0,0.0
+2018,142,Kelley O'Hara,us USA,"DF,FW",Utah,29.0,1988.0,8,7,518.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,143,Heather O'Reilly,us USA,"FW,MF",North Carolina,33.0,1985.0,8,2,260.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,144,Denise O'Sullivan,ie IRL,FW,North Carolina,23.0,1994.0,22,20,1752.0,0.0,2.0,0.0,0.0,2.0,0.0
+2018,145,Kealia Ohai,us USA,"FW,MF",Houston,26.0,1992.0,19,18,1439.0,5.0,4.0,0.0,0.0,1.0,0.0
+2018,146,Ifeoma Onumonu,us USA,FW,Portland,23.0,1994.0,8,3,310.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,147,Francisca Ordega,ng NGA,"FW,MF",Washington,24.0,1993.0,18,15,1193.0,3.0,0.0,0.0,0.0,3.0,0.0
+2018,148,Megan Oyster,us USA,DF,Seattle,25.0,1992.0,20,20,1800.0,1.0,2.0,0.0,0.0,3.0,0.0
+2018,149,Carson Pickett,us USA,DF,Orlando,24.0,1993.0,19,16,1381.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,150,Amandine Pierre-Louis,ca CAN,DF,Sky Blue,22.0,1995.0,3,0,44.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,151,Poliana,br BRA,DF,Orlando,26.0,1991.0,10,8,694.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,152,Clare Polkinghorne,au AUS,DF,Houston,28.0,1989.0,9,9,782.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,153,Christen Press,us USA,FW,Utah,29.0,1988.0,11,11,975.0,2.0,2.0,0.0,0.0,0.0,0.0
+2018,154,Toni Pressley,us USA,DF,Orlando,27.0,1990.0,11,10,813.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,155,Nichelle Prince,ca CAN,FW,Houston,22.0,1995.0,20,11,1023.0,1.0,2.0,0.0,0.0,0.0,0.0
+2018,156,Morgan Proffitt,us USA,MF,Washington,23.0,1994.0,4,2,197.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,157,Mallory Pugh,us USA,FW,Washington,19.0,1998.0,15,13,1082.0,2.0,1.0,0.0,1.0,0.0,0.0
+2018,158,Margaret Purce,us USA,FW,Portland,22.0,1995.0,19,15,1299.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,159,Rebecca Quinn,ca CAN,"DF,MF",Washington,22.0,1995.0,17,16,1384.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,160,Megan Rapinoe,us USA,"FW,MF",Seattle,32.0,1985.0,16,15,1317.0,7.0,6.0,2.0,3.0,2.0,0.0
+2018,161,Hayley Raso,au AUS,"FW,MF",Portland,23.0,1994.0,12,9,774.0,2.0,2.0,0.0,0.0,0.0,0.0
+2018,162,Brittany Ratcliffe,us USA,FW,Utah,23.0,1994.0,10,4,366.0,2.0,0.0,0.0,0.0,2.0,0.0
+2018,163,Katherine Reynolds,us USA,DF,Portland,30.0,1987.0,17,16,1419.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,164,Domi Richardson,us USA,"DF,MF",Sky Blue,25.0,1992.0,16,14,1356.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,165,Cari Roccaro,us USA,DF,North Carolina,23.0,1994.0,2,2,172.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,166,Amy Rodriguez,us USA,"FW,MF",Utah,30.0,1987.0,19,16,1300.0,5.0,1.0,0.0,0.0,0.0,0.0
+2018,167,Raquel Rodríguez,cr CRC,FW,Sky Blue,24.0,1993.0,15,10,909.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,168,Katelyn Rowland,us USA,GK,North Carolina,23.0,1994.0,18,18,1620.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,169,Angela Salem,us USA,MF,Portland,29.0,1988.0,5,1,161.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,170,Becky Sauerbrunn,us USA,DF,Utah,32.0,1985.0,20,19,1720.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,171,Desiree Scott,ca CAN,MF,Utah,30.0,1987.0,21,20,1811.0,0.0,0.0,0.0,0.0,2.0,0.0
+2018,172,Kailen Sheridan,ca CAN,GK,Sky Blue,22.0,1995.0,23,23,2070.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,173,Meleana Shim,us USA,MF,Houston,26.0,1991.0,8,7,596.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,174,Arielle Ship,us USA,FW,Washington,22.0,1995.0,2,0,41.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,175,Casey Short,us USA,DF,Chicago,27.0,1990.0,9,8,654.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,176,Kyah Simon,au AUS,FW,Houston,26.0,1991.0,15,11,949.0,2.0,2.0,0.0,0.0,1.0,0.0
+2018,177,Christine Sinclair,ca CAN,"FW,MF",Portland,34.0,1983.0,24,24,2160.0,9.0,6.0,3.0,3.0,4.0,0.0
+2018,178,Erica Skroski,us USA,DF,Sky Blue,23.0,1994.0,20,20,1654.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,179,Abby Smith,us USA,GK,Utah,24.0,1993.0,17,17,1512.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,180,Taylor Smith,us USA,FW,Washington,24.0,1993.0,23,23,2064.0,0.0,1.0,0.0,0.0,1.0,0.0
+2018,181,Havana Solaun,jm JAM,MF,Washington,24.0,1993.0,13,5,495.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,182,Emily Sonnett,us USA,DF,Portland,24.0,1993.0,20,20,1755.0,1.0,1.0,0.0,0.0,5.0,0.0
+2018,183,Meredith Speck,us USA,MF,North Carolina,24.0,1993.0,15,2,245.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,184,Jasmyne Spencer,us USA,FW,Seattle,27.0,1990.0,22,8,948.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,185,Nikki Stanton,us USA,MF,Chicago,27.0,1990.0,20,16,1451.0,0.0,0.0,0.0,0.0,4.0,0.0
+2018,186,Katie Stengel,us USA,FW,Utah,25.0,1992.0,23,10,1142.0,6.0,0.0,0.0,0.0,0.0,0.0
+2018,187,Rebekah Stott,nz NZL,"DF,MF",Sky Blue,24.0,1993.0,9,8,774.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,188,Andi Sullivan,us USA,MF,Washington,22.0,1995.0,23,22,1985.0,0.0,1.0,0.0,1.0,0.0,0.0
+2018,189,Jodie Taylor,eng ENG,FW,Seattle,31.0,1986.0,24,24,2089.0,9.0,1.0,1.0,2.0,3.0,0.0
+2018,190,Thaisa,br BRA,MF,Sky Blue,29.0,1988.0,8,5,396.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,191,Elise Thorsnes,no NOR,FW,Utah,29.0,1988.0,9,3,353.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,192,Madison Tiernan,us USA,MF,Sky Blue,22.0,1995.0,22,15,1240.0,2.0,1.0,0.0,0.0,4.0,0.0
+2018,193,Erika Tymrak,us USA,"FW,MF",Utah,26.0,1991.0,14,5,478.0,1.0,1.0,0.0,0.0,1.0,0.0
+2018,194,Chioma Ubogagu,us USA,FW,Orlando,25.0,1992.0,21,17,1339.0,4.0,1.0,0.0,0.0,2.0,0.0
+2018,195,Rumi Utsugi,jp JPN,MF,Seattle,29.0,1988.0,15,15,1239.0,1.0,0.0,0.0,0.0,0.0,0.0
+2018,196,Michele Vasconcelos,us USA,FW,Chicago,23.0,1994.0,19,10,904.0,1.0,0.0,0.0,0.0,1.0,0.0
+2018,197,Dani Weatherholt,us USA,MF,Orlando,23.0,1994.0,23,17,1658.0,2.0,0.0,0.0,0.0,1.0,0.0
+2018,198,Mallory Weber,us USA,FW,Portland,23.0,1994.0,14,9,713.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,199,Tiffany Weimer,us USA,FW,Washington,34.0,1983.0,3,1,84.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,200,Christen Westphal,us USA,DF,Seattle,24.0,1993.0,12,9,693.0,0.0,1.0,0.0,0.0,0.0,0.0
+2018,201,Rosie White,nz NZL,FW,Chicago,24.0,1993.0,10,4,377.0,1.0,1.0,0.0,0.0,1.0,0.0
+2018,202,Lydia Williams,au AUS,GK,Seattle,29.0,1988.0,16,16,1440.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,203,Lynn Williams,us USA,FW,North Carolina,24.0,1993.0,21,20,1708.0,14.0,5.0,1.0,2.0,1.0,0.0
+2018,204,Ryan Williams,us USA,"DF,MF",North Carolina,21.0,1996.0,1,0,10.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,205,Arin Wright,us USA,DF,Chicago,25.0,1992.0,24,23,2040.0,0.0,4.0,0.0,0.0,3.0,0.0
+2018,206,Janine van Wyk,za RSA,DF,Houston,30.0,1987.0,20,20,1720.0,0.0,0.0,0.0,0.0,1.0,0.0
+2018,207,Kelsey Wys,us USA,GK,Washington,26.0,1991.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,208,Beverly Yanez,us USA,"FW,MF",Seattle,29.0,1988.0,19,14,1167.0,2.0,0.0,0.0,0.0,0.0,0.0
+2018,209,Erin Yenney,us USA,MF,Chicago,25.0,1992.0,3,0,27.0,0.0,0.0,0.0,0.0,0.0,0.0
+2018,210,Gunnhildur Yrsa Jónsdóttir,is ISL,MF,Utah,29.0,1988.0,24,24,2160.0,1.0,2.0,0.0,0.0,4.0,0.0
+2018,211,Shelina Zadorsky,ca CAN,DF,Orlando,25.0,1992.0,23,23,2070.0,0.0,2.0,0.0,0.0,3.0,0.0
+2018,212,McCall Zerboni,us USA,MF,North Carolina,31.0,1986.0,20,20,1800.0,3.0,1.0,0.0,0.0,1.0,0.0
+2019,1,Lindsay Agnew,ca CAN,FW,Houston,23.0,1995.0,7,5,373.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,2,Andressinha,br BRA,MF,Portland,23.0,1995.0,7,4,371.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,3,Morgan Andrews,us USA,MF,Reign,23.0,1995.0,9,7,603.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,4,Dorian Bailey,us USA,MF,Washington,22.0,1997.0,19,12,1223.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,5,Bethany Balcer,us USA,FW,Reign,21.0,1997.0,24,19,1699.0,6.0,2.0,0.0,0.0,1.0,0.0
+2019,6,Elizabeth Ball,us USA,DF,Portland,23.0,1995.0,15,13,1089.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,7,Lauren Barnes,us USA,DF,Reign,29.0,1989.0,23,23,2070.0,0.0,0.0,0.0,0.0,5.0,0.0
+2019,8,Nicole Barnhart,us USA,GK,Utah,37.0,1981.0,24,24,2160.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,9,McKenzie Berryhill,us USA,DF,Washington,25.0,1993.0,3,2,196.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,10,Michelle Betos,us USA,GK,Reign,30.0,1988.0,4,4,359.0,0.0,0.0,0.0,0.0,0.0,1.0
+2019,11,Aubrey Bledsoe,us USA,GK,Washington,27.0,1991.0,24,24,2149.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,12,Verónica Boquete,es ESP,"FW,MF",Utah,31.0,1987.0,21,19,1630.0,0.0,6.0,0.0,0.0,0.0,0.0
+2019,13,Celeste Boureille,us USA,MF,Portland,24.0,1994.0,10,7,651.0,0.0,1.0,0.0,0.0,2.0,0.0
+2019,14,Katie Bowen,nz NZL,"DF,MF",Utah,24.0,1994.0,19,17,1504.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,15,Emily Boyd,us USA,GK,Chicago,22.0,1996.0,10,10,900.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,16,Joanna Boyles,us USA,MF,Orlando,23.0,1995.0,19,16,1379.0,1.0,2.0,0.0,0.0,0.0,0.0
+2019,17,Elizabeth Brandon,us USA,MF,Houston,,,1,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2019,18,Morgan Brian,us USA,MF,Chicago,25.0,1993.0,13,11,951.0,1.0,1.0,0.0,0.0,0.0,0.0
+2019,19,Amber Brooks,us USA,"DF,MF",Houston,28.0,1991.0,24,24,2160.0,1.0,0.0,0.0,0.0,2.0,0.0
+2019,20,Dagný Brynjarsdóttir,is ISL,MF,Portland,27.0,1991.0,21,17,1563.0,1.0,0.0,0.0,0.0,3.0,0.0
+2019,21,Lainey Burdett,us USA,GK,Orlando,22.0,1996.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,22,Ariana Calderón,mx MEX,FW,Houston,28.0,1990.0,8,0,129.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,23,Bridget Callahan,us USA,MF,Orlando,22.0,1996.0,8,6,496.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,24,Camila,br BRA,DF,Orlando,24.0,1994.0,16,4,579.0,1.0,0.0,1.0,1.0,2.0,0.0
+2019,25,Jane Campbell,us USA,GK,Houston,23.0,1995.0,24,24,2160.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,26,Ellie Carpenter,au AUS,DF,Portland,18.0,2000.0,16,14,1222.0,0.0,1.0,0.0,0.0,0.0,0.0
+2019,27,Steph Catley,au AUS,DF,Reign,25.0,1994.0,15,15,1305.0,0.0,2.0,0.0,0.0,1.0,0.0
+2019,28,Allysha Chapman,ca CAN,DF,Houston,30.0,1989.0,14,14,1217.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,29,Simone Charley,us USA,FW,Portland,23.0,1995.0,11,6,496.0,0.0,2.0,0.0,0.0,0.0,0.0
+2019,30,Danielle Colaprico,us USA,MF,Chicago,25.0,1993.0,19,18,1612.0,1.0,0.0,0.0,0.0,2.0,0.0
+2019,31,Taylor Comeau,us USA,DF,Houston,25.0,1993.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,32,Rachel Corsie,sco SCO,DF,Utah,29.0,1989.0,19,19,1710.0,1.0,0.0,0.0,0.0,2.0,0.0
+2019,33,Meghan Cox,us USA,DF,Utah,24.0,1994.0,2,0,7.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,34,Stephanie Cox,us USA,DF,Reign,32.0,1986.0,7,3,290.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,35,Ana-Maria Crnogorčević,ch SUI,FW,Portland,28.0,1990.0,12,9,761.0,1.0,1.0,0.0,0.0,0.0,0.0
+2019,36,Megan Crosson,,DF,Washington,24.0,1994.0,9,3,382.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,37,Abby Dahlkemper,us USA,MF,North Carolina,25.0,1993.0,14,14,1260.0,0.0,0.0,0.0,1.0,0.0,0.0
+2019,38,Kiersten Dallstream,us USA,"DF,FW",Reign,30.0,1988.0,2,0,33.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,39,Rachel Daly,eng ENG,FW,Houston,27.0,1991.0,17,17,1529.0,5.0,1.0,1.0,1.0,2.0,1.0
+2019,40,Tierna Davidson,us USA,DF,Chicago,20.0,1998.0,13,13,1084.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,41,Debinha,br BRA,FW,North Carolina,27.0,1991.0,19,17,1529.0,8.0,7.0,0.0,1.0,0.0,0.0
+2019,42,Vanessa DiBernardo,us USA,MF,Chicago,26.0,1992.0,21,18,1550.0,3.0,2.0,0.0,0.0,0.0,0.0
+2019,43,Jordan DiBiasi,us USA,MF,Washington,22.0,1996.0,22,20,1747.0,4.0,0.0,0.0,0.0,0.0,0.0
+2019,44,Makenzy Doniak,us USA,FW,Utah,24.0,1994.0,11,1,166.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,45,Imani Dorsey,us USA,FW,Sky Blue,,,23,23,1959.0,2.0,0.0,0.0,0.0,2.0,0.0
+2019,46,Meggie Dougherty Howard,us USA,MF,Washington,23.0,1995.0,22,18,1562.0,0.0,0.0,0.0,0.0,5.0,0.0
+2019,47,Crystal Dunn,us USA,"DF,MF",North Carolina,26.0,1992.0,13,11,999.0,7.0,4.0,0.0,0.0,0.0,0.0
+2019,48,Caprice Dydasco,us USA,DF,Sky Blue,25.0,1993.0,23,23,2028.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,49,Britt Eckerstrom,us USA,GK,Portland,25.0,1993.0,10,10,900.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,50,Elizabeth Eddy,us USA,MF,North Carolina,27.0,1991.0,3,0,65.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,51,Elizabeth Eddy,us USA,MF,Sky Blue,27.0,1991.0,17,15,1281.0,1.0,1.0,0.0,0.0,0.0,0.0
+2019,52,Kristen Edmonds,us USA,DF,Orlando,31.0,1987.0,13,9,866.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,53,Emily van Egmond,au AUS,MF,Orlando,25.0,1993.0,8,7,628.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,54,Brooke Elby,us USA,MF,Chicago,25.0,1993.0,16,2,317.0,2.0,0.0,0.0,0.0,0.0,0.0
+2019,55,Abby Elinsky,us USA,MF,Orlando,23.0,1996.0,18,4,546.0,0.0,0.0,0.0,0.0,3.0,0.0
+2019,56,Maddie Elliston,us USA,DF,Utah,22.0,1996.0,1,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2019,57,Claire Emslie,sco SCO,FW,Orlando,24.0,1994.0,11,9,773.0,0.0,1.0,0.0,0.0,4.0,0.0
+2019,58,Abby Erceg,nz NZL,"DF,FW",North Carolina,29.0,1989.0,20,20,1775.0,1.0,0.0,0.0,0.0,1.0,0.0
+2019,59,Julie Ertz,us USA,"DF,MF",Chicago,26.0,1992.0,14,14,1260.0,0.0,1.0,0.0,0.0,2.0,0.0
+2019,60,Danica Evans,us USA,FW,Orlando,23.0,1995.0,9,3,322.0,1.0,1.0,0.0,0.0,0.0,0.0
+2019,61,Marissa Everett,us USA,FW,Portland,21.0,1997.0,4,0,35.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,62,Cali Farquharson,us USA,FW,Washington,25.0,1993.0,13,6,541.0,0.0,2.0,0.0,0.0,0.0,0.0
+2019,63,Caitlin Farrell,us USA,DF,Orlando,21.0,1997.0,3,0,14.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,64,Bayley Feist,us USA,MF,Washington,21.0,1997.0,12,4,470.0,1.0,2.0,0.0,0.0,2.0,0.0
+2019,65,Jamia Fields,us USA,FW,Houston,25.0,1993.0,16,5,432.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,66,Jess Fishlock,wal WAL,MF,Reign,32.0,1987.0,5,5,414.0,3.0,1.0,0.0,0.0,0.0,0.0
+2019,67,Sabrina Flores,us USA,DF,Sky Blue,23.0,1996.0,4,4,360.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,68,Caitlin Foord,au AUS,"DF,FW",Portland,24.0,1994.0,17,9,837.0,3.0,2.0,0.0,1.0,3.0,0.0
+2019,69,Adrianna Franch,us USA,GK,Portland,28.0,1990.0,14,14,1260.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,70,Gabi,br BRA,FW,Sky Blue,24.0,1994.0,3,0,36.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,71,Zoey Goralski,us USA,MF,Chicago,24.0,1995.0,5,0,58.0,0.0,1.0,0.0,0.0,0.0,0.0
+2019,72,Sarah Gorden,us USA,DF,Chicago,26.0,1992.0,23,23,2054.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,73,Erin Greening,us USA,MF,Orlando,21.0,1997.0,17,16,1438.0,1.0,0.0,0.0,0.0,3.0,0.0
+2019,74,Shea Groom,us USA,FW,Reign,25.0,1993.0,15,14,1036.0,2.0,0.0,0.0,0.0,3.0,0.0
+2019,75,Kristen Hamilton,us USA,FW,North Carolina,26.0,1992.0,22,17,1314.0,9.0,5.0,0.0,0.0,0.0,0.0
+2019,76,Haley Hanson,us USA,MF,Houston,22.0,1996.0,24,21,1947.0,0.0,0.0,0.0,0.0,3.0,0.0
+2019,77,DiDi Haracic,ba BIH,GK,Sky Blue,26.0,1992.0,5,5,450.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,78,Ashlyn Harris,us USA,GK,Orlando,33.0,1985.0,13,13,1170.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,79,Amy Harrison,au AUS,DF,Washington,22.0,1996.0,10,8,508.0,0.0,2.0,0.0,0.0,1.0,0.0
+2019,80,Ashley Hatch,us USA,FW,Washington,23.0,1995.0,24,24,2096.0,7.0,2.0,0.0,0.0,1.0,0.0
+2019,81,Tobin Heath,us USA,MF,Portland,30.0,1988.0,13,12,1093.0,3.0,3.0,0.0,0.0,1.0,0.0
+2019,82,Rachel Hill,us USA,FW,Orlando,23.0,1995.0,24,22,1851.0,4.0,2.0,0.0,0.0,2.0,0.0
+2019,83,Jaelene Hinkle,us USA,DF,North Carolina,25.0,1993.0,24,24,2160.0,1.0,6.0,0.0,0.0,1.0,0.0
+2019,84,Lindsey Horan,us USA,FW,Portland,24.0,1994.0,13,13,1147.0,1.0,2.0,0.0,0.0,2.0,0.0
+2019,85,Jen Hoy,us USA,"FW,MF",Sky Blue,28.0,1991.0,21,11,960.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,86,Kelli Hubly,us USA,DF,Portland,24.0,1994.0,3,3,251.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,87,Carlin Hudson,us USA,DF,Washington,22.0,1996.0,4,0,50.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,88,Sofia Huerta,mx MEX,FW,Houston,26.0,1992.0,24,23,2082.0,5.0,3.0,0.0,1.0,1.0,0.0
+2019,89,Tori Huster,us USA,MF,Washington,29.0,1989.0,22,22,1935.0,0.0,3.0,0.0,0.0,3.0,0.0
+2019,90,Julie James,us USA,MF,Sky Blue,22.0,1996.0,16,12,1116.0,0.0,1.0,0.0,0.0,4.0,0.0
+2019,91,Darian Jenkins,us USA,FW,Reign,24.0,1995.0,17,11,900.0,4.0,1.0,0.0,0.0,1.0,0.0
+2019,92,Celia Jiménez,es ESP,DF,Reign,23.0,1995.0,12,10,900.0,1.0,0.0,0.0,0.0,3.0,0.0
+2019,93,Estelle Johnson,cm CMR,DF,Sky Blue,30.0,1988.0,15,15,1305.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,94,Jaycie Johnson,us USA,FW,Reign,23.0,1995.0,1,0,21.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,95,Katie Johnson,mx MEX,FW,Chicago,24.0,1994.0,19,11,1044.0,1.0,3.0,0.0,0.0,3.0,2.0
+2019,96,Samantha Johnson,us USA,"DF,MF",Utah,27.0,1991.0,8,8,675.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,97,Nahomi Kawasumi,jp JPN,"FW,MF",Sky Blue,33.0,1985.0,19,10,996.0,0.0,1.0,0.0,0.0,0.0,0.0
+2019,98,Elise Kellond-Knight,au AUS,"DF,MF",Reign,28.0,1990.0,3,0,103.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,99,Elise Kellond-Knight,au AUS,"DF,MF",Washington,28.0,1990.0,6,4,347.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,100,Maegan Kelly,ca CAN,MF,Reign,26.0,1992.0,6,2,199.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,101,Alanna Kennedy,au AUS,MF,Orlando,24.0,1995.0,15,15,1349.0,1.0,0.0,0.0,0.0,2.0,1.0
+2019,102,Sam Kerr,au AUS,"FW,MF",Chicago,25.0,1993.0,21,21,1863.0,18.0,5.0,0.0,0.0,1.0,0.0
+2019,103,Sarah Killion,us USA,MF,Sky Blue,26.0,1992.0,24,24,2160.0,1.0,3.0,1.0,1.0,0.0,0.0
+2019,104,Julie King,us USA,DF,Orlando,29.0,1989.0,2,2,132.0,0.0,0.0,0.0,0.0,0.0,1.0
+2019,105,Cecelia Kizer,us USA,FW,Houston,,,16,2,363.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,106,Meghan Klingenberg,us USA,"DF,MF",Portland,30.0,1988.0,23,23,2017.0,0.0,4.0,0.0,0.0,1.0,0.0
+2019,107,Haley Kopmeyer,us USA,GK,Orlando,28.0,1990.0,10,10,900.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,108,Ali Krieger,us USA,"DF,MF",Orlando,34.0,1984.0,12,12,1080.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,109,Kaleigh Kurtz,us USA,DF,North Carolina,21.0,1997.0,9,9,810.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,110,Stephanie Labbé,ca CAN,GK,North Carolina,32.0,1986.0,16,16,1440.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,111,Lo'eau LaBonta,us USA,MF,Utah,25.0,1993.0,22,22,1859.0,2.0,2.0,0.0,0.0,1.0,0.0
+2019,112,Mandy Laddish,us USA,MF,Utah,26.0,1992.0,11,9,633.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,113,Veronica Latsko,us USA,MF,Houston,23.0,1995.0,4,1,117.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,114,Rose Lavelle,us USA,MF,Washington,23.0,1995.0,6,5,450.0,1.0,1.0,0.0,0.0,1.0,0.0
+2019,115,Sydney Leroux,us USA,FW,Orlando,28.0,1990.0,3,0,28.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,116,Samantha Leshnak,us USA,GK,North Carolina,21.0,1997.0,2,2,180.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,117,Gina Lewandowski,us USA,"DF,MF",Sky Blue,33.0,1985.0,13,12,1079.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,118,Carli Lloyd,us USA,MF,Sky Blue,36.0,1982.0,14,14,1260.0,8.0,1.0,1.0,2.0,2.0,0.0
+2019,119,Chloe Logarzo,au AUS,MF,Washington,24.0,1994.0,15,9,796.0,1.0,0.0,0.0,1.0,1.0,0.0
+2019,120,Allie Long,us USA,MF,Reign,31.0,1987.0,14,14,1223.0,0.0,2.0,0.0,0.0,3.0,0.0
+2019,121,Tyler Lussi,us USA,FW,Portland,24.0,1995.0,12,1,277.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,122,Michelle Maemone,us USA,DF,Utah,,,7,6,442.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,123,Marta,br BRA,FW,Orlando,32.0,1986.0,14,14,1254.0,6.0,0.0,1.0,1.0,4.0,1.0
+2019,124,Merritt Mathias,us USA,"DF,MF",North Carolina,28.0,1990.0,20,20,1772.0,0.0,5.0,0.0,0.0,0.0,0.0
+2019,125,Cheyna Matthews,jm JAM,FW,Washington,25.0,1993.0,17,9,905.0,3.0,1.0,0.0,0.0,3.0,0.0
+2019,126,Alyssa Mautz,us USA,"FW,MF",Chicago,29.0,1989.0,3,3,217.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,127,Tiffany McCarty,us USA,FW,Washington,28.0,1990.0,1,0,38.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,128,Savannah McCaskill,us USA,FW,Sky Blue,22.0,1996.0,6,4,386.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,129,Savannah McCaskill,us USA,FW,Chicago,22.0,1996.0,16,8,658.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,130,Kayla McCoy,jm JAM,FW,Houston,22.0,1996.0,1,1,54.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,131,Jessica McDonald,us USA,FW,North Carolina,30.0,1988.0,14,9,860.0,5.0,3.0,0.0,0.0,1.0,0.0
+2019,132,Tegan McGrady,us USA,DF,Washington,21.0,1997.0,6,5,392.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,133,Kristen McNabb,us USA,DF,Reign,24.0,1994.0,15,10,1001.0,0.0,1.0,0.0,0.0,4.0,0.0
+2019,134,McKenzie Meehan,us USA,FW,North Carolina,24.0,1994.0,3,0,41.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,135,McKenzie Meehan,us USA,FW,Sky Blue,24.0,1994.0,3,0,14.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,136,Emily Menges,us USA,DF,Portland,26.0,1992.0,19,19,1665.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,137,Kristie Mewis,us USA,"DF,MF",Houston,27.0,1991.0,22,20,1818.0,4.0,1.0,0.0,0.0,1.0,0.0
+2019,138,Sam Mewis,us USA,MF,North Carolina,26.0,1992.0,12,11,995.0,2.0,1.0,2.0,2.0,0.0,0.0
+2019,139,Lauren Milliet,us USA,MF,North Carolina,,,2,0,45.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,140,Sydney Miramontez,us USA,DF,Utah,24.0,1994.0,4,2,210.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,141,Paige Monaghan,us USA,FW,Sky Blue,22.0,1996.0,23,20,1759.0,2.0,1.0,0.0,0.0,2.0,0.0
+2019,142,Alex Morgan,us USA,FW,Orlando,29.0,1989.0,6,5,395.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,143,Rebecca Moros,us USA,"DF,MF",Utah,33.0,1985.0,8,7,611.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,144,Casey Murphy,us USA,GK,Reign,22.0,1996.0,19,19,1710.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,145,Satara Murray,us USA,DF,Houston,25.0,1993.0,9,9,752.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,146,Alyssa Naeher,us USA,GK,Chicago,30.0,1988.0,14,14,1260.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,147,Yūki Nagasato,jp JPN,FW,Chicago,31.0,1987.0,24,24,2114.0,8.0,8.0,1.0,2.0,3.0,0.0
+2019,148,Christine Nairn,us USA,MF,Houston,28.0,1990.0,22,19,1663.0,1.0,2.0,0.0,0.0,6.0,0.0
+2019,149,Katie Naughton,us USA,DF,Chicago,24.0,1994.0,21,18,1539.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,150,Alexa Newfield,us USA,FW,Utah,27.0,1991.0,2,0,25.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,151,Paige Nielsen,us USA,FW,Washington,25.0,1993.0,22,22,1913.0,0.0,0.0,0.0,0.0,4.0,1.0
+2019,152,Theresa Nielsen,dk DEN,DF,Reign,32.0,1986.0,21,19,1721.0,0.0,2.0,0.0,0.0,2.0,0.0
+2019,153,Kelley O'Hara,us USA,"DF,FW",Utah,30.0,1988.0,4,2,242.0,0.0,1.0,0.0,0.0,0.0,0.0
+2019,154,Heather O'Reilly,us USA,"FW,MF",North Carolina,34.0,1985.0,13,4,437.0,1.0,1.0,0.0,0.0,0.0,0.0
+2019,155,Denise O'Sullivan,ie IRL,FW,North Carolina,24.0,1994.0,23,22,1966.0,0.0,1.0,0.0,0.0,4.0,0.0
+2019,156,Emily Ogle,us USA,MF,Portland,22.0,1996.0,3,1,92.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,157,Kealia Ohai,us USA,"FW,MF",Houston,27.0,1992.0,23,22,1801.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,158,Ifeoma Onumonu,us USA,FW,Reign,24.0,1994.0,20,8,994.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,159,Megan Oyster,us USA,DF,Reign,26.0,1992.0,20,20,1729.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,160,Carson Pickett,us USA,DF,Orlando,25.0,1993.0,20,19,1688.0,0.0,1.0,0.0,0.0,2.0,0.0
+2019,161,Amandine Pierre-Louis,ca CAN,DF,Sky Blue,23.0,1995.0,11,1,168.0,0.0,1.0,0.0,0.0,3.0,1.0
+2019,162,Madison Pogarch,us USA,DF,Portland,21.0,1997.0,3,1,102.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,163,Clare Polkinghorne,au AUS,DF,Houston,29.0,1989.0,9,9,810.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,164,Christen Press,us USA,FW,Utah,30.0,1988.0,14,14,1255.0,8.0,2.0,0.0,0.0,1.0,0.0
+2019,165,Toni Pressley,us USA,DF,Orlando,28.0,1990.0,10,9,828.0,1.0,0.0,0.0,0.0,1.0,0.0
+2019,166,Nichelle Prince,ca CAN,FW,Houston,23.0,1995.0,4,4,343.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,167,Ally Prisock,us USA,DF,Houston,22.0,1997.0,15,15,1323.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,168,Cami Privett,us USA,MF,Houston,25.0,1993.0,3,0,16.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,169,Morgan Proffitt,us USA,MF,Reign,24.0,1994.0,6,4,413.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,170,Leah Pruitt,us USA,FW,North Carolina,21.0,1997.0,14,6,553.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,171,Mallory Pugh,us USA,FW,Washington,20.0,1998.0,9,9,765.0,2.0,2.0,0.0,1.0,0.0,0.0
+2019,172,Margaret Purce,us USA,FW,Portland,23.0,1995.0,22,16,1332.0,8.0,1.0,0.0,0.0,0.0,0.0
+2019,173,Rebecca Quinn,ca CAN,"DF,MF",Reign,23.0,1995.0,6,4,357.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,174,Megan Rapinoe,us USA,"FW,MF",Reign,33.0,1985.0,5,3,333.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,175,Hayley Raso,au AUS,"FW,MF",Portland,24.0,1994.0,14,11,1041.0,4.0,0.0,0.0,0.0,0.0,0.0
+2019,176,Morgan Reid,us USA,DF,Orlando,23.0,1995.0,7,7,602.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,177,Katherine Reynolds,us USA,DF,Portland,31.0,1987.0,23,17,1651.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,178,Domi Richardson,us USA,"DF,MF",Sky Blue,26.0,1992.0,8,5,510.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,179,Cari Roccaro,us USA,DF,North Carolina,24.0,1994.0,13,11,908.0,0.0,1.0,0.0,0.0,0.0,0.0
+2019,180,Amy Rodriguez,us USA,"FW,MF",Utah,31.0,1987.0,24,24,2092.0,9.0,0.0,1.0,1.0,2.0,0.0
+2019,181,Raquel Rodríguez,cr CRC,FW,Sky Blue,25.0,1993.0,22,22,1921.0,3.0,3.0,0.0,0.0,2.0,0.0
+2019,182,Arianna Romero,mx MEX,DF,Houston,26.0,1992.0,10,8,762.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,183,Katelyn Rowland,us USA,GK,North Carolina,24.0,1994.0,6,6,540.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,184,Angela Salem,us USA,MF,Portland,30.0,1988.0,3,2,153.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,185,Maria Sanchez,mx MEX,MF,Chicago,22.0,1996.0,7,0,134.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,186,Becky Sauerbrunn,us USA,DF,Utah,33.0,1985.0,14,14,1260.0,1.0,0.0,0.0,0.0,0.0,0.0
+2019,187,Sophie Schmidt,ca CAN,MF,Houston,30.0,1988.0,18,16,1407.0,0.0,1.0,0.0,0.0,4.0,0.0
+2019,188,Desiree Scott,ca CAN,MF,Utah,31.0,1987.0,17,17,1530.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,189,Gabby Seiler,us USA,DF,Portland,24.0,1994.0,15,13,1123.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,190,Kayla Sharples,us USA,DF,Chicago,21.0,1997.0,2,0,13.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,191,Kailen Sheridan,ca CAN,GK,Sky Blue,23.0,1995.0,19,19,1710.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,192,Arielle Ship,us USA,FW,Washington,23.0,1995.0,8,4,322.0,0.0,2.0,0.0,0.0,0.0,0.0
+2019,193,Casey Short,us USA,DF,Chicago,28.0,1990.0,23,23,2055.0,2.0,3.0,0.0,0.0,2.0,0.0
+2019,194,Kyah Simon,au AUS,FW,Houston,27.0,1991.0,10,4,411.0,2.0,2.0,0.0,0.0,0.0,0.0
+2019,195,Christine Sinclair,ca CAN,"FW,MF",Portland,35.0,1983.0,17,17,1530.0,9.0,1.0,3.0,3.0,0.0,0.0
+2019,196,Erica Skroski,us USA,DF,Sky Blue,24.0,1994.0,24,24,2115.0,0.0,0.0,0.0,0.0,2.0,0.0
+2019,197,Emily Sonnett,us USA,DF,Portland,25.0,1993.0,13,12,1087.0,2.0,0.0,0.0,0.0,2.0,1.0
+2019,198,Meredith Speck,us USA,MF,North Carolina,25.0,1993.0,8,0,72.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,199,Jasmyne Spencer,us USA,FW,Reign,28.0,1990.0,1,1,26.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,200,Julia Spetsmark,se SWE,MF,North Carolina,29.0,1989.0,11,2,287.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,201,Samantha Staab,us USA,DF,Washington,21.0,1997.0,24,24,2160.0,1.0,1.0,0.0,0.0,4.0,0.0
+2019,202,Nikki Stanton,us USA,MF,Chicago,28.0,1990.0,19,11,995.0,0.0,0.0,0.0,0.0,6.0,0.0
+2019,203,Addison Steiner,us USA,FW,Reign,,,5,0,146.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,204,Katie Stengel,us USA,FW,Utah,26.0,1992.0,24,16,1477.0,2.0,1.0,0.0,0.0,1.0,0.0
+2019,205,Raisa Strom-Okimoto,us USA,FW,Utah,,,3,0,16.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,206,Andi Sullivan,us USA,MF,Washington,23.0,1995.0,23,23,2070.0,2.0,0.0,0.0,0.0,1.0,0.0
+2019,207,Jenna Szczesny,us USA,FW,Chicago,21.0,1997.0,2,0,15.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,208,Jodie Taylor,eng ENG,FW,Reign,32.0,1986.0,16,15,1239.0,5.0,3.0,0.0,1.0,2.0,0.0
+2019,209,Crystal Thomas,us USA,FW,Washington,25.0,1994.0,13,7,665.0,3.0,1.0,0.0,0.0,0.0,0.0
+2019,210,Erika Tymrak,us USA,"FW,MF",Utah,27.0,1991.0,16,4,529.0,0.0,1.0,0.0,0.0,1.0,0.0
+2019,211,Chioma Ubogagu,us USA,FW,Orlando,26.0,1992.0,17,15,1312.0,4.0,2.0,1.0,1.0,2.0,0.0
+2019,212,Rumi Utsugi,jp JPN,MF,Reign,30.0,1988.0,5,4,305.0,0.0,1.0,0.0,0.0,0.0,0.0
+2019,213,Michele Vasconcelos,us USA,FW,Chicago,24.0,1994.0,11,5,486.0,2.0,3.0,0.0,0.0,1.0,0.0
+2019,214,Marisa Viggiano,us USA,MF,Orlando,21.0,1997.0,19,14,1222.0,1.0,0.0,0.0,0.0,1.0,0.0
+2019,215,Gaby Vincent,us USA,DF,Utah,,,9,7,688.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,216,Dani Weatherholt,us USA,MF,Orlando,24.0,1994.0,19,16,1341.0,0.0,0.0,0.0,0.0,1.0,0.0
+2019,217,Mallory Weber,us USA,FW,Portland,24.0,1994.0,1,0,,0.0,0.0,0.0,0.0,0.0,0.0
+2019,218,Mallory Weber,us USA,FW,Utah,24.0,1994.0,18,13,1244.0,0.0,1.0,0.0,0.0,2.0,0.0
+2019,219,Christen Westphal,us USA,DF,Reign,25.0,1993.0,4,1,138.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,220,Rosie White,nz NZL,FW,Reign,25.0,1993.0,9,8,655.0,2.0,1.0,0.0,0.0,0.0,0.0
+2019,221,Lydia Williams,au AUS,GK,Reign,30.0,1988.0,1,1,90.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,222,Lynn Williams,us USA,FW,North Carolina,25.0,1993.0,22,21,1850.0,12.0,5.0,0.0,1.0,0.0,0.0
+2019,223,Ryan Williams,us USA,"DF,MF",North Carolina,22.0,1996.0,4,3,232.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,224,Arin Wright,us USA,DF,Chicago,26.0,1992.0,17,17,1505.0,1.0,1.0,0.0,0.0,0.0,0.0
+2019,225,Kenie Wright,us USA,MF,Sky Blue,,,5,1,186.0,0.0,1.0,0.0,0.0,2.0,0.0
+2019,226,Beverly Yanez,us USA,"FW,MF",Reign,30.0,1988.0,21,20,1747.0,1.0,0.0,0.0,0.0,1.0,0.0
+2019,227,Shae Yanez,us USA,GK,Washington,21.0,1997.0,1,0,11.0,0.0,0.0,0.0,0.0,0.0,0.0
+2019,228,Gunnhildur Yrsa Jónsdóttir,is ISL,MF,Utah,30.0,1988.0,24,19,1795.0,1.0,4.0,0.0,0.0,1.0,0.0
+2019,229,Shelina Zadorsky,ca CAN,DF,Orlando,26.0,1992.0,16,16,1440.0,1.0,0.0,0.0,0.0,1.0,0.0
+2019,230,McCall Zerboni,us USA,MF,North Carolina,32.0,1986.0,22,19,1670.0,0.0,1.0,0.0,0.0,3.0,0.0

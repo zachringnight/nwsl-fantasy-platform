@@ -1,0 +1,29 @@
+ranker,player,nationality,position,team,age,birth_year,minutes_90s,gk_goals_against,gk_pens_allowed,gk_free_kick_goals_against,gk_corner_kick_goals_against,gk_own_goals_against,gk_psxg,gk_psnpxg_per_shot_on_target_against,gk_psxg_net,gk_psxg_net_per90,gk_passes_completed_launched,gk_passes_launched,gk_passes_pct_launched,gk_passes,gk_passes_throws,gk_pct_passes_launched,gk_passes_length_avg,gk_goal_kicks,gk_pct_goal_kicks_launched,gk_goal_kick_length_avg,gk_crosses,gk_crosses_stopped,gk_crosses_stopped_pct,gk_def_actions_outside_pen_area,gk_def_actions_outside_pen_area_per90,gk_avg_distance_def_actions,matches
+1,Emmie Allen,usUSA,GK,Bay FC,22,2002,2.0,3,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+2,Angelina Anderson,usUSA,GK,Angel City FC,23,2001,22.0,37,4,,,,,,,,,,,,,,,,,,,,,,,,Matches
+3,Mackenzie Arnold,auAUS,GK,Portland Thorns,30,1994,19.0,25,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+4,Ann-Katrin Berger,deGER,GK,Gotham FC,34,1990,24.0,21,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+5,Bella Bixby,usUSA,GK,Portland Thorns,29,1995,7.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+6,Jordyn Bloomer,usUSA,GK,Racing Louisville,27,1997,20.0,26,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+7,Marisa Bova,usUSA,GK,NC Courage,24,2000,5.0,7,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+8,Jane Campbell,usUSA,GK,Houston Dash,29,1995,17.1,22,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+9,Ryan Campbell,usUSA,GK,Gotham FC,22,2002,0.0,0,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+10,McKinley Crone,,GK,Orlando Pride,,,1.4,1,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+11,Claudia Dickey,usUSA,GK,Reign,25,2000,26.0,29,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+12,DiDi Haracic,baBIH,GK,SD Wave,32,1992,2.0,3,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+13,Shelby Hogan,usUSA,GK,Gotham FC,26,1998,2.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+14,Laurel Ivory,usUSA,GK,Current,25,1999,2.0,0,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+15,Mia Justus,usUSA,GK,Royals,22,2002,2.0,1,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+16,Aubrey Kingsbury,usUSA,GK,Washington Spirit,33,1991,24.5,29,4,,,,,,,,,,,,,,,,,,,,,,,,Matches
+17,Lorena,brBRA,GK,Current,27,1997,24.0,13,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+18,Katie Lund,usUSA,GK,Racing Louisville,28,1996,6.0,12,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+19,Sandy MacIver,sctSCO,GK,Washington Spirit,26,1998,1.5,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+20,Halle Mackiewicz,usUSA,GK,Chicago Stars,23,2001,3.0,5,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+21,Amanda McGlynn,usUSA,GK,Royals,26,1998,24.0,41,4,,,,,,,,,,,,,,,,,,,,,,,,Matches
+22,Anna Moorhouse,engENG,GK,Orlando Pride,29,1995,24.6,26,1,,,,,,,,,,,,,,,,,,,,,,,,Matches
+23,Casey Murphy,usUSA,GK,NC Courage,28,1996,21.0,32,2,,,,,,,,,,,,,,,,,,,,,,,,Matches
+24,Alyssa Naeher,usUSA,GK,Chicago Stars,36,1988,23.0,49,4,,,,,,,,,,,,,,,,,,,,,,,,Matches
+25,Hannah Seabert,dkDEN,GK,Angel City FC,29,1995,4.0,4,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+26,Kailen Sheridan,caCAN,GK,SD Wave,29,1995,24.0,31,5,,,,,,,,,,,,,,,,,,,,,,,,Matches
+27,Jordan Silkowitz,usUSA,GK,Bay FC,24,2000,24.0,38,0,,,,,,,,,,,,,,,,,,,,,,,,Matches
+28,Abby Smith,usUSA,GK,Houston Dash,31,1993,8.9,17,1,,,,,,,,,,,,,,,,,,,,,,,,Matches

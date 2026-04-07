@@ -1,0 +1,20 @@
+ranker,player,nationality,position,team,age,birth_year,gk_games,gk_games_starts,gk_minutes,minutes_90s,gk_goals_against,gk_goals_against_per90,gk_shots_on_target_against,gk_saves,gk_save_pct,gk_wins,gk_ties,gk_losses,gk_clean_sheets,gk_clean_sheets_pct,gk_pens_att,gk_pens_allowed,gk_pens_saved,gk_pens_missed,gk_pens_save_pct,matches
+1,Angelina Anderson,usUSA,GK,Angel City FC,25-015,2001,4,4,360,4.0,4,1.0,14,10,71.4,3,0,1,1,25.0,0,0,0,0,,Matches
+2,Mackenzie Arnold,auAUS,GK,Portland Thorns,32-040,1994,2,2,180,2.0,2,1.0,11,9,81.8,1,1,0,1,50.0,0,0,0,0,,Matches
+3,Ann-Katrin Berger,deGER,GK,Gotham FC,35-179,1990,5,5,450,5.0,4,0.8,20,14,80.0,1,2,2,3,60.0,0,0,0,0,,Matches
+4,Jordyn Bloomer,usUSA,GK,Racing Louisville,28-174,1997,4,4,360,4.0,10,2.5,20,12,60.0,0,1,3,0,0.0,2,2,0,0,0.0,Matches
+5,Jane Campbell,usUSA,GK,Houston Dash,31-048,1995,4,4,360,4.0,5,1.25,16,13,81.3,3,0,1,2,50.0,2,2,0,0,0.0,Matches
+6,Claudia Dickey,usUSA,GK,Reign,26-090,2000,5,5,450,5.0,4,0.8,21,17,81.0,3,1,1,2,40.0,0,0,0,0,,Matches
+7,Leah Freeman,usUSA,GK,SD Wave,24-059,2002,4,4,360,4.0,2,0.5,8,6,75.0,4,0,0,2,50.0,0,0,0,0,,Matches
+8,DiDi Haracic,baBIH,GK,SD Wave,33-359,1992,1,1,90,1.0,1,1.0,2,1,50.0,0,0,1,0,0.0,0,0,0,0,,Matches
+9,Mia Justus,usUSA,GK,Royals,23-215,2002,5,5,450,5.0,6,1.2,20,14,70.0,2,1,2,1,20.0,0,0,0,0,,Matches
+10,Lorena,brBRA,GK,Current,28-335,1997,5,5,450,5.0,9,1.8,20,12,60.0,2,0,3,0,0.0,1,1,0,0,0.0,Matches
+11,Katie Lund,usUSA,GK,Chicago Stars,29-130,1996,1,1,90,1.0,1,1.0,8,8,100.0,0,0,1,0,0.0,1,1,0,0,0.0,Matches
+12,Sandy MacIver,sctSCO,GK,Washington Spirit,27-292,1998,5,5,450,5.0,4,0.8,13,9,69.2,1,3,1,2,40.0,0,0,0,0,,Matches
+13,Morgan Messner,usUSA,GK,Portland Thorns,26-048,2000,3,3,270,3.0,3,1.0,16,13,81.3,2,0,1,2,66.7,0,0,0,0,,Matches
+14,Anna Moorhouse,engENG,GK,Orlando Pride,31-007,1995,5,5,450,5.0,3,0.6,11,8,72.7,2,2,1,2,40.0,0,0,0,0,,Matches
+15,Casey Murphy,usUSA,GK,Boston Legacy,29-346,1996,4,4,360,4.0,7,1.75,11,6,45.5,0,0,4,0,0.0,2,1,1,0,50.0,Matches
+16,Alyssa Naeher,usUSA,GK,Chicago Stars,37-351,1988,4,4,360,4.0,10,2.5,20,10,50.0,1,0,3,0,0.0,0,0,0,0,,Matches
+17,Kailen Sheridan,caCAN,GK,NC Courage,30-264,1995,4,4,360,4.0,6,1.5,19,13,68.4,1,2,1,1,25.0,0,0,0,0,,Matches
+18,Jordan Silkowitz,usUSA,GK,Bay FC,26-010,2000,4,4,360,4.0,7,1.75,19,12,63.2,2,0,2,0,0.0,0,0,0,0,,Matches
+19,Abby Smith,usUSA,GK,Denver Summit,32-184,1993,5,5,450,5.0,3,0.6,27,24,88.9,1,3,1,3,60.0,0,0,0,0,,Matches

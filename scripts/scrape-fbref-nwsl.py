@@ -58,6 +58,20 @@ TEAM_TABLE_IDS = {
 
 DELAY_SECONDS = 7
 
+SCHEDULE_TEXT_COLUMNS = {
+    "round",
+    "dayofweek",
+    "date",
+    "start_time",
+    "home_team",
+    "score",
+    "away_team",
+    "venue",
+    "referee",
+    "match_report",
+    "notes",
+}
+
 
 def build_url(season: str, stat_type: str) -> str:
     page = STAT_PAGES[stat_type]
@@ -136,9 +150,18 @@ def parse_table(html: str, table_id: str) -> pd.DataFrame | None:
         "player", "nationality", "position", "squad", "age", "birth_year",
         "team", "country", "comp_level", "lg_finish", "matches",
     }
+    if table_id.startswith("sched_"):
+        text_cols |= SCHEDULE_TEXT_COLUMNS
     for col in df.columns:
         if col not in text_cols:
             df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    if table_id.startswith("sched_"):
+        for col in SCHEDULE_TEXT_COLUMNS & set(df.columns):
+            df[col] = df[col].astype(str).str.strip().replace({"": pd.NA, "nan": pd.NA})
+        core_columns = [col for col in ("date", "home_team", "away_team") if col in df.columns]
+        if core_columns:
+            df = df.dropna(subset=core_columns, how="any").reset_index(drop=True)
 
     return df
 
@@ -191,11 +214,26 @@ def scrape_all(season: str, stat_types: list[str], output_dir: Path):
         try:
             url = build_schedule_url(season)
             html = fetch_page(page, url)
-            schedule_table_id = f"sched_{season}_{COMP_ID}_1"
-            df_sched = parse_table(html, schedule_table_id)
-            if df_sched is None or df_sched.empty:
-                df_sched = parse_table(html, f"sched_{season}_{COMP_ID}")
-            if df_sched is not None and not df_sched.empty:
+            schedule_candidates = [
+                "sched_all",
+                f"sched_{season}_{COMP_ID}_1",
+                f"sched_{season}_{COMP_ID}_2",
+                f"sched_{season}_{COMP_ID}",
+            ]
+            schedule_frames = []
+
+            for table_id in schedule_candidates:
+                df_sched = parse_table(html, table_id)
+                if df_sched is not None and not df_sched.empty:
+                    schedule_frames.append(df_sched)
+
+            if schedule_frames:
+                df_sched = (
+                    pd.concat(schedule_frames, ignore_index=True)
+                    .dropna(subset=["date", "home_team", "away_team"], how="any")
+                    .drop_duplicates(subset=["date", "home_team", "away_team"], keep="first")
+                    .reset_index(drop=True)
+                )
                 fname = f"nwsl_{season}_schedule.csv"
                 df_sched.to_csv(output_dir / fname, index=False)
                 print(f"    [OK] {len(df_sched)} matches -> {fname}")

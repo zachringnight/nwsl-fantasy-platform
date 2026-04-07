@@ -1,0 +1,73 @@
+match_id,match_date,home_team,away_team,team,shots,goals,shots_on_target,total_xg
+7430,2018-04-15,Washington Spirit,North Carolina Courage,North Carolina Courage,17,4,10,2.152028152
+7430,2018-04-15,Washington Spirit,North Carolina Courage,Washington Spirit,8,2,3,0.9482155565
+7443,2018-05-05,Portland Thorns,OL Reign,OL Reign,13,3,7,1.857566267
+7443,2018-05-05,Portland Thorns,OL Reign,Portland Thorns,24,2,10,3.867488879
+7444,2018-05-06,North Carolina Courage,Chicago Red Stars,Chicago Red Stars,8,1,2,0.5806535740000001
+7444,2018-05-06,North Carolina Courage,Chicago Red Stars,North Carolina Courage,37,1,11,3.3004260836
+7445,2018-05-06,Utah Royals,Washington Spirit,Utah Royals,8,2,4,0.747665521
+7445,2018-05-06,Utah Royals,Washington Spirit,Washington Spirit,11,0,2,1.643780901
+7451,2018-05-13,North Carolina Courage,Washington Spirit,North Carolina Courage,18,1,7,1.8678505570000001
+7451,2018-05-13,North Carolina Courage,Washington Spirit,Washington Spirit,12,0,3,1.185287822
+7456,2018-05-20,NJ/NY Gotham FC,North Carolina Courage,NJ/NY Gotham FC,9,1,5,1.835903541
+7456,2018-05-20,NJ/NY Gotham FC,North Carolina Courage,North Carolina Courage,27,2,7,3.184335592
+7457,2018-05-24,Orlando Pride,North Carolina Courage,North Carolina Courage,26,3,5,4.390526975
+7457,2018-05-24,Orlando Pride,North Carolina Courage,Orlando Pride,9,3,3,1.713852462
+7471,2018-06-30,Orlando Pride,North Carolina Courage,North Carolina Courage,17,3,7,1.370616595
+7471,2018-06-30,Orlando Pride,North Carolina Courage,Orlando Pride,14,0,5,0.982378244
+7472,2018-07-01,OL Reign,Portland Thorns,OL Reign,17,1,9,1.7476126343
+7472,2018-07-01,OL Reign,Portland Thorns,Portland Thorns,7,0,0,1.2935135413
+7473,2018-07-01,Utah Royals,NJ/NY Gotham FC,NJ/NY Gotham FC,6,1,3,0.31245614299999996
+7473,2018-07-01,Utah Royals,NJ/NY Gotham FC,Utah Royals,11,3,5,1.191493207
+7474,2018-07-02,Chicago Red Stars,Washington Spirit,Chicago Red Stars,19,2,10,2.638041984
+7474,2018-07-02,Chicago Red Stars,Washington Spirit,Washington Spirit,19,0,2,1.6861822625
+7475,2018-07-05,North Carolina Courage,Chicago Red Stars,Chicago Red Stars,17,1,3,1.8953038805
+7475,2018-07-05,North Carolina Courage,Chicago Red Stars,North Carolina Courage,19,4,7,2.570020589
+7476,2018-07-08,NJ/NY Gotham FC,Chicago Red Stars,Chicago Red Stars,18,3,10,3.39147192
+7476,2018-07-08,NJ/NY Gotham FC,Chicago Red Stars,NJ/NY Gotham FC,10,1,5,1.2185178568000001
+7477,2018-07-07,Portland Thorns,Utah Royals,Portland Thorns,10,4,6,1.3414368666
+7477,2018-07-07,Portland Thorns,Utah Royals,Utah Royals,7,0,3,0.789657504
+7478,2018-07-08,OL Reign,Houston Dash,Houston Dash,12,1,4,0.994524514
+7478,2018-07-08,OL Reign,Houston Dash,OL Reign,13,3,7,2.2791694849999997
+7479,2018-07-08,Orlando Pride,Washington Spirit,Orlando Pride,29,2,11,2.5245627165
+7479,2018-07-08,Orlando Pride,Washington Spirit,Washington Spirit,15,1,5,0.8985164135
+7480,2018-07-12,OL Reign,Utah Royals,OL Reign,9,1,1,0.864331983
+7480,2018-07-12,OL Reign,Utah Royals,Utah Royals,11,0,0,0.861828144
+7482,2018-07-12,North Carolina Courage,Washington Spirit,North Carolina Courage,23,2,6,2.812675267
+7482,2018-07-12,North Carolina Courage,Washington Spirit,Washington Spirit,6,0,2,0.504442716
+7483,2018-07-15,Utah Royals,Orlando Pride,Orlando Pride,13,2,5,1.9851523913
+7483,2018-07-15,Utah Royals,Orlando Pride,Utah Royals,9,1,3,1.0820276636
+7484,2018-07-15,NJ/NY Gotham FC,North Carolina Courage,NJ/NY Gotham FC,12,0,5,1.2706184763000001
+7484,2018-07-15,NJ/NY Gotham FC,North Carolina Courage,North Carolina Courage,25,4,12,4.697587995
+7485,2018-07-15,Chicago Red Stars,OL Reign,Chicago Red Stars,19,1,6,1.27062518
+7485,2018-07-15,Chicago Red Stars,OL Reign,OL Reign,14,0,3,1.85745678
+7486,2018-07-16,Portland Thorns,Houston Dash,Houston Dash,8,1,3,1.378350346
+7486,2018-07-16,Portland Thorns,Houston Dash,Portland Thorns,19,3,9,2.605133036
+7487,2018-07-21,Utah Royals,North Carolina Courage,North Carolina Courage,19,0,2,1.598632118
+7487,2018-07-21,Utah Royals,North Carolina Courage,Utah Royals,5,0,1,0.3008274273
+7490,2018-07-22,NJ/NY Gotham FC,Portland Thorns,NJ/NY Gotham FC,17,1,5,2.43406227
+7490,2018-07-22,NJ/NY Gotham FC,Portland Thorns,Portland Thorns,10,2,3,1.219187414
+7492,2018-08-06,Orlando Pride,NJ/NY Gotham FC,NJ/NY Gotham FC,9,2,6,1.637505431
+7492,2018-08-06,Orlando Pride,NJ/NY Gotham FC,Orlando Pride,23,2,7,5.080263213
+7493,2018-08-06,OL Reign,Washington Spirit,OL Reign,21,2,6,2.911005545
+7493,2018-08-06,OL Reign,Washington Spirit,Washington Spirit,13,0,2,1.222890296
+7494,2018-08-06,Houston Dash,Utah Royals,Houston Dash,16,1,5,1.131186231
+7494,2018-08-06,Houston Dash,Utah Royals,Utah Royals,9,2,5,1.236244329
+7496,2018-08-09,Utah Royals,Washington Spirit,Utah Royals,19,1,8,1.523285889
+7496,2018-08-09,Utah Royals,Washington Spirit,Washington Spirit,6,0,2,0.392822717
+7497,2018-08-11,Chicago Red Stars,North Carolina Courage,Chicago Red Stars,12,1,1,0.940007198
+7497,2018-08-11,Chicago Red Stars,North Carolina Courage,North Carolina Courage,17,1,4,1.1445635269999999
+7500,2018-08-12,Orlando Pride,Portland Thorns,Orlando Pride,13,0,5,0.9715989930000001
+7500,2018-08-12,Orlando Pride,Portland Thorns,Portland Thorns,18,2,3,2.8293482883
+7519,2018-05-31,Portland Thorns,North Carolina Courage,North Carolina Courage,18,4,7,4.450649537
+7519,2018-05-31,Portland Thorns,North Carolina Courage,Portland Thorns,9,1,5,0.7734697744
+7520,2018-06-03,Washington Spirit,Chicago Red Stars,Chicago Red Stars,10,2,3,1.20336795
+7520,2018-06-03,Washington Spirit,Chicago Red Stars,Washington Spirit,11,0,4,0.666178857
+7521,2018-06-03,NJ/NY Gotham FC,Utah Royals,NJ/NY Gotham FC,10,1,4,0.612919292
+7521,2018-06-03,NJ/NY Gotham FC,Utah Royals,Utah Royals,8,1,4,0.5704884677
+7522,2018-06-04,Houston Dash,North Carolina Courage,Houston Dash,13,1,2,0.959971006
+7522,2018-06-04,Houston Dash,North Carolina Courage,North Carolina Courage,7,1,3,0.752515672
+7523,2018-06-04,OL Reign,Orlando Pride,OL Reign,18,0,6,1.559565803
+7523,2018-06-04,OL Reign,Orlando Pride,Orlando Pride,15,0,2,1.577299948
+7524,2018-07-12,Houston Dash,Orlando Pride,Houston Dash,17,3,8,2.176288172
+7524,2018-07-12,Houston Dash,Orlando Pride,Orlando Pride,23,1,6,1.948168691
