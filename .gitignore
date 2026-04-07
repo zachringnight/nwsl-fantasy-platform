@@ -38,6 +38,11 @@ yarn-error.log*
 __pycache__/
 *.pyc
 
+# model artifacts
+*.pkl
+nwsl-model/logs/
+nwsl-model/data/processed/
+
 # env files (can opt-in for committing if needed)
 .env*
 
