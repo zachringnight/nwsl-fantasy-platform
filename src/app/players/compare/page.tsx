@@ -93,6 +93,11 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
   const ceilingLeader = leftPlayer.ceiling >= rightPlayer.ceiling ? leftPlayer : rightPlayer;
   const floorLeader = leftPlayer.floor >= rightPlayer.floor ? leftPlayer : rightPlayer;
   const valueLeader = leftPlayer.valueScore >= rightPlayer.valueScore ? leftPlayer : rightPlayer;
+  const lineupLeader =
+    leftPlayer.starterProbability >= rightPlayer.starterProbability ? leftPlayer : rightPlayer;
+  const lineupGap = Math.round(
+    Math.abs(leftPlayer.starterProbability - rightPlayer.starterProbability) * 100
+  );
 
   return (
     <AppShell
@@ -118,7 +123,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
           description="Compare matchup-adjusted projection, range, salary, and value."
         >
           <div className="space-y-5">
-            <div className="grid gap-3 sm:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
               <MetricTile
                 detail="Higher projected fantasy output."
                 label="Projection edge"
@@ -148,6 +153,12 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                 value={`${getCallsign(valueLeader)} +${Math.abs(
                   leftPlayer.valueScore - rightPlayer.valueScore
                 ).toFixed(2)}`}
+              />
+              <MetricTile
+                detail="Higher chance to start."
+                label="Lineup edge"
+                tone="brand"
+                value={`${getCallsign(lineupLeader)} +${lineupGap}%`}
               />
             </div>
 
@@ -183,9 +194,12 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                         <Sparkles className="size-3.5" />
                         {player.matchupTag}
                       </Pill>
+                      <Pill tone={index === 0 ? "brand" : "accent"}>
+                        {player.lineupStatus}
+                      </Pill>
                     </div>
                     <p className="text-sm leading-7 text-white/78">
-                      {player.reasons[0] ?? player.trendLabel}
+                      {player.lineupNote}
                     </p>
                     <p className="text-xs uppercase tracking-[0.18em] text-white/58">
                       {player.matchDateLabel ?? "Match date pending"}
@@ -217,7 +231,7 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
               </Pill>
               <Pill tone="success">
                 <TimerReset className="size-3.5" />
-                Confidence = role stability + minutes
+                Starter odds = current role stability
               </Pill>
             </div>
 
@@ -309,6 +323,11 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                     value={player.ceiling.toFixed(1)}
                   />
                   <MetricTile
+                    detail="Projected chance to start."
+                    label="Starter odds"
+                    value={`${Math.round(player.starterProbability * 100)}%`}
+                  />
+                  <MetricTile
                     detail="Safer outcome band."
                     label="Floor"
                     tone="accent"
@@ -344,6 +363,13 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                       {formatPercent(player.confidence)}
                     </p>
                   </div>
+                </div>
+
+                <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
+                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+                    Lineup note
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-foreground">{player.lineupNote}</p>
                 </div>
 
                 <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">

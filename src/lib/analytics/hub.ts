@@ -64,6 +64,10 @@ export interface OfficialPlayerMatchLogRecord {
   xg: number;
   totalPasses: number;
   tacklesWon: number;
+  started: boolean;
+  enteredAsSub: boolean;
+  subbedOff: boolean;
+  formationPlace: number;
 }
 
 export interface OfficialPlayerLogSummary {
@@ -75,6 +79,26 @@ export interface OfficialPlayerLogSummary {
   minutesPlayed: number;
   xg: number;
   recentMatches: OfficialPlayerMatchLogRecord[];
+}
+
+export interface OfficialPlayerLineupSignalRecord {
+  playerId: string;
+  player: string;
+  team: string;
+  role: string;
+  playerStatus: string;
+  currentSeasonAppearances: number;
+  currentSeasonStarts: number;
+  currentSeasonSubApps: number;
+  recentMatchesCount: number;
+  startsLastFive: number;
+  subAppsLastFive: number;
+  averageMinutesLastFive: number;
+  averageMinutesWhenStarting: number;
+  lastMatchDateUtc: string | null;
+  lastOpponentTeamName: string | null;
+  lastStarted: boolean;
+  lastMinutes: number;
 }
 
 export interface OfficialFixtureRecord {
@@ -127,6 +151,7 @@ export interface MultiSourceAnalyticsHubData extends FbrefAnalyticsHubData {
     recentFixtures: OfficialFixtureRecord[];
     upcomingFixtures: OfficialFixtureRecord[];
     currentPlayerLogs: OfficialPlayerLogSummary[];
+    playerLineupSignals: OfficialPlayerLineupSignalRecord[];
   };
   statsbomb: {
     playerXgLeaders: StatsBombSummaryRecord[];
@@ -219,6 +244,14 @@ function round(value: number, digits = 2) {
   return Math.round(value * factor) / factor;
 }
 
+function average(values: number[]) {
+  if (values.length === 0) {
+    return 0;
+  }
+
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
 function sortByDateDesc<T extends { matchDateUtc?: string; matchDate?: string }>(rows: T[]) {
   return [...rows].sort((left, right) => {
     const leftDate = new Date(left.matchDateUtc ?? left.matchDate ?? "").getTime();
@@ -250,13 +283,27 @@ async function loadOfficialData(requestedSeason?: number) {
       recentFixtures: [],
       upcomingFixtures: [],
       currentPlayerLogs: [],
+      playerLineupSignals: [],
     };
   }
 
-  const [selectedTeamStats, selectedPlayerStats, selectedMatches, latestLogs] = await Promise.all([
+  const [
+    selectedTeamStats,
+    selectedPlayerStats,
+    selectedMatches,
+    latestProfiles,
+    latestSeasonPlayerStats,
+    latestLogs,
+  ] = await Promise.all([
     readCsvIfExists(OFFICIAL_DIR, `nwsl_${selectedSeason}_official_team_stats.csv`),
     readCsvIfExists(OFFICIAL_DIR, `nwsl_${selectedSeason}_official_player_stats.csv`),
     readCsvIfExists(OFFICIAL_DIR, `nwsl_${selectedSeason}_official_matches.csv`),
+    latestSeason
+      ? readCsvIfExists(OFFICIAL_DIR, `nwsl_${latestSeason}_official_player_profiles.csv`)
+      : Promise.resolve([] as CsvRow[]),
+    latestSeason
+      ? readCsvIfExists(OFFICIAL_DIR, `nwsl_${latestSeason}_official_player_stats.csv`)
+      : Promise.resolve([] as CsvRow[]),
     latestSeason
       ? readCsvIfExists(OFFICIAL_DIR, `nwsl_${latestSeason}_official_player_match_logs.csv`)
       : Promise.resolve([] as CsvRow[]),
@@ -365,9 +412,9 @@ async function loadOfficialData(requestedSeason?: number) {
     .filter((row) => row.status !== "FINISHED")
     .slice(0, 6);
 
-  const latestSeasonPlayerStats = latestSeason
-    ? await readCsvIfExists(OFFICIAL_DIR, `nwsl_${latestSeason}_official_player_stats.csv`)
-    : [];
+  const latestProfilesById = new Map(
+    latestProfiles.map((row) => [toText(row.player_id), row] as const)
+  );
   const latestPlayersById = new Map(
     latestSeasonPlayerStats.map((row) => [toText(row.player_id), row] as const)
   );
@@ -385,12 +432,16 @@ async function loadOfficialData(requestedSeason?: number) {
       result: toText(row.result),
       goalsFor: toNumber(row.goals_for),
       goalsAgainst: toNumber(row.goals_against),
-      minutesPlayed: toNumber(row.minutes_played || row.time_played),
+      minutesPlayed: toNumber(row.minutes_played || row.time_played || row.minsplayed || row.minutes),
       goals: toNumber(row.goals),
       assists: toNumber(row.assists || row.goal_assists),
-      xg: toNumber(row.xg),
-      totalPasses: toNumber(row.total_passes || row.total_pass),
-      tacklesWon: toNumber(row.tackles_won),
+      xg: toNumber(row.xg || row.expected_goals),
+      totalPasses: toNumber(row.total_passes || row.total_pass || row.totalpass),
+      tacklesWon: toNumber(row.tackles_won || row.wontackle || row.tackles_successful),
+      started: toNumber(row.gamestarted) === 1,
+      enteredAsSub: toNumber(row.totalsubon) === 1,
+      subbedOff: toNumber(row.totalsuboff) === 1,
+      formationPlace: toNumber(row.formationplace),
     });
     logsByPlayer.set(playerId, entries);
   }
@@ -398,11 +449,14 @@ async function loadOfficialData(requestedSeason?: number) {
   const currentPlayerLogs = [...logsByPlayer.entries()]
     .map(([playerId, rows]) => {
       const seasonRow = latestPlayersById.get(playerId);
+      const profileRow = latestProfilesById.get(playerId);
       return {
         playerId,
-        player: [toText(seasonRow?.media_first_name), toText(seasonRow?.media_last_name)].filter(Boolean).join(" "),
-        team: toText(seasonRow?.team_official_name),
-        role: toText(seasonRow?.role_label),
+        player:
+          [toText(seasonRow?.media_first_name), toText(seasonRow?.media_last_name)].filter(Boolean).join(" ") ||
+          [toText(profileRow?.media_first_name), toText(profileRow?.media_last_name)].filter(Boolean).join(" "),
+        team: toText(seasonRow?.team_official_name) || toText(profileRow?.team_name),
+        role: toText(seasonRow?.role_label) || toText(profileRow?.role_label),
         gamesPlayed: toNumber(seasonRow?.games_played),
         minutesPlayed: toNumber(seasonRow?.minutes_played || seasonRow?.time_played),
         xg: toNumber(seasonRow?.xg),
@@ -413,6 +467,61 @@ async function loadOfficialData(requestedSeason?: number) {
     .sort((left, right) => right.minutesPlayed - left.minutesPlayed)
     .slice(0, 12);
 
+  const playerLineupSignals = [...new Set([
+    ...latestProfilesById.keys(),
+    ...latestPlayersById.keys(),
+    ...logsByPlayer.keys(),
+  ])]
+    .map((playerId) => {
+      const profileRow = latestProfilesById.get(playerId);
+      const seasonRow = latestPlayersById.get(playerId);
+      const allMatches = sortByDateDesc(logsByPlayer.get(playerId) ?? []);
+      const recentMatches = allMatches.slice(0, 5);
+      const startedMatches = allMatches.filter((row) => row.started);
+      const recentMinutes = recentMatches
+        .map((row) => row.minutesPlayed)
+        .filter((value) => value > 0);
+      const lastMatch = recentMatches[0] ?? null;
+
+      return {
+        playerId,
+        player:
+          [toText(profileRow?.media_first_name), toText(profileRow?.media_last_name)].filter(Boolean).join(" ") ||
+          [toText(seasonRow?.media_first_name), toText(seasonRow?.media_last_name)].filter(Boolean).join(" "),
+        team: toText(profileRow?.team_name) || toText(seasonRow?.team_official_name),
+        role: toText(profileRow?.role_label) || toText(seasonRow?.role_label),
+        playerStatus: toText(profileRow?.player_status),
+        currentSeasonAppearances: allMatches.filter((row) => row.minutesPlayed > 0).length,
+        currentSeasonStarts: allMatches.filter((row) => row.started).length,
+        currentSeasonSubApps: allMatches.filter((row) => row.enteredAsSub).length,
+        recentMatchesCount: recentMatches.length,
+        startsLastFive: recentMatches.filter((row) => row.started).length,
+        subAppsLastFive: recentMatches.filter((row) => row.enteredAsSub).length,
+        averageMinutesLastFive: recentMinutes.length > 0 ? round(average(recentMinutes), 1) : 0,
+        averageMinutesWhenStarting:
+          startedMatches.length > 0
+            ? round(
+                average(
+                  startedMatches
+                    .map((row) => row.minutesPlayed)
+                    .filter((value) => value > 0)
+                ),
+                1
+              )
+            : 0,
+        lastMatchDateUtc: lastMatch?.matchDateUtc ?? null,
+        lastOpponentTeamName: lastMatch?.opponentTeamName ?? null,
+        lastStarted: lastMatch?.started ?? false,
+        lastMinutes: lastMatch?.minutesPlayed ?? 0,
+      } satisfies OfficialPlayerLineupSignalRecord;
+    })
+    .filter((row) => row.player)
+    .sort((left, right) => {
+      const teamOrder = left.team.localeCompare(right.team);
+      if (teamOrder !== 0) return teamOrder;
+      return left.player.localeCompare(right.player);
+    });
+
   return {
     selectedSeason,
     latestSeason,
@@ -422,6 +531,7 @@ async function loadOfficialData(requestedSeason?: number) {
     recentFixtures,
     upcomingFixtures,
     currentPlayerLogs,
+    playerLineupSignals,
   };
 }
 

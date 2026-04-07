@@ -725,6 +725,7 @@ export function AnalyticsHub({ data }: { data: PredictiveHubData }) {
                   <th className="px-2 py-3">Floor</th>
                   <th className="px-2 py-3">Ceiling</th>
                   <th className="px-2 py-3">Value</th>
+                  <th className="px-2 py-3">Starter</th>
                   <th className="px-2 py-3">Confidence</th>
                   <th className="px-2 py-3">Tag</th>
                 </tr>
@@ -746,6 +747,12 @@ export function AnalyticsHub({ data }: { data: PredictiveHubData }) {
                     <td className="px-2 py-3">{player.floor.toFixed(1)}</td>
                     <td className="px-2 py-3">{player.ceiling.toFixed(1)}</td>
                     <td className="px-2 py-3">{player.valueScore.toFixed(2)}</td>
+                    <td className="px-2 py-3">
+                      <div>
+                        <p className="font-semibold">{Math.round(player.starterProbability * 100)}%</p>
+                        <p className="text-xs text-muted">{player.lineupStatus}</p>
+                      </div>
+                    </td>
                     <td className="px-2 py-3">{formatProbability(player.confidence)}</td>
                     <td className="px-2 py-3">
                       <Pill tone="default">{player.matchupTag}</Pill>

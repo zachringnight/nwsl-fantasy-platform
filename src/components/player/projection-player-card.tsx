@@ -27,6 +27,12 @@ function cleanSheetLabel(player: PlayerProjectionRecord) {
   return `${Math.round(player.cleanSheetChance * 100)}% clean sheet`;
 }
 
+function lineupTone(player: PlayerProjectionRecord) {
+  if (player.lineupStatus === "Projected starter") return "success";
+  if (player.lineupStatus === "Likely starter") return "brand";
+  return "default";
+}
+
 export function ProjectionPlayerCard({
   compareDisabled = false,
   isCompared = false,
@@ -87,6 +93,10 @@ export function ProjectionPlayerCard({
             <ShieldCheck className="size-3.5" />
             {player.availability}
           </Pill>
+          <Pill tone={lineupTone(player)}>
+            {Math.round(player.starterProbability * 100)}% start
+          </Pill>
+          <Pill tone={lineupTone(player)}>{player.lineupStatus}</Pill>
           <Pill tone={confidenceTone(player.confidence)}>
             <Sparkles className="size-3.5" />
             {Math.round(player.confidence * 100)}% confidence
@@ -115,11 +125,15 @@ export function ProjectionPlayerCard({
             </span>
           </div>
           <div className="flex items-center justify-between rounded-full border border-line bg-white/5 px-4 py-2">
-            <span>Risk / trend</span>
+            <span>Lineup / risk</span>
             <span className="font-semibold text-foreground">
-              {player.riskLabel} • {player.trendLabel}
+              {player.lineupStatus} • {player.riskLabel}
             </span>
           </div>
+        </div>
+
+        <div className="space-y-2 rounded-[1.35rem] border border-line bg-white/5 p-4">
+          <p className="text-sm leading-6 text-muted">{player.lineupNote}</p>
         </div>
 
         <div className="space-y-2 rounded-[1.35rem] border border-line bg-white/5 p-4">

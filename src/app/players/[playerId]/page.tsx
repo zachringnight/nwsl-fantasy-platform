@@ -124,9 +124,27 @@ export default async function PlayerDetailPage({
                 value={playerProjection ? playerProjection.expectedMinutes.toFixed(0) : String(player.minutes_2025 ?? 0)}
               />
               <MetricTile
+                detail="Projected chance to start this slate"
+                label="Starter odds"
+                tone="brand"
+                value={
+                  playerProjection
+                    ? `${Math.round(playerProjection.starterProbability * 100)}%`
+                    : player.availability
+                }
+              />
+              <MetricTile
                 detail="Model confidence in this projection"
                 label="Confidence"
-                value={playerProjection ? `${Math.round(playerProjection.confidence * 100)}%` : player.availability}
+                value={
+                  playerProjection ? `${Math.round(playerProjection.confidence * 100)}%` : player.availability
+                }
+              />
+              <MetricTile
+                detail="Current role read for this match"
+                label="Lineup status"
+                tone="accent"
+                value={playerProjection ? playerProjection.lineupStatus : player.availability}
               />
             </div>
           ) : null}
@@ -136,7 +154,7 @@ export default async function PlayerDetailPage({
           title={playerProjection ? "Slate context" : "Season summary"}
           description={
             playerProjection
-              ? `${playerProjection.opponent ? `vs ${playerProjection.opponent}` : "No current opponent"} • ${playerProjection.riskLabel} • ${playerProjection.trendLabel}`
+              ? `${playerProjection.opponent ? `vs ${playerProjection.opponent}` : "No current opponent"} • ${playerProjection.lineupStatus} • ${playerProjection.trendLabel}`
               : player
                 ? "Projections based on real NWSL stats."
                 : "Try searching the player board."
@@ -145,11 +163,13 @@ export default async function PlayerDetailPage({
         >
           {playerProjection ? (
             <div className="space-y-3 text-sm leading-6 text-foreground">
+              <p>{playerProjection.lineupNote}</p>
               {playerProjection.reasons.map((reason) => (
                 <p key={`${playerProjection.id}-${reason}`}>{reason}</p>
               ))}
               <p>
                 Value score: {playerProjection.valueScore.toFixed(2)} •{" "}
+                {Math.round(playerProjection.starterProbability * 100)}% chance to start •{" "}
                 {playerProjection.cleanSheetChance != null
                   ? `${Math.round(playerProjection.cleanSheetChance * 100)}% clean-sheet chance`
                   : `${playerProjection.shotVolume.toFixed(1)} shot volume`}
@@ -222,7 +242,7 @@ export default async function PlayerDetailPage({
           <div className="space-y-3 text-sm leading-6 text-foreground">
             <p>
               {playerProjection
-                ? `${playerProjection.player} carries a ${playerProjection.matchupTag.toLowerCase()} with ${playerProjection.projection.toFixed(1)} projected points and a ${playerProjection.ceiling.toFixed(1)} point ceiling.`
+                ? `${playerProjection.player} carries a ${playerProjection.matchupTag.toLowerCase()} with ${playerProjection.projection.toFixed(1)} projected points, a ${Math.round(playerProjection.starterProbability * 100)}% start chance, and a ${playerProjection.ceiling.toFixed(1)} point ceiling.`
                 : "Use the player board for slate-aware projections, value sorting, and compare workflows."}
             </p>
             <div className="flex flex-wrap gap-3">

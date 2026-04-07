@@ -55,7 +55,9 @@ function TargetList({
               <Pill tone="default">{player.projection.toFixed(1)}</Pill>
             </div>
             <p className="mt-2 text-xs leading-6 text-muted">
-              {player.reasons[0] ?? `${player.floor.toFixed(1)} floor • ${player.ceiling.toFixed(1)} ceiling`}
+              {player.lineupStatus} • {Math.round(player.starterProbability * 100)}% start •{" "}
+              {player.reasons[0] ??
+                `${player.floor.toFixed(1)} floor • ${player.ceiling.toFixed(1)} ceiling`}
             </p>
           </div>
         ))}
@@ -174,6 +176,21 @@ export function MatchupPreviewCard({
         <div className="grid gap-4 lg:grid-cols-2">
           <TargetList players={matchup.homeTargets} title={`${matchup.homeTeam} targets`} />
           <TargetList players={matchup.awayTargets} title={`${matchup.awayTeam} targets`} />
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div className="rounded-[1.4rem] border border-line bg-white/5 p-4 text-sm leading-6 text-muted">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+              {matchup.homeTeam} lineup read
+            </p>
+            <p className="mt-3">{matchup.homeLineupSummary}</p>
+          </div>
+          <div className="rounded-[1.4rem] border border-line bg-white/5 p-4 text-sm leading-6 text-muted">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
+              {matchup.awayTeam} lineup read
+            </p>
+            <p className="mt-3">{matchup.awayLineupSummary}</p>
+          </div>
         </div>
 
         {detailHref ? (
@@ -335,6 +352,23 @@ export function MatchupPreviewDetail({ matchup }: { matchup: MatchupPreviewRecor
                   {angle}
                 </div>
               ))}
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard
+            eyebrow="Lineup certainty"
+            title="Who looks stable before lock"
+            description="Projected starter odds come from recent starts, current-season minutes, and historical role."
+          >
+            <div className="space-y-3 text-sm leading-6 text-foreground">
+              <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+                <p className="font-semibold text-foreground">{matchup.homeTeam}</p>
+                <p className="mt-1 text-muted">{matchup.homeLineupSummary}</p>
+              </div>
+              <div className="rounded-[1.2rem] border border-line bg-white/6 px-4 py-3">
+                <p className="font-semibold text-foreground">{matchup.awayTeam}</p>
+                <p className="mt-1 text-muted">{matchup.awayLineupSummary}</p>
+              </div>
             </div>
           </SurfaceCard>
         </div>

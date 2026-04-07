@@ -1,6 +1,10 @@
 import { cache } from "react";
 import type { TeamAnalyticsRecord, PlayerAnalyticsRecord } from "@/lib/analytics/fbref";
-import { getAnalyticsHubData, type MultiSourceAnalyticsHubData } from "@/lib/analytics/hub";
+import {
+  getAnalyticsHubData,
+  type MultiSourceAnalyticsHubData,
+  type OfficialPlayerLineupSignalRecord,
+} from "@/lib/analytics/hub";
 import {
   officialFantasyPlayerPool,
   type OfficialFantasyPoolPlayerRecord,
@@ -42,6 +46,13 @@ interface PlayerRateSnapshot {
   goalsConcededPer90: number;
 }
 
+export type ProjectedStarterStatus =
+  | "Projected starter"
+  | "Likely starter"
+  | "Rotation risk"
+  | "Bench risk"
+  | "Unavailable";
+
 export interface FairPriceRecord {
   label: string;
   probability: number;
@@ -76,6 +87,11 @@ export interface PlayerProjectionRecord {
   ceiling: number;
   confidence: number;
   expectedMinutes: number;
+  starterProbability: number;
+  lineupStatus: ProjectedStarterStatus;
+  lineupNote: string;
+  startsLastFive: number;
+  recentAppearances: number;
   valueScore: number;
   shotVolume: number;
   creationVolume: number;
@@ -118,6 +134,8 @@ export interface MatchupPreviewRecord {
   fairPrices: FairPriceRecord[];
   scoreMatrix: number[][];
   topScorelines: ScorelineRecord[];
+  homeLineupSummary: string;
+  awayLineupSummary: string;
   homeTargets: PlayerProjectionRecord[];
   awayTargets: PlayerProjectionRecord[];
 }
@@ -448,9 +466,118 @@ function blendRate(current: number | null, historical: number | null, currentWei
   return safeHistorical;
 }
 
+function estimateStarterProbability(
+  player: OfficialFantasyPoolPlayerRecord,
+  analyticsPlayer: PlayerAnalyticsRecord | null,
+  lineupSignal: OfficialPlayerLineupSignalRecord | null,
+  currentWeight: number
+) {
+  if (player.availability === "out") {
+    return 0;
+  }
+
+  const historicalStartRate =
+    player.appearances_2025 > 0 ? player.starts_2025 / player.appearances_2025 : 0;
+  const analyticsStartRate =
+    analyticsPlayer && analyticsPlayer.matches > 0
+      ? analyticsPlayer.starts / analyticsPlayer.matches
+      : 0;
+  const currentSeasonStartRate =
+    lineupSignal && lineupSignal.currentSeasonAppearances > 0
+      ? lineupSignal.currentSeasonStarts / lineupSignal.currentSeasonAppearances
+      : 0;
+  const recentStartRate =
+    lineupSignal && lineupSignal.recentMatchesCount > 0
+      ? lineupSignal.startsLastFive / lineupSignal.recentMatchesCount
+      : 0;
+  const recentBenchRate =
+    lineupSignal && lineupSignal.recentMatchesCount > 0
+      ? lineupSignal.subAppsLastFive / lineupSignal.recentMatchesCount
+      : 0;
+  const recentMinutesRate = clamp((lineupSignal?.averageMinutesLastFive ?? 0) / 90, 0, 1);
+  const noCurrentSamplePenalty =
+    lineupSignal && lineupSignal.currentSeasonAppearances === 0 ? 0.12 : 0;
+  const availabilityPenalty = player.availability === "questionable" ? 0.14 : 0;
+
+  const probability =
+    0.12 +
+    historicalStartRate * 0.2 +
+    analyticsStartRate * (0.12 + currentWeight * 0.08) +
+    currentSeasonStartRate * 0.18 +
+    recentStartRate * 0.22 +
+    recentMinutesRate * 0.1 +
+    (lineupSignal?.lastStarted ? 0.06 : 0) -
+    recentBenchRate * 0.12 -
+    noCurrentSamplePenalty -
+    availabilityPenalty;
+
+  return round(clamp(probability, 0.02, 0.97), 2);
+}
+
+export function starterStatusFromProbability(
+  probability: number,
+  availability: AvailabilityStatus
+): ProjectedStarterStatus {
+  if (availability === "out" || probability < 0.05) {
+    return "Unavailable";
+  }
+
+  if (probability >= 0.82) {
+    return "Projected starter";
+  }
+
+  if (probability >= 0.64) {
+    return "Likely starter";
+  }
+
+  if (probability >= 0.42) {
+    return "Rotation risk";
+  }
+
+  return "Bench risk";
+}
+
+function buildLineupNote(
+  lineupSignal: OfficialPlayerLineupSignalRecord | null,
+  starterProbability: number,
+  availability: AvailabilityStatus
+) {
+  if (availability === "out") {
+    return "Unavailable for the current slate.";
+  }
+
+  if (availability === "questionable") {
+    return "Availability note is active, so lineup certainty is lower than usual.";
+  }
+
+  if (!lineupSignal || lineupSignal.currentSeasonAppearances === 0) {
+    return "No current-season role sample yet, so the estimate leans on historical starts.";
+  }
+
+  if (lineupSignal.startsLastFive >= 4) {
+    return `Started ${lineupSignal.startsLastFive} of the last ${lineupSignal.recentMatchesCount} and averaged ${lineupSignal.averageMinutesLastFive.toFixed(0)} minutes.`;
+  }
+
+  if (lineupSignal.subAppsLastFive >= 3 && lineupSignal.startsLastFive <= 1) {
+    return `Mostly a bench role lately with ${lineupSignal.subAppsLastFive} sub appearances in the last ${lineupSignal.recentMatchesCount}.`;
+  }
+
+  if (lineupSignal.lastStarted && lineupSignal.lastMinutes >= 75) {
+    return `Started the last match and played ${lineupSignal.lastMinutes.toFixed(0)} minutes.`;
+  }
+
+  if (starterProbability >= 0.64) {
+    return `Recent usage still points toward a likely start, even with some rotation in the last ${lineupSignal.recentMatchesCount}.`;
+  }
+
+  return `Role is still moving: ${lineupSignal.startsLastFive} starts in the last ${lineupSignal.recentMatchesCount} matches.`;
+}
+
 function estimateExpectedMinutes(
   player: OfficialFantasyPoolPlayerRecord,
   analyticsPlayer: PlayerAnalyticsRecord | null,
+  lineupSignal: OfficialPlayerLineupSignalRecord | null,
+  starterProbability: number,
   currentWeight: number
 ) {
   const historicalAverage =
@@ -459,23 +586,26 @@ function estimateExpectedMinutes(
     analyticsPlayer && analyticsPlayer.matches > 0
       ? (analyticsPlayer.minutes90 * 90) / analyticsPlayer.matches
       : 0;
-  const historicalStartRate =
-    player.appearances_2025 > 0 ? player.starts_2025 / player.appearances_2025 : 0;
-  const currentStartRate =
-    analyticsPlayer && analyticsPlayer.matches > 0
-      ? analyticsPlayer.starts / analyticsPlayer.matches
-      : 0;
+  const recentAverage = lineupSignal?.averageMinutesLastFive ?? 0;
+  const startingAverage = lineupSignal?.averageMinutesWhenStarting ?? 0;
 
   const rawMinutes =
-    currentAverage > 0 && historicalAverage > 0
-      ? currentAverage * currentWeight + historicalAverage * (1 - currentWeight)
-      : currentAverage || historicalAverage;
-  const startRate =
-    currentStartRate > 0 && historicalStartRate > 0
-      ? currentStartRate * currentWeight + historicalStartRate * (1 - currentWeight)
-      : currentStartRate || historicalStartRate;
+    recentAverage > 0
+      ? recentAverage * 0.5 + currentAverage * 0.18 + historicalAverage * 0.32
+      : currentAverage > 0 && historicalAverage > 0
+        ? currentAverage * currentWeight + historicalAverage * (1 - currentWeight)
+        : currentAverage || historicalAverage;
 
-  let expectedMinutes = rawMinutes * (0.78 + startRate * 0.28);
+  const starterWeightedMinutes =
+    starterProbability >= 0.64 && startingAverage > 0
+      ? rawMinutes * 0.38 + startingAverage * 0.62
+      : rawMinutes;
+
+  let expectedMinutes = starterWeightedMinutes * (0.34 + starterProbability * 0.72);
+
+  if ((lineupSignal?.subAppsLastFive ?? 0) >= 3 && starterProbability < 0.5) {
+    expectedMinutes *= 0.82;
+  }
 
   if (player.availability === "questionable") {
     expectedMinutes *= 0.78;
@@ -581,25 +711,26 @@ function buildPlayerRates(
 
 function projectionConfidence(
   player: OfficialFantasyPoolPlayerRecord,
-  analyticsPlayer: PlayerAnalyticsRecord | null,
+  lineupSignal: OfficialPlayerLineupSignalRecord | null,
+  starterProbability: number,
   expectedMinutes: number,
   currentWeight: number
 ) {
-  const historicalStartRate =
-    player.appearances_2025 > 0 ? player.starts_2025 / player.appearances_2025 : 0;
-  const currentStartRate =
-    analyticsPlayer && analyticsPlayer.matches > 0
-      ? analyticsPlayer.starts / analyticsPlayer.matches
-      : 0;
-  const roleStability =
-    currentStartRate > 0 && historicalStartRate > 0
-      ? currentStartRate * currentWeight + historicalStartRate * (1 - currentWeight)
-      : currentStartRate || historicalStartRate;
+  const recentSample = clamp((lineupSignal?.recentMatchesCount ?? 0) / 5, 0, 1);
   const availabilityPenalty =
     player.availability === "questionable" ? 0.12 : player.availability === "out" ? 0.45 : 0;
 
   return round(
-    clamp(0.38 + roleStability * 0.24 + (expectedMinutes / 90) * 0.24 + currentWeight * 0.18 - availabilityPenalty, 0.08, 0.92),
+    clamp(
+      0.3 +
+        starterProbability * 0.3 +
+        (expectedMinutes / 90) * 0.22 +
+        recentSample * 0.1 +
+        currentWeight * 0.12 -
+        availabilityPenalty,
+      0.08,
+      0.92
+    ),
     2
   );
 }
@@ -608,10 +739,13 @@ function buildTrendLabel(
   projection: number,
   baselineProjection: number,
   availability: AvailabilityStatus,
-  confidence: number
+  confidence: number,
+  starterProbability: number
 ) {
   if (availability === "out") return "Unavailable";
   if (availability === "questionable") return "Injury watch";
+  if (starterProbability >= 0.82 && confidence >= 0.72) return "Locked role";
+  if (starterProbability < 0.42) return "Volatile role";
 
   if (projection - baselineProjection >= 1.5) {
     return "Rising spot";
@@ -630,12 +764,15 @@ function buildTrendLabel(
 
 function buildRiskLabel(
   availability: AvailabilityStatus,
+  starterProbability: number,
   expectedMinutes: number,
   confidence: number,
   cleanSheetChance: number | null
 ) {
   if (availability === "out") return "Out";
-  if (availability === "questionable") return "Minutes risk";
+  if (availability === "questionable") return "Injury watch";
+  if (starterProbability < 0.22) return "Bench only";
+  if (starterProbability < 0.48) return "Rotation risk";
   if (expectedMinutes < 55) return "Bench risk";
   if (cleanSheetChance != null && cleanSheetChance < 0.18) return "Thin floor";
   if (confidence < 0.56) return "Wide range";
@@ -723,6 +860,7 @@ function buildPlayerReasons(
   player: OfficialFantasyPoolPlayerRecord,
   rates: PlayerRateSnapshot,
   projection: number,
+  starterProbability: number,
   expectedMinutes: number,
   matchup: MatchupPreviewRecord | null,
   isHome: boolean | null
@@ -751,6 +889,10 @@ function buildPlayerReasons(
 
   if (matchup && projection >= player.average_points + 1.2) {
     reasons.push("The matchup upgrades the baseline versus a normal slate spot.");
+  }
+
+  if (starterProbability >= 0.76 && expectedMinutes >= 72) {
+    reasons.push("Role and minutes project as stable for this slate.");
   }
 
   if (expectedMinutes < 55) {
@@ -819,6 +961,37 @@ function candidateFixtures(data: MultiSourceAnalyticsHubData) {
     homeTeam: fixture.homeTeam,
     awayTeam: fixture.awayTeam,
   }));
+}
+
+function buildTeamLineupSummary(team: string, players: PlayerProjectionRecord[]) {
+  if (players.length === 0) {
+    return `${team} are still waiting on enough player data to project a stable XI.`;
+  }
+
+  const relevantPlayers = [...players].sort((left, right) => right.projection - left.projection).slice(0, 6);
+  const projectedStarters = relevantPlayers.filter((player) => player.starterProbability >= 0.82);
+  const likelyStarters = relevantPlayers.filter((player) => player.starterProbability >= 0.64);
+  const riskyPlayers = relevantPlayers.filter(
+    (player) => player.availability !== "available" || player.starterProbability < 0.48
+  );
+  const anchorNames = likelyStarters
+    .slice(0, 2)
+    .map((player) => player.player.split(" ").slice(-1)[0] ?? player.player);
+  const anchorLabel = anchorNames.length > 0 ? anchorNames.join(" and ") : "their core contributors";
+
+  if (riskyPlayers.length === 0) {
+    return `${team} project ${projectedStarters.length || likelyStarters.length} stable starters in the fantasy-relevant group, led by ${anchorLabel}.`;
+  }
+
+  const riskyNames = riskyPlayers
+    .slice(0, 2)
+    .map((player) => player.player.split(" ").slice(-1)[0] ?? player.player);
+
+  if (projectedStarters.length >= 3) {
+    return `${team} still project a stable core, but ${riskyNames.join(" and ")} carry the main lineup volatility.`;
+  }
+
+  return `${team} have more role volatility than usual, with ${riskyNames.join(" and ")} as the main names to monitor.`;
 }
 
 export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
@@ -967,6 +1140,8 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
         ],
         scoreMatrix,
         topScorelines: topScorelines(scoreMatrix),
+        homeLineupSummary: "",
+        awayLineupSummary: "",
         homeTargets: [] as PlayerProjectionRecord[],
         awayTargets: [] as PlayerProjectionRecord[],
       } satisfies MatchupPreviewRecord;
@@ -1002,6 +1177,10 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
     }
   }
 
+  const lineupSignalsByOfficialId = new Map<string, OfficialPlayerLineupSignalRecord>(
+    data.official.playerLineupSignals.map((signal) => [signal.playerId, signal] as const)
+  );
+
   const playerBoard = officialFantasyPlayerPool
     .map((player) => {
       const canonicalTeam = canonicalizeTeamName(player.club_name);
@@ -1009,10 +1188,24 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
       const analyticsPlayer =
         analyticsPlayersByNameTeam.get(`${normalizeText(player.display_name)}::${canonicalTeam}`) ??
         null;
+      const lineupSignal = lineupSignalsByOfficialId.get(player.official_player_id) ?? null;
       const currentWeight = analyticsPlayer
         ? clamp(analyticsPlayer.minutes90 / 8, 0.18, 0.72)
         : 0.22;
-      const expectedMinutes = estimateExpectedMinutes(player, analyticsPlayer, currentWeight);
+      const starterProbability = estimateStarterProbability(
+        player,
+        analyticsPlayer,
+        lineupSignal,
+        currentWeight
+      );
+      const lineupStatus = starterStatusFromProbability(starterProbability, player.availability);
+      const expectedMinutes = estimateExpectedMinutes(
+        player,
+        analyticsPlayer,
+        lineupSignal,
+        starterProbability,
+        currentWeight
+      );
       const rates = buildPlayerRates(player, analyticsPlayer, currentWeight);
       const matchup = matchupContext?.matchup ?? null;
       const isHome = matchupContext?.venue === "Home" ? true : matchupContext?.venue === "Away" ? false : null;
@@ -1141,8 +1334,23 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
         ),
         2
       );
-      const confidence = projectionConfidence(player, analyticsPlayer, expectedMinutes, currentWeight);
-      const reasons = buildPlayerReasons(player, rates, projection, expectedMinutes, matchup, isHome);
+      const confidence = projectionConfidence(
+        player,
+        lineupSignal,
+        starterProbability,
+        expectedMinutes,
+        currentWeight
+      );
+      const reasons = buildPlayerReasons(
+        player,
+        rates,
+        projection,
+        starterProbability,
+        expectedMinutes,
+        matchup,
+        isHome
+      );
+      const lineupNote = buildLineupNote(lineupSignal, starterProbability, player.availability);
 
       return {
         id: player.id,
@@ -1165,6 +1373,11 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
         ceiling,
         confidence,
         expectedMinutes,
+        starterProbability,
+        lineupStatus,
+        lineupNote,
+        startsLastFive: lineupSignal?.startsLastFive ?? 0,
+        recentAppearances: lineupSignal?.recentMatchesCount ?? 0,
         valueScore: round(projection / Math.max(player.salary_cost / 1000, 0.001), 2),
         shotVolume: round(rates.shotsPer90 * minutesFactor * attackMultiplier, 2),
         creationVolume: round(rates.chancesCreatedPer90 * minutesFactor * creationMultiplier, 2),
@@ -1177,8 +1390,20 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
         cleanSheetChance: cleanSheetChance != null ? round(cleanSheetChance, 4) : null,
         winChance: winChance != null ? round(winChance, 4) : null,
         matchupTag: matchupTagForPlayer(player.position, matchup, isHome),
-        riskLabel: buildRiskLabel(player.availability, expectedMinutes, confidence, cleanSheetChance),
-        trendLabel: buildTrendLabel(projection, baselineProjection, player.availability, confidence),
+        riskLabel: buildRiskLabel(
+          player.availability,
+          starterProbability,
+          expectedMinutes,
+          confidence,
+          cleanSheetChance
+        ),
+        trendLabel: buildTrendLabel(
+          projection,
+          baselineProjection,
+          player.availability,
+          confidence,
+          starterProbability
+        ),
         reasons,
       } satisfies PlayerProjectionRecord;
     })
@@ -1189,6 +1414,7 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
     });
 
   const topTargetsByTeam = new Map<string, PlayerProjectionRecord[]>();
+  const slatePlayersByTeam = new Map<string, PlayerProjectionRecord[]>();
   for (const player of playerBoard) {
     const list = topTargetsByTeam.get(player.canonicalTeam) ?? [];
     list.push(player);
@@ -1196,10 +1422,25 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
       player.canonicalTeam,
       list.sort((left, right) => right.projection - left.projection).slice(0, 4)
     );
+
+    const slateList = slatePlayersByTeam.get(player.canonicalTeam) ?? [];
+    slateList.push(player);
+    slatePlayersByTeam.set(
+      player.canonicalTeam,
+      slateList.sort((left, right) => right.starterProbability - left.starterProbability)
+    );
   }
 
   const enrichedMatchups: MatchupPreviewRecord[] = matchups.map((matchup) => ({
     ...matchup,
+    homeLineupSummary: buildTeamLineupSummary(
+      matchup.homeTeam,
+      slatePlayersByTeam.get(matchup.homeCanonicalTeam) ?? []
+    ),
+    awayLineupSummary: buildTeamLineupSummary(
+      matchup.awayTeam,
+      slatePlayersByTeam.get(matchup.awayCanonicalTeam) ?? []
+    ),
     homeTargets: topTargetsByTeam.get(matchup.homeCanonicalTeam) ?? [],
     awayTargets: topTargetsByTeam.get(matchup.awayCanonicalTeam) ?? [],
   }));

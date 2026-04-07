@@ -23,6 +23,7 @@ type BoardLens =
   | "VALUE"
   | "CEILING"
   | "FLOOR"
+  | "STARTERS"
   | "SHOOTERS"
   | "CREATORS"
   | "DEFENSE"
@@ -34,11 +35,12 @@ const boardLenses: Array<{ key: BoardLens; label: string }> = [
   { key: "VALUE", label: "Value" },
   { key: "CEILING", label: "Ceiling" },
   { key: "FLOOR", label: "Floor" },
+  { key: "STARTERS", label: "Starters" },
   { key: "SHOOTERS", label: "Shots" },
   { key: "CREATORS", label: "Creation" },
   { key: "DEFENSE", label: "Defense" },
   { key: "WATCHLIST", label: "Watchlist" },
-  { key: "QUESTIONABLE", label: "Questionable" },
+  { key: "QUESTIONABLE", label: "Lineup risk" },
 ] as const;
 
 const positionFilters: Array<{ key: "ALL" | PlayerPosition; label: string }> = [
@@ -128,7 +130,7 @@ export function PlayerProjectionBoardClient({
         }
 
         if (boardLens === "QUESTIONABLE") {
-          return player.availability !== "available";
+          return player.availability !== "available" || player.starterProbability < 0.58;
         }
 
         return true;
@@ -141,6 +143,12 @@ export function PlayerProjectionBoardClient({
             return right.ceiling - left.ceiling;
           case "FLOOR":
             return right.floor - left.floor;
+          case "STARTERS":
+            return (
+              right.starterProbability - left.starterProbability ||
+              right.expectedMinutes - left.expectedMinutes ||
+              right.projection - left.projection
+            );
           case "SHOOTERS":
             return right.shotVolume - left.shotVolume;
           case "CREATORS":
@@ -177,6 +185,11 @@ export function PlayerProjectionBoardClient({
     quickPicks("Best value", bestValues, (player) => `${player.valueScore.toFixed(2)} value`),
     quickPicks("Ceiling", bestCeilings, (player) => `${player.ceiling.toFixed(1)} ceiling`),
     quickPicks("Floor", safestFloors, (player) => `${player.floor.toFixed(1)} floor`),
+    quickPicks(
+      "Starter locks",
+      [...playerBoard].sort((left, right) => right.starterProbability - left.starterProbability),
+      (player) => `${Math.round(player.starterProbability * 100)}% start`
+    ),
     quickPicks("Props", propTargets, (player) => `${player.shotVolume.toFixed(1)} shot volume`),
   ];
 
@@ -406,6 +419,10 @@ export function PlayerProjectionBoardClient({
             <div className="flex items-center gap-2">
               <Target className="size-4 text-brand-strong" />
               Search by value, shot volume, creation, or defensive floor.
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="size-4 text-brand-strong" />
+              Starter probability and role notes flag the safest lineup spots.
             </div>
             <div className="flex items-center gap-2">
               <Scale className="size-4 text-brand-strong" />
