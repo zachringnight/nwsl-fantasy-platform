@@ -36,7 +36,7 @@ export function MetricTile({
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
           {label}
         </p>
-        <p className="text-[1.9rem] font-semibold leading-none tracking-[-0.04em]">{value}</p>
+        <p className="text-[clamp(1.4rem,4vw,1.9rem)] font-semibold leading-none tracking-[-0.04em]">{value}</p>
         {detail ? <p className="text-sm leading-6 text-muted">{detail}</p> : null}
       </div>
     </div>

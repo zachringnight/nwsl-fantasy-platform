@@ -3,6 +3,8 @@ import { ArrowUpRight, Heart, Scale, ShieldCheck, Star } from "lucide-react";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { getButtonClassName } from "@/components/ui/button";
+import { ClubLogo } from "@/components/ui/club-logo";
+import { PlayerAvatar } from "@/components/ui/player-avatar";
 import { Pill } from "@/components/ui/pill";
 
 export interface PlayerCardProps {
@@ -37,6 +39,21 @@ export function PlayerCard({
       description={`Rank ${player.rank} • ${player.average_points.toFixed(1)} avg fantasy points${player.salary_cost ? ` • $${player.salary_cost}` : ""}`}
     >
       <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <PlayerAvatar
+            name={player.display_name}
+            src={player.photo_url ?? null}
+            size={56}
+          />
+          <div>
+            <p className="text-sm font-semibold text-foreground">{player.display_name}</p>
+            <p className="flex items-center gap-1.5 text-xs text-muted">
+              <ClubLogo club={player.club_name} size={16} />
+              {player.position} &middot; {player.club_name}
+            </p>
+          </div>
+        </div>
+
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
             <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">

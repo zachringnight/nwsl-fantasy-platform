@@ -245,6 +245,8 @@ export type PlayerWhereInput = {
   availabilityItems?: Prisma.AvailabilityReportItemListRelationFilter
   providerMaps?: Prisma.ProviderPlayerMapListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
+  tradeAssets?: Prisma.TradeAssetListRelationFilter
+  projections?: Prisma.PlayerProjectionListRelationFilter
 }
 
 export type PlayerOrderByWithRelationInput = {
@@ -274,6 +276,8 @@ export type PlayerOrderByWithRelationInput = {
   availabilityItems?: Prisma.AvailabilityReportItemOrderByRelationAggregateInput
   providerMaps?: Prisma.ProviderPlayerMapOrderByRelationAggregateInput
   scoringOverrides?: Prisma.ScoringOverrideOrderByRelationAggregateInput
+  tradeAssets?: Prisma.TradeAssetOrderByRelationAggregateInput
+  projections?: Prisma.PlayerProjectionOrderByRelationAggregateInput
 }
 
 export type PlayerWhereUniqueInput = Prisma.AtLeast<{
@@ -306,6 +310,8 @@ export type PlayerWhereUniqueInput = Prisma.AtLeast<{
   availabilityItems?: Prisma.AvailabilityReportItemListRelationFilter
   providerMaps?: Prisma.ProviderPlayerMapListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
+  tradeAssets?: Prisma.TradeAssetListRelationFilter
+  projections?: Prisma.PlayerProjectionListRelationFilter
 }, "id">
 
 export type PlayerOrderByWithAggregationInput = {
@@ -368,6 +374,8 @@ export type PlayerCreateInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateInput = {
@@ -396,6 +404,8 @@ export type PlayerUncheckedCreateInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUpdateInput = {
@@ -424,6 +434,8 @@ export type PlayerUpdateInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateInput = {
@@ -452,6 +464,8 @@ export type PlayerUncheckedUpdateInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateManyInput = {
@@ -809,6 +823,34 @@ export type PlayerUpdateOneRequiredWithoutScoringOverridesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutScoringOverridesInput, Prisma.PlayerUpdateWithoutScoringOverridesInput>, Prisma.PlayerUncheckedUpdateWithoutScoringOverridesInput>
 }
 
+export type PlayerCreateNestedOneWithoutTradeAssetsInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutTradeAssetsInput, Prisma.PlayerUncheckedCreateWithoutTradeAssetsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutTradeAssetsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+}
+
+export type PlayerUpdateOneRequiredWithoutTradeAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutTradeAssetsInput, Prisma.PlayerUncheckedCreateWithoutTradeAssetsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutTradeAssetsInput
+  upsert?: Prisma.PlayerUpsertWithoutTradeAssetsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutTradeAssetsInput, Prisma.PlayerUpdateWithoutTradeAssetsInput>, Prisma.PlayerUncheckedUpdateWithoutTradeAssetsInput>
+}
+
+export type PlayerCreateNestedOneWithoutProjectionsInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutProjectionsInput, Prisma.PlayerUncheckedCreateWithoutProjectionsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutProjectionsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+}
+
+export type PlayerUpdateOneRequiredWithoutProjectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlayerCreateWithoutProjectionsInput, Prisma.PlayerUncheckedCreateWithoutProjectionsInput>
+  connectOrCreate?: Prisma.PlayerCreateOrConnectWithoutProjectionsInput
+  upsert?: Prisma.PlayerUpsertWithoutProjectionsInput
+  connect?: Prisma.PlayerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlayerUpdateToOneWithWhereWithoutProjectionsInput, Prisma.PlayerUpdateWithoutProjectionsInput>, Prisma.PlayerUncheckedUpdateWithoutProjectionsInput>
+}
+
 export type PlayerCreateWithoutClubInput = {
   id?: string
   displayName: string
@@ -834,6 +876,8 @@ export type PlayerCreateWithoutClubInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutClubInput = {
@@ -861,6 +905,8 @@ export type PlayerUncheckedCreateWithoutClubInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutClubInput = {
@@ -931,6 +977,8 @@ export type PlayerCreateWithoutDraftPicksInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutDraftPicksInput = {
@@ -958,6 +1006,8 @@ export type PlayerUncheckedCreateWithoutDraftPicksInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutDraftPicksInput = {
@@ -1001,6 +1051,8 @@ export type PlayerUpdateWithoutDraftPicksInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
@@ -1028,6 +1080,8 @@ export type PlayerUncheckedUpdateWithoutDraftPicksInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutQueueItemsInput = {
@@ -1055,6 +1109,8 @@ export type PlayerCreateWithoutQueueItemsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutQueueItemsInput = {
@@ -1082,6 +1138,8 @@ export type PlayerUncheckedCreateWithoutQueueItemsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutQueueItemsInput = {
@@ -1125,6 +1183,8 @@ export type PlayerUpdateWithoutQueueItemsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutQueueItemsInput = {
@@ -1152,6 +1212,8 @@ export type PlayerUncheckedUpdateWithoutQueueItemsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutRosterSpotsInput = {
@@ -1179,6 +1241,8 @@ export type PlayerCreateWithoutRosterSpotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutRosterSpotsInput = {
@@ -1206,6 +1270,8 @@ export type PlayerUncheckedCreateWithoutRosterSpotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutRosterSpotsInput = {
@@ -1249,6 +1315,8 @@ export type PlayerUpdateWithoutRosterSpotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutRosterSpotsInput = {
@@ -1276,6 +1344,8 @@ export type PlayerUncheckedUpdateWithoutRosterSpotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutLineupEntriesInput = {
@@ -1303,6 +1373,8 @@ export type PlayerCreateWithoutLineupEntriesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutLineupEntriesInput = {
@@ -1330,6 +1402,8 @@ export type PlayerUncheckedCreateWithoutLineupEntriesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutLineupEntriesInput = {
@@ -1373,6 +1447,8 @@ export type PlayerUpdateWithoutLineupEntriesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutLineupEntriesInput = {
@@ -1400,6 +1476,8 @@ export type PlayerUncheckedUpdateWithoutLineupEntriesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutEventsInput = {
@@ -1427,6 +1505,8 @@ export type PlayerCreateWithoutEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutEventsInput = {
@@ -1454,6 +1534,8 @@ export type PlayerUncheckedCreateWithoutEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutEventsInput = {
@@ -1486,6 +1568,8 @@ export type PlayerCreateWithoutAssistEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutAssistEventsInput = {
@@ -1513,6 +1597,8 @@ export type PlayerUncheckedCreateWithoutAssistEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutAssistEventsInput = {
@@ -1556,6 +1642,8 @@ export type PlayerUpdateWithoutEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutEventsInput = {
@@ -1583,6 +1671,8 @@ export type PlayerUncheckedUpdateWithoutEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUpsertWithoutAssistEventsInput = {
@@ -1621,6 +1711,8 @@ export type PlayerUpdateWithoutAssistEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutAssistEventsInput = {
@@ -1648,6 +1740,8 @@ export type PlayerUncheckedUpdateWithoutAssistEventsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutStatLinesInput = {
@@ -1675,6 +1769,8 @@ export type PlayerCreateWithoutStatLinesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutStatLinesInput = {
@@ -1702,6 +1798,8 @@ export type PlayerUncheckedCreateWithoutStatLinesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutStatLinesInput = {
@@ -1745,6 +1843,8 @@ export type PlayerUpdateWithoutStatLinesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutStatLinesInput = {
@@ -1772,6 +1872,8 @@ export type PlayerUncheckedUpdateWithoutStatLinesInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutPointSnapshotsInput = {
@@ -1799,6 +1901,8 @@ export type PlayerCreateWithoutPointSnapshotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutPointSnapshotsInput = {
@@ -1826,6 +1930,8 @@ export type PlayerUncheckedCreateWithoutPointSnapshotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutPointSnapshotsInput = {
@@ -1869,6 +1975,8 @@ export type PlayerUpdateWithoutPointSnapshotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutPointSnapshotsInput = {
@@ -1896,6 +2004,8 @@ export type PlayerUncheckedUpdateWithoutPointSnapshotsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutTransactionsInput = {
@@ -1923,6 +2033,8 @@ export type PlayerCreateWithoutTransactionsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutTransactionsInput = {
@@ -1950,6 +2062,8 @@ export type PlayerUncheckedCreateWithoutTransactionsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutTransactionsInput = {
@@ -1993,6 +2107,8 @@ export type PlayerUpdateWithoutTransactionsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutTransactionsInput = {
@@ -2020,6 +2136,8 @@ export type PlayerUncheckedUpdateWithoutTransactionsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutRequestedWaiverClaimsInput = {
@@ -2047,6 +2165,8 @@ export type PlayerCreateWithoutRequestedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutRequestedWaiverClaimsInput = {
@@ -2074,6 +2194,8 @@ export type PlayerUncheckedCreateWithoutRequestedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutRequestedWaiverClaimsInput = {
@@ -2106,6 +2228,8 @@ export type PlayerCreateWithoutDroppedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutDroppedWaiverClaimsInput = {
@@ -2133,6 +2257,8 @@ export type PlayerUncheckedCreateWithoutDroppedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutDroppedWaiverClaimsInput = {
@@ -2176,6 +2302,8 @@ export type PlayerUpdateWithoutRequestedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutRequestedWaiverClaimsInput = {
@@ -2203,6 +2331,8 @@ export type PlayerUncheckedUpdateWithoutRequestedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUpsertWithoutDroppedWaiverClaimsInput = {
@@ -2241,6 +2371,8 @@ export type PlayerUpdateWithoutDroppedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutDroppedWaiverClaimsInput = {
@@ -2268,6 +2400,8 @@ export type PlayerUncheckedUpdateWithoutDroppedWaiverClaimsInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutAvailabilityItemsInput = {
@@ -2295,6 +2429,8 @@ export type PlayerCreateWithoutAvailabilityItemsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutAvailabilityItemsInput = {
@@ -2322,6 +2458,8 @@ export type PlayerUncheckedCreateWithoutAvailabilityItemsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutAvailabilityItemsInput = {
@@ -2365,6 +2503,8 @@ export type PlayerUpdateWithoutAvailabilityItemsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutAvailabilityItemsInput = {
@@ -2392,6 +2532,8 @@ export type PlayerUncheckedUpdateWithoutAvailabilityItemsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutProviderMapsInput = {
@@ -2419,6 +2561,8 @@ export type PlayerCreateWithoutProviderMapsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutPlayerInput
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutProviderMapsInput = {
@@ -2446,6 +2590,8 @@ export type PlayerUncheckedCreateWithoutProviderMapsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPlayerInput
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutProviderMapsInput = {
@@ -2489,6 +2635,8 @@ export type PlayerUpdateWithoutProviderMapsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutPlayerNestedInput
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutProviderMapsInput = {
@@ -2516,6 +2664,8 @@ export type PlayerUncheckedUpdateWithoutProviderMapsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPlayerNestedInput
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateWithoutScoringOverridesInput = {
@@ -2543,6 +2693,8 @@ export type PlayerCreateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutPlayerInput
   availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerUncheckedCreateWithoutScoringOverridesInput = {
@@ -2570,6 +2722,8 @@ export type PlayerUncheckedCreateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPlayerInput
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
 }
 
 export type PlayerCreateOrConnectWithoutScoringOverridesInput = {
@@ -2613,6 +2767,8 @@ export type PlayerUpdateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutPlayerNestedInput
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutScoringOverridesInput = {
@@ -2640,6 +2796,272 @@ export type PlayerUncheckedUpdateWithoutScoringOverridesInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPlayerNestedInput
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerCreateWithoutTradeAssetsInput = {
+  id?: string
+  displayName: string
+  firstName?: string | null
+  lastName?: string | null
+  primaryPosition: $Enums.PlayerPosition
+  nationality?: string | null
+  headshotUrl?: string | null
+  status?: $Enums.PlayerStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  club?: Prisma.ClubCreateNestedOneWithoutPlayersInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutPlayerInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutPlayerInput
+  statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutPlayerInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutPlayerInput
+  events?: Prisma.FixtureEventCreateNestedManyWithoutPlayerInput
+  assistEvents?: Prisma.FixtureEventCreateNestedManyWithoutAssistingPlayerInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
+  queueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutPlayerInput
+  requestedWaiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutRequestedPlayerInput
+  droppedWaiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutPlayerInput
+  availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
+  providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerUncheckedCreateWithoutTradeAssetsInput = {
+  id?: string
+  currentClubId?: string | null
+  displayName: string
+  firstName?: string | null
+  lastName?: string | null
+  primaryPosition: $Enums.PlayerPosition
+  nationality?: string | null
+  headshotUrl?: string | null
+  status?: $Enums.PlayerStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutPlayerInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutPlayerInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutPlayerInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutPlayerInput
+  events?: Prisma.FixtureEventUncheckedCreateNestedManyWithoutPlayerInput
+  assistEvents?: Prisma.FixtureEventUncheckedCreateNestedManyWithoutAssistingPlayerInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
+  queueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutPlayerInput
+  requestedWaiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutRequestedPlayerInput
+  droppedWaiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPlayerInput
+  availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
+  providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  projections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerCreateOrConnectWithoutTradeAssetsInput = {
+  where: Prisma.PlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutTradeAssetsInput, Prisma.PlayerUncheckedCreateWithoutTradeAssetsInput>
+}
+
+export type PlayerUpsertWithoutTradeAssetsInput = {
+  update: Prisma.XOR<Prisma.PlayerUpdateWithoutTradeAssetsInput, Prisma.PlayerUncheckedUpdateWithoutTradeAssetsInput>
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutTradeAssetsInput, Prisma.PlayerUncheckedCreateWithoutTradeAssetsInput>
+  where?: Prisma.PlayerWhereInput
+}
+
+export type PlayerUpdateToOneWithWhereWithoutTradeAssetsInput = {
+  where?: Prisma.PlayerWhereInput
+  data: Prisma.XOR<Prisma.PlayerUpdateWithoutTradeAssetsInput, Prisma.PlayerUncheckedUpdateWithoutTradeAssetsInput>
+}
+
+export type PlayerUpdateWithoutTradeAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryPosition?: Prisma.EnumPlayerPositionFieldUpdateOperationsInput | $Enums.PlayerPosition
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headshotUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  club?: Prisma.ClubUpdateOneWithoutPlayersNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutPlayerNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutPlayerNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutPlayerNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutPlayerNestedInput
+  events?: Prisma.FixtureEventUpdateManyWithoutPlayerNestedInput
+  assistEvents?: Prisma.FixtureEventUpdateManyWithoutAssistingPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
+  queueItems?: Prisma.DraftQueueItemUpdateManyWithoutPlayerNestedInput
+  requestedWaiverClaims?: Prisma.WaiverClaimUpdateManyWithoutRequestedPlayerNestedInput
+  droppedWaiverClaims?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutPlayerNestedInput
+  availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
+  providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerUncheckedUpdateWithoutTradeAssetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  currentClubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryPosition?: Prisma.EnumPlayerPositionFieldUpdateOperationsInput | $Enums.PlayerPosition
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headshotUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutPlayerNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutPlayerNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutPlayerNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutPlayerNestedInput
+  events?: Prisma.FixtureEventUncheckedUpdateManyWithoutPlayerNestedInput
+  assistEvents?: Prisma.FixtureEventUncheckedUpdateManyWithoutAssistingPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
+  queueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutPlayerNestedInput
+  requestedWaiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutRequestedPlayerNestedInput
+  droppedWaiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPlayerNestedInput
+  availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
+  providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerCreateWithoutProjectionsInput = {
+  id?: string
+  displayName: string
+  firstName?: string | null
+  lastName?: string | null
+  primaryPosition: $Enums.PlayerPosition
+  nationality?: string | null
+  headshotUrl?: string | null
+  status?: $Enums.PlayerStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  club?: Prisma.ClubCreateNestedOneWithoutPlayersInput
+  rosterSpots?: Prisma.RosterSpotCreateNestedManyWithoutPlayerInput
+  lineupEntries?: Prisma.LineupEntryCreateNestedManyWithoutPlayerInput
+  statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutPlayerInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutPlayerInput
+  events?: Prisma.FixtureEventCreateNestedManyWithoutPlayerInput
+  assistEvents?: Prisma.FixtureEventCreateNestedManyWithoutAssistingPlayerInput
+  draftPicks?: Prisma.DraftPickCreateNestedManyWithoutPlayerInput
+  queueItems?: Prisma.DraftQueueItemCreateNestedManyWithoutPlayerInput
+  requestedWaiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutRequestedPlayerInput
+  droppedWaiverClaims?: Prisma.WaiverClaimCreateNestedManyWithoutDropPlayerInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutPlayerInput
+  availabilityItems?: Prisma.AvailabilityReportItemCreateNestedManyWithoutPlayerInput
+  providerMaps?: Prisma.ProviderPlayerMapCreateNestedManyWithoutPlayerInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerUncheckedCreateWithoutProjectionsInput = {
+  id?: string
+  currentClubId?: string | null
+  displayName: string
+  firstName?: string | null
+  lastName?: string | null
+  primaryPosition: $Enums.PlayerPosition
+  nationality?: string | null
+  headshotUrl?: string | null
+  status?: $Enums.PlayerStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedCreateNestedManyWithoutPlayerInput
+  lineupEntries?: Prisma.LineupEntryUncheckedCreateNestedManyWithoutPlayerInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutPlayerInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutPlayerInput
+  events?: Prisma.FixtureEventUncheckedCreateNestedManyWithoutPlayerInput
+  assistEvents?: Prisma.FixtureEventUncheckedCreateNestedManyWithoutAssistingPlayerInput
+  draftPicks?: Prisma.DraftPickUncheckedCreateNestedManyWithoutPlayerInput
+  queueItems?: Prisma.DraftQueueItemUncheckedCreateNestedManyWithoutPlayerInput
+  requestedWaiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutRequestedPlayerInput
+  droppedWaiverClaims?: Prisma.WaiverClaimUncheckedCreateNestedManyWithoutDropPlayerInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutPlayerInput
+  availabilityItems?: Prisma.AvailabilityReportItemUncheckedCreateNestedManyWithoutPlayerInput
+  providerMaps?: Prisma.ProviderPlayerMapUncheckedCreateNestedManyWithoutPlayerInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutPlayerInput
+  tradeAssets?: Prisma.TradeAssetUncheckedCreateNestedManyWithoutPlayerInput
+}
+
+export type PlayerCreateOrConnectWithoutProjectionsInput = {
+  where: Prisma.PlayerWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutProjectionsInput, Prisma.PlayerUncheckedCreateWithoutProjectionsInput>
+}
+
+export type PlayerUpsertWithoutProjectionsInput = {
+  update: Prisma.XOR<Prisma.PlayerUpdateWithoutProjectionsInput, Prisma.PlayerUncheckedUpdateWithoutProjectionsInput>
+  create: Prisma.XOR<Prisma.PlayerCreateWithoutProjectionsInput, Prisma.PlayerUncheckedCreateWithoutProjectionsInput>
+  where?: Prisma.PlayerWhereInput
+}
+
+export type PlayerUpdateToOneWithWhereWithoutProjectionsInput = {
+  where?: Prisma.PlayerWhereInput
+  data: Prisma.XOR<Prisma.PlayerUpdateWithoutProjectionsInput, Prisma.PlayerUncheckedUpdateWithoutProjectionsInput>
+}
+
+export type PlayerUpdateWithoutProjectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryPosition?: Prisma.EnumPlayerPositionFieldUpdateOperationsInput | $Enums.PlayerPosition
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headshotUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  club?: Prisma.ClubUpdateOneWithoutPlayersNestedInput
+  rosterSpots?: Prisma.RosterSpotUpdateManyWithoutPlayerNestedInput
+  lineupEntries?: Prisma.LineupEntryUpdateManyWithoutPlayerNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutPlayerNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutPlayerNestedInput
+  events?: Prisma.FixtureEventUpdateManyWithoutPlayerNestedInput
+  assistEvents?: Prisma.FixtureEventUpdateManyWithoutAssistingPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUpdateManyWithoutPlayerNestedInput
+  queueItems?: Prisma.DraftQueueItemUpdateManyWithoutPlayerNestedInput
+  requestedWaiverClaims?: Prisma.WaiverClaimUpdateManyWithoutRequestedPlayerNestedInput
+  droppedWaiverClaims?: Prisma.WaiverClaimUpdateManyWithoutDropPlayerNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutPlayerNestedInput
+  availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
+  providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+}
+
+export type PlayerUncheckedUpdateWithoutProjectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  currentClubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryPosition?: Prisma.EnumPlayerPositionFieldUpdateOperationsInput | $Enums.PlayerPosition
+  nationality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headshotUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumPlayerStatusFieldUpdateOperationsInput | $Enums.PlayerStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  rosterSpots?: Prisma.RosterSpotUncheckedUpdateManyWithoutPlayerNestedInput
+  lineupEntries?: Prisma.LineupEntryUncheckedUpdateManyWithoutPlayerNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutPlayerNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutPlayerNestedInput
+  events?: Prisma.FixtureEventUncheckedUpdateManyWithoutPlayerNestedInput
+  assistEvents?: Prisma.FixtureEventUncheckedUpdateManyWithoutAssistingPlayerNestedInput
+  draftPicks?: Prisma.DraftPickUncheckedUpdateManyWithoutPlayerNestedInput
+  queueItems?: Prisma.DraftQueueItemUncheckedUpdateManyWithoutPlayerNestedInput
+  requestedWaiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutRequestedPlayerNestedInput
+  droppedWaiverClaims?: Prisma.WaiverClaimUncheckedUpdateManyWithoutDropPlayerNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutPlayerNestedInput
+  availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
+  providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerCreateManyClubInput = {
@@ -2680,6 +3102,8 @@ export type PlayerUpdateWithoutClubInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateWithoutClubInput = {
@@ -2707,6 +3131,8 @@ export type PlayerUncheckedUpdateWithoutClubInput = {
   availabilityItems?: Prisma.AvailabilityReportItemUncheckedUpdateManyWithoutPlayerNestedInput
   providerMaps?: Prisma.ProviderPlayerMapUncheckedUpdateManyWithoutPlayerNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutPlayerNestedInput
+  tradeAssets?: Prisma.TradeAssetUncheckedUpdateManyWithoutPlayerNestedInput
+  projections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutPlayerNestedInput
 }
 
 export type PlayerUncheckedUpdateManyWithoutClubInput = {
@@ -2742,6 +3168,8 @@ export type PlayerCountOutputType = {
   availabilityItems: number
   providerMaps: number
   scoringOverrides: number
+  tradeAssets: number
+  projections: number
 }
 
 export type PlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2759,6 +3187,8 @@ export type PlayerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   availabilityItems?: boolean | PlayerCountOutputTypeCountAvailabilityItemsArgs
   providerMaps?: boolean | PlayerCountOutputTypeCountProviderMapsArgs
   scoringOverrides?: boolean | PlayerCountOutputTypeCountScoringOverridesArgs
+  tradeAssets?: boolean | PlayerCountOutputTypeCountTradeAssetsArgs
+  projections?: boolean | PlayerCountOutputTypeCountProjectionsArgs
 }
 
 /**
@@ -2869,6 +3299,20 @@ export type PlayerCountOutputTypeCountScoringOverridesArgs<ExtArgs extends runti
   where?: Prisma.ScoringOverrideWhereInput
 }
 
+/**
+ * PlayerCountOutputType without action
+ */
+export type PlayerCountOutputTypeCountTradeAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeAssetWhereInput
+}
+
+/**
+ * PlayerCountOutputType without action
+ */
+export type PlayerCountOutputTypeCountProjectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlayerProjectionWhereInput
+}
+
 
 export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2897,6 +3341,8 @@ export type PlayerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   availabilityItems?: boolean | Prisma.Player$availabilityItemsArgs<ExtArgs>
   providerMaps?: boolean | Prisma.Player$providerMapsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.Player$scoringOverridesArgs<ExtArgs>
+  tradeAssets?: boolean | Prisma.Player$tradeAssetsArgs<ExtArgs>
+  projections?: boolean | Prisma.Player$projectionsArgs<ExtArgs>
   _count?: boolean | Prisma.PlayerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["player"]>
 
@@ -2961,6 +3407,8 @@ export type PlayerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   availabilityItems?: boolean | Prisma.Player$availabilityItemsArgs<ExtArgs>
   providerMaps?: boolean | Prisma.Player$providerMapsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.Player$scoringOverridesArgs<ExtArgs>
+  tradeAssets?: boolean | Prisma.Player$tradeAssetsArgs<ExtArgs>
+  projections?: boolean | Prisma.Player$projectionsArgs<ExtArgs>
   _count?: boolean | Prisma.PlayerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PlayerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2988,6 +3436,8 @@ export type $PlayerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     availabilityItems: Prisma.$AvailabilityReportItemPayload<ExtArgs>[]
     providerMaps: Prisma.$ProviderPlayerMapPayload<ExtArgs>[]
     scoringOverrides: Prisma.$ScoringOverridePayload<ExtArgs>[]
+    tradeAssets: Prisma.$TradeAssetPayload<ExtArgs>[]
+    projections: Prisma.$PlayerProjectionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3410,6 +3860,8 @@ export interface Prisma__PlayerClient<T, Null = never, ExtArgs extends runtime.T
   availabilityItems<T extends Prisma.Player$availabilityItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$availabilityItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AvailabilityReportItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   providerMaps<T extends Prisma.Player$providerMapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$providerMapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderPlayerMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scoringOverrides<T extends Prisma.Player$scoringOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$scoringOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoringOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeAssets<T extends Prisma.Player$tradeAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$tradeAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projections<T extends Prisma.Player$projectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Player$projectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlayerProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4203,6 +4655,54 @@ export type Player$scoringOverridesArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.ScoringOverrideScalarFieldEnum | Prisma.ScoringOverrideScalarFieldEnum[]
+}
+
+/**
+ * Player.tradeAssets
+ */
+export type Player$tradeAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeAsset
+   */
+  select?: Prisma.TradeAssetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeAsset
+   */
+  omit?: Prisma.TradeAssetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeAssetInclude<ExtArgs> | null
+  where?: Prisma.TradeAssetWhereInput
+  orderBy?: Prisma.TradeAssetOrderByWithRelationInput | Prisma.TradeAssetOrderByWithRelationInput[]
+  cursor?: Prisma.TradeAssetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeAssetScalarFieldEnum | Prisma.TradeAssetScalarFieldEnum[]
+}
+
+/**
+ * Player.projections
+ */
+export type Player$projectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlayerProjection
+   */
+  select?: Prisma.PlayerProjectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlayerProjection
+   */
+  omit?: Prisma.PlayerProjectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlayerProjectionInclude<ExtArgs> | null
+  where?: Prisma.PlayerProjectionWhereInput
+  orderBy?: Prisma.PlayerProjectionOrderByWithRelationInput | Prisma.PlayerProjectionOrderByWithRelationInput[]
+  cursor?: Prisma.PlayerProjectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlayerProjectionScalarFieldEnum | Prisma.PlayerProjectionScalarFieldEnum[]
 }
 
 /**

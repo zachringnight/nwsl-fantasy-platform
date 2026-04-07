@@ -43,7 +43,7 @@ export function SurfaceCard({
           <p
             className={cn(
               "text-[0.68rem] font-semibold uppercase tracking-[0.26em]",
-              isBrand ? "text-white/70" : isAccent ? "text-[#C5FF5F]" : "text-brand-strong"
+              isBrand ? "text-white/78" : isAccent ? "text-[#C5FF5F]" : "text-brand-strong"
             )}
           >
             {eyebrow}

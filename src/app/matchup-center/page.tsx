@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import { Activity, CalendarRange, Shield, Zap } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
+import { MatchupCenterClient } from "@/components/matchup/matchup-center-client";
 import { fantasyPlayerPool } from "@/lib/fantasy-player-pool";
 import {
   formatFantasySlateRange,
@@ -8,6 +10,12 @@ import {
   getFantasyTargetSlate,
 } from "@/lib/fantasy-slate-engine";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
+
+export const metadata: Metadata = {
+  title: "Matchup Center",
+  description:
+    "Follow live scoring, manage your daily and weekly salary-cap entries, and track contest results.",
+};
 
 const nextDailySlate = getFantasyTargetSlate("salary_cap_daily");
 const nextWeeklySlate = getFantasyTargetSlate("salary_cap_weekly");
@@ -43,14 +51,16 @@ export default function MatchupCenterPage() {
   return (
     <AppShell
       eyebrow="Matchup Center"
-      title="Track every slate without losing the plot"
-      description="Live scoring stays readable from lock to final whistle, with clear score movement and the player events behind it."
+      title="Your contests and live scoring"
+      description="Manage entries, track slates, and follow every score as it happens."
     >
+      <MatchupCenterClient />
+
       <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
         <SurfaceCard
-          eyebrow="Live rhythm"
+          eyebrow="Slate schedule"
           title={getFantasySlateStatus(nextDailySlate) === "live" ? "A slate is live now" : "The next slate is already mapped"}
-          description="You always know when scoring starts, when it settles, and which window your lineup belongs to."
+          description="Always know when scoring starts and when it settles."
         >
           <div className="grid gap-3">
             <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
@@ -96,7 +106,7 @@ export default function MatchupCenterPage() {
         <SurfaceCard
           eyebrow="Impact players"
           title="These names can swing a slate in minutes"
-          description="Top-ranked players carry the biggest projection ceiling and usually drive the sharpest live movement."
+          description="Top-ranked players with the biggest upside."
         >
           <div className="space-y-3">
             {featuredImpactPlayers.map((player) => (
@@ -125,8 +135,8 @@ export default function MatchupCenterPage() {
       <section className="grid gap-5 lg:grid-cols-2">
         <SurfaceCard
           eyebrow="What moves scores"
-          title="The biggest fantasy swings are visible before kickoff"
-          description="The scoring model rewards end product, chance creation, shot quality, and real defensive actions."
+          title="Key scoring events"
+          description="Goals, creation, shot quality, and defensive actions all count."
         >
           <div className="grid gap-3 md:grid-cols-2">
             {scoringEvents.map((event) => (
@@ -142,7 +152,7 @@ export default function MatchupCenterPage() {
         <SurfaceCard
           eyebrow="Why it matters"
           title="A calm read beats a noisy scoreboard"
-          description="See what changed, who caused it, and whether you still have live players left without hunting through tabs."
+          description="See what changed, who caused it, and how your lineup is tracking."
           tone="accent"
         >
           <div className="space-y-3">

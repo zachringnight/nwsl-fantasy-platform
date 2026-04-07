@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+import { Crown, Users2 } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
-import { SurfaceCard } from "@/components/common/surface-card";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
@@ -11,6 +12,7 @@ import { getButtonClassName } from "@/components/ui/button";
 import { ClassicMatchupStoryboard } from "@/features/matchup/components/classic-matchup-storyboard";
 import { SalaryCapMatchupPlaceholder } from "@/features/matchup/components/salary-cap-matchup-placeholder";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { useSwipe } from "@/hooks/use-swipe";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type {
@@ -30,6 +32,29 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [leagueDetails, setLeagueDetails] = useState<FantasyLeagueDetails | null>(null);
   const [matchupState, setMatchupState] = useState<FantasyLeagueMatchupState | null>(null);
+  const switchWeekRef = useRef<(direction: -1 | 1) => void>(() => {});
+
+  const swipeRef = useSwipe<HTMLDivElement>({
+    onSwipeLeft: () => switchWeekRef.current(1),
+    onSwipeRight: () => switchWeekRef.current(-1),
+  });
+
+  const loadMatchupForWeek = useCallback(async (weekNumber: number) => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      setMatchupState(await dataClient.loadLeagueMatchup(leagueId, { weekNumber }));
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "Unable to load the matchup."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [dataClient, leagueId]);
 
   const refreshMatchup = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -79,22 +104,22 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening matchup view."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening matchup view."
-      signedOutDescription="Sign in before opening matchup view."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
         if (isLoading && !leagueDetails) {
           return (
             <EmptyState
-              description="Loading the league state and current matchup context."
+              description="Pulling up your matchup details."
               title="Loading matchup"
             />
           );
@@ -133,17 +158,16 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
           leagueDetails.league.status === "live";
 
         if (needsMoreManagers || draftStillBlocking) {
+          const primarySetupAction = draftStillBlocking ? links.draft : links.team;
+          const primarySetupLabel = draftStillBlocking ? "Open draft lobby" : "Open team hub";
+
           return (
             <MotionReveal>
-              <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-                <SurfaceCard
-                  description="Weekly matchups publish after the room fills and the roster cycle is ready to compare real teams."
-                  eyebrow="Matchup readiness"
-                  title="Fixtures publish after the league fills and the draft closes"
-                >
-                  <div className="flex flex-wrap gap-3">
-                    <Link className={getButtonClassName()} href={links.team}>
-                      Open team hub
+              <GuidedLeagueState
+                actions={
+                  <>
+                    <Link className={getButtonClassName()} href={primarySetupAction}>
+                      {primarySetupLabel}
                     </Link>
                     <Link
                       className={getButtonClassName({
@@ -153,20 +177,55 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
                     >
                       Scout players
                     </Link>
-                  </div>
-                </SurfaceCard>
-
-                <SurfaceCard
-                  description={
-                    needsMoreManagers
-                      ? "Add another manager before publishing head-to-head fixtures."
-                      : "Finish the draft flow before the matchup engine takes over."
-                  }
-                  eyebrow="Blocking reason"
-                  title={needsMoreManagers ? "Need at least two managers" : "Draft still in progress"}
-                  tone="accent"
-                />
-              </section>
+                  </>
+                }
+                badge={needsMoreManagers ? "Fill the room" : "Draft still live"}
+                description={
+                  needsMoreManagers
+                    ? "Head-to-head matchups unlock after another manager joins the circle."
+                    : "Weekly fixtures publish when the draft flow is done and the room has real teams."
+                }
+                eyebrow="Matchup setup"
+                highlights={
+                  needsMoreManagers
+                    ? ["Invite one more", "Crew first", "Fixtures next"]
+                    : ["Draft closes first", "Lineups after", "Matchups unlock"]
+                }
+                icon={needsMoreManagers ? Users2 : Crown}
+                steps={
+                  needsMoreManagers
+                    ? [
+                        {
+                          detail: "Share the invite link and get one more manager into the room.",
+                          label: "Expand the circle",
+                        },
+                        {
+                          detail: "Make sure every manager has a team identity before kickoff.",
+                          label: "Lock the room",
+                        },
+                        {
+                          detail: "Come back here once fixtures can auto-publish.",
+                          label: "Open matchups",
+                        },
+                      ]
+                    : [
+                        {
+                          detail: "Run the lobby and enter the room when the board is live.",
+                          label: "Finish the draft",
+                        },
+                        {
+                          detail: "Let every roster fill before the weekly schedule takes over.",
+                          label: "Complete the board",
+                        },
+                        {
+                          detail: "Return for the first real head-to-head story.",
+                          label: "Check the matchup",
+                        },
+                      ]
+                }
+                title={needsMoreManagers ? "Need at least two managers" : "Draft still in progress"}
+                tone={needsMoreManagers ? "accent" : "brand"}
+              />
             </MotionReveal>
           );
         }
@@ -178,18 +237,28 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         if (!matchupState) {
           return (
             <EmptyState
-              description="No weekly matchup state is available for this league yet."
+              description="No matchup scheduled for this league yet."
               title="Matchup unavailable"
             />
           );
         }
 
+        switchWeekRef.current = (direction: -1 | 1) => {
+          const nextWeek = matchupState.week_number + direction;
+
+          if (nextWeek >= 1 && nextWeek <= matchupState.total_weeks) {
+            void loadMatchupForWeek(nextWeek);
+          }
+        };
+
         return (
           <MotionReveal>
-            <ClassicMatchupStoryboard
-              leagueDetails={leagueDetails}
-              matchupState={matchupState}
-            />
+            <div ref={swipeRef}>
+              <ClassicMatchupStoryboard
+                leagueDetails={leagueDetails}
+                matchupState={matchupState}
+              />
+            </div>
           </MotionReveal>
         );
       }}

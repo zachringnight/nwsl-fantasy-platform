@@ -1,16 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useDeferredValue, useCallback, useEffect, useRef, useState } from "react";
 import { Activity, AlarmClockCheck, PlayCircle, ShieldAlert, Sparkles } from "lucide-react";
+import { useDraftRealtime } from "@/hooks/use-draft-realtime";
 import { DraftBoard } from "@/components/draft/draft-board";
 import { DraftQueuePanel } from "@/components/draft/draft-queue-panel";
 import { EmptyState } from "@/components/common/empty-state";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { StatusBanner } from "@/components/common/status-banner";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { ConfettiBurst } from "@/components/ui/confetti-burst";
+import { LiveRegion } from "@/components/ui/live-region";
+import { FirstPickGuide } from "@/components/draft/first-pick-guide";
+import { feedback } from "@/lib/feedback";
+import { ClubLogo } from "@/components/ui/club-logo";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type { FantasyDraftState, PlayerPosition } from "@/types/fantasy";
@@ -36,6 +43,12 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const [turnPulseActive, setTurnPulseActive] = useState(false);
   const [recentPickPulseId, setRecentPickPulseId] = useState<string | null>(null);
   const [queuePulsePlayerId, setQueuePulsePlayerId] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [screenReaderAnnouncement, setScreenReaderAnnouncement] = useState("");
+  const [showFirstPickGuide, setShowFirstPickGuide] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !window.localStorage.getItem("nwsl-draft-guide-dismissed");
+  });
   const deferredSearch = useDeferredValue(search);
   const links = buildLeagueLinks(leagueId);
   const draftStatus = draftState?.draft.status;
@@ -46,7 +59,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const pickPulseTimeoutRef = useRef<number | null>(null);
   const queuePulseTimeoutRef = useRef<number | null>(null);
 
-  const refreshDraftState = useEffectEvent(async () => {
+  const refreshDraftState = useCallback(async () => {
     if (!session || !profile?.onboarding_complete) {
       setDraftState(null);
       setIsLoading(false);
@@ -67,11 +80,11 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     } finally {
       setIsLoading(false);
     }
-  });
+  }, [dataClient, leagueId, profile?.onboarding_complete, session]);
 
   useEffect(() => {
     void refreshDraftState();
-  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+  }, [refreshDraftState]);
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
@@ -82,6 +95,17 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       window.clearInterval(timerId);
     };
   }, []);
+
+  // Subscribe to realtime draft updates — instant push instead of waiting for polls
+  useDraftRealtime({
+    leagueId,
+    enabled: !!session && !!profile?.onboarding_complete && !!draftStatus && draftStatus !== "complete",
+    onDraftUpdate: useCallback(() => {
+      if (document.visibilityState === "visible") {
+        void refreshDraftState();
+      }
+    }, [refreshDraftState]),
+  });
 
   useEffect(() => {
     if (!session || !profile?.onboarding_complete || !draftStatus || draftStatus === "complete") {
@@ -94,9 +118,10 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       }
     };
 
+    // Longer poll interval as a fallback — realtime handles the fast path
     const pollId = window.setInterval(
       refreshIfVisible,
-      draftStatus === "live" || draftStatus === "paused" ? 4000 : 3000
+      draftStatus === "live" || draftStatus === "paused" ? 15000 : 10000
     );
 
     window.addEventListener("focus", refreshIfVisible);
@@ -107,7 +132,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       window.removeEventListener("focus", refreshIfVisible);
       document.removeEventListener("visibilitychange", refreshIfVisible);
     };
-  }, [draftStatus, profile?.onboarding_complete, session]);
+  }, [draftStatus, profile?.onboarding_complete, refreshDraftState, session]);
 
   useEffect(() => {
     if (!draftState) {
@@ -265,7 +290,17 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   async function handleDraftPlayer(playerId: string) {
     setBusyPlayerId(playerId);
+    const prevPickCount = draftState?.picks.length ?? 0;
     await withDraftAction("pick", () => dataClient.makeDraftPick(leagueId, playerId));
+    // If we got a new pick, celebrate
+    const player = draftState?.availablePlayers.find((p) => p.id === playerId);
+    const playerName = player?.display_name ?? "Player";
+    setScreenReaderAnnouncement(`${playerName} drafted successfully.`);
+    if ((draftState?.picks.length ?? 0) >= prevPickCount) {
+      setShowConfetti(true);
+      feedback.celebrate();
+      setTimeout(() => setShowConfetti(false), 100);
+    }
   }
 
   async function handleAutopick() {
@@ -280,7 +315,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="Account services are not configured in this environment."
+        description="Something went wrong. Please try again in a moment."
       />
     );
   }
@@ -307,7 +342,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Finish onboarding first"
-        description="Set your club and fantasy experience level before entering the room."
+        description="Complete your profile to continue."
       />
     );
   }
@@ -316,7 +351,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Loading draft room"
-        description="Loading the live room state."
+        description="Setting up your draft board."
       />
     );
   }
@@ -329,7 +364,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     return (
       <EmptyState
         title="Draft room unavailable"
-        description="That league does not have a draft state yet."
+        description="This league's draft hasn't been set up yet."
       />
     );
   }
@@ -338,10 +373,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   if (!modeConfig.usesLiveDraftRoom) {
     return (
-      <EmptyState
-        title={`${modeConfig.label} does not use a draft room`}
-        description="This format uses the contest-entry hub instead of a live snake draft."
-        action={
+      <GuidedLeagueState
+        actions={
           <Link
             href={links.team}
             className={getButtonClassName()}
@@ -349,34 +382,82 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
             Open team hub
           </Link>
         }
+        badge="No live room"
+        description="This league format uses the roster builder instead of a live snake-draft board."
+        eyebrow="Draft format"
+        highlights={["Contest entry flow", "No live clock", "Team hub first"]}
+        icon={Sparkles}
+        steps={[
+          {
+            detail: "Build entries from the team hub instead of waiting on a live turn.",
+            label: "Open the builder",
+          },
+          {
+            detail: "Use the player board to scan salaries, value, and availability.",
+            label: "Scout the pool",
+          },
+          {
+            detail: "Return here only for classic live-draft leagues.",
+            label: "Stay in the hub",
+          },
+        ]}
+        title={`${modeConfig.label} does not use a draft room`}
+        tone="default"
       />
     );
   }
 
   if (!draftState.memberships.every((membership) => membership.draft_slot != null)) {
     return (
-      <EmptyState
-        title="Reveal the draft order first"
-        description="The commissioner needs to reveal the randomized snake order in the lobby before the live room can open."
-        action={
-          <Link
-            href={links.draft}
-            className={getButtonClassName()}
-          >
-            Return to lobby
-          </Link>
+      <GuidedLeagueState
+        actions={
+          <>
+            <Link
+              href={links.draft}
+              className={getButtonClassName()}
+            >
+              Return to lobby
+            </Link>
+            <Link
+              href={links.players}
+              className={getButtonClassName({
+                variant: "secondary",
+              })}
+            >
+              Build your queue
+            </Link>
+          </>
         }
+        badge="Order reveal"
+        description="The room opens after the commissioner reveals the draft order. Until then, use this moment to line up favorites."
+        eyebrow="Draft setup"
+        highlights={["Reveal the order", "Queue your targets", "Room opens next"]}
+        icon={PlayCircle}
+        steps={[
+          {
+            detail: "Head back to the lobby and reveal every manager's slot.",
+            label: "Publish the order",
+          },
+          {
+            detail: "Use the player board to build a quick shortlist before the clock starts.",
+            label: "Queue your names",
+          },
+          {
+            detail: "Return here once the room is ready to go live.",
+            label: "Enter the room",
+          },
+        ]}
+        title="Reveal the draft order first"
+        tone="brand"
       />
     );
   }
 
   if (draftState.draft.status === "complete") {
     return (
-      <EmptyState
-        title="Draft complete"
-        description="The room is closed because all picks are in. Move to the recap or team editor."
-        action={
-          <div className="flex flex-wrap justify-center gap-3">
+      <GuidedLeagueState
+        actions={
+          <div className="flex flex-wrap gap-3">
             <Link
               href={links.draftRecap}
               className={getButtonClassName()}
@@ -393,6 +474,27 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
             </Link>
           </div>
         }
+        badge="Room closed"
+        description="Every pick is in. The live board is finished, so the next scenes are recap, lineup polish, and week-one prep."
+        eyebrow="Draft complete"
+        highlights={["Recap time", "Lineup next", "Board closed"]}
+        icon={Sparkles}
+        steps={[
+          {
+            detail: "Review how the board fell and where your best value landed.",
+            label: "Read the recap",
+          },
+          {
+            detail: "Move into the team editor and shape your opening starters.",
+            label: "Set week one",
+          },
+          {
+            detail: "Use players and transactions to plan the next edge.",
+            label: "Scout next moves",
+          },
+        ]}
+        title="Draft complete"
+        tone="accent"
       />
     );
   }
@@ -434,9 +536,19 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   return (
     <section className="space-y-5">
+      <ConfettiBurst active={showConfetti} />
+      <LiveRegion message={screenReaderAnnouncement} politeness="assertive" />
       {error ? (
         <StatusBanner title="Draft action" message={error} tone="warning" />
       ) : null}
+
+      <FirstPickGuide
+        isFirstDraft={showFirstPickGuide}
+        onDismiss={() => {
+          setShowFirstPickGuide(false);
+          try { window.localStorage.setItem("nwsl-draft-guide-dismissed", "1"); } catch {}
+        }}
+      />
 
       <section className="grid gap-5 xl:grid-cols-[0.78fr_1.2fr_0.82fr]">
         <div className="space-y-5">
@@ -569,7 +681,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
           <SurfaceCard
             eyebrow="Recent picks"
             title="Room activity"
-            description="This feed keeps the board understandable on mobile without forcing a full draft-board replay."
+            description="See who was just picked and which teams are building."
           >
             <div className="space-y-3">
               {recentPicks.length === 0 ? (
@@ -594,7 +706,8 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-foreground">{pick.player_name}</p>
-                          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
+                          <p className="mt-1 flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-muted">
+                            <ClubLogo club={pick.club_name} size={16} />
                             {pick.club_name} • {pick.player_position} • {pick.source}
                           </p>
                         </div>

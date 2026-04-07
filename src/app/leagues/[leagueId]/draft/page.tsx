@@ -1,5 +1,5 @@
-import { DraftLobbyClient } from "@/components/draft/draft-lobby-client";
 import { LeaguePageShell } from "@/components/league/league-page-shell";
+import { DraftLobbyClient } from "@/components/draft/draft-lobby-client";
 import type { AsyncRouteProps } from "@/types/routes";
 
 export default async function DraftLobbyPage({
@@ -12,7 +12,8 @@ export default async function DraftLobbyPage({
       leagueId={leagueId}
       eyebrow="Draft lobby"
       title="Pre-draft waiting room"
-      description="Check the order, start time, roster setup, and autopick status before the room opens."
+      description="Draft order, start time, and setup — all before the room opens."
+      highlights={["Countdown mode", "Pick order", "Room prep"]}
     >
       <DraftLobbyClient leagueId={leagueId} />
     </LeaguePageShell>

@@ -271,6 +271,8 @@ export type FixtureWhereInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotListRelationFilter
   providerMaps?: Prisma.ProviderFixtureMapListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
+  predictions?: Prisma.ModelPredictionListRelationFilter
+  playerProjections?: Prisma.PlayerProjectionListRelationFilter
 }
 
 export type FixtureOrderByWithRelationInput = {
@@ -292,6 +294,8 @@ export type FixtureOrderByWithRelationInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotOrderByRelationAggregateInput
   providerMaps?: Prisma.ProviderFixtureMapOrderByRelationAggregateInput
   scoringOverrides?: Prisma.ScoringOverrideOrderByRelationAggregateInput
+  predictions?: Prisma.ModelPredictionOrderByRelationAggregateInput
+  playerProjections?: Prisma.PlayerProjectionOrderByRelationAggregateInput
 }
 
 export type FixtureWhereUniqueInput = Prisma.AtLeast<{
@@ -316,6 +320,8 @@ export type FixtureWhereUniqueInput = Prisma.AtLeast<{
   pointSnapshots?: Prisma.FantasyPointSnapshotListRelationFilter
   providerMaps?: Prisma.ProviderFixtureMapListRelationFilter
   scoringOverrides?: Prisma.ScoringOverrideListRelationFilter
+  predictions?: Prisma.ModelPredictionListRelationFilter
+  playerProjections?: Prisma.PlayerProjectionListRelationFilter
 }, "id">
 
 export type FixtureOrderByWithAggregationInput = {
@@ -371,6 +377,8 @@ export type FixtureCreateInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateInput = {
@@ -390,6 +398,8 @@ export type FixtureUncheckedCreateInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUpdateInput = {
@@ -409,6 +419,8 @@ export type FixtureUpdateInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateInput = {
@@ -428,6 +440,8 @@ export type FixtureUncheckedUpdateInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureCreateManyInput = {
@@ -693,6 +707,34 @@ export type FixtureUpdateOneRequiredWithoutScoringOverridesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FixtureUpdateToOneWithWhereWithoutScoringOverridesInput, Prisma.FixtureUpdateWithoutScoringOverridesInput>, Prisma.FixtureUncheckedUpdateWithoutScoringOverridesInput>
 }
 
+export type FixtureCreateNestedOneWithoutPredictionsInput = {
+  create?: Prisma.XOR<Prisma.FixtureCreateWithoutPredictionsInput, Prisma.FixtureUncheckedCreateWithoutPredictionsInput>
+  connectOrCreate?: Prisma.FixtureCreateOrConnectWithoutPredictionsInput
+  connect?: Prisma.FixtureWhereUniqueInput
+}
+
+export type FixtureUpdateOneRequiredWithoutPredictionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FixtureCreateWithoutPredictionsInput, Prisma.FixtureUncheckedCreateWithoutPredictionsInput>
+  connectOrCreate?: Prisma.FixtureCreateOrConnectWithoutPredictionsInput
+  upsert?: Prisma.FixtureUpsertWithoutPredictionsInput
+  connect?: Prisma.FixtureWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FixtureUpdateToOneWithWhereWithoutPredictionsInput, Prisma.FixtureUpdateWithoutPredictionsInput>, Prisma.FixtureUncheckedUpdateWithoutPredictionsInput>
+}
+
+export type FixtureCreateNestedOneWithoutPlayerProjectionsInput = {
+  create?: Prisma.XOR<Prisma.FixtureCreateWithoutPlayerProjectionsInput, Prisma.FixtureUncheckedCreateWithoutPlayerProjectionsInput>
+  connectOrCreate?: Prisma.FixtureCreateOrConnectWithoutPlayerProjectionsInput
+  connect?: Prisma.FixtureWhereUniqueInput
+}
+
+export type FixtureUpdateOneRequiredWithoutPlayerProjectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.FixtureCreateWithoutPlayerProjectionsInput, Prisma.FixtureUncheckedCreateWithoutPlayerProjectionsInput>
+  connectOrCreate?: Prisma.FixtureCreateOrConnectWithoutPlayerProjectionsInput
+  upsert?: Prisma.FixtureUpsertWithoutPlayerProjectionsInput
+  connect?: Prisma.FixtureWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FixtureUpdateToOneWithWhereWithoutPlayerProjectionsInput, Prisma.FixtureUpdateWithoutPlayerProjectionsInput>, Prisma.FixtureUncheckedUpdateWithoutPlayerProjectionsInput>
+}
+
 export type FixtureCreateWithoutHomeClubInput = {
   id?: string
   seasonYear: number
@@ -709,6 +751,8 @@ export type FixtureCreateWithoutHomeClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutHomeClubInput = {
@@ -727,6 +771,8 @@ export type FixtureUncheckedCreateWithoutHomeClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutHomeClubInput = {
@@ -755,6 +801,8 @@ export type FixtureCreateWithoutAwayClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutAwayClubInput = {
@@ -773,6 +821,8 @@ export type FixtureUncheckedCreateWithoutAwayClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutAwayClubInput = {
@@ -850,6 +900,8 @@ export type FixtureCreateWithoutEventsInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutEventsInput = {
@@ -868,6 +920,8 @@ export type FixtureUncheckedCreateWithoutEventsInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutEventsInput = {
@@ -902,6 +956,8 @@ export type FixtureUpdateWithoutEventsInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutEventsInput = {
@@ -920,6 +976,8 @@ export type FixtureUncheckedUpdateWithoutEventsInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureCreateWithoutStatLinesInput = {
@@ -938,6 +996,8 @@ export type FixtureCreateWithoutStatLinesInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutStatLinesInput = {
@@ -956,6 +1016,8 @@ export type FixtureUncheckedCreateWithoutStatLinesInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutStatLinesInput = {
@@ -990,6 +1052,8 @@ export type FixtureUpdateWithoutStatLinesInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutStatLinesInput = {
@@ -1008,6 +1072,8 @@ export type FixtureUncheckedUpdateWithoutStatLinesInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureCreateWithoutPointSnapshotsInput = {
@@ -1026,6 +1092,8 @@ export type FixtureCreateWithoutPointSnapshotsInput = {
   statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutPointSnapshotsInput = {
@@ -1044,6 +1112,8 @@ export type FixtureUncheckedCreateWithoutPointSnapshotsInput = {
   statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutPointSnapshotsInput = {
@@ -1078,6 +1148,8 @@ export type FixtureUpdateWithoutPointSnapshotsInput = {
   statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutPointSnapshotsInput = {
@@ -1096,6 +1168,8 @@ export type FixtureUncheckedUpdateWithoutPointSnapshotsInput = {
   statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureCreateWithoutProviderMapsInput = {
@@ -1114,6 +1188,8 @@ export type FixtureCreateWithoutProviderMapsInput = {
   statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutFixtureInput
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutProviderMapsInput = {
@@ -1132,6 +1208,8 @@ export type FixtureUncheckedCreateWithoutProviderMapsInput = {
   statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutFixtureInput
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutProviderMapsInput = {
@@ -1166,6 +1244,8 @@ export type FixtureUpdateWithoutProviderMapsInput = {
   statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutFixtureNestedInput
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutProviderMapsInput = {
@@ -1184,6 +1264,8 @@ export type FixtureUncheckedUpdateWithoutProviderMapsInput = {
   statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutFixtureNestedInput
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureCreateWithoutScoringOverridesInput = {
@@ -1202,6 +1284,8 @@ export type FixtureCreateWithoutScoringOverridesInput = {
   statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutFixtureInput
   pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureUncheckedCreateWithoutScoringOverridesInput = {
@@ -1220,6 +1304,8 @@ export type FixtureUncheckedCreateWithoutScoringOverridesInput = {
   statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutFixtureInput
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
 }
 
 export type FixtureCreateOrConnectWithoutScoringOverridesInput = {
@@ -1254,6 +1340,8 @@ export type FixtureUpdateWithoutScoringOverridesInput = {
   statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutFixtureNestedInput
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutScoringOverridesInput = {
@@ -1272,6 +1360,200 @@ export type FixtureUncheckedUpdateWithoutScoringOverridesInput = {
   statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutFixtureNestedInput
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
+}
+
+export type FixtureCreateWithoutPredictionsInput = {
+  id?: string
+  seasonYear: number
+  providerStatus: string
+  startsAt: Date | string
+  completedAt?: Date | string | null
+  venueName?: string | null
+  status?: $Enums.FixtureStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  homeClub: Prisma.ClubCreateNestedOneWithoutHomeFixturesInput
+  awayClub: Prisma.ClubCreateNestedOneWithoutAwayFixturesInput
+  events?: Prisma.FixtureEventCreateNestedManyWithoutFixtureInput
+  statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutFixtureInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
+  providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionCreateNestedManyWithoutFixtureInput
+}
+
+export type FixtureUncheckedCreateWithoutPredictionsInput = {
+  id?: string
+  seasonYear: number
+  providerStatus: string
+  startsAt: Date | string
+  completedAt?: Date | string | null
+  homeClubId: string
+  awayClubId: string
+  venueName?: string | null
+  status?: $Enums.FixtureStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.FixtureEventUncheckedCreateNestedManyWithoutFixtureInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutFixtureInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
+  providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedCreateNestedManyWithoutFixtureInput
+}
+
+export type FixtureCreateOrConnectWithoutPredictionsInput = {
+  where: Prisma.FixtureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FixtureCreateWithoutPredictionsInput, Prisma.FixtureUncheckedCreateWithoutPredictionsInput>
+}
+
+export type FixtureUpsertWithoutPredictionsInput = {
+  update: Prisma.XOR<Prisma.FixtureUpdateWithoutPredictionsInput, Prisma.FixtureUncheckedUpdateWithoutPredictionsInput>
+  create: Prisma.XOR<Prisma.FixtureCreateWithoutPredictionsInput, Prisma.FixtureUncheckedCreateWithoutPredictionsInput>
+  where?: Prisma.FixtureWhereInput
+}
+
+export type FixtureUpdateToOneWithWhereWithoutPredictionsInput = {
+  where?: Prisma.FixtureWhereInput
+  data: Prisma.XOR<Prisma.FixtureUpdateWithoutPredictionsInput, Prisma.FixtureUncheckedUpdateWithoutPredictionsInput>
+}
+
+export type FixtureUpdateWithoutPredictionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  providerStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  venueName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFixtureStatusFieldUpdateOperationsInput | $Enums.FixtureStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  homeClub?: Prisma.ClubUpdateOneRequiredWithoutHomeFixturesNestedInput
+  awayClub?: Prisma.ClubUpdateOneRequiredWithoutAwayFixturesNestedInput
+  events?: Prisma.FixtureEventUpdateManyWithoutFixtureNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutFixtureNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
+  providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
+}
+
+export type FixtureUncheckedUpdateWithoutPredictionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  providerStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  homeClubId?: Prisma.StringFieldUpdateOperationsInput | string
+  awayClubId?: Prisma.StringFieldUpdateOperationsInput | string
+  venueName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFixtureStatusFieldUpdateOperationsInput | $Enums.FixtureStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.FixtureEventUncheckedUpdateManyWithoutFixtureNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutFixtureNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
+  providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
+}
+
+export type FixtureCreateWithoutPlayerProjectionsInput = {
+  id?: string
+  seasonYear: number
+  providerStatus: string
+  startsAt: Date | string
+  completedAt?: Date | string | null
+  venueName?: string | null
+  status?: $Enums.FixtureStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  homeClub: Prisma.ClubCreateNestedOneWithoutHomeFixturesInput
+  awayClub: Prisma.ClubCreateNestedOneWithoutAwayFixturesInput
+  events?: Prisma.FixtureEventCreateNestedManyWithoutFixtureInput
+  statLines?: Prisma.PlayerMatchStatLineCreateNestedManyWithoutFixtureInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotCreateNestedManyWithoutFixtureInput
+  providerMaps?: Prisma.ProviderFixtureMapCreateNestedManyWithoutFixtureInput
+  scoringOverrides?: Prisma.ScoringOverrideCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionCreateNestedManyWithoutFixtureInput
+}
+
+export type FixtureUncheckedCreateWithoutPlayerProjectionsInput = {
+  id?: string
+  seasonYear: number
+  providerStatus: string
+  startsAt: Date | string
+  completedAt?: Date | string | null
+  homeClubId: string
+  awayClubId: string
+  venueName?: string | null
+  status?: $Enums.FixtureStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.FixtureEventUncheckedCreateNestedManyWithoutFixtureInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedCreateNestedManyWithoutFixtureInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedCreateNestedManyWithoutFixtureInput
+  providerMaps?: Prisma.ProviderFixtureMapUncheckedCreateNestedManyWithoutFixtureInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedCreateNestedManyWithoutFixtureInput
+  predictions?: Prisma.ModelPredictionUncheckedCreateNestedManyWithoutFixtureInput
+}
+
+export type FixtureCreateOrConnectWithoutPlayerProjectionsInput = {
+  where: Prisma.FixtureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FixtureCreateWithoutPlayerProjectionsInput, Prisma.FixtureUncheckedCreateWithoutPlayerProjectionsInput>
+}
+
+export type FixtureUpsertWithoutPlayerProjectionsInput = {
+  update: Prisma.XOR<Prisma.FixtureUpdateWithoutPlayerProjectionsInput, Prisma.FixtureUncheckedUpdateWithoutPlayerProjectionsInput>
+  create: Prisma.XOR<Prisma.FixtureCreateWithoutPlayerProjectionsInput, Prisma.FixtureUncheckedCreateWithoutPlayerProjectionsInput>
+  where?: Prisma.FixtureWhereInput
+}
+
+export type FixtureUpdateToOneWithWhereWithoutPlayerProjectionsInput = {
+  where?: Prisma.FixtureWhereInput
+  data: Prisma.XOR<Prisma.FixtureUpdateWithoutPlayerProjectionsInput, Prisma.FixtureUncheckedUpdateWithoutPlayerProjectionsInput>
+}
+
+export type FixtureUpdateWithoutPlayerProjectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  providerStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  venueName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFixtureStatusFieldUpdateOperationsInput | $Enums.FixtureStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  homeClub?: Prisma.ClubUpdateOneRequiredWithoutHomeFixturesNestedInput
+  awayClub?: Prisma.ClubUpdateOneRequiredWithoutAwayFixturesNestedInput
+  events?: Prisma.FixtureEventUpdateManyWithoutFixtureNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUpdateManyWithoutFixtureNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
+  providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+}
+
+export type FixtureUncheckedUpdateWithoutPlayerProjectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  seasonYear?: Prisma.IntFieldUpdateOperationsInput | number
+  providerStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  homeClubId?: Prisma.StringFieldUpdateOperationsInput | string
+  awayClubId?: Prisma.StringFieldUpdateOperationsInput | string
+  venueName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumFixtureStatusFieldUpdateOperationsInput | $Enums.FixtureStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.FixtureEventUncheckedUpdateManyWithoutFixtureNestedInput
+  statLines?: Prisma.PlayerMatchStatLineUncheckedUpdateManyWithoutFixtureNestedInput
+  pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
+  providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
+  scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureCreateManyHomeClubInput = {
@@ -1316,6 +1598,8 @@ export type FixtureUpdateWithoutHomeClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutHomeClubInput = {
@@ -1334,6 +1618,8 @@ export type FixtureUncheckedUpdateWithoutHomeClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateManyWithoutHomeClubInput = {
@@ -1365,6 +1651,8 @@ export type FixtureUpdateWithoutAwayClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateWithoutAwayClubInput = {
@@ -1383,6 +1671,8 @@ export type FixtureUncheckedUpdateWithoutAwayClubInput = {
   pointSnapshots?: Prisma.FantasyPointSnapshotUncheckedUpdateManyWithoutFixtureNestedInput
   providerMaps?: Prisma.ProviderFixtureMapUncheckedUpdateManyWithoutFixtureNestedInput
   scoringOverrides?: Prisma.ScoringOverrideUncheckedUpdateManyWithoutFixtureNestedInput
+  predictions?: Prisma.ModelPredictionUncheckedUpdateManyWithoutFixtureNestedInput
+  playerProjections?: Prisma.PlayerProjectionUncheckedUpdateManyWithoutFixtureNestedInput
 }
 
 export type FixtureUncheckedUpdateManyWithoutAwayClubInput = {
@@ -1409,6 +1699,8 @@ export type FixtureCountOutputType = {
   pointSnapshots: number
   providerMaps: number
   scoringOverrides: number
+  predictions: number
+  playerProjections: number
 }
 
 export type FixtureCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1417,6 +1709,8 @@ export type FixtureCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   pointSnapshots?: boolean | FixtureCountOutputTypeCountPointSnapshotsArgs
   providerMaps?: boolean | FixtureCountOutputTypeCountProviderMapsArgs
   scoringOverrides?: boolean | FixtureCountOutputTypeCountScoringOverridesArgs
+  predictions?: boolean | FixtureCountOutputTypeCountPredictionsArgs
+  playerProjections?: boolean | FixtureCountOutputTypeCountPlayerProjectionsArgs
 }
 
 /**
@@ -1464,6 +1758,20 @@ export type FixtureCountOutputTypeCountScoringOverridesArgs<ExtArgs extends runt
   where?: Prisma.ScoringOverrideWhereInput
 }
 
+/**
+ * FixtureCountOutputType without action
+ */
+export type FixtureCountOutputTypeCountPredictionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ModelPredictionWhereInput
+}
+
+/**
+ * FixtureCountOutputType without action
+ */
+export type FixtureCountOutputTypeCountPlayerProjectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlayerProjectionWhereInput
+}
+
 
 export type FixtureSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1484,6 +1792,8 @@ export type FixtureSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   pointSnapshots?: boolean | Prisma.Fixture$pointSnapshotsArgs<ExtArgs>
   providerMaps?: boolean | Prisma.Fixture$providerMapsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.Fixture$scoringOverridesArgs<ExtArgs>
+  predictions?: boolean | Prisma.Fixture$predictionsArgs<ExtArgs>
+  playerProjections?: boolean | Prisma.Fixture$playerProjectionsArgs<ExtArgs>
   _count?: boolean | Prisma.FixtureCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fixture"]>
 
@@ -1542,6 +1852,8 @@ export type FixtureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   pointSnapshots?: boolean | Prisma.Fixture$pointSnapshotsArgs<ExtArgs>
   providerMaps?: boolean | Prisma.Fixture$providerMapsArgs<ExtArgs>
   scoringOverrides?: boolean | Prisma.Fixture$scoringOverridesArgs<ExtArgs>
+  predictions?: boolean | Prisma.Fixture$predictionsArgs<ExtArgs>
+  playerProjections?: boolean | Prisma.Fixture$playerProjectionsArgs<ExtArgs>
   _count?: boolean | Prisma.FixtureCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FixtureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1563,6 +1875,8 @@ export type $FixturePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     pointSnapshots: Prisma.$FantasyPointSnapshotPayload<ExtArgs>[]
     providerMaps: Prisma.$ProviderFixtureMapPayload<ExtArgs>[]
     scoringOverrides: Prisma.$ScoringOverridePayload<ExtArgs>[]
+    predictions: Prisma.$ModelPredictionPayload<ExtArgs>[]
+    playerProjections: Prisma.$PlayerProjectionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1977,6 +2291,8 @@ export interface Prisma__FixtureClient<T, Null = never, ExtArgs extends runtime.
   pointSnapshots<T extends Prisma.Fixture$pointSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fixture$pointSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FantasyPointSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   providerMaps<T extends Prisma.Fixture$providerMapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fixture$providerMapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProviderFixtureMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scoringOverrides<T extends Prisma.Fixture$scoringOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fixture$scoringOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScoringOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  predictions<T extends Prisma.Fixture$predictionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fixture$predictionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModelPredictionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  playerProjections<T extends Prisma.Fixture$playerProjectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fixture$playerProjectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlayerProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2535,6 +2851,54 @@ export type Fixture$scoringOverridesArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.ScoringOverrideScalarFieldEnum | Prisma.ScoringOverrideScalarFieldEnum[]
+}
+
+/**
+ * Fixture.predictions
+ */
+export type Fixture$predictionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ModelPrediction
+   */
+  select?: Prisma.ModelPredictionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ModelPrediction
+   */
+  omit?: Prisma.ModelPredictionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ModelPredictionInclude<ExtArgs> | null
+  where?: Prisma.ModelPredictionWhereInput
+  orderBy?: Prisma.ModelPredictionOrderByWithRelationInput | Prisma.ModelPredictionOrderByWithRelationInput[]
+  cursor?: Prisma.ModelPredictionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ModelPredictionScalarFieldEnum | Prisma.ModelPredictionScalarFieldEnum[]
+}
+
+/**
+ * Fixture.playerProjections
+ */
+export type Fixture$playerProjectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlayerProjection
+   */
+  select?: Prisma.PlayerProjectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlayerProjection
+   */
+  omit?: Prisma.PlayerProjectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlayerProjectionInclude<ExtArgs> | null
+  where?: Prisma.PlayerProjectionWhereInput
+  orderBy?: Prisma.PlayerProjectionOrderByWithRelationInput | Prisma.PlayerProjectionOrderByWithRelationInput[]
+  cursor?: Prisma.PlayerProjectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlayerProjectionScalarFieldEnum | Prisma.PlayerProjectionScalarFieldEnum[]
 }
 
 /**

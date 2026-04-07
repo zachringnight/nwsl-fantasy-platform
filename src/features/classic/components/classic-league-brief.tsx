@@ -1,3 +1,4 @@
+import { Clock3, Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { getButtonClassName } from "@/components/ui/button";
@@ -24,11 +25,12 @@ export function ClassicLeagueBrief({
 }: ClassicLeagueBriefProps) {
   return (
     <SurfaceCard
-      description={`${description} • League code ${leagueDetails.league.code} • ${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target} managers`}
+      description={`Code ${leagueDetails.league.code} • ${leagueDetails.memberships.length}/${leagueDetails.league.manager_count_target} managers in`}
       eyebrow="Classic overview"
       title={leagueDetails.league.name}
+      tone="brand"
     >
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div className="flex flex-wrap gap-2">
           <Pill tone="brand">Code {leagueDetails.league.code}</Pill>
           <Pill tone="default">
@@ -39,13 +41,13 @@ export function ClassicLeagueBrief({
           ) : null}
         </div>
 
-        <p className="text-sm leading-6 text-muted">
-          Exclusive ownership, weekly lineup pressure, and matchup consequences all stay visible in one classic league view.
+        <p className="max-w-2xl text-sm leading-6 text-white/78">
+          {description} Keep the room sharp, the draft central, and the weekly decisions easy to scan.
         </p>
 
         <div className="grid gap-3 md:grid-cols-3">
           <MetricTile
-            detail="Every player belongs to one manager at a time."
+            detail="Each player belongs to one manager at a time."
             label="Ownership"
             value="Exclusive"
           />
@@ -63,13 +65,35 @@ export function ClassicLeagueBrief({
           />
         </div>
 
-        <div className="rounded-[1.45rem] border border-line bg-white/6 p-4">
-          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-brand-strong">
-            League pulse
-          </p>
-          <p className="mt-3 text-base leading-7 text-foreground">
-            Draft night anchors the room. Once the player pool turns exclusive, every lineup, waiver, and matchup decision has real scarcity behind it.
-          </p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            {
+              detail: "One manager gets the player. Every claim has consequences.",
+              icon: Crown,
+              title: "Scarcity",
+            },
+            {
+              detail: "Clock energy stays high before the room opens and once it goes live.",
+              icon: Clock3,
+              title: "Draft night",
+            },
+            {
+              detail: "Lineups, waivers, and matchups keep the room moving every week.",
+              icon: Sparkles,
+              title: "Weekly pulse",
+            },
+          ].map((beat) => (
+            <div
+              key={beat.title}
+              className="rounded-[1.35rem] border border-white/12 bg-black/18 px-4 py-4"
+            >
+              <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[#ffd5e5]">
+                <beat.icon className="size-3.5" />
+                {beat.title}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-white/78">{beat.detail}</p>
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-wrap gap-3">

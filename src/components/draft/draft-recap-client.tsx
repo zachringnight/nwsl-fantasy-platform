@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useEffectEvent, useState } from "react";
+import { Crown } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
+import { GuidedLeagueState } from "@/components/league/guided-setup-state";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
@@ -12,7 +14,6 @@ import { LineupPitch } from "@/components/lineup/lineup-pitch";
 import { buildSuggestedLineup } from "@/lib/fantasy-draft";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyPlayerById } from "@/lib/fantasy-player-pool";
-import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 import type { FantasyDraftState, FantasyRosterPlayer } from "@/types/fantasy";
 
 export interface DraftRecapClientProps {
@@ -81,7 +82,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
     return (
       <EmptyState
         title="Draft recap unavailable"
-        description="Account services are not configured in this environment."
+        description="Something went wrong. Please try again in a moment."
       />
     );
   }
@@ -108,7 +109,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
     return (
       <EmptyState
         title="Finish onboarding first"
-        description="Set your club and fantasy experience level before reviewing the recap."
+        description="Complete your profile to continue."
       />
     );
   }
@@ -128,9 +129,46 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
 
   if (!draftState || draftState.picks.length === 0) {
     return (
-      <EmptyState
+      <GuidedLeagueState
+        actions={
+          <>
+            <Link
+              href={links.draft}
+              className={getButtonClassName()}
+            >
+              Open draft lobby
+            </Link>
+            <Link
+              href={links.team}
+              className={getButtonClassName({
+                variant: "secondary",
+              })}
+            >
+              Open team hub
+            </Link>
+          </>
+        }
+        badge="Recap unlock"
+        description="This page turns into a visual board once the draft room starts logging real picks."
+        eyebrow="Draft recap"
+        highlights={["Picks first", "Board story next", "Lineup prep after"]}
+        icon={Crown}
+        steps={[
+          {
+            detail: "Run the draft room or finish revealing the order from the lobby.",
+            label: "Get the board moving",
+          },
+          {
+            detail: "Once picks land, this recap will fill with roster reads and the full board.",
+            label: "Let picks stack",
+          },
+          {
+            detail: "Come back here to review your haul before lineup setup.",
+            label: "Read the room",
+          },
+        ]}
         title="No draft recap yet"
-        description="This recap fills in once the room has logged picks."
+        tone="brand"
       />
     );
   }
@@ -152,49 +190,45 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
       <div className="space-y-5">
         <LineupPitch roster={recapRoster} title="Recommended week-one shape" />
         <SurfaceCard
-          eyebrow="Roster read"
-          title="What the draft built"
-          description="See the scoring profile your roster came out of the draft with, not just the names you selected."
+          eyebrow="Your roster"
+          title="Draft results"
+          description="How your roster looks after the draft."
         >
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <MetricTile
-                detail="Current roster-wide baseline from average fantasy points."
+                detail="Total projected points for your roster."
                 label="Roster projection"
                 tone="brand"
                 value={rosterProjection.toFixed(1)}
               />
               <MetricTile
-                detail="Player currently driving the most weekly upside."
-                label="Projection driver"
+                detail="Your highest-projected player."
+                label="Top scorer"
                 tone="accent"
                 value={topProjectionPlayer ? topProjectionPlayer.player_name : "N/A"}
               />
               <MetricTile
-                detail="How many selections this manager made in the room."
+                detail="Players you drafted."
                 label="Your picks"
                 value={myPicks.length}
               />
               <MetricTile
-                detail="Immediate scoring anchor after the draft closes."
-                label="Scoring read"
+                detail="Your best scorer's position."
+                label="Strength"
                 value={topProjectionPlayer ? getScoringFitLabel(topProjectionPlayer.player_position) : "Building"}
               />
             </div>
 
             <div className="rounded-[1.2rem] border border-line bg-white/6 p-4 text-sm leading-7 text-foreground">
-              Weekly score starts with appearance ({launchScoringRules.appearance}) and 60+ minute ({launchScoringRules.minutes60Plus}) base points, then rises on goals, assists, clean sheets, and saves. This roster currently leans on{" "}
-              {topProjectionPlayer
-                ? `${topProjectionPlayer.player_name} and the ${getScoringFitLabel(topProjectionPlayer.player_position).toLowerCase()} lane`
-                : "its best projected starter lane"}
-              {" "}to create the early weekly edge.
+              Your roster is projected at {rosterProjection.toFixed(1)} points per week{topProjectionPlayer ? `, led by ${topProjectionPlayer.player_name}` : ""}.
             </div>
           </div>
         </SurfaceCard>
         <SurfaceCard
           eyebrow="Next move"
           title="Finish lineup prep"
-          description="The recap hands the roster directly into the team editor so the first legal lineup is only one step away."
+          description="Your drafted roster is ready — set your first lineup now."
         >
           <div className="flex flex-wrap gap-3">
             <Link
@@ -218,7 +252,7 @@ export function DraftRecapClient({ leagueId }: DraftRecapClientProps) {
       <SurfaceCard
         eyebrow="League recap"
         title="Pick board"
-        description="Review how the room unfolded, where value landed, and which picks changed each team’s scoring outlook."
+        description="See every pick, who got what, and how rosters shaped up."
         tone="accent"
       >
         <div className="space-y-3">

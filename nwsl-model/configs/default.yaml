@@ -1,0 +1,119 @@
+# NWSL Betting Model Configuration
+# ==================================
+
+data:
+  matches_path: "data/raw/matches.csv"
+  odds_path: "data/raw/odds.csv"
+  venues_path: "data/raw/venues.csv"
+  appearances_path: "data/raw/appearances.csv"
+  projected_lineups_path: "data/raw/projected_lineups.csv"
+  output_dir: "data/processed"
+  # Supported formats: csv, parquet
+  format: "csv"
+
+model:
+  # Which model to use: "dixon_coles" or "bivariate_poisson"
+  primary_model: "dixon_coles"
+
+  # Score matrix dimensions (0..max_goals for each team)
+  max_goals: 8
+
+  # Random seed for reproducibility
+  random_seed: 42
+
+team_ratings:
+  # Exponential decay half-life in days
+  half_life_days: 90
+  # Shrinkage toward league average for new/sparse teams
+  prior_weight: 5.0
+  # Season-to-season carryover factor (0=full reset, 1=full carry)
+  season_carryover: 0.6
+  # Older seasons get additional shrinkage: effective_carryover = season_carryover ^ seasons_ago
+  multi_season_decay: true
+
+dixon_coles:
+  # Low-score correction parameter rho range
+  rho_init: -0.05
+  rho_bounds: [-0.5, 0.5]
+  # Home advantage initial value
+  home_advantage_init: 0.25
+  # Optimizer settings
+  max_iter: 2000
+  tol: 1.0e-8
+
+bivariate_poisson:
+  # Shared intensity lambda3 initial value
+  lambda3_init: 0.1
+  lambda3_bounds: [0.001, 2.0]
+  home_advantage_init: 0.25
+  max_iter: 2000
+  tol: 1.0e-8
+
+lineup_adjustment:
+  # Ridge regularization alpha for adjusted plus-minus
+  ridge_alpha: 100.0
+  # Minimum minutes for a player to be rated
+  min_minutes: 200
+  # Whether to split into attack/defense components
+  split_attack_defense: true
+
+features:
+  # Rolling window sizes in matches
+  rolling_windows: [3, 5, 10]
+  # Rest day thresholds
+  short_rest_days: 4
+  # Travel distance computation
+  use_travel_distance: true
+  # Weather features
+  use_weather: true
+  # Surface adjustment
+  use_surface: true
+
+market_blend:
+  # Default blend weight: p_final = alpha * p_model + (1-alpha) * p_market
+  alpha: 0.5
+  # Alpha schedule by matches played (if enabled)
+  alpha_schedule_enabled: true
+  alpha_schedule:
+    # fewer than N matches played -> use this alpha
+    - matches_played_lt: 5
+      alpha: 0.3
+    - matches_played_lt: 10
+      alpha: 0.4
+    - matches_played_lt: 20
+      alpha: 0.5
+    - matches_played_lt: 999
+      alpha: 0.55
+  # De-vig method: "multiplicative", "power", "shin"
+  devig_method: "multiplicative"
+
+betting:
+  # Minimum edge to place a bet
+  min_edge: 0.02
+  # Kelly fraction
+  kelly_fraction: 0.25
+  # Maximum stake as fraction of bankroll
+  max_stake_pct: 0.01
+  # Starting bankroll
+  starting_bankroll: 10000.0
+  # Markets to bet on
+  markets:
+    - "1x2"
+    - "asian_handicap"
+    - "totals"
+
+backtest:
+  # Minimum training matches before first prediction
+  min_train_matches: 50
+  # Step size: predict this many matches at a time
+  step_size: 1
+  # Benchmark models to compare
+  benchmarks:
+    - "market_implied"
+    - "dixon_coles"
+    - "bivariate_poisson"
+    - "full_blend"
+
+logging:
+  level: "INFO"
+  file: "logs/nwsl_model.log"

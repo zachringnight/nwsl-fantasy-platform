@@ -1,8 +1,8 @@
 export const featureFlags = {
-  enablePublicLeagues: false,
+  enablePublicLeagues: true,
   enablePushNotifications: false,
   enableCommissionerOverrides: true,
-  enablePlayerComparison: false,
-  enableAdminTools: false,
-  enableDarkMode: false,
+  enablePlayerComparison: true,
+  enableAdminTools: process.env.NEXT_PUBLIC_ENABLE_ADMIN === "true",
+  enableDarkMode: true,
 } as const;

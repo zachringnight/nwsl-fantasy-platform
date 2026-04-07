@@ -31,13 +31,13 @@ export function DraftQueuePanel({
       <SurfaceCard
         eyebrow="My board"
         title="Queue"
-        description="On mobile this collapses into a bottom sheet so the player pool stays primary."
+        description="Players you want to draft, in order of preference."
         tone="accent"
       >
         <div className="space-y-3 text-sm text-foreground">
           {queue.length === 0 ? (
             <p className="rounded-[1.2rem] border border-dashed border-line bg-white/8 px-4 py-3 text-muted">
-              Queue players from the board so autopick has a clean priority list.
+              Add players from the board to set your autopick order.
             </p>
           ) : (
             queue.map((player, index) => {
@@ -71,7 +71,8 @@ export function DraftQueuePanel({
                     </div>
                     <div className="flex gap-2">
                       <button
-                        className="rounded-full border border-line bg-white/10 px-3 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                        aria-label={`Move ${player.player_name} up in queue`}
+                        className="min-h-10 rounded-full border border-line bg-white/10 px-3 py-1.5 text-xs font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isBusy || index === 0 || !onMoveUp}
                         onClick={() => {
                           onMoveUp?.(player.player_id);
@@ -81,7 +82,8 @@ export function DraftQueuePanel({
                         Up
                       </button>
                       <button
-                        className="rounded-full border border-line bg-white/10 px-3 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                        aria-label={`Move ${player.player_name} down in queue`}
+                        className="min-h-10 rounded-full border border-line bg-white/10 px-3 py-1.5 text-xs font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isBusy || index === queue.length - 1 || !onMoveDown}
                         onClick={() => {
                           onMoveDown?.(player.player_id);
@@ -91,7 +93,8 @@ export function DraftQueuePanel({
                         Down
                       </button>
                       <button
-                        className="rounded-full border border-danger/20 bg-danger/10 px-3 py-1 text-xs font-semibold text-danger disabled:opacity-50"
+                        aria-label={`Remove ${player.player_name} from queue`}
+                        className="min-h-10 rounded-full border border-danger/20 bg-danger/10 px-3 py-1.5 text-xs font-semibold text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={isBusy || !onRemove}
                         onClick={() => {
                           onRemove?.(player.player_id);

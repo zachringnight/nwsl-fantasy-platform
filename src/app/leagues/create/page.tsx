@@ -1,12 +1,17 @@
+import type { Metadata } from "next";
 import { AppShell } from "@/components/common/app-shell";
 import { CreateLeagueForm } from "@/components/league/create-league-form";
+
+export const metadata: Metadata = {
+  title: "Create League",
+};
 
 export default function CreateLeaguePage() {
   return (
     <AppShell
-      eyebrow="League creation"
-      title="Create a league with the right rules from the start"
-      description="Choose classic season-long, season salary cap, weekly salary cap, or daily salary cap, then set your room size and invite your group."
+      eyebrow="New league"
+      title="Pick your format and invite your group"
+      description="Classic draft, season cap, weekly cap, or daily — choose and go."
     >
       <CreateLeagueForm />
     </AppShell>

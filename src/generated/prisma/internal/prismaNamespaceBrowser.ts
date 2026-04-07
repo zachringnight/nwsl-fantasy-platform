@@ -89,7 +89,17 @@ export const ModelName = {
   NotificationPreference: 'NotificationPreference',
   Notification: 'Notification',
   ScoringOverride: 'ScoringOverride',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Achievement: 'Achievement',
+  Streak: 'Streak',
+  ChatMessage: 'ChatMessage',
+  TradeProposal: 'TradeProposal',
+  TradeAsset: 'TradeAsset',
+  TradeVote: 'TradeVote',
+  ModelPrediction: 'ModelPrediction',
+  FairOdds: 'FairOdds',
+  BettingEdge: 'BettingEdge',
+  PlayerProjection: 'PlayerProjection'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -706,6 +716,150 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const AchievementScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  leagueId: 'leagueId',
+  key: 'key',
+  label: 'label',
+  description: 'description',
+  earnedAt: 'earnedAt',
+  metadata: 'metadata'
+} as const
+
+export type AchievementScalarFieldEnum = (typeof AchievementScalarFieldEnum)[keyof typeof AchievementScalarFieldEnum]
+
+
+export const StreakScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  leagueId: 'leagueId',
+  fantasyTeamId: 'fantasyTeamId',
+  streakType: 'streakType',
+  currentCount: 'currentCount',
+  bestCount: 'bestCount',
+  lastUpdatedAt: 'lastUpdatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type StreakScalarFieldEnum = (typeof StreakScalarFieldEnum)[keyof typeof StreakScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  userId: 'userId',
+  body: 'body',
+  createdAt: 'createdAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const TradeProposalScalarFieldEnum = {
+  id: 'id',
+  leagueId: 'leagueId',
+  proposerTeamId: 'proposerTeamId',
+  receiverTeamId: 'receiverTeamId',
+  status: 'status',
+  message: 'message',
+  reviewPeriodEndsAt: 'reviewPeriodEndsAt',
+  respondedAt: 'respondedAt',
+  processedAt: 'processedAt',
+  vetoCount: 'vetoCount',
+  vetoThreshold: 'vetoThreshold',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TradeProposalScalarFieldEnum = (typeof TradeProposalScalarFieldEnum)[keyof typeof TradeProposalScalarFieldEnum]
+
+
+export const TradeAssetScalarFieldEnum = {
+  id: 'id',
+  tradeProposalId: 'tradeProposalId',
+  fromTeamId: 'fromTeamId',
+  playerId: 'playerId',
+  playerName: 'playerName',
+  playerPosition: 'playerPosition',
+  clubName: 'clubName'
+} as const
+
+export type TradeAssetScalarFieldEnum = (typeof TradeAssetScalarFieldEnum)[keyof typeof TradeAssetScalarFieldEnum]
+
+
+export const TradeVoteScalarFieldEnum = {
+  id: 'id',
+  tradeProposalId: 'tradeProposalId',
+  fantasyTeamId: 'fantasyTeamId',
+  userId: 'userId',
+  decision: 'decision',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeVoteScalarFieldEnum = (typeof TradeVoteScalarFieldEnum)[keyof typeof TradeVoteScalarFieldEnum]
+
+
+export const ModelPredictionScalarFieldEnum = {
+  id: 'id',
+  fixtureId: 'fixtureId',
+  modelName: 'modelName',
+  homeWinProb: 'homeWinProb',
+  drawProb: 'drawProb',
+  awayWinProb: 'awayWinProb',
+  lambdaHome: 'lambdaHome',
+  lambdaAway: 'lambdaAway',
+  scoreMatrix: 'scoreMatrix',
+  metadata: 'metadata',
+  generatedAt: 'generatedAt'
+} as const
+
+export type ModelPredictionScalarFieldEnum = (typeof ModelPredictionScalarFieldEnum)[keyof typeof ModelPredictionScalarFieldEnum]
+
+
+export const FairOddsScalarFieldEnum = {
+  id: 'id',
+  predictionId: 'predictionId',
+  homeOdds: 'homeOdds',
+  drawOdds: 'drawOdds',
+  awayOdds: 'awayOdds',
+  bttsYesOdds: 'bttsYesOdds',
+  bttsNoOdds: 'bttsNoOdds',
+  over25Odds: 'over25Odds',
+  under25Odds: 'under25Odds'
+} as const
+
+export type FairOddsScalarFieldEnum = (typeof FairOddsScalarFieldEnum)[keyof typeof FairOddsScalarFieldEnum]
+
+
+export const BettingEdgeScalarFieldEnum = {
+  id: 'id',
+  predictionId: 'predictionId',
+  market: 'market',
+  fairOdds: 'fairOdds',
+  marketOdds: 'marketOdds',
+  edge: 'edge',
+  recommendedStake: 'recommendedStake'
+} as const
+
+export type BettingEdgeScalarFieldEnum = (typeof BettingEdgeScalarFieldEnum)[keyof typeof BettingEdgeScalarFieldEnum]
+
+
+export const PlayerProjectionScalarFieldEnum = {
+  id: 'id',
+  playerId: 'playerId',
+  fixtureId: 'fixtureId',
+  projectedPoints: 'projectedPoints',
+  confidence: 'confidence',
+  floorPoints: 'floorPoints',
+  ceilingPoints: 'ceilingPoints',
+  valueRating: 'valueRating',
+  generatedAt: 'generatedAt'
+} as const
+
+export type PlayerProjectionScalarFieldEnum = (typeof PlayerProjectionScalarFieldEnum)[keyof typeof PlayerProjectionScalarFieldEnum]
 
 
 export const SortOrder = {

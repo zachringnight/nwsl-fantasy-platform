@@ -278,3 +278,43 @@ export const AuditActorType = {
 } as const
 
 export type AuditActorType = (typeof AuditActorType)[keyof typeof AuditActorType]
+
+
+export const AchievementKey = {
+  FIRST_DRAFT_PICK: 'FIRST_DRAFT_PICK',
+  WIN_STREAK_3: 'WIN_STREAK_3',
+  WIN_STREAK_5: 'WIN_STREAK_5',
+  WIN_STREAK_7: 'WIN_STREAK_7',
+  POINTS_100_WEEK: 'POINTS_100_WEEK',
+  POINTS_150_WEEK: 'POINTS_150_WEEK',
+  PERFECT_LINEUP: 'PERFECT_LINEUP',
+  WAIVER_WIRE_HERO: 'WAIVER_WIRE_HERO',
+  COMEBACK_WIN: 'COMEBACK_WIN',
+  SEASON_CHAMPION: 'SEASON_CHAMPION',
+  CLEAN_SWEEP: 'CLEAN_SWEEP',
+  TOP_SCORER_WEEK: 'TOP_SCORER_WEEK',
+  TRADE_PARTNER: 'TRADE_PARTNER',
+  CHAT_STARTER: 'CHAT_STARTER'
+} as const
+
+export type AchievementKey = (typeof AchievementKey)[keyof typeof AchievementKey]
+
+
+export const TradeProposalStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  VETOED: 'VETOED',
+  CANCELED: 'CANCELED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type TradeProposalStatus = (typeof TradeProposalStatus)[keyof typeof TradeProposalStatus]
+
+
+export const TradeVoteDecision = {
+  APPROVE: 'APPROVE',
+  VETO: 'VETO'
+} as const
+
+export type TradeVoteDecision = (typeof TradeVoteDecision)[keyof typeof TradeVoteDecision]

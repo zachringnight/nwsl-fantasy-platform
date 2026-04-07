@@ -1,29 +1,34 @@
+import type { Metadata } from "next";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { OnboardingLocalForm } from "@/components/auth/onboarding-local-form";
 import { OnboardingLaunchSequence } from "@/features/onboarding/components/onboarding-launch-sequence";
 
+export const metadata: Metadata = {
+  title: "Welcome",
+};
+
 const onboardingSteps = [
-  "Choose a display name and favorite club",
-  "Pick your fantasy experience level",
-  "Choose whether to create or join a league",
-  "Land in the right next action without a dead end",
+  "Pick a display name and favorite club",
+  "Set your fantasy experience level",
+  "Create or join your first league",
+  "Start playing right away",
 ];
 
 export default function OnboardingPage() {
   return (
     <AppShell
-      eyebrow="Onboarding"
-      title="Set your club, your comfort level, and your next move"
-      description="Tell us who you support, how much fantasy you play, and what you want to do next."
+      eyebrow="Get started"
+      title="Welcome to the sharpest fantasy platform in soccer"
+      description="Model-powered projections, salary-cap tools, and live scoring — set up in 30 seconds."
     >
       <section className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
         <OnboardingLaunchSequence steps={onboardingSteps} />
 
         <SurfaceCard
           eyebrow="Your setup"
-          title="Save preferences and continue"
-          description="Choose your club, tell us your experience level, and decide whether to create or join a league."
+          title="Save and continue"
+          description="Pick your club and experience level, then jump straight into a league."
           tone="accent"
         >
           <OnboardingLocalForm />

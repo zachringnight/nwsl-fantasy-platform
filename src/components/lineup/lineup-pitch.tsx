@@ -50,7 +50,7 @@ export function LineupPitch({
     <SurfaceCard
       eyebrow="Lineup editor"
       title={title}
-      description="Tap-to-swap is still the intended mobile behavior. This first pass uses explicit slots so the legality rules stay obvious."
+      description="Tap a slot to assign or swap players into your formation."
     >
       <div
         className="relative overflow-hidden rounded-[1.75rem] border border-line bg-[linear-gradient(180deg,rgba(5,14,34,0.98)_0%,rgba(6,20,43,0.96)_100%)] p-4 sm:p-5"
@@ -112,7 +112,7 @@ export function LineupPitch({
                       <p className="mt-2 text-sm font-semibold text-white">
                         {player ? player.player_name : "Open slot"}
                       </p>
-                      <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                      <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                         {player
                           ? `${player.player_position} • ${player.club_name}`
                           : "Assign an eligible player"}
@@ -140,7 +140,7 @@ export function LineupPitch({
                     <p className="font-medium text-white">
                       {player ? player.player_name : lineupSlotLabels[slot]}
                     </p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/62">
+                    <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                       {player ? `${player.player_position} • ${player.club_name}` : "Bench slot"}
                     </p>
                   </div>

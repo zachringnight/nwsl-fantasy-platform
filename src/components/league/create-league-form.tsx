@@ -11,10 +11,11 @@ import {
   Users2,
   Wallet,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { getFantasyModeConfig, getFantasyModeOptions } from "@/lib/fantasy-modes";
 import {
@@ -25,17 +26,30 @@ import { cn } from "@/lib/utils";
 import type { FantasyGameVariant } from "@/types/fantasy";
 
 const defaultGameVariant: FantasyGameVariant = "classic_season_long";
+const validVariants: FantasyGameVariant[] = [
+  "classic_season_long",
+  "salary_cap_season_long",
+  "salary_cap_weekly",
+  "salary_cap_daily",
+];
 const modeOptions = getFantasyModeOptions();
 
 export function CreateLeagueForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dataClient = useFantasyDataClient();
+  const initialVariant = searchParams.get("variant") as FantasyGameVariant | null;
   const [leagueName, setLeagueName] = useState("");
   const [draftAt, setDraftAt] = useState("");
-  const [gameVariant, setGameVariant] = useState<FantasyGameVariant>(defaultGameVariant);
+  const [gameVariant, setGameVariant] = useState<FantasyGameVariant>(
+    initialVariant && validVariants.includes(initialVariant)
+      ? initialVariant
+      : defaultGameVariant
+  );
   const [managerCountTarget, setManagerCountTarget] = useState("10");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ leagueName?: string; draftAt?: string }>({});
   const selectedMode = getFantasyModeConfig(gameVariant);
   const salaryCapSlates = selectedMode.usesSalaryCap ? getFantasySlateWindows(gameVariant) : [];
   const firstSlate = salaryCapSlates[0] ?? null;
@@ -44,9 +58,19 @@ export function CreateLeagueForm() {
     ? "Set the draft night and invite the room."
     : "Contest lock windows are pulled directly from the 2026 schedule.";
 
+  function validateLeagueFields(): boolean {
+    const errors: { leagueName?: string; draftAt?: string } = {};
+    if (!leagueName.trim()) errors.leagueName = "Give your league a name.";
+    if (selectedMode.usesLiveDraftRoom && !draftAt) errors.draftAt = "Pick a draft date and time.";
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!validateLeagueFields()) return;
     setError("");
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
@@ -64,36 +88,33 @@ export function CreateLeagueForm() {
           : "Unable to create the league."
       );
       setIsSubmitting(false);
-      return;
     }
-
-    setIsSubmitting(false);
   }
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before league creation."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before creating a league."
+      onboardingDescription="Complete your profile to continue."
       signedOutAction={
         <Link className={getButtonClassName()} href="/signup">
           Create account
         </Link>
       }
-      signedOutDescription="Sign in before creating a league."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to create a league"
     >
       {() => (
         <form className="grid gap-6 xl:grid-cols-[1.12fr_0.88fr]" onSubmit={handleSubmit}>
           <SurfaceCard
-            eyebrow="League architecture"
+            eyebrow="League format"
             title="Choose the fantasy mode"
-            description="Pick the format that matches how your group wants to play. The room will inherit the right ownership rules, lock rhythm, and draft or contest timing."
+            description="Pick the format that matches how your group wants to play."
             className="overflow-hidden"
           >
             <div className="grid gap-3">
@@ -146,8 +167,8 @@ export function CreateLeagueForm() {
                       <div className="space-y-2">
                         <p className="text-xl font-semibold tracking-[-0.02em]">
                           {option.usesSalaryCap
-                            ? `${option.cadenceLabel} shared-pool contest`
-                            : "Season-long head-to-head league"}
+                            ? `${option.cadenceLabel} salary-cap league`
+                            : "Season-long draft league"}
                         </p>
                         <p
                           className={cn(
@@ -211,9 +232,12 @@ export function CreateLeagueForm() {
                     type="text"
                     placeholder="Founders Cup"
                     value={leagueName}
-                    onChange={(event) => setLeagueName(event.target.value)}
+                    onChange={(event) => { setLeagueName(event.target.value); setFieldErrors((prev) => ({ ...prev, leagueName: undefined })); }}
                     required
+                    aria-invalid={!!fieldErrors.leagueName}
+                    aria-describedby={fieldErrors.leagueName ? "league-name-error" : undefined}
                   />
+                  {fieldErrors.leagueName ? <span id="league-name-error" className="text-xs text-danger">{fieldErrors.leagueName}</span> : null}
                 </label>
 
                 <label className="block space-y-2">
@@ -238,9 +262,12 @@ export function CreateLeagueForm() {
                       className="field-control"
                       type="datetime-local"
                       value={draftAt}
-                      onChange={(event) => setDraftAt(event.target.value)}
+                      onChange={(event) => { setDraftAt(event.target.value); setFieldErrors((prev) => ({ ...prev, draftAt: undefined })); }}
                       required
+                      aria-invalid={!!fieldErrors.draftAt}
+                      aria-describedby={fieldErrors.draftAt ? "draft-time-error" : undefined}
                     />
+                    {fieldErrors.draftAt ? <span id="draft-time-error" className="text-xs text-danger">{fieldErrors.draftAt}</span> : null}
                     <span className="block text-xs leading-5 text-muted">
                       Classic leagues still use a commissioner-set live draft kickoff.
                     </span>
@@ -270,7 +297,7 @@ export function CreateLeagueForm() {
             <SurfaceCard
               eyebrow="Format readout"
               title={selectedMode.label}
-              description="A quick read on roster rules, lock rhythm, and how this room handles player control."
+              description="Roster rules and league format details."
             >
               <div className="grid gap-3 text-sm text-foreground sm:grid-cols-2">
                 <div className="edge-field rounded-[1.25rem] border border-line bg-white/6 p-4">
@@ -287,7 +314,7 @@ export function CreateLeagueForm() {
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
                     Cadence
                   </p>
-                  <p className="mt-2 font-semibold">{selectedMode.cadenceLabel} contest cycle</p>
+                  <p className="mt-2 font-semibold">{selectedMode.cadenceLabel} schedule</p>
                 </div>
                 <div className="edge-field rounded-[1.25rem] border border-line bg-white/6 p-4">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
@@ -328,12 +355,13 @@ export function CreateLeagueForm() {
                 disabled={isSubmitting}
                 type="submit"
               >
+                {isSubmitting ? <Spinner /> : null}
                 {isSubmitting
                   ? "Creating league..."
                   : selectedMode.usesSalaryCap
                     ? "Create salary-cap league"
                     : "Create classic league"}
-                <ArrowRight className="size-4" />
+                {!isSubmitting ? <ArrowRight className="size-4" /> : null}
               </Button>
             </SurfaceCard>
           </div>

@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "border-accent/35 bg-accent text-white shadow-[0_18px_42px_rgba(255,60,34,0.24)] hover:border-brand-lime hover:bg-brand-lime hover:text-night",
       },
       size: {
-        sm: "min-h-10 px-4 text-sm",
+        sm: "min-h-11 px-4 text-sm",
         md: "min-h-11 px-5 text-sm",
         lg: "min-h-12 px-6 text-base",
       },

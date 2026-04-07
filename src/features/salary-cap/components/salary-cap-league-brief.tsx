@@ -17,7 +17,7 @@ export interface SalaryCapLeagueBriefProps {
 }
 
 export function SalaryCapLeagueBrief({
-  description = "Shared-pool salary-cap play keeps the active slate, cap pressure, and next actions visible right away.",
+  description = "Your current contest window, salary cap, and lineup deadline at a glance.",
   leagueDetails,
   primaryActionHref,
   primaryActionLabel,
@@ -48,19 +48,19 @@ export function SalaryCapLeagueBrief({
 
         <div className="grid gap-3 md:grid-cols-3">
           <MetricTile
-            detail="Your entry always points to the current contest window."
-            label="Active slate"
+            detail="The matchday window your lineup counts toward."
+            label="Current window"
             tone="brand"
             value={slate.label}
           />
           <MetricTile
-            detail="Every single-entry build stays under the shared budget."
+            detail="Your lineup must stay under this budget."
             label="Cap"
             tone="brand"
             value={`$${leagueDetails.league.salary_cap_amount ?? 0}`}
           />
           <MetricTile
-            detail="Submission and lock follow the slate, not the page."
+            detail="Lineups lock at this time — no changes after."
             label="Lock"
             tone="accent"
             value={new Date(slate.lock_at).toLocaleTimeString([], {
@@ -72,10 +72,10 @@ export function SalaryCapLeagueBrief({
 
         <div className="rounded-[1.45rem] border border-white/12 bg-black/18 p-4">
           <p className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/72">
-            Slate pressure
+            Contest window
           </p>
           <p className="mt-3 text-base leading-7 text-white/86">
-            Every build points to a single clean window. Scout the board, commit once, and keep the entire contest anchored to the live slate instead of a generic season screen.
+            Build your lineup for this window, stay under the cap, and lock it in before the deadline.
           </p>
         </div>
 

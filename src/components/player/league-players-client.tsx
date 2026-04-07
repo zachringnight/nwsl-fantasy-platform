@@ -67,22 +67,22 @@ export function LeaguePlayersClient({ leagueId }: LeaguePlayersClientProps) {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening the player board."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before opening the league player board."
-      signedOutDescription="Sign in before opening the player board."
+      onboardingDescription="Complete your profile to continue."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => {
         if (isLoading && !league) {
           return (
             <EmptyState
-              description="Loading the player board and league ownership state."
+              description="Loading the player board for your league."
               title="Loading player board"
             />
           );

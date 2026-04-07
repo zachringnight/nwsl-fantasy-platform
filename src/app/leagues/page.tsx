@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, CalendarRange, Crown, Goal, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarRange, Crown, Goal, LayoutDashboard, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
+import { getButtonClassName } from "@/components/ui/button";
 import { fantasyPlayerPool } from "@/lib/fantasy-player-pool";
 import {
   formatFantasySlateRange,
@@ -43,8 +44,8 @@ export default function LeaguesPage() {
   return (
     <AppShell
       eyebrow="Leagues"
-      title="Create a league, join by code, and keep up with every matchweek"
-      description="Start a new league, join an existing one, and see how each format works before you enter."
+      title="Start or join a league"
+      description="Pick your format, invite friends, and get playing."
       actions={
         <div className="flex gap-3">
           <Link
@@ -62,6 +63,22 @@ export default function LeaguesPage() {
         </div>
       }
     >
+      <SurfaceCard
+        eyebrow="Your leagues"
+        title="Already in a league?"
+        description="Head to your dashboard to manage your active leagues, check scores, and set lineups."
+      >
+        <div className="flex flex-wrap gap-3">
+          <Link href="/dashboard" className={getButtonClassName()}>
+            <LayoutDashboard className="size-4" />
+            Go to dashboard
+          </Link>
+          <Link href="/leagues/join" className={getButtonClassName({ variant: "secondary" })}>
+            Join with invite code
+          </Link>
+        </div>
+      </SurfaceCard>
+
       <section className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
         {leagueModes.map((mode) => (
           <SurfaceCard
@@ -75,8 +92,8 @@ export default function LeaguesPage() {
 
       <SurfaceCard
         eyebrow="Choose your rhythm"
-        title="Every format tells you exactly how often you need to manage"
-        description="Pick the pace that fits your group: one draft all season, one lineup per week, or one lineup per slate."
+        title="Pick the pace that fits your group"
+        description="One draft all season, one lineup per week, or one lineup per day."
       >
         <div className="grid gap-3 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="rounded-[1.4rem] border border-line bg-panel-soft p-4">
@@ -109,8 +126,8 @@ export default function LeaguesPage() {
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <SurfaceCard
           eyebrow="How entry works"
-          title="Create or join without guessing the rules"
-          description="League setup spells out player ownership, lineup cadence, salary cap, and lock timing before you commit."
+          title="Create or join in three steps"
+          description="Every rule is visible before you commit."
         >
           <div className="grid gap-3 md:grid-cols-3">
             <div className="rounded-[1.2rem] border border-line bg-panel-soft p-4">
@@ -145,7 +162,7 @@ export default function LeaguesPage() {
         <SurfaceCard
           eyebrow="Top market"
           title="Start with the names everyone will chase"
-          description="The same rankings power draft boards, waivers, player compare, and salary-cap pricing."
+          description="The same rankings power every format."
         >
           <div className="space-y-3">
             {featuredMarket.map((player) => (

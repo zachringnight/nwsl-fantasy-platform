@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -21,24 +22,27 @@ import {
 } from "@/lib/fantasy-slate-engine";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 
+export const metadata: Metadata = {
+  title: "Model-Powered Fantasy Soccer",
+  description:
+    "The home for NWSL fantasy with model-powered predictions, player projections, and edge indicators.",
+};
+
 const experiencePillars = [
   {
     eyebrow: "Classic leagues",
-    title: "Private leagues built for real rivalries",
-    description:
-      "Set a draft time, invite your group, and play weekly head-to-head matchups with clear rules and live scoring.",
+    title: "Private leagues with your crew",
+    description: "Draft players, set lineups, and compete head-to-head each week.",
   },
   {
     eyebrow: "Weekly contests",
-    title: "Salary-cap lineups with clear lock times",
-    description:
-      "Build one lineup, watch the slate window, and make changes right up to lock when the news changes.",
+    title: "Salary-cap lineups every week",
+    description: "Build a lineup under the cap and edit until lock time.",
   },
   {
-    eyebrow: "Matchday pulse",
-    title: "Live scoring you can follow at a glance",
-    description:
-      "See scores, swings, and key match events in one place without digging through menus.",
+    eyebrow: "Live scoring",
+    title: "Follow every point as it happens",
+    description: "Scores, goals, and key events update in real time.",
   },
 ];
 
@@ -87,7 +91,7 @@ export default function Home() {
     <AppShell
       eyebrow="NWSL fantasy"
       title="Fantasy for every NWSL match window"
-      description="Create private season-long leagues, build weekly salary-cap lineups, and follow daily slates in one place built for NWSL fans."
+      description="Leagues, contests, and daily lineups — all in one place."
       actions={
         <div className="flex flex-wrap gap-3">
           <Link
@@ -109,15 +113,15 @@ export default function Home() {
       <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <SurfaceCard
           eyebrow="Play now"
-          title="Classic draft nights, weekly contests, and daily slates in one place"
-          description="Choose the format that fits the way you want to play. Every mode uses the same player board, scoring rules, and live matchday experience."
+          title="Draft nights, weekly contests, and daily slates"
+          description="Pick the format that fits you. Same players and scoring across every mode."
           tone="brand"
           className="section-fade"
         >
           <div className="grid gap-4 edge-frame">
             <div className="grid gap-3 md:grid-cols-3">
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/68">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
                   Opening daily slate
                 </p>
                 <p className="mt-2 text-lg font-semibold text-white">
@@ -125,13 +129,13 @@ export default function Home() {
                 </p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/68">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
                   Weekly windows
                 </p>
                 <p className="mt-2 text-lg font-semibold text-white">{weeklySlateCount} windows</p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
-                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/68">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/78">
                   Final daily lock
                 </p>
                 <p className="mt-2 text-lg font-semibold text-white">
@@ -147,7 +151,7 @@ export default function Home() {
                   Classic
                 </p>
                 <p className="mt-2 text-sm leading-6 text-white/82">
-                  Private leagues with weekly head-to-head standings and a live snake draft.
+                  Private leagues with a live draft and weekly head-to-head matchups.
                 </p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
@@ -156,7 +160,7 @@ export default function Home() {
                   Weekly cap
                 </p>
                 <p className="mt-2 text-sm leading-6 text-white/82">
-                  One entry, one lock, one clear runway from scouting to submission for each scoring cycle.
+                  Build one lineup per week and lock it before kickoff.
                 </p>
               </div>
               <div className="rounded-[1.35rem] border border-white/12 bg-black/16 p-4">
@@ -165,7 +169,7 @@ export default function Home() {
                   Daily
                 </p>
                 <p className="mt-2 text-sm leading-6 text-white/82">
-                  Fast-turn contest windows built for casual sweats, same-day pivots, and late lineup drama.
+                  Pick players for a single matchday and see results the same night.
                 </p>
               </div>
             </div>
@@ -190,29 +194,29 @@ export default function Home() {
 
         <div className="grid gap-4 section-fade section-fade-delay-1">
           <SurfaceCard
-            eyebrow="Contest calendar"
-            title="Every lock window is visible before you commit"
-            description="See when contests lock, when the next slate opens, and how often you need to update your lineup."
+            eyebrow="Schedule"
+            title="Always know when lineups lock"
+            description="Deadlines and matchday times — always visible."
           >
             <div className="space-y-3 text-sm text-muted">
               <div className="flex items-center gap-3">
                 <CalendarRange className="size-4 text-brand-strong" />
-                <p>Daily slates map cleanly to matchday windows.</p>
+                <p>Daily lineups lock at the first kickoff of each matchday.</p>
               </div>
               <div className="flex items-center gap-3">
                 <Radar className="size-4 text-brand-strong" />
-                <p>Weekly contests roll up the same schedule into one clear build cycle.</p>
+                <p>Weekly lineups cover an entire round of matches.</p>
               </div>
               <div className="flex items-center gap-3">
                 <Trophy className="size-4 text-[#C5FF5F]" />
-                <p>Season-long salary cap locks once and rides with you all year.</p>
+                <p>Season-long lineups lock once and ride all year.</p>
               </div>
             </div>
           </SurfaceCard>
           <SurfaceCard
-            eyebrow="Why it hits"
-            title="Made for matchday, not menus"
-            description="Deadlines stay visible, scores stay readable, and every important move is close at hand."
+            eyebrow="Why NWSL Fantasy"
+            title="Built for matchday"
+            description="Clear deadlines, live scores, and easy lineup management."
             tone="accent"
           >
             <div className="flex flex-wrap gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-muted">
@@ -257,8 +261,8 @@ export default function Home() {
       <section className="grid gap-5 xl:grid-cols-[1.05fr_0.95fr]">
         <SurfaceCard
           eyebrow="Player market"
-          title="Real NWSL talent drives every format"
-          description="Scouting, drafting, waivers, and salary-cap builds all pull from the same live player board with real clubs, positions, salary, and projections."
+          title="Real NWSL players power every format"
+          description="Browse real NWSL players with salaries and projected points."
           className="section-fade"
         >
           <div className="grid gap-3 md:grid-cols-2">
@@ -304,9 +308,9 @@ export default function Home() {
 
         <div className="grid gap-5 section-fade section-fade-delay-1">
           <SurfaceCard
-            eyebrow="Scoring clarity"
-            title="A score that feels like soccer"
-            description="Goals matter, but creation, pressure, defending, and goalkeeper work all move your total in visible ways."
+            eyebrow="Scoring"
+            title="Points that reward real soccer"
+            description="Goals, assists, clean sheets, and more — every stat counts."
           >
             <div className="grid gap-3">
               {scoringAnchors.map((anchor) => (
@@ -321,9 +325,9 @@ export default function Home() {
             </div>
           </SurfaceCard>
           <SurfaceCard
-            eyebrow="Live runway"
+            eyebrow="Live now"
             title={`${formatSlateStatusLabel()} for matchday`}
-            description="Lock times stay visible before kickoff, during the slate, and after scores settle."
+            description="See current deadlines and upcoming matchdays."
           >
             <div className="grid gap-3">
               <div className="rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3">
@@ -345,7 +349,7 @@ export default function Home() {
                   {formatFantasySlateRange(currentWeeklySlate)}
                 </p>
                 <p className="mt-1 text-sm text-muted">
-                  One build cycle across {currentWeeklySlate.slate_keys.length} matchdays
+                  Covers {currentWeeklySlate.slate_keys.length} matchdays
                 </p>
               </div>
             </div>
@@ -364,6 +368,28 @@ export default function Home() {
               </Link>
             </div>
           </SurfaceCard>
+        </div>
+      </section>
+      <section className="space-y-6 text-center">
+        <h2 className="text-2xl font-bold text-white">Powered by Professional-Grade Models</h2>
+        <p className="text-white/60 max-w-2xl mx-auto">
+          Our Dixon-Coles and Bivariate Poisson models analyze every NWSL match to produce win
+          probabilities, expected goals, and player projections. The same statistical models
+          used by professional sports betting syndicates — now powering your fantasy decisions.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="glass-card rounded-xl border border-line p-4">
+            <p className="text-lg font-bold text-white">Match Predictions</p>
+            <p className="text-sm text-white/50">Win probabilities and projected scorelines for every fixture</p>
+          </div>
+          <div className="glass-card rounded-xl border border-line p-4">
+            <p className="text-lg font-bold text-white">Player Projections</p>
+            <p className="text-sm text-white/50">Projected points with floor-ceiling ranges and value ratings</p>
+          </div>
+          <div className="glass-card rounded-xl border border-line p-4">
+            <p className="text-lg font-bold text-white">Sharp Indicators</p>
+            <p className="text-sm text-white/50">See where model-optimal lineups diverge from popular picks</p>
+          </div>
         </div>
       </section>
     </AppShell>

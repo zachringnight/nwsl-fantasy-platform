@@ -26,6 +26,7 @@
 /tmp
 /output
 /.playwright-cli
+/test-results
 
 # debug
 npm-debug.log*

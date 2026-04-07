@@ -12,7 +12,8 @@ export default async function LeaguePlayersPage({
       leagueId={leagueId}
       eyebrow="League players"
       title="Search, filter, and compare"
-      description="Browse players with league context intact, including roster status, add/drop eligibility, and matchup relevance."
+      description="Browse available players, check who's taken, and find your next move."
+      highlights={["Scout fast", "Clean filters", "Quick adds"]}
     >
       <LeaguePlayersClient leagueId={leagueId} />
     </LeaguePageShell>

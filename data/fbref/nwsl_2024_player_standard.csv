@@ -1,0 +1,377 @@
+ranker,player,nationality,position,team,age,birth_year,games,games_starts,minutes,minutes_90s,goals,assists,goals_assists,goals_pens,pens_made,pens_att,cards_yellow,cards_red,goals_per90,assists_per90,goals_assists_per90,goals_pens_per90,goals_assists_pens_per90,matches
+1,Kerry Abello,usUSA,DF,Orlando Pride,24,1999,26,25,,23.4,1,2,3,1,0,0,2,0,0.04,0.09,0.13,0.04,0.13,Matches
+2,Emeri Adames,usUSA,"MF,FW",Reign,17,2006,21,6,540.0,6.0,1,0,1,1,0,0,0,0,0.17,0.0,0.17,0.17,0.17,Matches
+3,Adriana,brBRA,"MF,FW",Orlando Pride,27,1996,23,19,,18.7,6,1,7,4,2,2,0,0,0.32,0.05,0.37,0.21,0.27,Matches
+4,Amirah Ali,usUSA,"FW,MF",SD Wave,25,1998,14,4,572.0,6.4,1,0,1,1,0,0,0,0,0.16,0.0,0.16,0.16,0.16,Matches
+5,Aline,brBRA,"FW,MF",NC Courage,18,2005,7,5,371.0,4.1,1,0,1,1,0,0,0,0,0.24,0.0,0.24,0.24,0.24,Matches
+6,Amanda Allen,caCAN,FW,Orlando Pride,18,2005,8,0,87.0,1.0,0,1,1,0,0,0,1,0,0.0,1.03,1.03,0.0,1.03,Matches
+7,Michelle Alozie,ngNGA,"FW,MF",Houston Dash,26,1997,24,14,,15.0,0,1,1,0,0,0,3,0,0.0,0.07,0.07,0.0,0.07,Matches
+8,Angelina Anderson,usUSA,GK,Angel City FC,22,2001,3,3,270.0,3.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+9,Hannah Anderson,usUSA,DF,Red Stars,22,2001,16,15,,15.1,0,1,1,0,0,0,3,0,0.0,0.07,0.07,0.0,0.07,Matches
+10,Joelle Anderson,usUSA,MF,Bay FC,25,1998,17,10,916.0,10.2,3,2,5,3,0,0,2,0,0.29,0.2,0.49,0.29,0.49,Matches
+11,Andressa,brBRA,"MF,FW",Houston Dash,31,1992,24,15,,13.1,1,1,2,1,0,0,3,0,0.08,0.08,0.15,0.08,0.15,Matches
+12,Angelina,brBRA,MF,Orlando Pride,24,2000,21,16,,16.5,2,2,4,2,0,0,1,0,0.12,0.12,0.24,0.12,0.24,Matches
+13,Mackenzie Arnold,auAUS,GK,Portland Thorns,29,1994,5,5,450.0,5.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+14,Ary Borges,brBRA,MF,Racing Louisville,24,1999,14,10,826.0,9.2,1,2,3,1,0,0,3,0,0.11,0.22,0.33,0.11,0.33,Matches
+15,Kimmi Ascanio,usUSA,MF,SD Wave,16,2008,6,2,148.0,1.6,0,1,1,0,0,0,0,0,0.0,0.61,0.61,0.0,0.61,Matches
+16,Olivia Athens,usUSA,"MF,FW",Reign,24,1999,20,8,691.0,7.7,1,0,1,1,0,0,2,0,0.13,0.0,0.13,0.13,0.13,Matches
+17,Rosella Ayane,maMAR,FW,Red Stars,27,1996,1,1,45.0,0.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+18,Madison Ayson,,DF,Houston Dash,,,1,0,9.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+19,Ramona Bachmann,chSUI,"FW,MF",Houston Dash,33,1990,12,10,834.0,9.3,2,0,2,2,0,0,3,0,0.22,0.0,0.22,0.22,0.22,Matches
+20,Jordan Baggett,usUSA,MF,Racing Louisville,27,1996,3,1,85.0,0.9,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+21,Elexa Bahr,coCOL,"FW,MF",Racing Louisville,25,1998,16,14,,11.6,1,1,2,1,0,0,0,0,0.09,0.09,0.17,0.09,0.17,Matches
+22,Dorian Bailey,usUSA,MF,Bay FC,27,1997,26,18,,18.7,1,2,3,1,0,0,1,0,0.05,0.11,0.16,0.05,0.16,Matches
+23,Elizabeth Ball,usUSA,DF,Current,28,1995,19,12,,13.6,1,3,4,1,0,0,0,0,0.07,0.22,0.29,0.07,0.29,Matches
+24,Stine Ballisager Pedersen,dkDEN,DF,Current,30,1994,18,11,,11.9,1,0,1,1,0,0,0,0,0.08,0.0,0.08,0.08,0.08,Matches
+25,Barbra Banda,zmZAM,FW,Orlando Pride,23,2000,22,20,,19.3,13,6,19,13,0,0,0,0,0.67,0.31,0.98,0.67,0.98,Matches
+26,Melanie Barcenas,usUSA,MF,SD Wave,16,2007,10,5,447.0,5.0,1,0,1,1,0,0,0,0,0.2,0.0,0.2,0.2,0.2,Matches
+27,Lauren Barnes,usUSA,DF,Reign,34,1989,21,17,,16.6,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+28,Ángela Barón,coCOL,DF,Racing Louisville,20,2003,1,0,13.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+29,Hillary Beall,usUSA,GK,SD Wave,25,1999,2,1,118.0,1.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+30,Beatriz,brBRA,FW,Current,30,1993,16,11,866.0,9.6,5,4,9,5,0,0,0,0,0.52,0.42,0.94,0.52,0.94,Matches
+31,Jennifer Beattie,sctSCO,DF,Bay FC,32,1991,8,6,409.0,4.5,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+32,Maycee Bell,usUSA,DF,NC Courage,23,2000,2,0,10.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+33,Maycee Bell,usUSA,DF,Gotham FC,23,2000,8,3,292.0,3.2,1,0,1,1,0,0,0,0,0.31,0.0,0.31,0.31,0.31,Matches
+34,Elyse Bennett,usUSA,"MF,FW",SD Wave,24,1999,14,2,272.0,3.0,0,1,1,0,0,0,2,0,0.0,0.33,0.33,0.0,0.33,Matches
+35,Ann-Katrin Berger,deGER,GK,Gotham FC,33,1990,22,22,,22.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+36,Malia Berkely,usUSA,DF,NC Courage,25,1998,25,25,,24.5,1,3,4,0,1,3,0,0,0.04,0.12,0.16,0.0,0.12,Matches
+37,Hannah Betfort,usUSA,FW,Royals,25,1999,24,18,,18.6,2,0,2,2,0,0,2,0,0.11,0.0,0.11,0.11,0.11,Matches
+38,Croix Bethune,usUSA,MF,Washington Spirit,22,2001,17,16,,15.3,5,10,15,5,0,0,1,0,0.33,0.65,0.98,0.33,0.98,Matches
+39,Camryn Biegalski,usUSA,"DF,MF",Red Stars,25,1998,7,3,377.0,4.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+40,Jenna Bike,usUSA,"MF,FW",Red Stars,25,1998,23,15,,14.8,1,2,3,1,0,0,4,0,0.07,0.14,0.2,0.07,0.2,Matches
+41,Lynn Biyendolo,usUSA,"FW,MF",Gotham FC,30,1993,16,10,919.0,10.2,4,2,6,3,1,1,1,0,0.39,0.2,0.59,0.29,0.49,Matches
+42,Tess Boade,usUSA,"MF,FW",Bay FC,24,1999,25,23,,22.7,3,2,5,3,0,0,2,0,0.13,0.09,0.22,0.13,0.22,Matches
+43,Bethany Bos,usUSA,"FW,MF",Reign,26,1997,15,13,,12.0,5,0,5,3,2,2,2,1,0.42,0.0,0.42,0.25,0.25,Matches
+44,Bethany Bos,usUSA,"FW,MF",Racing Louisville,26,1997,10,10,715.0,7.9,3,1,4,2,1,1,0,0,0.38,0.13,0.5,0.25,0.38,Matches
+45,Lyza Bosselmann,,GK,Washington Spirit,,,1,0,1.0,0.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+46,Jordan Brewster,usUSA,DF,Bay FC,24,1999,1,0,10.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+47,Isabella Briede,usUSA,MF,Houston Dash,25,1998,17,2,371.0,4.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+48,Messiah Bright,usUSA,FW,Angel City FC,24,2000,21,7,687.0,7.6,1,0,1,1,0,0,2,0,0.13,0.0,0.13,0.13,0.13,Matches
+49,Courtney Brown,usUSA,MF,Washington Spirit,23,2000,24,10,947.0,10.5,1,0,1,1,0,0,0,0,0.1,0.0,0.1,0.1,0.1,Matches
+50,Ryanne Brown,usUSA,DF,Reign,25,1999,9,3,277.0,3.1,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+51,Bruninha,brBRA,DF,Gotham FC,21,2002,20,8,866.0,9.6,0,2,2,0,0,0,3,0,0.0,0.21,0.21,0.0,0.21,Matches
+52,Jordyn Bugg,usUSA,DF,Reign,17,2006,6,5,495.0,5.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+53,Zoe Burns,caCAN,"DF,MF",Royals,22,2002,21,14,,14.7,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+54,Anaïg Butel,frFRA,DF,Washington Spirit,31,1992,24,21,,21.2,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+55,Jenna Butler,,DF,Washington Spirit,,,1,0,1.0,0.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+56,Scarlett Camberos,mxMEX,"FW,MF",Bay FC,23,2000,10,8,694.0,7.7,1,0,1,1,0,0,2,0,0.13,0.0,0.13,0.13,0.13,Matches
+57,Jane Campbell,usUSA,GK,Houston Dash,28,1995,25,25,,25.0,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+58,Gabrielle Carle,caCAN,DF,Washington Spirit,25,1998,26,23,,22.5,0,2,2,0,0,0,2,0,0.0,0.09,0.09,0.0,0.09,Matches
+59,Jess Carter,engENG,DF,Gotham FC,26,1997,10,10,849.0,9.4,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+60,Kyra Carusa,ieIRL,FW,SD Wave,28,1995,17,7,633.0,7.0,2,0,2,2,0,0,1,0,0.28,0.0,0.28,0.28,0.28,Matches
+61,Delphine Cascarino,frFRA,"MF,FW",SD Wave,26,1997,10,7,638.0,7.1,2,3,5,2,0,0,0,0,0.28,0.42,0.71,0.28,0.71,Matches
+62,Deyna Castellanos,veVEN,"MF,FW",Bay FC,24,1999,20,12,,11.8,2,1,3,2,0,0,1,0,0.17,0.08,0.25,0.17,0.25,Matches
+63,Allysha Chapman,caCAN,DF,Houston Dash,35,1989,8,6,542.0,6.0,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+64,Temwa Chaŵinga,mwMWI,"MF,FW",Current,25,1998,25,24,,23.8,20,5,25,20,0,0,1,0,0.84,0.21,1.05,0.84,1.05,Matches
+65,Milly Clegg,nzNZL,FW,Racing Louisville,18,2005,1,0,19.0,0.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+66,Mikayla Cluff,usUSA,MF,Royals,24,1999,11,5,481.0,5.3,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+67,Sam Coffey,usUSA,MF,Portland Thorns,25,1998,24,23,,22.1,2,3,5,2,0,0,0,0,0.09,0.14,0.23,0.09,0.23,Matches
+68,Danielle Colaprico,usUSA,MF,SD Wave,30,1993,23,18,,17.3,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+69,Caroline Conti,usUSA,MF,Bay FC,22,2001,8,1,98.0,1.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+70,Alana Cook,usUSA,DF,Reign,26,1997,11,9,844.0,9.4,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+71,Alana Cook,usUSA,DF,Current,26,1997,10,10,855.0,9.5,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+72,Ally Cook,,FW,Red Stars,,,14,1,217.0,2.4,0,1,1,0,0,0,0,0,0.0,0.41,0.41,0.0,0.41,Matches
+73,Ava Cook,usUSA,FW,Red Stars,23,2000,3,0,97.0,1.1,1,0,1,1,0,0,1,0,0.93,0.0,0.93,0.93,0.93,Matches
+74,Michelle Cooper,usUSA,"MF,FW",Current,21,2002,21,15,,14.9,3,2,5,3,0,0,2,0,0.2,0.13,0.33,0.2,0.33,Matches
+75,Ana-Maria Crnogorčević,chSUI,"FW,MF",Reign,33,1990,10,8,716.0,8.0,0,1,1,0,0,0,0,0,0.0,0.13,0.13,0.0,0.13,Matches
+76,Chardonnay Curran,usUSA,FW,Red Stars,24,1999,11,0,241.0,2.7,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+77,Madison Curry,usUSA,DF,Angel City FC,23,2001,22,20,,17.7,1,1,2,1,0,0,5,0,0.06,0.06,0.11,0.06,0.11,Matches
+78,Izzy D'Aquila,usUSA,"MF,FW",Portland Thorns,22,2001,14,4,454.0,5.0,2,0,2,2,0,0,0,0,0.4,0.0,0.4,0.4,0.4,Matches
+79,Abby Dahlkemper,usUSA,DF,Bay FC,30,1993,9,9,810.0,9.0,2,0,2,2,0,0,0,0,0.22,0.0,0.22,0.22,0.22,Matches
+80,Abby Dahlkemper,usUSA,DF,SD Wave,30,1993,13,12,,12.5,1,0,1,1,0,0,1,0,0.08,0.0,0.08,0.08,0.08,Matches
+81,Tierna Davidson,usUSA,DF,Gotham FC,25,1998,19,16,,15.7,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+82,Debinha,brBRA,"MF,FW",Current,32,1991,22,17,,16.3,3,6,9,3,0,0,0,0,0.18,0.37,0.55,0.18,0.55,Matches
+83,Kate Del Fava,usUSA,DF,Royals,25,1998,26,26,,26.0,2,1,3,2,0,0,3,0,0.08,0.04,0.12,0.08,0.12,Matches
+84,Cece Delzer,usUSA,"FW,MF",Gotham FC,26,1997,5,0,65.0,0.7,1,0,1,1,0,0,0,0,1.38,0.0,1.38,1.38,1.38,Matches
+85,Cece Delzer,usUSA,"FW,MF",Houston Dash,26,1997,5,3,216.0,2.4,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+86,Savannah Demelo,usUSA,MF,Racing Louisville,25,1998,21,20,,19.4,5,2,7,4,1,2,5,0,0.26,0.1,0.36,0.21,0.31,Matches
+87,Ana Dias,ptPOR,FW,Portland Thorns,26,1997,10,2,237.0,2.6,1,0,1,1,0,0,3,0,0.38,0.0,0.38,0.38,0.38,Matches
+88,Vanessa DiBernardo,usUSA,"MF,FW",Current,31,1992,23,20,,17.0,5,6,11,5,0,0,3,0,0.29,0.35,0.65,0.29,0.65,Matches
+89,Claudia Dickey,usUSA,GK,Reign,24,2000,18,18,,17.7,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+90,Marisa DiGrande,usUSA,MF,Racing Louisville,26,1997,23,20,,19.5,1,2,3,1,0,0,0,0,0.05,0.1,0.15,0.05,0.15,Matches
+91,Maya Doms,usUSA,MF,Bay FC,22,2001,1,0,15.0,0.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+92,Makenzy Doniak,usUSA,MF,SD Wave,29,1994,24,17,,15.7,3,1,4,3,0,0,0,0,0.19,0.06,0.26,0.19,0.26,Matches
+93,Imani Dorsey,usUSA,DF,Royals,27,1996,2,2,134.0,1.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+94,Meggie Dougherty Howard,usUSA,MF,Angel City FC,28,1995,18,14,,12.9,1,2,3,1,0,0,2,0,0.08,0.15,0.23,0.08,0.23,Matches
+95,Julie Doyle,usUSA,MF,Orlando Pride,25,1998,24,19,,15.2,2,1,3,2,0,0,2,0,0.13,0.07,0.2,0.13,0.2,Matches
+96,Evelina Duljan,seSWE,FW,Orlando Pride,20,2003,8,1,179.0,2.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+97,Crystal Dunn,usUSA,"MF,FW",Gotham FC,31,1992,20,12,,11.7,1,2,3,1,0,0,2,0,0.09,0.17,0.26,0.09,0.26,Matches
+98,Caprice Dydasco,usUSA,DF,Bay FC,30,1993,25,22,,22.5,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+99,Cori Dyke,usUSA,DF,Orlando Pride,23,2000,21,11,,12.2,0,1,1,0,0,0,0,0,0.0,0.08,0.08,0.0,0.08,Matches
+100,Elizabeth Eddy,usUSA,MF,Angel City FC,32,1991,3,0,32.0,0.4,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+101,Emily van Egmond,auAUS,MF,SD Wave,30,1993,26,19,,21.0,1,0,1,1,0,0,3,0,0.05,0.0,0.05,0.05,0.05,Matches
+102,Claire Emslie,sctSCO,"MF,FW",Angel City FC,29,1994,26,24,,21.8,7,2,9,4,3,4,3,0,0.32,0.09,0.41,0.18,0.28,Matches
+103,Sierra Enge,usUSA,DF,SD Wave,23,2000,1,1,90.0,1.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+104,Abby Erceg,nzNZL,DF,Racing Louisville,34,1989,26,26,,26.0,1,2,3,1,0,0,0,0,0.04,0.08,0.12,0.04,0.12,Matches
+105,Sinead Farrelly,ieIRL,MF,Gotham FC,34,1989,1,0,2.0,0.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+106,Bayley Feist,usUSA,MF,Current,26,1997,16,6,572.0,6.4,1,0,1,1,0,0,0,0,0.16,0.0,0.16,0.16,0.16,Matches
+107,Kayla Fischer,usUSA,"MF,FW",Racing Louisville,24,2000,24,12,,12.6,1,1,2,1,0,0,10,0,0.08,0.08,0.16,0.08,0.16,Matches
+108,Jess Fishlock,wlsWAL,"MF,FW",Reign,37,1987,18,17,,15.5,0,3,3,0,0,0,0,0,0.0,0.19,0.19,0.0,0.19,Matches
+109,Jessie Fleming,caCAN,MF,Portland Thorns,25,1998,25,21,,18.9,0,1,1,0,0,0,3,0,0.0,0.05,0.05,0.0,0.05,Matches
+110,Taylor Flint,usUSA,MF,Racing Louisville,25,1998,24,24,,22.8,3,1,4,2,1,1,6,0,0.13,0.04,0.18,0.09,0.13,Matches
+111,Lauren Flynn,usUSA,DF,Royals,21,2002,12,10,893.0,9.9,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+112,Dana Foederer,nlNED,MF,Royals,21,2002,23,17,,17.0,1,2,3,1,0,0,4,0,0.06,0.12,0.18,0.06,0.18,Matches
+113,Adrianna Franch,usUSA,GK,Current,33,1990,17,17,,17.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+114,Bea Franklin,usUSA,MF,Red Stars,23,2000,16,12,,12.3,1,0,1,1,0,0,2,0,0.08,0.0,0.08,0.08,0.08,Matches
+115,Macey Fraser,nzNZL,MF,Royals,21,2002,4,2,210.0,2.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+116,Mandy Freeman,usUSA,DF,Gotham FC,28,1995,16,7,751.0,8.3,1,2,3,1,0,0,3,0,0.12,0.24,0.36,0.12,0.36,Matches
+117,Kennedy Fuller,usUSA,"MF,FW",Angel City FC,16,2007,19,10,979.0,10.9,1,0,1,1,0,0,1,0,0.09,0.0,0.09,0.09,0.09,Matches
+118,Ryan Gareis,usUSA,"MF,FW",Houston Dash,25,1998,7,5,327.0,3.6,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+119,Morgan Gautrat,usUSA,MF,Orlando Pride,30,1993,17,11,850.0,9.4,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+120,Naomi Girma,usUSA,DF,SD Wave,23,2000,20,20,,19.0,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+121,Hanna Glas,seSWE,DF,Reign,30,1993,7,6,473.0,5.3,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+122,Parker Goins,usUSA,MF,Racing Louisville,25,1998,14,0,173.0,1.9,1,0,1,1,0,0,0,0,0.52,0.0,0.52,0.52,0.52,Matches
+123,Nádia Gomes,ptPOR,"MF,FW",Red Stars,27,1996,9,3,234.0,2.6,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+124,Esther González,esESP,"FW,MF",Gotham FC,31,1992,21,18,,17.5,9,4,13,9,0,0,1,0,0.51,0.23,0.74,0.51,0.74,Matches
+125,Sarah Gorden,usUSA,DF,Angel City FC,31,1992,24,24,,22.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+126,Emily Gray,usUSA,MF,Royals,23,2000,2,0,3.0,0.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+127,Sarah Griffith,usUSA,MF,Red Stars,24,1999,7,3,190.0,2.1,0,1,1,0,0,0,0,0,0.0,0.47,0.47,0.0,0.47,Matches
+128,Shea Groom,usUSA,"MF,FW",Red Stars,30,1993,17,3,530.0,5.9,0,2,2,0,0,0,1,0,0.0,0.34,0.34,0.0,0.34,Matches
+129,Julia Grosso,caCAN,MF,Red Stars,23,2000,10,10,852.0,9.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+130,Kristen Hamilton,usUSA,"FW,MF",Current,31,1992,3,0,87.0,1.0,1,0,1,1,0,0,0,0,1.03,0.0,1.03,1.03,1.03,Matches
+131,Madison Hammond,usUSA,MF,Angel City FC,26,1997,23,15,,15.4,0,0,0,0,0,0,5,0,0.0,0.0,0.0,0.0,0.0,Matches
+132,DiDi Haracic,baBIH,GK,Angel City FC,31,1992,23,23,,23.0,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+133,Jyllissa Harris,usUSA,DF,Houston Dash,23,2000,11,9,804.0,8.9,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+134,Ashley Hatch,usUSA,"FW,MF",Washington Spirit,28,1995,24,16,,15.6,7,3,10,4,3,3,0,0,0.45,0.19,0.64,0.26,0.45,Matches
+135,Anna Heilferty,usUSA,DF,Washington Spirit,24,1999,2,0,71.0,0.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+136,Amandine Henry,frFRA,MF,Angel City FC,34,1989,4,3,263.0,2.9,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+137,Amandine Henry,frFRA,MF,Royals,34,1989,10,9,840.0,9.3,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+138,Hal Hershfelt,usUSA,MF,Washington Spirit,22,2001,25,23,,23.1,2,0,2,2,0,0,6,0,0.09,0.0,0.09,0.09,0.09,Matches
+139,Samantha Hiatt,usUSA,DF,Gotham FC,26,1998,17,12,,12.4,1,0,1,1,0,0,2,0,0.08,0.0,0.08,0.08,0.08,Matches
+140,Rachel Hill,usUSA,"MF,FW",Bay FC,28,1995,18,12,,12.3,1,2,3,1,0,0,0,0,0.08,0.16,0.24,0.08,0.24,Matches
+141,Heather Hinz,usUSA,GK,Houston Dash,22,2001,1,1,90.0,1.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+142,Sophie Hirst,usUSA,MF,Portland Thorns,23,2000,1,0,1.0,0.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+143,Sophie Hirst,usUSA,MF,Houston Dash,23,2000,7,3,286.0,3.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+144,Penelope Hocking,usUSA,"FW,MF",Red Stars,24,1999,13,12,982.0,10.9,4,1,5,4,0,0,5,0,0.37,0.09,0.46,0.37,0.46,Matches
+145,Penelope Hocking,usUSA,"MF,FW",Bay FC,24,1999,8,3,373.0,4.1,0,1,1,0,0,0,1,0,0.0,0.24,0.24,0.0,0.24,Matches
+146,Shelby Hogan,usUSA,GK,Portland Thorns,25,1998,21,21,,21.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+147,Shae Holmes,usUSA,DF,Reign,23,2000,19,12,,13.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+148,Haley Hopkins,usUSA,"FW,MF",NC Courage,25,1998,23,18,,16.3,3,1,4,3,0,0,2,0,0.18,0.06,0.25,0.18,0.25,Matches
+149,Jaelin Howell,usUSA,MF,Reign,24,1999,8,5,477.0,5.3,0,0,0,0,0,0,4,0,0.0,0.0,0.0,0.0,0.0,Matches
+150,Jaelin Howell,usUSA,MF,Racing Louisville,24,1999,12,8,701.0,7.8,0,1,1,0,0,0,4,0,0.0,0.13,0.13,0.0,0.13,Matches
+151,Kelli Hubly,usUSA,DF,Portland Thorns,29,1994,20,19,,19.1,0,2,2,0,0,0,6,0,0.0,0.1,0.1,0.0,0.1,Matches
+152,Sofia Huerta,usUSA,DF,Reign,31,1992,19,19,,19.0,2,0,2,0,2,2,4,0,0.11,0.0,0.11,0.0,0.0,Matches
+153,Jordyn Huitema,caCAN,"FW,MF",Reign,22,2001,18,17,,16.7,3,1,4,3,0,0,2,0,0.18,0.06,0.24,0.18,0.24,Matches
+154,Claire Hutton,usUSA,MF,Current,18,2006,22,19,,18.4,0,1,1,0,0,0,3,0,0.0,0.05,0.05,0.0,0.05,Matches
+155,Laurel Ivory,usUSA,GK,Reign,24,1999,9,8,751.0,8.3,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+156,Riley Jackson,usUSA,MF,NC Courage,18,2005,18,3,316.0,3.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+157,Natalie Jacobs,usUSA,DF,Houston Dash,26,1997,16,14,,13.8,1,1,2,1,0,0,2,0,0.07,0.07,0.15,0.07,0.15,Matches
+158,Sofia Jakobsson,seSWE,"MF,FW",SD Wave,33,1990,12,6,559.0,6.2,1,0,1,1,0,0,0,0,0.16,0.0,0.16,0.16,0.16,Matches
+159,Angharad James,wlsWAL,MF,Reign,29,1994,15,12,888.0,9.9,1,0,1,1,0,0,3,1,0.1,0.0,0.1,0.1,0.1,Matches
+160,Ellie Jean,usUSA,DF,Racing Louisville,27,1997,8,6,592.0,6.6,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+161,Mwanalima Jereko,keKEN,MF,Current,26,1997,3,0,45.0,0.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+162,Celia Jiménez,esESP,DF,Orlando Pride,28,1995,3,1,74.0,0.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+163,Katie Johnson,mxMEX,"FW,MF",Angel City FC,29,1994,5,0,89.0,1.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+164,Mya Jones,caCAN,"MF,FW",SD Wave,22,2001,19,12,852.0,9.5,2,0,2,2,0,0,0,0,0.21,0.0,0.21,0.21,0.21,Matches
+165,Jameese Joseph,usUSA,"MF,FW",Red Stars,21,2002,23,9,,11.5,2,2,4,2,0,0,1,0,0.17,0.17,0.35,0.17,0.35,Matches
+166,Júlia,brBRA,MF,Red Stars,26,1997,17,9,785.0,8.7,1,0,1,1,0,0,2,0,0.11,0.0,0.11,0.11,0.11,Matches
+167,Uchenna Kanu,ngNGA,"MF,FW",Racing Louisville,26,1997,12,10,751.0,8.3,5,0,5,5,0,0,1,0,0.6,0.0,0.6,0.6,0.6,Matches
+168,Kerolin,brBRA,FW,NC Courage,24,1999,5,2,235.0,2.6,1,0,1,1,0,0,0,0,0.38,0.0,0.38,0.38,0.38,Matches
+169,Alex Kerr,usUSA,FW,Orlando Pride,22,2001,1,0,7.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+170,Savannah King,usUSA,DF,Bay FC,18,2005,18,12,,12.3,0,2,2,0,0,0,1,0,0.0,0.16,0.16,0.0,0.16,Matches
+171,Tziarra King,usUSA,"MF,FW",Reign,25,1998,23,18,,14.9,2,1,3,2,0,0,1,1,0.13,0.07,0.2,0.13,0.2,Matches
+172,Aubrey Kingsbury,usUSA,GK,Washington Spirit,32,1991,26,26,,26.0,0,0,0,0,0,0,0,1,0.0,0.0,0.0,0.0,0.0,Matches
+173,Meghan Klingenberg,usUSA,"MF,DF",Portland Thorns,35,1988,12,2,253.0,2.8,0,1,1,0,0,0,0,0,0.0,0.36,0.36,0.0,0.36,Matches
+174,Rosemonde Kouassi,ciCIV,"MF,FW",Washington Spirit,22,2001,8,7,552.0,6.1,0,2,2,0,0,0,1,1,0.0,0.33,0.33,0.0,0.33,Matches
+175,Casey Krueger,usUSA,DF,Washington Spirit,33,1990,22,20,,18.6,1,3,4,1,0,0,1,0,0.05,0.16,0.21,0.05,0.21,Matches
+176,Natalia Kuikka,fiFIN,DF,Red Stars,28,1995,25,25,,22.9,0,1,1,0,0,0,1,0,0.0,0.04,0.04,0.0,0.04,Matches
+177,Racheal Kundananji,zmZAM,"FW,MF",Bay FC,23,2000,21,20,,20.3,5,4,9,5,0,0,6,0,0.25,0.2,0.44,0.25,0.44,Matches
+178,Kaleigh Kurtz,usUSA,DF,NC Courage,26,1997,26,26,,26.0,1,0,1,1,0,0,4,0,0.04,0.0,0.04,0.04,0.04,Matches
+179,Lo'eau LaBonta,usUSA,MF,Current,30,1993,24,21,,21.3,6,1,7,3,3,3,2,0,0.28,0.05,0.33,0.14,0.19,Matches
+180,Cloé Lacasse,caCAN,"MF,FW",Royals,30,1993,9,8,664.0,7.4,4,0,4,4,0,0,1,0,0.54,0.0,0.54,0.54,0.54,Matches
+181,Mariana Larroquette,arARG,FW,Orlando Pride,31,1992,4,0,52.0,0.6,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+182,Veronica Latsko,usUSA,"MF,DF",Reign,28,1995,23,11,,13.1,3,1,4,3,0,0,0,0,0.23,0.08,0.31,0.23,0.31,Matches
+183,Lauren,brBRA,DF,Current,21,2002,3,1,78.0,0.9,1,0,1,1,0,0,0,0,1.15,0.0,1.15,1.15,1.15,Matches
+184,Rose Lavelle,usUSA,MF,Gotham FC,28,1995,21,16,,15.7,7,1,8,7,0,0,1,0,0.45,0.06,0.51,0.45,0.51,Matches
+185,Claire Lavogez,frFRA,"FW,MF",Current,29,1994,14,4,481.0,5.3,2,0,2,2,0,0,2,0,0.37,0.0,0.37,0.37,0.37,Matches
+186,Carrie Lawrence,usUSA,DF,Orlando Pride,26,1997,9,3,288.0,3.2,0,1,1,0,0,0,3,1,0.0,0.31,0.31,0.0,0.31,Matches
+187,Clarisse Le Bihan,frFRA,MF,Angel City FC,29,1994,10,6,489.0,5.4,1,0,1,1,0,0,2,0,0.18,0.0,0.18,0.18,0.18,Matches
+188,Ally Lemos,usUSA,MF,Orlando Pride,19,2004,13,2,346.0,3.8,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+189,Sydney Leroux,usUSA,FW,Angel City FC,33,1990,25,19,,19.3,7,1,8,7,0,0,1,0,0.36,0.05,0.41,0.36,0.41,Matches
+190,Julia Lester,usUSA,DF,Reign,26,1998,5,2,213.0,2.4,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+191,Payton Linnehan,usUSA,"MF,FW",Portland Thorns,22,2001,18,6,739.0,8.2,2,1,3,2,0,0,2,0,0.24,0.12,0.37,0.24,0.37,Matches
+192,Alex Loera,usUSA,MF,Bay FC,24,1999,4,4,294.0,3.3,1,0,1,1,0,0,1,0,0.31,0.0,0.31,0.31,0.31,Matches
+193,Maitane López Millán,esESP,"MF,DF",Gotham FC,28,1995,13,4,414.0,4.6,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+194,Luana,brBRA,MF,Orlando Pride,30,1993,3,2,189.0,2.1,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+195,Ludmila,brBRA,"FW,MF",Red Stars,29,1994,7,6,529.0,5.9,3,0,3,3,0,0,0,1,0.51,0.0,0.51,0.51,0.51,Matches
+196,Katie Lund,usUSA,GK,Racing Louisville,27,1996,26,26,,26.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+197,Hanna Lundkvist,seSWE,DF,SD Wave,21,2002,23,21,,20.2,2,0,2,2,0,0,6,0,0.1,0.0,0.1,0.1,0.1,Matches
+198,Tyler Lussi,usUSA,"MF,FW",NC Courage,29,1995,22,20,,16.3,4,2,6,4,0,0,1,0,0.25,0.12,0.37,0.25,0.37,Matches
+199,Hailie Mace,usUSA,DF,Current,26,1997,23,20,,20.0,0,1,1,0,0,0,5,0,0.0,0.05,0.05,0.0,0.05,Matches
+200,Hildah Magaia,zaRSA,FW,Current,29,1994,6,0,50.0,0.6,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+201,Taylor Malham,usUSA,DF,Red Stars,24,1999,19,16,,16.0,0,2,2,0,0,0,2,0,0.0,0.13,0.13,0.0,0.13,Matches
+202,Alyssa Malonson,usUSA,DF,Bay FC,24,1999,22,16,,15.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+203,Princess Marfo,ghGHA,FW,Bay FC,20,2003,9,2,245.0,2.7,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+204,Marta,brBRA,"MF,FW",Orlando Pride,37,1986,23,19,,19.3,9,1,10,7,2,2,4,0,0.47,0.05,0.52,0.36,0.42,Matches
+205,Nealy Martin,usUSA,MF,Gotham FC,25,1998,25,22,,21.2,0,0,0,0,0,0,7,0,0.0,0.0,0.0,0.0,0.0,Matches
+206,Brianna Martinez,usUSA,DF,Orlando Pride,23,2000,13,8,698.0,7.8,0,0,0,0,0,0,3,1,0.0,0.0,0.0,0.0,0.0,Matches
+207,Merritt Mathias,usUSA,DF,Angel City FC,33,1990,13,3,371.0,4.1,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+208,Manaka Matsukubo,jpJPN,FW,NC Courage,19,2004,17,11,,11.7,2,1,3,2,0,0,0,0,0.17,0.09,0.26,0.17,0.26,Matches
+209,Zoe Matthews,usUSA,MF,Houston Dash,16,2007,2,0,9.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+210,Ainsley McCammon,usUSA,MF,Reign,16,2007,2,1,63.0,0.7,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+211,Savannah McCaskill,usUSA,MF,SD Wave,27,1996,20,16,,16.1,1,1,2,1,0,0,3,0,0.06,0.06,0.12,0.06,0.12,Matches
+212,Phoebe McClernon,usUSA,DF,Reign,26,1997,26,22,,21.5,0,1,1,0,0,0,4,0,0.0,0.05,0.05,0.0,0.05,Matches
+213,Haley McCutcheon,usUSA,MF,Orlando Pride,27,1996,22,18,,18.9,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+214,Amanda McGlynn,usUSA,GK,Royals,25,1998,24,24,,24.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+215,Mallie McKenzie,usUSA,MF,Portland Thorns,23,2000,1,0,13.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+216,Tara McKeown,usUSA,DF,Washington Spirit,24,1999,26,26,,26.0,0,1,1,0,0,0,2,0,0.0,0.04,0.04,0.0,0.04,Matches
+217,Kristen McNabb,usUSA,DF,SD Wave,29,1994,24,21,,21.6,1,0,1,1,0,0,2,1,0.05,0.0,0.05,0.05,0.05,Matches
+218,Emily Menges,usUSA,DF,Bay FC,31,1992,26,25,,25.4,0,2,2,0,0,0,0,0,0.0,0.08,0.08,0.0,0.08,Matches
+219,Maddie Mercado,usUSA,FW,Reign,22,2001,5,0,36.0,0.4,1,0,1,1,0,0,0,0,2.5,0.0,2.5,2.5,2.5,Matches
+220,Addisyn Merrick,usUSA,MF,Royals,25,1998,4,1,117.0,1.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+221,Landy Mertz,usUSA,MF,NC Courage,23,2000,2,0,8.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+222,Paige Metayer,usUSA,"DF,MF",Washington Spirit,23,2000,20,11,,11.6,1,1,2,1,0,0,2,0,0.09,0.09,0.17,0.09,0.17,Matches
+223,Tatumn Milazzo,usUSA,DF,Red Stars,25,1998,17,13,,12.6,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+224,Cassie Miller,usUSA,GK,Gotham FC,28,1995,4,4,360.0,4.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+225,Lauren Milliet,usUSA,DF,Racing Louisville,27,1996,26,26,,26.0,0,2,2,0,0,0,3,0,0.0,0.08,0.08,0.0,0.08,Matches
+226,Narumi Miura,jpJPN,MF,NC Courage,26,1997,25,23,,21.7,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+227,Paige Monaghan,usUSA,"MF,FW",Royals,27,1996,22,20,,17.4,2,1,3,2,0,0,2,0,0.11,0.06,0.17,0.11,0.17,Matches
+228,Nérilia Mondésir,htHAI,MF,Reign,25,1999,10,2,275.0,3.1,1,0,1,1,0,0,0,0,0.33,0.0,0.33,0.33,0.33,Matches
+229,Anna Moorhouse,engENG,GK,Orlando Pride,28,1995,26,26,,26.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+230,Madeline Moreau,usUSA,DF,Bay FC,23,2000,11,2,250.0,2.8,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+231,Alex Morgan,usUSA,FW,SD Wave,34,1989,13,10,848.0,9.4,0,1,1,0,0,2,1,0,0.0,0.11,0.11,0.0,0.11,Matches
+232,Esme Morgan,engENG,DF,Washington Spirit,23,2000,6,5,448.0,5.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+233,Makenna Morris,usUSA,MF,Washington Spirit,21,2002,12,4,536.0,6.0,5,2,7,5,0,0,0,0,0.84,0.34,1.18,0.84,1.18,Matches
+234,Perle Morroni,frFRA,DF,SD Wave,26,1997,6,5,380.0,4.2,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+235,Linda Motlhalo,zaRSA,MF,Racing Louisville,25,1998,1,0,4.0,0.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+236,Olivia Moultrie,usUSA,"MF,FW",Portland Thorns,18,2005,22,18,,17.4,5,1,6,4,1,1,2,0,0.29,0.06,0.34,0.23,0.29,Matches
+237,Brecken Mozingo,usUSA,"MF,FW",Royals,22,2001,18,10,981.0,10.9,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+238,Marie Müller,deGER,"DF,MF",Portland Thorns,23,2000,25,20,,20.3,0,2,2,0,0,0,2,0,0.0,0.1,0.1,0.0,0.1,Matches
+239,Shaelan Murison,usUSA,FW,Royals,25,1998,3,0,12.0,0.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+240,Casey Murphy,usUSA,GK,NC Courage,27,1996,26,26,,26.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+241,Lily Nabet,usUSA,MF,Angel City FC,24,1999,13,8,704.0,7.8,0,0,0,0,0,0,4,0,0.0,0.0,0.0,0.0,0.0,Matches
+242,Alyssa Naeher,usUSA,GK,Red Stars,35,1988,24,24,,23.7,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+243,Yūki Nagasato,jpJPN,"MF,FW",Houston Dash,36,1987,21,14,,11.8,2,1,3,2,0,0,2,0,0.17,0.08,0.25,0.17,0.25,Matches
+244,Meaghan Nally,usUSA,DF,Portland Thorns,25,1998,1,0,45.0,0.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+245,Carly Nelson,usUSA,GK,Royals,25,1998,1,1,90.0,1.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+246,Leilanni Nesbeth,bmBER,"MF,DF",Red Stars,22,2001,18,10,961.0,10.7,1,1,2,1,0,0,2,0,0.09,0.09,0.19,0.09,0.19,Matches
+247,Paige Nielsen,usUSA,DF,Houston Dash,30,1993,21,21,,21.0,1,0,1,1,0,0,4,0,0.05,0.0,0.05,0.05,0.05,Matches
+248,Paige Nielsen,usUSA,DF,Angel City FC,30,1993,3,3,270.0,3.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+249,Jenna Nighswonger,usUSA,DF,Gotham FC,23,2000,26,23,,22.3,1,3,4,0,1,1,4,0,0.04,0.13,0.18,0.0,0.13,Matches
+250,Agnes Nyberg,seSWE,MF,Royals,23,2000,11,8,651.0,7.2,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+251,Kelley O'Hara,usUSA,DF,Gotham FC,35,1988,3,1,81.0,0.9,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+252,Denise O'Sullivan,ieIRL,MF,NC Courage,29,1994,23,21,,21.4,1,3,4,1,0,0,5,0,0.05,0.14,0.19,0.05,0.19,Matches
+253,Isabella Obaze,dkDEN,DF,Portland Thorns,21,2002,13,12,,11.3,0,2,2,0,0,0,1,0,0.0,0.18,0.18,0.0,0.18,Matches
+254,Bárbara Olivieri,veVEN,"MF,FW",Houston Dash,21,2002,24,17,,17.7,4,2,6,2,2,2,6,0,0.23,0.11,0.34,0.11,0.23,Matches
+255,Ifeoma Onumonu,ngNGA,FW,Royals,29,1994,5,0,112.0,1.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+256,Diana Ordoñez,mxMEX,"FW,MF",Houston Dash,22,2001,24,19,,19.1,5,0,5,5,0,1,2,0,0.26,0.0,0.26,0.26,0.26,Matches
+257,Asisat Oshoala,ngNGA,FW,Bay FC,29,1994,25,23,,20.7,7,1,8,5,2,2,3,0,0.34,0.05,0.39,0.24,0.29,Matches
+258,Avery Patterson,usUSA,"MF,DF",Houston Dash,21,2002,25,23,,23.0,1,2,3,1,0,0,3,0,0.04,0.09,0.13,0.04,0.13,Matches
+259,Nicole Payne,ngNGA,DF,Portland Thorns,23,2001,19,11,,11.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+260,Courtney Petersen,usUSA,DF,Racing Louisville,26,1997,7,6,541.0,6.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+261,Courtney Petersen,usUSA,"DF,MF",Houston Dash,26,1997,16,12,,12.9,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+262,Alex Pfeiffer,usUSA,FW,Current,16,2007,10,0,138.0,1.5,1,0,1,1,0,0,0,0,0.65,0.0,0.65,0.65,0.65,Matches
+263,Carson Pickett,usUSA,"DF,MF",Orlando Pride,30,1993,7,4,391.0,4.3,1,1,2,1,0,0,2,0,0.23,0.23,0.46,0.23,0.46,Matches
+264,Carson Pickett,usUSA,DF,Racing Louisville,30,1993,16,16,,16.0,1,2,3,1,0,0,0,0,0.06,0.12,0.19,0.06,0.19,Matches
+265,Kiki Pickett,usUSA,MF,Bay FC,24,1999,20,18,,18.3,1,1,2,1,0,0,1,0,0.05,0.05,0.11,0.05,0.11,Matches
+266,Victoria Pickett,caCAN,"FW,MF",NC Courage,27,1996,19,6,582.0,6.5,0,1,1,0,0,0,1,0,0.0,0.15,0.15,0.0,0.15,Matches
+267,Elli Pikkujämsä,fiFIN,DF,Racing Louisville,24,1999,3,3,251.0,2.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+268,Brianna Pinto,usUSA,"FW,MF",NC Courage,23,2000,20,9,764.0,8.5,3,2,5,3,0,0,0,0,0.35,0.24,0.59,0.35,0.59,Matches
+269,Madison Pogarch,usUSA,DF,Royals,26,1997,25,21,,20.9,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+270,Maddie Pokorny,usUSA,MF,Racing Louisville,27,1996,12,0,80.0,0.9,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+271,Christen Press,usUSA,FW,Angel City FC,35,1988,9,1,203.0,2.3,1,0,1,1,0,0,0,0,0.44,0.0,0.44,0.44,0.44,Matches
+272,Nichelle Prince,caCAN,"FW,MF",Current,28,1995,13,9,732.0,8.1,2,2,4,2,0,0,0,0,0.25,0.25,0.49,0.25,0.49,Matches
+273,Lysianne Proulx,caCAN,GK,Bay FC,24,1999,6,6,540.0,6.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+274,Sarah Puntigam,atAUT,"MF,DF",Houston Dash,31,1992,23,18,,17.6,0,2,2,0,0,0,5,0,0.0,0.11,0.11,0.0,0.11,Matches
+275,Margaret Purce,usUSA,FW,Gotham FC,28,1995,1,1,44.0,0.5,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+276,Quinn,caCAN,MF,Reign,28,1995,15,13,,12.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+277,Rafaelle,brBRA,DF,Orlando Pride,32,1991,9,6,621.0,6.9,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+278,Maximiliane Rall,deGER,DF,Red Stars,30,1993,9,9,800.0,8.9,1,0,1,1,0,0,0,0,0.11,0.0,0.11,0.11,0.11,Matches
+279,Brittany Ratcliffe,usUSA,"MF,FW",Washington Spirit,29,1994,23,3,515.0,5.7,3,0,3,3,0,0,1,0,0.52,0.0,0.52,0.52,0.52,Matches
+280,Felicitas Rauch,deGER,DF,NC Courage,27,1996,25,21,,21.0,1,0,1,1,0,0,2,0,0.05,0.0,0.05,0.05,0.05,Matches
+281,Megan Reid,usUSA,DF,Angel City FC,27,1996,23,19,,20.0,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+282,Reyna Reyes,mxMEX,"DF,MF",Portland Thorns,22,2001,25,20,,19.3,0,1,1,0,0,0,5,0,0.0,0.05,0.05,0.0,0.05,Matches
+283,Chloe Ricketts,usUSA,MF,Washington Spirit,16,2007,4,0,20.0,0.2,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+284,Kaleigh Riehl,usUSA,DF,Royals,27,1996,14,14,,14.0,0,1,1,0,0,0,1,0,0.0,0.07,0.07,0.0,0.07,Matches
+285,Ali Riley,nzNZL,DF,Angel City FC,36,1987,5,3,260.0,2.9,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+286,Gabrielle Robinson,usUSA,DF,Current,22,2001,11,11,925.0,10.3,1,0,1,1,0,0,2,0,0.1,0.0,0.1,0.1,0.1,Matches
+287,Cari Roccaro,usUSA,"MF,DF",Red Stars,29,1994,26,26,,25.9,0,0,0,0,0,0,3,0,0.0,0.0,0.0,0.0,0.0,Matches
+288,Trinity Rodman,usUSA,MF,Washington Spirit,21,2002,23,20,,19.6,8,6,14,7,1,1,4,0,0.41,0.31,0.72,0.36,0.66,Matches
+289,Izzy Rodriguez,usUSA,DF,Current,24,1999,21,18,,16.8,1,2,3,1,0,0,1,0,0.06,0.12,0.18,0.06,0.18,Matches
+290,Raquel Rodríguez,crCRC,MF,Angel City FC,30,1993,20,13,,12.7,1,0,1,1,0,0,3,0,0.08,0.0,0.08,0.08,0.08,Matches
+291,Cristina Roque,prPUR,GK,Royals,22,2001,1,1,90.0,1.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+292,Katelyn Rowland,usUSA,GK,Bay FC,29,1994,20,20,,20.0,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+293,Elin Rubensson,seSWE,MF,Houston Dash,30,1993,15,12,,11.3,0,1,1,0,0,0,2,0,0.0,0.09,0.09,0.0,0.09,Matches
+294,Yazmeen Ryan,usUSA,"MF,FW",Gotham FC,24,1999,25,23,,21.5,5,5,10,5,0,0,4,1,0.23,0.23,0.46,0.23,0.46,Matches
+295,Emily Sams,usUSA,DF,Orlando Pride,24,1999,25,24,,24.3,1,2,3,1,0,0,2,0,0.04,0.08,0.12,0.04,0.12,Matches
+296,Ashley Sanchez,usUSA,MF,NC Courage,24,1999,26,25,,23.8,5,4,9,5,0,0,1,0,0.21,0.17,0.38,0.21,0.38,Matches
+297,Maria Sanchez,mxMEX,MF,SD Wave,27,1996,22,18,,17.0,1,4,5,1,0,0,1,0,0.06,0.23,0.29,0.06,0.29,Matches
+298,Maria Sanchez,mxMEX,MF,Houston Dash,27,1996,4,4,347.0,3.9,0,1,1,0,0,0,0,0,0.0,0.26,0.26,0.0,0.26,Matches
+299,Leicy Santos,coCOL,"MF,FW",Washington Spirit,27,1996,7,6,530.0,5.9,2,1,3,2,0,0,1,0,0.34,0.17,0.51,0.34,0.51,Matches
+300,Ouleymata Sarr,frFRA,FW,Washington Spirit,28,1995,19,19,,14.8,8,2,10,8,0,0,1,0,0.54,0.14,0.68,0.54,0.68,Matches
+301,Becky Sauerbrunn,usUSA,DF,Portland Thorns,38,1985,25,24,,23.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+302,Ally Schlegel,usUSA,"MF,FW",Red Stars,23,2000,22,19,,14.2,7,0,7,6,1,1,0,0,0.49,0.0,0.49,0.42,0.42,Matches
+303,Sophie Schmidt,caCAN,"MF,DF",Houston Dash,35,1988,23,21,,20.4,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+304,Almuth Schult,deGER,GK,Current,32,1991,9,9,810.0,9.0,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+305,Desiree Scott,caCAN,MF,Current,36,1987,11,0,136.0,1.5,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+306,Emma Sears,usUSA,MF,Racing Louisville,22,2001,26,12,,16.5,5,1,6,5,0,0,2,0,0.3,0.06,0.36,0.3,0.36,Matches
+307,Ally Sentnor,usUSA,"MF,FW",Royals,19,2004,21,21,,20.7,3,4,7,3,0,0,2,0,0.14,0.19,0.34,0.14,0.34,Matches
+308,Kayla Sharples,usUSA,DF,Bay FC,26,1997,15,12,,12.6,2,0,2,2,0,0,4,0,0.16,0.0,0.16,0.16,0.16,Matches
+309,Kayla Sharples,usUSA,DF,Current,26,1997,8,8,689.0,7.7,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+310,Jaedyn Shaw,usUSA,"MF,FW",SD Wave,19,2004,22,13,,13.9,4,1,5,3,1,1,1,0,0.29,0.07,0.36,0.22,0.29,Matches
+311,Delanie Sheehan,usUSA,MF,Gotham FC,25,1999,26,25,,23.3,2,1,3,2,0,0,3,0,0.09,0.04,0.13,0.09,0.13,Matches
+312,Jamie Shepherd,usUSA,MF,Bay FC,23,2000,2,2,155.0,1.7,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+313,Kailen Sheridan,caCAN,GK,SD Wave,28,1995,25,25,,24.7,0,0,0,0,0,0,0,1,0.0,0.0,0.0,0.0,0.0,Matches
+314,Marissa Sheva,ieIRL,MF,Portland Thorns,26,1997,6,0,86.0,1.0,0,1,1,0,0,0,0,0,0.0,1.05,1.05,0.0,1.05,Matches
+315,Lena Silano,usUSA,FW,Washington Spirit,23,2000,12,0,152.0,1.7,2,0,2,2,0,0,0,1,1.18,0.0,1.18,1.18,1.18,Matches
+316,Jéssica Silva,ptPOR,"FW,MF",Gotham FC,29,1994,3,0,61.0,0.7,0,1,1,0,0,0,1,0,0.0,1.48,1.48,0.0,1.48,Matches
+317,Christine Sinclair,caCAN,FW,Portland Thorns,40,1983,24,16,,13.9,4,1,5,4,0,0,2,0,0.29,0.07,0.36,0.29,0.36,Matches
+318,Olivia Smith-Griffitts,usUSA,DF,Royals,22,2001,13,13,,12.3,1,0,1,1,0,0,1,0,0.08,0.0,0.08,0.08,0.08,Matches
+319,Ji So-yun,krKOR,"MF,FW",Reign,32,1991,26,22,,22.7,3,3,6,3,0,0,1,0,0.13,0.13,0.26,0.13,0.26,Matches
+320,Havana Solaun,jmJAM,MF,Houston Dash,30,1993,5,1,167.0,1.9,1,0,1,1,0,0,1,0,0.54,0.0,0.54,0.54,0.54,Matches
+321,Janine Sonis,caCAN,MF,Racing Louisville,29,1994,10,8,689.0,7.7,1,1,2,1,0,0,0,0,0.13,0.13,0.26,0.13,0.26,Matches
+322,Janine Sonis,caCAN,"MF,FW",Portland Thorns,29,1994,16,10,917.0,10.2,3,2,5,3,0,0,1,0,0.29,0.2,0.49,0.29,0.49,Matches
+323,Emily Sonnett,usUSA,"DF,MF",Gotham FC,30,1993,25,25,,23.9,0,1,1,0,0,0,5,0,0.0,0.04,0.04,0.0,0.04,Matches
+324,Croix Soto,,DF,Houston Dash,,,3,0,30.0,0.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+325,Alexa Spaanstra,usUSA,"MF,FW",Portland Thorns,23,2000,8,4,322.0,3.6,0,1,1,0,0,0,0,0,0.0,0.28,0.28,0.0,0.28,Matches
+326,Alexa Spaanstra,usUSA,"MF,FW",Current,23,2000,11,8,592.0,6.6,1,1,2,1,0,0,1,0,0.15,0.15,0.3,0.15,0.3,Matches
+327,Meredith Speck,usUSA,MF,NC Courage,30,1993,11,1,213.0,2.4,2,1,3,2,0,0,2,0,0.85,0.42,1.27,0.85,1.27,Matches
+328,Jasmyne Spencer,usUSA,DF,Angel City FC,33,1990,24,16,,18.1,0,0,0,0,0,0,4,0,0.0,0.0,0.0,0.0,0.0,Matches
+329,Bianca St-Georges,caCAN,"MF,FW",NC Courage,26,1997,21,8,776.0,8.6,3,1,4,3,0,0,3,0,0.35,0.12,0.46,0.35,0.46,Matches
+330,Samantha Staab,usUSA,DF,Red Stars,26,1997,16,16,,16.0,1,2,3,1,0,0,3,0,0.06,0.12,0.19,0.06,0.19,Matches
+331,Heather Stainbrook,usUSA,MF,Washington Spirit,22,2001,11,4,442.0,4.9,1,0,1,1,0,0,2,0,0.2,0.0,0.2,0.2,0.2,Matches
+332,Nikki Stanton,usUSA,MF,Reign,33,1990,7,0,117.0,1.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+333,Regan Steigleder,noNOR,DF,Current,25,1998,3,1,72.0,0.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+334,Katie Stengel,usUSA,"MF,FW",Gotham FC,31,1992,15,8,830.0,9.2,0,1,1,0,0,1,2,0,0.0,0.11,0.11,0.0,0.11,Matches
+335,Ella Stevens,usUSA,"FW,MF",Gotham FC,26,1997,22,15,,12.9,7,4,11,7,0,0,1,0,0.54,0.31,0.85,0.54,0.85,Matches
+336,Kylie Strom,usUSA,DF,Orlando Pride,31,1992,25,24,,24.0,0,1,1,0,0,0,4,1,0.0,0.04,0.04,0.0,0.04,Matches
+337,Hina Sugita,jpJPN,MF,Portland Thorns,27,1997,21,18,,18.5,2,4,6,2,0,0,2,0,0.11,0.22,0.32,0.11,0.32,Matches
+338,Andi Sullivan,usUSA,MF,Washington Spirit,28,1995,21,21,,19.0,2,0,2,0,2,2,2,0,0.11,0.0,0.11,0.0,0.0,Matches
+339,Mallory Swanson,usUSA,"MF,FW",Red Stars,25,1998,24,24,,22.5,7,4,11,6,1,3,0,0,0.31,0.18,0.49,0.27,0.44,Matches
+340,Frankie Tagliaferri,usUSA,MF,Royals,25,1999,6,4,265.0,2.9,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+341,Mina Tanaka,jpJPN,"MF,FW",Royals,29,1994,7,7,507.0,5.6,1,0,1,1,0,0,2,0,0.18,0.0,0.18,0.18,0.18,Matches
+342,Tarciane,brBRA,DF,Houston Dash,20,2003,11,10,913.0,10.1,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+343,Ana Tejada,esESP,"MF,DF",Royals,21,2002,15,15,,14.6,2,1,3,2,0,0,5,0,0.14,0.07,0.21,0.14,0.21,Matches
+344,Alyssa Thompson,usUSA,"MF,FW",Angel City FC,19,2004,26,24,,23.8,5,7,12,5,0,0,2,0,0.21,0.29,0.5,0.21,0.5,Matches
+345,Gisele Thompson,usUSA,"DF,MF",Angel City FC,18,2005,15,10,882.0,9.8,0,1,1,0,0,0,1,0,0.0,0.1,0.1,0.0,0.1,Matches
+346,Kaitlyn Torpey,auAUS,DF,SD Wave,23,2000,14,4,520.0,5.8,0,0,0,0,0,0,2,0,0.0,0.0,0.0,0.0,0.0,Matches
+347,Taryn Torres,usUSA,DF,Gotham FC,24,1999,12,1,164.0,1.8,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+348,Cameron Tucker,usUSA,"FW,MF",Royals,24,1999,18,3,564.0,6.3,1,0,1,1,0,0,2,0,0.16,0.0,0.16,0.16,0.16,Matches
+349,Reilyn Turner,usUSA,FW,Racing Louisville,21,2002,16,7,733.0,8.1,4,2,6,4,0,0,1,0,0.49,0.25,0.74,0.49,0.74,Matches
+350,Reilyn Turner,usUSA,MF,Portland Thorns,21,2002,6,1,188.0,2.1,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+351,Olivia Van der Jagt,usUSA,MF,Reign,24,1999,15,7,769.0,8.5,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+352,Kiki Van Zanten,jmJAM,MF,Houston Dash,22,2001,4,1,113.0,1.3,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+353,Michele Vasconcelos,usUSA,"MF,FW",Royals,29,1994,14,2,262.0,2.9,0,1,1,0,0,0,0,0,0.0,0.34,0.34,0.0,0.34,Matches
+354,Mary Vignola,usUSA,"DF,FW",Angel City FC,25,1998,17,10,827.0,9.2,1,2,3,1,0,0,0,0,0.11,0.22,0.33,0.11,0.33,Matches
+355,Viviana Villacorta,usUSA,MF,Orlando Pride,24,1999,3,1,71.0,0.8,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+356,Cortnee Vine,auAUS,"MF,FW",NC Courage,25,1998,4,2,233.0,2.6,1,0,1,1,0,0,0,0,0.39,0.0,0.39,0.39,0.39,Matches
+357,Olivia Wade-Katoa,usUSA,MF,Portland Thorns,24,1999,5,0,37.0,0.4,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+358,Ally Watt,usUSA,"FW,MF",Orlando Pride,26,1997,22,9,887.0,9.9,3,1,4,3,0,0,1,0,0.3,0.1,0.41,0.3,0.41,Matches
+359,Dani Weatherholt,usUSA,"DF,MF",NC Courage,29,1994,21,8,840.0,9.3,1,0,1,1,0,0,0,0,0.11,0.0,0.11,0.11,0.11,Matches
+360,Morgan Weaver,usUSA,"FW,MF",Portland Thorns,26,1997,14,11,933.0,10.4,4,0,4,4,0,0,0,0,0.39,0.0,0.39,0.39,0.39,Matches
+361,McKenzie Weinert,,FW,Reign,,,4,0,28.0,0.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+362,Kennedy Wesley,usUSA,DF,SD Wave,22,2001,13,12,,11.2,1,0,1,1,0,0,1,0,0.09,0.0,0.09,0.09,0.09,Matches
+363,Amanda West,caCAN,"MF,FW",Houston Dash,22,2001,16,6,730.0,8.1,1,1,2,1,0,0,0,0,0.12,0.12,0.25,0.12,0.25,Matches
+364,Christen Westphal,usUSA,DF,SD Wave,30,1993,15,8,729.0,8.1,0,0,0,0,0,0,1,0,0.0,0.0,0.0,0.0,0.0,Matches
+365,Ellie Wheeler,usUSA,"DF,MF",Current,22,2001,23,14,,15.9,1,0,1,1,0,0,2,0,0.06,0.0,0.06,0.06,0.06,Matches
+366,Kate Wiesner,usUSA,"DF,MF",Washington Spirit,22,2001,15,5,518.0,5.8,1,0,1,1,0,0,2,0,0.17,0.0,0.17,0.17,0.17,Matches
+367,Ryan Williams,usUSA,DF,NC Courage,27,1996,25,25,,24.9,0,0,0,0,0,0,3,1,0.0,0.0,0.0,0.0,0.0,Matches
+368,Sophia Wilson,usUSA,"FW,MF",Portland Thorns,23,2000,19,18,,17.2,12,6,18,10,2,2,3,1,0.7,0.35,1.05,0.58,0.93,Matches
+369,Olivia Wingate,usUSA,FW,NC Courage,23,2000,10,1,360.0,4.0,2,2,4,2,0,0,0,0,0.5,0.5,1.0,0.5,1.0,Matches
+370,Mackenzie Wood,usUSA,GK,Red Stars,23,2000,3,2,209.0,2.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+371,Lily Woodham,wlsWAL,DF,Reign,23,2000,8,5,388.0,4.3,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+372,Arin Wright,usUSA,DF,Racing Louisville,31,1992,22,21,,20.1,0,0,0,0,0,0,1,1,0.0,0.0,0.0,0.0,0.0,Matches
+373,Summer Yates,usUSA,MF,Orlando Pride,23,2000,25,17,,14.7,5,2,7,4,1,1,0,0,0.34,0.14,0.47,0.27,0.41,Matches
+374,Katie Zelem,engENG,MF,Angel City FC,28,1996,10,8,744.0,8.3,0,1,1,0,0,0,2,0,0.0,0.12,0.12,0.0,0.12,Matches
+375,McCall Zerboni,usUSA,MF,Gotham FC,37,1986,13,0,168.0,1.9,0,0,0,0,0,0,0,0,0.0,0.0,0.0,0.0,0.0,Matches
+376,Claudia Zornoza,esESP,MF,Royals,33,1990,10,10,844.0,9.4,2,3,5,1,1,1,1,0,0.21,0.32,0.53,0.11,0.43,Matches

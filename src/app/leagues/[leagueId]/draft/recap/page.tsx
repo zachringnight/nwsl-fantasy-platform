@@ -1,5 +1,5 @@
-import { DraftRecapClient } from "@/components/draft/draft-recap-client";
 import { LeaguePageShell } from "@/components/league/league-page-shell";
+import { DraftRecapClient } from "@/components/draft/draft-recap-client";
 import type { AsyncRouteProps } from "@/types/routes";
 
 export default async function DraftRecapPage({
@@ -12,7 +12,8 @@ export default async function DraftRecapPage({
       leagueId={leagueId}
       eyebrow="Draft recap"
       title="See how the room broke"
-      description="Review the full draft board, check your roster shape, and move directly into week-one lineup prep."
+      description="See every pick, review your roster, and start building your lineup."
+      highlights={["Pick story", "Roster shape", "Next steps"]}
     >
       <DraftRecapClient leagueId={leagueId} />
     </LeaguePageShell>

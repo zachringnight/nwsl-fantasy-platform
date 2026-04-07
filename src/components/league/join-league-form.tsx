@@ -20,6 +20,13 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const trimmed = code.trim();
+    if (!trimmed) {
+      setError("Enter a league code to join.");
+      return;
+    }
+
     setError("");
     setIsSubmitting(true);
 
@@ -33,28 +40,25 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
           : "Unable to join that league."
       );
       setIsSubmitting(false);
-      return;
     }
-
-    setIsSubmitting(false);
   }
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before joining a league."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       onboardingAction={
         <Link className={getButtonClassName()} href="/onboarding">
           Finish onboarding
         </Link>
       }
-      onboardingDescription="Set your club and fantasy experience level before joining a league."
+      onboardingDescription="Complete your profile to continue."
       signedOutAction={
         <Link className={getButtonClassName()} href="/signup">
           Create account
         </Link>
       }
-      signedOutDescription="Sign in before joining a league."
+      signedOutDescription="Sign in to continue."
       signedOutTitle="Sign in to continue"
     >
       {() => (

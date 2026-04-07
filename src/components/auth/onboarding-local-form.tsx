@@ -7,6 +7,8 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getButtonClassName, Button } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { NWSL_CLUBS_LIST } from "@/config/nwsl-clubs";
+import { completeLocalOnboarding } from "@/lib/local-mode-store";
 import type { FantasyProfile } from "@/types/fantasy";
 
 export function OnboardingLocalForm() {
@@ -14,7 +16,7 @@ export function OnboardingLocalForm() {
 
   return (
     <FantasyAuthGate
-      loadingDescription="Checking your account before opening onboarding."
+      loadingDescription="Loading."
       loadingTitle="Checking your account"
       requireOnboarding={false}
       signedOutAction={
@@ -39,12 +41,16 @@ interface OnboardingLocalFieldsProps {
 
 function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalFieldsProps) {
   const dataClient = useFantasyDataClient();
+  const { supabaseReady } = useFantasyAuth();
   const router = useRouter();
   const [favoriteClub, setFavoriteClub] = useState(profile.favorite_club ?? "");
   const [experienceLevel, setExperienceLevel] = useState<"new" | "casual" | "experienced">(
     profile.experience_level ?? "new"
   );
-  const [nextStep, setNextStep] = useState<"create" | "join">("create");
+  const isReturning = profile.onboarding_complete;
+  const [nextStep, setNextStep] = useState<"create" | "join" | "dashboard">(
+    isReturning ? "dashboard" : "create"
+  );
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -54,13 +60,18 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
     setIsSubmitting(true);
 
     try {
-      await dataClient.upsertFantasyProfile({
-        displayName: profile.display_name,
-        favoriteClub,
-        experienceLevel,
-        onboardingComplete: true,
-      });
-      await refreshProfile();
+      if (!supabaseReady) {
+        completeLocalOnboarding({ favoriteClub, experienceLevel });
+        await refreshProfile();
+      } else {
+        await dataClient.upsertFantasyProfile({
+          displayName: profile.display_name,
+          favoriteClub,
+          experienceLevel,
+          onboardingComplete: true,
+        });
+        await refreshProfile();
+      }
     } catch (submissionError) {
       setError(
         submissionError instanceof Error
@@ -72,21 +83,31 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
     }
 
     setIsSubmitting(false);
-    router.push(nextStep === "create" ? "/leagues/create" : "/leagues/join");
+    const destinations = {
+      create: "/leagues/create",
+      join: "/leagues/join",
+      dashboard: "/dashboard",
+    } as const;
+    router.push(destinations[nextStep]);
   }
 
   return (
     <form className="grid gap-4" onSubmit={handleSubmit}>
       <label className="block space-y-2">
         <span className="text-sm font-medium text-foreground">Favorite club</span>
-        <input
+        <select
           className="field-control"
-          type="text"
-          placeholder="Portland Thorns"
           value={favoriteClub}
           onChange={(event) => setFavoriteClub(event.target.value)}
           required
-        />
+        >
+          <option value="">Select a club</option>
+          {NWSL_CLUBS_LIST.map((club) => (
+            <option key={club.abbreviation} value={club.name}>
+              {club.name}
+            </option>
+          ))}
+        </select>
       </label>
 
       <label className="block space-y-2">
@@ -109,8 +130,9 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
         <select
           className="field-control"
           value={nextStep}
-          onChange={(event) => setNextStep(event.target.value as "create" | "join")}
+          onChange={(event) => setNextStep(event.target.value as "create" | "join" | "dashboard")}
         >
+          {isReturning && <option value="dashboard">Back to dashboard</option>}
           <option value="create">Create a league</option>
           <option value="join">Join a league</option>
         </select>
