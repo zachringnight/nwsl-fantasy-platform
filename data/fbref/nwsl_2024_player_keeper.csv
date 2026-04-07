@@ -1,0 +1,27 @@
+ranker,player,nationality,position,team,age,birth_year,gk_games,gk_games_starts,gk_minutes,minutes_90s,gk_goals_against,gk_goals_against_per90,gk_shots_on_target_against,gk_saves,gk_save_pct,gk_wins,gk_ties,gk_losses,gk_clean_sheets,gk_clean_sheets_pct,gk_pens_att,gk_pens_allowed,gk_pens_saved,gk_pens_missed,gk_pens_save_pct,matches
+1,Angelina Anderson,usUSA,GK,Angel City FC,22,2001,3,3,270.0,3.0,6,2.0,23,17,73.9,0,1,2,0,0.0,0,0,0,0,,Matches
+2,Mackenzie Arnold,auAUS,GK,Portland Thorns,29,1994,5,5,450.0,5.0,10,2.0,22,13,54.5,0,1,4,0,0.0,1,0,1,0,100.0,Matches
+3,Hillary Beall,usUSA,GK,SD Wave,25,1999,2,1,118.0,1.3,2,1.53,7,5,71.4,1,0,0,0,0.0,0,0,0,0,,Matches
+4,Ann-Katrin Berger,deGER,GK,Gotham FC,33,1990,22,22,,22.0,16,0.73,78,63,82.1,16,4,2,8,36.4,2,2,0,0,0.0,Matches
+5,Lyza Bosselmann,,GK,Washington Spirit,,,1,0,1.0,0.0,0,0.0,0,0,,0,0,0,0,,0,0,0,0,,Matches
+6,Jane Campbell,usUSA,GK,Houston Dash,28,1995,25,25,,25.0,39,1.56,140,106,75.0,5,5,15,8,32.0,5,4,1,0,20.0,Matches
+7,Claudia Dickey,usUSA,GK,Reign,24,2000,18,18,,17.7,24,1.36,83,61,73.5,5,4,9,3,16.7,2,2,0,0,0.0,Matches
+8,Adrianna Franch,usUSA,GK,Current,33,1990,17,17,,17.0,25,1.47,70,46,65.7,10,5,2,5,29.4,1,1,0,0,0.0,Matches
+9,DiDi Haracic,baBIH,GK,Angel City FC,31,1992,23,23,,23.0,36,1.57,112,78,69.6,7,5,11,4,17.4,2,2,0,0,0.0,Matches
+10,Heather Hinz,usUSA,GK,Houston Dash,22,2001,1,1,90.0,1.0,3,3.0,8,5,62.5,0,0,1,0,0.0,0,0,0,0,,Matches
+11,Shelby Hogan,usUSA,GK,Portland Thorns,25,1998,21,21,,21.0,25,1.19,95,70,73.7,10,3,8,9,42.9,0,0,0,0,,Matches
+12,Laurel Ivory,usUSA,GK,Reign,24,1999,9,8,751.0,8.3,20,2.4,46,28,63.0,1,1,6,1,12.5,3,3,0,0,0.0,Matches
+13,Aubrey Kingsbury,usUSA,GK,Washington Spirit,32,1991,26,26,,26.0,28,1.08,95,72,73.7,18,2,6,7,26.9,5,3,2,0,40.0,Matches
+14,Katie Lund,usUSA,GK,Racing Louisville,27,1996,26,26,,26.0,39,1.5,107,73,68.2,7,7,12,5,19.2,5,5,0,0,0.0,Matches
+15,Amanda McGlynn,usUSA,GK,Royals,25,1998,24,24,,24.0,38,1.58,116,85,72.4,6,4,14,4,16.7,8,6,1,1,14.3,Matches
+16,Cassie Miller,usUSA,GK,Gotham FC,28,1995,4,4,360.0,4.0,4,1.0,15,12,80.0,1,1,2,1,25.0,1,1,0,0,0.0,Matches
+17,Anna Moorhouse,engENG,GK,Orlando Pride,28,1995,26,26,,26.0,20,0.77,106,86,82.1,18,6,2,13,50.0,1,1,0,0,0.0,Matches
+18,Casey Murphy,usUSA,GK,NC Courage,27,1996,26,26,,26.0,28,1.08,109,83,76.1,12,3,11,6,23.1,3,2,1,0,33.3,Matches
+19,Alyssa Naeher,usUSA,GK,Red Stars,35,1988,24,24,,23.7,34,1.44,115,82,71.3,10,2,12,6,25.0,2,1,0,1,0.0,Matches
+20,Carly Nelson,usUSA,GK,Royals,25,1998,1,1,90.0,1.0,2,2.0,3,1,33.3,0,0,1,0,0.0,0,0,0,0,,Matches
+21,Lysianne Proulx,caCAN,GK,Bay FC,24,1999,6,6,540.0,6.0,15,2.5,37,23,59.5,1,0,5,1,16.7,1,0,1,0,100.0,Matches
+22,Cristina Roque,prPUR,GK,Royals,22,2001,1,1,90.0,1.0,0,0.0,2,2,100.0,1,0,0,1,100.0,0,0,0,0,,Matches
+23,Katelyn Rowland,usUSA,GK,Bay FC,29,1994,20,20,,20.0,26,1.3,75,53,69.3,10,1,9,5,25.0,4,3,1,0,25.0,Matches
+24,Almuth Schult,deGER,GK,Current,32,1991,9,9,810.0,9.0,4,0.44,37,33,89.2,6,2,1,5,55.6,0,0,0,0,,Matches
+25,Kailen Sheridan,caCAN,GK,SD Wave,28,1995,25,25,,24.7,33,1.34,117,86,73.5,5,7,13,6,24.0,2,2,0,0,0.0,Matches
+26,Mackenzie Wood,usUSA,GK,Red Stars,23,2000,3,2,209.0,2.3,4,1.72,12,8,66.7,0,0,2,0,0.0,0,0,0,0,,Matches

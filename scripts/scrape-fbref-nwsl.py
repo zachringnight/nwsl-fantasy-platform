@@ -98,7 +98,7 @@ def parse_table(html: str, table_id: str) -> pd.DataFrame | None:
 
     thead = table.find("thead")
     header_rows = thead.find_all("tr") if thead else []
-    if len(header_rows) < 2:
+    if not header_rows:
         return None
 
     columns = []
