@@ -30,6 +30,10 @@ export interface FantasySalaryCapEntrySummary {
 export const salaryCapLineupSlots =
   starterLineupSlots as FantasySalaryCapLineupSlot[];
 
+function getProjectedPoints(player: FantasyPoolPlayer) {
+  return player.projected_points ?? player.average_points;
+}
+
 function dedupePlayers(players: FantasyPoolPlayer[]) {
   const seen = new Set<string>();
 
@@ -72,12 +76,13 @@ function buildCandidatePool(
 ) {
   const eligible = playerPool.filter((player) => player.position === position);
   const byProjection = [...eligible]
-    .sort((left, right) => right.average_points - left.average_points)
+    .sort((left, right) => getProjectedPoints(right) - getProjectedPoints(left))
     .slice(0, 8);
   const byValue = [...eligible]
     .sort(
       (left, right) =>
-        right.average_points / right.salary_cost - left.average_points / left.salary_cost
+        getProjectedPoints(right) / right.salary_cost -
+        getProjectedPoints(left) / left.salary_cost
     )
     .slice(0, 6);
 
@@ -115,7 +120,7 @@ export function buildSalaryCapEntrySummary(
     .filter((player): player is FantasyPoolPlayer => player != null);
   const salarySpent = selectedPlayers.reduce((sum, player) => sum + player.salary_cost, 0);
   const projectedPoints = Number(
-    selectedPlayers.reduce((sum, player) => sum + player.average_points, 0).toFixed(1)
+    selectedPlayers.reduce((sum, player) => sum + getProjectedPoints(player), 0).toFixed(1)
   );
   const selectedCount = selectedPlayers.length;
   const remainingBudget = salaryCapAmount - salarySpent;
@@ -248,8 +253,12 @@ export function getRecommendedSalaryCapSlot(
       slot,
     }))
     .sort((left, right) => {
-      const leftProjection = left.currentPlayer?.average_points ?? 0;
-      const rightProjection = right.currentPlayer?.average_points ?? 0;
+      const leftProjection = left.currentPlayer
+        ? getProjectedPoints(left.currentPlayer)
+        : 0;
+      const rightProjection = right.currentPlayer
+        ? getProjectedPoints(right.currentPlayer)
+        : 0;
       return leftProjection - rightProjection;
     })[0]?.slot;
 }
@@ -263,7 +272,7 @@ export function buildSalaryCapAutofillSelections(
   const midfielders = buildCandidatePool(playerPool, "MID");
   const forwards = buildCandidatePool(playerPool, "FWD");
   const flexPool = dedupePlayers([...defenders, ...midfielders, ...forwards]).sort(
-    (left, right) => right.average_points - left.average_points
+    (left, right) => getProjectedPoints(right) - getProjectedPoints(left)
   );
   let bestEntry:
     | {
@@ -312,8 +321,8 @@ export function buildSalaryCapAutofillSelections(
 
           const projectedPoints = Number(
             (
-              corePlayers.reduce((sum, player) => sum + player.average_points, 0) +
-              flexCandidate.average_points
+              corePlayers.reduce((sum, player) => sum + getProjectedPoints(player), 0) +
+              getProjectedPoints(flexCandidate)
             ).toFixed(1)
           );
           const salarySpent = coreSalary + flexCandidate.salary_cost;
