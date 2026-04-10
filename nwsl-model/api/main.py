@@ -43,6 +43,20 @@ app = FastAPI(
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
+def _count_prediction_rows(version_dir: Path, model_family: str | None) -> int:
+    if not model_family:
+        return 0
+
+    prediction_path = version_dir / "backtest" / f"predictions_{model_family}.csv"
+    if not prediction_path.exists():
+        return 0
+
+    with prediction_path.open() as handle:
+        row_count = sum(1 for _ in handle)
+
+    return max(row_count - 1, 0)
+
+
 def _build_prediction_response(
     prediction_result: object,
     bundle: object,
@@ -223,6 +237,19 @@ def backtest_summary() -> BacktestSummary:
     champion_family = pure_alias.get("model_family") if pure_alias else None
     champion_metrics = models.get(champion_family, {}) if champion_family else {}
     champion_gates = promotion_summary.get("gate_results", {}).get(champion_family, {}) if champion_family else {}
+    fallback_family = None
+    if not pure_alias:
+        baseline_rows = [
+            metrics_row
+            for metrics_row in data.get("report_summary", {}).get("metrics_comparison", [])
+            if metrics_row.get("model")
+            in {"home_field_baseline", "rolling_npxg_poisson", "team_ratings_poisson", "uniform_baseline"}
+        ]
+        if baseline_rows:
+            fallback_family = min(
+                baseline_rows,
+                key=lambda row: float(row.get("log_loss_1x2", 999.0)),
+            ).get("model")
     readiness = {
         "has_promoted_pure": pure_alias is not None,
         "has_backtest_summary": True,
@@ -231,22 +258,34 @@ def backtest_summary() -> BacktestSummary:
         "promoted_version": version_dir.name,
         "pure_model_family": champion_family,
         "pure_model_passed": bool(champion_gates.get("passed", False)),
+        "fallback_model_family": fallback_family,
     }
+
+    summary_family = champion_family or fallback_family
+    summary_metrics = champion_metrics if champion_family else models.get(fallback_family or "", {})
+    message = (
+        "Backtest summary loaded from promoted artifact bundle."
+        if pure_alias
+        else "Backtest summary loaded from the latest research artifact bundle. No pure champion is currently promoted."
+    )
+
+    n_matches = _count_prediction_rows(version_dir, summary_family)
+    if n_matches == 0:
+        metrics_rows = data.get("report_summary", {}).get("metrics_comparison", [])
+        n_matches = int(metrics_rows[0].get("n_matches", 0)) if metrics_rows else 0
 
     return BacktestSummary(
         version=version_dir.name,
-        n_matches=int(data.get("report_summary", {}).get("metrics_comparison", [{}])[0].get("n_matches", 0))
-        if data.get("report_summary", {}).get("metrics_comparison")
-        else 0,
-        brier_score=champion_metrics.get("brier_score_1x2"),
-        log_loss=champion_metrics.get("log_loss_1x2"),
-        calibration=evaluation_summary.get("models", {}).get(champion_family) or data.get("report_summary"),
+        n_matches=n_matches,
+        brier_score=summary_metrics.get("brier_score_1x2"),
+        log_loss=summary_metrics.get("log_loss_1x2"),
+        calibration=evaluation_summary.get("models", {}).get(summary_family) or data.get("report_summary"),
         models=models,
         champions=registry.get("aliases", {}),
         gate_results=promotion_summary.get("gate_results"),
         readiness=readiness,
         odds_quality=odds_quality,
-        message="Backtest summary loaded from promoted artifact bundle.",
+        message=message,
     )
 
 

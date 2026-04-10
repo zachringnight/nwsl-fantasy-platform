@@ -66,6 +66,24 @@ export interface ScorelineRecord {
   probability: number;
 }
 
+export interface ProjectedPlayerStats {
+  goals: number;
+  assists: number;
+  shots: number;
+  shotsOnTarget: number;
+  chancesCreated: number;
+  successfulPasses: number;
+  successfulCrosses: number;
+  tacklesWon: number;
+  interceptions: number;
+  blocks: number;
+  saves: number;
+  goalsConceded: number;
+  cleanSheetProbability: number | null;
+  goalkeeperWinProbability: number | null;
+  goalkeeperDrawProbability: number | null;
+}
+
 export interface PlayerProjectionRecord {
   id: string;
   officialPlayerId: string;
@@ -96,6 +114,7 @@ export interface PlayerProjectionRecord {
   shotVolume: number;
   creationVolume: number;
   defensiveVolume: number;
+  statProjection: ProjectedPlayerStats;
   cleanSheetChance: number | null;
   winChance: number | null;
   matchupTag: string;
@@ -1250,31 +1269,73 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
       const appearancePoints = expectedMinutes > 0 ? launchScoringRules.appearance : 0;
       const minutesBonus = launchScoringRules.minutes60Plus * clamp((expectedMinutes - 45) / 25, 0, 1);
       const minutesFactor = expectedMinutes / 90;
+      const projectedGoals = round(rates.goalsPer90 * minutesFactor * attackMultiplier, 3);
+      const projectedAssists = round(rates.assistsPer90 * minutesFactor * attackMultiplier, 3);
+      const projectedShots = round(rates.shotsPer90 * minutesFactor * attackMultiplier, 3);
+      const projectedShotsOnTarget = round(
+        rates.shotsOnTargetPer90 * minutesFactor * attackMultiplier,
+        3
+      );
+      const projectedChancesCreated = round(
+        rates.chancesCreatedPer90 * minutesFactor * creationMultiplier,
+        3
+      );
+      const projectedSuccessfulPasses = round(
+        rates.successfulPassesPer90 * minutesFactor,
+        3
+      );
+      const projectedSuccessfulCrosses = round(
+        rates.successfulCrossesPer90 * minutesFactor,
+        3
+      );
+      const projectedTacklesWon = round(
+        rates.tacklesWonPer90 * minutesFactor * defensiveMultiplier,
+        3
+      );
+      const projectedInterceptions = round(
+        rates.interceptionsPer90 * minutesFactor * defensiveMultiplier,
+        3
+      );
+      const projectedBlocks = round(
+        rates.blocksPer90 * minutesFactor * defensiveMultiplier,
+        3
+      );
+      const projectedSaves =
+        player.position === "GK"
+          ? round(
+              rates.savesPer90 *
+                minutesFactor *
+                clamp(
+                  (matchupContext?.opponentCanonicalTeam
+                    ? (teamContexts.get(matchupContext.opponentCanonicalTeam)?.team.shotsPer90 ??
+                        leagueShotsPer90) /
+                      Math.max(leagueShotsPer90, 0.1)
+                    : 1) * 1.04,
+                  0.92,
+                  1.3
+                ),
+              3
+            )
+          : 0;
+      const projectedGoalsConceded =
+        player.position === "GK" || player.position === "DEF"
+          ? round(Math.max(0, opponentLambda - 1.1) * 0.64, 3)
+          : 0;
       const modeledProjection =
         appearancePoints +
         minutesBonus +
-        rates.goalsPer90 * minutesFactor * attackMultiplier * launchScoringRules.goal[resolvePlayerPosition(player)] +
-        rates.assistsPer90 * minutesFactor * attackMultiplier * launchScoringRules.assist +
-        rates.shotsPer90 * minutesFactor * attackMultiplier * launchScoringRules.shot +
-        rates.shotsOnTargetPer90 * minutesFactor * attackMultiplier * launchScoringRules.shotOnTarget +
-        rates.chancesCreatedPer90 * minutesFactor * creationMultiplier * launchScoringRules.chanceCreated +
-        rates.successfulPassesPer90 * minutesFactor * launchScoringRules.successfulPass +
-        rates.successfulCrossesPer90 * minutesFactor * launchScoringRules.successfulCross +
-        rates.tacklesWonPer90 * minutesFactor * defensiveMultiplier * launchScoringRules.tackleWon +
-        rates.interceptionsPer90 * minutesFactor * defensiveMultiplier * launchScoringRules.interception +
-        rates.blocksPer90 * minutesFactor * defensiveMultiplier * launchScoringRules.block +
+        projectedGoals * launchScoringRules.goal[resolvePlayerPosition(player)] +
+        projectedAssists * launchScoringRules.assist +
+        projectedShots * launchScoringRules.shot +
+        projectedShotsOnTarget * launchScoringRules.shotOnTarget +
+        projectedChancesCreated * launchScoringRules.chanceCreated +
+        projectedSuccessfulPasses * launchScoringRules.successfulPass +
+        projectedSuccessfulCrosses * launchScoringRules.successfulCross +
+        projectedTacklesWon * launchScoringRules.tackleWon +
+        projectedInterceptions * launchScoringRules.interception +
+        projectedBlocks * launchScoringRules.block +
         (player.position === "GK"
-          ? rates.savesPer90 *
-              minutesFactor *
-              clamp(
-                (matchupContext?.opponentCanonicalTeam
-                  ? (teamContexts.get(matchupContext.opponentCanonicalTeam)?.team.shotsPer90 ?? leagueShotsPer90) /
-                    Math.max(leagueShotsPer90, 0.1)
-                  : 1) * 1.04,
-                0.92,
-                1.3
-              ) *
-              launchScoringRules.save
+          ? projectedSaves * launchScoringRules.save
           : 0) +
         ((player.position === "GK" || player.position === "DEF") && cleanSheetChance != null
           ? cleanSheetChance * launchScoringRules.cleanSheet[player.position]
@@ -1379,14 +1440,31 @@ export const getPredictiveHubData = cache(async (requestedSeason?: number) => {
         startsLastFive: lineupSignal?.startsLastFive ?? 0,
         recentAppearances: lineupSignal?.recentMatchesCount ?? 0,
         valueScore: round(projection / Math.max(player.salary_cost / 1000, 0.001), 2),
-        shotVolume: round(rates.shotsPer90 * minutesFactor * attackMultiplier, 2),
-        creationVolume: round(rates.chancesCreatedPer90 * minutesFactor * creationMultiplier, 2),
+        shotVolume: round(projectedShots, 2),
+        creationVolume: round(projectedChancesCreated, 2),
         defensiveVolume: round(
-          (rates.tacklesWonPer90 + rates.interceptionsPer90 + rates.blocksPer90) *
-            minutesFactor *
-            defensiveMultiplier,
+          projectedTacklesWon + projectedInterceptions + projectedBlocks,
           2
         ),
+        statProjection: {
+          goals: projectedGoals,
+          assists: projectedAssists,
+          shots: projectedShots,
+          shotsOnTarget: projectedShotsOnTarget,
+          chancesCreated: projectedChancesCreated,
+          successfulPasses: projectedSuccessfulPasses,
+          successfulCrosses: projectedSuccessfulCrosses,
+          tacklesWon: projectedTacklesWon,
+          interceptions: projectedInterceptions,
+          blocks: projectedBlocks,
+          saves: projectedSaves,
+          goalsConceded: projectedGoalsConceded,
+          cleanSheetProbability: cleanSheetChance != null ? round(cleanSheetChance, 4) : null,
+          goalkeeperWinProbability:
+            player.position === "GK" && winChance != null ? round(winChance, 4) : null,
+          goalkeeperDrawProbability:
+            player.position === "GK" ? round(drawChance, 4) : null,
+        },
         cleanSheetChance: cleanSheetChance != null ? round(cleanSheetChance, 4) : null,
         winChance: winChance != null ? round(winChance, 4) : null,
         matchupTag: matchupTagForPlayer(player.position, matchup, isHome),

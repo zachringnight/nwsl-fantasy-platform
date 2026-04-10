@@ -54,6 +54,7 @@ class BuildOutputs:
     asa_player_analytics: pd.DataFrame
     odds: pd.DataFrame
     odds_quality_report: dict[str, Any]
+    refresh_manifest: dict[str, Any]
     manifest: dict[str, Any]
 
 
@@ -113,6 +114,45 @@ def _string_series(frame: pd.DataFrame, column: str) -> pd.Series:
     if column not in frame.columns:
         return pd.Series([""] * len(frame), index=frame.index, dtype="object")
     return frame[column].fillna("").astype(str)
+
+
+def _season_coverage(frame: pd.DataFrame, season_col: str = "season") -> list[int]:
+    if frame.empty or season_col not in frame.columns:
+        return []
+    seasons = pd.to_numeric(frame[season_col], errors="coerce").dropna().astype(int)
+    return sorted(seasons.unique().tolist())
+
+
+def _latest_mtime(paths: list[Path]) -> str | None:
+    mtimes = [path.stat().st_mtime for path in paths if path.exists()]
+    if not mtimes:
+        return None
+    return datetime.fromtimestamp(max(mtimes), tz=UTC).isoformat()
+
+
+def _source_batch(
+    *,
+    name: str,
+    source: str,
+    status: str,
+    rows: int,
+    season_coverage: list[int],
+    source_confidence: float,
+    provenance: dict[str, Any],
+    freshness: dict[str, Any],
+    output_files: list[str],
+) -> dict[str, Any]:
+    return {
+        "name": name,
+        "source": source,
+        "status": status,
+        "rows": int(rows),
+        "season_coverage": season_coverage,
+        "source_confidence": round(float(source_confidence), 2),
+        "provenance": provenance,
+        "freshness": freshness,
+        "output_files": output_files,
+    }
 
 
 def _build_official_player_names(frame: pd.DataFrame) -> pd.Series:
@@ -275,6 +315,7 @@ def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
         return pd.DataFrame(
             columns=[
                 "match_id",
+                "season",
                 "player_id",
                 "team",
                 "start_minute",
@@ -291,6 +332,10 @@ def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
 
     logs = pd.read_csv(logs_path)
     logs = logs[logs["match_id"].notna()].copy()
+    if "season" in logs.columns:
+        logs["season"] = pd.to_numeric(logs["season"], errors="coerce").astype("Int64")
+    else:
+        logs["season"] = pd.NA
     logs["team"] = logs["team_name"].map(canonicalize_team_name)
     logs["player_id"] = logs["player_id"].astype(str)
     logs["started_flag"] = logs["gamestarted"].fillna(0).astype(float).gt(0)
@@ -310,6 +355,7 @@ def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
     appearances = pd.DataFrame(
         {
             "match_id": logs["match_id"].astype(str),
+            "season": logs["season"],
             "player_id": logs["player_id"],
             "team": logs["team"],
             "start_minute": start_minute.astype(int),
@@ -323,7 +369,7 @@ def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
             "national_team_absence_flag": False,
         }
     )
-    return appearances.sort_values(["match_id", "team", "player_id"]).reset_index(drop=True)
+    return appearances.sort_values(["season", "match_id", "team", "player_id"]).reset_index(drop=True)
 
 
 def build_player_season_priors(
@@ -705,6 +751,7 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
         return pd.DataFrame(
             columns=[
                 "match_id",
+                "season",
                 "team",
                 "player_id",
                 "projected_start",
@@ -716,6 +763,8 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
         )
 
     matches = pd.read_csv(matches_path)
+    if "season" in matches.columns:
+        matches["season"] = pd.to_numeric(matches["season"], errors="coerce").astype("Int64")
     matches["match_date"] = pd.to_datetime(matches["match_date_utc"], errors="coerce", utc=True).dt.date
     upcoming = matches[
         matches["home_score"].isna() | matches["away_score"].isna() | ~matches["status"].astype(str).str.upper().isin({"FINISHED"})
@@ -724,6 +773,7 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
         return pd.DataFrame(
             columns=[
                 "match_id",
+                "season",
                 "team",
                 "player_id",
                 "projected_start",
@@ -857,6 +907,7 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
                 output_rows.append(
                     {
                         "match_id": str(row["match_id"]),
+                        "season": row.get("season"),
                         "team": team,
                         "player_id": str(player["player_id"]),
                         "projected_start": projected_start,
@@ -867,7 +918,11 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
                     }
                 )
 
-    return pd.DataFrame(output_rows).sort_values(["match_id", "team", "projected_start", "projected_minutes"], ascending=[True, True, False, False]).reset_index(drop=True)
+    return (
+        pd.DataFrame(output_rows)
+        .sort_values(["season", "match_id", "team", "projected_start", "projected_minutes"], ascending=[True, True, True, False, False])
+        .reset_index(drop=True)
+    )
 
 
 def normalize_odds_contract(raw_odds: pd.DataFrame) -> pd.DataFrame:
@@ -914,6 +969,7 @@ def build_dataset(
     history_start_season: int | None = None,
 ) -> BuildOutputs:
     """Build all raw model datasets and a manifest."""
+    generated_at = datetime.now(UTC).isoformat()
     official_match_frames = _load_official_match_frames(repo_root)
     season_coverage = sorted(
         {
@@ -936,6 +992,7 @@ def build_dataset(
     appearances = build_appearances(repo_root)
     if not appearances.empty and not matches.empty:
         appearances = appearances[appearances["match_id"].astype(str).isin(matches["match_id"].astype(str))].copy()
+        appearances = _filter_frame_by_season(appearances, history_start_season)
     player_season_priors = build_player_season_priors(repo_root, asa_player_analytics=asa_datasets.player_analytics)
     player_season_priors = _filter_frame_by_season(player_season_priors, history_start_season)
     team_season_priors = build_team_season_priors(
@@ -945,6 +1002,7 @@ def build_dataset(
     )
     team_season_priors = _filter_frame_by_season(team_season_priors, history_start_season)
     projected_lineups = build_projected_lineups(repo_root)
+    projected_lineups = _filter_frame_by_season(projected_lineups, history_start_season)
     odds = build_odds(odds_source)
     if not odds.empty and not matches.empty:
         odds = odds[odds["match_id"].astype(str).isin(matches["match_id"].astype(str))].copy()
@@ -959,13 +1017,213 @@ def build_dataset(
         int(matches["away_xg"].notna().sum()),
     )
 
-    manifest = {
-        "generated_at": datetime.now(UTC).isoformat(),
+    refresh_manifest = {
+        "generated_at": generated_at,
         "history_start_season": history_start_season,
+        "refresh_mode": "cache_first",
         "feature_policy": {
             "team_season_priors": "previous_available_season_baseline_applied_at_training_time",
             "player_season_priors": "last_season_only_for_projection_fallback",
         },
+        "source_batches": [
+            _source_batch(
+                name="official_match_archive",
+                source="data/nwsl-official",
+                status="materialized",
+                rows=sum(len(frame) for frame in official_match_frames),
+                season_coverage=season_coverage,
+                source_confidence=1.0,
+                provenance={
+                    "kind": "repo_archive",
+                    "inputs": [str(path) for path in sorted((repo_root / "data" / "nwsl-official").glob("nwsl_*_official_matches.csv"))],
+                },
+                freshness={
+                    "mode": "static_archive",
+                    "latest_input_mtime": _latest_mtime(sorted((repo_root / "data" / "nwsl-official").glob("nwsl_*_official_matches.csv"))),
+                },
+                output_files=["matches.csv"],
+            ),
+            _source_batch(
+                name="official_player_match_logs",
+                source="data/nwsl-official",
+                status="materialized",
+                rows=int(len(appearances)),
+                season_coverage=_season_coverage(appearances),
+                source_confidence=0.9,
+                provenance={
+                    "kind": "repo_archive",
+                    "inputs": [str(repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv")],
+                },
+                freshness={
+                    "mode": "static_archive",
+                    "latest_input_mtime": _latest_mtime([repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv"]),
+                },
+                output_files=["appearances.csv"],
+            ),
+            _source_batch(
+                name="projected_lineup_materialization",
+                source="data/nwsl-official",
+                status="materialized",
+                rows=int(len(projected_lineups)),
+                season_coverage=_season_coverage(projected_lineups),
+                source_confidence=0.85,
+                provenance={
+                    "kind": "repo_archive",
+                    "inputs": [
+                        str(repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv"),
+                        str(repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_profiles.csv"),
+                    ],
+                },
+                freshness={
+                    "mode": "static_archive",
+                    "latest_input_mtime": _latest_mtime([
+                        repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv",
+                        repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_profiles.csv",
+                    ]),
+                },
+                output_files=["projected_lineups.csv"],
+            ),
+            _source_batch(
+                name="player_season_priors_materialization",
+                source="data/nwsl-official+asa",
+                status="materialized",
+                rows=int(len(player_season_priors)),
+                season_coverage=_season_coverage(player_season_priors),
+                source_confidence=0.9,
+                provenance={
+                    "kind": "repo_archive_plus_asa",
+                    "inputs": [
+                        str(path)
+                        for path in sorted((repo_root / "data" / "nwsl-official").glob("nwsl_*_official_player_stats.csv"))
+                    ] + [str(raw_dir / "asa_player_analytics.csv")],
+                },
+                freshness={
+                    "mode": "cache_first",
+                    "latest_input_mtime": _latest_mtime(
+                        sorted((repo_root / "data" / "nwsl-official").glob("nwsl_*_official_player_stats.csv"))
+                        + [raw_dir / "asa_player_analytics.csv"]
+                    ),
+                    "generated_at": generated_at,
+                },
+                output_files=["player_season_priors.csv"],
+            ),
+            _source_batch(
+                name="team_season_priors_materialization",
+                source="data/nwsl-official+asa",
+                status="materialized",
+                rows=int(len(team_season_priors)),
+                season_coverage=_season_coverage(team_season_priors),
+                source_confidence=0.9,
+                provenance={
+                    "kind": "repo_archive_plus_asa",
+                    "inputs": [
+                        str(path)
+                        for path in sorted((repo_root / "data" / "nwsl-official").glob("nwsl_*_official_team_stats.csv"))
+                    ] + [str(raw_dir / "asa_team_analytics.csv")],
+                },
+                freshness={
+                    "mode": "cache_first",
+                    "latest_input_mtime": _latest_mtime(
+                        sorted((repo_root / "data" / "nwsl-official").glob("nwsl_*_official_team_stats.csv"))
+                        + [raw_dir / "asa_team_analytics.csv"]
+                    ),
+                    "generated_at": generated_at,
+                },
+                output_files=["team_season_priors.csv"],
+            ),
+            _source_batch(
+                name="asa_advanced_analytics",
+                source="american-soccer-analysis",
+                status="fetched" if fetch_asa else ("cached" if asa_match_rows or len(asa_datasets.team_analytics) or len(asa_datasets.player_analytics) else "empty"),
+                rows=int(asa_match_rows + len(asa_datasets.team_analytics) + len(asa_datasets.player_analytics)),
+                season_coverage=asa_match_seasons,
+                source_confidence=0.95 if (asa_match_rows or len(asa_datasets.team_analytics) or len(asa_datasets.player_analytics)) else 0.0,
+                provenance={
+                    "kind": "external_provider",
+                    "cache_first": True,
+                    "fetch_enabled": bool(fetch_asa),
+                    "inputs": [str(raw_dir / "asa_match_xgoals.csv"), str(raw_dir / "asa_team_analytics.csv"), str(raw_dir / "asa_player_analytics.csv")],
+                },
+                freshness={
+                    "mode": "fetched" if fetch_asa else "cached",
+                    "latest_input_mtime": _latest_mtime([
+                        raw_dir / "asa_match_xgoals.csv",
+                        raw_dir / "asa_team_analytics.csv",
+                        raw_dir / "asa_player_analytics.csv",
+                    ]),
+                    "generated_at": generated_at,
+                },
+                output_files=["asa_match_xgoals.csv", "asa_team_analytics.csv", "asa_player_analytics.csv"],
+            ),
+            _source_batch(
+                name="odds_contract",
+                source=str(odds_source or raw_dir / "odds.csv"),
+                status="materialized" if len(odds) > 0 else "empty",
+                rows=int(len(odds)),
+                season_coverage=_season_coverage(matches) if not matches.empty else [],
+                source_confidence=0.85 if len(odds) > 0 else 0.0,
+                provenance={
+                    "kind": "canonical_contract",
+                    "inputs": [str(odds_source or raw_dir / "odds.csv")],
+                },
+                freshness={
+                    "mode": "normalized",
+                    "latest_input_mtime": _latest_mtime([odds_source or raw_dir / "odds.csv"] if (odds_source or (raw_dir / "odds.csv").exists()) else []),
+                    "generated_at": generated_at,
+                },
+                output_files=["odds.csv"],
+            ),
+        ],
+        "source_hooks": {
+            "fbref_secondary": {
+                "status": "hook_only",
+                "enabled": False,
+                "source_confidence": 0.55,
+                "note": "Reserved for secondary completeness checks; not required for a passing build.",
+            },
+            "espn_fallback": {
+                "status": "hook_only",
+                "enabled": False,
+                "source_confidence": 0.25,
+                "note": "Reserved as a live-status fallback; not required for a passing build.",
+            },
+        },
+        "summary": {
+            "rows": {
+                "matches": int(len(matches)),
+                "appearances": int(len(appearances)),
+                "projected_lineups": int(len(projected_lineups)),
+                "team_season_priors": int(len(team_season_priors)),
+                "player_season_priors": int(len(player_season_priors)),
+                "odds": int(len(odds)),
+            },
+            "season_coverage": {
+                "matches": _season_coverage(matches),
+                "appearances": _season_coverage(appearances),
+                "projected_lineups": _season_coverage(projected_lineups),
+                "team_season_priors": _season_coverage(team_season_priors),
+                "player_season_priors": _season_coverage(player_season_priors),
+            },
+            "source_confidence": {
+                "official": 1.0,
+                "asa": 0.95 if bool(asa_match_rows or len(asa_datasets.team_analytics) or len(asa_datasets.player_analytics)) else 0.0,
+                "odds": 0.85 if len(odds) > 0 else 0.0,
+            },
+        },
+        "feature_policy": {
+            "training_window": f"{history_start_season}+ only" if history_start_season is not None else "all_available_seasons",
+            "travel_features": "disabled",
+            "weather_features": "disabled",
+            "surface_features": "disabled",
+        },
+    }
+
+    manifest = {
+        "generated_at": generated_at,
+        "history_start_season": history_start_season,
+        "refresh_manifest_path": "refresh_manifest.json",
+        "refresh_mode": "cache_first",
+        "feature_policy": refresh_manifest["feature_policy"],
         "feature_inclusion": {
             "training_window": f"{history_start_season}+ only" if history_start_season is not None else "all_available_seasons",
             "travel_features": "disabled",
@@ -974,7 +1232,7 @@ def build_dataset(
         },
         "matches": {
             "rows": int(len(matches)),
-            "season_coverage": sorted(matches["season"].dropna().astype(int).unique().tolist()),
+            "season_coverage": _season_coverage(matches),
             "xg_coverage_pct": {
                 "home_xg": round(float(matches["home_xg"].notna().mean() * 100), 2),
                 "away_xg": round(float(matches["away_xg"].notna().mean() * 100), 2),
@@ -984,26 +1242,21 @@ def build_dataset(
         },
         "appearances": {
             "rows": int(len(appearances)),
-            "season_coverage": sorted(
-                matches[matches["match_id"].isin(appearances["match_id"].unique())]["season"]
-                .dropna()
-                .astype(int)
-                .unique()
-                .tolist()
-            ),
+            "season_coverage": _season_coverage(appearances),
         },
         "projected_lineups": {
             "rows": int(len(projected_lineups)),
             "matches_covered": int(projected_lineups["match_id"].nunique()) if not projected_lineups.empty else 0,
             "teams_covered": int(projected_lineups["team"].nunique()) if not projected_lineups.empty else 0,
+            "season_coverage": _season_coverage(projected_lineups),
         },
         "team_season_priors": {
             "rows": int(len(team_season_priors)),
-            "season_coverage": sorted(team_season_priors["season"].dropna().astype(int).unique().tolist()) if not team_season_priors.empty else [],
+            "season_coverage": _season_coverage(team_season_priors),
         },
         "player_season_priors": {
             "rows": int(len(player_season_priors)),
-            "season_coverage": sorted(player_season_priors["season"].dropna().astype(int).unique().tolist()) if not player_season_priors.empty else [],
+            "season_coverage": _season_coverage(player_season_priors),
         },
         "asa": {
             "source_available": bool(
@@ -1031,9 +1284,11 @@ def build_dataset(
                 if not appearances.empty else 0.0,
                 2,
             ),
-            "projected_lineup_upcoming_coverage_pct": 100.0
-            if projected_lineups.empty
-            else round(float(projected_lineups["match_id"].nunique() / max(projected_lineups["match_id"].nunique(), 1) * 100), 2),
+            "projected_lineup_upcoming_coverage_pct": round(
+                float(projected_lineups["match_id"].nunique() / max(projected_lineups["match_id"].nunique(), 1) * 100)
+                if not projected_lineups.empty else 0.0,
+                2,
+            ),
         },
     }
 
@@ -1048,6 +1303,7 @@ def build_dataset(
         asa_player_analytics=asa_datasets.player_analytics,
         odds=odds,
         odds_quality_report=odds_quality_report,
+        refresh_manifest=refresh_manifest,
         manifest=manifest,
     )
 
@@ -1066,6 +1322,7 @@ def write_dataset(outputs: BuildOutputs, raw_dir: Path = RAW_DIR) -> dict[str, P
         "asa_player_analytics": raw_dir / "asa_player_analytics.csv",
         "odds": raw_dir / "odds.csv",
         "odds_quality_report": raw_dir / "odds_quality_report.json",
+        "refresh_manifest": raw_dir / "refresh_manifest.json",
         "manifest": raw_dir / "dataset_manifest.json",
     }
     save_csv(outputs.matches, paths["matches"])
@@ -1083,5 +1340,6 @@ def write_dataset(outputs: BuildOutputs, raw_dir: Path = RAW_DIR) -> dict[str, P
     )
     save_csv(outputs.odds, paths["odds"])
     save_json(outputs.odds_quality_report, paths["odds_quality_report"])
+    save_json(outputs.refresh_manifest, paths["refresh_manifest"])
     save_json(outputs.manifest, paths["manifest"])
     return paths

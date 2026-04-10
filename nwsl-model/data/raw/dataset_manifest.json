@@ -1,9 +1,13 @@
 {
-  "generated_at": "2026-04-07T17:24:39.867804+00:00",
+  "generated_at": "2026-04-07T22:11:26.842933+00:00",
   "history_start_season": 2025,
+  "refresh_manifest_path": "refresh_manifest.json",
+  "refresh_mode": "cache_first",
   "feature_policy": {
-    "team_season_priors": "previous_available_season_baseline_applied_at_training_time",
-    "player_season_priors": "last_season_only_for_projection_fallback"
+    "training_window": "2025+ only",
+    "travel_features": "disabled",
+    "weather_features": "disabled",
+    "surface_features": "disabled"
   },
   "feature_inclusion": {
     "training_window": "2025+ only",
@@ -33,7 +37,10 @@
   "projected_lineups": {
     "rows": 10986,
     "matches_covered": 203,
-    "teams_covered": 16
+    "teams_covered": 16,
+    "season_coverage": [
+      2026
+    ]
   },
   "team_season_priors": {
     "rows": 30,
@@ -66,7 +73,7 @@
     "markets": []
   },
   "odds_quality": {
-    "generated_at": "2026-04-07T17:24:39.867646+00:00",
+    "generated_at": "2026-04-07T22:11:27.584144+00:00",
     "source_available": false,
     "total_rows": 0,
     "sportsbooks": [],

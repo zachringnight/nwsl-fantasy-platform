@@ -25,7 +25,11 @@ from src.data.dataset_builder import build_dataset, write_dataset
 from src.data.loaders import NWSLDataset
 from src.data.transforms import encode_teams, melt_to_team_match, merge_odds_to_matches
 from src.data.validation import run_all_validations
-from src.features.context import ContextualFeatureProvider, build_contextual_training_frame
+from src.features.context import (
+    ContextualFeatureProvider,
+    build_contextual_training_frame,
+    select_model_contextual_columns,
+)
 from src.features.match_features import compute_rolling_form, compute_season_stats
 from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoissonModel
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
@@ -127,6 +131,7 @@ def main() -> None:
         rolling_windows=config.get("features", {}).get("rolling_windows", [3, 5, 10]),
         short_rest_days=config.get("features", {}).get("short_rest_days", 4),
     )
+    model_contextual_cols = select_model_contextual_columns(contextual_cols)
 
     # Compute recency weights
     reference_date = prepared_matches["match_date"].max()
@@ -163,10 +168,12 @@ def main() -> None:
         "n_teams": len(team_map),
         "history_start_season": data_cfg.get("history_start_season"),
         "contextual_columns": contextual_cols,
+        "model_contextual_columns": model_contextual_cols,
         "feature_policy": {
             "team_season_priors": "previous_available_season",
             "player_season_priors": "last_season_only_projection_fallback",
             "lineup_features": "observed_appearances_and_projected_lineups_only",
+            "score_model_contextual_profile": "pure_projection_v1",
         },
         "feature_inclusion_decisions": {
             "travel_features": "disabled",
@@ -208,7 +215,7 @@ def main() -> None:
         fit_result = model.fit(
             prepared_matches,
             weights=weights,
-            contextual_cols=contextual_cols,
+            contextual_cols=model_contextual_cols,
         )
 
         # Save model
@@ -220,8 +227,13 @@ def main() -> None:
             "log_likelihood": fit_result.log_likelihood,
             "n_teams": fit_result.n_teams,
             "parameters": fit_result.parameters,
+            "warnings": fit_result.warnings,
+            "diagnostics": fit_result.diagnostics,
         }
-        logger.info(f"{model_name} training complete: converged={fit_result.converged}")
+        logger.info(
+            f"{model_name} training complete: converged={fit_result.converged}, "
+            f"grad_norm={fit_result.diagnostics.get('grad_norm', 'n/a')}"
+        )
 
     # Save team ratings
     save_pickle(ratings_model, output_dir / "team_ratings.pkl")

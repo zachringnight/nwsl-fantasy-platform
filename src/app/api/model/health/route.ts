@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { getPredictionApiUrl } from "@/lib/prediction-api";
 import {
   createUnauthorizedResponse,
   getAuthenticatedRequestUser,
 } from "@/lib/request-auth";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const user = await getAuthenticatedRequestUser(request);
@@ -10,16 +13,20 @@ export async function GET(request: Request) {
     return createUnauthorizedResponse();
   }
 
-  const predictionApiUrl = process.env.PREDICTION_API_URL;
+  const predictionApiUrl = getPredictionApiUrl("/health");
   if (!predictionApiUrl) {
     return NextResponse.json(
-      { error: "PREDICTION_API_URL not configured" },
+      {
+        status: "degraded",
+        error: "PREDICTION_API_URL not configured",
+        timestamp: new Date().toISOString(),
+      },
       { status: 503 }
     );
   }
 
   try {
-    const response = await fetch(`${predictionApiUrl}/health`, {
+    const response = await fetch(predictionApiUrl, {
       signal: AbortSignal.timeout(5000),
     });
 

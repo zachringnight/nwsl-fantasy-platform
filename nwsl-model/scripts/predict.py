@@ -26,6 +26,7 @@ from src.betting.staking import StakingConfig, StakingEngine
 from src.data.loaders import load_odds
 from src.data.transforms import merge_odds_to_matches
 from src.features.market_features import compute_market_probabilities, compute_totals_market_probabilities
+from src.models.baseline import ProjectionBaselineModel
 from src.models.calibration import apply_market_calibration, summarize_projection_quality
 from src.models.market_blend import MarketBlender
 from src.utils.artifacts import resolve_model_artifact
@@ -80,6 +81,24 @@ def _load_calibration_artifact(artifact: dict[str, object]) -> dict[str, object]
     return payload.get("models", {}).get(evaluation_model)
 
 
+def _load_model_stack(artifact: dict[str, object]) -> tuple[object, object | None, object | None]:
+    ratings_path = Path(artifact["version_dir"]) / "team_ratings.pkl"
+    ratings_model = load_pickle(ratings_path) if ratings_path.exists() else None
+    context_provider_path = Path(artifact["version_dir"]) / "context_provider.pkl"
+    context_provider = load_pickle(context_provider_path) if context_provider_path.exists() else None
+
+    if artifact.get("kind") == "baseline_fallback":
+        model = ProjectionBaselineModel(
+            strategy=str(artifact["model_family"]),
+            ratings_model=ratings_model,
+        )
+        return model, ratings_model, context_provider
+
+    model_path = Path(artifact["version_dir"]) / f"{artifact['model_family']}_model.pkl"
+    model = load_pickle(model_path)
+    return model, ratings_model, context_provider
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Predict NWSL match outcomes")
     parser.add_argument("--config", type=str, default="configs/default.yaml")
@@ -101,14 +120,12 @@ def main() -> None:
         logger.error(str(exc))
         sys.exit(1)
 
-    model_path = artifact["version_dir"] / f"{artifact['model_family']}_model.pkl"
-    model = load_pickle(model_path)
-    logger.info(f"Loaded model from {model_path}")
-
-    ratings_path = artifact["version_dir"] / "team_ratings.pkl"
-    ratings_model = load_pickle(ratings_path) if ratings_path.exists() else None
-    context_provider_path = artifact["version_dir"] / "context_provider.pkl"
-    context_provider = load_pickle(context_provider_path) if context_provider_path.exists() else None
+    model, ratings_model, context_provider = _load_model_stack(artifact)
+    logger.info(
+        "Loaded %s from %s",
+        artifact["model_family"],
+        artifact["version_dir"],
+    )
     calibration_artifact = _load_calibration_artifact(artifact)
 
     upcoming = _load_upcoming_matches(args.matches)

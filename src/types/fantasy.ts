@@ -167,6 +167,26 @@ export interface FantasyPoolPlayer {
   salary_cost: number;
   availability: AvailabilityStatus;
   rank: number;
+  projected_points?: number;
+  baseline_points?: number;
+  floor_points?: number;
+  ceiling_points?: number;
+  projection_confidence?: number;
+  projection_quality?: string;
+  projection_schema?: string;
+  projection_schema_label?: string;
+  model_version?: string;
+  model_family?: string;
+  gating_status?: string;
+  calibration_applied?: boolean;
+  fixture_id?: string | null;
+  slate_key?: string | null;
+  opponent?: string | null;
+  venue?: "Home" | "Away" | null;
+  expected_minutes?: number;
+  starter_probability?: number;
+  lineup_status?: string;
+  lineup_note?: string;
   /** Player headshot URL (optional — falls back to initials) */
   photo_url?: string;
 }

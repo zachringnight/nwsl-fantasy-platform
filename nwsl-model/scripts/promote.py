@@ -28,6 +28,32 @@ def _load_optional_json(path: Path) -> dict:
     return load_json(path) if path.exists() else {}
 
 
+def _merge_registry(
+    registry: dict,
+    champion_selection: dict,
+    version_name: str,
+    promoted_at: str,
+) -> dict:
+    aliases = dict(registry.get("aliases", {}))
+    for alias_name, payload in champion_selection.get("aliases", {}).items():
+        aliases[alias_name] = {
+            **payload,
+            "version": version_name,
+            "promoted_at": promoted_at,
+        }
+
+    experimental = dict(registry.get("experimental", {}))
+    experimental.pop(BLENDED_ALIAS, None)
+    for alias_name, payload in champion_selection.get("experimental", {}).items():
+        experimental[alias_name] = {
+            **payload,
+            "version": version_name,
+            "promoted_at": promoted_at,
+        }
+
+    return {"aliases": aliases, "experimental": experimental}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Promote champion nwsl-model artifacts")
     parser.add_argument("--artifact-root", type=str, default="data/processed/models")
@@ -57,27 +83,13 @@ def main() -> None:
 
     registry = load_champion_registry(artifact_root)
     promoted_at = datetime.now(UTC).isoformat()
-    aliases = registry.get("aliases", {})
-    if PURE_ALIAS not in champion_selection.get("aliases", {}):
-        aliases.pop(PURE_ALIAS, None)
-    aliases.pop(BLENDED_ALIAS, None)
-    for alias_name, payload in champion_selection.get("aliases", {}).items():
-        aliases[alias_name] = {
-            **payload,
-            "version": version_dir.name,
-            "promoted_at": promoted_at,
-        }
-
-    experimental = registry.get("experimental", {})
-    experimental.pop(BLENDED_ALIAS, None)
-    for alias_name, payload in champion_selection.get("experimental", {}).items():
-        experimental[alias_name] = {
-            **payload,
-            "version": version_dir.name,
-            "promoted_at": promoted_at,
-        }
-
-    save_champion_registry({"aliases": aliases, "experimental": experimental}, artifact_root)
+    next_registry = _merge_registry(
+        registry=registry,
+        champion_selection=champion_selection,
+        version_name=version_dir.name,
+        promoted_at=promoted_at,
+    )
+    save_champion_registry(next_registry, artifact_root)
     write_artifact_json(
         version_dir,
         "promotion_summary.json",

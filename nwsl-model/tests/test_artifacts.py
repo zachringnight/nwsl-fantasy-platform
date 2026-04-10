@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from src.utils.artifacts import create_version_dir, resolve_model_artifact, save_champion_registry
+from src.utils.artifacts import (
+    available_model_names,
+    create_version_dir,
+    resolve_model_artifact,
+    save_champion_registry,
+)
 from src.utils.gating import choose_champions, evaluate_go_live_gates
 
 
@@ -29,6 +34,36 @@ def test_resolve_model_artifact_prefers_champion_alias(tmp_path: Path) -> None:
     assert artifact["version"] == "v-test"
     assert artifact["model_family"] == "dixon_coles"
     assert artifact["gating_status"] == "passed"
+
+
+def test_resolve_model_artifact_falls_back_to_best_baseline(tmp_path: Path) -> None:
+    artifact_root = tmp_path / "models"
+    version_dir = create_version_dir("v-test", artifact_root)
+    (version_dir / "backtest_summary.json").write_text(
+        """
+        {
+          "models": {
+            "home_field_baseline": {"log_loss_1x2": 1.04},
+            "team_ratings_poisson": {"log_loss_1x2": 1.07},
+            "rolling_npxg_poisson": {"log_loss_1x2": 1.02}
+          }
+        }
+        """.strip()
+    )
+
+    artifact = resolve_model_artifact("champion_pure", artifact_root)
+    assert artifact["version"] == "v-test"
+    assert artifact["model_family"] == "rolling_npxg_poisson"
+    assert artifact["gating_status"] == "baseline_fallback"
+    assert artifact["kind"] == "baseline_fallback"
+
+
+def test_available_model_names_exposes_champion_pure_when_latest_exists(tmp_path: Path) -> None:
+    artifact_root = tmp_path / "models"
+    create_version_dir("v-test", artifact_root)
+
+    model_names = available_model_names(artifact_root)
+    assert "champion_pure" in model_names
 
 
 def test_pure_projection_gates_choose_pure_champion_only() -> None:

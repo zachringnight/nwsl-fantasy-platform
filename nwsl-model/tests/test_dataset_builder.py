@@ -13,6 +13,7 @@ from src.data.dataset_builder import (
     build_projected_lineups,
     build_team_season_priors,
     normalize_odds_contract,
+    write_dataset,
 )
 
 
@@ -518,5 +519,14 @@ def test_build_dataset_filters_to_history_start_season(tmp_path: Path) -> None:
     outputs = build_dataset(repo_root=repo_root, fetch_asa=False, history_start_season=2025)
 
     assert outputs.matches["season"].tolist() == [2025]
+    assert outputs.refresh_manifest["history_start_season"] == 2025
+    assert outputs.refresh_manifest["refresh_mode"] == "cache_first"
+    assert any(batch["name"] == "official_match_archive" for batch in outputs.refresh_manifest["source_batches"])
+    assert set(outputs.refresh_manifest["source_hooks"].keys()) == {"fbref_secondary", "espn_fallback"}
+    assert outputs.manifest["refresh_manifest_path"] == "refresh_manifest.json"
+
+    raw_dir = tmp_path / "raw"
+    paths = write_dataset(outputs, raw_dir=raw_dir)
+    assert paths["refresh_manifest"].exists()
     assert outputs.manifest["history_start_season"] == 2025
     assert outputs.manifest["matches"]["season_coverage"] == [2025]

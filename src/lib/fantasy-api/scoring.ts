@@ -36,6 +36,58 @@ import {
   fetchLeagueContext,
 } from "./shared";
 
+function buildFantasyPlayerMap(players: FantasyPoolPlayer[]) {
+  return new Map(players.map((player) => [player.id, player] as const));
+}
+
+async function fetchMaterializedProjectionPool(
+  variant: FantasyLeagueRecord["game_variant"],
+  slateKey?: string
+) {
+  const searchParams = new URLSearchParams({
+    schemaKey: "site_launch_v1",
+    variant,
+  });
+
+  if (slateKey) {
+    searchParams.set("slateKey", slateKey);
+  }
+
+  const response = await fetch(`/api/fantasy-projections?${searchParams.toString()}`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to load the projected salary-cap player pool.");
+  }
+
+  const payload = (await response.json()) as {
+    players?: FantasyPoolPlayer[];
+  };
+
+  return payload.players ?? [];
+}
+
+async function loadSalaryCapAvailablePlayers(
+  league: FantasyLeagueRecord,
+  slateKey?: string
+) {
+  try {
+    const projections = await fetchMaterializedProjectionPool(
+      league.game_variant,
+      slateKey
+    );
+
+    if (projections.length > 0) {
+      return projections;
+    }
+  } catch (error) {
+    console.warn("[salary-cap] Falling back to bootstrap fantasy pool.", error);
+  }
+
+  return getFantasyPlayerPool();
+}
+
 async function fetchSalaryCapEntryForUser(
   leagueId: string,
   userId: string,
@@ -175,17 +227,22 @@ function buildSalaryCapEntryState(
   slate: FantasySlateWindow,
   availableSlates: FantasySlateWindow[],
   entry: FantasySalaryCapEntryRecord,
-  slotRecords: FantasySalaryCapEntrySlotRecord[]
+  slotRecords: FantasySalaryCapEntrySlotRecord[],
+  availablePlayers: FantasyPoolPlayer[]
 ) {
   const slotRecordBySlot = new Map(
     slotRecords.map((slotRecord) => [slotRecord.lineup_slot, slotRecord] as const)
   );
+  const availablePlayerById = buildFantasyPlayerMap(availablePlayers);
   const slots = salaryCapLineupSlots.map((lineupSlot) => {
     const record = slotRecordBySlot.get(lineupSlot) ?? null;
+    const selectedPlayer = record
+      ? availablePlayerById.get(record.player_id) ?? getFantasyPlayerById(record.player_id)
+      : null;
 
     return {
       lineup_slot: lineupSlot,
-      player: record ? getFantasyPlayerById(record.player_id) : null,
+      player: selectedPlayer,
       record,
     };
   });
@@ -206,7 +263,7 @@ function buildSalaryCapEntryState(
     available_slates: availableSlates,
     entry_window: buildSalaryCapEntryWindowState(league, entry, summary, slate),
     slots,
-    available_players: getFantasyPlayerPool(),
+    available_players: availablePlayers,
     salary_spent: summary.salarySpent,
     remaining_budget: summary.remainingBudget,
     projected_points: summary.projectedPoints,
@@ -243,6 +300,7 @@ function normalizeSalaryCapAssignments(
 
 function validateSalaryCapAssignments(
   league: FantasyLeagueRecord,
+  availablePlayers: FantasyPoolPlayer[],
   assignments: Array<{
     lineupSlot: FantasySalaryCapLineupSlot;
     playerId: string | null;
@@ -256,6 +314,7 @@ function validateSalaryCapAssignments(
 
   const normalizedAssignments = normalizeSalaryCapAssignments(assignments);
   const usedPlayerIds = new Set<string>();
+  const availablePlayerById = buildFantasyPlayerMap(availablePlayers);
   const selectedPlayers: Array<{
     lineupSlot: FantasySalaryCapLineupSlot;
     player: FantasyPoolPlayer;
@@ -266,7 +325,7 @@ function validateSalaryCapAssignments(
       return;
     }
 
-    const player = getFantasyPlayerById(assignment.playerId);
+    const player = availablePlayerById.get(assignment.playerId);
 
     if (!player) {
       throw new Error("One of the selected players is no longer in the salary-cap pool.");
@@ -292,7 +351,9 @@ function validateSalaryCapAssignments(
   const summary = buildSalaryCapEntrySummary(
     normalizedAssignments.map((assignment) => ({
       lineup_slot: assignment.lineupSlot,
-      player: assignment.playerId ? getFantasyPlayerById(assignment.playerId) : null,
+      player: assignment.playerId
+        ? availablePlayerById.get(assignment.playerId) ?? null
+        : null,
     })),
     salaryCapAmount
   );
@@ -387,6 +448,7 @@ export async function loadSalaryCapEntryState(
   assertSalaryCapLeagueMode(league, "Salary-cap entry building");
   const availableSlates = getFantasySlateWindows(league);
   const activeSlate = resolveSalaryCapSlate(league, options?.slateKey);
+  const availablePlayers = await loadSalaryCapAvailablePlayers(league, activeSlate.key);
   const entry = await ensureSalaryCapEntry(leagueId, user.id, myMembership, activeSlate);
   const slotRecords = await fetchSalaryCapEntrySlots(entry.id);
 
@@ -396,7 +458,8 @@ export async function loadSalaryCapEntryState(
     activeSlate,
     availableSlates,
     entry,
-    slotRecords
+    slotRecords,
+    availablePlayers
   );
 }
 
@@ -416,6 +479,7 @@ export async function saveSalaryCapEntry(
   const slate = resolveSalaryCapSlate(league, input.slateKey);
   const existingEntry = await ensureSalaryCapEntry(leagueId, user.id, myMembership, slate);
   assertSalaryCapEntryUnlocked(league, slate, "Salary-cap entry editing");
+  const availablePlayers = await loadSalaryCapAvailablePlayers(league, slate.key);
 
   if (existingEntry.status === "submitted") {
     throw new Error("Reopen the submitted entry before saving changes.");
@@ -423,6 +487,7 @@ export async function saveSalaryCapEntry(
 
   const { selectedPlayers, summary } = validateSalaryCapAssignments(
     league,
+    availablePlayers,
     input.assignments
   );
   const entryName =
@@ -512,8 +577,10 @@ export async function submitSalaryCapEntry(
   const slate = resolveSalaryCapSlate(league, input.slateKey);
   const existingEntry = await ensureSalaryCapEntry(leagueId, user.id, myMembership, slate);
   assertSalaryCapEntryUnlocked(league, slate, "Salary-cap entry submission");
+  const availablePlayers = await loadSalaryCapAvailablePlayers(league, slate.key);
   const { selectedPlayers, summary } = validateSalaryCapAssignments(
     league,
+    availablePlayers,
     input.assignments
   );
 

@@ -219,6 +219,14 @@ class NWSLDataset:
             player_season_priors,
             history_start_season,
         )
+        appearances = _filter_by_history_start(
+            appearances,
+            history_start_season,
+        )
+        projected = _filter_by_history_start(
+            projected,
+            history_start_season,
+        )
         if appearances is not None and matches is not None and not appearances.empty:
             allowed_match_ids = set(matches["match_id"].astype(str))
             appearances = appearances[

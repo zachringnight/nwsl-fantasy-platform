@@ -253,3 +253,5 @@ def test_train_backtest_evaluate_and_promote_smoke(tmp_path: Path) -> None:
     assert (artifact_root / "champions.json").exists()
     training_summary = json.loads((version_dir / "training_summary.json").read_text())
     assert "home_team_xg_per_match" in training_summary["contextual_columns"]
+    assert "home_team_xg_per_match" in training_summary["model_contextual_columns"]
+    assert len(training_summary["model_contextual_columns"]) < len(training_summary["contextual_columns"])

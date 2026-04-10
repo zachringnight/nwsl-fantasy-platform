@@ -75,4 +75,16 @@ describe("env validation", () => {
 
     expect(env.NEXT_PUBLIC_SUPABASE_ANON_KEY).toBe("anon-key-value");
   });
+
+  it("requires PREDICTION_API_SECRET when PREDICTION_API_URL is configured", async () => {
+    for (const [key, value] of Object.entries(validEnv)) {
+      vi.stubEnv(key, value);
+    }
+    vi.stubEnv("PREDICTION_API_URL", "https://model.example");
+    vi.stubEnv("PREDICTION_API_SECRET", "");
+
+    await expect(
+      import("../env")
+    ).rejects.toThrow("Invalid environment configuration");
+  });
 });

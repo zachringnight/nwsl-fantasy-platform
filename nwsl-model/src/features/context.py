@@ -74,6 +74,30 @@ DEFAULT_CONTEXTUAL_COLUMNS = [
     "rest_diff",
 ]
 
+PURE_MODEL_CONTEXTUAL_PRIORITY = [
+    "home_roll_5_npxg_for",
+    "home_roll_5_npxg_against",
+    "home_season_avg_npxg_for",
+    "home_season_avg_npxg_against",
+    "home_team_xg_per_match",
+    "home_team_xg_against_per_match",
+    "home_team_points_per_match",
+    "home_rest_days",
+    "home_short_rest",
+    "home_lineup_strength",
+    "away_roll_5_npxg_for",
+    "away_roll_5_npxg_against",
+    "away_season_avg_npxg_for",
+    "away_season_avg_npxg_against",
+    "away_team_xg_per_match",
+    "away_team_xg_against_per_match",
+    "away_team_points_per_match",
+    "away_rest_days",
+    "away_short_rest",
+    "away_lineup_strength",
+    "rest_diff",
+]
+
 TEAM_PRIOR_COLUMNS = [
     "goals_per_match",
     "goals_against_per_match",
@@ -149,6 +173,31 @@ def _apply_contextual_missing_policy(
         final_cols.append("rest_diff")
 
     return frame, final_cols
+
+
+def select_model_contextual_columns(
+    contextual_cols: list[str],
+    *,
+    profile: str = "pure_projection_v1",
+) -> list[str]:
+    """Reduce the fit-time feature surface for score models.
+
+    The 2025+ production window is intentionally small. Fitting one beta per
+    contextual column and missing-indicator can overwhelm the score models, so
+    serving keeps the full contextual frame while fit-time uses a curated core.
+    """
+    if profile != "pure_projection_v1":
+        return contextual_cols
+
+    selected: list[str] = []
+    for column in PURE_MODEL_CONTEXTUAL_PRIORITY:
+        if column in contextual_cols:
+            selected.append(column)
+        missing_indicator = f"{column}_missing"
+        if missing_indicator in contextual_cols:
+            selected.append(missing_indicator)
+
+    return selected or contextual_cols
 
 
 def _player_ratings_map(

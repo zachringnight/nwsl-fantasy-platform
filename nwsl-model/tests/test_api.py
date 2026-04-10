@@ -292,6 +292,43 @@ class TestBacktestSummary:
         assert data["readiness"]["pure_model_passed"] is True
         assert data["odds_quality"]["close_coverage_pct"]["1x2"] == 88.0
 
+    def test_backtest_summary_labels_latest_research_bundle_when_no_champion(
+        self, client: TestClient, tmp_path: Path
+    ) -> None:
+        version_dir = tmp_path / "data" / "processed" / "models" / "v2"
+        backtest_dir = version_dir / "backtest"
+        backtest_dir.mkdir(parents=True)
+        (backtest_dir / "predictions_home_field_baseline.csv").write_text(
+            "match_id,prob_home\n1,0.44\n2,0.41\n"
+        )
+        (version_dir / "backtest_summary.json").write_text(
+            json.dumps(
+                {
+                    "models": {
+                        "home_field_baseline": {
+                            "brier_score_1x2": 0.64,
+                            "log_loss_1x2": 1.06,
+                        }
+                    },
+                    "report_summary": {"metrics_comparison": [{"model": "home_field_baseline"}]},
+                }
+            )
+        )
+        (version_dir / "promotion_summary.json").write_text(
+            json.dumps({"gate_results": {}})
+        )
+
+        with patch("api.main.PROJECT_ROOT", tmp_path):
+            with patch("api.main.load_champion_registry", return_value={"aliases": {}}):
+                resp = client.get("/backtest-summary", headers=AUTH_HEADER)
+
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["n_matches"] == 2
+        assert data["readiness"]["has_promoted_pure"] is False
+        assert data["readiness"]["fallback_model_family"] == "home_field_baseline"
+        assert "latest research artifact bundle" in data["message"]
+
     def test_backtest_summary_requires_auth(self, client: TestClient) -> None:
         resp = client.get("/backtest-summary")
         assert resp.status_code == 401

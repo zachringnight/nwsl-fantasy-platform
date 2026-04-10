@@ -30,7 +30,11 @@ from src.data.transforms import (
     merge_odds_to_matches,
 )
 from src.data.validation import run_all_validations
-from src.features.context import ContextualFeatureProvider, build_contextual_training_frame
+from src.features.context import (
+    ContextualFeatureProvider,
+    build_contextual_training_frame,
+    select_model_contextual_columns,
+)
 from src.features.market_features import compute_market_probabilities, compute_totals_market_probabilities
 from src.features.match_features import (
     compute_rolling_form,
@@ -95,6 +99,7 @@ class BacktestRunner:
         self.results: list[dict[str, Any]] = []
         self.predictions: list[pd.DataFrame] = []
         self.bet_logs: list[pd.DataFrame] = []
+        self.fit_diagnostics: dict[str, list[dict[str, Any]]] = {}
         self.selection_config = load_bet_selection_config(config)
 
     def run(
@@ -188,6 +193,26 @@ class BacktestRunner:
                 metrics = compute_all_metrics(all_preds, bet_log)
                 metrics["model"] = model_name
                 metrics["staking_summary"] = staker.summary()
+                fit_runs = self.fit_diagnostics.get(model_name, [])
+                if fit_runs:
+                    fit_summary: dict[str, Any] = {
+                        "n_folds": len(fit_runs),
+                        "converged_rate": float(np.mean([float(run.get("success", False)) for run in fit_runs])),
+                        "median_iterations": float(np.median([float(run.get("nit", 0.0)) for run in fit_runs])),
+                        "median_nfev": float(np.median([float(run.get("nfev", 0.0)) for run in fit_runs])),
+                        "median_gradient_norm": float(
+                            np.median(
+                                [
+                                    float(run.get("grad_norm", np.nan))
+                                    for run in fit_runs
+                                    if np.isfinite(float(run.get("grad_norm", np.nan)))
+                                ]
+                            )
+                        )
+                        if any(np.isfinite(float(run.get("grad_norm", np.nan))) for run in fit_runs)
+                        else float("nan"),
+                    }
+                    metrics["fit_diagnostics"] = fit_summary
 
                 all_model_results[model_name] = {
                     "metrics": metrics,
@@ -242,6 +267,7 @@ class BacktestRunner:
             short_rest_days=self.config.get("features", {}).get("short_rest_days", 4),
             **feature_flags,
         )
+        model_contextual_cols = select_model_contextual_columns(contextual_cols)
 
         # Build team ratings from training data
         team_matches = melt_to_team_match(prepared_train)
@@ -281,7 +307,8 @@ class BacktestRunner:
 
         # Fit score model
         model = self._create_model(base_model)
-        model.fit(prepared_train, weights=weights, contextual_cols=contextual_cols)
+        fit_result = model.fit(prepared_train, weights=weights, contextual_cols=model_contextual_cols)
+        self.fit_diagnostics.setdefault(model_name, []).append(fit_result.diagnostics)
 
         # Predict test matches
         results = []
@@ -333,6 +360,11 @@ class BacktestRunner:
                 "score_matrix": pred.score_matrix,
                 "model": model_name,
                 "confidence_score": max(pred.home_win_prob, pred.draw_prob, pred.away_win_prob),
+                "fit_converged": float(fit_result.converged),
+                "fit_iterations": float(fit_result.diagnostics.get("nit", 0.0)),
+                "fit_nfev": float(fit_result.diagnostics.get("nfev", 0.0)),
+                "fit_grad_norm": float(fit_result.diagnostics.get("grad_norm", np.nan)),
+                "fit_n_params": float(fit_result.diagnostics.get("n_params", 0.0)),
             }
             if contextual_features:
                 for column in (

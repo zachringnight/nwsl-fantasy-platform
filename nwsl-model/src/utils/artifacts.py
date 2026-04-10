@@ -14,6 +14,12 @@ ARTIFACT_ROOT = Path(__file__).resolve().parents[2] / "data" / "processed" / "mo
 LATEST_ALIAS = "latest"
 PURE_ALIAS = "champion_pure"
 BLENDED_ALIAS = "champion_blended"
+BASELINE_MODELS = (
+    "home_field_baseline",
+    "rolling_npxg_poisson",
+    "team_ratings_poisson",
+    "uniform_baseline",
+)
 
 
 def champion_registry_path(root: Path = ARTIFACT_ROOT) -> Path:
@@ -89,10 +95,45 @@ def available_model_names(root: Path = ARTIFACT_ROOT) -> list[str]:
     names: set[str] = set()
     registry = load_champion_registry(root)
     names.update(registry.get("aliases", {}).keys())
+    if latest_version_dir(root) is not None:
+        names.add(PURE_ALIAS)
     latest = latest_version_dir(root)
     if latest:
         names.update(path.stem.replace("_model", "") for path in latest.glob("*_model.pkl"))
     return sorted(names)
+
+
+def _select_best_baseline(version_dir: Path) -> dict[str, Any] | None:
+    backtest_path = version_dir / "backtest_summary.json"
+    if not backtest_path.exists():
+        return None
+
+    summary = load_json(backtest_path)
+    best_name = None
+    best_log_loss = None
+    for model_name in BASELINE_MODELS:
+        model_summary = summary.get("models", {}).get(model_name, {})
+        metric = model_summary.get("log_loss_1x2")
+        if metric is None:
+            continue
+        metric = float(metric)
+        if best_log_loss is None or metric < best_log_loss:
+            best_name = model_name
+            best_log_loss = metric
+
+    if best_name is None:
+        return None
+
+    return {
+        "model_family": best_name,
+        "gating_status": "baseline_fallback",
+        "blended": False,
+        "kind": "baseline_fallback",
+        "notes": [
+            "No promoted pure model was available.",
+            f"Resolved champion_pure to the strongest non-market baseline: {best_name}.",
+        ],
+    }
 
 
 def resolve_model_artifact(model_name: str, root: Path = ARTIFACT_ROOT) -> dict[str, Any]:
@@ -112,6 +153,27 @@ def resolve_model_artifact(model_name: str, root: Path = ARTIFACT_ROOT) -> dict[
             "blended": bool(alias_payload.get("blended", False)),
             "gating_status": alias_payload.get("gating_status", "unknown"),
             "metadata": alias_payload,
+        }
+
+    if model_name == PURE_ALIAS:
+        version_dir = latest_version_dir(root)
+        if version_dir is None:
+            raise FileNotFoundError(f"No artifacts found under {root}")
+        fallback = _select_best_baseline(version_dir)
+        if fallback is None:
+            raise FileNotFoundError(
+                f"Model alias '{model_name}' was not promoted and no baseline fallback was found in {version_dir}"
+            )
+        return {
+            "requested_model": model_name,
+            "version": version_dir.name,
+            "version_dir": version_dir,
+            "model_family": fallback["model_family"],
+            "evaluation_model": fallback["model_family"],
+            "blended": False,
+            "gating_status": fallback["gating_status"],
+            "metadata": fallback,
+            "kind": fallback["kind"],
         }
 
     version_dir = latest_version_dir(root)

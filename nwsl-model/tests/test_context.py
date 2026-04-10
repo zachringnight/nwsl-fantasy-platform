@@ -4,7 +4,11 @@ from datetime import date
 
 import pandas as pd
 
-from src.features.context import ContextualFeatureProvider, build_contextual_training_frame
+from src.features.context import (
+    ContextualFeatureProvider,
+    build_contextual_training_frame,
+    select_model_contextual_columns,
+)
 
 
 def test_contextual_training_frame_uses_team_and_player_priors() -> None:
@@ -249,3 +253,33 @@ def test_contextual_training_frame_uses_previous_available_team_priors() -> None
     assert second_row["home_team_xg_per_match"] == 1.35
     assert second_row["away_team_points_per_match"] == 2.0
     assert second_row["home_team_xg_per_match_missing"] == 0.0
+
+
+def test_select_model_contextual_columns_trims_fit_surface() -> None:
+    contextual_cols = [
+        "home_roll_5_npxg_for",
+        "home_roll_5_npxg_for_missing",
+        "home_team_shots_per_match",
+        "home_team_shots_per_match_missing",
+        "home_team_xg_per_match",
+        "home_team_xg_per_match_missing",
+        "home_lineup_strength",
+        "home_lineup_strength_missing",
+        "away_roll_5_npxg_for",
+        "away_roll_5_npxg_for_missing",
+        "away_team_points_per_match",
+        "away_team_points_per_match_missing",
+        "away_lineup_strength",
+        "rest_diff",
+        "away_team_gplus_passing_net_per90",
+    ]
+
+    selected = select_model_contextual_columns(contextual_cols)
+
+    assert "home_roll_5_npxg_for" in selected
+    assert "home_team_xg_per_match" in selected
+    assert "home_lineup_strength_missing" in selected
+    assert "away_team_points_per_match_missing" in selected
+    assert "rest_diff" in selected
+    assert "home_team_shots_per_match" not in selected
+    assert "away_team_gplus_passing_net_per90" not in selected

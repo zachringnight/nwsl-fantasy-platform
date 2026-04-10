@@ -87,6 +87,8 @@ See `.env.example` for the full list. The key variables are:
 | `SUPABASE_SECRET_KEY` | Supabase secret key for server-side access |
 | `DATABASE_URL` | PostgreSQL connection string |
 | `AUTH_SECRET` | Auth.js session secret |
+| `PREDICTION_API_URL` | Base URL for the Python prediction service |
+| `PREDICTION_API_SECRET` | Shared bearer token for prediction jobs and retraining |
 
 The app reads Supabase config from environment variables. `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are still accepted as compatibility fallbacks for older local setups.
 

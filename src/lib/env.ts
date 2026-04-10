@@ -32,6 +32,13 @@ const envSchemaRefined = envSchema.refine(
     message:
       "Either NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY must be set",
   }
+).refine(
+  (env) => !env.PREDICTION_API_URL || !!env.PREDICTION_API_SECRET,
+  {
+    path: ["PREDICTION_API_SECRET"],
+    message:
+      "PREDICTION_API_SECRET must be set when PREDICTION_API_URL is configured",
+  }
 );
 
 export type Env = z.infer<typeof envSchema>;

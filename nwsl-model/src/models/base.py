@@ -30,6 +30,7 @@ class FitResult:
     log_likelihood: float
     parameters: dict[str, Any] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
+    diagnostics: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass

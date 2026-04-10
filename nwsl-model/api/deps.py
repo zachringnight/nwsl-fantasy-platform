@@ -7,12 +7,12 @@ import os
 import pickle
 from dataclasses import dataclass
 from functools import lru_cache
-from pathlib import Path
 from typing import Any
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
+from src.models.baseline import ProjectionBaselineModel
 from src.utils.artifacts import ARTIFACT_ROOT, available_model_names, resolve_model_artifact
 from src.utils.io import load_json
 
@@ -71,21 +71,33 @@ def load_model_bundle(model_name: str) -> ModelBundle:
             detail=str(exc),
         ) from exc
 
-    model_path = artifact["version_dir"] / f"{artifact['model_family']}_model.pkl"
-    if not model_path.exists():
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Model file not found: {model_path}. Run train.py first.",
-        )
-
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
-
     context_provider = None
     context_provider_path = artifact["version_dir"] / "context_provider.pkl"
     if context_provider_path.exists():
         with open(context_provider_path, "rb") as f:
             context_provider = pickle.load(f)
+
+    ratings_model = None
+    ratings_path = artifact["version_dir"] / "team_ratings.pkl"
+    if ratings_path.exists():
+        with open(ratings_path, "rb") as f:
+            ratings_model = pickle.load(f)
+
+    if artifact.get("kind") == "baseline_fallback":
+        model = ProjectionBaselineModel(
+            strategy=str(artifact["model_family"]),
+            ratings_model=ratings_model,
+        )
+    else:
+        model_path = artifact["version_dir"] / f"{artifact['model_family']}_model.pkl"
+        if not model_path.exists():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Model file not found: {model_path}. Run train.py first.",
+            )
+
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
 
     calibration = None
     evaluation_model = str(artifact.get("evaluation_model", artifact["model_family"]))

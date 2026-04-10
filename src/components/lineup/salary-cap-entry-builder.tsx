@@ -113,6 +113,10 @@ function formatPoints(points: number) {
   return points.toFixed(hasDecimal ? 1 : 0);
 }
 
+function getPlayerProjectionPoints(player: FantasyPoolPlayer) {
+  return player.projected_points ?? player.average_points;
+}
+
 export function SalaryCapEntryBuilder({
   leagueDetails,
   leagueId,
@@ -288,7 +292,7 @@ export function SalaryCapEntryBuilder({
   const canReopenEntry = !!lockState && !lockState.is_locked && !!isSubmitted;
   const nextOpenSlot = salaryCapLineupSlots.find((slot) => !assignments[slot]) ?? null;
   const topProjectedPlayer = [...selectedPlayers].sort(
-    (left, right) => right.average_points - left.average_points
+    (left, right) => getPlayerProjectionPoints(right) - getPlayerProjectionPoints(left)
   )[0] ?? null;
   const averageProjectionPerSlot =
     summary.selectedCount > 0 ? summary.projectedPoints / summary.selectedCount : 0;
@@ -716,7 +720,7 @@ export function SalaryCapEntryBuilder({
                   How projections work
                 </p>
                 <p className="mt-3 text-sm leading-7 text-foreground">
-                  Current lineup projection is the sum of each selected player&apos;s average fantasy points. That average is now built from real soccer events: finishing, chance creation, passing volume, ball-winning, clean-sheet equity, and goalkeeper work.
+                  Current lineup projection is the sum of each selected player&apos;s slate-specific fantasy projection. Those projections come from the same player stat kernel used across the public player board, matchup previews, and salary-cap builder.
                 </p>
               </div>
               <div className="rounded-[1.25rem] border border-line bg-white/6 p-4">
@@ -887,7 +891,7 @@ export function SalaryCapEntryBuilder({
                 </p>
                 <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                   {topProjectedPlayer
-                    ? `${formatPoints(topProjectedPlayer.average_points)} pts baseline`
+                    ? `${formatPoints(getPlayerProjectionPoints(topProjectedPlayer))} pts projected`
                     : `${formatPoints(averageProjectionPerSlot)} avg per filled slot`}
                 </p>
               </div>
@@ -956,7 +960,7 @@ export function SalaryCapEntryBuilder({
                             {selectedPlayer ? (
                               <div className="text-right text-sm text-white/75">
                                 <p>${selectedPlayer.salary_cost}</p>
-                                <p>{formatPoints(selectedPlayer.average_points)} pts</p>
+                                <p>{formatPoints(getPlayerProjectionPoints(selectedPlayer))} pts</p>
                               </div>
                             ) : null}
                           </div>
@@ -973,7 +977,7 @@ export function SalaryCapEntryBuilder({
                             {eligiblePlayers.map((player) => (
                               <option key={player.id} value={player.id}>
                                 {player.display_name} • {player.club_name} • ${player.salary_cost} •{" "}
-                                {formatPoints(player.average_points)} pts
+                                {formatPoints(getPlayerProjectionPoints(player))} pts
                               </option>
                             ))}
                           </select>
@@ -1061,7 +1065,7 @@ export function SalaryCapEntryBuilder({
                   </div>
                   <div className="text-right text-sm text-muted">
                     <p>${focusedPlayer.salary_cost}</p>
-                    <p>{formatPoints(focusedPlayer.average_points)} pts</p>
+                    <p>{formatPoints(getPlayerProjectionPoints(focusedPlayer))} pts</p>
                   </div>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -1107,7 +1111,7 @@ export function SalaryCapEntryBuilder({
                       </div>
                       <div className="text-right text-sm text-muted">
                         <p>${player.salary_cost}</p>
-                        <p>{formatPoints(player.average_points)} pts</p>
+                        <p>{formatPoints(getPlayerProjectionPoints(player))} pts</p>
                       </div>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">

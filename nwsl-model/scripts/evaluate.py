@@ -183,6 +183,58 @@ def _summarize_posthoc_calibration(
     return summary
 
 
+def _summarize_calibrated_predictions(
+    preds: pd.DataFrame,
+    calibrated_preds: pd.DataFrame,
+) -> dict[str, Any]:
+    required = {"prob_home_calibrated", "prob_draw_calibrated", "prob_away_calibrated"}
+    if calibrated_preds.empty or not required.issubset(calibrated_preds.columns):
+        return {"available": False}
+
+    outcomes = np.where(
+        preds["home_goals_90"] > preds["away_goals_90"], 0,
+        np.where(preds["home_goals_90"] < preds["away_goals_90"], 2, 1),
+    )
+    probs = calibrated_preds[["prob_home_calibrated", "prob_draw_calibrated", "prob_away_calibrated"]].to_numpy(dtype=float)
+    summary: dict[str, Any] = {
+        "available": True,
+        "metrics": {
+            "log_loss_1x2": float(log_loss_1x2(probs, outcomes)),
+            "brier_score_1x2": float(brier_score_multiclass(probs, outcomes)),
+            "top1_accuracy_1x2": float((np.argmax(probs, axis=1) == outcomes).mean()),
+            "forecast_entropy_1x2": float(
+                np.mean(-np.sum(np.clip(probs, 1e-15, 1.0) * np.log(np.clip(probs, 1e-15, 1.0)), axis=1))
+            ),
+        },
+        "classwise_ece": {},
+        "totals": {},
+    }
+
+    home_actual = (preds["home_goals_90"] > preds["away_goals_90"]).astype(int).to_numpy()
+    draw_actual = (preds["home_goals_90"] == preds["away_goals_90"]).astype(int).to_numpy()
+    away_actual = (preds["home_goals_90"] < preds["away_goals_90"]).astype(int).to_numpy()
+    for index, (label, actual) in enumerate((("home", home_actual), ("draw", draw_actual), ("away", away_actual))):
+        summary["classwise_ece"][label] = float(expected_calibration_error(probs[:, index], actual))
+
+    total_goals = preds["home_goals_90"] + preds["away_goals_90"]
+    for line in (1.5, 2.5, 3.5, 4.5):
+        before_col = f"prob_over_{line}_calibrated"
+        if before_col not in calibrated_preds.columns:
+            continue
+        mask = calibrated_preds[before_col].notna()
+        if not mask.any():
+            continue
+        actual = (total_goals.loc[mask] > line).astype(int).to_numpy()
+        values = calibrated_preds.loc[mask, before_col].to_numpy(dtype=float)
+        summary["totals"][str(line)] = {
+            "ece": float(expected_calibration_error(values, actual)),
+            "brier": float(np.mean((values - actual) ** 2)),
+            "n": int(mask.sum()),
+        }
+
+    return summary
+
+
 def _build_betting_report(
     preds: pd.DataFrame,
     bet_log: pd.DataFrame,
@@ -413,13 +465,47 @@ def main() -> None:
 
         ece = expected_calibration_error(predicted, actual)
         eval_results.setdefault(model_name, {})
+        raw_classwise_ece = dict(eval_results[model_name].get("classwise_ece", {}))
+        raw_totals = dict(eval_results[model_name].get("totals", {}))
+        posthoc = _summarize_posthoc_calibration(preds, calibrated_preds)
+        calibrated_summary = _summarize_calibrated_predictions(preds, calibrated_preds)
         eval_results[model_name]["ece_home_win"] = float(ece)
         eval_results[model_name]["launch_totals"] = _summarize_launch_totals(preds)
-        eval_results[model_name]["posthoc_calibration"] = _summarize_posthoc_calibration(preds, calibrated_preds)
+        eval_results[model_name]["posthoc_calibration"] = posthoc
         eval_results[model_name]["benchmark_comparison"] = _build_benchmark_comparison(model_name, metrics_df)
         eval_results[model_name]["ablation_comparison"] = _build_ablation_comparison(model_name, metrics_df)
         slice_reports[model_name] = _build_slice_report(preds)
         eval_results[model_name]["slice_metrics"] = slice_reports[model_name]
+        fit_diagnostics: dict[str, Any] = {}
+        if "fit_converged" in preds.columns:
+            fit_converged = pd.to_numeric(preds["fit_converged"], errors="coerce").dropna()
+            if not fit_converged.empty:
+                fit_diagnostics["converged_rate"] = float(fit_converged.mean())
+            for source_col, target_col in [
+                ("fit_iterations", "median_iterations"),
+                ("fit_nfev", "median_nfev"),
+                ("fit_grad_norm", "median_grad_norm"),
+                ("fit_n_params", "median_n_params"),
+            ]:
+                series = pd.to_numeric(preds[source_col], errors="coerce").dropna() if source_col in preds.columns else pd.Series(dtype=float)
+                if not series.empty:
+                    fit_diagnostics[target_col] = float(series.median())
+        if fit_diagnostics:
+            eval_results[model_name]["fit_diagnostics"] = fit_diagnostics
+        eval_results[model_name]["raw_classwise_ece"] = raw_classwise_ece
+        eval_results[model_name]["raw_totals"] = raw_totals
+        if calibrated_summary.get("available"):
+            eval_results[model_name]["calibrated_metrics"] = calibrated_summary["metrics"]
+            eval_results[model_name]["calibrated_classwise_ece"] = calibrated_summary["classwise_ece"]
+            eval_results[model_name]["calibrated_totals"] = calibrated_summary["totals"]
+            eval_results[model_name]["classwise_ece"] = calibrated_summary["classwise_ece"]
+            eval_results[model_name]["totals"] = calibrated_summary["totals"]
+        else:
+            eval_results[model_name]["calibrated_metrics"] = {}
+            eval_results[model_name]["calibrated_classwise_ece"] = raw_classwise_ece
+            eval_results[model_name]["calibrated_totals"] = raw_totals
+            eval_results[model_name]["classwise_ece"] = raw_classwise_ece
+            eval_results[model_name]["totals"] = raw_totals
 
         print(f"\n--- {model_name} ---")
         print(f"  ECE (Home Win): {ece:.4f}")
@@ -429,6 +515,20 @@ def main() -> None:
                 f" n={eval_results[model_name]['launch_totals']['n']},"
                 f" brier={eval_results[model_name]['launch_totals']['brier']:.4f},"
                 f" ece={eval_results[model_name]['launch_totals']['ece']:.4f}"
+            )
+        if calibrated_summary.get("available"):
+            calibrated_metrics = calibrated_summary["metrics"]
+            print(
+                "  Calibrated 1X2:"
+                f" log_loss={calibrated_metrics['log_loss_1x2']:.4f},"
+                f" brier={calibrated_metrics['brier_score_1x2']:.4f},"
+                f" entropy={calibrated_metrics['forecast_entropy_1x2']:.4f}"
+            )
+        if fit_diagnostics:
+            print(
+                "  Fit diagnostics:"
+                f" converged_rate={fit_diagnostics.get('converged_rate', 0.0):.2f},"
+                f" median_grad_norm={fit_diagnostics.get('median_grad_norm', float('nan')):.4g}"
             )
 
         if args.plots:

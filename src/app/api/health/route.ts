@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
+import { getPredictionApiUrl } from "@/lib/prediction-api";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
-  const checks: Record<string, { status: string; message?: string }> = {};
+  const checks: Record<
+    string,
+    { status: "healthy" | "unhealthy" | "degraded"; message?: string }
+  > = {};
 
   // Check database connectivity
   try {
@@ -16,10 +22,10 @@ export async function GET() {
   }
 
   // Check model API health
-  const predictionApiUrl = process.env.PREDICTION_API_URL;
+  const predictionApiUrl = getPredictionApiUrl("/health");
   if (predictionApiUrl) {
     try {
-      const response = await fetch(`${predictionApiUrl}/health`, {
+      const response = await fetch(predictionApiUrl, {
         signal: AbortSignal.timeout(5000),
       });
       checks.modelApi = response.ok
@@ -32,14 +38,18 @@ export async function GET() {
       };
     }
   } else {
-    checks.modelApi = { status: "unconfigured", message: "PREDICTION_API_URL not set" };
+    checks.modelApi = {
+      status: "degraded",
+      message: "PREDICTION_API_URL not set",
+    };
   }
 
-  const overall = Object.values(checks).every(
-    (c) => c.status === "healthy" || c.status === "unconfigured"
-  )
-    ? "healthy"
-    : "unhealthy";
+  const statuses = Object.values(checks).map((check) => check.status);
+  const overall = statuses.includes("unhealthy")
+    ? "unhealthy"
+    : statuses.includes("degraded")
+      ? "degraded"
+      : "healthy";
 
   const statusCode = overall === "healthy" ? 200 : 503;
 
