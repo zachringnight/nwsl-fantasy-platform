@@ -1,0 +1,280 @@
+{
+  "generated_at": "2026-04-07T22:11:26.842933+00:00",
+  "history_start_season": 2025,
+  "refresh_mode": "cache_first",
+  "feature_policy": {
+    "training_window": "2025+ only",
+    "travel_features": "disabled",
+    "weather_features": "disabled",
+    "surface_features": "disabled"
+  },
+  "source_batches": [
+    {
+      "name": "official_match_archive",
+      "source": "data/nwsl-official",
+      "status": "materialized",
+      "rows": 1558,
+      "season_coverage": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "source_confidence": 1.0,
+      "provenance": {
+        "kind": "repo_archive",
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2015_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2016_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2017_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2018_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2019_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2021_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2022_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2023_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2024_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2025_official_matches.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2026_official_matches.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "static_archive",
+        "latest_input_mtime": "2026-04-07T00:57:10.564101+00:00"
+      },
+      "output_files": [
+        "matches.csv"
+      ]
+    },
+    {
+      "name": "official_player_match_logs",
+      "source": "data/nwsl-official",
+      "status": "materialized",
+      "rows": 1455,
+      "season_coverage": [
+        2026
+      ],
+      "source_confidence": 0.9,
+      "provenance": {
+        "kind": "repo_archive",
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2026_official_player_match_logs.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "static_archive",
+        "latest_input_mtime": "2026-04-07T00:59:51.558118+00:00"
+      },
+      "output_files": [
+        "appearances.csv"
+      ]
+    },
+    {
+      "name": "projected_lineup_materialization",
+      "source": "data/nwsl-official",
+      "status": "materialized",
+      "rows": 10986,
+      "season_coverage": [
+        2026
+      ],
+      "source_confidence": 0.85,
+      "provenance": {
+        "kind": "repo_archive",
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2026_official_player_match_logs.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2026_official_player_profiles.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "static_archive",
+        "latest_input_mtime": "2026-04-07T00:59:51.558118+00:00"
+      },
+      "output_files": [
+        "projected_lineups.csv"
+      ]
+    },
+    {
+      "name": "player_season_priors_materialization",
+      "source": "data/nwsl-official+asa",
+      "status": "materialized",
+      "rows": 856,
+      "season_coverage": [
+        2025,
+        2026
+      ],
+      "source_confidence": 0.9,
+      "provenance": {
+        "kind": "repo_archive_plus_asa",
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2015_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2016_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2017_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2018_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2019_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2021_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2022_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2023_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2024_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2025_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2026_official_player_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/asa_player_analytics.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "cache_first",
+        "latest_input_mtime": "2026-04-07T22:08:38.897263+00:00",
+        "generated_at": "2026-04-07T22:11:26.842933+00:00"
+      },
+      "output_files": [
+        "player_season_priors.csv"
+      ]
+    },
+    {
+      "name": "team_season_priors_materialization",
+      "source": "data/nwsl-official+asa",
+      "status": "materialized",
+      "rows": 30,
+      "season_coverage": [
+        2025,
+        2026
+      ],
+      "source_confidence": 0.9,
+      "provenance": {
+        "kind": "repo_archive_plus_asa",
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2015_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2016_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2017_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2018_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2019_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2021_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2022_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2023_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2024_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2025_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/data/nwsl-official/nwsl_2026_official_team_stats.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/asa_team_analytics.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "cache_first",
+        "latest_input_mtime": "2026-04-07T22:08:38.894243+00:00",
+        "generated_at": "2026-04-07T22:11:26.842933+00:00"
+      },
+      "output_files": [
+        "team_season_priors.csv"
+      ]
+    },
+    {
+      "name": "asa_advanced_analytics",
+      "source": "american-soccer-analysis",
+      "status": "cached",
+      "rows": 902,
+      "season_coverage": [
+        2025,
+        2026
+      ],
+      "source_confidence": 0.95,
+      "provenance": {
+        "kind": "external_provider",
+        "cache_first": true,
+        "fetch_enabled": false,
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/asa_match_xgoals.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/asa_team_analytics.csv",
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/asa_player_analytics.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "cached",
+        "latest_input_mtime": "2026-04-07T22:08:38.897263+00:00",
+        "generated_at": "2026-04-07T22:11:26.842933+00:00"
+      },
+      "output_files": [
+        "asa_match_xgoals.csv",
+        "asa_team_analytics.csv",
+        "asa_player_analytics.csv"
+      ]
+    },
+    {
+      "name": "odds_contract",
+      "source": "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/odds.csv",
+      "status": "empty",
+      "rows": 0,
+      "season_coverage": [
+        2025,
+        2026
+      ],
+      "source_confidence": 0.0,
+      "provenance": {
+        "kind": "canonical_contract",
+        "inputs": [
+          "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/odds.csv"
+        ]
+      },
+      "freshness": {
+        "mode": "normalized",
+        "latest_input_mtime": "2026-04-07T22:08:38.897529+00:00",
+        "generated_at": "2026-04-07T22:11:26.842933+00:00"
+      },
+      "output_files": [
+        "odds.csv"
+      ]
+    }
+  ],
+  "source_hooks": {
+    "fbref_secondary": {
+      "status": "hook_only",
+      "enabled": false,
+      "source_confidence": 0.55,
+      "note": "Reserved for secondary completeness checks; not required for a passing build."
+    },
+    "espn_fallback": {
+      "status": "hook_only",
+      "enabled": false,
+      "source_confidence": 0.25,
+      "note": "Reserved as a live-status fallback; not required for a passing build."
+    }
+  },
+  "summary": {
+    "rows": {
+      "matches": 226,
+      "appearances": 1455,
+      "projected_lineups": 10986,
+      "team_season_priors": 30,
+      "player_season_priors": 856,
+      "odds": 0
+    },
+    "season_coverage": {
+      "matches": [
+        2025,
+        2026
+      ],
+      "appearances": [
+        2026
+      ],
+      "projected_lineups": [
+        2026
+      ],
+      "team_season_priors": [
+        2025,
+        2026
+      ],
+      "player_season_priors": [
+        2025,
+        2026
+      ]
+    },
+    "source_confidence": {
+      "official": 1.0,
+      "asa": 0.95,
+      "odds": 0.0
+    }
+  }
+}

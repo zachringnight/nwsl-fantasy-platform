@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-04-07T22:11:27.584144+00:00",
+  "source_available": false,
+  "total_rows": 0,
+  "sportsbooks": [],
+  "markets": [],
+  "coverage_by_season": {},
+  "close_coverage_pct": {
+    "1x2": 0.0,
+    "total": 0.0
+  },
+  "current_price_health": {
+    "rows": 0,
+    "fresh_rows": 0,
+    "stale_rows": 0,
+    "stale_pct": 0.0
+  },
+  "excluded_backtest_matches": {
+    "count": 226,
+    "sample_match_ids": [
+      "nwsl::Football_Match::0922c0db04954feaa9928edaed7b8c98",
+      "nwsl::Football_Match::15fab6c3d4934435b04ea0ad02308c55",
+      "nwsl::Football_Match::69a7d4ea37034ac39bb187f91ff8e840",
+      "nwsl::Football_Match::b25348cccb264c0e8e2627551c31cff0",
+      "nwsl::Football_Match::3114155112114d73a00ec74d39684a5d",
+      "nwsl::Football_Match::76062d8d7aaa44d5bc069953f259ce75",
+      "nwsl::Football_Match::f3b0318a39584b77b318574b7870b53e",
+      "nwsl::Football_Match::0bebb14ac1394bdea4bb466178321ce5",
+      "nwsl::Football_Match::c854204c4351492f8bf1e0ef45ac3530",
+      "nwsl::Football_Match::f3839461958e416abb79cb52914e9f46"
+    ]
+  }
+}

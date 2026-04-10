@@ -21,22 +21,22 @@ import pandas as pd
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from src.data.dataset_builder import build_dataset, write_dataset
 from src.data.loaders import NWSLDataset
-from src.data.transforms import (
-    add_npxg_fallback,
-    add_result_columns,
-    encode_teams,
-    melt_to_team_match,
-    merge_odds_to_matches,
-)
+from src.data.transforms import encode_teams, melt_to_team_match, merge_odds_to_matches
 from src.data.validation import run_all_validations
+from src.features.context import (
+    ContextualFeatureProvider,
+    build_contextual_training_frame,
+    select_model_contextual_columns,
+)
 from src.features.match_features import compute_rolling_form, compute_season_stats
-from src.features.schedule_features import add_short_rest_flags, compute_rest_days
 from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoissonModel
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
 from src.models.lineup_adjustment import LineupAdjustmentModel
 from src.models.team_ratings import TeamRatingsConfig, TeamRatingsModel
-from src.utils.io import load_config, save_json, save_pickle
+from src.utils.artifacts import create_version_dir, write_artifact_json
+from src.utils.io import load_config, load_json, save_json, save_pickle
 from src.utils.logging import setup_logging
 
 
@@ -46,6 +46,17 @@ def main() -> None:
     parser.add_argument("--model", type=str, default="all",
                         choices=["dixon_coles", "bivariate_poisson", "all"])
     parser.add_argument("--output-dir", type=str, default="data/processed/models")
+    parser.add_argument("--version", type=str, default="")
+    parser.add_argument(
+        "--build-dataset",
+        action="store_true",
+        help="Regenerate data/raw inputs from the repo archives before training",
+    )
+    parser.add_argument(
+        "--fetch-asa",
+        action="store_true",
+        help="Fetch fresh ASA analytics when rebuilding raw datasets",
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -53,21 +64,39 @@ def main() -> None:
     setup_logging(log_cfg.get("level", "INFO"), log_cfg.get("file"))
     logger = logging.getLogger("nwsl_model.train")
 
+    data_cfg = config.get("data", {})
+    matches_path = Path(data_cfg.get("matches_path", "data/raw/matches.csv"))
+    if args.build_dataset or not matches_path.exists():
+        logger.info("Building deterministic raw datasets...")
+        dataset_outputs = build_dataset(
+            repo_root=Path(__file__).resolve().parents[2],
+            fetch_asa=args.fetch_asa,
+            history_start_season=data_cfg.get("history_start_season"),
+        )
+        write_dataset(dataset_outputs)
+
     logger.info("Loading data...")
     dataset = NWSLDataset.from_config(config)
 
     # Validate and prepare matches
     matches = run_all_validations(dataset.matches)
-    matches = add_result_columns(matches)
-    matches = add_npxg_fallback(matches)
-    matches = compute_rest_days(matches)
-    matches = add_short_rest_flags(matches, config.get("features", {}).get("short_rest_days", 4))
 
     if dataset.has_odds:
         matches = merge_odds_to_matches(matches, dataset.odds)
 
     # Team ratings
-    team_matches = melt_to_team_match(matches)
+    base_prepared_matches, contextual_cols = build_contextual_training_frame(
+        matches,
+        appearances=dataset.appearances,
+        projected_lineups=None,
+        team_season_priors=dataset.team_season_priors,
+        player_season_priors=dataset.player_season_priors,
+        lineup_model=None,
+        rolling_windows=config.get("features", {}).get("rolling_windows", [3, 5, 10]),
+        short_rest_days=config.get("features", {}).get("short_rest_days", 4),
+    )
+
+    team_matches = melt_to_team_match(base_prepared_matches)
     team_matches = compute_rolling_form(
         team_matches, config.get("features", {}).get("rolling_windows", [3, 5, 10])
     )
@@ -90,20 +119,31 @@ def main() -> None:
             min_minutes=la_cfg.get("min_minutes", 200),
             split_attack_defense=la_cfg.get("split_attack_defense", True),
         )
-        lineup_model.fit(dataset.appearances, matches)
+        lineup_model.fit(dataset.appearances, base_prepared_matches)
+
+    prepared_matches, contextual_cols = build_contextual_training_frame(
+        matches,
+        appearances=dataset.appearances,
+        projected_lineups=dataset.projected_lineups,
+        team_season_priors=dataset.team_season_priors,
+        player_season_priors=dataset.player_season_priors,
+        lineup_model=lineup_model,
+        rolling_windows=config.get("features", {}).get("rolling_windows", [3, 5, 10]),
+        short_rest_days=config.get("features", {}).get("short_rest_days", 4),
+    )
+    model_contextual_cols = select_model_contextual_columns(contextual_cols)
 
     # Compute recency weights
-    reference_date = matches["match_date"].max()
+    reference_date = prepared_matches["match_date"].max()
     days_since = np.array([
-        (reference_date - d).days for d in matches["match_date"]
+        (reference_date - d).days for d in prepared_matches["match_date"]
     ], dtype=np.float64)
     weights = np.exp(-days_since * math.log(2) / ratings_cfg.get("half_life_days", 90))
 
     # Encode teams
-    matches_encoded, team_map = encode_teams(matches)
+    _, team_map = encode_teams(prepared_matches)
 
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = create_version_dir(args.version or None, Path(args.output_dir))
 
     models_to_train = (
         ["dixon_coles", "bivariate_poisson"] if args.model == "all"
@@ -112,7 +152,38 @@ def main() -> None:
 
     model_cfg = config.get("model", {})
     max_goals = model_cfg.get("max_goals", 8)
-    training_summary = {"models": {}, "n_matches": len(matches), "n_teams": len(team_map)}
+    dataset_manifest = {}
+    odds_quality_report = {}
+    raw_data_dir = Path(data_cfg.get("output_dir", "data/processed")).parent / "raw"
+    manifest_path = raw_data_dir / "dataset_manifest.json"
+    odds_quality_path = raw_data_dir / "odds_quality_report.json"
+    if manifest_path.exists():
+        dataset_manifest = load_json(manifest_path)
+    if odds_quality_path.exists():
+        odds_quality_report = load_json(odds_quality_path)
+    training_summary = {
+        "version": output_dir.name,
+        "models": {},
+        "n_matches": len(prepared_matches),
+        "n_teams": len(team_map),
+        "history_start_season": data_cfg.get("history_start_season"),
+        "contextual_columns": contextual_cols,
+        "model_contextual_columns": model_contextual_cols,
+        "feature_policy": {
+            "team_season_priors": "previous_available_season",
+            "player_season_priors": "last_season_only_projection_fallback",
+            "lineup_features": "observed_appearances_and_projected_lineups_only",
+            "score_model_contextual_profile": "pure_projection_v1",
+        },
+        "feature_inclusion_decisions": {
+            "travel_features": "disabled",
+            "weather_features": "disabled",
+            "surface_features": "disabled",
+            "training_window": f"{data_cfg.get('history_start_season')}+" if data_cfg.get("history_start_season") is not None else "all_available",
+        },
+        "dataset_manifest": dataset_manifest,
+        "odds_quality": odds_quality_report,
+    }
 
     for model_name in models_to_train:
         logger.info(f"Training {model_name}...")
@@ -141,7 +212,11 @@ def main() -> None:
             logger.error(f"Unknown model: {model_name}")
             continue
 
-        fit_result = model.fit(matches, weights=weights)
+        fit_result = model.fit(
+            prepared_matches,
+            weights=weights,
+            contextual_cols=model_contextual_cols,
+        )
 
         # Save model
         save_pickle(model, output_dir / f"{model_name}_model.pkl")
@@ -152,8 +227,13 @@ def main() -> None:
             "log_likelihood": fit_result.log_likelihood,
             "n_teams": fit_result.n_teams,
             "parameters": fit_result.parameters,
+            "warnings": fit_result.warnings,
+            "diagnostics": fit_result.diagnostics,
         }
-        logger.info(f"{model_name} training complete: converged={fit_result.converged}")
+        logger.info(
+            f"{model_name} training complete: converged={fit_result.converged}, "
+            f"grad_norm={fit_result.diagnostics.get('grad_norm', 'n/a')}"
+        )
 
     # Save team ratings
     save_pickle(ratings_model, output_dir / "team_ratings.pkl")
@@ -164,9 +244,26 @@ def main() -> None:
         save_pickle(lineup_model, output_dir / "lineup_model.pkl")
         lineup_model.to_dataframe().to_csv(output_dir / "player_ratings.csv", index=False)
 
+    context_provider = (
+        ContextualFeatureProvider.from_training_frame(
+            prepared_matches,
+            short_rest_days=config.get("features", {}).get("short_rest_days", 4),
+        )
+        .attach_projected_lineups(
+            dataset.projected_lineups,
+            lineup_model=lineup_model,
+            player_season_priors=dataset.player_season_priors,
+        )
+    )
+    save_pickle(context_provider, output_dir / "context_provider.pkl")
+
     # Save training summary
     save_json(training_summary, output_dir / "training_summary.json")
-    save_json(config, output_dir / "config_snapshot.json")
+    write_artifact_json(output_dir, "config_snapshot.json", config)
+    if dataset_manifest:
+        write_artifact_json(output_dir, "dataset_manifest.json", dataset_manifest)
+    if odds_quality_report:
+        write_artifact_json(output_dir, "odds_quality_report.json", odds_quality_report)
 
     logger.info(f"Training complete. Artifacts saved to {output_dir}")
 
