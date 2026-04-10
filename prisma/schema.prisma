@@ -341,6 +341,10 @@ model Player {
   providerMaps        ProviderPlayerMap[]
   scoringOverrides    ScoringOverride[]
   tradeAssets         TradeAsset[]
+  projections         PlayerProjection[]
+
+  @@index([currentClubId])
+  @@index([status])
 }
 
 model League {
@@ -625,6 +629,12 @@ model Fixture {
   pointSnapshots FantasyPointSnapshot[]
   providerMaps   ProviderFixtureMap[]
   scoringOverrides ScoringOverride[]
+  predictions      ModelPrediction[]
+  playerProjections PlayerProjection[]
+
+  @@index([homeClubId])
+  @@index([awayClubId])
+  @@index([startsAt])
 }
 
 model FixtureEvent {
@@ -697,6 +707,7 @@ model FantasyPointSnapshot {
   overrides   ScoringOverride[]
 
   @@unique([leagueId, leagueWeekId, fixtureId, playerId])
+  @@index([statLineId])
 }
 
 model Matchup {
@@ -925,8 +936,8 @@ model Notification {
   readAt       DateTime?
   createdAt    DateTime            @default(now())
   user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  league       League?             @relation(fields: [leagueId], references: [id], onDelete: SetNull)
-  fantasyTeam  FantasyTeam?        @relation(fields: [fantasyTeamId], references: [id], onDelete: SetNull)
+  league       League?             @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  fantasyTeam  FantasyTeam?        @relation(fields: [fantasyTeamId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
 }
@@ -945,7 +956,7 @@ model ScoringOverride {
   league          League                @relation(fields: [leagueId], references: [id], onDelete: Cascade)
   fixture         Fixture               @relation(fields: [fixtureId], references: [id], onDelete: Cascade)
   player          Player                @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  snapshot        FantasyPointSnapshot? @relation(fields: [snapshotId], references: [id], onDelete: SetNull)
+  snapshot        FantasyPointSnapshot? @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
   createdBy       User                  @relation("override_actor", fields: [createdByUserId], references: [id])
 }
 
@@ -980,7 +991,7 @@ model Achievement {
   earnedAt    DateTime       @default(now())
   metadata    Json?
   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  league      League?        @relation(fields: [leagueId], references: [id], onDelete: SetNull)
+  league      League?        @relation(fields: [leagueId], references: [id], onDelete: Cascade)
 
   @@unique([userId, leagueId, key])
   @@index([userId, earnedAt])
@@ -1077,4 +1088,73 @@ model TradeVote {
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([tradeProposalId, fantasyTeamId])
+}
+
+// ───────────────────────────────────────────────────────────
+// Model Integration: Predictions & Projections
+// ───────────────────────────────────────────────────────────
+
+model ModelPrediction {
+  id           String      @id @default(cuid())
+  fixtureId    String
+  modelName    String
+  homeWinProb  Float
+  drawProb     Float
+  awayWinProb  Float
+  lambdaHome   Float
+  lambdaAway   Float
+  scoreMatrix  Json
+  metadata     Json?
+  generatedAt  DateTime    @default(now())
+  fixture      Fixture     @relation(fields: [fixtureId], references: [id], onDelete: Cascade)
+  fairOdds     FairOdds?
+  edges        BettingEdge[]
+
+  @@unique([fixtureId, modelName])
+  @@index([fixtureId])
+  @@index([generatedAt])
+}
+
+model FairOdds {
+  id           String          @id @default(cuid())
+  predictionId String          @unique
+  homeOdds     Float
+  drawOdds     Float
+  awayOdds     Float
+  bttsYesOdds  Float?
+  bttsNoOdds   Float?
+  over25Odds   Float?
+  under25Odds  Float?
+  prediction   ModelPrediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+}
+
+model BettingEdge {
+  id               String          @id @default(cuid())
+  predictionId     String
+  market           String
+  fairOdds         Float
+  marketOdds       Float?
+  edge             Float?
+  recommendedStake Float?
+  prediction       ModelPrediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+
+  @@index([predictionId])
+}
+
+model PlayerProjection {
+  id              String   @id @default(cuid())
+  playerId        String
+  fixtureId       String
+  projectedPoints Float
+  confidence      Float
+  floorPoints     Float
+  ceilingPoints   Float
+  valueRating     String
+  generatedAt     DateTime @default(now())
+  player          Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  fixture         Fixture  @relation(fields: [fixtureId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, fixtureId])
+  @@index([playerId])
+  @@index([fixtureId])
 }

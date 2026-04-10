@@ -428,7 +428,11 @@ export const ModelName = {
   ChatMessage: 'ChatMessage',
   TradeProposal: 'TradeProposal',
   TradeAsset: 'TradeAsset',
-  TradeVote: 'TradeVote'
+  TradeVote: 'TradeVote',
+  ModelPrediction: 'ModelPrediction',
+  FairOdds: 'FairOdds',
+  BettingEdge: 'BettingEdge',
+  PlayerProjection: 'PlayerProjection'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -444,7 +448,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "club" | "player" | "league" | "leagueSettings" | "leagueScoringRule" | "leagueInvite" | "leagueMembership" | "fantasyTeam" | "leagueWeek" | "draft" | "draftSlot" | "draftPick" | "draftQueueItem" | "rosterSpot" | "lineupEntry" | "fixture" | "fixtureEvent" | "playerMatchStatLine" | "fantasyPointSnapshot" | "matchup" | "standingEntry" | "transaction" | "waiverClaim" | "availabilityReport" | "availabilityReportItem" | "provider" | "providerIngestRun" | "providerPayload" | "providerPlayerMap" | "providerClubMap" | "providerFixtureMap" | "notificationPreference" | "notification" | "scoringOverride" | "auditLog" | "achievement" | "streak" | "chatMessage" | "tradeProposal" | "tradeAsset" | "tradeVote"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "club" | "player" | "league" | "leagueSettings" | "leagueScoringRule" | "leagueInvite" | "leagueMembership" | "fantasyTeam" | "leagueWeek" | "draft" | "draftSlot" | "draftPick" | "draftQueueItem" | "rosterSpot" | "lineupEntry" | "fixture" | "fixtureEvent" | "playerMatchStatLine" | "fantasyPointSnapshot" | "matchup" | "standingEntry" | "transaction" | "waiverClaim" | "availabilityReport" | "availabilityReportItem" | "provider" | "providerIngestRun" | "providerPayload" | "providerPlayerMap" | "providerClubMap" | "providerFixtureMap" | "notificationPreference" | "notification" | "scoringOverride" | "auditLog" | "achievement" | "streak" | "chatMessage" | "tradeProposal" | "tradeAsset" | "tradeVote" | "modelPrediction" | "fairOdds" | "bettingEdge" | "playerProjection"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3778,6 +3782,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ModelPrediction: {
+      payload: Prisma.$ModelPredictionPayload<ExtArgs>
+      fields: Prisma.ModelPredictionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ModelPredictionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ModelPredictionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>
+        }
+        findFirst: {
+          args: Prisma.ModelPredictionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ModelPredictionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>
+        }
+        findMany: {
+          args: Prisma.ModelPredictionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>[]
+        }
+        create: {
+          args: Prisma.ModelPredictionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>
+        }
+        createMany: {
+          args: Prisma.ModelPredictionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ModelPredictionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>[]
+        }
+        delete: {
+          args: Prisma.ModelPredictionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>
+        }
+        update: {
+          args: Prisma.ModelPredictionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ModelPredictionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ModelPredictionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ModelPredictionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ModelPredictionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ModelPredictionPayload>
+        }
+        aggregate: {
+          args: Prisma.ModelPredictionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateModelPrediction>
+        }
+        groupBy: {
+          args: Prisma.ModelPredictionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ModelPredictionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ModelPredictionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ModelPredictionCountAggregateOutputType> | number
+        }
+      }
+    }
+    FairOdds: {
+      payload: Prisma.$FairOddsPayload<ExtArgs>
+      fields: Prisma.FairOddsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FairOddsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FairOddsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>
+        }
+        findFirst: {
+          args: Prisma.FairOddsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FairOddsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>
+        }
+        findMany: {
+          args: Prisma.FairOddsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>[]
+        }
+        create: {
+          args: Prisma.FairOddsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>
+        }
+        createMany: {
+          args: Prisma.FairOddsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FairOddsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>[]
+        }
+        delete: {
+          args: Prisma.FairOddsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>
+        }
+        update: {
+          args: Prisma.FairOddsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>
+        }
+        deleteMany: {
+          args: Prisma.FairOddsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FairOddsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FairOddsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>[]
+        }
+        upsert: {
+          args: Prisma.FairOddsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FairOddsPayload>
+        }
+        aggregate: {
+          args: Prisma.FairOddsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFairOdds>
+        }
+        groupBy: {
+          args: Prisma.FairOddsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FairOddsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FairOddsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FairOddsCountAggregateOutputType> | number
+        }
+      }
+    }
+    BettingEdge: {
+      payload: Prisma.$BettingEdgePayload<ExtArgs>
+      fields: Prisma.BettingEdgeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BettingEdgeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BettingEdgeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>
+        }
+        findFirst: {
+          args: Prisma.BettingEdgeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BettingEdgeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>
+        }
+        findMany: {
+          args: Prisma.BettingEdgeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>[]
+        }
+        create: {
+          args: Prisma.BettingEdgeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>
+        }
+        createMany: {
+          args: Prisma.BettingEdgeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BettingEdgeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>[]
+        }
+        delete: {
+          args: Prisma.BettingEdgeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>
+        }
+        update: {
+          args: Prisma.BettingEdgeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>
+        }
+        deleteMany: {
+          args: Prisma.BettingEdgeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BettingEdgeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BettingEdgeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>[]
+        }
+        upsert: {
+          args: Prisma.BettingEdgeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BettingEdgePayload>
+        }
+        aggregate: {
+          args: Prisma.BettingEdgeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBettingEdge>
+        }
+        groupBy: {
+          args: Prisma.BettingEdgeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BettingEdgeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BettingEdgeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BettingEdgeCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlayerProjection: {
+      payload: Prisma.$PlayerProjectionPayload<ExtArgs>
+      fields: Prisma.PlayerProjectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlayerProjectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlayerProjectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>
+        }
+        findFirst: {
+          args: Prisma.PlayerProjectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlayerProjectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>
+        }
+        findMany: {
+          args: Prisma.PlayerProjectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>[]
+        }
+        create: {
+          args: Prisma.PlayerProjectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>
+        }
+        createMany: {
+          args: Prisma.PlayerProjectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlayerProjectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>[]
+        }
+        delete: {
+          args: Prisma.PlayerProjectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>
+        }
+        update: {
+          args: Prisma.PlayerProjectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlayerProjectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlayerProjectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlayerProjectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlayerProjectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlayerProjectionPayload>
+        }
+        aggregate: {
+          args: Prisma.PlayerProjectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlayerProjection>
+        }
+        groupBy: {
+          args: Prisma.PlayerProjectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerProjectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlayerProjectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlayerProjectionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -4501,6 +4801,66 @@ export const TradeVoteScalarFieldEnum = {
 export type TradeVoteScalarFieldEnum = (typeof TradeVoteScalarFieldEnum)[keyof typeof TradeVoteScalarFieldEnum]
 
 
+export const ModelPredictionScalarFieldEnum = {
+  id: 'id',
+  fixtureId: 'fixtureId',
+  modelName: 'modelName',
+  homeWinProb: 'homeWinProb',
+  drawProb: 'drawProb',
+  awayWinProb: 'awayWinProb',
+  lambdaHome: 'lambdaHome',
+  lambdaAway: 'lambdaAway',
+  scoreMatrix: 'scoreMatrix',
+  metadata: 'metadata',
+  generatedAt: 'generatedAt'
+} as const
+
+export type ModelPredictionScalarFieldEnum = (typeof ModelPredictionScalarFieldEnum)[keyof typeof ModelPredictionScalarFieldEnum]
+
+
+export const FairOddsScalarFieldEnum = {
+  id: 'id',
+  predictionId: 'predictionId',
+  homeOdds: 'homeOdds',
+  drawOdds: 'drawOdds',
+  awayOdds: 'awayOdds',
+  bttsYesOdds: 'bttsYesOdds',
+  bttsNoOdds: 'bttsNoOdds',
+  over25Odds: 'over25Odds',
+  under25Odds: 'under25Odds'
+} as const
+
+export type FairOddsScalarFieldEnum = (typeof FairOddsScalarFieldEnum)[keyof typeof FairOddsScalarFieldEnum]
+
+
+export const BettingEdgeScalarFieldEnum = {
+  id: 'id',
+  predictionId: 'predictionId',
+  market: 'market',
+  fairOdds: 'fairOdds',
+  marketOdds: 'marketOdds',
+  edge: 'edge',
+  recommendedStake: 'recommendedStake'
+} as const
+
+export type BettingEdgeScalarFieldEnum = (typeof BettingEdgeScalarFieldEnum)[keyof typeof BettingEdgeScalarFieldEnum]
+
+
+export const PlayerProjectionScalarFieldEnum = {
+  id: 'id',
+  playerId: 'playerId',
+  fixtureId: 'fixtureId',
+  projectedPoints: 'projectedPoints',
+  confidence: 'confidence',
+  floorPoints: 'floorPoints',
+  ceilingPoints: 'ceilingPoints',
+  valueRating: 'valueRating',
+  generatedAt: 'generatedAt'
+} as const
+
+export type PlayerProjectionScalarFieldEnum = (typeof PlayerProjectionScalarFieldEnum)[keyof typeof PlayerProjectionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5177,6 +5537,10 @@ export type GlobalOmitConfig = {
   tradeProposal?: Prisma.TradeProposalOmit
   tradeAsset?: Prisma.TradeAssetOmit
   tradeVote?: Prisma.TradeVoteOmit
+  modelPrediction?: Prisma.ModelPredictionOmit
+  fairOdds?: Prisma.FairOddsOmit
+  bettingEdge?: Prisma.BettingEdgeOmit
+  playerProjection?: Prisma.PlayerProjectionOmit
 }
 
 /* Types for Logging */

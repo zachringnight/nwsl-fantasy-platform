@@ -242,3 +242,23 @@ export type TradeAsset = Prisma.TradeAssetModel
  * 
  */
 export type TradeVote = Prisma.TradeVoteModel
+/**
+ * Model ModelPrediction
+ * 
+ */
+export type ModelPrediction = Prisma.ModelPredictionModel
+/**
+ * Model FairOdds
+ * 
+ */
+export type FairOdds = Prisma.FairOddsModel
+/**
+ * Model BettingEdge
+ * 
+ */
+export type BettingEdge = Prisma.BettingEdgeModel
+/**
+ * Model PlayerProjection
+ * 
+ */
+export type PlayerProjection = Prisma.PlayerProjectionModel

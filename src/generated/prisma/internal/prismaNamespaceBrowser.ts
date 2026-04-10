@@ -95,7 +95,11 @@ export const ModelName = {
   ChatMessage: 'ChatMessage',
   TradeProposal: 'TradeProposal',
   TradeAsset: 'TradeAsset',
-  TradeVote: 'TradeVote'
+  TradeVote: 'TradeVote',
+  ModelPrediction: 'ModelPrediction',
+  FairOdds: 'FairOdds',
+  BettingEdge: 'BettingEdge',
+  PlayerProjection: 'PlayerProjection'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -796,6 +800,66 @@ export const TradeVoteScalarFieldEnum = {
 } as const
 
 export type TradeVoteScalarFieldEnum = (typeof TradeVoteScalarFieldEnum)[keyof typeof TradeVoteScalarFieldEnum]
+
+
+export const ModelPredictionScalarFieldEnum = {
+  id: 'id',
+  fixtureId: 'fixtureId',
+  modelName: 'modelName',
+  homeWinProb: 'homeWinProb',
+  drawProb: 'drawProb',
+  awayWinProb: 'awayWinProb',
+  lambdaHome: 'lambdaHome',
+  lambdaAway: 'lambdaAway',
+  scoreMatrix: 'scoreMatrix',
+  metadata: 'metadata',
+  generatedAt: 'generatedAt'
+} as const
+
+export type ModelPredictionScalarFieldEnum = (typeof ModelPredictionScalarFieldEnum)[keyof typeof ModelPredictionScalarFieldEnum]
+
+
+export const FairOddsScalarFieldEnum = {
+  id: 'id',
+  predictionId: 'predictionId',
+  homeOdds: 'homeOdds',
+  drawOdds: 'drawOdds',
+  awayOdds: 'awayOdds',
+  bttsYesOdds: 'bttsYesOdds',
+  bttsNoOdds: 'bttsNoOdds',
+  over25Odds: 'over25Odds',
+  under25Odds: 'under25Odds'
+} as const
+
+export type FairOddsScalarFieldEnum = (typeof FairOddsScalarFieldEnum)[keyof typeof FairOddsScalarFieldEnum]
+
+
+export const BettingEdgeScalarFieldEnum = {
+  id: 'id',
+  predictionId: 'predictionId',
+  market: 'market',
+  fairOdds: 'fairOdds',
+  marketOdds: 'marketOdds',
+  edge: 'edge',
+  recommendedStake: 'recommendedStake'
+} as const
+
+export type BettingEdgeScalarFieldEnum = (typeof BettingEdgeScalarFieldEnum)[keyof typeof BettingEdgeScalarFieldEnum]
+
+
+export const PlayerProjectionScalarFieldEnum = {
+  id: 'id',
+  playerId: 'playerId',
+  fixtureId: 'fixtureId',
+  projectedPoints: 'projectedPoints',
+  confidence: 'confidence',
+  floorPoints: 'floorPoints',
+  ceilingPoints: 'ceilingPoints',
+  valueRating: 'valueRating',
+  generatedAt: 'generatedAt'
+} as const
+
+export type PlayerProjectionScalarFieldEnum = (typeof PlayerProjectionScalarFieldEnum)[keyof typeof PlayerProjectionScalarFieldEnum]
 
 
 export const SortOrder = {
