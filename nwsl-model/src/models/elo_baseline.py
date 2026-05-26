@@ -116,12 +116,8 @@ class RegularizedEloBaseline:
         """Return home/draw/away probabilities from Elo plus shrunken draw rate."""
         home_rating = self._rating(home_team)
         away_rating = self._rating(away_team)
-        home_non_draw_share = self._expected_home_score(home_rating, away_rating)
-        draw_prob = self.draw_probability
-        non_draw_prob = 1.0 - draw_prob
-        home_prob = non_draw_prob * home_non_draw_share
-        away_prob = non_draw_prob * (1.0 - home_non_draw_share)
-        return self._normalize_probs(home_prob, draw_prob, away_prob)
+        expected_home = self._expected_home_score(home_rating, away_rating)
+        return self._result_score_to_1x2(expected_home)
 
     def predict_score_matrix(
         self,
@@ -135,28 +131,30 @@ class RegularizedEloBaseline:
 
         if home_advantage is None:
             probs = self.predict_1x2(home_team, away_team)
-            home_non_draw_share = self._expected_home_score(
+            expected_home = self._expected_home_score(
                 self._rating(home_team),
                 self._rating(away_team),
             )
         else:
             probs = self._predict_1x2_with_home_advantage(home_team, away_team, float(home_advantage))
-            home_non_draw_share = self._expected_home_score(
+            expected_home = self._expected_home_score(
                 self._rating(home_team),
                 self._rating(away_team),
                 home_advantage_elo=float(home_advantage),
             )
 
+        home_non_draw_share = self._home_non_draw_share(probs, expected_home)
         lambda_home, lambda_away = self._low_information_lambdas(probs, home_non_draw_share)
         matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
         matrix = self._calibrate_matrix_to_1x2(matrix, probs)
+        matrix_lambda_home, matrix_lambda_away = self._matrix_lambdas(matrix)
 
         return PredictionResult(
             match_id="",
             home_team=home_team,
             away_team=away_team,
-            lambda_home=float(lambda_home),
-            lambda_away=float(lambda_away),
+            lambda_home=matrix_lambda_home,
+            lambda_away=matrix_lambda_away,
             score_matrix=matrix,
             home_win_prob=probs[0],
             draw_prob=probs[1],
@@ -166,6 +164,8 @@ class RegularizedEloBaseline:
                 "home_rating": self._rating(home_team),
                 "away_rating": self._rating(away_team),
                 "draw_probability": self.draw_probability,
+                "heuristic_lambda_home": float(lambda_home),
+                "heuristic_lambda_away": float(lambda_away),
             },
         )
 
@@ -191,18 +191,33 @@ class RegularizedEloBaseline:
         away_team: str,
         home_advantage_elo: float,
     ) -> tuple[float, float, float]:
-        home_non_draw_share = self._expected_home_score(
+        expected_home = self._expected_home_score(
             self._rating(home_team),
             self._rating(away_team),
             home_advantage_elo=home_advantage_elo,
         )
-        draw_prob = self.draw_probability
-        non_draw_prob = 1.0 - draw_prob
-        return self._normalize_probs(
-            non_draw_prob * home_non_draw_share,
-            draw_prob,
-            non_draw_prob * (1.0 - home_non_draw_share),
-        )
+        return self._result_score_to_1x2(expected_home)
+
+    def _result_score_to_1x2(self, expected_home: float) -> tuple[float, float, float]:
+        draw_prob = self._draw_probability_for_expected_score(expected_home)
+        home_prob = expected_home - 0.5 * draw_prob
+        away_prob = 1.0 - expected_home - 0.5 * draw_prob
+        return self._normalize_probs(home_prob, draw_prob, away_prob)
+
+    def _draw_probability_for_expected_score(self, expected_home: float) -> float:
+        eps = 1e-12
+        max_draw = 2.0 * min(expected_home, 1.0 - expected_home)
+        return float(np.clip(min(self.draw_probability, max_draw - 2.0 * eps), eps, 1.0 - eps))
+
+    def _home_non_draw_share(
+        self,
+        probs: tuple[float, float, float],
+        expected_home: float,
+    ) -> float:
+        non_draw_prob = 1.0 - probs[1]
+        if non_draw_prob <= 0.0:
+            return expected_home
+        return float(probs[0] / non_draw_prob)
 
     def _low_information_lambdas(
         self,
@@ -249,6 +264,12 @@ class RegularizedEloBaseline:
         if total > 0.0:
             calibrated /= total
         return calibrated
+
+    def _matrix_lambdas(self, matrix: NDArray[np.float64]) -> tuple[float, float]:
+        goals = np.arange(matrix.shape[0], dtype=np.float64)
+        lambda_home = float((goals[:, None] * matrix).sum())
+        lambda_away = float((goals[None, :] * matrix).sum())
+        return lambda_home, lambda_away
 
     def _normalize_probs(
         self,
