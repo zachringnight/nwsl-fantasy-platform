@@ -43,6 +43,7 @@ from src.features.match_features import (
 from src.models.base import BaseScoreModel, PredictionResult
 from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoissonModel
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
+from src.models.elo_baseline import RegularizedEloBaseline
 from src.models.market_blend import MarketBlender
 from src.models.team_ratings import TeamRatingsConfig, TeamRatingsModel
 
@@ -54,6 +55,7 @@ BASELINE_MODELS = {
     "home_field_baseline",
     "team_ratings_poisson",
     "rolling_npxg_poisson",
+    "regularized_elo_baseline",
 }
 ABLATION_SUFFIXES = ("no_asa", "no_lineup", "no_priors", "no_rest")
 
@@ -515,6 +517,16 @@ class BacktestRunner:
             train_draw_rate if train_draw_rate > 0 else 1 / 3,
             train_away_rate if train_away_rate > 0 else 1 / 3,
         )
+        elo_model = None
+        if base_model == "regularized_elo_baseline":
+            elo_cfg = self.config.get("elo_baseline", {})
+            elo_model = RegularizedEloBaseline(
+                k_factor=elo_cfg.get("k_factor", 20.0),
+                home_advantage_elo=elo_cfg.get("home_advantage_elo", 45.0),
+                draw_prior=elo_cfg.get("draw_prior", 0.27),
+                draw_prior_weight=elo_cfg.get("draw_prior_weight", 50.0),
+                max_goals=self.config.get("model", {}).get("max_goals", 8),
+            ).fit(train)
 
         rows: list[dict[str, Any]] = []
         for _, row in test.iterrows():
@@ -546,10 +558,26 @@ class BacktestRunner:
                 lambda_home = max((home_for + away_against) / 2.0, 0.1)
                 lambda_away = max((away_for + home_against) / 2.0, 0.1)
                 probs_override = None
+            elif base_model == "regularized_elo_baseline":
+                if elo_model is None:
+                    raise ValueError("Regularized Elo baseline was not initialized")
+                elo_pred = elo_model.predict_score_matrix(
+                    home_team=row["home_team"],
+                    away_team=row["away_team"],
+                )
+                lambda_home = elo_pred.lambda_home
+                lambda_away = elo_pred.lambda_away
+                matrix = elo_pred.score_matrix
+                probs_override = (
+                    elo_pred.home_win_prob,
+                    elo_pred.draw_prob,
+                    elo_pred.away_win_prob,
+                )
             else:
                 raise ValueError(f"Unknown baseline model: {base_model}")
 
-            matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
+            if base_model != "regularized_elo_baseline":
+                matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
             rows.append(
                 self._prediction_row_from_markets(
                     row=row,

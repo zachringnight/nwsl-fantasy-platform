@@ -50,6 +50,12 @@ bivariate_poisson:
   max_iter: 2000
   tol: 1.0e-8
 
+elo_baseline:
+  k_factor: 20.0
+  home_advantage_elo: 45.0
+  draw_prior: 0.27
+  draw_prior_weight: 50.0
+
 lineup_adjustment:
   # Ridge regularization alpha for adjusted plus-minus
   ridge_alpha: 100.0
