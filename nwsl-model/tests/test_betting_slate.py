@@ -141,3 +141,107 @@ def test_filter_near_term_slate_does_not_accept_nan_bet_flag() -> None:
 
     assert not bool(slate.loc[0, "accepted_bet"])
     assert slate.loc[0, "bet_reason"] == "no_bet"
+
+
+def test_filter_near_term_slate_requires_fresh_market_metadata() -> None:
+    predictions = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-29",
+                "gating_status": "passed",
+                "mkt_home_odds": 2.1,
+                "mkt_draw_odds": 3.0,
+                "mkt_away_odds": 3.2,
+            },
+            {
+                "match_id": "2",
+                "match_date": "2026-05-29",
+                "gating_status": "passed",
+                "mkt_home_odds": 2.1,
+                "mkt_draw_odds": 3.0,
+                "mkt_away_odds": 3.2,
+            },
+        ]
+    )
+    odds = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-26T03:00:00Z",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "home_odds": 2.1,
+                "draw_odds": 3.0,
+                "away_odds": 3.2,
+                "source_type": "current",
+            },
+            {
+                "match_id": "2",
+                "timestamp": "2026-05-26T00:00:00Z",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "home_odds": 2.1,
+                "draw_odds": 3.0,
+                "away_odds": 3.2,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    slate = filter_near_term_slate(
+        predictions,
+        as_of="2026-05-26",
+        days=14,
+        odds=odds,
+        odds_as_of="2026-05-26T04:00:00Z",
+        max_odds_age_minutes=180,
+    )
+
+    assert slate["match_id"].tolist() == ["1"]
+    assert bool(slate.loc[0, "market_is_fresh"])
+    assert slate.loc[0, "market_sportsbook"] == "FootyStats"
+    assert slate.loc[0, "market_age_minutes"] == 60.0
+
+
+def test_filter_near_term_slate_reports_stale_market_in_diagnostics() -> None:
+    predictions = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-29",
+                "gating_status": "passed",
+                "mkt_home_odds": 2.1,
+                "mkt_draw_odds": 3.0,
+                "mkt_away_odds": 3.2,
+            }
+        ]
+    )
+    odds = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-26T00:00:00Z",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "home_odds": 2.1,
+                "draw_odds": 3.0,
+                "away_odds": 3.2,
+                "source_type": "current",
+            }
+        ]
+    )
+
+    slate = filter_near_term_slate(
+        predictions,
+        as_of="2026-05-26",
+        days=14,
+        odds=odds,
+        odds_as_of="2026-05-26T04:00:00Z",
+        max_odds_age_minutes=180,
+        require_current_odds=False,
+    )
+
+    assert not bool(slate.loc[0, "has_market_odds"])
+    assert not bool(slate.loc[0, "market_is_fresh"])
+    assert slate.loc[0, "bet_reason"] == "stale_market_price"
