@@ -78,7 +78,16 @@ def _load_calibration_artifact(artifact: dict[str, object]) -> dict[str, object]
         return None
     payload = load_json(calibration_path)
     evaluation_model = str(artifact.get("evaluation_model", artifact["model_family"]))
-    return payload.get("models", {}).get(evaluation_model)
+    model_calibration = payload.get("models", {}).get(evaluation_model)
+    if not isinstance(model_calibration, dict):
+        return None
+
+    actionable = {
+        key: model_calibration[key]
+        for key in ("1x2", "totals")
+        if model_calibration.get(key)
+    }
+    return actionable or None
 
 
 def _load_model_stack(artifact: dict[str, object]) -> tuple[object, object | None, object | None]:

@@ -12,8 +12,25 @@ from scipy.stats import poisson
 TOTAL_INTENSITY_GRID: tuple[float, ...] = (0.90, 0.95, 1.00, 1.05, 1.10)
 DRAW_INFLATION_GRID: tuple[float, ...] = (0.90, 1.00, 1.10, 1.20)
 OBJECTIVE_OVER_2_5_WEIGHT = 0.25
+MATRIX_SOURCE_PROVIDED = "provided_score_matrices"
+MATRIX_SOURCE_RECONSTRUCTED = "independent_poisson_reconstruction_from_lambdas"
+FIT_SCOPE = "post_hoc_in_sample_backtest"
+LEAKAGE_WARNING = (
+    "Post-hoc in-sample score-matrix calibration candidate; not deployable without "
+    "chronological calibrated backtest gating."
+)
 _IDENTITY_PARAMS = {"total_intensity_scale": 1.0, "draw_inflation": 1.0}
 _EPSILON = 1e-15
+
+
+def _artifact_metadata(matrix_source: str = MATRIX_SOURCE_PROVIDED) -> dict[str, object]:
+    return {
+        "matrix_source": matrix_source,
+        "fit_scope": FIT_SCOPE,
+        "artifact_only": True,
+        "applied_to_live_predictions": False,
+        "leakage_warning": LEAKAGE_WARNING,
+    }
 
 
 def calibrate_score_matrix(
@@ -132,6 +149,7 @@ def fit_score_matrix_calibration(
     total_intensity_grid: Sequence[float] = TOTAL_INTENSITY_GRID,
     draw_inflation_grid: Sequence[float] = DRAW_INFLATION_GRID,
     folds: Sequence[object] | None = None,
+    matrix_source: str = MATRIX_SOURCE_PROVIDED,
 ) -> dict[str, Any]:
     """Fit a guarded score-matrix calibration candidate by grid search."""
     matrix_list = [calibrate_score_matrix(matrix) for matrix in matrices]
@@ -144,6 +162,7 @@ def fit_score_matrix_calibration(
             "reason": "no_score_matrices",
             "method": "score_matrix_grid_search",
             "selected": dict(_IDENTITY_PARAMS),
+            **_artifact_metadata(matrix_source),
         }
     if len(actual_home) != n_samples or len(actual_away) != n_samples:
         raise ValueError("Score matrices and actual score arrays must have the same length.")
@@ -160,7 +179,7 @@ def fit_score_matrix_calibration(
     )
     best_metrics = dict(metrics_before)
     best_params = dict(_IDENTITY_PARAMS)
-    candidates_evaluated = 0
+    candidate_grid_audit: list[dict[str, Any]] = []
     rejected_for_log_loss = 0
     baseline_log_loss = metrics_before["multiclass_log_loss"]
 
@@ -170,8 +189,16 @@ def fit_score_matrix_calibration(
                 "total_intensity_scale": float(total_intensity_scale),
                 "draw_inflation": float(draw_inflation),
             }
-            candidates_evaluated += 1
             if params == _IDENTITY_PARAMS:
+                candidate_grid_audit.append(
+                    {
+                        "params": params,
+                        "metrics": dict(metrics_before),
+                        "accepted": False,
+                        "selection_status": "baseline",
+                        "rejection_reason": "",
+                    }
+                )
                 continue
 
             calibrated = [
@@ -190,12 +217,37 @@ def fit_score_matrix_calibration(
             )
             if candidate_metrics["multiclass_log_loss"] > baseline_log_loss + 1e-12:
                 rejected_for_log_loss += 1
+                candidate_grid_audit.append(
+                    {
+                        "params": params,
+                        "metrics": candidate_metrics,
+                        "accepted": False,
+                        "selection_status": "rejected",
+                        "rejection_reason": "worse_multiclass_log_loss",
+                    }
+                )
                 continue
             if candidate_metrics["objective"] < best_metrics["objective"] - 1e-12:
                 best_metrics = candidate_metrics
                 best_params = params
+            candidate_grid_audit.append(
+                {
+                    "params": params,
+                    "metrics": candidate_metrics,
+                    "accepted": False,
+                    "selection_status": "eligible",
+                    "rejection_reason": "",
+                }
+            )
 
     accepted = best_params != _IDENTITY_PARAMS
+    for candidate in candidate_grid_audit:
+        if candidate["params"] == best_params and accepted:
+            candidate["accepted"] = True
+            candidate["selection_status"] = "selected"
+        elif candidate["selection_status"] == "eligible":
+            candidate["rejection_reason"] = "objective_not_selected"
+
     return {
         "available": True,
         "method": "score_matrix_grid_search",
@@ -203,11 +255,14 @@ def fit_score_matrix_calibration(
         "selected": best_params,
         "accepted": accepted,
         "n_samples": int(n_samples),
+        **_artifact_metadata(matrix_source),
         "grid": {
             "total_intensity_scale": [float(value) for value in total_intensity_grid],
             "draw_inflation": [float(value) for value in draw_inflation_grid],
         },
-        "candidates_evaluated": int(candidates_evaluated),
+        "candidate_count": int(len(candidate_grid_audit)),
+        "candidate_grid_audit": candidate_grid_audit,
+        "candidates_evaluated": int(len(candidate_grid_audit)),
         "candidates_rejected_for_log_loss": int(rejected_for_log_loss),
         "metrics_before": metrics_before,
         "metrics_after": best_metrics,
@@ -239,6 +294,7 @@ def fit_score_matrix_calibration_from_predictions(
             "method": "score_matrix_grid_search",
             "source": "independent_poisson_from_lambdas",
             "selected": dict(_IDENTITY_PARAMS),
+            **_artifact_metadata(MATRIX_SOURCE_RECONSTRUCTED),
         }
 
     frame = predictions.copy()
@@ -253,6 +309,7 @@ def fit_score_matrix_calibration_from_predictions(
             "source": "independent_poisson_from_lambdas",
             "selected": dict(_IDENTITY_PARAMS),
             "n_input_rows": int(len(predictions)),
+            **_artifact_metadata(MATRIX_SOURCE_RECONSTRUCTED),
         }
 
     usable = frame.loc[mask].copy()
@@ -276,6 +333,7 @@ def fit_score_matrix_calibration_from_predictions(
         total_intensity_grid=total_intensity_grid,
         draw_inflation_grid=draw_inflation_grid,
         folds=folds,
+        matrix_source=MATRIX_SOURCE_RECONSTRUCTED,
     )
     artifact["source"] = "independent_poisson_from_lambdas"
     artifact["max_goals"] = int(max_goals)
