@@ -1,6 +1,6 @@
 import pandas as pd
 
-from src.odds.snapshots import append_snapshot_file, append_snapshot_rows
+from src.odds.snapshots import append_snapshot_file, append_snapshot_rows, materialize_closing_odds
 
 
 EXPECTED_SNAPSHOT_COLUMNS = [
@@ -116,3 +116,48 @@ def test_append_snapshot_file_dedupes_blank_odds_fields_and_creates_parent(tmp_p
     assert len(first) == 1
     assert len(second) == 1
     assert pd.read_csv(snapshot_path).columns.tolist() == EXPECTED_SNAPSHOT_COLUMNS
+
+
+def test_materialize_closing_odds_picks_latest_snapshot_before_match() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "home_team": "Orlando Pride",
+                "away_team": "Bay FC",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-25T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 2.05,
+                "draw_odds": 3.25,
+                "away_odds": 3.45,
+                "source_type": "current",
+            },
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-29T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.95,
+                "draw_odds": 3.30,
+                "away_odds": 3.70,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert close.to_dict("records")[0]["source_type"] == "close"
+    assert close.to_dict("records")[0]["home_odds"] == 1.95

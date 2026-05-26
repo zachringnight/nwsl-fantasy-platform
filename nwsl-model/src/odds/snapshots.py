@@ -45,3 +45,39 @@ def append_snapshot_file(snapshot_path: Path, incoming_path: Path) -> pd.DataFra
     snapshot_path.parent.mkdir(parents=True, exist_ok=True)
     combined.to_csv(snapshot_path, index=False)
     return combined
+
+
+def materialize_closing_odds(
+    matches: pd.DataFrame,
+    snapshots: pd.DataFrame,
+    *,
+    max_hours_before_match: int = 168,
+) -> pd.DataFrame:
+    if matches.empty or snapshots.empty:
+        return snapshots.iloc[0:0].copy()
+
+    if "match_status" in matches.columns:
+        match_status = matches["match_status"].astype(str).str.lower()
+    else:
+        match_status = pd.Series("completed", index=matches.index)
+    completed = matches[match_status == "completed"].copy()
+    completed["match_id"] = completed["match_id"].astype(str)
+    completed["match_datetime"] = pd.to_datetime(completed["match_date"], utc=True, errors="coerce")
+
+    rows = []
+    snap = snapshots.copy()
+    snap["match_id"] = snap["match_id"].astype(str)
+    snap["timestamp_dt"] = pd.to_datetime(snap["timestamp"], utc=True, errors="coerce")
+    for match in completed.itertuples(index=False):
+        candidates = snap[snap["match_id"] == str(match.match_id)].copy()
+        candidates = candidates[candidates["timestamp_dt"].notna()]
+        candidates = candidates[candidates["timestamp_dt"] <= match.match_datetime]
+        candidates = candidates[
+            candidates["timestamp_dt"] >= match.match_datetime - pd.Timedelta(hours=max_hours_before_match)
+        ]
+        if candidates.empty:
+            continue
+        latest = candidates.sort_values("timestamp_dt").iloc[-1].copy()
+        latest["source_type"] = "close"
+        rows.append(latest.drop(labels=["timestamp_dt"]).to_dict())
+    return pd.DataFrame(rows)
