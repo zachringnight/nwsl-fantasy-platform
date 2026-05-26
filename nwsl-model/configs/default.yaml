@@ -4,6 +4,7 @@
 data:
   matches_path: "data/raw/matches.csv"
   odds_path: "data/raw/odds.csv"
+  odds_snapshots_path: "data/raw/odds_snapshots.csv"
   venues_path: "data/raw/venues.csv"
   appearances_path: "data/raw/appearances.csv"
   projected_lineups_path: "data/raw/projected_lineups.csv"

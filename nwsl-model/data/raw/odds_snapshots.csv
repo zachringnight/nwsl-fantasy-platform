@@ -1,0 +1,9 @@
+match_id,timestamp,sportsbook,market_type,line,home_odds,draw_odds,away_odds,over_odds,under_odds,source_type
+401853922,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,1.9,3.4,3.74,,,current
+401853923,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,2.42,3.1,2.84,,,current
+401853924,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,1.51,4.0,5.63,,,current
+401853925,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,6.34,4.5,1.41,,,current
+401853926,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,1.27,4.65,7.45,,,current
+401853927,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,2.75,3.05,2.2,,,current
+401854059,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,2.93,3.28,2.22,,,current
+401854060,2026-05-25T23:01:25.599163+00:00,FootyStats,1x2,,1.62,4.0,4.52,,,current
