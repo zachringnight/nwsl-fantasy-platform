@@ -161,3 +161,240 @@ def test_materialize_closing_odds_picks_latest_snapshot_before_match() -> None:
 
     assert close.to_dict("records")[0]["source_type"] == "close"
     assert close.to_dict("records")[0]["home_odds"] == 1.95
+
+
+def test_materialize_closing_odds_allows_same_day_snapshots_for_date_only_matches() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-30T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.90,
+                "draw_odds": 3.40,
+                "away_odds": 4.10,
+                "source_type": "current",
+            }
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert close.to_dict("records")[0]["source_type"] == "close"
+    assert close.to_dict("records")[0]["home_odds"] == 1.90
+
+
+def test_materialize_closing_odds_excludes_snapshots_after_date_only_end_of_day() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-30T22:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.90,
+                "draw_odds": 3.40,
+                "away_odds": 4.10,
+                "source_type": "current",
+            },
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-31T00:01:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.80,
+                "draw_odds": 3.50,
+                "away_odds": 4.30,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert close.to_dict("records")[0]["timestamp"] == "2026-05-30T22:00:00+00:00"
+    assert close.to_dict("records")[0]["home_odds"] == 1.90
+
+
+def test_materialize_closing_odds_uses_match_datetime_when_present() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "match_datetime": "2026-05-30T18:00:00+00:00",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-30T17:30:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.90,
+                "draw_odds": 3.40,
+                "away_odds": 4.10,
+                "source_type": "current",
+            },
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-30T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.80,
+                "draw_odds": 3.50,
+                "away_odds": 4.30,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert close.to_dict("records")[0]["timestamp"] == "2026-05-30T17:30:00+00:00"
+    assert close.to_dict("records")[0]["home_odds"] == 1.90
+
+
+def test_materialize_closing_odds_excludes_outside_window_snapshots() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-22T23:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 2.10,
+                "draw_odds": 3.20,
+                "away_odds": 3.50,
+                "source_type": "current",
+            }
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert close.empty
+    assert close.columns.tolist() == EXPECTED_SNAPSHOT_COLUMNS
+
+
+def test_materialize_closing_odds_preserves_all_rows_at_latest_timestamp() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-29T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 2.05,
+                "draw_odds": 3.25,
+                "away_odds": 3.45,
+                "source_type": "current",
+            },
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-30T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.95,
+                "draw_odds": 3.30,
+                "away_odds": 3.70,
+                "source_type": "current",
+            },
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-30T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "total_goals",
+                "line": 2.5,
+                "over_odds": 2.05,
+                "under_odds": 1.75,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert len(close) == 2
+    assert close["source_type"].tolist() == ["close", "close"]
+    assert close["market_type"].tolist() == ["1x2", "total_goals"]
+
+
+def test_materialize_closing_odds_returns_stable_columns_when_no_close_is_eligible() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-30",
+                "match_status": "completed",
+            }
+        ]
+    )
+    snapshots = pd.DataFrame(
+        [
+            {
+                "match_id": "2",
+                "timestamp": "2026-05-30T20:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.90,
+                "draw_odds": 3.40,
+                "away_odds": 4.10,
+                "source_type": "current",
+            }
+        ]
+    )
+
+    close = materialize_closing_odds(matches, snapshots, max_hours_before_match=168)
+
+    assert close.empty
+    assert close.columns.tolist() == EXPECTED_SNAPSHOT_COLUMNS

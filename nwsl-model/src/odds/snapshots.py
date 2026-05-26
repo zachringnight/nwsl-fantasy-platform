@@ -24,6 +24,10 @@ SNAPSHOT_KEY_COLUMNS = [
 ]
 
 
+def _empty_snapshot_frame() -> pd.DataFrame:
+    return pd.DataFrame(columns=SNAPSHOT_COLUMNS)
+
+
 def append_snapshot_rows(existing: pd.DataFrame, incoming: pd.DataFrame) -> pd.DataFrame:
     frames = [frame for frame in [existing, incoming] if frame is not None and not frame.empty]
     if not frames:
@@ -54,7 +58,7 @@ def materialize_closing_odds(
     max_hours_before_match: int = 168,
 ) -> pd.DataFrame:
     if matches.empty or snapshots.empty:
-        return snapshots.iloc[0:0].copy()
+        return _empty_snapshot_frame()
 
     if "match_status" in matches.columns:
         match_status = matches["match_status"].astype(str).str.lower()
@@ -62,22 +66,37 @@ def materialize_closing_odds(
         match_status = pd.Series("completed", index=matches.index)
     completed = matches[match_status == "completed"].copy()
     completed["match_id"] = completed["match_id"].astype(str)
-    completed["match_datetime"] = pd.to_datetime(completed["match_date"], utc=True, errors="coerce")
+    if "match_datetime" in completed.columns:
+        completed["match_cutoff"] = pd.to_datetime(completed["match_datetime"], utc=True, errors="coerce")
+    else:
+        match_date = completed["match_date"]
+        completed["match_cutoff"] = pd.to_datetime(match_date, utc=True, errors="coerce")
+        date_only = match_date.astype("string").str.fullmatch(r"\d{4}-\d{2}-\d{2}").fillna(False)
+        completed.loc[date_only, "match_cutoff"] += pd.Timedelta(days=1) - pd.Timedelta(nanoseconds=1)
 
-    rows = []
+    frames = []
     snap = snapshots.copy()
+    for column in SNAPSHOT_COLUMNS:
+        if column not in snap.columns:
+            snap[column] = pd.NA
     snap["match_id"] = snap["match_id"].astype(str)
     snap["timestamp_dt"] = pd.to_datetime(snap["timestamp"], utc=True, errors="coerce")
     for match in completed.itertuples(index=False):
+        if pd.isna(match.match_cutoff):
+            continue
         candidates = snap[snap["match_id"] == str(match.match_id)].copy()
         candidates = candidates[candidates["timestamp_dt"].notna()]
-        candidates = candidates[candidates["timestamp_dt"] <= match.match_datetime]
+        candidates = candidates[candidates["timestamp_dt"] <= match.match_cutoff]
         candidates = candidates[
-            candidates["timestamp_dt"] >= match.match_datetime - pd.Timedelta(hours=max_hours_before_match)
+            candidates["timestamp_dt"] >= match.match_cutoff - pd.Timedelta(hours=max_hours_before_match)
         ]
         if candidates.empty:
             continue
-        latest = candidates.sort_values("timestamp_dt").iloc[-1].copy()
+        latest_timestamp = candidates["timestamp_dt"].max()
+        latest = candidates[candidates["timestamp_dt"] == latest_timestamp].copy()
         latest["source_type"] = "close"
-        rows.append(latest.drop(labels=["timestamp_dt"]).to_dict())
-    return pd.DataFrame(rows)
+        frames.append(latest.drop(columns=["timestamp_dt"]))
+    if not frames:
+        return _empty_snapshot_frame()
+    close = pd.concat(frames, ignore_index=True, sort=False)
+    return close.loc[:, SNAPSHOT_COLUMNS].reset_index(drop=True)

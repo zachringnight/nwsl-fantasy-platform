@@ -14,6 +14,13 @@ sys.path.insert(0, str(MODEL_ROOT))
 from src.odds.snapshots import materialize_closing_odds
 
 
+def positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("must be greater than 0")
+    return parsed
+
+
 def resolve_cli_path(value: str | None, default: str) -> Path:
     if value is None:
         return MODEL_ROOT / default
@@ -26,7 +33,7 @@ def main() -> None:
     parser.add_argument("--matches")
     parser.add_argument("--snapshots")
     parser.add_argument("--output")
-    parser.add_argument("--max-hours-before-match", type=int, default=168)
+    parser.add_argument("--max-hours-before-match", type=positive_int, default=168)
     args = parser.parse_args()
 
     matches_path = resolve_cli_path(args.matches, "data/raw/matches.csv")
