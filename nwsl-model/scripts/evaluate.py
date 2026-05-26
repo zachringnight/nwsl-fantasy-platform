@@ -30,6 +30,7 @@ from src.models.calibration import (
     fit_prediction_calibrators,
     plot_calibration,
 )
+from src.models.score_matrix_calibration import fit_score_matrix_calibration_from_predictions
 from src.utils.artifacts import resolve_version_dir, write_artifact_json
 from src.utils.gating import (
     BASELINE_MODELS,
@@ -448,9 +449,11 @@ def main() -> None:
         preds = pd.read_csv(pred_file)
         predictions_by_model[model_name] = preds
         calibrators = fit_prediction_calibrators(preds)
+        score_matrix_artifact = fit_score_matrix_calibration_from_predictions(preds)
+        model_calibration_artifact = dict(calibrators)
+        model_calibration_artifact["score_matrix"] = score_matrix_artifact
         calibrated_preds = apply_prediction_calibration(preds, calibrators)
-        if calibrators:
-            calibration_artifacts["models"][model_name] = calibrators
+        calibration_artifacts["models"][model_name] = model_calibration_artifact
 
         if "prob_home" not in preds.columns:
             continue
@@ -472,6 +475,16 @@ def main() -> None:
         eval_results[model_name]["ece_home_win"] = float(ece)
         eval_results[model_name]["launch_totals"] = _summarize_launch_totals(preds)
         eval_results[model_name]["posthoc_calibration"] = posthoc
+        eval_results[model_name]["score_matrix_calibration"] = {
+            "available": bool(score_matrix_artifact.get("available")),
+            "accepted": bool(score_matrix_artifact.get("accepted", False)),
+            "selected": score_matrix_artifact.get("selected"),
+            "metrics_before": score_matrix_artifact.get("metrics_before", {}),
+            "metrics_after": score_matrix_artifact.get("metrics_after", {}),
+            "delta": score_matrix_artifact.get("delta", {}),
+            "reason": score_matrix_artifact.get("reason", ""),
+            "source": score_matrix_artifact.get("source", ""),
+        }
         eval_results[model_name]["benchmark_comparison"] = _build_benchmark_comparison(model_name, metrics_df)
         eval_results[model_name]["ablation_comparison"] = _build_ablation_comparison(model_name, metrics_df)
         slice_reports[model_name] = _build_slice_report(preds)
@@ -523,6 +536,16 @@ def main() -> None:
                 f" log_loss={calibrated_metrics['log_loss_1x2']:.4f},"
                 f" brier={calibrated_metrics['brier_score_1x2']:.4f},"
                 f" entropy={calibrated_metrics['forecast_entropy_1x2']:.4f}"
+            )
+        if score_matrix_artifact.get("available"):
+            selected = score_matrix_artifact["selected"]
+            delta = score_matrix_artifact.get("delta", {})
+            print(
+                "  Score-matrix candidate:"
+                f" scale={selected['total_intensity_scale']:.2f},"
+                f" draw={selected['draw_inflation']:.2f},"
+                f" accepted={score_matrix_artifact.get('accepted', False)},"
+                f" delta_objective={delta.get('objective', 0.0):.4f}"
             )
         if fit_diagnostics:
             print(
