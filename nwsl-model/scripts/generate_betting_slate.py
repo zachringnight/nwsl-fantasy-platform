@@ -48,15 +48,24 @@ def _as_date(value: Any) -> pd.Timestamp:
 
 
 def _derive_market_odds(predictions: pd.DataFrame) -> pd.Series:
+    market_flag = None
     if "has_market_odds" in predictions.columns:
-        return predictions["has_market_odds"].map(_coerce_bool)
+        market_flag = predictions["has_market_odds"].map(_coerce_bool)
 
     available_odds = [column for column in MARKET_ODDS_COLUMNS if column in predictions.columns]
     if not available_odds:
+        if market_flag is not None:
+            return market_flag
+        return pd.Series(False, index=predictions.index)
+
+    if set(available_odds) != set(MARKET_ODDS_COLUMNS):
         return pd.Series(False, index=predictions.index)
 
     numeric_odds = predictions[available_odds].apply(pd.to_numeric, errors="coerce")
-    return numeric_odds.gt(1.0).all(axis=1)
+    complete_price = numeric_odds.gt(1.0).all(axis=1)
+    if market_flag is not None:
+        return market_flag & complete_price
+    return complete_price
 
 
 def _coerce_bool(value: Any) -> bool:
@@ -79,6 +88,8 @@ def _first_rejection_reason(value: Any) -> str:
 def _accepted_bet(row: pd.Series) -> bool:
     if "accepted_bet" in row.index:
         value = row["accepted_bet"]
+        if value is None or (isinstance(value, float) and pd.isna(value)):
+            return False
         if isinstance(value, str):
             return value.strip().lower() in {"true", "1", "yes"}
         return bool(value)

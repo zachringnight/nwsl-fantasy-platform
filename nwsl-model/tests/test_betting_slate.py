@@ -31,6 +31,8 @@ def test_filter_near_term_slate_forces_gating_rejection_reason() -> None:
                 "accepted_bet_count": 1,
                 "recommended_bets": "home",
                 "mkt_home_odds": 2.2,
+                "mkt_draw_odds": 3.0,
+                "mkt_away_odds": 3.2,
             }
         ]
     )
@@ -101,3 +103,41 @@ def test_filter_near_term_slate_requires_complete_derived_market_odds() -> None:
     slate = filter_near_term_slate(predictions, as_of="2026-05-26", days=14)
 
     assert slate["match_id"].tolist() == ["2"]
+
+
+def test_filter_near_term_slate_rejects_partial_market_columns() -> None:
+    predictions = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-29",
+                "has_market_odds": True,
+                "mkt_home_odds": 2.1,
+            }
+        ]
+    )
+
+    slate = filter_near_term_slate(predictions, as_of="2026-05-26", days=14)
+
+    assert slate.empty
+
+
+def test_filter_near_term_slate_does_not_accept_nan_bet_flag() -> None:
+    predictions = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "match_date": "2026-05-29",
+                "gating_status": "passed",
+                "accepted_bet": float("nan"),
+                "mkt_home_odds": 2.1,
+                "mkt_draw_odds": 3.0,
+                "mkt_away_odds": 3.2,
+            }
+        ]
+    )
+
+    slate = filter_near_term_slate(predictions, as_of="2026-05-26", days=14)
+
+    assert not bool(slate.loc[0, "accepted_bet"])
+    assert slate.loc[0, "bet_reason"] == "no_bet"
