@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 
 from scripts.predict import _load_calibration_artifact
+from scripts.run_operator_report import _load_calibration_artifact as _load_operator_calibration_artifact
 from src.models.score_matrix_calibration import (
     calibrate_score_matrix,
     fit_score_matrix_calibration,
@@ -183,5 +184,30 @@ def test_predict_load_calibration_artifact_ignores_score_matrix_only_artifacts(t
     )
 
     assert _load_calibration_artifact(
+        {"version_dir": version_dir, "model_family": "dixon_coles"}
+    ) is None
+
+
+def test_operator_report_load_calibration_artifact_ignores_score_matrix_only_artifacts(
+    tmp_path,
+) -> None:
+    version_dir = tmp_path / "model-version"
+    version_dir.mkdir()
+    (version_dir / "calibration_artifacts.json").write_text(
+        json.dumps(
+            {
+                "models": {
+                    "dixon_coles": {
+                        "score_matrix": {
+                            "available": True,
+                            "artifact_only": True,
+                        }
+                    }
+                }
+            }
+        )
+    )
+
+    assert _load_operator_calibration_artifact(
         {"version_dir": version_dir, "model_family": "dixon_coles"}
     ) is None
