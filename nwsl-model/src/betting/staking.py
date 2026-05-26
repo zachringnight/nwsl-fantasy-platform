@@ -24,6 +24,16 @@ class BetRecommendation:
     market_odds: float = 0.0
     fair_odds: float = 0.0
     edge: float = 0.0
+    sportsbook: str = "consensus"
+    source_type: str = "close"
+    market_timestamp: str | None = None
+    confidence: float = 0.0
+    confidence_band: str = "low"
+    slate_key: str = ""
+    model_version: str = ""
+    model_family: str = ""
+    blended: bool = False
+    gating_status: str = "unknown"
     kelly_fraction: float = 0.0
     stake: float = 0.0
     stake_pct: float = 0.0
@@ -35,6 +45,7 @@ class StakingConfig:
     min_edge: float = 0.02
     kelly_fraction: float = 0.25
     max_stake_pct: float = 0.01
+    max_slate_exposure_pct: float = 0.01
     bankroll: float = 10000.0
 
 
@@ -46,6 +57,7 @@ class StakingEngine:
         self.bankroll = config.bankroll
         self.initial_bankroll = config.bankroll
         self.bet_log: list[dict] = []
+        self.slate_exposure: dict[str, float] = {}
 
     def compute_edge(self, model_prob: float, market_odds: float) -> float:
         """Compute edge: model_prob * odds - 1."""
@@ -102,6 +114,19 @@ class StakingEngine:
             stake=stake,
             stake_pct=stake_pct,
         )
+
+    def can_allocate(self, slate_key: str, stake: float) -> bool:
+        """Return whether adding a stake stays under the slate exposure cap."""
+        cap = self.config.max_slate_exposure_pct * self.bankroll
+        if cap <= 0:
+            return True
+        current = self.slate_exposure.get(str(slate_key), 0.0)
+        return current + stake <= cap + 1e-9
+
+    def reserve_exposure(self, slate_key: str, stake: float) -> None:
+        """Reserve stake against the configured slate exposure cap."""
+        key = str(slate_key)
+        self.slate_exposure[key] = self.slate_exposure.get(key, 0.0) + stake
 
     def update_bankroll(self, pnl: float) -> float:
         """Update bankroll after a bet settles."""
