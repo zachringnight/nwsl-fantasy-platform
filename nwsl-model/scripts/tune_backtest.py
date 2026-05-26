@@ -55,6 +55,19 @@ def resolve_project_path(path: str | Path) -> Path:
     return candidate if candidate.is_absolute() else PROJECT_ROOT / candidate
 
 
+def format_summary_path(path: str | Path) -> str:
+    absolute_path = Path(path).resolve()
+    try:
+        return str(absolute_path.relative_to(PROJECT_ROOT))
+    except ValueError:
+        return str(absolute_path)
+
+
+def text_tail(text: str, max_lines: int = 20, max_chars: int = 2000) -> str:
+    tail = "\n".join(text.splitlines()[-max_lines:])
+    return tail[-max_chars:]
+
+
 def regularization_label(value: float) -> str:
     return f"reg_{value:g}".replace(".", "p")
 
@@ -130,11 +143,14 @@ def write_process_logs(
     run_dir: Path,
     candidate: str,
     result: subprocess.CompletedProcess[str],
-) -> None:
+) -> tuple[Path, Path]:
     logs_dir = run_dir / "logs"
     logs_dir.mkdir(parents=True, exist_ok=True)
-    (logs_dir / f"{candidate}.stdout.log").write_text(result.stdout)
-    (logs_dir / f"{candidate}.stderr.log").write_text(result.stderr)
+    stdout_path = logs_dir / f"{candidate}.stdout.log"
+    stderr_path = logs_dir / f"{candidate}.stderr.log"
+    stdout_path.write_text(result.stdout)
+    stderr_path.write_text(result.stderr)
+    return stdout_path, stderr_path
 
 
 def summarize_candidate(
@@ -160,8 +176,8 @@ def summarize_candidate(
                 "candidate_label": candidate_label,
                 "regularization": regularization,
                 "status": "completed",
-                "config_path": str(config_path),
-                "output_dir": str(output_dir),
+                "config_path": format_summary_path(config_path),
+                "output_dir": format_summary_path(output_dir),
             }
         )
         rows.append(row)
@@ -224,7 +240,7 @@ def main() -> int:
 
         print(f"Running {candidate}...")
         result = run_backtest(config_path, output_dir, models)
-        write_process_logs(run_dir, candidate, result)
+        stdout_path, stderr_path = write_process_logs(run_dir, candidate, result)
 
         if result.returncode != 0:
             summary_rows.append(
@@ -234,8 +250,11 @@ def main() -> int:
                     "regularization": regularization,
                     "status": "failed",
                     "return_code": result.returncode,
-                    "config_path": str(config_path),
-                    "output_dir": str(output_dir),
+                    "stderr_tail": text_tail(result.stderr),
+                    "stdout_log_path": format_summary_path(stdout_path),
+                    "stderr_log_path": format_summary_path(stderr_path),
+                    "config_path": format_summary_path(config_path),
+                    "output_dir": format_summary_path(output_dir),
                 }
             )
             continue
@@ -261,8 +280,11 @@ def main() -> int:
                     "regularization": regularization,
                     "status": "failed",
                     "error": str(exc),
-                    "config_path": str(config_path),
-                    "output_dir": str(output_dir),
+                    "stderr_tail": text_tail(result.stderr),
+                    "stdout_log_path": format_summary_path(stdout_path),
+                    "stderr_log_path": format_summary_path(stderr_path),
+                    "config_path": format_summary_path(config_path),
+                    "output_dir": format_summary_path(output_dir),
                 }
             )
 

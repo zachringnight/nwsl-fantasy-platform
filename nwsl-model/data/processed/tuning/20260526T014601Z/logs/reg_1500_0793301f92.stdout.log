@@ -1,0 +1,45 @@
+2026-05-25 18:46:42 | nwsl_model.backtest | INFO | Loading data...
+2026-05-25 18:46:42 | nwsl_model.data.loaders | INFO | Loaded 274 matches from data/raw/matches.csv
+2026-05-25 18:46:42 | nwsl_model.data.loaders | INFO | Loaded 8 odds records from data/raw/odds.csv
+2026-05-25 18:46:42 | nwsl_model.data.loaders | WARNING | Venues file not found at data/raw/venues.csv. Running without venue data.
+2026-05-25 18:46:42 | nwsl_model.data.loaders | INFO | Loaded 1455 appearance records from data/raw/appearances.csv
+2026-05-25 18:46:42 | nwsl_model.data.loaders | INFO | Loaded 10986 projected lineup records from data/raw/projected_lineups.csv
+2026-05-25 18:46:42 | nwsl_model.data.loaders | WARNING | Team season priors path not configured.
+2026-05-25 18:46:42 | nwsl_model.data.loaders | WARNING | Player season priors path not configured.
+2026-05-25 18:46:42 | nwsl_model.backtest | INFO | Running backtest with models: ['dixon_coles']
+2026-05-25 18:46:42 | nwsl_model.data.transforms | WARNING | Using home_goals_90 as fallback for home_npxg (no xG data)
+2026-05-25 18:46:42 | nwsl_model.data.transforms | WARNING | Using away_goals_90 as fallback for away_npxg (no xG data)
+2026-05-25 18:46:42 | nwsl_model.features.market_features | WARNING | 1X2 odds not available. Market probabilities will be null.
+2026-05-25 18:46:42 | nwsl_model.backtest.runner | INFO | Running backtest for model: dixon_coles
+2026-05-25 18:46:42 | nwsl_model.models.team_ratings | INFO | Computed ratings for 14 teams (league avg attack=1.316, defense=1.316)
+2026-05-25 18:46:45 | nwsl_model.models.dixon_coles | INFO | Dixon-Coles fit: converged=True, home_adv=-0.0425, rho=0.0010, intercept=0.2918, n_teams=14, grad_norm=0.934
+2026-05-25 18:46:45 | nwsl_model.models.team_ratings | INFO | Computed ratings for 14 teams (league avg attack=1.354, defense=1.354)
+2026-05-25 18:46:54 | nwsl_model.models.dixon_coles | INFO | Dixon-Coles fit: converged=True, home_adv=0.0379, rho=-0.0000, intercept=0.2848, n_teams=14, grad_norm=0.07253
+2026-05-25 18:46:54 | nwsl_model.models.team_ratings | INFO | Computed ratings for 14 teams (league avg attack=1.284, defense=1.284)
+2026-05-25 18:47:08 | nwsl_model.models.dixon_coles | INFO | Dixon-Coles fit: converged=True, home_adv=0.1029, rho=-0.0029, intercept=0.1985, n_teams=14, grad_norm=0.6145
+2026-05-25 18:47:08 | nwsl_model.models.team_ratings | INFO | Computed ratings for 16 teams (league avg attack=1.246, defense=1.246)
+2026-05-25 18:47:25 | nwsl_model.models.dixon_coles | INFO | Dixon-Coles fit: converged=True, home_adv=0.2117, rho=-0.0012, intercept=0.1172, n_teams=16, grad_norm=1.394
+2026-05-25 18:47:25 | nwsl_model.backtest.splitter | INFO | Generated 4 backtest folds
+2026-05-25 18:47:25 | nwsl_model.backtest.runner | INFO | dixon_coles: log_loss=1.0812, ROI=0.0000, n_bets=0
+2026-05-25 18:47:25 | nwsl_model.models.calibration | INFO | Calibration plot saved to /Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/processed/tuning/20260526T014601Z/backtests/reg_1500_0793301f92/calibration_dixon_coles_home.png
+2026-05-25 18:47:25 | nwsl_model.backtest.reports | INFO | Backtest report saved to /Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/processed/tuning/20260526T014601Z/backtests/reg_1500_0793301f92
+
+================================================================================
+BACKTEST RESULTS SUMMARY
+================================================================================
+
+--- dixon_coles ---
+  brier_home_win                : 0.2428
+  brier_over_2_5                : 0.2530
+  brier_score_1x2               : 0.6551
+  crps_scoreline                : 0.8626
+  expected_total_goals_mae      : 1.2616
+  fit_diagnostics               : {'n_folds': 4, 'converged_rate': 1.0, 'median_iterations': 26.5, 'median_nfev': 2454.0, 'median_gradient_norm': 0.7742271531435374}
+  log_loss_1x2                  : 1.0812
+  --- Staking ---
+    n_bets                      : 0
+    roi                         : 0.0000
+    pnl                         : 0.0000
+
+================================================================================
+2026-05-25 18:47:25 | nwsl_model.backtest | INFO | Backtest complete.

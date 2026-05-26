@@ -567,9 +567,17 @@ class BacktestRunner:
         """Create model instance from name."""
         model_cfg = self.config.get("model", {})
         max_goals = model_cfg.get("max_goals", 8)
+        bt_fit_cfg = self.config.get("backtest", {}).get("fit", {})
+
+        def _fit_overrides(base_cfg: dict[str, Any], model_key: str) -> dict[str, Any]:
+            overrides = {
+                **bt_fit_cfg.get("common", {}),
+                **bt_fit_cfg.get(model_key, {}),
+            }
+            return {**base_cfg, **overrides}
 
         if model_name == "dixon_coles":
-            dc_cfg = self.config.get("dixon_coles", {})
+            dc_cfg = _fit_overrides(self.config.get("dixon_coles", {}), "dixon_coles")
             return DixonColesModel(DixonColesConfig(
                 max_goals=max_goals,
                 home_advantage_init=dc_cfg.get("home_advantage_init", 0.25),
@@ -577,9 +585,12 @@ class BacktestRunner:
                 tol=dc_cfg.get("tol", 1e-8),
                 rho_init=dc_cfg.get("rho_init", -0.05),
                 rho_bounds=tuple(dc_cfg.get("rho_bounds", [-0.5, 0.5])),
+                regularization=dc_cfg.get("regularization", 0.001),
+                contextual_regularization=dc_cfg.get("contextual_regularization", 0.01),
+                rho_regularization=dc_cfg.get("rho_regularization", 0.002),
             ))
         elif model_name == "bivariate_poisson":
-            bp_cfg = self.config.get("bivariate_poisson", {})
+            bp_cfg = _fit_overrides(self.config.get("bivariate_poisson", {}), "bivariate_poisson")
             return BivariatePoissonModel(BivariatePoissonConfig(
                 max_goals=max_goals,
                 home_advantage_init=bp_cfg.get("home_advantage_init", 0.25),
@@ -587,6 +598,9 @@ class BacktestRunner:
                 tol=bp_cfg.get("tol", 1e-8),
                 lambda3_init=bp_cfg.get("lambda3_init", 0.1),
                 lambda3_bounds=tuple(bp_cfg.get("lambda3_bounds", [0.001, 2.0])),
+                regularization=bp_cfg.get("regularization", 0.001),
+                contextual_regularization=bp_cfg.get("contextual_regularization", 0.01),
+                lambda3_regularization=bp_cfg.get("lambda3_regularization", 0.002),
             ))
         else:
             raise ValueError(f"Unknown model: {model_name}")

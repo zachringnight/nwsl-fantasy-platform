@@ -1,0 +1,2 @@
+model,log_loss_1x2,brier_score_1x2,brier_home_win,brier_over_2_5,crps_scoreline,expected_total_goals_mae,fit_diagnostics
+dixon_coles,1.085955251022227,0.6588329599074626,0.2435740285110049,0.2539948464707158,0.8653259823050595,1.2663648063910788,"{'n_folds': 4, 'converged_rate': 1.0, 'median_iterations': 24.5, 'median_nfev': 2186.0, 'median_gradient_norm': 0.46910924178886826}"
