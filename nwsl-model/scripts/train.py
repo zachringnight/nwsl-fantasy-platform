@@ -35,6 +35,7 @@ from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoisso
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
 from src.models.lineup_adjustment import LineupAdjustmentModel
 from src.models.team_ratings import TeamRatingsConfig, TeamRatingsModel
+from src.odds.quality import build_odds_quality_report
 from src.utils.artifacts import create_version_dir, write_artifact_json
 from src.utils.io import load_config, load_json, save_json, save_pickle
 from src.utils.logging import setup_logging
@@ -153,14 +154,29 @@ def main() -> None:
     model_cfg = config.get("model", {})
     max_goals = model_cfg.get("max_goals", 8)
     dataset_manifest = {}
-    odds_quality_report = {}
     raw_data_dir = Path(data_cfg.get("output_dir", "data/processed")).parent / "raw"
     manifest_path = raw_data_dir / "dataset_manifest.json"
-    odds_quality_path = raw_data_dir / "odds_quality_report.json"
     if manifest_path.exists():
         dataset_manifest = load_json(manifest_path)
-    if odds_quality_path.exists():
-        odds_quality_report = load_json(odds_quality_path)
+    odds_for_quality = dataset.odds if dataset.has_odds else None
+    odds_path_value = data_cfg.get("odds_path", "")
+    odds_path = Path(odds_path_value)
+    if str(odds_path_value).strip() and odds_path.exists():
+        raw_odds = pd.read_csv(odds_path)
+        if "source_type" in raw_odds.columns:
+            current_odds = raw_odds[
+                raw_odds["source_type"].astype(str).str.lower() == "current"
+            ].copy()
+            if not current_odds.empty:
+                quality_parts = []
+                if odds_for_quality is not None and not odds_for_quality.empty:
+                    quality_parts.append(odds_for_quality)
+                quality_parts.append(current_odds)
+                odds_for_quality = pd.concat(quality_parts, ignore_index=True).drop_duplicates()
+    odds_quality_report = build_odds_quality_report(
+        matches,
+        odds_for_quality,
+    )
     training_summary = {
         "version": output_dir.name,
         "models": {},
@@ -197,6 +213,9 @@ def main() -> None:
                 tol=dc_cfg.get("tol", 1e-8),
                 rho_init=dc_cfg.get("rho_init", -0.05),
                 rho_bounds=tuple(dc_cfg.get("rho_bounds", [-0.5, 0.5])),
+                regularization=dc_cfg.get("regularization", 0.001),
+                contextual_regularization=dc_cfg.get("contextual_regularization", 0.01),
+                rho_regularization=dc_cfg.get("rho_regularization", 0.002),
             ))
         elif model_name == "bivariate_poisson":
             bp_cfg = config.get("bivariate_poisson", {})
@@ -207,6 +226,9 @@ def main() -> None:
                 tol=bp_cfg.get("tol", 1e-8),
                 lambda3_init=bp_cfg.get("lambda3_init", 0.1),
                 lambda3_bounds=tuple(bp_cfg.get("lambda3_bounds", [0.001, 2.0])),
+                regularization=bp_cfg.get("regularization", 0.001),
+                contextual_regularization=bp_cfg.get("contextual_regularization", 0.01),
+                lambda3_regularization=bp_cfg.get("lambda3_regularization", 0.002),
             ))
         else:
             logger.error(f"Unknown model: {model_name}")

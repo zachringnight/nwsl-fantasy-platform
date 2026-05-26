@@ -36,6 +36,11 @@ dixon_coles:
   # Low-score correction parameter rho range
   rho_init: -0.05
   rho_bounds: [-0.5, 0.5]
+  # Strong shrinkage is intentional with only 2025-2026 match data; weak priors
+  # produced extreme 99%+ out-of-sample probabilities in early folds.
+  regularization: 2000.0
+  contextual_regularization: 2000.0
+  rho_regularization: 2000.0
   # Home advantage initial value
   home_advantage_init: 0.25
   # Optimizer settings
@@ -46,6 +51,10 @@ bivariate_poisson:
   # Shared intensity lambda3 initial value
   lambda3_init: 0.1
   lambda3_bounds: [0.001, 2.0]
+  # Match Dixon-Coles shrinkage until the model has richer xG/odds history.
+  regularization: 2000.0
+  contextual_regularization: 2000.0
+  lambda3_regularization: 2000.0
   home_advantage_init: 0.25
   max_iter: 2000
   tol: 1.0e-8
@@ -112,14 +121,21 @@ betting:
 backtest:
   # Minimum training matches before first prediction
   min_train_matches: 50
-  # Step size: predict this many matches at a time
-  step_size: 1
+  # Step size: predict this many matches at a time for the operating validation sweep.
+  step_size: 28
+  # Deep feature ablations are useful for research runs but too slow for the operating pipeline.
+  run_ablations: false
+  # Backtest folds are fit repeatedly; use bounded optimizer settings for validation speed.
+  fit:
+    common:
+      max_iter: 250
+      tol: 1.0e-6
   # Benchmark models to compare
   benchmarks:
-    - "market_implied"
-    - "dixon_coles"
-    - "bivariate_poisson"
-    - "full_blend"
+    - "uniform_baseline"
+    - "home_field_baseline"
+    - "team_ratings_poisson"
+    - "rolling_npxg_poisson"
 
 logging:
   level: "INFO"

@@ -47,7 +47,8 @@ def create_version_dir(version: str | None = None, root: Path = ARTIFACT_ROOT) -
 def list_version_dirs(root: Path = ARTIFACT_ROOT) -> list[Path]:
     if not root.exists():
         return []
-    return sorted([path for path in root.iterdir() if path.is_dir() and path.name != "__pycache__"])
+    version_dirs = [path for path in root.iterdir() if path.is_dir() and path.name != "__pycache__"]
+    return sorted(version_dirs, key=lambda path: (path.stat().st_mtime, path.name))
 
 
 def latest_version_dir(root: Path = ARTIFACT_ROOT) -> Path | None:

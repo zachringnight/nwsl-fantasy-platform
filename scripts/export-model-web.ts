@@ -6,11 +6,12 @@
  * Writes: nwsl-model/data/processed/web/predictions.json, team-ratings.json
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
 
 const ROOT = process.cwd();
 const PROCESSED = join(ROOT, "nwsl-model", "data", "processed");
+const MODELS_DIR = join(PROCESSED, "models");
 const WEB_DIR = join(PROCESSED, "web");
 mkdirSync(WEB_DIR, { recursive: true });
 
@@ -32,6 +33,8 @@ function parseCsv(filepath: string): Record<string, string>[] {
 
 console.log("Exporting predictions...");
 const predictions = parseCsv(join(PROCESSED, "predictions.csv"));
+const predictionVersion = predictions.find((r) => r.model_version)?.model_version;
+const artifactDir = resolveArtifactDir(predictionVersion);
 
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
@@ -100,7 +103,10 @@ console.log(`  → ${webPredictions.length} predictions`);
 // ── Team Ratings ───────────────────────────────────────────────────────────
 
 console.log("Exporting team ratings...");
-const ratings = parseCsv(join(PROCESSED, "models", "team_ratings.csv"));
+const ratingsPath = artifactDir
+  ? join(artifactDir, "team_ratings.csv")
+  : join(MODELS_DIR, "team_ratings.csv");
+const ratings = existsSync(ratingsPath) ? parseCsv(ratingsPath) : [];
 
 const webRatings = ratings
   .map((r) => {
@@ -127,9 +133,54 @@ const webRatings = ratings
 writeFileSync(join(WEB_DIR, "team-ratings.json"), JSON.stringify(webRatings, null, 2));
 console.log(`  → ${webRatings.length} team ratings`);
 
+// ── Backtest Summary ───────────────────────────────────────────────────────
+
+console.log("Exporting backtest summary...");
+const metricsPath = artifactDir ? join(artifactDir, "backtest", "metrics_comparison.csv") : "";
+const metrics = metricsPath && existsSync(metricsPath) ? parseCsv(metricsPath) : [];
+const backtestSummary = Object.fromEntries(
+  metrics.map((r) => [
+    r.model || "unknown",
+    {
+      logLoss: round4(parseFloat(r.log_loss_1x2) || 0),
+      brierScore: round4(parseFloat(r.brier_score_1x2) || 0),
+      calibrationError: round4(parseFloat(r.calibration_error) || 0),
+      roi: round4(parseFloat(r.roi) || 0),
+      hitRate: round4(parseFloat(r.hit_rate) || 0),
+      totalPredictions: parseInt(r.n_predictions || "0", 10) || 0,
+      brierOver25: round4(parseFloat(r.brier_over_2_5) || 0),
+      totalGoalsMae: round4(parseFloat(r.expected_total_goals_mae) || 0),
+    },
+  ])
+);
+
+writeFileSync(join(WEB_DIR, "backtest-summary.json"), JSON.stringify(backtestSummary, null, 2));
+console.log(`  → ${Object.keys(backtestSummary).length} model summaries`);
+
 console.log("\nDone! Model web data written to nwsl-model/data/processed/web/");
 
 // ── Helpers ────────────────────────────────────────────────────────────────
+
+function resolveArtifactDir(modelVersion?: string): string | null {
+  if (modelVersion) {
+    const versionDir = join(MODELS_DIR, modelVersion);
+    if (existsSync(join(versionDir, "training_summary.json"))) return versionDir;
+  }
+
+  if (!existsSync(MODELS_DIR)) return null;
+  const candidates = readdirSync(MODELS_DIR)
+    .map((name) => join(MODELS_DIR, name))
+    .filter((path) => existsSync(join(path, "training_summary.json")))
+    .sort((a, b) => {
+      const mtimeDelta = statSync(b).mtimeMs - statSync(a).mtimeMs;
+      return mtimeDelta !== 0 ? mtimeDelta : b.localeCompare(a);
+    });
+  return candidates[0] ?? null;
+}
+
+function round4(value: number): number {
+  return Math.round(value * 10000) / 10000;
+}
 
 function generateScoreMatrix(lambdaHome: number, lambdaAway: number): number[][] {
   const size = 9;

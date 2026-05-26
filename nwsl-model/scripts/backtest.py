@@ -13,13 +13,33 @@ import logging
 import sys
 from pathlib import Path
 
+import pandas as pd
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.backtest.reports import generate_backtest_report, print_summary
 from src.backtest.runner import BacktestRunner
 from src.data.loaders import NWSLDataset
+from src.utils.artifacts import resolve_version_dir, write_artifact_json
 from src.utils.io import load_config
 from src.utils.logging import setup_logging
+
+
+def _build_version_backtest_summary(report_summary: dict, version_name: str) -> dict:
+    """Normalize report metrics into the schema promotion gates expect."""
+    metrics_rows = report_summary.get("metrics_comparison", [])
+    return {
+        "version": version_name,
+        "models": {
+            str(row["model"]): {
+                key: value
+                for key, value in row.items()
+                if key != "model" and pd.notna(value)
+            }
+            for row in metrics_rows
+            if "model" in row
+        },
+    }
 
 
 def main() -> None:
@@ -27,10 +47,12 @@ def main() -> None:
     parser.add_argument("--config", type=str, default="configs/default.yaml")
     parser.add_argument(
         "--models", nargs="+",
-        default=["dixon_coles", "bivariate_poisson", "market_implied", "full_blend"],
+        default=None,
         help="Models to evaluate",
     )
-    parser.add_argument("--output-dir", type=str, default="data/processed/backtest")
+    parser.add_argument("--output-dir", type=str, default="")
+    parser.add_argument("--artifact-root", type=str, default="data/processed/models")
+    parser.add_argument("--version", type=str, default="")
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -40,6 +62,14 @@ def main() -> None:
 
     logger.info("Loading data...")
     dataset = NWSLDataset.from_config(config)
+
+    artifact_mode = bool(args.version) or args.artifact_root != "data/processed/models"
+    version_dir = None
+    if artifact_mode:
+        version_dir = resolve_version_dir(args.version or None, Path(args.artifact_root))
+    output_dir = Path(args.output_dir) if args.output_dir else (
+        version_dir / "backtest" if version_dir is not None else Path("data/processed/backtest")
+    )
 
     logger.info(f"Running backtest with models: {args.models}")
     runner = BacktestRunner(config)
@@ -56,12 +86,17 @@ def main() -> None:
             dataset.odds.get("source_type", pd.Series(dtype=str)).str.lower() == "close"
         ] if "source_type" in dataset.odds.columns else dataset.odds
 
-    generate_backtest_report(results, args.output_dir, closing_odds)
+    report_summary = generate_backtest_report(results, str(output_dir), closing_odds)
+    if version_dir is not None:
+        write_artifact_json(
+            version_dir,
+            "backtest_summary.json",
+            _build_version_backtest_summary(report_summary, version_dir.name),
+        )
     print_summary(results)
 
     logger.info("Backtest complete.")
 
 
 if __name__ == "__main__":
-    import pandas as pd
     main()

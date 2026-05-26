@@ -1,0 +1,2104 @@
+{
+  "version": "20260526T030638Z",
+  "generated_at": "2026-05-26T03:13:15.726767+00:00",
+  "models": {
+    "bivariate_poisson": {
+      "classwise_ece": {
+        "home": 0.006140014261423521,
+        "draw": 0.002974649658596784,
+        "away": 0.0031653646028265148
+      },
+      "totals": {
+        "1.5": {
+          "ece": 0.0006127450980393245,
+          "brier": 0.18524830275247353,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.01784980028195487,
+          "brier": 0.24990775717397198,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.011366020316619457,
+          "brier": 0.18509249813826725,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0037999574829931937,
+          "brier": 0.10881996958009395,
+          "n": 224
+        }
+      },
+      "ece_home_win": 0.042755272592934226,
+      "launch_totals": {},
+      "posthoc_calibration": {
+        "available": true,
+        "multiclass_log_loss_before": 1.0822985608782365,
+        "multiclass_log_loss_after": 1.076917818380095,
+        "multiclass_brier_before": 0.655434254951998,
+        "multiclass_brier_after": 0.6520989538758052,
+        "classwise_ece_before": {
+          "home": 0.042755272592934226,
+          "draw": 0.020525567241276077,
+          "away": 0.03876627767946158
+        },
+        "classwise_ece_after": {
+          "home": 0.006140014261423521,
+          "draw": 0.002974649658596784,
+          "away": 0.0031653646028265148
+        },
+        "totals": {
+          "1.5": {
+            "ece_before": 0.031377619303052405,
+            "ece_after": 0.0006127450980393245,
+            "brier_before": 0.18670401441473736,
+            "brier_after": 0.18524830275247353,
+            "n": 224
+          },
+          "2.5": {
+            "ece_before": 0.03846727203584135,
+            "ece_after": 0.01784980028195487,
+            "brier_before": 0.2528453842699801,
+            "brier_after": 0.24990775717397198,
+            "n": 224
+          },
+          "3.5": {
+            "ece_before": 0.025300751891456103,
+            "ece_after": 0.011366020316619457,
+            "brier_before": 0.18626099650085395,
+            "brier_after": 0.18509249813826725,
+            "n": 224
+          },
+          "4.5": {
+            "ece_before": 0.007488072745295611,
+            "ece_after": 0.0037999574829931937,
+            "brier_before": 0.10882754967232071,
+            "brier_after": 0.10881996958009395,
+            "n": 224
+          }
+        }
+      },
+      "score_matrix_calibration": {
+        "available": true,
+        "accepted": true,
+        "selected": {
+          "total_intensity_scale": 1.05,
+          "draw_inflation": 1.0
+        },
+        "metrics_before": {
+          "multiclass_log_loss": 1.0811887392417208,
+          "over_2_5_brier": 0.2528952560208519,
+          "objective": 1.1444125532469338
+        },
+        "metrics_after": {
+          "multiclass_log_loss": 1.0809386201020463,
+          "over_2_5_brier": 0.2538757950362086,
+          "objective": 1.1444075688610984
+        },
+        "delta": {
+          "multiclass_log_loss": -0.0002501191396744318,
+          "over_2_5_brier": 0.0009805390153567184,
+          "objective": -4.9843858354048365e-06
+        },
+        "reason": "",
+        "source": "independent_poisson_from_lambdas"
+      },
+      "benchmark_comparison": {
+        "strongest_baseline": "home_field_baseline",
+        "comparisons": {
+          "uniform_baseline": {
+            "baseline_log_loss_1x2": 1.0986122886681078,
+            "candidate_log_loss_1x2": 1.0822985608782365,
+            "relative_log_loss_ratio": 0.9851506050331468,
+            "baseline_brier_score_1x2": 0.6666666666666667,
+            "candidate_brier_score_1x2": 0.6554342549519979,
+            "relative_brier_ratio": 0.9831513824279968
+          },
+          "home_field_baseline": {
+            "baseline_log_loss_1x2": 1.0904891186672154,
+            "candidate_log_loss_1x2": 1.0822985608782365,
+            "relative_log_loss_ratio": 0.9924890971869675,
+            "baseline_brier_score_1x2": 0.6608288767158061,
+            "candidate_brier_score_1x2": 0.6554342549519979,
+            "relative_brier_ratio": 0.9918365828826693
+          },
+          "team_ratings_poisson": {
+            "baseline_log_loss_1x2": 1.144105777690897,
+            "candidate_log_loss_1x2": 1.0822985608782365,
+            "relative_log_loss_ratio": 0.9459777076404565,
+            "baseline_brier_score_1x2": 0.6984183689739824,
+            "candidate_brier_score_1x2": 0.6554342549519979,
+            "relative_brier_ratio": 0.9384550637104081
+          },
+          "rolling_npxg_poisson": {
+            "baseline_log_loss_1x2": 1.1086541680394062,
+            "candidate_log_loss_1x2": 1.0822985608782365,
+            "relative_log_loss_ratio": 0.9762273863924779,
+            "baseline_brier_score_1x2": 0.6688689588153338,
+            "candidate_brier_score_1x2": 0.6554342549519979,
+            "relative_brier_ratio": 0.9799142960870381
+          }
+        }
+      },
+      "ablation_comparison": {},
+      "slice_metrics": {
+        "early_season": {
+          "n_matches": 29,
+          "log_loss_1x2": 1.077782349324607,
+          "brier_score_1x2": 0.6530413119814815,
+          "expected_total_goals_mae": 1.5024346154294297
+        },
+        "later_season": {
+          "n_matches": 195,
+          "log_loss_1x2": 1.0829702025964687,
+          "brier_score_1x2": 0.6557901285219723,
+          "expected_total_goals_mae": 1.2262981744903474
+        },
+        "home_favorite": {
+          "n_matches": 152,
+          "log_loss_1x2": 1.0784504040589245,
+          "brier_score_1x2": 0.6526472108642764,
+          "expected_total_goals_mae": 1.2597063782845246
+        },
+        "away_favorite": {
+          "n_matches": 72,
+          "log_loss_1x2": 1.0904224474967856,
+          "brier_score_1x2": 0.6613180146927434,
+          "expected_total_goals_mae": 1.2669913663031038
+        },
+        "short_rest": {
+          "n_matches": 2,
+          "log_loss_1x2": 0.9127557180981716,
+          "brier_score_1x2": 0.5384767100041348,
+          "expected_total_goals_mae": 0.5817370427002375
+        },
+        "normal_rest": {
+          "n_matches": 222,
+          "log_loss_1x2": 1.083825973876255,
+          "brier_score_1x2": 0.6564879265281047,
+          "expected_total_goals_mae": 1.268176908953472
+        },
+        "high_lineup_quality": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.0822985608782365,
+          "brier_score_1x2": 0.655434254951998,
+          "expected_total_goals_mae": 1.262047981576211
+        },
+        "low_lineup_quality": {
+          "n_matches": 0
+        },
+        "high_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.0534825383908373,
+          "brier_score_1x2": 0.6363750933967486,
+          "expected_total_goals_mae": 1.2490243286129095
+        },
+        "low_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.1111145833656362,
+          "brier_score_1x2": 0.6744934165072473,
+          "expected_total_goals_mae": 1.2750716345395123
+        }
+      },
+      "fit_diagnostics": {
+        "converged_rate": 1.0,
+        "median_iterations": 26.5,
+        "median_nfev": 2454.0,
+        "median_grad_norm": 0.5434911455629976,
+        "median_n_params": 75.0
+      },
+      "raw_classwise_ece": {
+        "home": 0.042755272592934226,
+        "draw": 0.020525567241276077,
+        "away": 0.03876627767946158
+      },
+      "raw_totals": {
+        "1.5": {
+          "ece": 0.031377619303052405,
+          "brier": 0.18670401441473736,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03846727203584135,
+          "brier": 0.2528453842699801,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.025300751891456103,
+          "brier": 0.18626099650085395,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.007488072745295611,
+          "brier": 0.10882754967232071,
+          "n": 224
+        }
+      },
+      "calibrated_metrics": {
+        "log_loss_1x2": 1.076917818380095,
+        "brier_score_1x2": 0.6520989538758052,
+        "top1_accuracy_1x2": 0.42410714285714285,
+        "forecast_entropy_1x2": 1.0743838294902577
+      },
+      "calibrated_classwise_ece": {
+        "home": 0.006140014261423521,
+        "draw": 0.002974649658596784,
+        "away": 0.0031653646028265148
+      },
+      "calibrated_totals": {
+        "1.5": {
+          "ece": 0.0006127450980393245,
+          "brier": 0.18524830275247353,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.01784980028195487,
+          "brier": 0.24990775717397198,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.011366020316619457,
+          "brier": 0.18509249813826725,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0037999574829931937,
+          "brier": 0.10881996958009395,
+          "n": 224
+        }
+      },
+      "ece_over_1.5": 0.031377619303052405,
+      "ece_over_2.5": 0.03846727203584135,
+      "ece_over_3.5": 0.025300751891456103,
+      "ece_over_4.5": 0.007488072745295611,
+      "betting": {
+        "overall": {
+          "n_bets": 0,
+          "total_staked": 0.0,
+          "total_pnl": 0.0,
+          "roi": 0.0,
+          "hit_rate": 0.0,
+          "mean_edge": 0.0,
+          "mean_confidence": 0.0
+        },
+        "by_market": {},
+        "by_edge_bucket": {},
+        "by_season": {},
+        "by_line_band": {},
+        "clv": {}
+      }
+    },
+    "dixon_coles": {
+      "classwise_ece": {
+        "home": 0.005674788547233467,
+        "draw": 0.00977150634522897,
+        "away": 0.004096717797995697
+      },
+      "totals": {
+        "1.5": {
+          "ece": 0.001006778719552348,
+          "brier": 0.18524247691829235,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03256272026512918,
+          "brier": 0.25046516791423595,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.008586646512655366,
+          "brier": 0.18514230768256087,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0,
+          "brier": 0.109375,
+          "n": 224
+        }
+      },
+      "ece_home_win": 0.03776207624964727,
+      "launch_totals": {},
+      "posthoc_calibration": {
+        "available": true,
+        "multiclass_log_loss_before": 1.08147696679514,
+        "multiclass_log_loss_after": 1.0771071722903343,
+        "multiclass_brier_before": 0.6548853874883067,
+        "multiclass_brier_after": 0.6522036959337912,
+        "classwise_ece_before": {
+          "home": 0.03776207624964727,
+          "draw": 0.008481039980129723,
+          "away": 0.03248355517004967
+        },
+        "classwise_ece_after": {
+          "home": 0.005674788547233467,
+          "draw": 0.00977150634522897,
+          "away": 0.004096717797995697
+        },
+        "totals": {
+          "1.5": {
+            "ece_before": 0.021170520711449075,
+            "ece_after": 0.001006778719552348,
+            "brier_before": 0.18607766880443657,
+            "brier_after": 0.18524247691829235,
+            "n": 224
+          },
+          "2.5": {
+            "ece_before": 0.06070913428162329,
+            "ece_after": 0.03256272026512918,
+            "brier_before": 0.25336279467958545,
+            "brier_after": 0.25046516791423595,
+            "n": 224
+          },
+          "3.5": {
+            "ece_before": 0.020417224678199095,
+            "ece_after": 0.008586646512655366,
+            "brier_before": 0.18644386577371871,
+            "brier_after": 0.18514230768256087,
+            "n": 224
+          },
+          "4.5": {
+            "ece_before": 0.018515380988481035,
+            "ece_after": 0.0,
+            "brier_before": 0.10887188309301678,
+            "brier_after": 0.109375,
+            "n": 224
+          }
+        }
+      },
+      "score_matrix_calibration": {
+        "available": true,
+        "accepted": true,
+        "selected": {
+          "total_intensity_scale": 1.05,
+          "draw_inflation": 1.0
+        },
+        "metrics_before": {
+          "multiclass_log_loss": 1.0814346565131667,
+          "over_2_5_brier": 0.25336279467958545,
+          "objective": 1.144775355183063
+        },
+        "metrics_after": {
+          "multiclass_log_loss": 1.0811571909901903,
+          "over_2_5_brier": 0.25423406730041853,
+          "objective": 1.144715707815295
+        },
+        "delta": {
+          "multiclass_log_loss": -0.0002774655229764722,
+          "over_2_5_brier": 0.0008712726208330857,
+          "objective": -5.9647367768089765e-05
+        },
+        "reason": "",
+        "source": "independent_poisson_from_lambdas"
+      },
+      "benchmark_comparison": {
+        "strongest_baseline": "home_field_baseline",
+        "comparisons": {
+          "uniform_baseline": {
+            "baseline_log_loss_1x2": 1.0986122886681078,
+            "candidate_log_loss_1x2": 1.0814769667951398,
+            "relative_log_loss_ratio": 0.9844027578703477,
+            "baseline_brier_score_1x2": 0.6666666666666667,
+            "candidate_brier_score_1x2": 0.6548853874883067,
+            "relative_brier_ratio": 0.98232808123246
+          },
+          "home_field_baseline": {
+            "baseline_log_loss_1x2": 1.0904891186672154,
+            "candidate_log_loss_1x2": 1.0814769667951398,
+            "relative_log_loss_ratio": 0.9917356792307197,
+            "baseline_brier_score_1x2": 0.6608288767158061,
+            "candidate_brier_score_1x2": 0.6548853874883067,
+            "relative_brier_ratio": 0.9910060086099182
+          },
+          "team_ratings_poisson": {
+            "baseline_log_loss_1x2": 1.144105777690897,
+            "candidate_log_loss_1x2": 1.0814769667951398,
+            "relative_log_loss_ratio": 0.9452595973930327,
+            "baseline_brier_score_1x2": 0.6984183689739824,
+            "candidate_brier_score_1x2": 0.6548853874883067,
+            "relative_brier_ratio": 0.9376691916771488
+          },
+          "rolling_npxg_poisson": {
+            "baseline_log_loss_1x2": 1.1086541680394062,
+            "candidate_log_loss_1x2": 1.0814769667951398,
+            "relative_log_loss_ratio": 0.9754863130201118,
+            "baseline_brier_score_1x2": 0.6688689588153338,
+            "candidate_brier_score_1x2": 0.6548853874883067,
+            "relative_brier_ratio": 0.9790937056612792
+          }
+        }
+      },
+      "ablation_comparison": {},
+      "slice_metrics": {
+        "early_season": {
+          "n_matches": 29,
+          "log_loss_1x2": 1.0710342188214543,
+          "brier_score_1x2": 0.64927925386867,
+          "expected_total_goals_mae": 1.5021991619506758
+        },
+        "later_season": {
+          "n_matches": 195,
+          "log_loss_1x2": 1.0830299908527652,
+          "brier_score_1x2": 0.655719120180458,
+          "expected_total_goals_mae": 1.2278520050948472
+        },
+        "home_favorite": {
+          "n_matches": 149,
+          "log_loss_1x2": 1.0761911779423083,
+          "brier_score_1x2": 0.6511771575303944,
+          "expected_total_goals_mae": 1.2739150325613444
+        },
+        "away_favorite": {
+          "n_matches": 75,
+          "log_loss_1x2": 1.0919780673160993,
+          "brier_score_1x2": 0.6622524043380262,
+          "expected_total_goals_mae": 1.2424210245123266
+        },
+        "short_rest": {
+          "n_matches": 2,
+          "log_loss_1x2": 0.9019554361735416,
+          "brier_score_1x2": 0.5317774483383158,
+          "expected_total_goals_mae": 0.5751214358865961
+        },
+        "normal_rest": {
+          "n_matches": 222,
+          "log_loss_1x2": 1.0830942778818213,
+          "brier_score_1x2": 0.6559944680211897,
+          "expected_total_goals_mae": 1.2695706027850975
+        },
+        "high_lineup_quality": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.08147696679514,
+          "brier_score_1x2": 0.6548853874883067,
+          "expected_total_goals_mae": 1.2633701637949322
+        },
+        "low_lineup_quality": {
+          "n_matches": 0
+        },
+        "high_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.0501577746487105,
+          "brier_score_1x2": 0.6345727014113126,
+          "expected_total_goals_mae": 1.261312257046059
+        },
+        "low_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.11279615894157,
+          "brier_score_1x2": 0.675198073565301,
+          "expected_total_goals_mae": 1.2654280705438052
+        }
+      },
+      "fit_diagnostics": {
+        "converged_rate": 1.0,
+        "median_iterations": 26.0,
+        "median_nfev": 2338.0,
+        "median_grad_norm": 0.910946398046593,
+        "median_n_params": 75.0
+      },
+      "raw_classwise_ece": {
+        "home": 0.03776207624964727,
+        "draw": 0.008481039980129723,
+        "away": 0.03248355517004967
+      },
+      "raw_totals": {
+        "1.5": {
+          "ece": 0.021170520711449075,
+          "brier": 0.18607766880443657,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.06070913428162329,
+          "brier": 0.25336279467958545,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.020417224678199095,
+          "brier": 0.18644386577371871,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.018515380988481035,
+          "brier": 0.10887188309301678,
+          "n": 224
+        }
+      },
+      "calibrated_metrics": {
+        "log_loss_1x2": 1.0771071722903343,
+        "brier_score_1x2": 0.6522036959337912,
+        "top1_accuracy_1x2": 0.42410714285714285,
+        "forecast_entropy_1x2": 1.0727495330005021
+      },
+      "calibrated_classwise_ece": {
+        "home": 0.005674788547233467,
+        "draw": 0.00977150634522897,
+        "away": 0.004096717797995697
+      },
+      "calibrated_totals": {
+        "1.5": {
+          "ece": 0.001006778719552348,
+          "brier": 0.18524247691829235,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03256272026512918,
+          "brier": 0.25046516791423595,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.008586646512655366,
+          "brier": 0.18514230768256087,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0,
+          "brier": 0.109375,
+          "n": 224
+        }
+      },
+      "ece_over_1.5": 0.021170520711449075,
+      "ece_over_2.5": 0.06070913428162329,
+      "ece_over_3.5": 0.020417224678199095,
+      "ece_over_4.5": 0.018515380988481035,
+      "betting": {
+        "overall": {
+          "n_bets": 0,
+          "total_staked": 0.0,
+          "total_pnl": 0.0,
+          "roi": 0.0,
+          "hit_rate": 0.0,
+          "mean_edge": 0.0,
+          "mean_confidence": 0.0
+        },
+        "by_market": {},
+        "by_edge_bucket": {},
+        "by_season": {},
+        "by_line_band": {},
+        "clv": {}
+      }
+    },
+    "home_field_baseline": {
+      "classwise_ece": {
+        "home": 0.02588630074106807,
+        "draw": 0.04187763157666974,
+        "away": 0.015991330835601503
+      },
+      "totals": {
+        "1.5": {
+          "ece": 0.002929687500000111,
+          "brier": 0.18520378579898758,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03969594594594589,
+          "brier": 0.2513963995020945,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 1.1102230246251565e-16,
+          "brier": 0.18524792729591838,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0,
+          "brier": 0.109375,
+          "n": 224
+        }
+      },
+      "ece_home_win": 0.045653423766796875,
+      "launch_totals": {},
+      "posthoc_calibration": {
+        "available": true,
+        "multiclass_log_loss_before": 1.0904891186672159,
+        "multiclass_log_loss_after": 1.081038182180715,
+        "multiclass_brier_before": 0.6608288767158061,
+        "multiclass_brier_after": 0.6546079930703316,
+        "classwise_ece_before": {
+          "home": 0.045653423766796875,
+          "draw": 0.003411053152484911,
+          "away": 0.04906447691928166
+        },
+        "classwise_ece_after": {
+          "home": 0.02588630074106807,
+          "draw": 0.04187763157666974,
+          "away": 0.015991330835601503
+        },
+        "totals": {
+          "1.5": {
+            "ece_before": 0.01053036144398245,
+            "ece_after": 0.002929687500000111,
+            "brier_before": 0.1853858571680236,
+            "brier_after": 0.18520378579898758,
+            "n": 224
+          },
+          "2.5": {
+            "ece_before": 0.06405083786117896,
+            "ece_after": 0.03969594594594589,
+            "brier_before": 0.25189440446702444,
+            "brier_after": 0.2513963995020945,
+            "n": 224
+          },
+          "3.5": {
+            "ece_before": 0.03187206769305271,
+            "ece_after": 1.1102230246251565e-16,
+            "brier_before": 0.1873300449476672,
+            "brier_after": 0.18524792729591838,
+            "n": 224
+          },
+          "4.5": {
+            "ece_before": 0.006514486779818085,
+            "ece_after": 0.0,
+            "brier_before": 0.10940606099185256,
+            "brier_after": 0.109375,
+            "n": 224
+          }
+        }
+      },
+      "score_matrix_calibration": {
+        "available": true,
+        "accepted": false,
+        "selected": {
+          "total_intensity_scale": 1.0,
+          "draw_inflation": 1.0
+        },
+        "metrics_before": {
+          "multiclass_log_loss": 1.08185295511429,
+          "over_2_5_brier": 0.2518944044670245,
+          "objective": 1.144826556231046
+        },
+        "metrics_after": {
+          "multiclass_log_loss": 1.08185295511429,
+          "over_2_5_brier": 0.2518944044670245,
+          "objective": 1.144826556231046
+        },
+        "delta": {
+          "multiclass_log_loss": 0.0,
+          "over_2_5_brier": 0.0,
+          "objective": 0.0
+        },
+        "reason": "",
+        "source": "independent_poisson_from_lambdas"
+      },
+      "benchmark_comparison": {},
+      "ablation_comparison": {},
+      "slice_metrics": {
+        "early_season": {
+          "n_matches": 29,
+          "log_loss_1x2": 1.0601192879949028,
+          "brier_score_1x2": 0.6424395775829285,
+          "expected_total_goals_mae": 1.5039927404718696
+        },
+        "later_season": {
+          "n_matches": 195,
+          "log_loss_1x2": 1.0950056575877127,
+          "brier_score_1x2": 0.6635636955612085,
+          "expected_total_goals_mae": 1.2250956504776227
+        },
+        "home_favorite": {
+          "n_matches": 140,
+          "log_loss_1x2": 1.0727290443770028,
+          "brier_score_1x2": 0.649366655463761,
+          "expected_total_goals_mae": 1.2145875298257405
+        },
+        "away_favorite": {
+          "n_matches": 84,
+          "log_loss_1x2": 1.1200892424842368,
+          "brier_score_1x2": 0.6799325788025482,
+          "expected_total_goals_mae": 1.3388950850144878
+        },
+        "short_rest": {
+          "n_matches": 2,
+          "log_loss_1x2": 0.9601352885622187,
+          "brier_score_1x2": 0.5739499018999021,
+          "expected_total_goals_mae": 0.6196928635953025
+        },
+        "normal_rest": {
+          "n_matches": 222,
+          "log_loss_1x2": 1.0916634774969907,
+          "brier_score_1x2": 0.6616115701826161,
+          "expected_total_goals_mae": 1.266982232385721
+        },
+        "high_lineup_quality": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.0904891186672159,
+          "brier_score_1x2": 0.6608288767158061,
+          "expected_total_goals_mae": 1.2612028630215206
+        },
+        "low_lineup_quality": {
+          "n_matches": 0
+        },
+        "high_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.0801956222293303,
+          "brier_score_1x2": 0.6540192599330302,
+          "expected_total_goals_mae": 1.3401092200482445
+        },
+        "low_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.100782615105102,
+          "brier_score_1x2": 0.6676384934985821,
+          "expected_total_goals_mae": 1.182296505994797
+        }
+      },
+      "raw_classwise_ece": {
+        "home": 0.045653423766796875,
+        "draw": 0.003411053152484911,
+        "away": 0.04906447691928166
+      },
+      "raw_totals": {
+        "1.5": {
+          "ece": 0.01053036144398245,
+          "brier": 0.1853858571680236,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.06405083786117896,
+          "brier": 0.25189440446702444,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.03187206769305271,
+          "brier": 0.1873300449476672,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.006514486779818085,
+          "brier": 0.10940606099185256,
+          "n": 224
+        }
+      },
+      "calibrated_metrics": {
+        "log_loss_1x2": 1.081038182180715,
+        "brier_score_1x2": 0.6546079930703316,
+        "top1_accuracy_1x2": 0.42410714285714285,
+        "forecast_entropy_1x2": 1.0892913918754712
+      },
+      "calibrated_classwise_ece": {
+        "home": 0.02588630074106807,
+        "draw": 0.04187763157666974,
+        "away": 0.015991330835601503
+      },
+      "calibrated_totals": {
+        "1.5": {
+          "ece": 0.002929687500000111,
+          "brier": 0.18520378579898758,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03969594594594589,
+          "brier": 0.2513963995020945,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 1.1102230246251565e-16,
+          "brier": 0.18524792729591838,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0,
+          "brier": 0.109375,
+          "n": 224
+        }
+      },
+      "ece_over_1.5": 0.01053036144398245,
+      "ece_over_2.5": 0.06405083786117896,
+      "ece_over_3.5": 0.03187206769305271,
+      "ece_over_4.5": 0.006514486779818085,
+      "betting": {
+        "overall": {
+          "n_bets": 0,
+          "total_staked": 0.0,
+          "total_pnl": 0.0,
+          "roi": 0.0,
+          "hit_rate": 0.0,
+          "mean_edge": 0.0,
+          "mean_confidence": 0.0
+        },
+        "by_market": {},
+        "by_edge_bucket": {},
+        "by_season": {},
+        "by_line_band": {},
+        "clv": {}
+      }
+    },
+    "rolling_npxg_poisson": {
+      "classwise_ece": {
+        "home": 0.009411345692009698,
+        "draw": 0.020118625414083907,
+        "away": 0.026471390013883905
+      },
+      "totals": {
+        "1.5": {
+          "ece": 0.048668686224489895,
+          "brier": 0.18741476431532433,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.07989292655837861,
+          "brier": 0.25588262040534804,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.0917595777150146,
+          "brier": 0.19232770525665113,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.018936420722134972,
+          "brier": 0.10974617023478876,
+          "n": 224
+        }
+      },
+      "ece_home_win": 0.09505797205391724,
+      "launch_totals": {},
+      "posthoc_calibration": {
+        "available": true,
+        "multiclass_log_loss_before": 1.1086541680394062,
+        "multiclass_log_loss_after": 1.0773698504804283,
+        "multiclass_brier_before": 0.6688689588153338,
+        "multiclass_brier_after": 0.6522789533060923,
+        "classwise_ece_before": {
+          "home": 0.09505797205391724,
+          "draw": 0.03315325719955333,
+          "away": 0.06811677312956141
+        },
+        "classwise_ece_after": {
+          "home": 0.009411345692009698,
+          "draw": 0.020118625414083907,
+          "away": 0.026471390013883905
+        },
+        "totals": {
+          "1.5": {
+            "ece_before": 0.09493093391291932,
+            "ece_after": 0.048668686224489895,
+            "brier_before": 0.19677475881960943,
+            "brier_after": 0.18741476431532433,
+            "n": 224
+          },
+          "2.5": {
+            "ece_before": 0.12192090174427074,
+            "ece_after": 0.07989292655837861,
+            "brier_before": 0.27062033655027523,
+            "brier_after": 0.25588262040534804,
+            "n": 224
+          },
+          "3.5": {
+            "ece_before": 0.12509446826174744,
+            "ece_after": 0.0917595777150146,
+            "brier_before": 0.2064547959087814,
+            "brier_after": 0.19232770525665113,
+            "n": 224
+          },
+          "4.5": {
+            "ece_before": 0.09737395040240583,
+            "ece_after": 0.018936420722134972,
+            "brier_before": 0.12040589599363918,
+            "brier_after": 0.10974617023478876,
+            "n": 224
+          }
+        }
+      },
+      "score_matrix_calibration": {
+        "available": true,
+        "accepted": true,
+        "selected": {
+          "total_intensity_scale": 0.9,
+          "draw_inflation": 0.9
+        },
+        "metrics_before": {
+          "multiclass_log_loss": 1.1086541680394062,
+          "over_2_5_brier": 0.27062033655027523,
+          "objective": 1.176309252176975
+        },
+        "metrics_after": {
+          "multiclass_log_loss": 1.1070263059451229,
+          "over_2_5_brier": 0.27228830391455444,
+          "objective": 1.1750983819237615
+        },
+        "delta": {
+          "multiclass_log_loss": -0.0016278620942833388,
+          "over_2_5_brier": 0.0016679673642792103,
+          "objective": -0.0012108702532134252
+        },
+        "reason": "",
+        "source": "independent_poisson_from_lambdas"
+      },
+      "benchmark_comparison": {},
+      "ablation_comparison": {},
+      "slice_metrics": {
+        "early_season": {
+          "n_matches": 29,
+          "log_loss_1x2": 1.0913824382634283,
+          "brier_score_1x2": 0.6597682151051804,
+          "expected_total_goals_mae": 1.5114942528735635
+        },
+        "later_season": {
+          "n_matches": 195,
+          "log_loss_1x2": 1.1112227842625004,
+          "brier_score_1x2": 0.6702224027517156,
+          "expected_total_goals_mae": 1.3133333333333332
+        },
+        "home_favorite": {
+          "n_matches": 120,
+          "log_loss_1x2": 1.0754697534612323,
+          "brier_score_1x2": 0.6490911388681738,
+          "expected_total_goals_mae": 1.4044444444444444
+        },
+        "away_favorite": {
+          "n_matches": 104,
+          "log_loss_1x2": 1.146943877168068,
+          "brier_score_1x2": 0.691689520292826,
+          "expected_total_goals_mae": 1.2634615384615382
+        },
+        "short_rest": {
+          "n_matches": 2,
+          "log_loss_1x2": 0.9740301344797456,
+          "brier_score_1x2": 0.5847401863659006,
+          "expected_total_goals_mae": 0.5500000000000003
+        },
+        "normal_rest": {
+          "n_matches": 222,
+          "log_loss_1x2": 1.1098669971705744,
+          "brier_score_1x2": 0.6696268756842477,
+          "expected_total_goals_mae": 1.3460960960960957
+        },
+        "high_lineup_quality": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.1086541680394062,
+          "brier_score_1x2": 0.6688689588153338,
+          "expected_total_goals_mae": 1.3389880952380953
+        },
+        "low_lineup_quality": {
+          "n_matches": 0
+        },
+        "high_confidence": {
+          "n_matches": 113,
+          "log_loss_1x2": 1.1041434915308115,
+          "brier_score_1x2": 0.6638475392512657,
+          "expected_total_goals_mae": 1.4348082595870206
+        },
+        "low_confidence": {
+          "n_matches": 111,
+          "log_loss_1x2": 1.1132461179986055,
+          "brier_score_1x2": 0.6739808544075834,
+          "expected_total_goals_mae": 1.2414414414414412
+        }
+      },
+      "raw_classwise_ece": {
+        "home": 0.09505797205391724,
+        "draw": 0.03315325719955333,
+        "away": 0.06811677312956141
+      },
+      "raw_totals": {
+        "1.5": {
+          "ece": 0.09493093391291932,
+          "brier": 0.19677475881960943,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.12192090174427074,
+          "brier": 0.27062033655027523,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.12509446826174744,
+          "brier": 0.2064547959087814,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.09737395040240583,
+          "brier": 0.12040589599363918,
+          "n": 224
+        }
+      },
+      "calibrated_metrics": {
+        "log_loss_1x2": 1.0773698504804283,
+        "brier_score_1x2": 0.6522789533060923,
+        "top1_accuracy_1x2": 0.42410714285714285,
+        "forecast_entropy_1x2": 1.0718614720981445
+      },
+      "calibrated_classwise_ece": {
+        "home": 0.009411345692009698,
+        "draw": 0.020118625414083907,
+        "away": 0.026471390013883905
+      },
+      "calibrated_totals": {
+        "1.5": {
+          "ece": 0.048668686224489895,
+          "brier": 0.18741476431532433,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.07989292655837861,
+          "brier": 0.25588262040534804,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.0917595777150146,
+          "brier": 0.19232770525665113,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.018936420722134972,
+          "brier": 0.10974617023478876,
+          "n": 224
+        }
+      },
+      "ece_over_1.5": 0.09493093391291932,
+      "ece_over_2.5": 0.12192090174427074,
+      "ece_over_3.5": 0.12509446826174744,
+      "ece_over_4.5": 0.09737395040240583,
+      "betting": {
+        "overall": {
+          "n_bets": 0,
+          "total_staked": 0.0,
+          "total_pnl": 0.0,
+          "roi": 0.0,
+          "hit_rate": 0.0,
+          "mean_edge": 0.0,
+          "mean_confidence": 0.0
+        },
+        "by_market": {},
+        "by_edge_bucket": {},
+        "by_season": {},
+        "by_line_band": {},
+        "clv": {}
+      }
+    },
+    "team_ratings_poisson": {
+      "classwise_ece": {
+        "home": 0.05756681266285535,
+        "draw": 0.047022902033833046,
+        "away": 0.01054391062902221
+      },
+      "totals": {
+        "1.5": {
+          "ece": 0.10300251052802079,
+          "brier": 0.19526102944687218,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.11021614174515966,
+          "brier": 0.2616811285999589,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.12481398809523804,
+          "brier": 0.19975779699900795,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.046875,
+          "brier": 0.111572265625,
+          "n": 224
+        }
+      },
+      "ece_home_win": 0.12082859042022982,
+      "launch_totals": {},
+      "posthoc_calibration": {
+        "available": true,
+        "multiclass_log_loss_before": 1.144105777690897,
+        "multiclass_log_loss_after": 1.085654816851691,
+        "multiclass_brier_before": 0.6984183689739824,
+        "multiclass_brier_after": 0.6578421991182914,
+        "classwise_ece_before": {
+          "home": 0.12082859042022982,
+          "draw": 0.008341887840806732,
+          "away": 0.1164159816223624
+        },
+        "classwise_ece_after": {
+          "home": 0.05756681266285535,
+          "draw": 0.047022902033833046,
+          "away": 0.01054391062902221
+        },
+        "totals": {
+          "1.5": {
+            "ece_before": 0.1522127649316911,
+            "ece_after": 0.10300251052802079,
+            "brier_before": 0.21350032899799626,
+            "brier_after": 0.19526102944687218,
+            "n": 224
+          },
+          "2.5": {
+            "ece_before": 0.1957420316031579,
+            "ece_after": 0.11021614174515966,
+            "brier_before": 0.29992312787938175,
+            "brier_after": 0.2616811285999589,
+            "n": 224
+          },
+          "3.5": {
+            "ece_before": 0.1752140743852711,
+            "ece_after": 0.12481398809523804,
+            "brier_before": 0.23692627439000807,
+            "brier_after": 0.19975779699900795,
+            "n": 224
+          },
+          "4.5": {
+            "ece_before": 0.11987162453413094,
+            "ece_after": 0.046875,
+            "brier_before": 0.13268451041197915,
+            "brier_after": 0.111572265625,
+            "n": 224
+          }
+        }
+      },
+      "score_matrix_calibration": {
+        "available": true,
+        "accepted": true,
+        "selected": {
+          "total_intensity_scale": 0.9,
+          "draw_inflation": 0.9
+        },
+        "metrics_before": {
+          "multiclass_log_loss": 1.1441057776908974,
+          "over_2_5_brier": 0.29992312787938175,
+          "objective": 1.2190865596607428
+        },
+        "metrics_after": {
+          "multiclass_log_loss": 1.140874214053682,
+          "over_2_5_brier": 0.29813720115649023,
+          "objective": 1.2154085143428046
+        },
+        "delta": {
+          "multiclass_log_loss": -0.003231563637215329,
+          "over_2_5_brier": -0.0017859267228915177,
+          "objective": -0.003678045317938139
+        },
+        "reason": "",
+        "source": "independent_poisson_from_lambdas"
+      },
+      "benchmark_comparison": {},
+      "ablation_comparison": {},
+      "slice_metrics": {
+        "early_season": {
+          "n_matches": 29,
+          "log_loss_1x2": 1.228420329659175,
+          "brier_score_1x2": 0.7510219928899498,
+          "expected_total_goals_mae": 1.5851161155556956
+        },
+        "later_season": {
+          "n_matches": 195,
+          "log_loss_1x2": 1.1315666904751016,
+          "brier_score_1x2": 0.6905952659300694,
+          "expected_total_goals_mae": 1.4777135700182553
+        },
+        "home_favorite": {
+          "n_matches": 115,
+          "log_loss_1x2": 1.1040218520430536,
+          "brier_score_1x2": 0.6710643014342427,
+          "expected_total_goals_mae": 1.510407974033456
+        },
+        "away_favorite": {
+          "n_matches": 109,
+          "log_loss_1x2": 1.1863961579615578,
+          "brier_score_1x2": 0.7272781650021481,
+          "expected_total_goals_mae": 1.4717944632186009
+        },
+        "short_rest": {
+          "n_matches": 2,
+          "log_loss_1x2": 0.8342562426932763,
+          "brier_score_1x2": 0.4926682918343093,
+          "expected_total_goals_mae": 2.529904875268293
+        },
+        "normal_rest": {
+          "n_matches": 222,
+          "log_loss_1x2": 1.1468972149431278,
+          "brier_score_1x2": 0.700271973272538,
+          "expected_total_goals_mae": 1.4822644313249478
+        },
+        "high_lineup_quality": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.144105777690897,
+          "brier_score_1x2": 0.6984183689739824,
+          "expected_total_goals_mae": 1.491618363860156
+        },
+        "low_lineup_quality": {
+          "n_matches": 0
+        },
+        "high_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.2042497288305245,
+          "brier_score_1x2": 0.7379861540520337,
+          "expected_total_goals_mae": 1.7309192674205125
+        },
+        "low_confidence": {
+          "n_matches": 112,
+          "log_loss_1x2": 1.08396182655127,
+          "brier_score_1x2": 0.6588505838959311,
+          "expected_total_goals_mae": 1.2523174602997997
+        }
+      },
+      "raw_classwise_ece": {
+        "home": 0.12082859042022982,
+        "draw": 0.008341887840806732,
+        "away": 0.1164159816223624
+      },
+      "raw_totals": {
+        "1.5": {
+          "ece": 0.1522127649316911,
+          "brier": 0.21350032899799626,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.1957420316031579,
+          "brier": 0.29992312787938175,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.1752140743852711,
+          "brier": 0.23692627439000807,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.11987162453413094,
+          "brier": 0.13268451041197915,
+          "n": 224
+        }
+      },
+      "calibrated_metrics": {
+        "log_loss_1x2": 1.085654816851691,
+        "brier_score_1x2": 0.6578421991182914,
+        "top1_accuracy_1x2": 0.42410714285714285,
+        "forecast_entropy_1x2": 1.0413179898310507
+      },
+      "calibrated_classwise_ece": {
+        "home": 0.05756681266285535,
+        "draw": 0.047022902033833046,
+        "away": 0.01054391062902221
+      },
+      "calibrated_totals": {
+        "1.5": {
+          "ece": 0.10300251052802079,
+          "brier": 0.19526102944687218,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.11021614174515966,
+          "brier": 0.2616811285999589,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.12481398809523804,
+          "brier": 0.19975779699900795,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.046875,
+          "brier": 0.111572265625,
+          "n": 224
+        }
+      },
+      "ece_over_1.5": 0.1522127649316911,
+      "ece_over_2.5": 0.1957420316031579,
+      "ece_over_3.5": 0.1752140743852711,
+      "ece_over_4.5": 0.11987162453413094,
+      "betting": {
+        "overall": {
+          "n_bets": 0,
+          "total_staked": 0.0,
+          "total_pnl": 0.0,
+          "roi": 0.0,
+          "hit_rate": 0.0,
+          "mean_edge": 0.0,
+          "mean_confidence": 0.0
+        },
+        "by_market": {},
+        "by_edge_bucket": {},
+        "by_season": {},
+        "by_line_band": {},
+        "clv": {}
+      }
+    },
+    "uniform_baseline": {
+      "classwise_ece": {
+        "home": 1.1102230246251565e-16,
+        "draw": 5.551115123125783e-17,
+        "away": 5.551115123125783e-17
+      },
+      "totals": {
+        "1.5": {
+          "ece": 0.002929687500000111,
+          "brier": 0.18520378579898758,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03969594594594589,
+          "brier": 0.2513963995020945,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 1.1102230246251565e-16,
+          "brier": 0.18524792729591838,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0,
+          "brier": 0.109375,
+          "n": 224
+        }
+      },
+      "ece_home_win": 0.09077380952380953,
+      "launch_totals": {},
+      "posthoc_calibration": {
+        "available": true,
+        "multiclass_log_loss_before": 1.0986122886681078,
+        "multiclass_log_loss_after": 1.0768595003471062,
+        "multiclass_brier_before": 0.6666666666666667,
+        "multiclass_brier_after": 0.6520647321428571,
+        "classwise_ece_before": {
+          "home": 0.09077380952380953,
+          "draw": 0.0788690476190476,
+          "away": 0.011904761904761862
+        },
+        "classwise_ece_after": {
+          "home": 1.1102230246251565e-16,
+          "draw": 5.551115123125783e-17,
+          "away": 5.551115123125783e-17
+        },
+        "totals": {
+          "1.5": {
+            "ece_before": 0.01053017914420673,
+            "ece_after": 0.002929687500000111,
+            "brier_before": 0.18538585159914245,
+            "brier_after": 0.18520378579898758,
+            "n": 224
+          },
+          "2.5": {
+            "ece_before": 0.06405049963466745,
+            "ece_after": 0.03969594594594589,
+            "brier_before": 0.2518943610587573,
+            "brier_after": 0.2513963995020945,
+            "n": 224
+          },
+          "3.5": {
+            "ece_before": 0.03187257221142172,
+            "ece_after": 1.1102230246251565e-16,
+            "brier_before": 0.18733007023936857,
+            "brier_after": 0.18524792729591838,
+            "n": 224
+          },
+          "4.5": {
+            "ece_before": 0.006515089281617897,
+            "ece_after": 0.0,
+            "brier_before": 0.10940609203226626,
+            "brier_after": 0.109375,
+            "n": 224
+          }
+        }
+      },
+      "score_matrix_calibration": {
+        "available": true,
+        "accepted": false,
+        "selected": {
+          "total_intensity_scale": 1.0,
+          "draw_inflation": 1.0
+        },
+        "metrics_before": {
+          "multiclass_log_loss": 1.085631318388778,
+          "over_2_5_brier": 0.2518943610587573,
+          "objective": 1.1486049086534673
+        },
+        "metrics_after": {
+          "multiclass_log_loss": 1.085631318388778,
+          "over_2_5_brier": 0.2518943610587573,
+          "objective": 1.1486049086534673
+        },
+        "delta": {
+          "multiclass_log_loss": 0.0,
+          "over_2_5_brier": 0.0,
+          "objective": 0.0
+        },
+        "reason": "",
+        "source": "independent_poisson_from_lambdas"
+      },
+      "benchmark_comparison": {},
+      "ablation_comparison": {},
+      "slice_metrics": {
+        "early_season": {
+          "n_matches": 29,
+          "log_loss_1x2": 1.0986122886681102,
+          "brier_score_1x2": 0.6666666666666669,
+          "expected_total_goals_mae": 1.5039927404718696
+        },
+        "later_season": {
+          "n_matches": 195,
+          "log_loss_1x2": 1.0986122886681078,
+          "brier_score_1x2": 0.666666666666667,
+          "expected_total_goals_mae": 1.2250956504776227
+        },
+        "home_favorite": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.0986122886681078,
+          "brier_score_1x2": 0.6666666666666667,
+          "expected_total_goals_mae": 1.2612028630215206
+        },
+        "away_favorite": {
+          "n_matches": 0
+        },
+        "short_rest": {
+          "n_matches": 2,
+          "log_loss_1x2": 1.0986122886681098,
+          "brier_score_1x2": 0.6666666666666667,
+          "expected_total_goals_mae": 0.619692863595303
+        },
+        "normal_rest": {
+          "n_matches": 222,
+          "log_loss_1x2": 1.0986122886681078,
+          "brier_score_1x2": 0.666666666666667,
+          "expected_total_goals_mae": 1.266982232385721
+        },
+        "high_lineup_quality": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.0986122886681078,
+          "brier_score_1x2": 0.6666666666666667,
+          "expected_total_goals_mae": 1.2612028630215206
+        },
+        "low_lineup_quality": {
+          "n_matches": 0
+        },
+        "high_confidence": {
+          "n_matches": 224,
+          "log_loss_1x2": 1.0986122886681078,
+          "brier_score_1x2": 0.6666666666666667,
+          "expected_total_goals_mae": 1.2612028630215206
+        },
+        "low_confidence": {
+          "n_matches": 0
+        }
+      },
+      "raw_classwise_ece": {
+        "home": 0.09077380952380953,
+        "draw": 0.0788690476190476,
+        "away": 0.011904761904761862
+      },
+      "raw_totals": {
+        "1.5": {
+          "ece": 0.01053017914420673,
+          "brier": 0.18538585159914245,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.06405049963466745,
+          "brier": 0.2518943610587573,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 0.03187257221142172,
+          "brier": 0.18733007023936857,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.006515089281617897,
+          "brier": 0.10940609203226626,
+          "n": 224
+        }
+      },
+      "calibrated_metrics": {
+        "log_loss_1x2": 1.0768595003471062,
+        "brier_score_1x2": 0.6520647321428571,
+        "top1_accuracy_1x2": 0.42410714285714285,
+        "forecast_entropy_1x2": 1.0768595003471082
+      },
+      "calibrated_classwise_ece": {
+        "home": 1.1102230246251565e-16,
+        "draw": 5.551115123125783e-17,
+        "away": 5.551115123125783e-17
+      },
+      "calibrated_totals": {
+        "1.5": {
+          "ece": 0.002929687500000111,
+          "brier": 0.18520378579898758,
+          "n": 224
+        },
+        "2.5": {
+          "ece": 0.03969594594594589,
+          "brier": 0.2513963995020945,
+          "n": 224
+        },
+        "3.5": {
+          "ece": 1.1102230246251565e-16,
+          "brier": 0.18524792729591838,
+          "n": 224
+        },
+        "4.5": {
+          "ece": 0.0,
+          "brier": 0.109375,
+          "n": 224
+        }
+      },
+      "ece_over_1.5": 0.01053017914420673,
+      "ece_over_2.5": 0.06405049963466745,
+      "ece_over_3.5": 0.03187257221142172,
+      "ece_over_4.5": 0.006515089281617897,
+      "betting": {
+        "overall": {
+          "n_bets": 0,
+          "total_staked": 0.0,
+          "total_pnl": 0.0,
+          "roi": 0.0,
+          "hit_rate": 0.0,
+          "mean_edge": 0.0,
+          "mean_confidence": 0.0
+        },
+        "by_market": {},
+        "by_edge_bucket": {},
+        "by_season": {},
+        "by_line_band": {},
+        "clv": {}
+      }
+    }
+  },
+  "slice_metrics": {
+    "uniform_baseline": {
+      "early_season": {
+        "n_matches": 29,
+        "log_loss_1x2": 1.0986122886681102,
+        "brier_score_1x2": 0.6666666666666669,
+        "expected_total_goals_mae": 1.5039927404718696
+      },
+      "later_season": {
+        "n_matches": 195,
+        "log_loss_1x2": 1.0986122886681078,
+        "brier_score_1x2": 0.666666666666667,
+        "expected_total_goals_mae": 1.2250956504776227
+      },
+      "home_favorite": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.0986122886681078,
+        "brier_score_1x2": 0.6666666666666667,
+        "expected_total_goals_mae": 1.2612028630215206
+      },
+      "away_favorite": {
+        "n_matches": 0
+      },
+      "short_rest": {
+        "n_matches": 2,
+        "log_loss_1x2": 1.0986122886681098,
+        "brier_score_1x2": 0.6666666666666667,
+        "expected_total_goals_mae": 0.619692863595303
+      },
+      "normal_rest": {
+        "n_matches": 222,
+        "log_loss_1x2": 1.0986122886681078,
+        "brier_score_1x2": 0.666666666666667,
+        "expected_total_goals_mae": 1.266982232385721
+      },
+      "high_lineup_quality": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.0986122886681078,
+        "brier_score_1x2": 0.6666666666666667,
+        "expected_total_goals_mae": 1.2612028630215206
+      },
+      "low_lineup_quality": {
+        "n_matches": 0
+      },
+      "high_confidence": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.0986122886681078,
+        "brier_score_1x2": 0.6666666666666667,
+        "expected_total_goals_mae": 1.2612028630215206
+      },
+      "low_confidence": {
+        "n_matches": 0
+      }
+    },
+    "bivariate_poisson": {
+      "early_season": {
+        "n_matches": 29,
+        "log_loss_1x2": 1.077782349324607,
+        "brier_score_1x2": 0.6530413119814815,
+        "expected_total_goals_mae": 1.5024346154294297
+      },
+      "later_season": {
+        "n_matches": 195,
+        "log_loss_1x2": 1.0829702025964687,
+        "brier_score_1x2": 0.6557901285219723,
+        "expected_total_goals_mae": 1.2262981744903474
+      },
+      "home_favorite": {
+        "n_matches": 152,
+        "log_loss_1x2": 1.0784504040589245,
+        "brier_score_1x2": 0.6526472108642764,
+        "expected_total_goals_mae": 1.2597063782845246
+      },
+      "away_favorite": {
+        "n_matches": 72,
+        "log_loss_1x2": 1.0904224474967856,
+        "brier_score_1x2": 0.6613180146927434,
+        "expected_total_goals_mae": 1.2669913663031038
+      },
+      "short_rest": {
+        "n_matches": 2,
+        "log_loss_1x2": 0.9127557180981716,
+        "brier_score_1x2": 0.5384767100041348,
+        "expected_total_goals_mae": 0.5817370427002375
+      },
+      "normal_rest": {
+        "n_matches": 222,
+        "log_loss_1x2": 1.083825973876255,
+        "brier_score_1x2": 0.6564879265281047,
+        "expected_total_goals_mae": 1.268176908953472
+      },
+      "high_lineup_quality": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.0822985608782365,
+        "brier_score_1x2": 0.655434254951998,
+        "expected_total_goals_mae": 1.262047981576211
+      },
+      "low_lineup_quality": {
+        "n_matches": 0
+      },
+      "high_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.0534825383908373,
+        "brier_score_1x2": 0.6363750933967486,
+        "expected_total_goals_mae": 1.2490243286129095
+      },
+      "low_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.1111145833656362,
+        "brier_score_1x2": 0.6744934165072473,
+        "expected_total_goals_mae": 1.2750716345395123
+      }
+    },
+    "rolling_npxg_poisson": {
+      "early_season": {
+        "n_matches": 29,
+        "log_loss_1x2": 1.0913824382634283,
+        "brier_score_1x2": 0.6597682151051804,
+        "expected_total_goals_mae": 1.5114942528735635
+      },
+      "later_season": {
+        "n_matches": 195,
+        "log_loss_1x2": 1.1112227842625004,
+        "brier_score_1x2": 0.6702224027517156,
+        "expected_total_goals_mae": 1.3133333333333332
+      },
+      "home_favorite": {
+        "n_matches": 120,
+        "log_loss_1x2": 1.0754697534612323,
+        "brier_score_1x2": 0.6490911388681738,
+        "expected_total_goals_mae": 1.4044444444444444
+      },
+      "away_favorite": {
+        "n_matches": 104,
+        "log_loss_1x2": 1.146943877168068,
+        "brier_score_1x2": 0.691689520292826,
+        "expected_total_goals_mae": 1.2634615384615382
+      },
+      "short_rest": {
+        "n_matches": 2,
+        "log_loss_1x2": 0.9740301344797456,
+        "brier_score_1x2": 0.5847401863659006,
+        "expected_total_goals_mae": 0.5500000000000003
+      },
+      "normal_rest": {
+        "n_matches": 222,
+        "log_loss_1x2": 1.1098669971705744,
+        "brier_score_1x2": 0.6696268756842477,
+        "expected_total_goals_mae": 1.3460960960960957
+      },
+      "high_lineup_quality": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.1086541680394062,
+        "brier_score_1x2": 0.6688689588153338,
+        "expected_total_goals_mae": 1.3389880952380953
+      },
+      "low_lineup_quality": {
+        "n_matches": 0
+      },
+      "high_confidence": {
+        "n_matches": 113,
+        "log_loss_1x2": 1.1041434915308115,
+        "brier_score_1x2": 0.6638475392512657,
+        "expected_total_goals_mae": 1.4348082595870206
+      },
+      "low_confidence": {
+        "n_matches": 111,
+        "log_loss_1x2": 1.1132461179986055,
+        "brier_score_1x2": 0.6739808544075834,
+        "expected_total_goals_mae": 1.2414414414414412
+      }
+    },
+    "home_field_baseline": {
+      "early_season": {
+        "n_matches": 29,
+        "log_loss_1x2": 1.0601192879949028,
+        "brier_score_1x2": 0.6424395775829285,
+        "expected_total_goals_mae": 1.5039927404718696
+      },
+      "later_season": {
+        "n_matches": 195,
+        "log_loss_1x2": 1.0950056575877127,
+        "brier_score_1x2": 0.6635636955612085,
+        "expected_total_goals_mae": 1.2250956504776227
+      },
+      "home_favorite": {
+        "n_matches": 140,
+        "log_loss_1x2": 1.0727290443770028,
+        "brier_score_1x2": 0.649366655463761,
+        "expected_total_goals_mae": 1.2145875298257405
+      },
+      "away_favorite": {
+        "n_matches": 84,
+        "log_loss_1x2": 1.1200892424842368,
+        "brier_score_1x2": 0.6799325788025482,
+        "expected_total_goals_mae": 1.3388950850144878
+      },
+      "short_rest": {
+        "n_matches": 2,
+        "log_loss_1x2": 0.9601352885622187,
+        "brier_score_1x2": 0.5739499018999021,
+        "expected_total_goals_mae": 0.6196928635953025
+      },
+      "normal_rest": {
+        "n_matches": 222,
+        "log_loss_1x2": 1.0916634774969907,
+        "brier_score_1x2": 0.6616115701826161,
+        "expected_total_goals_mae": 1.266982232385721
+      },
+      "high_lineup_quality": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.0904891186672159,
+        "brier_score_1x2": 0.6608288767158061,
+        "expected_total_goals_mae": 1.2612028630215206
+      },
+      "low_lineup_quality": {
+        "n_matches": 0
+      },
+      "high_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.0801956222293303,
+        "brier_score_1x2": 0.6540192599330302,
+        "expected_total_goals_mae": 1.3401092200482445
+      },
+      "low_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.100782615105102,
+        "brier_score_1x2": 0.6676384934985821,
+        "expected_total_goals_mae": 1.182296505994797
+      }
+    },
+    "team_ratings_poisson": {
+      "early_season": {
+        "n_matches": 29,
+        "log_loss_1x2": 1.228420329659175,
+        "brier_score_1x2": 0.7510219928899498,
+        "expected_total_goals_mae": 1.5851161155556956
+      },
+      "later_season": {
+        "n_matches": 195,
+        "log_loss_1x2": 1.1315666904751016,
+        "brier_score_1x2": 0.6905952659300694,
+        "expected_total_goals_mae": 1.4777135700182553
+      },
+      "home_favorite": {
+        "n_matches": 115,
+        "log_loss_1x2": 1.1040218520430536,
+        "brier_score_1x2": 0.6710643014342427,
+        "expected_total_goals_mae": 1.510407974033456
+      },
+      "away_favorite": {
+        "n_matches": 109,
+        "log_loss_1x2": 1.1863961579615578,
+        "brier_score_1x2": 0.7272781650021481,
+        "expected_total_goals_mae": 1.4717944632186009
+      },
+      "short_rest": {
+        "n_matches": 2,
+        "log_loss_1x2": 0.8342562426932763,
+        "brier_score_1x2": 0.4926682918343093,
+        "expected_total_goals_mae": 2.529904875268293
+      },
+      "normal_rest": {
+        "n_matches": 222,
+        "log_loss_1x2": 1.1468972149431278,
+        "brier_score_1x2": 0.700271973272538,
+        "expected_total_goals_mae": 1.4822644313249478
+      },
+      "high_lineup_quality": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.144105777690897,
+        "brier_score_1x2": 0.6984183689739824,
+        "expected_total_goals_mae": 1.491618363860156
+      },
+      "low_lineup_quality": {
+        "n_matches": 0
+      },
+      "high_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.2042497288305245,
+        "brier_score_1x2": 0.7379861540520337,
+        "expected_total_goals_mae": 1.7309192674205125
+      },
+      "low_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.08396182655127,
+        "brier_score_1x2": 0.6588505838959311,
+        "expected_total_goals_mae": 1.2523174602997997
+      }
+    },
+    "dixon_coles": {
+      "early_season": {
+        "n_matches": 29,
+        "log_loss_1x2": 1.0710342188214543,
+        "brier_score_1x2": 0.64927925386867,
+        "expected_total_goals_mae": 1.5021991619506758
+      },
+      "later_season": {
+        "n_matches": 195,
+        "log_loss_1x2": 1.0830299908527652,
+        "brier_score_1x2": 0.655719120180458,
+        "expected_total_goals_mae": 1.2278520050948472
+      },
+      "home_favorite": {
+        "n_matches": 149,
+        "log_loss_1x2": 1.0761911779423083,
+        "brier_score_1x2": 0.6511771575303944,
+        "expected_total_goals_mae": 1.2739150325613444
+      },
+      "away_favorite": {
+        "n_matches": 75,
+        "log_loss_1x2": 1.0919780673160993,
+        "brier_score_1x2": 0.6622524043380262,
+        "expected_total_goals_mae": 1.2424210245123266
+      },
+      "short_rest": {
+        "n_matches": 2,
+        "log_loss_1x2": 0.9019554361735416,
+        "brier_score_1x2": 0.5317774483383158,
+        "expected_total_goals_mae": 0.5751214358865961
+      },
+      "normal_rest": {
+        "n_matches": 222,
+        "log_loss_1x2": 1.0830942778818213,
+        "brier_score_1x2": 0.6559944680211897,
+        "expected_total_goals_mae": 1.2695706027850975
+      },
+      "high_lineup_quality": {
+        "n_matches": 224,
+        "log_loss_1x2": 1.08147696679514,
+        "brier_score_1x2": 0.6548853874883067,
+        "expected_total_goals_mae": 1.2633701637949322
+      },
+      "low_lineup_quality": {
+        "n_matches": 0
+      },
+      "high_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.0501577746487105,
+        "brier_score_1x2": 0.6345727014113126,
+        "expected_total_goals_mae": 1.261312257046059
+      },
+      "low_confidence": {
+        "n_matches": 112,
+        "log_loss_1x2": 1.11279615894157,
+        "brier_score_1x2": 0.675198073565301,
+        "expected_total_goals_mae": 1.2654280705438052
+      }
+    }
+  },
+  "gate_results": {
+    "dixon_coles": {
+      "passed": false,
+      "gating_status": "research_only",
+      "checks": {
+        "converged": true,
+        "season_coverage_ok": true,
+        "beats_best_baseline_log_loss": false,
+        "beats_best_baseline_brier": false,
+        "total_goals_mae_ok": false,
+        "classwise_ece_ok": true,
+        "totals_ece_ok": true,
+        "totals_brier_ok": false,
+        "posthoc_calibration_available": true,
+        "slice_stability_ok": false
+      },
+      "metrics": {
+        "log_loss_1x2": 1.0814769667951398,
+        "brier_score_1x2": 0.6548853874883067,
+        "expected_total_goals_mae": 1.263370163794932,
+        "max_classwise_ece": 0.00977150634522897,
+        "totals_ece": 0.03256272026512918,
+        "totals_brier_2.5": 0.25046516791423595,
+        "totals_brier_3.5": 0.18514230768256087,
+        "best_baseline_log_loss_model": "home_field_baseline",
+        "best_baseline_log_loss": 1.0904891186672154,
+        "best_baseline_brier_model": "home_field_baseline",
+        "best_baseline_brier": 0.6608288767158061,
+        "best_baseline_total_goals_mae_model": "uniform_baseline",
+        "best_baseline_total_goals_mae": 1.2612028630215206
+      },
+      "slice_comparisons": {
+        "early_season": {
+          "available": true,
+          "baseline_log_loss": 1.0601192879949028,
+          "candidate_log_loss": 1.0710342188214543,
+          "ratio": 1.0102959458903873,
+          "passed": true
+        },
+        "later_season": {
+          "available": true,
+          "baseline_log_loss": 1.0950056575877127,
+          "candidate_log_loss": 1.0830299908527652,
+          "ratio": 0.9890633745570504,
+          "passed": true
+        },
+        "home_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.0727290443770028,
+          "candidate_log_loss": 1.0761911779423083,
+          "ratio": 1.0032274073154384,
+          "passed": true
+        },
+        "away_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.1200892424842368,
+          "candidate_log_loss": 1.0919780673160993,
+          "ratio": 0.9749027362268117,
+          "passed": true
+        },
+        "short_rest": {
+          "available": true,
+          "baseline_log_loss": 0.9601352885622187,
+          "candidate_log_loss": 0.9019554361735416,
+          "ratio": 0.9394045265477116,
+          "passed": true
+        },
+        "normal_rest": {
+          "available": true,
+          "baseline_log_loss": 1.0916634774969907,
+          "candidate_log_loss": 1.0830942778818213,
+          "ratio": 0.9921503285657067,
+          "passed": true
+        },
+        "high_lineup_quality": {
+          "available": true,
+          "baseline_log_loss": 1.0904891186672159,
+          "candidate_log_loss": 1.08147696679514,
+          "ratio": 0.9917356792307195,
+          "passed": true
+        },
+        "low_lineup_quality": {
+          "available": false
+        },
+        "high_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.0801956222293303,
+          "candidate_log_loss": 1.0501577746487105,
+          "ratio": 0.9721922150372846,
+          "passed": true
+        },
+        "low_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.100782615105102,
+          "candidate_log_loss": 1.11279615894157,
+          "ratio": 1.0109136387799158,
+          "passed": true
+        }
+      }
+    },
+    "bivariate_poisson": {
+      "passed": false,
+      "gating_status": "research_only",
+      "checks": {
+        "converged": true,
+        "season_coverage_ok": true,
+        "beats_best_baseline_log_loss": false,
+        "beats_best_baseline_brier": false,
+        "total_goals_mae_ok": false,
+        "classwise_ece_ok": true,
+        "totals_ece_ok": true,
+        "totals_brier_ok": false,
+        "posthoc_calibration_available": true,
+        "slice_stability_ok": false
+      },
+      "metrics": {
+        "log_loss_1x2": 1.0822985608782365,
+        "brier_score_1x2": 0.6554342549519979,
+        "expected_total_goals_mae": 1.2620479815762111,
+        "max_classwise_ece": 0.006140014261423521,
+        "totals_ece": 0.01784980028195487,
+        "totals_brier_2.5": 0.24990775717397198,
+        "totals_brier_3.5": 0.18509249813826725,
+        "best_baseline_log_loss_model": "home_field_baseline",
+        "best_baseline_log_loss": 1.0904891186672154,
+        "best_baseline_brier_model": "home_field_baseline",
+        "best_baseline_brier": 0.6608288767158061,
+        "best_baseline_total_goals_mae_model": "uniform_baseline",
+        "best_baseline_total_goals_mae": 1.2612028630215206
+      },
+      "slice_comparisons": {
+        "early_season": {
+          "available": true,
+          "baseline_log_loss": 1.0601192879949028,
+          "candidate_log_loss": 1.077782349324607,
+          "ratio": 1.016661390401746,
+          "passed": true
+        },
+        "later_season": {
+          "available": true,
+          "baseline_log_loss": 1.0950056575877127,
+          "candidate_log_loss": 1.0829702025964687,
+          "ratio": 0.9890087736918565,
+          "passed": true
+        },
+        "home_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.0727290443770028,
+          "candidate_log_loss": 1.0784504040589245,
+          "ratio": 1.0053334620815122,
+          "passed": true
+        },
+        "away_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.1200892424842368,
+          "candidate_log_loss": 1.0904224474967856,
+          "ratio": 0.9735139006230847,
+          "passed": true
+        },
+        "short_rest": {
+          "available": true,
+          "baseline_log_loss": 0.9601352885622187,
+          "candidate_log_loss": 0.9127557180981716,
+          "ratio": 0.9506532349883765,
+          "passed": true
+        },
+        "normal_rest": {
+          "available": true,
+          "baseline_log_loss": 1.0916634774969907,
+          "candidate_log_loss": 1.083825973876255,
+          "ratio": 0.9928205863965461,
+          "passed": true
+        },
+        "high_lineup_quality": {
+          "available": true,
+          "baseline_log_loss": 1.0904891186672159,
+          "candidate_log_loss": 1.0822985608782365,
+          "ratio": 0.9924890971869671,
+          "passed": true
+        },
+        "low_lineup_quality": {
+          "available": false
+        },
+        "high_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.0801956222293303,
+          "candidate_log_loss": 1.0534825383908373,
+          "ratio": 0.9752701424734883,
+          "passed": true
+        },
+        "low_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.100782615105102,
+          "candidate_log_loss": 1.1111145833656362,
+          "ratio": 1.0093860205627865,
+          "passed": true
+        }
+      }
+    }
+  },
+  "champion_recommendation": {
+    "aliases": {},
+    "experimental": {}
+  }
+}

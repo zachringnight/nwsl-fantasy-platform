@@ -161,6 +161,11 @@ def compute_all_metrics(
             df["away_goals_90"].values.astype(int),
         )
 
+    if all(c in df.columns for c in ["lambda_home", "lambda_away", "home_goals_90", "away_goals_90"]):
+        total_expected = df["lambda_home"].astype(float) + df["lambda_away"].astype(float)
+        total_actual = df["home_goals_90"].astype(float) + df["away_goals_90"].astype(float)
+        metrics["expected_total_goals_mae"] = float(np.mean(np.abs(total_expected - total_actual)))
+
     # Betting metrics
     if bet_log is not None and len(bet_log) > 0:
         total_staked = bet_log["stake"].sum()

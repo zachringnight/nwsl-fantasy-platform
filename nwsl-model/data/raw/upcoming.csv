@@ -1,0 +1,156 @@
+match_id,match_date,season,competition,regular_season_flag,home_team,away_team,home_goals_90,away_goals_90,venue,match_status
+401853922,2026-05-29,2026,NWSL,true,Orlando Pride,Bay FC,0,0,Inter&Co Stadium,scheduled
+401853923,2026-05-30,2026,NWSL,true,Portland Thorns FC,Utah Royals,0,0,Providence Park,scheduled
+401853924,2026-05-30,2026,NWSL,true,Washington Spirit,Seattle Reign FC,0,0,Audi Field,scheduled
+401854059,2026-05-30,2026,NWSL,true,Racing Louisville FC,Denver Summit FC,0,0,Lynn Family Stadium,scheduled
+401854060,2026-05-30,2026,NWSL,true,Kansas City Current,Boston Legacy FC,0,0,CPKC Stadium,scheduled
+401853925,2026-05-31,2026,NWSL,true,Chicago Stars FC,San Diego Wave FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401853926,2026-05-31,2026,NWSL,true,Gotham FC,Houston Dash,0,0,Red Bull Arena,scheduled
+401853927,2026-05-31,2026,NWSL,true,Angel City FC,North Carolina Courage,0,0,BMO Stadium,scheduled
+401853928,2026-07-04,2026,NWSL,true,Washington Spirit,Houston Dash,0,0,Audi Field,scheduled
+401853929,2026-07-04,2026,NWSL,true,Angel City FC,Orlando Pride,0,0,BMO Stadium,scheduled
+401853930,2026-07-04,2026,NWSL,true,North Carolina Courage,Seattle Reign FC,0,0,WakeMed Soccer Park,scheduled
+401854061,2026-07-04,2026,NWSL,true,Denver Summit FC,Kansas City Current,0,0,Centennial Stadium,scheduled
+401853931,2026-07-05,2026,NWSL,true,San Diego Wave FC,Gotham FC,0,0,Snapdragon Stadium,scheduled
+401853932,2026-07-05,2026,NWSL,true,Chicago Stars FC,Utah Royals,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401853933,2026-07-05,2026,NWSL,true,Portland Thorns FC,Racing Louisville FC,0,0,Providence Park,scheduled
+401854062,2026-07-05,2026,NWSL,true,Boston Legacy FC,Bay FC,0,0,Centreville Bank Stadium,scheduled
+401853934,2026-07-11,2026,NWSL,true,Orlando Pride,Kansas City Current,0,0,Inter&Co Stadium,scheduled
+401853935,2026-07-11,2026,NWSL,true,Racing Louisville FC,Bay FC,0,0,Lynn Family Stadium,scheduled
+401853936,2026-07-11,2026,NWSL,true,Utah Royals,Gotham FC,0,0,America First Field,scheduled
+401853937,2026-07-11,2026,NWSL,true,North Carolina Courage,Washington Spirit,0,0,WakeMed Soccer Park,scheduled
+401854063,2026-07-11,2026,NWSL,true,Boston Legacy FC,Chicago Stars FC,0,0,Centreville Bank Stadium,scheduled
+401853938,2026-07-12,2026,NWSL,true,San Diego Wave FC,Angel City FC,0,0,Snapdragon Stadium,scheduled
+401853939,2026-07-12,2026,NWSL,true,Seattle Reign FC,Portland Thorns FC,0,0,Lumen Field,scheduled
+401854064,2026-07-12,2026,NWSL,true,Denver Summit FC,Houston Dash,0,0,Centennial Stadium,scheduled
+401854065,2026-07-15,2026,NWSL,true,Orlando Pride,Boston Legacy FC,0,0,Inter&Co Stadium,scheduled
+401853940,2026-07-16,2026,NWSL,true,Gotham FC,Washington Spirit,0,0,Citi Field,scheduled
+401853941,2026-07-18,2026,NWSL,true,Kansas City Current,San Diego Wave FC,0,0,CPKC Stadium,scheduled
+401853942,2026-07-18,2026,NWSL,true,Gotham FC,Seattle Reign FC,0,0,Icahn Stadium,scheduled
+401853943,2026-07-18,2026,NWSL,true,Bay FC,North Carolina Courage,0,0,PayPal Park,scheduled
+401853944,2026-07-18,2026,NWSL,true,Chicago Stars FC,Angel City FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401854066,2026-07-18,2026,NWSL,true,Denver Summit FC,Portland Thorns FC,0,0,Centennial Stadium,scheduled
+401853945,2026-07-19,2026,NWSL,true,Racing Louisville FC,Houston Dash,0,0,Lynn Family Stadium,scheduled
+401853946,2026-07-19,2026,NWSL,true,Utah Royals,Orlando Pride,0,0,America First Field,scheduled
+401854067,2026-07-19,2026,NWSL,true,Boston Legacy FC,Washington Spirit,0,0,Centreville Bank Stadium,scheduled
+401853947,2026-07-25,2026,NWSL,true,Orlando Pride,Chicago Stars FC,0,0,Inter&Co Stadium,scheduled
+401853948,2026-07-25,2026,NWSL,true,Houston Dash,Bay FC,0,0,Shell Energy Stadium,scheduled
+401853949,2026-07-25,2026,NWSL,true,Portland Thorns FC,Gotham FC,0,0,Providence Park,scheduled
+401853950,2026-07-25,2026,NWSL,true,North Carolina Courage,Utah Royals,0,0,WakeMed Soccer Park,scheduled
+401854068,2026-07-25,2026,NWSL,true,Boston Legacy FC,Kansas City Current,0,0,Centreville Bank Stadium,scheduled
+401853951,2026-07-26,2026,NWSL,true,San Diego Wave FC,Seattle Reign FC,0,0,Snapdragon Stadium,scheduled
+401854069,2026-07-26,2026,NWSL,true,Washington Spirit,Denver Summit FC,0,0,Audi Field,scheduled
+401853952,2026-07-27,2026,NWSL,true,Angel City FC,Racing Louisville FC,0,0,BMO Stadium,scheduled
+401853953,2026-07-30,2026,NWSL,true,Kansas City Current,Racing Louisville FC,0,0,CPKC Stadium,scheduled
+401853954,2026-07-30,2026,NWSL,true,Utah Royals,Washington Spirit,0,0,America First Field,scheduled
+401853955,2026-07-30,2026,NWSL,true,Bay FC,Gotham FC,0,0,PayPal Park,scheduled
+401853956,2026-08-01,2026,NWSL,true,North Carolina Courage,Orlando Pride,0,0,WakeMed Soccer Park,scheduled
+401853957,2026-08-01,2026,NWSL,true,Racing Louisville FC,Chicago Stars FC,0,0,Lynn Family Stadium,scheduled
+401853958,2026-08-01,2026,NWSL,true,Kansas City Current,Angel City FC,0,0,CPKC Stadium,scheduled
+401853959,2026-08-02,2026,NWSL,true,Houston Dash,Gotham FC,0,0,Shell Energy Stadium,scheduled
+401853960,2026-08-02,2026,NWSL,true,Bay FC,Seattle Reign FC,0,0,PayPal Park,scheduled
+401853961,2026-08-02,2026,NWSL,true,Washington Spirit,San Diego Wave FC,0,0,Audi Field,scheduled
+401853962,2026-08-02,2026,NWSL,true,Utah Royals,Portland Thorns FC,0,0,America First Field,scheduled
+401854070,2026-08-03,2026,NWSL,true,Denver Summit FC,Boston Legacy FC,0,0,Centennial Stadium,scheduled
+401854071,2026-08-06,2026,NWSL,true,Denver Summit FC,North Carolina Courage,0,0,Centennial Stadium,scheduled
+401853965,2026-08-07,2026,NWSL,true,Orlando Pride,Racing Louisville FC,0,0,Inter&Co Stadium,scheduled
+401853963,2026-08-08,2026,NWSL,true,Gotham FC,San Diego Wave FC,0,0,Red Bull Arena,scheduled
+401853964,2026-08-08,2026,NWSL,true,Washington Spirit,North Carolina Courage,0,0,Audi Field,scheduled
+401854072,2026-08-08,2026,NWSL,true,Denver Summit FC,Utah Royals,0,0,Centennial Stadium,scheduled
+401853966,2026-08-09,2026,NWSL,true,Houston Dash,Kansas City Current,0,0,Shell Energy Stadium,scheduled
+401853967,2026-08-09,2026,NWSL,true,Chicago Stars FC,Bay FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401854073,2026-08-09,2026,NWSL,true,Boston Legacy FC,Portland Thorns FC,0,0,Centreville Bank Stadium,scheduled
+401853968,2026-08-10,2026,NWSL,true,Seattle Reign FC,Angel City FC,0,0,Lumen Field,scheduled
+401853969,2026-08-15,2026,NWSL,true,Gotham FC,Kansas City Current,0,0,Red Bull Arena,scheduled
+401853970,2026-08-15,2026,NWSL,true,Seattle Reign FC,Chicago Stars FC,0,0,Lumen Field,scheduled
+401853971,2026-08-15,2026,NWSL,true,Utah Royals,Bay FC,0,0,America First Field,scheduled
+401854074,2026-08-15,2026,NWSL,true,San Diego Wave FC,Denver Summit FC,0,0,Snapdragon Stadium,scheduled
+401854075,2026-08-15,2026,NWSL,true,Racing Louisville FC,Boston Legacy FC,0,0,Lynn Family Stadium,scheduled
+401853972,2026-08-16,2026,NWSL,true,Portland Thorns FC,Orlando Pride,0,0,Providence Park,scheduled
+401853973,2026-08-16,2026,NWSL,true,North Carolina Courage,Houston Dash,0,0,WakeMed Soccer Park,scheduled
+401853974,2026-08-17,2026,NWSL,true,Angel City FC,Washington Spirit,0,0,BMO Stadium,scheduled
+401853975,2026-08-19,2026,NWSL,true,Racing Louisville FC,Seattle Reign FC,0,0,Lynn Family Stadium,scheduled
+401853976,2026-08-20,2026,NWSL,true,Houston Dash,Chicago Stars FC,0,0,Shell Energy Stadium,scheduled
+401853977,2026-08-22,2026,NWSL,true,San Diego Wave FC,Utah Royals,0,0,Snapdragon Stadium,scheduled
+401853978,2026-08-22,2026,NWSL,true,Kansas City Current,Seattle Reign FC,0,0,CPKC Stadium,scheduled
+401854076,2026-08-22,2026,NWSL,true,North Carolina Courage,Boston Legacy FC,0,0,WakeMed Soccer Park,scheduled
+401853979,2026-08-23,2026,NWSL,true,Chicago Stars FC,Racing Louisville FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401853980,2026-08-23,2026,NWSL,true,Washington Spirit,Orlando Pride,0,0,Audi Field,scheduled
+401853981,2026-08-23,2026,NWSL,true,Bay FC,Houston Dash,0,0,PayPal Park,scheduled
+401854077,2026-08-23,2026,NWSL,true,Portland Thorns FC,Denver Summit FC,0,0,Providence Park,scheduled
+401853982,2026-08-24,2026,NWSL,true,Angel City FC,Gotham FC,0,0,BMO Stadium,scheduled
+401853983,2026-08-27,2026,NWSL,true,North Carolina Courage,Angel City FC,0,0,WakeMed Soccer Park,scheduled
+401853984,2026-08-29,2026,NWSL,true,Gotham FC,Portland Thorns FC,0,0,Red Bull Arena,scheduled
+401853985,2026-08-29,2026,NWSL,true,San Diego Wave FC,Racing Louisville FC,0,0,Snapdragon Stadium,scheduled
+401853986,2026-08-29,2026,NWSL,true,Kansas City Current,North Carolina Courage,0,0,CPKC Stadium,scheduled
+401853987,2026-08-29,2026,NWSL,true,Orlando Pride,Utah Royals,0,0,Inter&Co Stadium,scheduled
+401853988,2026-08-30,2026,NWSL,true,Washington Spirit,Bay FC,0,0,Audi Field,scheduled
+401853989,2026-08-30,2026,NWSL,true,Seattle Reign FC,Houston Dash,0,0,Lumen Field,scheduled
+401854078,2026-08-30,2026,NWSL,true,Denver Summit FC,Chicago Stars FC,0,0,Centennial Stadium,scheduled
+401854079,2026-09-01,2026,NWSL,true,Boston Legacy FC,Angel City FC,0,0,Gillette Stadium,scheduled
+401853990,2026-09-05,2026,NWSL,true,Bay FC,Kansas City Current,0,0,PayPal Park,scheduled
+401853991,2026-09-05,2026,NWSL,true,Racing Louisville FC,Angel City FC,0,0,Lynn Family Stadium,scheduled
+401854080,2026-09-05,2026,NWSL,true,Utah Royals,Boston Legacy FC,0,0,America First Field,scheduled
+401853992,2026-09-06,2026,NWSL,true,Chicago Stars FC,North Carolina Courage,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401853993,2026-09-06,2026,NWSL,true,Portland Thorns FC,Washington Spirit,0,0,Providence Park,scheduled
+401853994,2026-09-06,2026,NWSL,true,Orlando Pride,Houston Dash,0,0,Inter&Co Stadium,scheduled
+401854081,2026-09-06,2026,NWSL,true,Denver Summit FC,Gotham FC,0,0,Centennial Stadium,scheduled
+401853995,2026-09-07,2026,NWSL,true,Seattle Reign FC,San Diego Wave FC,0,0,Lumen Field,scheduled
+401853996,2026-09-11,2026,NWSL,true,Racing Louisville FC,Gotham FC,0,0,Lynn Family Stadium,scheduled
+401853997,2026-09-12,2026,NWSL,true,Kansas City Current,Orlando Pride,0,0,CPKC Stadium,scheduled
+401853999,2026-09-12,2026,NWSL,true,San Diego Wave FC,North Carolina Courage,0,0,Snapdragon Stadium,scheduled
+401854082,2026-09-12,2026,NWSL,true,Angel City FC,Denver Summit FC,0,0,BMO Stadium,scheduled
+401853998,2026-09-13,2026,NWSL,true,Seattle Reign FC,Bay FC,0,0,Lumen Field,scheduled
+401854000,2026-09-13,2026,NWSL,true,Houston Dash,Utah Royals,0,0,Shell Energy Stadium,scheduled
+401854001,2026-09-13,2026,NWSL,true,Portland Thorns FC,Chicago Stars FC,0,0,Providence Park,scheduled
+401854083,2026-09-13,2026,NWSL,true,Washington Spirit,Boston Legacy FC,0,0,Audi Field,scheduled
+401854002,2026-09-17,2026,NWSL,true,Angel City FC,Seattle Reign FC,0,0,BMO Stadium,scheduled
+401854084,2026-09-17,2026,NWSL,true,Denver Summit FC,Bay FC,0,0,Centennial Stadium,scheduled
+401854003,2026-09-19,2026,NWSL,true,San Diego Wave FC,Kansas City Current,0,0,Snapdragon Stadium,scheduled
+401854004,2026-09-19,2026,NWSL,true,Orlando Pride,Portland Thorns FC,0,0,Inter&Co Stadium,scheduled
+401854005,2026-09-19,2026,NWSL,true,North Carolina Courage,Gotham FC,0,0,WakeMed Soccer Park,scheduled
+401854006,2026-09-20,2026,NWSL,true,Chicago Stars FC,Washington Spirit,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401854007,2026-09-20,2026,NWSL,true,Bay FC,Racing Louisville FC,0,0,PayPal Park,scheduled
+401854008,2026-09-20,2026,NWSL,true,Utah Royals,Angel City FC,0,0,America First Field,scheduled
+401854085,2026-09-20,2026,NWSL,true,Denver Summit FC,Seattle Reign FC,0,0,Centennial Stadium,scheduled
+401854086,2026-09-20,2026,NWSL,true,Boston Legacy FC,Houston Dash,0,0,Centreville Bank Stadium,scheduled
+401854009,2026-09-25,2026,NWSL,true,Racing Louisville FC,San Diego Wave FC,0,0,Lynn Family Stadium,scheduled
+401854010,2026-09-26,2026,NWSL,true,Gotham FC,Chicago Stars FC,0,0,Red Bull Arena,scheduled
+401854011,2026-09-26,2026,NWSL,true,Washington Spirit,Angel City FC,0,0,Audi Field,scheduled
+401854087,2026-09-26,2026,NWSL,true,Seattle Reign FC,Boston Legacy FC,0,0,Lumen Field,scheduled
+401854088,2026-09-26,2026,NWSL,true,Kansas City Current,Denver Summit FC,0,0,CPKC Stadium,scheduled
+401854012,2026-09-27,2026,NWSL,true,Portland Thorns FC,Houston Dash,0,0,Providence Park,scheduled
+401854013,2026-09-27,2026,NWSL,true,Bay FC,Orlando Pride,0,0,PayPal Park,scheduled
+401854014,2026-09-27,2026,NWSL,true,Utah Royals,North Carolina Courage,0,0,America First Field,scheduled
+401854015,2026-10-03,2026,NWSL,true,Orlando Pride,San Diego Wave FC,0,0,Inter&Co Stadium,scheduled
+401854016,2026-10-03,2026,NWSL,true,Seattle Reign FC,North Carolina Courage,0,0,Lumen Field,scheduled
+401854017,2026-10-03,2026,NWSL,true,Racing Louisville FC,Utah Royals,0,0,Lynn Family Stadium,scheduled
+401854018,2026-10-03,2026,NWSL,true,Kansas City Current,Bay FC,0,0,CPKC Stadium,scheduled
+401854019,2026-10-04,2026,NWSL,true,Gotham FC,Angel City FC,0,0,Red Bull Arena,scheduled
+401854020,2026-10-04,2026,NWSL,true,Houston Dash,Washington Spirit,0,0,Shell Energy Stadium,scheduled
+401854089,2026-10-04,2026,NWSL,true,Portland Thorns FC,Boston Legacy FC,0,0,Providence Park,scheduled
+401854090,2026-10-04,2026,NWSL,true,Chicago Stars FC,Denver Summit FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401854021,2026-10-17,2026,NWSL,true,Washington Spirit,Gotham FC,0,0,Audi Field,scheduled
+401854022,2026-10-17,2026,NWSL,true,Utah Royals,Kansas City Current,0,0,America First Field,scheduled
+401854023,2026-10-17,2026,NWSL,true,North Carolina Courage,San Diego Wave FC,0,0,WakeMed Soccer Park,scheduled
+401854091,2026-10-17,2026,NWSL,true,Boston Legacy FC,Racing Louisville FC,0,0,Gillette Stadium,scheduled
+401854024,2026-10-18,2026,NWSL,true,Houston Dash,Orlando Pride,0,0,Shell Energy Stadium,scheduled
+401854025,2026-10-18,2026,NWSL,true,Bay FC,Portland Thorns FC,0,0,PayPal Park,scheduled
+401854026,2026-10-18,2026,NWSL,true,Chicago Stars FC,Seattle Reign FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401854092,2026-10-18,2026,NWSL,true,Denver Summit FC,Angel City FC,0,0,Centennial Stadium,scheduled
+401854027,2026-10-24,2026,NWSL,true,Chicago Stars FC,Houston Dash,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
+401854028,2026-10-24,2026,NWSL,true,Utah Royals,Seattle Reign FC,0,0,America First Field,scheduled
+401854029,2026-10-24,2026,NWSL,true,Portland Thorns FC,North Carolina Courage,0,0,Providence Park,scheduled
+401854093,2026-10-24,2026,NWSL,true,Denver Summit FC,Racing Louisville FC,0,0,Centennial Stadium,scheduled
+401854030,2026-10-25,2026,NWSL,true,Angel City FC,Bay FC,0,0,BMO Stadium,scheduled
+401854031,2026-10-25,2026,NWSL,true,Orlando Pride,Gotham FC,0,0,Inter&Co Stadium,scheduled
+401854032,2026-10-25,2026,NWSL,true,Kansas City Current,Washington Spirit,0,0,CPKC Stadium,scheduled
+401854094,2026-10-25,2026,NWSL,true,San Diego Wave FC,Boston Legacy FC,0,0,Snapdragon Stadium,scheduled
+401854033,2026-11-01,2026,NWSL,true,Bay FC,San Diego Wave FC,0,0,PayPal Park,scheduled
+401854034,2026-11-01,2026,NWSL,true,Gotham FC,Utah Royals,0,0,Red Bull Arena,scheduled
+401854035,2026-11-01,2026,NWSL,true,Washington Spirit,Chicago Stars FC,0,0,Audi Field,scheduled
+401854036,2026-11-01,2026,NWSL,true,Racing Louisville FC,Kansas City Current,0,0,Lynn Family Stadium,scheduled
+401854037,2026-11-01,2026,NWSL,true,Seattle Reign FC,Orlando Pride,0,0,Lumen Field,scheduled
+401854038,2026-11-01,2026,NWSL,true,Houston Dash,Portland Thorns FC,0,0,Shell Energy Stadium,scheduled
+401854095,2026-11-01,2026,NWSL,true,Angel City FC,Boston Legacy FC,0,0,TBC,scheduled
+401854096,2026-11-01,2026,NWSL,true,North Carolina Courage,Denver Summit FC,0,0,WakeMed Soccer Park,scheduled

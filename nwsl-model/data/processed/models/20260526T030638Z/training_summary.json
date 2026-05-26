@@ -1,0 +1,302 @@
+{
+  "version": "20260526T030638Z",
+  "models": {
+    "dixon_coles": {
+      "converged": true,
+      "log_likelihood": -245.71478814948418,
+      "n_teams": 16,
+      "parameters": {
+        "home_advantage": 0.23173146541545364,
+        "intercept": 0.12906899355121004,
+        "rho": 0.0006359699976298884,
+        "contextual_columns": [
+          "home_roll_5_npxg_for",
+          "home_roll_5_npxg_for_missing",
+          "home_roll_5_npxg_against",
+          "home_roll_5_npxg_against_missing",
+          "home_season_avg_npxg_for",
+          "home_season_avg_npxg_for_missing",
+          "home_season_avg_npxg_against",
+          "home_season_avg_npxg_against_missing",
+          "home_rest_days",
+          "home_rest_days_missing",
+          "home_short_rest",
+          "home_lineup_strength",
+          "home_lineup_strength_missing",
+          "away_roll_5_npxg_for",
+          "away_roll_5_npxg_for_missing",
+          "away_roll_5_npxg_against",
+          "away_roll_5_npxg_against_missing",
+          "away_season_avg_npxg_for",
+          "away_season_avg_npxg_for_missing",
+          "away_season_avg_npxg_against",
+          "away_season_avg_npxg_against_missing",
+          "away_rest_days",
+          "away_rest_days_missing",
+          "away_short_rest",
+          "away_lineup_strength",
+          "away_lineup_strength_missing",
+          "rest_diff"
+        ]
+      },
+      "warnings": [
+        "gradient_norm=0.995"
+      ],
+      "diagnostics": {
+        "optimizer": "L-BFGS-B",
+        "n_params": 87,
+        "n_free_teams": 15,
+        "n_contextual_features": 27,
+        "nfev": 2288,
+        "nit": 22,
+        "grad_norm": 0.9949936694895667,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "success": true,
+        "team_regularization": 2000.0,
+        "contextual_regularization": 2000.0,
+        "rho_regularization": 2000.0
+      }
+    },
+    "bivariate_poisson": {
+      "converged": true,
+      "log_likelihood": -246.501820446553,
+      "n_teams": 16,
+      "parameters": {
+        "home_advantage": 0.22884813026282713,
+        "intercept": 0.13958357031130192,
+        "lambda3": 0.09997580473250729,
+        "contextual_columns": [
+          "home_roll_5_npxg_for",
+          "home_roll_5_npxg_for_missing",
+          "home_roll_5_npxg_against",
+          "home_roll_5_npxg_against_missing",
+          "home_season_avg_npxg_for",
+          "home_season_avg_npxg_for_missing",
+          "home_season_avg_npxg_against",
+          "home_season_avg_npxg_against_missing",
+          "home_rest_days",
+          "home_rest_days_missing",
+          "home_short_rest",
+          "home_lineup_strength",
+          "home_lineup_strength_missing",
+          "away_roll_5_npxg_for",
+          "away_roll_5_npxg_for_missing",
+          "away_roll_5_npxg_against",
+          "away_roll_5_npxg_against_missing",
+          "away_season_avg_npxg_for",
+          "away_season_avg_npxg_for_missing",
+          "away_season_avg_npxg_against",
+          "away_season_avg_npxg_against_missing",
+          "away_rest_days",
+          "away_rest_days_missing",
+          "away_short_rest",
+          "away_lineup_strength",
+          "away_lineup_strength_missing",
+          "rest_diff"
+        ]
+      },
+      "warnings": [
+        "gradient_norm=0.4683"
+      ],
+      "diagnostics": {
+        "optimizer": "L-BFGS-B",
+        "n_params": 87,
+        "n_free_teams": 15,
+        "n_contextual_features": 27,
+        "nfev": 2640,
+        "nit": 26,
+        "grad_norm": 0.46833055035543303,
+        "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+        "success": true,
+        "team_regularization": 2000.0,
+        "contextual_regularization": 2000.0,
+        "lambda3_regularization": 2000.0
+      }
+    }
+  },
+  "n_matches": 274,
+  "n_teams": 16,
+  "history_start_season": null,
+  "contextual_columns": [
+    "home_roll_5_npxg_for",
+    "home_roll_5_npxg_for_missing",
+    "home_roll_5_npxg_against",
+    "home_roll_5_npxg_against_missing",
+    "home_season_avg_npxg_for",
+    "home_season_avg_npxg_for_missing",
+    "home_season_avg_npxg_against",
+    "home_season_avg_npxg_against_missing",
+    "home_season_matches_played",
+    "home_rest_days",
+    "home_rest_days_missing",
+    "home_short_rest",
+    "home_matches_prev_14d",
+    "home_lineup_strength",
+    "home_lineup_strength_missing",
+    "away_roll_5_npxg_for",
+    "away_roll_5_npxg_for_missing",
+    "away_roll_5_npxg_against",
+    "away_roll_5_npxg_against_missing",
+    "away_season_avg_npxg_for",
+    "away_season_avg_npxg_for_missing",
+    "away_season_avg_npxg_against",
+    "away_season_avg_npxg_against_missing",
+    "away_season_matches_played",
+    "away_rest_days",
+    "away_rest_days_missing",
+    "away_short_rest",
+    "away_matches_prev_14d",
+    "away_lineup_strength",
+    "away_lineup_strength_missing",
+    "rest_diff"
+  ],
+  "model_contextual_columns": [
+    "home_roll_5_npxg_for",
+    "home_roll_5_npxg_for_missing",
+    "home_roll_5_npxg_against",
+    "home_roll_5_npxg_against_missing",
+    "home_season_avg_npxg_for",
+    "home_season_avg_npxg_for_missing",
+    "home_season_avg_npxg_against",
+    "home_season_avg_npxg_against_missing",
+    "home_rest_days",
+    "home_rest_days_missing",
+    "home_short_rest",
+    "home_lineup_strength",
+    "home_lineup_strength_missing",
+    "away_roll_5_npxg_for",
+    "away_roll_5_npxg_for_missing",
+    "away_roll_5_npxg_against",
+    "away_roll_5_npxg_against_missing",
+    "away_season_avg_npxg_for",
+    "away_season_avg_npxg_for_missing",
+    "away_season_avg_npxg_against",
+    "away_season_avg_npxg_against_missing",
+    "away_rest_days",
+    "away_rest_days_missing",
+    "away_short_rest",
+    "away_lineup_strength",
+    "away_lineup_strength_missing",
+    "rest_diff"
+  ],
+  "feature_policy": {
+    "team_season_priors": "previous_available_season",
+    "player_season_priors": "last_season_only_projection_fallback",
+    "lineup_features": "observed_appearances_and_projected_lineups_only",
+    "score_model_contextual_profile": "pure_projection_v1"
+  },
+  "feature_inclusion_decisions": {
+    "travel_features": "disabled",
+    "weather_features": "disabled",
+    "surface_features": "disabled",
+    "training_window": "all_available"
+  },
+  "dataset_manifest": {
+    "generated_at": "2026-05-25T21:17:11.951Z",
+    "source": "espn_public_api",
+    "source_files": {
+      "matches_2025": "src/data/espn/matches-2025.json",
+      "matches_2026": "src/data/espn/matches-2026.json"
+    },
+    "matches": {
+      "rows": 274,
+      "season_coverage": [
+        2025,
+        2026
+      ],
+      "date_range": [
+        "2025-03-15",
+        "2026-05-24"
+      ],
+      "status": "completed_only"
+    },
+    "upcoming": {
+      "rows": 155,
+      "season_coverage": [
+        2026
+      ],
+      "date_range": [
+        "2026-05-29",
+        "2026-11-01"
+      ],
+      "status": "scheduled_only"
+    },
+    "feature_policy": {
+      "training_window": "ESPN 2025-2026 public scoreboard",
+      "travel_features": "disabled",
+      "weather_features": "disabled",
+      "surface_features": "disabled",
+      "xg_features": "not_available_from_espn_feed"
+    },
+    "odds": {
+      "rows": 8,
+      "source_available": true,
+      "markets": [
+        "1x2"
+      ],
+      "sportsbooks": [
+        "FootyStats"
+      ],
+      "source_types": [
+        "current"
+      ],
+      "latest_timestamp": "2026-05-26T03:06:28.524107+00:00"
+    },
+    "missing_feature_coverage": {
+      "odds_missing_pct": 100,
+      "xg_missing_pct": 100
+    }
+  },
+  "odds_quality": {
+    "generated_at": "2026-05-26T03:28:29.754484+00:00",
+    "source_available": true,
+    "total_rows": 8,
+    "sportsbooks": [
+      "FootyStats"
+    ],
+    "markets": [
+      "1x2"
+    ],
+    "coverage_by_season": {
+      "2025": {
+        "matches": 189,
+        "close_1x2_matches": 0,
+        "close_total_matches": 0,
+        "close_1x2_pct": 0.0,
+        "close_total_pct": 0.0
+      },
+      "2026": {
+        "matches": 85,
+        "close_1x2_matches": 0,
+        "close_total_matches": 0,
+        "close_1x2_pct": 0.0,
+        "close_total_pct": 0.0
+      }
+    },
+    "close_coverage_pct": {
+      "1x2": 0.0,
+      "total": 0.0
+    },
+    "current_price_health": {
+      "rows": 8,
+      "fresh_rows": 8,
+      "stale_rows": 0,
+      "stale_pct": 0.0
+    },
+    "excluded_backtest_matches": {
+      "count": 274,
+      "sample_match_ids": [
+        "731390",
+        "731391",
+        "731392",
+        "731394",
+        "731393",
+        "731395",
+        "731396",
+        "731397",
+        "731398",
+        "731399"
+      ]
+    }
+  }
+}

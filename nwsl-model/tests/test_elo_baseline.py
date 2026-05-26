@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import yaml
@@ -226,7 +228,8 @@ def test_regularized_elo_baseline_can_run_when_listed_as_benchmark() -> None:
 
 
 def test_regularized_elo_baseline_is_not_in_default_benchmarks() -> None:
-    with open("nwsl-model/configs/default.yaml", encoding="utf-8") as config_file:
+    config_path = Path(__file__).resolve().parents[1] / "configs" / "default.yaml"
+    with open(config_path, encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file)
 
     assert "regularized_elo_baseline" not in config["backtest"]["benchmarks"]

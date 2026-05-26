@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-05-26T03:28:29.754484+00:00",
+  "source_available": true,
+  "total_rows": 8,
+  "sportsbooks": [
+    "FootyStats"
+  ],
+  "markets": [
+    "1x2"
+  ],
+  "coverage_by_season": {
+    "2025": {
+      "matches": 189,
+      "close_1x2_matches": 0,
+      "close_total_matches": 0,
+      "close_1x2_pct": 0.0,
+      "close_total_pct": 0.0
+    },
+    "2026": {
+      "matches": 85,
+      "close_1x2_matches": 0,
+      "close_total_matches": 0,
+      "close_1x2_pct": 0.0,
+      "close_total_pct": 0.0
+    }
+  },
+  "close_coverage_pct": {
+    "1x2": 0.0,
+    "total": 0.0
+  },
+  "current_price_health": {
+    "rows": 8,
+    "fresh_rows": 8,
+    "stale_rows": 0,
+    "stale_pct": 0.0
+  },
+  "excluded_backtest_matches": {
+    "count": 274,
+    "sample_match_ids": [
+      "731390",
+      "731391",
+      "731392",
+      "731394",
+      "731393",
+      "731395",
+      "731396",
+      "731397",
+      "731398",
+      "731399"
+    ]
+  }
+}

@@ -38,9 +38,76 @@ def numpy_serializer(obj):
     raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
 
 
+def _coerce_metric(row: pd.Series, *names: str, default: float = 0.0) -> float:
+    for name in names:
+        if name in row and pd.notna(row[name]):
+            return float(row[name])
+    return default
+
+
+def _predictions_path(model_dir: Path) -> Path:
+    direct_path = model_dir / "predictions.csv"
+    if direct_path.exists():
+        return direct_path
+    processed_path = model_dir.parent / "predictions.csv"
+    if model_dir.name == "models" and processed_path.exists():
+        return processed_path
+    return direct_path
+
+
+def _version_from_predictions(predictions_path: Path) -> str | None:
+    if not predictions_path.exists():
+        return None
+    try:
+        frame = pd.read_csv(predictions_path, usecols=["model_version"])
+    except (ValueError, OSError, pd.errors.EmptyDataError):
+        return None
+    versions = frame["model_version"].dropna().astype(str)
+    if versions.empty:
+        return None
+    return versions.iloc[0]
+
+
+def _latest_artifact_dir(models_root: Path) -> Path | None:
+    if not models_root.exists():
+        return None
+    candidates = [
+        path
+        for path in models_root.iterdir()
+        if path.is_dir() and (path / "training_summary.json").exists()
+    ]
+    if not candidates:
+        return None
+    return max(candidates, key=lambda path: (path.stat().st_mtime, path.name))
+
+
+def resolve_artifact_dir(model_dir: Path) -> Path | None:
+    """Resolve the versioned artifact that matches the predictions export."""
+    if (model_dir / "training_summary.json").exists():
+        return model_dir
+
+    predictions_path = _predictions_path(model_dir)
+    version = _version_from_predictions(predictions_path)
+    search_roots = []
+    if (model_dir / "models").exists():
+        search_roots.append(model_dir / "models")
+    if model_dir.name == "models":
+        search_roots.append(model_dir)
+
+    for root in search_roots:
+        if version:
+            candidate = root / version
+            if candidate.exists():
+                return candidate
+        latest = _latest_artifact_dir(root)
+        if latest is not None:
+            return latest
+    return None
+
+
 def export_predictions(model_dir: Path, output_dir: Path, config: dict) -> None:
     """Export predictions to web-ready JSON."""
-    predictions_path = model_dir / "predictions.csv"
+    predictions_path = _predictions_path(model_dir)
     if not predictions_path.exists():
         logging.warning(f"No predictions found at {predictions_path}. Run predict.py first.")
         return
@@ -87,22 +154,40 @@ def export_predictions(model_dir: Path, output_dir: Path, config: dict) -> None:
 def export_team_ratings(model_dir: Path, output_dir: Path) -> None:
     """Export team ratings to web-ready JSON."""
     ratings_path = model_dir / "team_ratings.pkl"
-    if not ratings_path.exists():
-        logging.warning(f"No team ratings found at {ratings_path}.")
+    ratings_csv_path = model_dir / "team_ratings.csv"
+    if not ratings_path.exists() and not ratings_csv_path.exists():
+        logging.warning(f"No team ratings found at {ratings_path} or {ratings_csv_path}.")
         return
 
-    ratings_model = load_pickle(ratings_path)
     ratings = []
-
-    for team_name in sorted(ratings_model._team_ratings.keys()):
-        rating = ratings_model.get_rating(team_name)
-        ratings.append({
-            "team": team_name,
-            "attackRating": round(float(rating.attack), 3),
-            "defenseRating": round(float(rating.defense), 3),
-            "overallRating": round(float((rating.attack + rating.defense) / 2), 3),
-            "nMatches": int(rating.n_matches),
-        })
+    if ratings_path.exists():
+        ratings_model = load_pickle(ratings_path)
+        rating_map = getattr(ratings_model, "ratings", None) or getattr(
+            ratings_model,
+            "_team_ratings",
+            {},
+        )
+        for team_name in sorted(rating_map.keys()):
+            rating = ratings_model.get_rating(team_name)
+            ratings.append({
+                "team": team_name,
+                "attackRating": round(float(rating.attack), 3),
+                "defenseRating": round(float(rating.defense), 3),
+                "overallRating": round(float((rating.attack + rating.defense) / 2), 3),
+                "nMatches": int(rating.n_matches),
+            })
+    else:
+        frame = pd.read_csv(ratings_csv_path)
+        for _, row in frame.iterrows():
+            attack = float(row.get("attack_rating", 0.0))
+            defense = float(row.get("defense_rating", 0.0))
+            ratings.append({
+                "team": row.get("team", ""),
+                "attackRating": round(attack, 3),
+                "defenseRating": round(defense, 3),
+                "overallRating": round(float((attack + defense) / 2), 3),
+                "nMatches": int(row.get("n_matches", 0)),
+            })
 
     ratings.sort(key=lambda r: r["overallRating"], reverse=True)
     for i, r in enumerate(ratings):
@@ -116,8 +201,9 @@ def export_team_ratings(model_dir: Path, output_dir: Path) -> None:
 
 def export_backtest_summary(model_dir: Path, output_dir: Path) -> None:
     """Export backtest metrics summary to web-ready JSON."""
-    backtest_dir = model_dir.parent / "backtest"
-    metrics_path = backtest_dir / "aggregate_metrics.csv"
+    metrics_path = model_dir / "backtest" / "metrics_comparison.csv"
+    if not metrics_path.exists():
+        metrics_path = model_dir.parent / "backtest" / "aggregate_metrics.csv"
 
     if not metrics_path.exists():
         logging.warning(f"No backtest metrics at {metrics_path}. Run backtest.py first.")
@@ -129,12 +215,14 @@ def export_backtest_summary(model_dir: Path, output_dir: Path) -> None:
     for _, row in df.iterrows():
         model_name = row.get("model", "unknown")
         summary[model_name] = {
-            "logLoss": round(float(row.get("log_loss", 0)), 4),
-            "brierScore": round(float(row.get("brier_score", 0)), 4),
-            "calibrationError": round(float(row.get("calibration_error", 0)), 4),
-            "roi": round(float(row.get("roi", 0)), 4),
-            "hitRate": round(float(row.get("hit_rate", 0)), 4),
-            "totalPredictions": int(row.get("n_predictions", 0)),
+            "logLoss": round(_coerce_metric(row, "log_loss_1x2", "log_loss"), 4),
+            "brierScore": round(_coerce_metric(row, "brier_score_1x2", "brier_score"), 4),
+            "calibrationError": round(_coerce_metric(row, "calibration_error", "ece_home_win"), 4),
+            "roi": round(_coerce_metric(row, "roi"), 4),
+            "hitRate": round(_coerce_metric(row, "hit_rate"), 4),
+            "totalPredictions": int(_coerce_metric(row, "n_predictions")),
+            "brierOver25": round(_coerce_metric(row, "brier_over_2_5"), 4),
+            "totalGoalsMae": round(_coerce_metric(row, "expected_total_goals_mae"), 4),
         }
 
     output_file = output_dir / "backtest-summary.json"
@@ -146,7 +234,7 @@ def export_backtest_summary(model_dir: Path, output_dir: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export model outputs for web UI")
     parser.add_argument("--config", type=str, default="configs/default.yaml")
-    parser.add_argument("--model-dir", type=str, default="data/processed/models")
+    parser.add_argument("--model-dir", type=str, default="data/processed")
     parser.add_argument("--output-dir", type=str, default="data/processed/web")
     args = parser.parse_args()
 
@@ -160,9 +248,13 @@ def main() -> None:
 
     logging.info(f"Exporting model outputs to {output_dir}")
 
+    artifact_dir = resolve_artifact_dir(model_dir)
+    if artifact_dir is None:
+        logging.warning(f"No versioned model artifact found from {model_dir}.")
+
     export_predictions(model_dir, output_dir, config)
-    export_team_ratings(model_dir, output_dir)
-    export_backtest_summary(model_dir, output_dir)
+    export_team_ratings(artifact_dir or model_dir, output_dir)
+    export_backtest_summary(artifact_dir or model_dir, output_dir)
 
     logging.info("Web export complete.")
 

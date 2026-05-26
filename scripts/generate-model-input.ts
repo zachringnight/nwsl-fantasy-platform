@@ -8,96 +8,71 @@
  * Writes to nwsl-model/data/raw/matches.csv
  */
 
-import { readFileSync, writeFileSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
+import { buildModelInputCsvs, type EspnModelMatch } from "../src/lib/model-input-builder";
 
 const ROOT = process.cwd();
 const ESPN_DIR = join(ROOT, "src", "data", "espn");
-const OUTPUT = join(ROOT, "nwsl-model", "data", "raw", "matches.csv");
-
-interface EspnMatch {
-  matchId: string;
-  date: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeGoals: number;
-  awayGoals: number;
-  status: string;
-  venue: string;
-}
-
-interface MatchDetail {
-  homeShots: number;
-  awayShots: number;
-  homeShotsOnTarget: number;
-  awayShotsOnTarget: number;
-  homePossession: number;
-  awayPossession: number;
-  homeCorners: number;
-  awayCorners: number;
-  homeFouls: number;
-  awayFouls: number;
-}
+const RAW_DIR = join(ROOT, "nwsl-model", "data", "raw");
+const MATCHES_OUTPUT = join(RAW_DIR, "matches.csv");
+const UPCOMING_OUTPUT = join(RAW_DIR, "upcoming.csv");
+const MANIFEST_OUTPUT = join(RAW_DIR, "dataset_manifest.json");
 
 function loadJson<T>(filename: string): T {
   return JSON.parse(readFileSync(join(ESPN_DIR, filename), "utf-8"));
 }
 
-const matches2025 = loadJson<EspnMatch[]>("matches-2025.json");
-const matches2026 = loadJson<EspnMatch[]>("matches-2026.json");
-const details = loadJson<Record<string, MatchDetail>>("match-details.json");
+const matches2025 = loadJson<EspnModelMatch[]>("matches-2025.json");
+const matches2026 = loadJson<EspnModelMatch[]>("matches-2026.json");
+const output = buildModelInputCsvs(matches2025, matches2026);
 
-// Merge 2025 details if available
-let details2025: Record<string, MatchDetail> = {};
-try {
-  details2025 = loadJson<Record<string, MatchDetail>>("match-details-2025.json");
-} catch {
-  // File might not exist yet
-}
-
-const allDetails = { ...details, ...details2025 };
-
-// CSV header matching the schema in nwsl-model/src/data/schemas.py
-const header = [
-  "match_id",
-  "match_date",
-  "season",
-  "competition",
-  "regular_season_flag",
-  "home_team",
-  "away_team",
-  "home_goals_90",
-  "away_goals_90",
-  "venue",
-  "match_status",
-].join(",");
-
-function matchToRow(m: EspnMatch, season: number): string {
-  const cols = [
-    m.matchId,
-    m.date,
-    season,
-    "NWSL",
-    "true",
-    `"${m.homeTeam}"`,
-    `"${m.awayTeam}"`,
-    m.homeGoals,
-    m.awayGoals,
-    `"${m.venue}"`,
-    m.status === "completed" ? "completed" : "scheduled",
-  ];
-  return cols.join(",");
-}
-
-const rows = [
-  header,
-  ...matches2025
-    .filter((m) => m.status === "completed")
-    .map((m) => matchToRow(m, 2025)),
-  ...matches2026
-    .filter((m) => m.status === "completed")
-    .map((m) => matchToRow(m, 2026)),
-];
-
-writeFileSync(OUTPUT, rows.join("\n") + "\n");
-console.log(`Wrote ${rows.length - 1} matches to ${OUTPUT}`);
+mkdirSync(RAW_DIR, { recursive: true });
+writeFileSync(MATCHES_OUTPUT, output.matchesCsv);
+writeFileSync(UPCOMING_OUTPUT, output.upcomingCsv);
+writeFileSync(
+  MANIFEST_OUTPUT,
+  JSON.stringify(
+    {
+      generated_at: new Date().toISOString(),
+      source: "espn_public_api",
+      source_files: {
+        matches_2025: "src/data/espn/matches-2025.json",
+        matches_2026: "src/data/espn/matches-2026.json",
+      },
+      matches: {
+        rows: output.completedCount,
+        season_coverage: output.completedSeasonCoverage,
+        date_range: output.completedDateRange,
+        status: "completed_only",
+      },
+      upcoming: {
+        rows: output.upcomingCount,
+        season_coverage: output.upcomingSeasonCoverage,
+        date_range: output.upcomingDateRange,
+        status: "scheduled_only",
+      },
+      feature_policy: {
+        training_window: "ESPN 2025-2026 public scoreboard",
+        travel_features: "disabled",
+        weather_features: "disabled",
+        surface_features: "disabled",
+        xg_features: "not_available_from_espn_feed",
+      },
+      odds: {
+        rows: 0,
+        source_available: false,
+        markets: [],
+      },
+      missing_feature_coverage: {
+        odds_missing_pct: 100.0,
+        xg_missing_pct: 100.0,
+      },
+    },
+    null,
+    2
+  ) + "\n"
+);
+console.log(`Wrote ${output.completedCount} completed matches to ${MATCHES_OUTPUT}`);
+console.log(`Wrote ${output.upcomingCount} upcoming fixtures to ${UPCOMING_OUTPUT}`);
+console.log(`Wrote dataset manifest to ${MANIFEST_OUTPUT}`);

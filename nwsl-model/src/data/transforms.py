@@ -106,11 +106,12 @@ def merge_odds_to_matches(
     market_type: str = "1x2",
 ) -> pd.DataFrame:
     """Merge odds into matches for a given source_type and market_type."""
+    result_matches = matches.copy()
     if odds is None or odds.empty:
         for col in ["home_odds", "draw_odds", "away_odds"]:
-            if col not in matches.columns:
-                matches[col] = np.nan
-        return matches
+            if col not in result_matches.columns:
+                result_matches[col] = np.nan
+        return result_matches
 
     mask = odds["market_type"].str.lower() == market_type.lower()
     if "source_type" in odds.columns:
@@ -119,7 +120,10 @@ def merge_odds_to_matches(
 
     if filtered.empty:
         logger.warning(f"No odds found for {market_type}/{source_type}")
-        return matches
+        return result_matches
+
+    result_matches["match_id"] = result_matches["match_id"].astype(str)
+    filtered["match_id"] = filtered["match_id"].astype(str)
 
     # If multiple sportsbooks, average them
     agg_cols = {}
@@ -131,5 +135,5 @@ def merge_odds_to_matches(
 
     odds_agg = filtered.groupby("match_id").agg(agg_cols).reset_index()
 
-    result = matches.merge(odds_agg, on="match_id", how="left", suffixes=("", "_mkt"))
+    result = result_matches.merge(odds_agg, on="match_id", how="left", suffixes=("", "_mkt"))
     return result

@@ -1,0 +1,82 @@
+{
+  "metrics_comparison": [
+    {
+      "model": "dixon_coles",
+      "log_loss_1x2": 1.0814769667951398,
+      "brier_score_1x2": 0.6548853874883067,
+      "brier_home_win": 0.24423726057015813,
+      "brier_over_2_5": 0.25336279467958545,
+      "crps_scoreline": 0.8614248744739275,
+      "expected_total_goals_mae": 1.263370163794932,
+      "fit_diagnostics": {
+        "n_folds": 8,
+        "converged_rate": 1.0,
+        "median_iterations": 26.0,
+        "median_nfev": 2338.0,
+        "median_gradient_norm": 0.910946398046593
+      }
+    },
+    {
+      "model": "bivariate_poisson",
+      "log_loss_1x2": 1.0822985608782365,
+      "brier_score_1x2": 0.6554342549519979,
+      "brier_home_win": 0.2447883685898604,
+      "brier_over_2_5": 0.2528453842699801,
+      "crps_scoreline": 0.861546221463556,
+      "expected_total_goals_mae": 1.2620479815762111,
+      "fit_diagnostics": {
+        "n_folds": 8,
+        "converged_rate": 1.0,
+        "median_iterations": 26.5,
+        "median_nfev": 2454.0,
+        "median_gradient_norm": 0.5434911455629976
+      }
+    },
+    {
+      "model": "uniform_baseline",
+      "log_loss_1x2": 1.0986122886681078,
+      "brier_score_1x2": 0.6666666666666667,
+      "brier_home_win": 0.2524801587301588,
+      "brier_over_2_5": 0.2518943610587573,
+      "crps_scoreline": 0.8607843905296335,
+      "expected_total_goals_mae": 1.2612028630215206,
+      "fit_diagnostics": NaN
+    },
+    {
+      "model": "home_field_baseline",
+      "log_loss_1x2": 1.0904891186672154,
+      "brier_score_1x2": 0.6608288767158061,
+      "brier_home_win": 0.24651531874690225,
+      "brier_over_2_5": 0.2518944044670245,
+      "crps_scoreline": 0.8607843486847614,
+      "expected_total_goals_mae": 1.2612028630215206,
+      "fit_diagnostics": NaN
+    },
+    {
+      "model": "team_ratings_poisson",
+      "log_loss_1x2": 1.144105777690897,
+      "brier_score_1x2": 0.6984183689739824,
+      "brier_home_win": 0.26639777364100514,
+      "brier_over_2_5": 0.29992312787938175,
+      "crps_scoreline": 1.0297596187271076,
+      "expected_total_goals_mae": 1.4916183638601563,
+      "fit_diagnostics": NaN
+    },
+    {
+      "model": "rolling_npxg_poisson",
+      "log_loss_1x2": 1.1086541680394062,
+      "brier_score_1x2": 0.6688689588153338,
+      "brier_home_win": 0.25575818717007265,
+      "brier_over_2_5": 0.27062033655027523,
+      "crps_scoreline": 0.9268450643693645,
+      "expected_total_goals_mae": 1.3389880952380953,
+      "fit_diagnostics": NaN
+    }
+  ],
+  "dixon_coles_ece_home_win": 0.03776207624964727,
+  "bivariate_poisson_ece_home_win": 0.04275527259293415,
+  "uniform_baseline_ece_home_win": 0.09077380952380953,
+  "home_field_baseline_ece_home_win": 0.04565342376679678,
+  "team_ratings_poisson_ece_home_win": 0.12082859042022982,
+  "rolling_npxg_poisson_ece_home_win": 0.09505797205391724
+}

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from src.utils.artifacts import (
     available_model_names,
     create_version_dir,
+    latest_version_dir,
     resolve_model_artifact,
     save_champion_registry,
 )
@@ -64,6 +66,16 @@ def test_available_model_names_exposes_champion_pure_when_latest_exists(tmp_path
 
     model_names = available_model_names(artifact_root)
     assert "champion_pure" in model_names
+
+
+def test_latest_version_dir_prefers_newest_artifact_run_over_lexicographic_name(tmp_path: Path) -> None:
+    artifact_root = tmp_path / "models"
+    older = create_version_dir("pure-projection-2025plus-v3", artifact_root)
+    newer = create_version_dir("20260525T220000Z", artifact_root)
+    os.utime(older, (1, 1))
+    os.utime(newer, (2, 2))
+
+    assert latest_version_dir(artifact_root) == newer
 
 
 def test_pure_projection_gates_choose_pure_champion_only() -> None:
