@@ -1,6 +1,8 @@
 "use client";
 
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { queueNotification } from "@/lib/notifications/client";
+import { awardAchievement } from "@/lib/fantasy-achievements";
 import type { TradeProposalRecord, TradeProposalStatus } from "@/types/fantasy";
 
 interface CreateTradeInput {
@@ -48,14 +50,36 @@ export async function loadTradeProposals(
 
   if (error) return [];
 
-  return ((data ?? []) as Array<Record<string, unknown>>).map((row) => ({
+  const rawRows = (data ?? []) as Array<Record<string, unknown>>;
+  const expiredIds = rawRows
+    .filter(
+      (row) =>
+        row.status === "pending" &&
+        new Date(row.review_period_ends_at as string).getTime() <= Date.now()
+    )
+    .map((row) => row.id as string);
+
+  if (expiredIds.length > 0) {
+    await supabase
+      .from("fantasy_trade_proposals")
+      .update({
+        status: "expired",
+        processed_at: new Date().toISOString(),
+      })
+      .in("id", expiredIds);
+  }
+  const expiredSet = new Set(expiredIds);
+
+  return rawRows.map((row) => ({
     id: row.id as string,
     league_id: row.league_id as string,
     proposer_team_id: row.proposer_team_id as string,
     proposer_team_name: ((row.proposer_team as Record<string, string>)?.team_name) ?? "Unknown",
     receiver_team_id: row.receiver_team_id as string,
     receiver_team_name: ((row.receiver_team as Record<string, string>)?.team_name) ?? "Unknown",
-    status: row.status as TradeProposalStatus,
+    status: (expiredSet.has(row.id as string)
+      ? "expired"
+      : row.status) as TradeProposalStatus,
     message: row.message as string | null,
     review_period_ends_at: row.review_period_ends_at as string,
     veto_count: row.veto_count as number,
@@ -145,6 +169,23 @@ export async function createTradeProposal(input: CreateTradeInput): Promise<Trad
 
   if (assetError) throw new Error("Unable to create trade assets.");
 
+  const { data: receiver } = await supabase
+    .from("fantasy_league_memberships")
+    .select("user_id, team_name")
+    .eq("id", input.receiverTeamId)
+    .maybeSingle();
+
+  if (receiver?.user_id) {
+    void queueNotification({
+      userId: receiver.user_id,
+      leagueId: input.leagueId,
+      type: "TRADE_PROPOSED",
+      title: "New trade proposal",
+      body: `A manager sent ${receiver.team_name ?? "your team"} a trade proposal.`,
+      channels: ["in_app"],
+    }).catch(() => undefined);
+  }
+
   return {
     ...proposal,
     proposer_team_name: "",
@@ -159,6 +200,11 @@ export async function respondToTrade(
   decision: "accepted" | "rejected"
 ): Promise<void> {
   const supabase = getSupabaseBrowserClient();
+  const { data: proposal } = await supabase
+    .from("fantasy_trade_proposals")
+    .select("league_id, proposer_team_id, receiver_team_id")
+    .eq("id", proposalId)
+    .maybeSingle();
 
   const { error } = await supabase
     .from("fantasy_trade_proposals")
@@ -171,6 +217,42 @@ export async function respondToTrade(
     .eq("status", "pending");
 
   if (error) throw new Error("Unable to respond to trade.");
+
+  if (proposal?.proposer_team_id) {
+    const { data: tradeTeams } = await supabase
+      .from("fantasy_league_memberships")
+      .select("id, user_id")
+      .in("id", [proposal.proposer_team_id, proposal.receiver_team_id]);
+    const proposer = tradeTeams?.find(
+      (team) => team.id === proposal.proposer_team_id
+    );
+    const receiver = tradeTeams?.find(
+      (team) => team.id === proposal.receiver_team_id
+    );
+
+    if (proposer?.user_id) {
+      void queueNotification({
+        userId: proposer.user_id,
+        leagueId: proposal.league_id,
+        type: "TRADE_RESPONDED",
+        title: `Trade ${decision}`,
+        body: `Your trade proposal was ${decision}.`,
+        channels: ["in_app"],
+      }).catch(() => undefined);
+    }
+
+    if (decision === "accepted") {
+      await Promise.allSettled(
+        [proposer?.user_id, receiver?.user_id]
+          .filter((userId): userId is string => Boolean(userId))
+          .map((userId) =>
+            awardAchievement(userId, "TRADE_PARTNER", proposal.league_id, {
+              proposalId,
+            })
+          )
+      );
+    }
+  }
 }
 
 export async function voteOnTrade(

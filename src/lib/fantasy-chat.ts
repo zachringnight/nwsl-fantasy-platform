@@ -1,6 +1,7 @@
 "use client";
 
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { awardAchievement } from "@/lib/fantasy-achievements";
 import type { ChatMessageRecord } from "@/types/fantasy";
 
 export async function loadChatMessages(
@@ -52,6 +53,11 @@ export async function sendChatMessage(
   if (!user) throw new Error("You must be signed in to send a message.");
   if (!body.trim()) throw new Error("Message cannot be empty.");
   if (body.length > 500) throw new Error("Message is too long (max 500 characters).");
+  const { count: priorMessageCount } = await supabase
+    .from("fantasy_chat_messages")
+    .select("id", { count: "exact", head: true })
+    .eq("league_id", leagueId)
+    .eq("user_id", user.id);
 
   const { data, error } = await supabase
     .from("fantasy_chat_messages")
@@ -73,6 +79,10 @@ export async function sendChatMessage(
     .select("display_name")
     .eq("user_id", user.id)
     .maybeSingle();
+
+  if ((priorMessageCount ?? 0) === 0) {
+    await awardAchievement(user.id, "CHAT_STARTER", leagueId);
+  }
 
   return {
     ...data,

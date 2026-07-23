@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowRightLeft, Ban, Check, ThumbsDown, ThumbsUp, X } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
-import { Button, getButtonClassName } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { Pill } from "@/components/ui/pill";
@@ -47,7 +46,7 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
   const [selectedReceivePlayers, setSelectedReceivePlayers] = useState<string[]>([]);
   const [tradeMessage, setTradeMessage] = useState("");
 
-  const refreshTrades = useEffectEvent(async () => {
+  const refreshTrades = useCallback(async () => {
     if (!session || !profile?.onboarding_complete) return;
 
     setIsLoading(true);
@@ -68,15 +67,12 @@ export function LeagueTradesClient({ leagueId }: LeagueTradesClientProps) {
     } finally {
       setIsLoading(false);
     }
-  });
+  }, [dataClient, leagueId, profile?.onboarding_complete, session]);
 
   useEffect(() => {
     void refreshTrades();
-  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+  }, [refreshTrades]);
 
-  const myTeamId = leagueDetails?.memberships.find(
-    (m) => m.user_id === session?.user.id
-  )?.team_name;
   const myMembership = leagueDetails?.currentMembership;
 
   async function handleSubmitProposal() {

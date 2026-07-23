@@ -172,7 +172,11 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
               ) : (
                 <StatusBanner
                   title="How standings work"
-                  message="The current table is driven by weekly matchup results, so the playoff race updates automatically and reads like a real season."
+                  message={
+                    standingsState.standings.some((row) => row.is_approximated)
+                      ? "The table uses official match snapshots. Totals marked estimated include season-rate inputs for stats the official match feed does not publish."
+                      : "The current table is driven by official weekly matchup results."
+                  }
                   tone="info"
                 />
               )}
@@ -248,6 +252,7 @@ export function LeagueStandingsClient({ leagueId }: LeagueStandingsClientProps) 
                               Pace {row.points_for - row.projected_points > 0 ? "+" : ""}
                               <AnimatedScore value={row.points_for - row.projected_points} />
                             </p>
+                            {row.is_approximated ? <p>Estimated inputs</p> : null}
                           </div>
                         </div>
                       </ScrollReveal>

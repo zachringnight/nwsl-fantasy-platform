@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 interface UseDraftRealtimeOptions {
@@ -15,8 +15,7 @@ interface UseDraftRealtimeOptions {
  * so the draft room can refresh state without manual polling.
  */
 export function useDraftRealtime({ leagueId, enabled, onDraftUpdate }: UseDraftRealtimeOptions) {
-  const callbackRef = useRef(onDraftUpdate);
-  callbackRef.current = onDraftUpdate;
+  const handleDraftUpdate = useEffectEvent(onDraftUpdate);
 
   useEffect(() => {
     if (!enabled || !leagueId) return;
@@ -34,7 +33,7 @@ export function useDraftRealtime({ leagueId, enabled, onDraftUpdate }: UseDraftR
           table: "fantasy_draft_picks",
           filter: `league_id=eq.${leagueId}`,
         },
-        () => callbackRef.current()
+        () => handleDraftUpdate()
       )
       .on(
         "postgres_changes",
@@ -44,7 +43,7 @@ export function useDraftRealtime({ leagueId, enabled, onDraftUpdate }: UseDraftR
           table: "fantasy_drafts",
           filter: `league_id=eq.${leagueId}`,
         },
-        () => callbackRef.current()
+        () => handleDraftUpdate()
       )
       .subscribe();
 

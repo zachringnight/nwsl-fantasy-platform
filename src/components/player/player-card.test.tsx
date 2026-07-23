@@ -29,7 +29,7 @@ const mockPlayer: FantasyPoolPlayer = {
   average_points: 12.5,
   salary_cost: 9500,
   availability: "available",
-  photo_url: null,
+  photo_url: undefined,
 };
 
 describe("PlayerCard", () => {

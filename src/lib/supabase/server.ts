@@ -8,8 +8,12 @@ export const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY ?? "";
 
 const SUPABASE_SERVER_KEY = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_SECRET_KEY;
 
+export function hasSupabaseServerConfig() {
+  return Boolean(SUPABASE_URL && SUPABASE_SERVER_KEY);
+}
+
 export function getSupabaseServerClient() {
-  if (!SUPABASE_URL || !SUPABASE_SERVER_KEY) {
+  if (!hasSupabaseServerConfig()) {
     throw new Error(
       "Missing Supabase server configuration. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY or SUPABASE_SERVICE_ROLE_KEY."
     );

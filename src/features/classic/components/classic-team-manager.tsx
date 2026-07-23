@@ -26,6 +26,7 @@ export interface ClassicTeamManagerProps {
   onAutofill: () => Promise<void>;
   onSave: () => Promise<void>;
   roster: FantasyRosterPlayer[];
+  lineupLock: { isLocked: boolean; label: string };
 }
 
 export function ClassicTeamManager({
@@ -37,6 +38,7 @@ export function ClassicTeamManager({
   onAutofill,
   onSave,
   roster,
+  lineupLock,
 }: ClassicTeamManagerProps) {
   const rosterWithAssignments = roster.map((player) => ({
     ...player,
@@ -85,6 +87,13 @@ export function ClassicTeamManager({
     <section className="space-y-5">
       {error ? (
         <StatusBanner message={error} title="Lineup action" tone="warning" />
+      ) : null}
+      {lineupLock.isLocked ? (
+        <StatusBanner
+          message={lineupLock.label}
+          title="Lineup locked"
+          tone="warning"
+        />
       ) : null}
 
       <section className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
@@ -194,7 +203,7 @@ export function ClassicTeamManager({
 
               <div className="flex flex-wrap gap-3">
                 <Button
-                  disabled={isSaving}
+                  disabled={isSaving || lineupLock.isLocked}
                   onClick={() => {
                     void onAutofill();
                   }}
@@ -204,7 +213,7 @@ export function ClassicTeamManager({
                   {isSaving ? "Working..." : "Autofill best lineup"}
                 </Button>
                 <Button
-                  disabled={isSaving}
+                  disabled={isSaving || lineupLock.isLocked}
                   onClick={() => {
                     void onSave();
                   }}
@@ -240,6 +249,7 @@ export function ClassicTeamManager({
               </span>
               <select
                 className="field-control mt-3"
+                disabled={lineupLock.isLocked}
                 onChange={(event) => {
                   onAssignmentChange(player.id, event.target.value as FantasyLineupSlot | "");
                 }}

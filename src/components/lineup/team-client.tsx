@@ -41,6 +41,10 @@ export function TeamClient({ leagueId }: TeamClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [assignments, setAssignments] = useState<Record<string, FantasyLineupSlot | "">>({});
+  const [lineupLock, setLineupLock] = useState({
+    isLocked: false,
+    label: "Lineup is editable.",
+  });
 
   const refreshRoster = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -71,6 +75,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
       const nextState = await dataClient.loadRosterState(leagueId);
       setRoster(nextState.roster);
       setAssignments(createAssignmentState(nextState.roster));
+      setLineupLock(nextState.lineupLock);
     } catch (loadError) {
       setError(
         loadError instanceof Error
@@ -94,6 +99,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
       const nextState = await dataClient.autofillRosterLineup(leagueId);
       setRoster(nextState.roster);
       setAssignments(createAssignmentState(nextState.roster));
+      setLineupLock(nextState.lineupLock);
     } catch (actionError) {
       setError(
         actionError instanceof Error
@@ -120,6 +126,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
 
       setRoster(nextState.roster);
       setAssignments(createAssignmentState(nextState.roster));
+      setLineupLock(nextState.lineupLock);
     } catch (actionError) {
       setError(
         actionError instanceof Error
@@ -264,6 +271,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
               onAutofill={handleAutofill}
               onSave={handleSave}
               roster={roster}
+              lineupLock={lineupLock}
             />
           </MotionReveal>
         );

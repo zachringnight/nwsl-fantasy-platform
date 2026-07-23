@@ -1,6 +1,7 @@
 export interface JobContext {
   startedAt: string;
   requestedBy?: string;
+  params?: Record<string, unknown>;
 }
 
 export interface JobResult {

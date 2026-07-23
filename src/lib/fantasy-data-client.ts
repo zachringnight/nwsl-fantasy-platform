@@ -16,6 +16,7 @@ import {
   loadMyLeagues,
   loadRosterState,
   loadSalaryCapEntryState,
+  loadSalaryCapLeaderboard,
   loadDraftState,
   loadTransactionHub,
   makeDraftPick,
@@ -52,6 +53,7 @@ export interface FantasyDataClient {
   loadMyLeagues: typeof loadMyLeagues;
   loadRosterState: typeof loadRosterState;
   loadSalaryCapEntryState: typeof loadSalaryCapEntryState;
+  loadSalaryCapLeaderboard: typeof loadSalaryCapLeaderboard;
   loadDraftState: typeof loadDraftState;
   loadTransactionHub: typeof loadTransactionHub;
   makeDraftPick: typeof makeDraftPick;
@@ -88,6 +90,7 @@ export const supabaseFantasyDataClient: FantasyDataClient = {
   loadMyLeagues,
   loadRosterState,
   loadSalaryCapEntryState,
+  loadSalaryCapLeaderboard,
   loadDraftState,
   loadTransactionHub,
   makeDraftPick,

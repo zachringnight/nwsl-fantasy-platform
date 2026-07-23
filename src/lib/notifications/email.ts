@@ -30,6 +30,13 @@ function createTransport() {
 }
 
 export async function sendEmail(payload: EmailPayload): Promise<void> {
+  if (
+    !process.env.AUTH_EMAIL_SERVER &&
+    !(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)
+  ) {
+    return;
+  }
+
   const transport = createTransport();
   const from = process.env.AUTH_EMAIL_FROM ?? "NWSL Fantasy <noreply@nwslfantasy.com>";
 
