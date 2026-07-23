@@ -7,10 +7,10 @@ and completed-run evidence. The current long-range product plan is
 `handoffs/` holds dated model handoff documents written at the end of model-lab
 sessions. They summarize what changed and what remained open at that date.
 
-`planning/` and `outputs/` preserve the original product strategy, research,
-information architecture, design system, screen specifications, and build-plan
-material. They are useful historical references, but the dated package under
-the root `plans/` directory controls future implementation sequencing.
+`archive/initial-product-planning/` preserves the original product prompt chain
+and expanded strategy, research, information architecture, design system,
+screen specifications, and build-plan material. These historical references
+do not control future implementation sequencing.
 
 `nwsl-model/docs/` (left in place, not moved) holds model-package-specific
 notes: `season_validation_protocol.md` (the season holdout methodology) and

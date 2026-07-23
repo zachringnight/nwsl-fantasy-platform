@@ -44,4 +44,5 @@ These warnings were present outside the roadmap documentation. The roadmap captu
 - Environment configuration changed: no.
 - Vercel configuration changed: no.
 - Existing plans or basketball work deleted: no.
+- Superseded product-planning documents archived: 24.
 - Deployment performed: no.

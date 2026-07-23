@@ -27,6 +27,8 @@ The package is internally consistent, discoverable from the repository documenta
 6. Verified that every dependency points to an earlier wave.
 7. Preserved the existing fantasy, DFS, model-lab, basketball, and motion references.
 8. Kept implementation, infrastructure mutation, and deployment out of this planning release.
+9. Archived the superseded initial product prompt chain and expanded outputs under `docs/archive/initial-product-planning/`.
+10. Confirmed the two historical document sets are not exact duplicates, so both were retained.
 
 ## Non-blocking concerns
 
