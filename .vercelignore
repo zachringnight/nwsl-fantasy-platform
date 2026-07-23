@@ -1,0 +1,16 @@
+.git
+.vercel
+docs
+plans
+CLAUDE.md
+HANDOFF*.md
+
+# The web app reads only the exported model JSON at runtime. Exclude the Python
+# pipeline and large training artifacts while preserving that small web bundle.
+nwsl-model/*
+!nwsl-model/data/
+nwsl-model/data/*
+!nwsl-model/data/processed/
+nwsl-model/data/processed/*
+!nwsl-model/data/processed/web/
+!nwsl-model/data/processed/web/**
