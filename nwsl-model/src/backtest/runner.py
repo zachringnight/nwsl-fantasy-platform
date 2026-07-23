@@ -19,7 +19,7 @@ from src.backtest.metrics import compute_all_metrics
 from src.backtest.splitter import BacktestFold, ExpandingWindowSplitter
 from src.betting.market_derivation import derive_all_markets
 from src.betting.recommendations import evaluate_market_candidates, load_bet_selection_config
-from src.betting.score_matrix import build_full_result, derive_1x2
+from src.betting.score_matrix import build_full_result, derive_1x2, expected_goals, rescale_matrix_to_targets
 from src.betting.settlement import settle_1x2, settle_total
 from src.betting.staking import BetRecommendation, StakingConfig, StakingEngine
 from src.data.transforms import (
@@ -546,11 +546,18 @@ class BacktestRunner:
         league_total_npxg = max(train_home_npxg + train_away_npxg, 0.2)
         league_goal_rate = max(float(pd.to_numeric(train["total_goals"], errors="coerce").mean()), league_total_npxg)
         league_side_rate = max(league_goal_rate / 2.0, 0.1)
-        base_home_probs = (
-            train_home_rate if train_home_rate > 0 else 1 / 3,
-            train_draw_rate if train_draw_rate > 0 else 1 / 3,
-            train_away_rate if train_away_rate > 0 else 1 / 3,
-        )
+        # These three rates always sum to exactly 1.0 when `train` is
+        # non-empty (every match is exactly one outcome), so a per-component
+        # "or 1/3" fallback is wrong: a legitimate zero rate for one outcome
+        # (e.g. no away wins occurred) is not "undefined," and replacing
+        # just that one component with 1/3 breaks the sum-to-1 invariant
+        # for the other two, untouched components. Only fall back to a
+        # uniform split when the rates are genuinely undefined (NaN, from
+        # an empty training window).
+        if len(train) > 0:
+            base_home_probs = (train_home_rate, train_draw_rate, train_away_rate)
+        else:
+            base_home_probs = (1 / 3, 1 / 3, 1 / 3)
         elo_model = None
         if base_model == "regularized_elo_baseline":
             elo_cfg = self.config.get("elo_baseline", {})
@@ -696,6 +703,27 @@ class BacktestRunner:
 
             if base_model not in {"regularized_elo_baseline", "spi_lite_baseline", "market_residual"}:
                 matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
+
+            # uniform_baseline and home_field_baseline set probs_override to
+            # values NOT derived from `matrix` (a flat 1/3 split, and the
+            # empirical historical W/D/L rate, respectively). Without this
+            # rescale, markets (and therefore betting edge/EV/settlement)
+            # would reflect the raw Poisson matrix while the reported
+            # prob_home/draw/away reflect probs_override instead, silently
+            # scoring log-loss against one forecast and profitability
+            # against a different one. For elo/spi/market_residual,
+            # probs_override is already the exact 1X2 summary of `matrix`,
+            # so this rescale is a no-op beyond floating-point cleanup.
+            if probs_override is not None:
+                matrix = rescale_matrix_to_targets(matrix, *probs_override)
+                # The rescale redistributes mass across the matrix, which
+                # shifts its implied expected goals -- recompute lambda_home/
+                # lambda_away from the POST-rescale matrix so
+                # expected_total_goals_mae (computed from these two fields)
+                # and the totals-market probabilities (derived from `markets`
+                # below, i.e. this same rescaled matrix) stay consistent with
+                # each other rather than describing two different forecasts.
+                lambda_home, lambda_away = expected_goals(matrix)
 
             markets = derive_all_markets(matrix, match_id=str(row["match_id"]))
 

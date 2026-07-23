@@ -32,11 +32,11 @@
   },
   "missing_feature_coverage": {
     "asa_match_xg_missing_pct": 0.32,
-    "odds_missing_pct": 20.13,
+    "odds_missing_pct": 9.09,
     "xg_missing_pct": 0.32
   },
   "odds": {
-    "rows": 1195,
+    "rows": 1367,
     "source_available": true,
     "markets": [
       "1x2",
@@ -54,7 +54,7 @@
       "current",
       "open"
     ],
-    "latest_timestamp": "2026-06-09T16:21:50.683492+00:00"
+    "latest_timestamp": "2026-07-19T23:00:00+00:00"
   },
   "source": "espn_public_api",
   "source_files": {

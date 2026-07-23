@@ -21,9 +21,9 @@ from typing import Any, Protocol
 
 import numpy as np
 import pandas as pd
-from numpy.typing import NDArray
 from sklearn.linear_model import LogisticRegression
 
+from src.betting.score_matrix import rescale_matrix_to_targets
 from src.models.base import PredictionResult
 
 _CLASS_HOME = 0
@@ -65,44 +65,6 @@ def _feature_vector(
         p_base_draw - p_mkt_draw,
         p_base_away - p_mkt_away,
     ]
-
-
-def _rescale_matrix_to_targets(
-    matrix: NDArray[np.float64],
-    p_home: float,
-    p_draw: float,
-    p_away: float,
-) -> NDArray[np.float64]:
-    """Rescale the H/D/A triangular regions of a score matrix to target masses.
-
-    Each region (strictly-lower = home win, diagonal = draw, strictly-upper
-    = away win) is scaled independently to hit its target probability mass,
-    preserving the base model's relative shape within each region. If a
-    region happens to carry zero mass in the base matrix, its target mass is
-    spread uniformly across the region's cells instead. The result is
-    renormalized to guard against floating-point drift.
-    """
-    matrix = np.asarray(matrix, dtype=np.float64)
-    n = matrix.shape[0]
-    lower_mask = np.tril(np.ones((n, n)), -1) > 0
-    diag_mask = np.eye(n, dtype=bool)
-    upper_mask = np.triu(np.ones((n, n)), 1) > 0
-
-    scaled = np.zeros_like(matrix)
-    for mask, target in ((lower_mask, p_home), (diag_mask, p_draw), (upper_mask, p_away)):
-        region = matrix * mask
-        region_sum = float(region.sum())
-        if region_sum > 0:
-            scaled += region * (target / region_sum)
-        else:
-            count = int(mask.sum())
-            if count > 0:
-                scaled += mask.astype(np.float64) * (target / count)
-
-    total = float(scaled.sum())
-    if total > 0:
-        scaled /= total
-    return scaled
 
 
 class MarketResidualModel:
@@ -223,7 +185,7 @@ class MarketResidualModel:
         else:
             p_home = p_draw = p_away = 1.0 / 3.0
 
-        matrix = _rescale_matrix_to_targets(base_pred.score_matrix, p_home, p_draw, p_away)
+        matrix = rescale_matrix_to_targets(base_pred.score_matrix, p_home, p_draw, p_away)
 
         return PredictionResult(
             match_id=base_pred.match_id,
