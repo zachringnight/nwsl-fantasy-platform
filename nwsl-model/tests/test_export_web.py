@@ -36,6 +36,15 @@ def test_export_backtest_summary_reads_versioned_metrics_comparison(tmp_path) ->
             }
         ]
     ).to_csv(artifact / "backtest" / "metrics_comparison.csv", index=False)
+    pd.DataFrame(
+        [
+            {"match_id": "match-1", "prob_home": 0.5},
+            {"match_id": "match-2", "prob_home": 0.4},
+        ]
+    ).to_csv(
+        artifact / "backtest" / "predictions_dixon_coles.csv",
+        index=False,
+    )
 
     export_backtest_summary(artifact, output)
 
@@ -44,6 +53,7 @@ def test_export_backtest_summary_reads_versioned_metrics_comparison(tmp_path) ->
     assert summary["dixon_coles"]["brierScore"] == 0.6548
     assert summary["dixon_coles"]["brierOver25"] == 0.2533
     assert summary["dixon_coles"]["totalGoalsMae"] == 1.2633
+    assert summary["dixon_coles"]["totalPredictions"] == 2
 
 
 def test_export_team_ratings_falls_back_to_artifact_csv(tmp_path) -> None:

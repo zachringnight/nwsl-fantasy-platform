@@ -74,50 +74,64 @@ export default function ModelPage() {
           tone={perf.roi >= 0 ? "brand" : "accent"}
         />
         <MetricTile
-          label="Predictions"
+          label="Evaluated Matches"
           value={perf.totalPredictions}
-          detail="Total matches"
+          detail="Backtest sample"
         />
       </section>
 
-      {/* Calibration Chart */}
-      <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-        <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-          Calibration Plot
-        </h3>
-        <p className="mb-4 text-sm text-muted">
-          A well-calibrated model produces actual outcomes matching predicted probabilities.
-          The closer the blue line tracks the dashed perfect line, the better the calibration.
-        </p>
-        <ThemedLineChart
-          data={calibrationData}
-          xKey="predicted"
-          lines={[
-            { dataKey: "Actual", label: "Actual Frequency", color: "#00e1ff" },
-            { dataKey: "Perfect", label: "Perfect Calibration", color: "#b6c0d9", dashed: true },
-          ]}
-          height={350}
-        />
-      </section>
+      {perf.calibrationBuckets.length > 0 ? (
+        <>
+          {/* Calibration Chart */}
+          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Calibration Plot
+            </h3>
+            <p className="mb-4 text-sm text-muted">
+              A well-calibrated model produces actual outcomes matching predicted probabilities.
+              The closer the blue line tracks the dashed perfect line, the better the calibration.
+            </p>
+            <ThemedLineChart
+              data={calibrationData}
+              xKey="predicted"
+              lines={[
+                { dataKey: "Actual", label: "Actual Frequency", color: "#00e1ff" },
+                { dataKey: "Perfect", label: "Perfect Calibration", color: "#b6c0d9", dashed: true },
+              ]}
+              height={350}
+            />
+          </section>
 
-      {/* Sample Size Per Bucket */}
-      <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-        <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-          Predictions Per Probability Bucket
-        </h3>
-        <p className="mb-4 text-sm text-muted">
-          Number of predictions in each probability range. More samples improve calibration reliability.
-        </p>
-        <ThemedBarChart
-          data={perf.calibrationBuckets.map((b) => ({
-            bucket: `${(b.predicted * 100).toFixed(0)}%`,
-            count: b.count,
-          }))}
-          xKey="bucket"
-          bars={[{ dataKey: "count", label: "Predictions", color: "#0522ff" }]}
-          height={250}
-        />
-      </section>
+          {/* Sample Size Per Bucket */}
+          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+            <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Predictions Per Probability Bucket
+            </h3>
+            <p className="mb-4 text-sm text-muted">
+              Number of predictions in each probability range. More samples improve calibration reliability.
+            </p>
+            <ThemedBarChart
+              data={perf.calibrationBuckets.map((b) => ({
+                bucket: `${(b.predicted * 100).toFixed(0)}%`,
+                count: b.count,
+              }))}
+              xKey="bucket"
+              bars={[{ dataKey: "count", label: "Predictions", color: "#0522ff" }]}
+              height={250}
+            />
+          </section>
+        </>
+      ) : (
+        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+          <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+            Calibration Detail
+          </h3>
+          <p className="text-sm text-muted">
+            Per-bucket observed calibration rates are not included in the current model export.
+            Summary accuracy metrics above use the complete backtest sample.
+          </p>
+        </section>
+      )}
 
       {/* Methodology */}
       <MethodologySection />
