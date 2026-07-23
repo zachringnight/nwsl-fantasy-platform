@@ -1,6 +1,6 @@
 # Session Handoff — 2026-07-22
 
-Branch: `codex/model-pipeline-refresh`. PR: [#13](https://github.com/zachringnight/nwsl-fantasy-platform/pull/13) (draft). Everything below is committed and pushed — nothing local-only, nothing in progress.
+`main` is clean and in sync with `origin/main` (`26f56d7`). One PR open awaiting merge decision, one branch pushed with no PR yet. Nothing local-only, nothing uncommitted.
 
 ## What this session did
 
@@ -8,46 +8,61 @@ Started as a repo cleanup (branches, worktrees, stale dirs), then expanded into 
 
 ## Track 1: betting model (`nwsl-model/`)
 
-Plan: [`plans/2026-07-22-model-lab/`](plans/2026-07-22-model-lab/) — manifest + 13 packets + `REVIEW_NOTES.md` + `HANDOFF.md`.
+Plan: [`plans/2026-07-22-model-lab/`](plans/2026-07-22-model-lab/) — manifest + 13 packets + `REVIEW_NOTES.md` + `HANDOFF.md` + `LAB_REPORT.md`.
 
-**Landed (waves 1-2, commits `5e78783`, `5b1ced2`, `b51f956`):**
+**Merged to `main` (PR [#13](https://github.com/zachringnight/nwsl-fantasy-platform/pull/13), waves 1-2):**
 - Fixed the plan-breaking bug the review caught: baseline models never settled bets in the backtest at all (`_evaluate_baseline_fold` had no staker, never called settlement). Every packet downstream of that depended on evidence that silently never existed. Fixed, verified with a real settled-P&L test.
 - Data refreshed through 2026-07-19.
 - `spi_lite_baseline` promoted to a first-class, gate-able candidate.
 - Nested chronological threshold tuning, a fitted market-residual model, a calibrated totals model — all new, all wired in.
 - Fixed a live FOX Sports scraper bug (abbreviated month names broke date parsing).
-- 330 tests passing (fast loop), full suite green.
 
-**Not started: waves 3-4.**
-- Wave 3: June-July 2026 closing-odds backfill (direct HTTP, no tokens — packet 03 already built this path), then the full evidence lab run (fresh training artifact, backtest, season holdout, threshold tuning, totals eval — this is what actually answers "should SPI-lite/market-residual be promoted," written to `LAB_REPORT.md`), then a docs/README pass.
-- Wave 4: final verification (regenerate predictions/slate, fail-closed invariant checks, full test suites).
-- **A wave 3 attempt was started and stopped mid-flight this session** (see "In-flight work that was stopped" below) — nothing was lost, but note it before re-launching so you don't duplicate effort.
-- To resume: read `plans/2026-07-22-model-lab/HANDOFF.md`, it has the literal handoff instruction.
+**Merged to `main` (PR [#14](https://github.com/zachringnight/nwsl-fantasy-platform/pull/14), 4 rounds of Copilot/Codex review fixes):** missing `fastapi` dependency, `api/deps.py` 404 on `baseline_promoted` kind, baseline settlement probabilities not matching the reported `probs_override` (fixed via a matrix rescale), a broken per-component `1/3` fallback surfaced by that fix, a private cross-module import promoted to `score_matrix.rescale_matrix_to_targets`, lambdas not recomputed after rescale (corrupted totals MAE), and two rounds of the API not loading the artifact's own `spi_lite_summary.json`/`config_snapshot.json`.
+
+**Executed and out for review (PR [#15](https://github.com/zachringnight/nwsl-fantasy-platform/pull/15), wave 3 — not yet merged):**
+- Packet 10: June-July 2026 closing-odds backfill via direct OddsPortal HTTP (no tokens). Coverage for that window went 0% → 100%.
+- Packet 11: full evidence lab run, written to `plans/2026-07-22-model-lab/LAB_REPORT.md`.
+- Packet 12: docs reorganized under `docs/`, root `CLAUDE.md` added, `nwsl-model/Makefile` added, `nwsl-model/README.md` rewritten.
+- Full suite: **358 passed**.
+
+**The actual verdict (`LAB_REPORT.md`), unchanged by any threshold/config edits:**
+> Reject promotion this round. Slate stays fail-closed. Bet settlement is real now (previously silently zero). With real settlement: `spi_lite_baseline` backtests at -26.9% ROI, `market_residual` at -18.6%. Nested out-of-sample threshold tuning found no model/market combo clearing the +5%-unit ROI bar anywhere. The baseline promotion gate fails on two independent grounds (OOS evidence was collected for the wrong model this run, and the numbers miss their own thresholds regardless). Totals model: no-vig market still beats it, stays suppressed. Pure models (`dixon_coles`, `bivariate_poisson`) stay `research_only`, losing to baseline on every metric.
+
+**Not started: wave 4** (final verification — regenerate predictions/slate, fail-closed invariant checks, full test suite one more time after PR #15 merges). Read `plans/2026-07-22-model-lab/HANDOFF.md` to resume; packet 13 is the only one left.
 
 ## Track 2: fantasy/DFS product
 
-Plan: [`plans/2026-07-22-fantasy-dfs/`](plans/2026-07-22-fantasy-dfs/) — manifest + 14 packets + `REVIEW_NOTES.md` + `HANDOFF.md` + `RLS_SECURITY_NOTE.md`.
+Plan: [`plans/2026-07-22-fantasy-dfs/`](plans/2026-07-22-fantasy-dfs/) — manifest + 14 packets + `REVIEW_NOTES.md` + `HANDOFF.md` + `RLS_SECURITY_NOTE.md` + `DATA_SOURCE_DECISION.md`.
 
-**The central finding:** this product looks complete but the scoring layer is entirely fabricated. `src/lib/fantasy-season-sim.ts` generates every classic-league standing and matchup score via a deterministic hash function — this is live code in the real, Supabase-backed app, not a demo path. The DFS "leaderboard" component is literally named `SalaryCapMatchupPlaceholder` and renders hardcoded fake data with zero real props. Six Supabase tables that shipped, real code depends on (trades, chat, achievements) don't exist in any tracked migration or in the live database — confirmed directly against the live Supabase project (`PrizmLounge`, `rnfvmqflktghriqefatc`) — so those three features 500 on first real use today.
+**The central finding:** this product looks complete but the scoring layer was entirely fabricated. `src/lib/fantasy-season-sim.ts` generated every classic-league standing and matchup score via a deterministic hash function — live code in the real, Supabase-backed app, not a demo path. The DFS "leaderboard" component was literally named `SalaryCapMatchupPlaceholder` and rendered hardcoded fake data with zero real props. Six Supabase tables that shipped code depended on (trades, chat, achievements) didn't exist in any tracked migration or in the live database.
 
-**Plan status: written and adversarially reviewed. Zero packets executed.**
-- Review caught real bugs before any code was written: a trades query that would silently return empty forever (wrong column name), a missing database column three packets each independently assumed existed, a phantom "settlement checkpoint" nothing produced (would have caused achievement/streak double-counting).
-- Two findings were **deliberately left unfixed** per explicit user instruction ("don't worry about security or RLS concerns" — said twice, mid-session): packet 10's admin-override table has no DB-level write authorization beyond a client-side allowlist, and packet 05's cross-user notification writes don't fit this schema's existing RLS convention. Both are documented in `REVIEW_NOTES.md`, not silently dropped. Worth a real look before anything here touches production traffic.
-- To start: read `plans/2026-07-22-fantasy-dfs/HANDOFF.md`.
+**Executed and pushed (branch `codex/fantasy-dfs-wave0`, commit `000e231` — no PR opened yet):**
+- Packet 01: ran real, live HTTP calls against the official NWSL API to determine exactly which fantasy scoring categories have real per-match data vs. must be approximated. Findings in `DATA_SOURCE_DECISION.md`. **Load-bearing correction for packet 04**: the numeric `match_id` in `matches.csv` (ESPN-keyed) is not what the official API's `/lineups` endpoint expects — packet 04 needs the UUID-style `matchId` from `fetch_season_matches()` instead (e.g. `"nwsl::Football_Match::994672fd..."`).
+- Packet 02: created the 6 missing tables live against the real Supabase project (`fantasy_chat_messages`, `fantasy_achievements`, `fantasy_streaks`, `fantasy_trade_proposals`, `fantasy_trade_assets`, `fantasy_trade_votes`), RLS enabled, membership-scoped policies, applied via migration and confirmed via `list_tables`.
+- Packet 03: fixed a trades query that would have silently returned empty forever (`fantasy_teams` doesn't exist, needed `fantasy_league_memberships` + `.team_name` not `.name`); removed dead/orphaned code (`demo-data.ts`, a scaffold `src/jobs/` directory distinct from the real `src/lib/jobs/`, the NextAuth Credentials provider that had a password-bypass bug); added a stopgap `isAdminEmail()` allowlist gate (explicitly not real RBAC, per instruction below).
+- Two findings deliberately left unfixed per explicit instruction ("don't worry about security or RLS concerns"): packet 10's admin-override table has no DB-level write authorization beyond that client-side allowlist, and packet 05's cross-user notification writes don't fit this schema's existing RLS convention. Both documented in `REVIEW_NOTES.md`, not silently dropped — worth a real look before this touches production traffic for real.
 
-## In-flight work that was stopped (nothing lost)
+**Not started: packets 04-14** (real scoring ingest through final verification). To resume, read `plans/2026-07-22-fantasy-dfs/HANDOFF.md`, open a PR for `codex/fantasy-dfs-wave0` first (it's currently just a pushed branch), then continue with wave 1.
 
-Wave 3 of the model-lab plan was launched, then stopped almost immediately at the user's request (they asked for a commit+PR+handoff instead of continued autonomous execution). At the moment it was stopped:
-- Packet 10 (odds backfill) had started fetching but never reached its merge step — no `odds.csv` change had happened. Four partial/interrupted raw-scrape JSON/CSV files were reverted to their last-committed state since they were incomplete scratch output, not a finished unit of work.
-- Packets 11 (lab run) and 12 (docs) had not started.
-- Nothing tested, verified, or committed was touched by this. Waves 1-2's results are exactly as described above.
+## A note on the mid-session incident (fully resolved, no open risk)
 
-## A standing `/goal` may still be active
+Mid-session, two `Workflow` runs were active concurrently in the same working directory (model-lab wave 3 and fantasy-dfs wave 0, no worktree isolation). When fantasy-dfs wave 0 finished first, an attempt to clean up after committing it directly to `main` used `git reset --hard` while wave 3 was still writing to already-tracked files, wiping wave 3's in-progress odds backfill and doc changes, and — it turned out separately — local `main` had also never been fast-forwarded past PR #13 in the first place, so PR #14's merged fixes were briefly missing from the working tree too.
 
-Earlier in this session the user ran `/goal` with the condition "finish the full build and polish it up without waiting for me." That goal was never explicitly cleared. If you're an AI coder picking this up in a **new** session, this doesn't carry over. If you're continuing **this same session**, be aware a Stop hook may still be pushing toward full autonomous completion of both tracks — the user's later, more specific instructions (commit, PR, prepare this handoff) should take precedence; run `/goal clear` if that hook's pressure is unwanted.
+Both are fully repaired: the odds backfill was re-run and re-verified (100% June-July coverage confirmed twice), the docs work was redone, local `main` was fast-forwarded to `origin/main` with zero conflicts (verified no file overlap before doing it), and the full suite passed at 358/358 afterward. Lesson for future sessions: don't run two `Workflow`s unisolated against the same branch, and never `git reset --hard` without confirming nothing else is concurrently writing to the same tree.
 
 ## Everything else worth knowing
 
-- This is a **shared, multi-tenant production Supabase project** — dozens of unrelated tables from the user's other apps (Panini, NBA/NCAA props, World Cup, UGC pipelines) live in the same `public` schema. Any new migration must be additive-only, `fantasy_`-prefixed, RLS-on-from-creation.
+- This is a **shared, multi-tenant production Supabase project** (`PrizmLounge`, `rnfvmqflktghriqefatc`) — dozens of unrelated tables from the user's other apps (Panini, NBA/NCAA props, World Cup, UGC pipelines) live in the same `public` schema. Any new migration must be additive-only, `fantasy_`-prefixed, RLS-on-from-creation.
 - Unrelated finding surfaced during verification, explicitly out of scope for both plans: 33 tables in that same Supabase project have RLS disabled (none are fantasy-related — they belong to other apps). Documented in `plans/2026-07-22-fantasy-dfs/RLS_SECURITY_NOTE.md`, not acted on.
+- `vercel.json` now has a conditional `ignoreCommand` — builds are skipped only when `VERCEL_ENV=production`, so PR previews still work but merges to `main` no longer auto-deploy to production.
 - Repo cleanup from earlier this session: stale branches converted to tags (`archive/*`), a rescued Codex worktree became branch `codex/sports-card-motion` (unmerged, still available), `.gitignore` extended to cover model logs/artifacts/tuning output.
+- No standing `/goal` is active — it was set once mid-session and explicitly cleared by the user later on.
+
+## Branch map (as of end of session)
+
+| Branch | State |
+|---|---|
+| `main` | Clean, synced with `origin/main` at `26f56d7` |
+| `codex/model-lab-wave3-docs-backfill` | Pushed, PR [#15](https://github.com/zachringnight/nwsl-fantasy-platform/pull/15) open, not merged |
+| `codex/fantasy-dfs-wave0` | Pushed, no PR opened yet |
+| `codex/sports-card-motion` | Pushed, unmerged, unrelated rescued work |
