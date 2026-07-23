@@ -27,6 +27,19 @@ def test_event_from_url_parses_match_identity() -> None:
     assert event.away_team == "Boston Legacy FC"
 
 
+def test_event_from_url_parses_abbreviated_month_name() -> None:
+    # FOX Sports switched event-URL month names to the abbreviated form
+    # (e.g. "jul" instead of "july") at some point in the 2026 season;
+    # the parser must accept both.
+    event = event_from_url(
+        "https://www.foxsports.com/soccer/"
+        "nwsl-kansas-city-current-vs-boston-legacy-fc-jul-18-2026-game-boxscore-651658"
+    )
+
+    assert event is not None
+    assert event.match_date == "2026-07-18"
+
+
 def test_parse_event_total_odds_extracts_line_and_decimal_prices() -> None:
     html = """
     <h3>OVER/UNDER 2.5 GOALS</h3>

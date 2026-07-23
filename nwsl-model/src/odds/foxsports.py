@@ -73,7 +73,13 @@ def _slug_to_team(value: str) -> str:
 
 
 def _month_number(value: str) -> int:
-    return datetime.strptime(value.title(), "%B").month
+    title = value.title()
+    for fmt in ("%B", "%b"):
+        try:
+            return datetime.strptime(title, fmt).month
+        except ValueError:
+            continue
+    raise ValueError(f"Unrecognized month name in FOX Sports event URL: {value!r}")
 
 
 def event_from_url(url: str) -> FoxSportsEvent | None:
