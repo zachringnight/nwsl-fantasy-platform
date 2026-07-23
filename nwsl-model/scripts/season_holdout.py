@@ -37,6 +37,7 @@ DEFAULT_MODELS = [
     "team_ratings_poisson",
     "rolling_npxg_poisson",
     "spi_lite_baseline",
+    "market_residual",
 ]
 
 

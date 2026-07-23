@@ -26,6 +26,21 @@ PURE_PROJECTION_THRESHOLDS = {
     "max_slice_regression": 1.10,
 }
 
+# Baseline (e.g. spi_lite_baseline) promotion gate. Backtest ROI is measured
+# on close-time, uncalibrated odds while live picks run on current, calibrated
+# odds and current gating -- the evidence does not directly transfer, so the
+# bar is raised well above "beats zero" and a caveat always ships alongside
+# the result so a human sees the gap even when the gate passes.
+BASELINE_EVIDENCE_CAVEAT = (
+    "OOS ROI measured on close-time, uncalibrated backtest odds; live picks run on "
+    "current, calibrated odds and current gating — this evidence does not directly transfer"
+)
+BASELINE_OOS_THRESHOLDS = {
+    "min_n_blocks_tuned": 5,
+    "min_n_bets": 50,
+    "min_roi_units": 0.05,
+}
+
 
 def _binary_ece(probabilities: pd.Series, actual: pd.Series) -> float:
     if probabilities.empty:
@@ -107,6 +122,107 @@ def _best_baseline_metric(backtest_summary: dict[str, Any], metric_name: str) ->
             best_name = model_name
             best_value = metric_value
     return best_name, best_value
+
+
+def _best_baseline_by_effective_log_loss(
+    backtest_summary: dict[str, Any],
+    evaluation_summary: dict[str, Any],
+) -> tuple[str | None, float | None]:
+    """Strongest baseline by OOF-calibrated log loss when available, else raw.
+
+    Mirrors the pure-model gate's "effective_log_loss" convention (production
+    applies post-hoc calibration, so the honest comparison is the
+    out-of-fold estimate, not the raw backtest number) so the baseline gate's
+    "is this genuinely the strongest baseline" check uses the same standard.
+    """
+    eval_models = evaluation_summary.get("models", {})
+    best_name = None
+    best_value = None
+    for model_name, metrics in backtest_summary.get("models", {}).items():
+        if model_name not in BASELINE_MODELS:
+            continue
+        raw_log_loss = metrics.get("log_loss_1x2")
+        posthoc = eval_models.get(model_name, {}).get("posthoc_calibration", {})
+        effective = posthoc.get("multiclass_log_loss_after_oof", raw_log_loss)
+        if effective is None:
+            continue
+        effective = float(effective)
+        if best_value is None or effective < best_value:
+            best_name = model_name
+            best_value = effective
+    return best_name, best_value
+
+
+def evaluate_baseline_go_live_gates(
+    backtest_summary: dict[str, Any],
+    evaluation_summary: dict[str, Any],
+    dataset_manifest: dict[str, Any],
+    oos_summary: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Evaluate the baseline (e.g. spi_lite_baseline) promotion gate.
+
+    Unlike `evaluate_go_live_gates` (one result per pure model), this
+    evaluates a single candidate: the strongest current baseline by
+    effective (OOF) log loss, cross-checked against whichever model the
+    nested-tuning OOS artifact (`oos_summary`) was actually produced for so
+    stale evidence from a no-longer-strongest baseline can't be credited.
+
+    Fails closed (passed=False, evidence_missing=True) when no OOS artifact
+    is supplied. Always returns an `evidence_caveat` regardless of outcome
+    so the evidence-transfer gap stays visible even when the gate passes.
+    """
+    season_coverage_ok = _season_coverage_ok(dataset_manifest)
+    strongest_name, strongest_effective_log_loss = _best_baseline_by_effective_log_loss(
+        backtest_summary, evaluation_summary
+    )
+
+    evidence_missing = not bool(oos_summary)
+    oos_model = oos_summary.get("model") if oos_summary else None
+    moneyline_oos = (oos_summary or {}).get("oos", {}).get("moneyline", {}) or {}
+
+    eval_model = evaluation_summary.get("models", {}).get(strongest_name, {}) if strongest_name else {}
+    classwise_ece = eval_model.get("classwise_ece", {})
+    max_class_ece = max(classwise_ece.values()) if classwise_ece else 1.0
+    posthoc = eval_model.get("posthoc_calibration", {})
+    posthoc_available = bool(posthoc.get("available", False))
+
+    is_strongest_baseline = bool(strongest_name) and oos_model == strongest_name
+
+    n_blocks_tuned = moneyline_oos.get("n_blocks_tuned", 0) or 0
+    n_bets = moneyline_oos.get("n_bets", 0) or 0
+    roi_units = moneyline_oos.get("roi_units", 0.0) or 0.0
+
+    checks = {
+        "evidence_present": not evidence_missing,
+        "season_coverage_ok": season_coverage_ok,
+        "classwise_ece_ok": max_class_ece <= PURE_PROJECTION_THRESHOLDS["classwise_ece"],
+        "posthoc_calibration_available": posthoc_available,
+        "is_strongest_baseline": is_strongest_baseline,
+        "oos_n_blocks_tuned_ok": (
+            (not evidence_missing) and float(n_blocks_tuned) >= BASELINE_OOS_THRESHOLDS["min_n_blocks_tuned"]
+        ),
+        "oos_n_bets_ok": (not evidence_missing) and float(n_bets) >= BASELINE_OOS_THRESHOLDS["min_n_bets"],
+        "oos_roi_ok": (not evidence_missing) and float(roi_units) >= BASELINE_OOS_THRESHOLDS["min_roi_units"],
+    }
+    passed = all(checks.values())
+
+    return {
+        "model": strongest_name,
+        "passed": passed,
+        "gating_status": "passed" if passed else "research_only",
+        "evidence_missing": evidence_missing,
+        "evidence_caveat": BASELINE_EVIDENCE_CAVEAT,
+        "checks": checks,
+        "metrics": {
+            "effective_log_loss_1x2": strongest_effective_log_loss,
+            "max_classwise_ece": max_class_ece,
+            "oos_moneyline": {
+                "n_blocks_tuned": n_blocks_tuned,
+                "n_bets": n_bets,
+                "roi_units": roi_units,
+            },
+        },
+    }
 
 
 def _slice_regression_ok(
@@ -257,8 +373,18 @@ def evaluate_go_live_gates(
     return gate_results
 
 
-def choose_champions(gate_results: dict[str, Any]) -> dict[str, Any]:
-    """Select the promoted pure champion based on pure-projection gates."""
+def choose_champions(
+    gate_results: dict[str, Any],
+    baseline_gate_results: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Select the promoted pure champion based on pure-projection gates.
+
+    Pure passers keep absolute priority. Only when none pass, and a
+    baseline candidate's own gate (`evaluate_baseline_go_live_gates`)
+    genuinely passed, is the baseline aliased to champion_pure -- carrying
+    its evidence caveat forward so the evidence-transfer gap is never
+    promoted away silently.
+    """
     pure_candidates = {
         model_name: result
         for model_name, result in gate_results.items()
@@ -276,5 +402,13 @@ def choose_champions(gate_results: dict[str, Any]) -> dict[str, Any]:
             "blended": False,
             "gating_status": "passed",
             "mode": "pure_projection",
+        }
+    elif baseline_gate_results and baseline_gate_results.get("passed") and baseline_gate_results.get("model"):
+        champions["aliases"]["champion_pure"] = {
+            "model_family": baseline_gate_results["model"],
+            "blended": False,
+            "gating_status": "passed",
+            "mode": "baseline",
+            "evidence_caveat": baseline_gate_results.get("evidence_caveat"),
         }
     return champions

@@ -38,6 +38,7 @@ from src.utils.gating import (
     PURE_MODELS,
     build_evaluation_summary,
     choose_champions,
+    evaluate_baseline_go_live_gates,
     evaluate_go_live_gates,
 )
 from src.utils.io import load_json, save_json
@@ -406,13 +407,19 @@ def _build_slice_report(preds: pd.DataFrame) -> dict[str, Any]:
 
 
 def _build_benchmark_comparison(model_name: str, metrics_df: pd.DataFrame) -> dict[str, Any]:
-    if model_name not in PURE_MODELS:
+    # Pure candidates are always compared against the baseline field. A
+    # baseline candidate (e.g. the strongest baseline being evaluated for its
+    # own promotion gate) is also allowed through, but excludes itself from
+    # the comparison set below.
+    if model_name not in PURE_MODELS and model_name not in BASELINE_MODELS:
         return {}
     candidate_row = metrics_df.loc[metrics_df["model"] == model_name]
     if candidate_row.empty:
         return {}
     candidate = candidate_row.iloc[0]
-    baselines = metrics_df.loc[metrics_df["model"].isin(BASELINE_MODELS)].copy()
+    baselines = metrics_df.loc[
+        metrics_df["model"].isin(BASELINE_MODELS) & (metrics_df["model"] != model_name)
+    ].copy()
     if baselines.empty:
         return {}
     strongest = baselines.sort_values("log_loss_1x2", ascending=True).iloc[0]
@@ -458,6 +465,45 @@ def _build_ablation_comparison(model_name: str, metrics_df: pd.DataFrame) -> dic
             "delta_brier_score_1x2": float(ablation["brier_score_1x2"] - candidate["brier_score_1x2"]),
         }
     return comparison
+
+
+def _strongest_baseline_by_name(backtest_summary: dict[str, Any]) -> str | None:
+    """Baseline with the lowest raw log_loss_1x2 in backtest_summary.
+
+    Used only to pick which model-named OOS evidence file to look for; the
+    baseline gate itself independently re-derives the strongest baseline by
+    effective (OOF) log loss and fails closed if the two disagree.
+    """
+    best_name = None
+    best_log_loss = None
+    for model_name, metrics in backtest_summary.get("models", {}).items():
+        if model_name not in BASELINE_MODELS:
+            continue
+        log_loss = metrics.get("log_loss_1x2")
+        if log_loss is None:
+            continue
+        log_loss = float(log_loss)
+        if best_log_loss is None or log_loss < best_log_loss:
+            best_name = model_name
+            best_log_loss = log_loss
+    return best_name
+
+
+def _load_baseline_oos_summary(version_dir: Path, model_name: str | None) -> dict[str, Any] | None:
+    """Load packet 07's nested-tuning OOS artifact for the baseline gate.
+
+    Prefers the per-model-named file, falls back to the fixed-name copy,
+    and returns None (evidence_missing) when neither exists.
+    """
+    betting_analysis_dir = version_dir / "betting_analysis"
+    if model_name:
+        named_path = betting_analysis_dir / f"nested_thresholds_summary_{model_name}.json"
+        if named_path.exists():
+            return load_json(named_path)
+    fallback_path = betting_analysis_dir / "nested_thresholds_summary.json"
+    if fallback_path.exists():
+        return load_json(fallback_path)
+    return None
 
 
 def main() -> None:
@@ -759,7 +805,18 @@ def main() -> None:
         evaluation_summary=evaluation_context,
         dataset_manifest=dataset_manifest,
     )
-    champion_selection = choose_champions(gate_results)
+
+    strongest_baseline_name = _strongest_baseline_by_name(backtest_summary)
+    oos_summary = _load_baseline_oos_summary(version_dir, strongest_baseline_name)
+    baseline_gate_result = evaluate_baseline_go_live_gates(
+        backtest_summary=backtest_summary,
+        evaluation_summary=evaluation_context,
+        dataset_manifest=dataset_manifest,
+        oos_summary=oos_summary,
+    )
+    gate_results[baseline_gate_result.get("model") or "baseline_candidate"] = baseline_gate_result
+
+    champion_selection = choose_champions(gate_results, baseline_gate_result)
 
     evaluation_payload = {
         "version": version_dir.name,
@@ -767,6 +824,7 @@ def main() -> None:
         "models": eval_results,
         "slice_metrics": slice_reports,
         "gate_results": gate_results,
+        "baseline_gate_result": baseline_gate_result,
         "champion_recommendation": champion_selection,
     }
     model_report_payload = {

@@ -146,7 +146,7 @@ def resolve_model_artifact(model_name: str, root: Path = ARTIFACT_ROOT) -> dict[
         version_dir = resolve_version_dir(alias_payload["version"], root)
         model_family = alias_payload["model_family"]
         evaluation_model = alias_payload.get("evaluation_model", model_family)
-        return {
+        result = {
             "requested_model": model_name,
             "version": alias_payload["version"],
             "version_dir": version_dir,
@@ -156,6 +156,12 @@ def resolve_model_artifact(model_name: str, root: Path = ARTIFACT_ROOT) -> dict[
             "gating_status": alias_payload.get("gating_status", "unknown"),
             "metadata": alias_payload,
         }
+        if model_family in BASELINE_MODELS:
+            # Baselines are never persisted as a pkl (they're re-instantiated
+            # from ratings + league rates), so a promoted baseline alias must
+            # never fall through to the raw-pkl code path below.
+            result["kind"] = "baseline_promoted"
+        return result
 
     if model_name == PURE_ALIAS:
         version_dir = latest_version_dir(root)

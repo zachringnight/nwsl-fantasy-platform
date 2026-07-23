@@ -1,7 +1,7 @@
 {
   "asa": {
-    "match_xg_coverage_pct": 100.0,
-    "match_xgoals_rows": 275,
+    "match_xg_coverage_pct": 99.68,
+    "match_xgoals_rows": 310,
     "season_coverage": [
       2025,
       2026
@@ -15,15 +15,15 @@
     "weather_features": "disabled",
     "xg_features": "asa_match_xgoals_loader_enrichment"
   },
-  "generated_at": "2026-05-26T16:48:53.921Z",
+  "generated_at": "2026-07-23T01:39:05.888Z",
   "matches": {
     "date_range": [
       "2025-03-15",
-      "2026-05-24"
+      "2026-07-19"
     ],
     "non_regular_season_rows": 7,
-    "regular_season_rows": 267,
-    "rows": 274,
+    "regular_season_rows": 301,
+    "rows": 308,
     "season_coverage": [
       2025,
       2026
@@ -31,9 +31,9 @@
     "status": "completed_with_regular_season_flag"
   },
   "missing_feature_coverage": {
-    "asa_match_xg_missing_pct": 0.0,
-    "odds_missing_pct": 10.22,
-    "xg_missing_pct": 0.0
+    "asa_match_xg_missing_pct": 0.32,
+    "odds_missing_pct": 20.13,
+    "xg_missing_pct": 0.32
   },
   "odds": {
     "rows": 1195,
@@ -63,10 +63,10 @@
   },
   "upcoming": {
     "date_range": [
-      "2026-05-29",
+      "2026-07-25",
       "2026-11-01"
     ],
-    "rows": 155,
+    "rows": 121,
     "season_coverage": [
       2026
     ],

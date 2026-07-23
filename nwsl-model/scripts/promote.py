@@ -79,7 +79,12 @@ def main() -> None:
         evaluation_summary=evaluation_summary,
         dataset_manifest=dataset_manifest,
     )
-    champion_selection = choose_champions(gate_results)
+    # evaluate.py already computed and persisted the baseline gate (it needs
+    # the strongest-baseline OOS artifact lookup); if evaluation_summary.json
+    # is absent or predates this gate, this is None and promotion behaves
+    # exactly as before (fail closed, no baseline champion).
+    baseline_gate_result = evaluation_summary.get("baseline_gate_result")
+    champion_selection = choose_champions(gate_results, baseline_gate_result)
 
     registry = load_champion_registry(artifact_root)
     promoted_at = datetime.now(UTC).isoformat()
@@ -97,6 +102,7 @@ def main() -> None:
             "version": version_dir.name,
             "promoted_at": promoted_at,
             "gate_results": gate_results,
+            "baseline_gate_result": baseline_gate_result,
             "champions": champion_selection,
             "available_aliases": [PURE_ALIAS],
         },

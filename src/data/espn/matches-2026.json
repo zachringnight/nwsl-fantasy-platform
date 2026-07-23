@@ -1026,9 +1026,9 @@
     "homeTeamId": "18206",
     "awayTeam": "Bay FC",
     "awayTeamId": "22187",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 3,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Inter&Co Stadium"
   },
   {
@@ -1039,8 +1039,8 @@
     "awayTeam": "Denver Summit FC",
     "awayTeamId": "131563",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Lynn Family Stadium"
   },
   {
@@ -1050,9 +1050,9 @@
     "homeTeamId": "20907",
     "awayTeam": "Boston Legacy FC",
     "awayTeamId": "131562",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "CPKC Stadium"
   },
   {
@@ -1062,9 +1062,9 @@
     "homeTeamId": "15362",
     "awayTeam": "Utah Royals",
     "awayTeamId": "19141",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Providence Park"
   },
   {
@@ -1074,9 +1074,9 @@
     "homeTeamId": "15365",
     "awayTeam": "Seattle Reign FC",
     "awayTeamId": "15363",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Audi Field"
   },
   {
@@ -1087,8 +1087,8 @@
     "awayTeam": "San Diego Wave FC",
     "awayTeamId": "21423",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Northwestern Medicine Field at Martin Stadium"
   },
   {
@@ -1098,9 +1098,9 @@
     "homeTeamId": "15364",
     "awayTeam": "Houston Dash",
     "awayTeamId": "17346",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Red Bull Arena"
   },
   {
@@ -1110,9 +1110,9 @@
     "homeTeamId": "21422",
     "awayTeam": "North Carolina Courage",
     "awayTeamId": "15366",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "BMO Stadium"
   },
   {
@@ -1122,9 +1122,9 @@
     "homeTeamId": "15365",
     "awayTeam": "Houston Dash",
     "awayTeamId": "17346",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Audi Field"
   },
   {
@@ -1135,9 +1135,9 @@
     "awayTeam": "Kansas City Current",
     "awayTeamId": "20907",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
-    "venue": "Centennial Stadium"
+    "awayGoals": 3,
+    "status": "completed",
+    "venue": "Dick's Sporting Goods Park"
   },
   {
     "matchId": "401853929",
@@ -1146,9 +1146,9 @@
     "homeTeamId": "21422",
     "awayTeam": "Orlando Pride",
     "awayTeamId": "18206",
-    "homeGoals": 0,
+    "homeGoals": 2,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "BMO Stadium"
   },
   {
@@ -1158,9 +1158,9 @@
     "homeTeamId": "15366",
     "awayTeam": "Seattle Reign FC",
     "awayTeamId": "15363",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 3,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "WakeMed Soccer Park"
   },
   {
@@ -1170,9 +1170,9 @@
     "homeTeamId": "21423",
     "awayTeam": "Gotham FC",
     "awayTeamId": "15364",
-    "homeGoals": 0,
+    "homeGoals": 2,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Snapdragon Stadium"
   },
   {
@@ -1182,9 +1182,9 @@
     "homeTeamId": "131562",
     "awayTeam": "Bay FC",
     "awayTeamId": "22187",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Centreville Bank Stadium"
   },
   {
@@ -1194,9 +1194,9 @@
     "homeTeamId": "15360",
     "awayTeam": "Utah Royals",
     "awayTeamId": "19141",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 3,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Northwestern Medicine Field at Martin Stadium"
   },
   {
@@ -1206,9 +1206,9 @@
     "homeTeamId": "15362",
     "awayTeam": "Racing Louisville FC",
     "awayTeamId": "20905",
-    "homeGoals": 0,
+    "homeGoals": 4,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Providence Park"
   },
   {
@@ -1218,22 +1218,10 @@
     "homeTeamId": "131562",
     "awayTeam": "Chicago Stars FC",
     "awayTeamId": "15360",
-    "homeGoals": 0,
+    "homeGoals": 2,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Centreville Bank Stadium"
-  },
-  {
-    "matchId": "401853934",
-    "date": "2026-07-11",
-    "homeTeam": "Orlando Pride",
-    "homeTeamId": "18206",
-    "awayTeam": "Kansas City Current",
-    "awayTeamId": "20907",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
-    "venue": "Inter&Co Stadium"
   },
   {
     "matchId": "401853935",
@@ -1243,9 +1231,21 @@
     "awayTeam": "Bay FC",
     "awayTeamId": "22187",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Lynn Family Stadium"
+  },
+  {
+    "matchId": "401853934",
+    "date": "2026-07-11",
+    "homeTeam": "Orlando Pride",
+    "homeTeamId": "18206",
+    "awayTeam": "Kansas City Current",
+    "awayTeamId": "20907",
+    "homeGoals": 3,
+    "awayGoals": 0,
+    "status": "completed",
+    "venue": "Inter&Co Stadium"
   },
   {
     "matchId": "401853936",
@@ -1254,9 +1254,9 @@
     "homeTeamId": "19141",
     "awayTeam": "Gotham FC",
     "awayTeamId": "15364",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 3,
+    "status": "completed",
     "venue": "America First Field"
   },
   {
@@ -1267,8 +1267,8 @@
     "awayTeam": "Washington Spirit",
     "awayTeamId": "15365",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "WakeMed Soccer Park"
   },
   {
@@ -1279,8 +1279,8 @@
     "awayTeam": "Angel City FC",
     "awayTeamId": "21422",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Snapdragon Stadium"
   },
   {
@@ -1290,9 +1290,9 @@
     "homeTeamId": "15363",
     "awayTeam": "Portland Thorns FC",
     "awayTeamId": "15362",
-    "homeGoals": 0,
+    "homeGoals": 2,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Lumen Field"
   },
   {
@@ -1302,10 +1302,10 @@
     "homeTeamId": "131563",
     "awayTeam": "Houston Dash",
     "awayTeamId": "17346",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
-    "venue": "Centennial Stadium"
+    "homeGoals": 2,
+    "awayGoals": 2,
+    "status": "completed",
+    "venue": "Dick's Sporting Goods Park"
   },
   {
     "matchId": "401854065",
@@ -1315,8 +1315,8 @@
     "awayTeam": "Boston Legacy FC",
     "awayTeamId": "131562",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Inter&Co Stadium"
   },
   {
@@ -1326,9 +1326,9 @@
     "homeTeamId": "15364",
     "awayTeam": "Washington Spirit",
     "awayTeamId": "15365",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Citi Field"
   },
   {
@@ -1338,22 +1338,10 @@
     "homeTeamId": "20907",
     "awayTeam": "San Diego Wave FC",
     "awayTeamId": "21423",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "CPKC Stadium"
-  },
-  {
-    "matchId": "401853942",
-    "date": "2026-07-18",
-    "homeTeam": "Gotham FC",
-    "homeTeamId": "15364",
-    "awayTeam": "Seattle Reign FC",
-    "awayTeamId": "15363",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
-    "venue": "Icahn Stadium"
   },
   {
     "matchId": "401854066",
@@ -1362,10 +1350,22 @@
     "homeTeamId": "131563",
     "awayTeam": "Portland Thorns FC",
     "awayTeamId": "15362",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Centennial Stadium"
+  },
+  {
+    "matchId": "401853942",
+    "date": "2026-07-18",
+    "homeTeam": "Gotham FC",
+    "homeTeamId": "15364",
+    "awayTeam": "Seattle Reign FC",
+    "awayTeamId": "15363",
+    "homeGoals": 3,
+    "awayGoals": 2,
+    "status": "completed",
+    "venue": "Icahn Stadium"
   },
   {
     "matchId": "401853943",
@@ -1374,9 +1374,9 @@
     "homeTeamId": "22187",
     "awayTeam": "North Carolina Courage",
     "awayTeamId": "15366",
-    "homeGoals": 0,
+    "homeGoals": 3,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "PayPal Park"
   },
   {
@@ -1387,21 +1387,9 @@
     "awayTeam": "Angel City FC",
     "awayTeamId": "21422",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Northwestern Medicine Field at Martin Stadium"
-  },
-  {
-    "matchId": "401853945",
-    "date": "2026-07-19",
-    "homeTeam": "Racing Louisville FC",
-    "homeTeamId": "20905",
-    "awayTeam": "Houston Dash",
-    "awayTeamId": "17346",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
-    "venue": "Lynn Family Stadium"
   },
   {
     "matchId": "401853946",
@@ -1410,10 +1398,22 @@
     "homeTeamId": "19141",
     "awayTeam": "Orlando Pride",
     "awayTeamId": "18206",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "America First Field"
+  },
+  {
+    "matchId": "401853945",
+    "date": "2026-07-19",
+    "homeTeam": "Racing Louisville FC",
+    "homeTeamId": "20905",
+    "awayTeam": "Houston Dash",
+    "awayTeamId": "17346",
+    "homeGoals": 1,
+    "awayGoals": 1,
+    "status": "completed",
+    "venue": "Lynn Family Stadium"
   },
   {
     "matchId": "401854067",
@@ -1422,9 +1422,9 @@
     "homeTeamId": "131562",
     "awayTeam": "Washington Spirit",
     "awayTeamId": "15365",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Centreville Bank Stadium"
   },
   {
@@ -2793,7 +2793,7 @@
     "homeGoals": 0,
     "awayGoals": 0,
     "status": "upcoming",
-    "venue": "TBC"
+    "venue": ""
   },
   {
     "matchId": "401854033",

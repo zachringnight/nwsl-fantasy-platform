@@ -1,38 +1,4 @@
 match_id,match_date,season,competition,regular_season_flag,home_team,away_team,home_goals_90,away_goals_90,venue,match_status
-401853922,2026-05-29,2026,NWSL,true,Orlando Pride,Bay FC,0,0,Inter&Co Stadium,scheduled
-401853923,2026-05-30,2026,NWSL,true,Portland Thorns FC,Utah Royals,0,0,Providence Park,scheduled
-401853924,2026-05-30,2026,NWSL,true,Washington Spirit,Seattle Reign FC,0,0,Audi Field,scheduled
-401854059,2026-05-30,2026,NWSL,true,Racing Louisville FC,Denver Summit FC,0,0,Lynn Family Stadium,scheduled
-401854060,2026-05-30,2026,NWSL,true,Kansas City Current,Boston Legacy FC,0,0,CPKC Stadium,scheduled
-401853925,2026-05-31,2026,NWSL,true,Chicago Stars FC,San Diego Wave FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
-401853926,2026-05-31,2026,NWSL,true,Gotham FC,Houston Dash,0,0,Red Bull Arena,scheduled
-401853927,2026-05-31,2026,NWSL,true,Angel City FC,North Carolina Courage,0,0,BMO Stadium,scheduled
-401853928,2026-07-04,2026,NWSL,true,Washington Spirit,Houston Dash,0,0,Audi Field,scheduled
-401853929,2026-07-04,2026,NWSL,true,Angel City FC,Orlando Pride,0,0,BMO Stadium,scheduled
-401853930,2026-07-04,2026,NWSL,true,North Carolina Courage,Seattle Reign FC,0,0,WakeMed Soccer Park,scheduled
-401854061,2026-07-04,2026,NWSL,true,Denver Summit FC,Kansas City Current,0,0,Centennial Stadium,scheduled
-401853931,2026-07-05,2026,NWSL,true,San Diego Wave FC,Gotham FC,0,0,Snapdragon Stadium,scheduled
-401853932,2026-07-05,2026,NWSL,true,Chicago Stars FC,Utah Royals,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
-401853933,2026-07-05,2026,NWSL,true,Portland Thorns FC,Racing Louisville FC,0,0,Providence Park,scheduled
-401854062,2026-07-05,2026,NWSL,true,Boston Legacy FC,Bay FC,0,0,Centreville Bank Stadium,scheduled
-401853934,2026-07-11,2026,NWSL,true,Orlando Pride,Kansas City Current,0,0,Inter&Co Stadium,scheduled
-401853935,2026-07-11,2026,NWSL,true,Racing Louisville FC,Bay FC,0,0,Lynn Family Stadium,scheduled
-401853936,2026-07-11,2026,NWSL,true,Utah Royals,Gotham FC,0,0,America First Field,scheduled
-401853937,2026-07-11,2026,NWSL,true,North Carolina Courage,Washington Spirit,0,0,WakeMed Soccer Park,scheduled
-401854063,2026-07-11,2026,NWSL,true,Boston Legacy FC,Chicago Stars FC,0,0,Centreville Bank Stadium,scheduled
-401853938,2026-07-12,2026,NWSL,true,San Diego Wave FC,Angel City FC,0,0,Snapdragon Stadium,scheduled
-401853939,2026-07-12,2026,NWSL,true,Seattle Reign FC,Portland Thorns FC,0,0,Lumen Field,scheduled
-401854064,2026-07-12,2026,NWSL,true,Denver Summit FC,Houston Dash,0,0,Centennial Stadium,scheduled
-401854065,2026-07-15,2026,NWSL,true,Orlando Pride,Boston Legacy FC,0,0,Inter&Co Stadium,scheduled
-401853940,2026-07-16,2026,NWSL,true,Gotham FC,Washington Spirit,0,0,Citi Field,scheduled
-401853941,2026-07-18,2026,NWSL,true,Kansas City Current,San Diego Wave FC,0,0,CPKC Stadium,scheduled
-401853942,2026-07-18,2026,NWSL,true,Gotham FC,Seattle Reign FC,0,0,Icahn Stadium,scheduled
-401853943,2026-07-18,2026,NWSL,true,Bay FC,North Carolina Courage,0,0,PayPal Park,scheduled
-401853944,2026-07-18,2026,NWSL,true,Chicago Stars FC,Angel City FC,0,0,Northwestern Medicine Field at Martin Stadium,scheduled
-401854066,2026-07-18,2026,NWSL,true,Denver Summit FC,Portland Thorns FC,0,0,Centennial Stadium,scheduled
-401853945,2026-07-19,2026,NWSL,true,Racing Louisville FC,Houston Dash,0,0,Lynn Family Stadium,scheduled
-401853946,2026-07-19,2026,NWSL,true,Utah Royals,Orlando Pride,0,0,America First Field,scheduled
-401854067,2026-07-19,2026,NWSL,true,Boston Legacy FC,Washington Spirit,0,0,Centreville Bank Stadium,scheduled
 401853947,2026-07-25,2026,NWSL,true,Orlando Pride,Chicago Stars FC,0,0,Inter&Co Stadium,scheduled
 401853948,2026-07-25,2026,NWSL,true,Houston Dash,Bay FC,0,0,Shell Energy Stadium,scheduled
 401853949,2026-07-25,2026,NWSL,true,Portland Thorns FC,Gotham FC,0,0,Providence Park,scheduled
@@ -152,5 +118,5 @@ match_id,match_date,season,competition,regular_season_flag,home_team,away_team,h
 401854036,2026-11-01,2026,NWSL,true,Racing Louisville FC,Kansas City Current,0,0,Lynn Family Stadium,scheduled
 401854037,2026-11-01,2026,NWSL,true,Seattle Reign FC,Orlando Pride,0,0,Lumen Field,scheduled
 401854038,2026-11-01,2026,NWSL,true,Houston Dash,Portland Thorns FC,0,0,Shell Energy Stadium,scheduled
-401854095,2026-11-01,2026,NWSL,true,Angel City FC,Boston Legacy FC,0,0,TBC,scheduled
+401854095,2026-11-01,2026,NWSL,true,Angel City FC,Boston Legacy FC,0,0,,scheduled
 401854096,2026-11-01,2026,NWSL,true,North Carolina Courage,Denver Summit FC,0,0,WakeMed Soccer Park,scheduled

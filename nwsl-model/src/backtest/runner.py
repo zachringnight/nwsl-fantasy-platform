@@ -45,6 +45,7 @@ from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoisso
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
 from src.models.elo_baseline import RegularizedEloBaseline
 from src.models.market_blend import MarketBlender
+from src.models.market_residual import MarketResidualModel
 from src.models.spi_lite import SpiLiteBaseline
 from src.models.team_ratings import TeamRatingsConfig, TeamRatingsModel
 from src.utils.dates import parse_mixed_utc_datetime
@@ -60,6 +61,9 @@ BASELINE_MODELS = {
     "spi_lite_baseline",
     "regularized_elo_baseline",
 }
+# Market-input models use close odds as a feature, so they must never join
+# BASELINE_MODELS (gating.py's promotion bar for pure projection models).
+MARKET_MODELS = {"market_residual"}
 ABLATION_SUFFIXES = ("no_asa", "no_lineup", "no_priors", "no_rest")
 
 
@@ -298,7 +302,7 @@ class BacktestRunner:
             short_rest_days=self.config.get("features", {}).get("short_rest_days", 4),
         )
 
-        if base_model in BASELINE_MODELS:
+        if base_model in BASELINE_MODELS or base_model in MARKET_MODELS:
             return self._evaluate_baseline_fold(
                 base_model=base_model,
                 train=train,
@@ -575,6 +579,32 @@ class BacktestRunner:
                 max_lambda=spi_cfg.get("max_lambda", 3.75),
             )
 
+        market_residual_model = None
+        if base_model == "market_residual":
+            spi_cfg = self.config.get("spi_lite", {})
+            residual_base_model = SpiLiteBaseline(
+                ratings_model=ratings_model,
+                max_goals=self.config.get("model", {}).get("max_goals", 8),
+                league_home_rate=max(train_home_npxg, 0.1),
+                league_away_rate=max(train_away_npxg, 0.1),
+                rating_weight=spi_cfg.get("rating_weight", 0.55),
+                current_full_weight_matches=spi_cfg.get("current_full_weight_matches", 10.0),
+                max_rating_log_adjustment=spi_cfg.get("max_rating_log_adjustment", 0.70),
+                lineup_log_scale=spi_cfg.get("lineup_log_scale", 0.035),
+                rest_log_scale=spi_cfg.get("rest_log_scale", 0.012),
+                pace_weight=spi_cfg.get("pace_weight", 0.20),
+                min_lambda=spi_cfg.get("min_lambda", 0.20),
+                max_lambda=spi_cfg.get("max_lambda", 3.75),
+            )
+            market_residual_cfg = self.config.get("market_residual", {})
+            market_residual_model = MarketResidualModel(
+                base_model=residual_base_model,
+                regularization_c=market_residual_cfg.get("regularization_c", 1.0),
+                min_train_matches=market_residual_cfg.get("min_train_matches", 60),
+                max_goals=self.config.get("model", {}).get("max_goals", 8),
+            )
+            market_residual_model.fit(train, context_provider)
+
         rows: list[dict[str, Any]] = []
         for _, row in test.iterrows():
             contextual_features = context_provider.for_match(
@@ -637,10 +667,34 @@ class BacktestRunner:
                     spi_pred.draw_prob,
                     spi_pred.away_win_prob,
                 )
+            elif base_model == "market_residual":
+                if market_residual_model is None:
+                    raise ValueError("Market residual model was not initialized")
+                market_probs = None
+                if all(pd.notna(row.get(c)) for c in ("mkt_prob_home", "mkt_prob_draw", "mkt_prob_away")):
+                    market_probs = (
+                        float(row["mkt_prob_home"]),
+                        float(row["mkt_prob_draw"]),
+                        float(row["mkt_prob_away"]),
+                    )
+                mr_pred = market_residual_model.predict_score_matrix(
+                    row["home_team"],
+                    row["away_team"],
+                    market_probs=market_probs,
+                    contextual_features=contextual_features,
+                )
+                lambda_home = mr_pred.lambda_home
+                lambda_away = mr_pred.lambda_away
+                matrix = mr_pred.score_matrix
+                probs_override = (
+                    mr_pred.home_win_prob,
+                    mr_pred.draw_prob,
+                    mr_pred.away_win_prob,
+                )
             else:
                 raise ValueError(f"Unknown baseline model: {base_model}")
 
-            if base_model not in {"regularized_elo_baseline", "spi_lite_baseline"}:
+            if base_model not in {"regularized_elo_baseline", "spi_lite_baseline", "market_residual"}:
                 matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
 
             markets = derive_all_markets(matrix, match_id=str(row["match_id"]))

@@ -36,12 +36,14 @@ class ProjectionBaselineModel:
         ratings_model: Any | None = None,
         max_goals: int = 8,
         spi_lite_config: dict[str, Any] | None = None,
+        league_home_rate: float | None = None,
+        league_away_rate: float | None = None,
     ) -> None:
         self.strategy = strategy
         self.ratings_model = ratings_model
         self.max_goals = max_goals
         spi_cfg = spi_lite_config or {}
-        self._spi_lite = SpiLiteBaseline(
+        spi_lite_kwargs: dict[str, Any] = dict(
             ratings_model=ratings_model,
             max_goals=max_goals,
             rating_weight=spi_cfg.get("rating_weight", 0.55),
@@ -53,6 +55,17 @@ class ProjectionBaselineModel:
             min_lambda=spi_cfg.get("min_lambda", 0.20),
             max_lambda=spi_cfg.get("max_lambda", 3.75),
         )
+        # Explicit constructor kwargs win over config; both are optional and
+        # None keeps SpiLiteBaseline's own defaults (this is the train/serve
+        # skew fix: backtest fits league rates per-fold, serving previously
+        # hardcoded 1.25/1.05 no matter what the training data implied).
+        resolved_home_rate = league_home_rate if league_home_rate is not None else spi_cfg.get("league_home_rate")
+        resolved_away_rate = league_away_rate if league_away_rate is not None else spi_cfg.get("league_away_rate")
+        if resolved_home_rate is not None:
+            spi_lite_kwargs["league_home_rate"] = resolved_home_rate
+        if resolved_away_rate is not None:
+            spi_lite_kwargs["league_away_rate"] = resolved_away_rate
+        self._spi_lite = SpiLiteBaseline(**spi_lite_kwargs)
 
     def _resolve_lambdas(
         self,

@@ -286,6 +286,32 @@ def main() -> None:
     if not roster_continuity.empty:
         roster_continuity.to_csv(output_dir / "roster_continuity.csv", index=False)
 
+    # spi_lite_baseline train/serve skew fix: the backtest fits league rates
+    # per-fold from the training frame's mean npxg (runner.py's
+    # _evaluate_baseline_fold convention); serving must use the same
+    # convention over the full training frame instead of hardcoded defaults.
+    spi_lite_cfg = config.get("spi_lite", {})
+    train_home_npxg = float(pd.to_numeric(prepared_matches["home_npxg"], errors="coerce").mean())
+    train_away_npxg = float(pd.to_numeric(prepared_matches["away_npxg"], errors="coerce").mean())
+    configured_home_rate = spi_lite_cfg.get("league_home_rate")
+    configured_away_rate = spi_lite_cfg.get("league_away_rate")
+    spi_lite_league_home_rate = (
+        max(float(configured_home_rate), 0.1) if configured_home_rate is not None else max(train_home_npxg, 0.1)
+    )
+    spi_lite_league_away_rate = (
+        max(float(configured_away_rate), 0.1) if configured_away_rate is not None else max(train_away_npxg, 0.1)
+    )
+    write_artifact_json(
+        output_dir,
+        "spi_lite_summary.json",
+        {
+            "league_home_rate": spi_lite_league_home_rate,
+            "league_away_rate": spi_lite_league_away_rate,
+            "n_matches": int(len(prepared_matches)),
+            "source": "train_npxg_mean",
+        },
+    )
+
     # Save lineup model if fitted
     if lineup_model is not None:
         save_pickle(lineup_model, output_dir / "lineup_model.pkl")

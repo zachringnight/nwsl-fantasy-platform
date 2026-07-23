@@ -4,21 +4,21 @@
   "matches": {
     "rows": 240,
     "status_counts": {
-      "UPCOMING": 155,
-      "FINISHED": 85
+      "UPCOMING": 121,
+      "FINISHED": 119
     }
   },
   "profiles": {
-    "rows": 440,
+    "rows": 453,
     "teams": 16
   },
   "player_stats": {
-    "rows": 442,
-    "max_games_played": 12.0,
-    "max_starts": 12.0
+    "rows": 452,
+    "max_games_played": 16.0,
+    "max_starts": 16.0
   },
   "team_stats": {
     "rows": 16,
-    "max_games_played": 12.0
+    "max_games_played": 16.0
   }
 }

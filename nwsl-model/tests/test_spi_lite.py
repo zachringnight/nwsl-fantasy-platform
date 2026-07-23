@@ -83,6 +83,33 @@ def test_spi_lite_lineup_delta_moves_projection_toward_stronger_xi() -> None:
     assert stronger_home_xi.home_win_prob > neutral.home_win_prob
 
 
+def test_projection_baseline_model_forwards_league_rates_to_spi_lite() -> None:
+    default_model = ProjectionBaselineModel(
+        strategy="spi_lite_baseline",
+        ratings_model=_FakeRatings({"Home": (0.0, 0.0), "Away": (0.0, 0.0)}),
+    )
+    overridden_model = ProjectionBaselineModel(
+        strategy="spi_lite_baseline",
+        ratings_model=_FakeRatings({"Home": (0.0, 0.0), "Away": (0.0, 0.0)}),
+        league_home_rate=1.40,
+        league_away_rate=0.90,
+    )
+
+    # None keeps SpiLiteBaseline's own defaults (train/serve skew fix must be opt-in).
+    assert default_model._spi_lite.config.league_home_rate == pytest.approx(1.25)
+    assert default_model._spi_lite.config.league_away_rate == pytest.approx(1.05)
+
+    # Explicit rates are forwarded through to the underlying SpiLiteBaseline config.
+    assert overridden_model._spi_lite.config.league_home_rate == pytest.approx(1.40)
+    assert overridden_model._spi_lite.config.league_away_rate == pytest.approx(0.90)
+
+    # The forwarded rates actually move the resulting projection (not just stored inertly).
+    default_pred = default_model.predict_score_matrix("Home", "Away", contextual_features=_context())
+    overridden_pred = overridden_model.predict_score_matrix("Home", "Away", contextual_features=_context())
+    assert overridden_pred.lambda_home != pytest.approx(default_pred.lambda_home)
+    assert overridden_pred.lambda_away != pytest.approx(default_pred.lambda_away)
+
+
 def test_projection_team_ratings_treat_positive_defense_as_weaker_defense() -> None:
     neutral = ProjectionBaselineModel(
         strategy="team_ratings_poisson",

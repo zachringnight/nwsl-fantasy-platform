@@ -131,12 +131,21 @@ def _load_model_stack(
     context_provider_path = Path(artifact["version_dir"]) / "context_provider.pkl"
     context_provider = load_pickle(context_provider_path) if context_provider_path.exists() else None
 
-    if artifact.get("kind") == "baseline_fallback":
+    if artifact.get("kind") in {"baseline_fallback", "baseline_promoted"}:
+        league_home_rate = None
+        league_away_rate = None
+        spi_summary_path = Path(artifact["version_dir"]) / "spi_lite_summary.json"
+        if spi_summary_path.exists():
+            spi_summary = load_json(spi_summary_path)
+            league_home_rate = spi_summary.get("league_home_rate")
+            league_away_rate = spi_summary.get("league_away_rate")
         model = ProjectionBaselineModel(
             strategy=str(artifact["model_family"]),
             ratings_model=ratings_model,
             max_goals=int(config.get("model", {}).get("max_goals", 8)),
             spi_lite_config=config.get("spi_lite", {}),
+            league_home_rate=league_home_rate,
+            league_away_rate=league_away_rate,
         )
         return model, ratings_model, context_provider
 
