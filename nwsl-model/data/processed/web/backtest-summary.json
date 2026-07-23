@@ -1,23 +1,33 @@
 {
   "dixon_coles": {
-    "logLoss": 1.076,
-    "brierScore": 0.6516,
+    "logLoss": 1.0808,
+    "brierScore": 0.6521,
     "calibrationError": 0.0,
-    "roi": -0.7328,
-    "hitRate": 0.1429,
+    "roi": -0.2043,
+    "hitRate": 0.3137,
     "totalPredictions": 0,
-    "brierOver25": 0.2536,
-    "totalGoalsMae": 1.1233
+    "brierOver25": 0.2733,
+    "totalGoalsMae": 1.2901
   },
   "bivariate_poisson": {
-    "logLoss": 1.0919,
-    "brierScore": 0.6602,
+    "logLoss": 1.0874,
+    "brierScore": 0.6553,
     "calibrationError": 0.0,
-    "roi": -0.7328,
-    "hitRate": 0.1429,
+    "roi": -0.2167,
+    "hitRate": 0.3091,
     "totalPredictions": 0,
-    "brierOver25": 0.2578,
-    "totalGoalsMae": 1.133
+    "brierOver25": 0.2717,
+    "totalGoalsMae": 1.2869
+  },
+  "market_residual": {
+    "logLoss": 1.048,
+    "brierScore": 0.6298,
+    "calibrationError": 0.0,
+    "roi": -0.1857,
+    "hitRate": 0.3103,
+    "totalPredictions": 0,
+    "brierOver25": 0.2557,
+    "totalGoalsMae": 1.2317
   },
   "uniform_baseline": {
     "logLoss": 1.0986,
@@ -26,47 +36,47 @@
     "roi": 0.0,
     "hitRate": 0.0,
     "totalPredictions": 0,
-    "brierOver25": 0.2493,
-    "totalGoalsMae": 1.0873
+    "brierOver25": 0.2524,
+    "totalGoalsMae": 1.2371
   },
   "home_field_baseline": {
-    "logLoss": 1.0054,
-    "brierScore": 0.6086,
+    "logLoss": 1.0852,
+    "brierScore": 0.6569,
     "calibrationError": 0.0,
-    "roi": 0.0,
-    "hitRate": 0.0,
+    "roi": 0.057,
+    "hitRate": 0.3415,
     "totalPredictions": 0,
-    "brierOver25": 0.2493,
-    "totalGoalsMae": 1.0873
+    "brierOver25": 0.251,
+    "totalGoalsMae": 1.2276
   },
   "team_ratings_poisson": {
-    "logLoss": 1.0174,
-    "brierScore": 0.6088,
+    "logLoss": 1.0508,
+    "brierScore": 0.6323,
     "calibrationError": 0.0,
-    "roi": 0.0,
-    "hitRate": 0.0,
+    "roi": -0.2382,
+    "hitRate": 0.2979,
     "totalPredictions": 0,
-    "brierOver25": 0.2541,
-    "totalGoalsMae": 1.1422
+    "brierOver25": 0.2534,
+    "totalGoalsMae": 1.2514
   },
   "rolling_npxg_poisson": {
-    "logLoss": 1.0289,
-    "brierScore": 0.6173,
+    "logLoss": 1.0701,
+    "brierScore": 0.6461,
     "calibrationError": 0.0,
-    "roi": 0.0,
-    "hitRate": 0.0,
+    "roi": -0.378,
+    "hitRate": 0.2222,
     "totalPredictions": 0,
-    "brierOver25": 0.2564,
-    "totalGoalsMae": 1.122
+    "brierOver25": 0.2572,
+    "totalGoalsMae": 1.2426
   },
   "spi_lite_baseline": {
-    "logLoss": 0.9957,
-    "brierScore": 0.5939,
+    "logLoss": 1.0463,
+    "brierScore": 0.629,
     "calibrationError": 0.0,
-    "roi": 0.0,
-    "hitRate": 0.0,
+    "roi": -0.2689,
+    "hitRate": 0.275,
     "totalPredictions": 0,
-    "brierOver25": 0.2532,
-    "totalGoalsMae": 1.1299
+    "brierOver25": 0.2537,
+    "totalGoalsMae": 1.2317
   }
 }

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { PlayerAvatar } from "./player-avatar";
 
 // Mock next/image to render a regular img tag
