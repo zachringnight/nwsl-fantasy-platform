@@ -70,3 +70,53 @@ def test_default_betting_markets_cover_moneyline_and_totals_only() -> None:
     assert config["betting"]["market_rules"]["totals"]["enabled"] is True
     assert config["betting"]["market_rules"]["totals"]["official_picks_enabled"] is False
     assert config["betting"]["market_rules"]["totals"]["allowed_sides"] == ["over"]
+
+
+def test_default_odds_provider_stale_line_minutes_is_pinned() -> None:
+    config_path = Path(__file__).resolve().parents[1] / "configs" / "default.yaml"
+    config = yaml.safe_load(config_path.read_text())
+
+    assert config["odds_provider"]["stale_line_minutes"] == 180
+
+
+def test_default_spi_lite_league_rates_default_to_null() -> None:
+    config_path = Path(__file__).resolve().parents[1] / "configs" / "default.yaml"
+    config = yaml.safe_load(config_path.read_text())
+
+    assert config["spi_lite"]["league_home_rate"] is None
+    assert config["spi_lite"]["league_away_rate"] is None
+    # Existing spi_lite keys must still be present alongside the new ones.
+    assert config["spi_lite"]["rating_weight"] == 0.55
+    assert config["spi_lite"]["current_full_weight_matches"] == 10.0
+
+
+def test_default_threshold_tuning_config_is_present() -> None:
+    config_path = Path(__file__).resolve().parents[1] / "configs" / "default.yaml"
+    config = yaml.safe_load(config_path.read_text())
+
+    tt = config["threshold_tuning"]
+    assert tt["edge_grid"] == [0.0, 0.01, 0.02, 0.03, 0.05, 0.08, 0.10]
+    assert tt["confidence_grid"] == [0.0, 0.03, 0.05, 0.08, 0.10, 0.15]
+    assert tt["min_bets_per_cell"] == 8
+    assert tt["min_history_bets"] == 30
+    assert tt["rank_metric"] == "roi_units"
+
+
+def test_default_market_residual_config_is_present() -> None:
+    config_path = Path(__file__).resolve().parents[1] / "configs" / "default.yaml"
+    config = yaml.safe_load(config_path.read_text())
+
+    mr = config["market_residual"]
+    assert mr["enabled"] is True
+    assert mr["regularization_c"] == 1.0
+    assert mr["min_train_matches"] == 60
+
+
+def test_default_totals_model_config_is_present() -> None:
+    config_path = Path(__file__).resolve().parents[1] / "configs" / "default.yaml"
+    config = yaml.safe_load(config_path.read_text())
+
+    tm = config["totals_model"]
+    assert tm["enabled"] is True
+    assert tm["regularization_c"] == 1.0
+    assert tm["min_train_matches"] == 60

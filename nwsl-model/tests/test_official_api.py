@@ -1,5 +1,6 @@
 import pandas as pd
 
+from scripts.fetch_official_player_appearances import build_appearance_rows
 from src.data.official_api import (
     flatten_match_lineup,
     flatten_matches,
@@ -190,3 +191,36 @@ def test_flatten_match_lineup_derives_starts_and_minutes() -> None:
     away = rows.set_index("player_id").loc["p_away_full"]
     assert away["team_name"] == "Bay FC"
     assert int(away["minsplayed"]) == 90
+
+
+def test_build_appearance_rows_carries_match_date_utc() -> None:
+    match = {
+        "matchId": "api-m1",
+        "matchDateUtc": "2026-05-24T00:00:00Z",
+    }
+    rows = build_appearance_rows(
+        match,
+        _lineup_payload(),
+        target_id="m1",
+        season=2026,
+    )
+
+    assert not rows.empty
+    assert "match_date_utc" in rows.columns
+    assert (rows["match_date_utc"] == "2026-05-24T00:00:00Z").all()
+    assert (rows["match_id"] == "m1").all()
+    assert (rows["season"] == 2026).all()
+
+
+def test_build_appearance_rows_output_is_superset_for_projected_lineups() -> None:
+    """build_projected_lineups requires match_date_utc on the written CSV."""
+    match = {"matchId": "api-m1", "matchDateUtc": "2026-05-24T00:00:00Z"}
+    rows = build_appearance_rows(
+        match,
+        _lineup_payload(),
+        target_id="m1",
+        season=2026,
+    )
+
+    required_columns = {"match_id", "player_id", "gamestarted", "match_date_utc"}
+    assert required_columns.issubset(set(rows.columns))

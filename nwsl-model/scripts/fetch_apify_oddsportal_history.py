@@ -7,7 +7,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 
 import pandas as pd
 
@@ -23,12 +23,20 @@ from src.odds.apify_oddsportal import (
     build_historical_1x2_open_close_contract,
     build_historical_odds_contract,
     build_historical_total_odds_contract,
+    decrypt_archive_items,
+    fetch_results_page_html,
     merge_historical_with_existing_odds,
     run_apify_match_event_fetch,
+    run_direct_archive_fetch,
     run_direct_match_event_fetch,
     resolve_season_requests,
     run_apify_archive_fetch,
 )
+
+# Errors that indicate an Apify call failed and (in apify_then_direct modes) a
+# direct-HTTP fallback should be attempted instead. RuntimeError covers the
+# "APIFY_TOKEN is not configured." case raised by run_apify_web_scraper.
+APIFY_FALLBACK_ERRORS = (HTTPError, URLError, TimeoutError, RuntimeError)
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,6 +55,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--report-output", default="data/raw/oddsportal_historical_report.json")
     parser.add_argument("--token-env", default="APIFY_TOKEN")
     parser.add_argument("--timeout-seconds", type=int, default=420)
+    parser.add_argument(
+        "--archive-fetch-mode",
+        choices=["apify", "direct", "apify_then_direct"],
+        default="apify_then_direct",
+        help=(
+            "How to fetch OddsPortal results-page discovery and archive pages. "
+            "'direct' skips Apify entirely (no APIFY_TOKEN required)."
+        ),
+    )
     parser.add_argument("--include-max-book", action="store_true")
     parser.add_argument("--skip-total-markets", action="store_true")
     parser.add_argument("--include-all-total-lines", action="store_true")
@@ -79,6 +96,10 @@ def main() -> None:
     if unknown:
         raise SystemExit(f"No OddsPortal NWSL URL configured for seasons: {unknown}")
 
+    # Lazy/optional: a plain --archive-fetch-mode direct run (with
+    # --total-market-fetch-mode direct) needs no APIFY_TOKEN at all, so we do not
+    # hard-fail here. Modes that actually call Apify raise their own clear error
+    # below if no token is available.
     token = load_env_token(
         args.token_env,
         env_files=[
@@ -86,25 +107,62 @@ def main() -> None:
             REPO_ROOT / ".env.local",
         ],
     )
-    if not token:
-        raise SystemExit(f"{args.token_env} is not configured in environment or ignored .env.local files.")
 
     season_urls = {season: ODDSPORTAL_NWSL_RESULTS_URLS[season] for season in args.seasons}
-    discovery_items = run_apify_web_scraper(
-        token,
-        build_discovery_input(list(season_urls.values())),
-        timeout_seconds=args.timeout_seconds,
-    )
+
+    def _discover_and_fetch_archive_via_apify() -> tuple[list, list, dict]:
+        discovery = run_apify_web_scraper(
+            token,
+            build_discovery_input(list(season_urls.values())),
+            timeout_seconds=args.timeout_seconds,
+        )
+        requests = resolve_season_requests(discovery, args.seasons, season_urls)
+        items, pages = run_apify_archive_fetch(
+            token,
+            requests,
+            timeout_seconds=args.timeout_seconds,
+        )
+        return discovery, items, pages
+
+    def _discover_and_fetch_archive_direct() -> tuple[list, list, dict]:
+        discovery = [
+            {"url": url, "htmlSample": fetch_results_page_html(url, timeout=args.timeout_seconds)}
+            for url in season_urls.values()
+        ]
+        requests = resolve_season_requests(discovery, args.seasons, season_urls)
+        items = run_direct_archive_fetch(requests, timeout=args.timeout_seconds, max_workers=4)
+        pages = decrypt_archive_items(items)
+        return discovery, items, pages
+
+    if args.archive_fetch_mode == "direct":
+        discovery_items, archive_items, decrypted_pages = _discover_and_fetch_archive_direct()
+    elif args.archive_fetch_mode == "apify":
+        if not token:
+            raise SystemExit(f"{args.token_env} is required for --archive-fetch-mode apify.")
+        discovery_items, archive_items, decrypted_pages = _discover_and_fetch_archive_via_apify()
+    else:
+        if token:
+            try:
+                discovery_items, archive_items, decrypted_pages = _discover_and_fetch_archive_via_apify()
+            except APIFY_FALLBACK_ERRORS as exc:
+                print(
+                    f"Apify OddsPortal discovery/archive fetch failed ({exc}); "
+                    "falling back to direct HTTP.",
+                    file=sys.stderr,
+                )
+                discovery_items, archive_items, decrypted_pages = _discover_and_fetch_archive_direct()
+        else:
+            print(
+                f"{args.token_env} not configured; using direct HTTP for OddsPortal "
+                "discovery/archive fetch.",
+                file=sys.stderr,
+            )
+            discovery_items, archive_items, decrypted_pages = _discover_and_fetch_archive_direct()
+
     discovery_output = resolve_path(args.discovery_output)
     discovery_output.parent.mkdir(parents=True, exist_ok=True)
     discovery_output.write_text(json.dumps(discovery_items, indent=2), encoding="utf-8")
 
-    season_requests = resolve_season_requests(discovery_items, args.seasons, season_urls)
-    archive_items, decrypted_pages = run_apify_archive_fetch(
-        token,
-        season_requests,
-        timeout_seconds=args.timeout_seconds,
-    )
     raw_output = resolve_path(args.raw_output)
     raw_output.parent.mkdir(parents=True, exist_ok=True)
     raw_output.write_text(json.dumps(archive_items, indent=2), encoding="utf-8")
@@ -126,14 +184,16 @@ def main() -> None:
     raw_total_output = resolve_path(args.raw_total_output)
     if not args.skip_total_markets:
         total_items = []
-        if args.total_market_fetch_mode in {"apify", "apify_then_direct"}:
+        if args.total_market_fetch_mode == "apify" and not token:
+            raise SystemExit(f"{args.token_env} is required for --total-market-fetch-mode apify.")
+        if args.total_market_fetch_mode in {"apify", "apify_then_direct"} and token:
             try:
                 total_items, total_payloads = run_apify_match_event_fetch(
                     token,
                     parsed,
                     timeout_seconds=args.timeout_seconds,
                 )
-            except (HTTPError, TimeoutError) as exc:
+            except APIFY_FALLBACK_ERRORS as exc:
                 if args.total_market_fetch_mode == "apify":
                     raise
                 print(
@@ -160,7 +220,9 @@ def main() -> None:
     if args.include_1x2_opening:
         opening_items: list = []
         opening_payloads: dict = {}
-        if args.total_market_fetch_mode in {"apify", "apify_then_direct"}:
+        if args.total_market_fetch_mode == "apify" and not token:
+            raise SystemExit(f"{args.token_env} is required for --total-market-fetch-mode apify.")
+        if args.total_market_fetch_mode in {"apify", "apify_then_direct"} and token:
             try:
                 opening_items, opening_payloads = run_apify_match_event_fetch(
                     token,
@@ -168,7 +230,7 @@ def main() -> None:
                     betting_type=1,
                     timeout_seconds=args.timeout_seconds,
                 )
-            except (HTTPError, TimeoutError) as exc:
+            except APIFY_FALLBACK_ERRORS as exc:
                 if args.total_market_fetch_mode == "apify":
                     raise
                 print(
@@ -198,22 +260,20 @@ def main() -> None:
     if not unmatched_total.empty:
         unmatched_total = unmatched_total.copy()
         unmatched_total["market_type"] = "total"
-    unmatched = pd.concat(
-        [frame for frame in (unmatched_1x2, unmatched_total) if not frame.empty],
-        ignore_index=True,
-        sort=False,
+    unmatched_frames = [frame for frame in (unmatched_1x2, unmatched_total) if not frame.empty]
+    unmatched = (
+        pd.concat(unmatched_frames, ignore_index=True, sort=False) if unmatched_frames else pd.DataFrame()
     )
-    historical = pd.concat(
-        [
-            frame
-            for frame in (historical_1x2, historical_total, historical_1x2_open_close)
-            if not frame.empty
-        ],
-        ignore_index=True,
-        sort=False,
+    historical_frames = [
+        frame
+        for frame in (historical_1x2, historical_total, historical_1x2_open_close)
+        if not frame.empty
+    ]
+    historical = (
+        pd.concat(historical_frames, ignore_index=True, sort=False)
+        if historical_frames
+        else pd.DataFrame(columns=ODDS_CONTRACT_COLUMNS)
     )
-    if historical.empty:
-        historical = pd.DataFrame(columns=ODDS_CONTRACT_COLUMNS)
     historical_output = resolve_path(args.historical_output)
     historical_output.parent.mkdir(parents=True, exist_ok=True)
     historical.to_csv(historical_output, index=False)

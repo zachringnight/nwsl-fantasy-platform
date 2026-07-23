@@ -81,6 +81,32 @@ def build_match_crosswalk(season_matches: list[dict], matches_csv: pd.DataFrame,
     return crosswalk
 
 
+def build_appearance_rows(
+    match: dict,
+    lineup_payload: dict,
+    *,
+    target_id: str,
+    season: int,
+    regulation_minutes: int = 90,
+) -> pd.DataFrame:
+    """Flatten one match's lineup payload into appearance rows carrying ``match_date_utc``.
+
+    The season-matches payload already carries the match UTC datetime (that is
+    what the API-id-to-``matches.csv`` crosswalk keys on), so it can be stamped
+    onto every output row here with no extra API calls. Downstream,
+    ``dataset_builder.build_projected_lineups`` reads this column back out of
+    the written CSV via ``pd.to_datetime(logs['match_date_utc'])``.
+    """
+    rows = flatten_match_lineup(
+        lineup_payload,
+        match_id=target_id,
+        season=season,
+        regulation_minutes=regulation_minutes,
+    )
+    rows["match_date_utc"] = match.get("matchDateUtc")
+    return rows
+
+
 def fetch_season_appearances(season: int, season_id: str, matches_csv: pd.DataFrame, workers: int) -> tuple[pd.DataFrame, dict]:
     encoded_season = urllib.parse.quote(season_id, safe=":")
     season_matches = fetch_json(
@@ -98,7 +124,7 @@ def fetch_season_appearances(season: int, season_id: str, matches_csv: pd.DataFr
             payload = fetch_match_lineup(season_id=season_id, match_id=api_id)
         except Exception:
             return pd.DataFrame()
-        return flatten_match_lineup(payload, match_id=target_id, season=season)
+        return build_appearance_rows(match, payload, target_id=target_id, season=season)
 
     frames: list[pd.DataFrame] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:

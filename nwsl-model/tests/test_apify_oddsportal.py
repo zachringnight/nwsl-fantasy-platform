@@ -1,4 +1,7 @@
+import sys
+
 import pandas as pd
+import pytest
 
 from src.odds.apify_oddsportal import (
     archive_pages_to_match_rows,
@@ -6,6 +9,7 @@ from src.odds.apify_oddsportal import (
     build_historical_odds_contract,
     build_historical_total_odds_contract,
     decrypt_match_event_items,
+    extract_odds_request_from_html,
     merge_historical_with_existing_odds,
     resolve_season_requests,
 )
@@ -445,6 +449,118 @@ def test_decrypt_match_event_items_skips_empty_payloads(monkeypatch) -> None:
     )
 
     assert payloads == {"abc": {"text": "encrypted"}}
+
+
+def test_extract_odds_request_from_html_parses_escaped_odds_request_attribute() -> None:
+    # Mirrors the shape the Apify page function pulls off <next-matches
+    # :odds-request='...'>: real HTML escapes the embedded JSON's double quotes
+    # as &quot; since the attribute itself is single-quoted here (and the Apify
+    # page-function's htmlSample regex expects the double-quoted form, which is
+    # what OddsPortal's server-rendered markup actually emits).
+    html_text = (
+        "<next-matches "
+        ':odds-request="{&quot;url&quot;:&quot;\\/ajax-sport-country-tournament-archive_\\/1\\/TOKEN\\/&quot;,'
+        "&quot;urlPartTz&quot;:0,&quot;urlPartQs&quot;:&quot;?_=&quot;}\""
+        "></next-matches>"
+    )
+
+    parsed = extract_odds_request_from_html(html_text)
+
+    assert parsed == {
+        "url": "/ajax-sport-country-tournament-archive_/1/TOKEN/",
+        "urlPartTz": 0,
+        "urlPartQs": "?_=",
+    }
+
+
+def test_extract_odds_request_from_html_raises_clear_error_when_missing() -> None:
+    with pytest.raises(ValueError, match="odds-request"):
+        extract_odds_request_from_html("<html><body>no markup here</body></html>")
+
+
+def test_direct_archive_fetch_mode_avoids_apify_and_works_without_token(tmp_path, monkeypatch) -> None:
+    import scripts.fetch_apify_oddsportal_history as history_script
+
+    def _forbid_apify(*_args, **_kwargs):
+        raise AssertionError("Apify should not be called when --archive-fetch-mode direct")
+
+    monkeypatch.setattr(history_script, "load_env_token", lambda *a, **k: "")
+    monkeypatch.setattr(history_script, "run_apify_web_scraper", _forbid_apify)
+    monkeypatch.setattr(history_script, "run_apify_archive_fetch", _forbid_apify)
+    monkeypatch.setattr(history_script, "run_apify_match_event_fetch", _forbid_apify)
+
+    fetched_urls: list[str] = []
+
+    def _fake_fetch_results_page_html(url: str, *, timeout: int = 30) -> str:
+        fetched_urls.append(url)
+        return (
+            "<next-matches "
+            ':odds-request="{&quot;url&quot;:&quot;\\/ajax-sport-country-tournament-archive_\\/1\\/TOKEN\\/&quot;,'
+            "&quot;urlPartTz&quot;:0,&quot;urlPartQs&quot;:&quot;?_=&quot;}\""
+            "></next-matches>"
+            '<script src="https://www.oddsportal.com/ajax-user-data/t/1/?abc"></script>'
+        )
+
+    direct_archive_calls: list[list] = []
+
+    def _fake_run_direct_archive_fetch(requests, **_kwargs):
+        direct_archive_calls.append(requests)
+        return [
+            {
+                "url": "https://www.oddsportal.com/archive",
+                "userData": {"season": 2026, "page": 1},
+                "text": "encrypted",
+            }
+        ]
+
+    monkeypatch.setattr(history_script, "fetch_results_page_html", _fake_fetch_results_page_html)
+    monkeypatch.setattr(history_script, "run_direct_archive_fetch", _fake_run_direct_archive_fetch)
+    monkeypatch.setattr(history_script, "decrypt_archive_items", lambda items: {2026: {1: {"d": {"rows": []}}}})
+    monkeypatch.setattr(
+        "src.odds.apify_oddsportal.fetch_user_data_config",
+        lambda _: {"bookiehash": "BOOKHASH", "usePremium": 1},
+    )
+
+    matches_path = tmp_path / "matches.csv"
+    matches_path.write_text("match_id,season,match_date,home_team,away_team\n", encoding="utf-8")
+
+    argv = [
+        "fetch_apify_oddsportal_history.py",
+        "--seasons",
+        "2026",
+        "--matches",
+        str(matches_path),
+        "--existing-odds",
+        str(tmp_path / "missing_odds.csv"),
+        "--output",
+        str(tmp_path / "odds.csv"),
+        "--historical-output",
+        str(tmp_path / "historical.csv"),
+        "--historical-total-output",
+        str(tmp_path / "historical_total.csv"),
+        "--parsed-output",
+        str(tmp_path / "parsed.csv"),
+        "--unmatched-output",
+        str(tmp_path / "unmatched.csv"),
+        "--raw-output",
+        str(tmp_path / "raw.json"),
+        "--raw-total-output",
+        str(tmp_path / "raw_total.json"),
+        "--discovery-output",
+        str(tmp_path / "discovery.json"),
+        "--report-output",
+        str(tmp_path / "report.json"),
+        "--archive-fetch-mode",
+        "direct",
+        "--skip-total-markets",
+    ]
+    monkeypatch.setattr(sys, "argv", argv)
+
+    history_script.main()
+
+    assert fetched_urls == ["https://www.oddsportal.com/football/usa/nwsl-women/results/"]
+    assert len(direct_archive_calls) == 1
+    assert (tmp_path / "odds.csv").exists()
 
 
 def test_merge_historical_with_existing_odds_deduplicates_contract_rows() -> None:

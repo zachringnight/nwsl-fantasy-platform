@@ -306,6 +306,9 @@ class BacktestRunner:
                 context_provider=context_provider,
                 ratings_model=ratings_model,
                 model_name=model_name,
+                fold=fold,
+                staker=staker,
+                odds=odds,
             )
 
         # Compute recency weights for training
@@ -341,7 +344,7 @@ class BacktestRunner:
             self._generate_and_settle_bets(
                 row,
                 pred,
-                markets,
+                markets=markets,
                 odds_rows=(
                     odds[
                         (odds["match_id"].astype(str) == str(row["match_id"]))
@@ -352,6 +355,8 @@ class BacktestRunner:
                 ),
                 staker=staker,
                 model_name=base_model,
+                fold_id=fold.fold_id,
+                match_date=str(row.get("match_date")),
             )
 
             result_row = {
@@ -369,6 +374,7 @@ class BacktestRunner:
                 "lambda_away": pred.lambda_away,
                 "score_matrix": pred.score_matrix,
                 "model": model_name,
+                "fold_id": fold.fold_id,
                 "confidence_score": max(pred.home_win_prob, pred.draw_prob, pred.away_win_prob),
                 "fit_converged": float(fit_result.converged),
                 "fit_iterations": float(fit_result.diagnostics.get("nit", 0.0)),
@@ -442,12 +448,13 @@ class BacktestRunner:
         row: pd.Series,
         model_name: str,
         matrix: NDArray[np.float64],
+        markets: Any,
         lambda_home: float,
         lambda_away: float,
+        fold_id: int | None = None,
         contextual_features: dict[str, float] | None = None,
         probs_override: tuple[float, float, float] | None = None,
     ) -> dict[str, Any]:
-        markets = derive_all_markets(matrix, match_id=str(row["match_id"]))
         prob_home, prob_draw, prob_away = probs_override or (
             float(markets.home_prob),
             float(markets.draw_prob),
@@ -468,6 +475,7 @@ class BacktestRunner:
             "lambda_away": float(lambda_away),
             "score_matrix": matrix,
             "model": model_name,
+            "fold_id": fold_id,
             "total_goals": row["home_goals_90"] + row["away_goals_90"],
             "home_win": int(row["home_goals_90"] > row["away_goals_90"]),
             "over_2_5": int((row["home_goals_90"] + row["away_goals_90"]) > 2.5),
@@ -501,6 +509,17 @@ class BacktestRunner:
                 result_row[f"prob_over_{total_line}"] = markets.over_probs[total_line]
                 result_row[f"fair_over_{total_line}"] = markets.over_fair_odds[total_line]
                 result_row[f"fair_under_{total_line}"] = markets.under_fair_odds[total_line]
+        total_line = row.get("total_line", row.get("line"))
+        if pd.notna(total_line):
+            total_line = float(total_line)
+            result_row["main_total_line"] = total_line
+            result_row["main_total_over_market_odds"] = row.get("over_odds")
+            result_row["main_total_under_market_odds"] = row.get("under_odds")
+            if total_line in markets.over_probs:
+                result_row["prob_over_main_total"] = markets.over_probs[total_line]
+                result_row["fair_over_main_total"] = markets.over_fair_odds[total_line]
+                result_row["fair_under_main_total"] = markets.under_fair_odds[total_line]
+                result_row["main_total_over_actual"] = int(result_row["total_goals"] > total_line)
         return result_row
 
     def _evaluate_baseline_fold(
@@ -511,6 +530,9 @@ class BacktestRunner:
         context_provider: ContextualFeatureProvider,
         ratings_model: TeamRatingsModel,
         model_name: str,
+        fold: BacktestFold,
+        staker: StakingEngine,
+        odds: Optional[pd.DataFrame],
     ) -> pd.DataFrame:
         train_home_rate = float((train["home_goals_90"] > train["away_goals_90"]).mean())
         train_draw_rate = float((train["home_goals_90"] == train["away_goals_90"]).mean())
@@ -620,13 +642,38 @@ class BacktestRunner:
 
             if base_model not in {"regularized_elo_baseline", "spi_lite_baseline"}:
                 matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
+
+            markets = derive_all_markets(matrix, match_id=str(row["match_id"]))
+
+            # Generate bet recommendations and settle (previously absent for
+            # every baseline model, including spi_lite_baseline).
+            self._generate_and_settle_bets(
+                row,
+                pred=None,
+                markets=markets,
+                odds_rows=(
+                    odds[
+                        (odds["match_id"].astype(str) == str(row["match_id"]))
+                        & (odds["source_type"].astype(str).str.lower() == "close")
+                    ].copy()
+                    if odds is not None and not odds.empty
+                    else pd.DataFrame()
+                ),
+                staker=staker,
+                model_name=base_model,
+                fold_id=fold.fold_id,
+                match_date=str(row.get("match_date")),
+            )
+
             rows.append(
                 self._prediction_row_from_markets(
                     row=row,
                     model_name=model_name,
                     matrix=matrix,
+                    markets=markets,
                     lambda_home=lambda_home,
                     lambda_away=lambda_away,
+                    fold_id=fold.fold_id,
                     contextual_features=contextual_features,
                     probs_override=probs_override,
                 )
@@ -682,11 +729,14 @@ class BacktestRunner:
     def _generate_and_settle_bets(
         self,
         row: pd.Series,
-        pred: PredictionResult,
+        pred: PredictionResult | None = None,
+        *,
         markets: Any,
         odds_rows: pd.DataFrame,
         staker: StakingEngine,
         model_name: str,
+        fold_id: int | None = None,
+        match_date: str = "",
     ) -> None:
         """Generate bet recommendations and settle against actual results."""
         match_id = str(row["match_id"])
@@ -711,6 +761,8 @@ class BacktestRunner:
             # Backtest candidate generation should not be blocked by live
             # promotion gates; those gates are evaluated after validation.
             gating_status="passed",
+            fold_id=fold_id,
+            match_date=match_date,
         )
         for decision in decisions:
             staker.log_decision(decision)

@@ -94,6 +94,9 @@ spi_lite:
   pace_weight: 0.20
   min_lambda: 0.20
   max_lambda: 3.75
+  # null means derive from training data and persist to the artifact.
+  league_home_rate: null
+  league_away_rate: null
 
 lineup_adjustment:
   # Ridge regularization alpha for adjusted plus-minus
@@ -214,3 +217,30 @@ backtest:
 logging:
   level: "INFO"
   file: "logs/nwsl_model.log"
+
+odds_provider:
+  # Odds lines older than this are treated as stale and gated out of official picks.
+  stale_line_minutes: 180
+
+threshold_tuning:
+  # Grid searched during nested chronological threshold tuning: edge/confidence
+  # cutoffs are tuned only on prior folds and evaluated on later folds.
+  edge_grid: [0.0, 0.01, 0.02, 0.03, 0.05, 0.08, 0.10]
+  confidence_grid: [0.0, 0.03, 0.05, 0.08, 0.10, 0.15]
+  min_bets_per_cell: 8
+  min_history_bets: 30
+  rank_metric: "roi_units"
+
+market_residual:
+  # Learns when model-vs-no-vig-market disagreement historically produced ROI.
+  # Evaluated as a candidate only; not auto-promoted.
+  enabled: true
+  regularization_c: 1.0
+  min_train_matches: 60
+
+totals_model:
+  # Calibrated market-line model for totals, evaluated as a candidate only;
+  # official picks stay suppressed unless it passes validation.
+  enabled: true
+  regularization_c: 1.0
+  min_train_matches: 60

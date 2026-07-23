@@ -171,6 +171,8 @@ class BetDecision:
     model_family: str = ""
     blended: bool = False
     gating_status: str = "unknown"
+    fold_id: int | None = None
+    match_date: str = ""
 
     def to_record(self) -> dict[str, Any]:
         return asdict(self)
@@ -361,6 +363,8 @@ def _reject(
     reason: str,
     stake: float = 0.0,
     stake_pct: float = 0.0,
+    fold_id: int | None = None,
+    match_date: str = "",
 ) -> BetDecision:
     return BetDecision(
         match_id=match_id,
@@ -392,6 +396,8 @@ def _reject(
         model_family=model_family,
         blended=blended,
         gating_status=gating_status,
+        fold_id=fold_id,
+        match_date=match_date,
     )
 
 
@@ -429,6 +435,8 @@ def _append_market_decision(
     model_family: str,
     blended: bool,
     gating_status: str,
+    fold_id: int | None = None,
+    match_date: str = "",
 ) -> None:
     model_price = float(decimal_from_probability(probability))
     confidence = _confidence_score(market_type, probability)
@@ -460,6 +468,8 @@ def _append_market_decision(
         "model_family": model_family,
         "blended": blended,
         "gating_status": gating_status,
+        "fold_id": fold_id,
+        "match_date": match_date,
     }
     if market_price is None:
         decisions.append(_reject(**base, reason="missing_market_price"))
@@ -614,6 +624,8 @@ def evaluate_market_candidates(
     model_family: str = "",
     blended: bool = False,
     gating_status: str = "unknown",
+    fold_id: int | None = None,
+    match_date: str = "",
 ) -> list[BetDecision]:
     """Evaluate 1X2 and total opportunities from raw odds rows."""
     if odds_rows is None or odds_rows.empty:
@@ -672,6 +684,8 @@ def evaluate_market_candidates(
                     model_family=model_family,
                     blended=blended,
                     gating_status=gating_status,
+                    fold_id=fold_id,
+                    match_date=match_date,
                 )
 
         if "total" in selection.allowed_markets and (
@@ -713,6 +727,8 @@ def evaluate_market_candidates(
                         blended=blended,
                         gating_status=gating_status,
                         reason="unsupported_total_line",
+                        fold_id=fold_id,
+                        match_date=match_date,
                     )
                 )
                 continue
@@ -746,6 +762,8 @@ def evaluate_market_candidates(
                     model_family=model_family,
                     blended=blended,
                     gating_status=gating_status,
+                    fold_id=fold_id,
+                    match_date=match_date,
                 )
 
     return decisions

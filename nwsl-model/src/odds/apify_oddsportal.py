@@ -180,15 +180,47 @@ def _json_from_escaped_attr(value: str) -> dict[str, Any]:
     return json.loads(html.unescape(value).strip())
 
 
+def extract_odds_request_from_html(html_text: str) -> dict[str, Any]:
+    """Extract the OddsPortal archive request config from raw results-page HTML.
+
+    Mirrors what the Apify page function reads from the ``<next-matches>``
+    element's ``:odds-request`` attribute (``{"url": ..., "urlPartTz": ...,
+    "urlPartQs": ...}``). Real HTML escapes the embedded JSON's double quotes
+    (e.g. ``&quot;``), so the value is html-unescaped before parsing.
+    """
+    match = re.search(r':odds-request="([^"]+)"', html_text)
+    if not match:
+        raise ValueError(
+            "Could not find OddsPortal :odds-request attribute in HTML; "
+            "site markup may have changed."
+        )
+    return _json_from_escaped_attr(match.group(1))
+
+
+def fetch_results_page_html(url: str, *, timeout: int = 30) -> str:
+    """Fetch an OddsPortal results page directly with plain HTTP."""
+    request = Request(
+        url,
+        headers={
+            "Accept": "text/html,application/xhtml+xml,*/*",
+            "Referer": "https://www.oddsportal.com/",
+            "User-Agent": "nwsl-model/0.1",
+        },
+    )
+    with urlopen(request, timeout=timeout) as response:
+        return response.read().decode("utf-8", errors="replace")
+
+
 def _extract_odds_request(item: dict[str, Any]) -> dict[str, Any]:
     attr = item.get("oddsRequestAttr")
     if isinstance(attr, str) and attr.strip():
         return _json_from_escaped_attr(attr)
 
     sample = str(item.get("htmlSample") or "")
-    match = re.search(r':odds-request="([^"]+)"', sample)
-    if match:
-        return _json_from_escaped_attr(match.group(1))
+    try:
+        return extract_odds_request_from_html(sample)
+    except ValueError:
+        pass
     outright_match = re.search(r"pageOutrightsVar\s*=\s*'([^']+)'", sample)
     if outright_match:
         outright = json.loads(html.unescape(outright_match.group(1)))
@@ -430,6 +462,60 @@ def run_apify_archive_fetch(
         for season, pages in decrypt_archive_items(remaining_items).items():
             decrypted.setdefault(season, {}).update(pages)
     return all_items, decrypted
+
+
+def run_direct_archive_fetch(
+    requests: list[OddsPortalSeasonRequest],
+    *,
+    timeout: int = 30,
+    max_workers: int = 4,
+    sleep_seconds: float = 0.35,
+) -> list[dict[str, Any]]:
+    """Fetch OddsPortal archive pages directly with plain HTTP, no Apify.
+
+    Reuses the same URL construction (``OddsPortalSeasonRequest.page_url``) and
+    encrypted-payload fetch path (``_direct_encrypted_item``) that
+    ``repair_empty_archive_items`` uses for its direct-fetch fallback. Returns a
+    flat list of items in the same shape ``run_apify_archive_fetch`` returns
+    (``url``/``userData``/``text``), so ``decrypt_archive_items`` and
+    ``archive_pages_to_match_rows`` are unchanged downstream. Workers are capped
+    at 4 and paced with a small sleep to be polite to the site.
+    """
+    workers = max(1, min(int(max_workers), 4))
+
+    def _fetch_page(request: OddsPortalSeasonRequest, page: int) -> dict[str, Any]:
+        url = request.page_url(page)
+        item = _direct_encrypted_item(url, {"season": request.season, "page": page}, timeout_seconds=timeout)
+        if sleep_seconds:
+            time.sleep(sleep_seconds)
+        return item
+
+    items: list[dict[str, Any]] = []
+    first_items_by_season: dict[int, dict[str, Any]] = {}
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {executor.submit(_fetch_page, request, 1): request for request in requests}
+        for future in as_completed(futures):
+            request = futures[future]
+            item = future.result()
+            first_items_by_season[request.season] = item
+            items.append(item)
+
+    decrypted_first = decrypt_archive_items(list(first_items_by_season.values()))
+
+    request_by_season = {request.season: request for request in requests}
+    remaining: list[tuple[OddsPortalSeasonRequest, int]] = []
+    for season, pages in decrypted_first.items():
+        page_count = int(pages[1].get("d", {}).get("pagination", {}).get("pageCount", 1))
+        for page in range(2, page_count + 1):
+            remaining.append((request_by_season[season], page))
+
+    if remaining:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [executor.submit(_fetch_page, request, page) for request, page in remaining]
+            for future in as_completed(futures):
+                items.append(future.result())
+
+    return items
 
 
 def match_event_url(
