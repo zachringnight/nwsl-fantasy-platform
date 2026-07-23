@@ -50,7 +50,7 @@ export default function MatchesPage() {
     <AppShell
       eyebrow="Match Analytics"
       title="Match Center"
-      description={`${matches.length} real NWSL matches from the 2025 and 2026 seasons. Data from ESPN.`}
+      description={`${matches.length} real NWSL matches from the ${season} season. Data from ESPN.`}
     >
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">

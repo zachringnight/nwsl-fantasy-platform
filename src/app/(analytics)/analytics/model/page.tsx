@@ -1,6 +1,3 @@
-"use client";
-
-import { useMemo } from "react";
 import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { ThemedLineChart } from "@/components/analytics/charts/themed-line-chart";
@@ -8,7 +5,7 @@ import { ThemedBarChart } from "@/components/analytics/charts/themed-bar-chart";
 import { getModelPerformance } from "@/lib/analytics/analytics-data";
 
 export default function ModelPage() {
-  const perf = useMemo(() => getModelPerformance(), []);
+  const perf = getModelPerformance();
 
   if (!perf) {
     return (

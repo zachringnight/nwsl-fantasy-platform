@@ -235,13 +235,27 @@ export function getRealTeamRatings(): TeamRating[] {
 
 // ── Match Results (real ESPN data) ──────────────────────────────────────────
 
+function buildMatchdayByDate(matches: EspnMatch[]): Map<string, number> {
+  const seasons = [...new Set(matches.map((match) => match.date.slice(0, 4)))];
+  const dateToMatchday = new Map<string, number>();
+
+  for (const season of seasons) {
+    const dates = [
+      ...new Set(
+        matches
+          .filter((match) => match.date.startsWith(season))
+          .map((match) => match.date)
+      ),
+    ].sort();
+    dates.forEach((date, index) => dateToMatchday.set(date, index + 1));
+  }
+
+  return dateToMatchday;
+}
+
 export function getRealMatchResults(): MatchResult[] {
   const allMatches = getAllEspnMatches();
-
-  // Assign matchdays based on date grouping
-  const dateToMatchday = new Map<string, number>();
-  const uniqueDates = [...new Set(allMatches.map((m) => m.date))].sort();
-  uniqueDates.forEach((d, i) => dateToMatchday.set(d, i + 1));
+  const dateToMatchday = buildMatchdayByDate(allMatches);
 
   return allMatches.map((m) => ({
     matchId: m.matchId,
@@ -289,9 +303,7 @@ export function getStandingsBySeason(season: Season): TeamStanding[] {
 
 export function getMatchResultsBySeason(season: Season): MatchResult[] {
   const matches = getEspnMatchesBySeason(season);
-  const dateToMatchday = new Map<string, number>();
-  const uniqueDates = [...new Set(matches.map((m) => m.date))].sort();
-  uniqueDates.forEach((d, i) => dateToMatchday.set(d, i + 1));
+  const dateToMatchday = buildMatchdayByDate(matches);
 
   return matches.map((m) => ({
     matchId: m.matchId,

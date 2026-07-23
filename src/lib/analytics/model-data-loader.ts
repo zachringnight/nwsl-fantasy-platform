@@ -177,10 +177,16 @@ export function loadModelPerformance(): ModelPerformance | null {
     roi: m.roi,
     hitRate: m.hitRate,
     totalPredictions: m.totalPredictions,
-    calibrationBuckets: Array.from({ length: 10 }, (_, i) => ({
-      predicted: (i + 0.5) / 10,
-      actual: ((i + 0.5) / 10) * (1 + (Math.random() * 0.2 - 0.1)),
-      count: Math.round(m.totalPredictions / 10),
-    })),
+    calibrationBuckets: Array.from({ length: 10 }, (_, i) => {
+      const predicted = (i + 0.5) / 10;
+      return {
+        predicted,
+        // The summary export does not include per-bucket observations yet.
+        // Keep the fallback neutral and deterministic instead of fabricating
+        // a new chart on every render.
+        actual: predicted,
+        count: Math.round(m.totalPredictions / 10),
+      };
+    }),
   };
 }
