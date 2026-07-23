@@ -1125,3 +1125,1426 @@ select.field-control {
 .score-pop {
   animation: score-pop 380ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+.sports-motion-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2.4rem;
+  min-height: 28rem;
+  padding: clamp(1.4rem, 3vw, 2rem);
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 170, 73, 0.26), transparent 18%),
+    radial-gradient(circle at 84% 16%, rgba(0, 225, 255, 0.2), transparent 22%),
+    linear-gradient(145deg, rgba(6, 11, 34, 0.98) 0%, rgba(8, 16, 46, 0.96) 42%, rgba(1, 4, 14, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 36px 110px rgba(2, 6, 22, 0.46);
+}
+
+.sports-motion-stage[data-motion-tone="ember"] {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 198, 148, 0.3), transparent 18%),
+    radial-gradient(circle at 84% 18%, rgba(255, 60, 34, 0.2), transparent 22%),
+    linear-gradient(145deg, rgba(24, 10, 18, 0.98) 0%, rgba(48, 14, 12, 0.94) 38%, rgba(9, 6, 18, 0.98) 100%);
+}
+
+.sports-motion-stage[data-motion-tone="volt"] {
+  background:
+    radial-gradient(circle at 12% 18%, rgba(197, 255, 95, 0.26), transparent 18%),
+    radial-gradient(circle at 84% 18%, rgba(0, 225, 255, 0.18), transparent 22%),
+    linear-gradient(145deg, rgba(10, 18, 12, 0.98) 0%, rgba(8, 24, 18, 0.94) 38%, rgba(4, 10, 20, 0.98) 100%);
+}
+
+.sports-motion-stage__content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+}
+
+.sports-motion-stage__grid,
+.sports-motion-stage__orb,
+.sports-motion-stage__ribbon {
+  position: absolute;
+  pointer-events: none;
+}
+
+.sports-motion-stage__grid {
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 112%, transparent 0 17%, rgba(255, 184, 71, 0.16) 17.4% 17.8%, transparent 18.2%),
+    radial-gradient(circle at 50% 50%, transparent 0 6.6%, rgba(255, 255, 255, 0.08) 6.9% 7.2%, transparent 7.5%),
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      transparent 0 29%,
+      rgba(255, 184, 71, 0.08) 29.3% 29.7%,
+      transparent 30% 70%,
+      rgba(255, 184, 71, 0.08) 70.3% 70.7%,
+      transparent 71%
+    ),
+    linear-gradient(
+      118deg,
+      transparent 0 16%,
+      rgba(0, 225, 255, 0.18) 16.4%,
+      transparent 17.1%,
+      transparent 20%,
+      rgba(255, 170, 73, 0.16) 20.4%,
+      transparent 21.1%
+    );
+  background-size: auto, auto, 84px 84px, 84px 84px, auto, auto;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.96), transparent 92%);
+  opacity: 0.7;
+  animation: sports-stage-grid-drift 18s linear infinite;
+}
+
+.sports-motion-stage__orb {
+  border-radius: 999px;
+  filter: blur(20px);
+  opacity: 0.92;
+}
+
+.sports-motion-stage__orb--left {
+  inset: auto auto 8% -6%;
+  width: 14rem;
+  height: 14rem;
+  background: radial-gradient(circle, rgba(0, 225, 255, 0.34) 0%, rgba(0, 225, 255, 0) 72%);
+  animation: sports-orb-float 11s ease-in-out infinite alternate;
+}
+
+.sports-motion-stage__orb--right {
+  inset: 8% -4% auto auto;
+  width: 13rem;
+  height: 13rem;
+  background: radial-gradient(circle, rgba(255, 126, 182, 0.26) 0%, rgba(255, 126, 182, 0) 72%);
+  animation: sports-orb-float 15s ease-in-out infinite alternate-reverse;
+}
+
+.sports-motion-stage__ribbon {
+  inset: auto auto auto -10%;
+  width: 70%;
+  height: 8rem;
+  background: linear-gradient(
+    116deg,
+    transparent 0 22%,
+    rgba(255, 184, 71, 0.18) 22.8%,
+    rgba(0, 225, 255, 0.2) 24.2%,
+    transparent 26.4%,
+    transparent 100%
+  );
+  opacity: 0.85;
+  transform: skewX(-26deg);
+}
+
+.sports-motion-stage__ribbon--primary {
+  top: 18%;
+  animation: sports-ribbon-glide 10s ease-in-out infinite alternate;
+}
+
+.sports-motion-stage__ribbon--secondary {
+  top: 56%;
+  width: 82%;
+  opacity: 0.48;
+  animation: sports-ribbon-glide 12s ease-in-out infinite alternate-reverse;
+}
+
+.sports-motion-ticker {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(22, 16, 20, 0.95), rgba(4, 8, 24, 0.98));
+  padding-block: 0.8rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 40px rgba(1, 3, 12, 0.32);
+}
+
+.sports-motion-ticker::before,
+.sports-motion-ticker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4.5rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.sports-motion-ticker::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(2, 7, 22, 1), rgba(2, 7, 22, 0));
+}
+
+.sports-motion-ticker::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(2, 7, 22, 1), rgba(2, 7, 22, 0));
+}
+
+.sports-motion-ticker__belt {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  animation: sports-ticker-slide 18s linear infinite;
+}
+
+.sports-motion-ticker[data-speed="slow"] .sports-motion-ticker__belt {
+  animation-duration: 24s;
+}
+
+.sports-motion-ticker[data-speed="fast"] .sports-motion-ticker__belt {
+  animation-duration: 12s;
+}
+
+.sports-motion-ticker__track {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-shrink: 0;
+  padding-inline: 0.9rem;
+}
+
+.sports-motion-ticker__chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 184, 71, 0.14);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 184, 71, 0.12), rgba(255, 255, 255, 0.04));
+  padding: 0.55rem 0.95rem;
+  color: rgba(245, 248, 255, 0.9);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.sports-motion-rarity {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.24);
+  padding: 0.5rem 0.85rem;
+  color: #00e1ff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.sports-motion-rarity[data-rarity-tone="legendary"] {
+  color: #ffc894;
+}
+
+.sports-motion-rarity[data-rarity-tone="rookie"] {
+  color: #c5ff5f;
+}
+
+.sports-motion-rarity::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid currentColor;
+  opacity: 0.16;
+  animation: sports-rarity-bloom 1.8s ease-out infinite;
+}
+
+.sports-motion-rarity__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 0 0 currentColor;
+  animation: sports-rarity-dot 1.8s ease-out infinite;
+}
+
+.sports-motion-foil-card {
+  --foil-pointer-x: 50%;
+  --foil-pointer-y: 50%;
+  --foil-rotate-x: 0deg;
+  --foil-rotate-y: 0deg;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.18), transparent 18%),
+    linear-gradient(145deg, rgba(20, 28, 74, 0.96) 0%, rgba(9, 14, 44, 0.98) 46%, rgba(3, 6, 18, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 38px 110px rgba(0, 0, 0, 0.44);
+  transform:
+    perspective(1400px)
+    rotateX(var(--foil-rotate-x))
+    rotateY(var(--foil-rotate-y))
+    translateZ(0);
+  transform-style: preserve-3d;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+  will-change: transform;
+}
+
+.sports-motion-foil-card[data-motion-tone="ember"] {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 199, 130, 0.22), transparent 18%),
+    linear-gradient(145deg, rgba(58, 18, 12, 0.96) 0%, rgba(32, 12, 20, 0.96) 46%, rgba(12, 6, 18, 0.98) 100%);
+}
+
+.sports-motion-foil-card[data-motion-tone="volt"] {
+  background:
+    radial-gradient(circle at 18% 16%, rgba(197, 255, 95, 0.2), transparent 18%),
+    linear-gradient(145deg, rgba(18, 34, 18, 0.96) 0%, rgba(8, 18, 26, 0.96) 46%, rgba(4, 8, 18, 0.98) 100%);
+}
+
+.sports-motion-foil-card::before,
+.sports-motion-foil-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sports-motion-foil-card::before {
+  background:
+    radial-gradient(circle at var(--foil-pointer-x) var(--foil-pointer-y), rgba(255, 255, 255, 0.34), transparent 28%),
+    linear-gradient(
+      120deg,
+      transparent 0 10%,
+      rgba(255, 255, 255, 0.16) 18%,
+      transparent 26%,
+      transparent 52%,
+      rgba(0, 225, 255, 0.22) 64%,
+      transparent 73%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.92;
+  animation: sports-foil-sheen 8s linear infinite;
+}
+
+.sports-motion-foil-card::after {
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 80% 18%, rgba(0, 225, 255, 0.16), transparent 20%),
+    radial-gradient(circle at 18% 84%, rgba(255, 170, 73, 0.14), transparent 18%);
+  opacity: 0.22;
+  mix-blend-mode: screen;
+}
+
+.sports-motion-foil-card:hover {
+  border-color: rgba(0, 225, 255, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 42px 120px rgba(0, 0, 0, 0.46);
+}
+
+.sports-motion-foil-card__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem;
+}
+
+.sports-motion-foil-card__rating {
+  min-width: 5.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.4rem;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 0.9rem 0.95rem;
+  text-align: right;
+}
+
+.sports-motion-foil-card__footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.sports-motion-fan {
+  position: relative;
+  min-height: 26rem;
+  display: grid;
+  place-items: center;
+  perspective: 1600px;
+}
+
+.sports-motion-fan__card {
+  position: absolute;
+  width: min(100%, 18rem);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 14% 14%, rgba(255, 255, 255, 0.14), transparent 18%),
+    linear-gradient(150deg, rgba(14, 19, 52, 0.96) 0%, rgba(7, 12, 34, 0.96) 52%, rgba(3, 6, 18, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 32px 88px rgba(0, 0, 0, 0.32);
+  animation: sports-fan-card-float 8s ease-in-out infinite alternate;
+}
+
+.sports-motion-fan__card[data-motion-tone="ember"] {
+  background:
+    radial-gradient(circle at 14% 14%, rgba(255, 199, 130, 0.14), transparent 18%),
+    linear-gradient(150deg, rgba(44, 18, 14, 0.96) 0%, rgba(28, 10, 18, 0.96) 52%, rgba(10, 6, 16, 0.98) 100%);
+}
+
+.sports-motion-fan__card[data-motion-tone="volt"] {
+  background:
+    radial-gradient(circle at 14% 14%, rgba(197, 255, 95, 0.14), transparent 18%),
+    linear-gradient(150deg, rgba(18, 34, 18, 0.96) 0%, rgba(7, 18, 24, 0.96) 52%, rgba(4, 8, 16, 0.98) 100%);
+}
+
+.sports-motion-fan__card[data-card-index="0"] {
+  transform: translate3d(-28%, 1.25rem, -12px) rotate(-13deg);
+  animation-delay: -2.1s;
+}
+
+.sports-motion-fan__card[data-card-index="1"] {
+  transform: translate3d(0, -0.6rem, 16px) rotate(0deg);
+}
+
+.sports-motion-fan__card[data-card-index="2"] {
+  transform: translate3d(28%, 1.25rem, -12px) rotate(13deg);
+  animation-delay: -4.3s;
+}
+
+.sports-motion-fan__card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 20rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem;
+}
+
+.sports-motion-spotlight {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2rem;
+  background: linear-gradient(145deg, rgba(22, 13, 18, 0.98) 0%, rgba(18, 10, 32, 0.98) 44%, rgba(4, 8, 18, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 28px 90px rgba(0, 0, 0, 0.36);
+}
+
+.sports-motion-spotlight[data-motion-tone="cobalt"] {
+  background: linear-gradient(145deg, rgba(10, 16, 42, 0.98) 0%, rgba(8, 12, 34, 0.98) 44%, rgba(4, 8, 18, 0.98) 100%);
+}
+
+.sports-motion-spotlight[data-motion-tone="volt"] {
+  background: linear-gradient(145deg, rgba(12, 26, 18, 0.98) 0%, rgba(8, 18, 24, 0.98) 44%, rgba(4, 8, 18, 0.98) 100%);
+}
+
+.sports-motion-spotlight::before,
+.sports-motion-spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sports-motion-spotlight::before {
+  background: radial-gradient(circle at 8% 28%, rgba(255, 255, 255, 0.18) 0%, transparent 32%);
+  opacity: 0.72;
+  animation: sports-spotlight-sweep 9s ease-in-out infinite;
+}
+
+.sports-motion-spotlight::after {
+  background: linear-gradient(
+    118deg,
+    transparent 0 26%,
+    rgba(255, 255, 255, 0.08) 26.5%,
+    transparent 27.2%,
+    transparent 52%,
+    rgba(255, 170, 73, 0.14) 52.4%,
+    transparent 53%
+  );
+  opacity: 0.82;
+  animation: sports-panel-scan 11s linear infinite;
+}
+
+.sports-motion-spotlight__content {
+  position: relative;
+  z-index: 1;
+  padding: clamp(1.35rem, 3vw, 2rem);
+}
+
+.sports-motion-scorebug {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.7rem;
+  background: linear-gradient(140deg, rgba(10, 18, 44, 0.98) 0%, rgba(4, 10, 26, 0.98) 58%, rgba(2, 6, 18, 1) 100%);
+  padding: 1rem 1.1rem 1.05rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 22px 58px rgba(0, 0, 0, 0.28);
+}
+
+.sports-motion-scorebug[data-motion-tone="ember"] {
+  background: linear-gradient(140deg, rgba(32, 18, 12, 0.98) 0%, rgba(12, 8, 22, 0.98) 58%, rgba(4, 6, 18, 1) 100%);
+}
+
+.sports-motion-scorebug[data-motion-tone="volt"] {
+  background: linear-gradient(140deg, rgba(12, 26, 18, 0.98) 0%, rgba(8, 12, 24, 0.98) 58%, rgba(2, 6, 18, 1) 100%);
+}
+
+.sports-motion-scorebug::before,
+.sports-motion-scorebug::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sports-motion-scorebug::before {
+  background: linear-gradient(
+    116deg,
+    transparent 0 18%,
+    rgba(255, 184, 71, 0.16) 18.6%,
+    rgba(0, 225, 255, 0.16) 20.4%,
+    transparent 22%,
+    transparent 100%
+  );
+  opacity: 0.8;
+  animation: sports-scorebug-scan 7s linear infinite;
+}
+
+.sports-motion-scorebug::after {
+  inset: auto 0 0 0;
+  height: 0.22rem;
+  background: linear-gradient(90deg, rgba(255, 184, 71, 0.4), rgba(0, 225, 255, 0.7), rgba(197, 255, 95, 0.4));
+  opacity: 0.9;
+}
+
+.sports-motion-scorebug__status-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sports-motion-scorebug__status-pill,
+.sports-motion-scorebug__clock {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.sports-motion-scorebug__status-pill {
+  background: rgba(255, 184, 71, 0.12);
+  border: 1px solid rgba(255, 184, 71, 0.22);
+  color: #ffc894;
+  padding: 0.38rem 0.62rem;
+}
+
+.sports-motion-scorebug__clock {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.sports-motion-scorebug__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.sports-motion-scorebug__team {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.sports-motion-scorebug__team[data-side="home"] {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.sports-motion-scorebug__team-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.sports-motion-scorebug__team-score {
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 6vw, 3.4rem);
+  line-height: 0.84;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.sports-motion-scorebug__pulse {
+  position: relative;
+  width: 0.58rem;
+  height: 0.58rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sports-motion-scorebug__pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+}
+
+.sports-motion-scorebug[data-possession="away"] .sports-motion-scorebug__team[data-side="away"] .sports-motion-scorebug__pulse,
+.sports-motion-scorebug[data-possession="home"] .sports-motion-scorebug__team[data-side="home"] .sports-motion-scorebug__pulse {
+  background: #ffb847;
+  box-shadow: 0 0 0 0 rgba(255, 184, 71, 0.56);
+  animation: sports-possession-pulse 1.7s ease-out infinite;
+}
+
+.sports-motion-scorebug[data-possession="away"] .sports-motion-scorebug__team[data-side="away"] .sports-motion-scorebug__pulse::after,
+.sports-motion-scorebug[data-possession="home"] .sports-motion-scorebug__team[data-side="home"] .sports-motion-scorebug__pulse::after {
+  border-color: rgba(255, 184, 71, 0.42);
+  animation: sports-possession-ring 1.7s ease-out infinite;
+}
+
+.sports-motion-scorebug__center {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.55rem 0.75rem;
+}
+
+.sports-motion-scorebug__game-clock {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.sports-motion-scorebug__shot-clock {
+  min-width: 2.4rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 184, 71, 0.18), rgba(255, 184, 71, 0.08));
+  padding: 0.26rem 0.5rem;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffc894;
+}
+
+.sports-motion-lower-third {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.8rem;
+  background: linear-gradient(145deg, rgba(28, 14, 12, 0.98) 0%, rgba(16, 10, 28, 0.98) 44%, rgba(4, 8, 18, 1) 100%);
+  padding: 1rem 1.15rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 66px rgba(0, 0, 0, 0.32);
+}
+
+.sports-motion-lower-third[data-motion-tone="cobalt"] {
+  background: linear-gradient(145deg, rgba(8, 18, 42, 0.98) 0%, rgba(8, 10, 28, 0.98) 44%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-lower-third[data-motion-tone="volt"] {
+  background: linear-gradient(145deg, rgba(12, 26, 18, 0.98) 0%, rgba(8, 14, 22, 0.98) 44%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-lower-third::before,
+.sports-motion-lower-third::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sports-motion-lower-third::before {
+  background: linear-gradient(
+    116deg,
+    transparent 0 22%,
+    rgba(255, 255, 255, 0.14) 22.8%,
+    rgba(255, 184, 71, 0.16) 24.2%,
+    transparent 26.8%
+  );
+  animation: sports-lower-third-sweep 6.2s linear infinite;
+}
+
+.sports-motion-lower-third::after {
+  inset: auto 0 0 0;
+  height: 0.3rem;
+  background: linear-gradient(90deg, rgba(255, 184, 71, 0.6), rgba(0, 225, 255, 0.7));
+}
+
+.sports-motion-lower-third__number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 4rem;
+  min-height: 4rem;
+  border-radius: 1.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.24);
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+}
+
+.sports-motion-lower-third__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sports-motion-lower-third__eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #ffb847;
+}
+
+.sports-motion-lower-third__name {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.sports-motion-lower-third__role {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sports-motion-lower-third__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.sports-motion-lower-third__tag {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.36rem 0.62rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.sports-motion-countdown {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.8rem;
+  background: linear-gradient(145deg, rgba(30, 18, 12, 0.98) 0%, rgba(10, 8, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+  color: #ffb847;
+  padding: 1rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 62px rgba(0, 0, 0, 0.28);
+}
+
+.sports-motion-countdown[data-motion-tone="cobalt"] {
+  background: linear-gradient(145deg, rgba(10, 18, 42, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+  color: #00e1ff;
+}
+
+.sports-motion-countdown[data-motion-tone="volt"] {
+  background: linear-gradient(145deg, rgba(12, 26, 18, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+  color: #c5ff5f;
+}
+
+.sports-motion-countdown::before {
+  content: "";
+  position: absolute;
+  inset: 14%;
+  border-radius: 999px;
+  background: radial-gradient(circle, currentColor 0%, transparent 62%);
+  filter: blur(24px);
+  opacity: 0.16;
+  animation: sports-countdown-glow 2.8s ease-in-out infinite alternate;
+}
+
+.sports-motion-countdown__ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 13.5rem);
+  aspect-ratio: 1;
+}
+
+.sports-motion-countdown__ring::after {
+  content: "";
+  position: absolute;
+  inset: 16%;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  animation: sports-countdown-orbit 7s linear infinite;
+}
+
+.sports-motion-countdown__svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.sports-motion-countdown__track,
+.sports-motion-countdown__bar {
+  fill: none;
+  stroke-width: 8;
+}
+
+.sports-motion-countdown__track {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.sports-motion-countdown__bar {
+  stroke: currentColor;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+.sports-motion-countdown__value-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.18rem;
+  text-align: center;
+}
+
+.sports-motion-countdown__label,
+.sports-motion-countdown__detail {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.sports-motion-countdown__label {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.sports-motion-countdown__value {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 8vw, 4.9rem);
+  line-height: 0.82;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.sports-motion-countdown__detail {
+  color: currentColor;
+}
+
+.sports-motion-momentum {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.8rem;
+  background: linear-gradient(145deg, rgba(10, 18, 40, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+  padding: 1rem 1.1rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 62px rgba(0, 0, 0, 0.28);
+}
+
+.sports-motion-momentum[data-motion-tone="ember"] {
+  background: linear-gradient(145deg, rgba(28, 18, 12, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-momentum[data-motion-tone="volt"] {
+  background: linear-gradient(145deg, rgba(12, 24, 18, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-momentum__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sports-motion-momentum__label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.sports-motion-momentum__value {
+  margin-top: 0.15rem;
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  line-height: 0.82;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.sports-motion-momentum__caption {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffb847;
+}
+
+.sports-motion-momentum__rail {
+  position: relative;
+  overflow: hidden;
+  margin-top: 0.9rem;
+  height: 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sports-motion-momentum__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.sports-motion-momentum__fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+  animation: sports-momentum-sweep 2.4s linear infinite;
+}
+
+.sports-motion-momentum__fill--left {
+  left: 0;
+  background: linear-gradient(90deg, rgba(255, 184, 71, 0.9), rgba(255, 184, 71, 0.38));
+}
+
+.sports-motion-momentum__fill--right {
+  right: 0;
+  background: linear-gradient(270deg, rgba(0, 225, 255, 0.9), rgba(0, 225, 255, 0.34));
+}
+
+.sports-motion-momentum[data-leading="left"] .sports-motion-momentum__fill--right::after,
+.sports-motion-momentum[data-leading="right"] .sports-motion-momentum__fill--left::after,
+.sports-motion-momentum[data-leading="even"] .sports-motion-momentum__fill::after {
+  opacity: 0.28;
+}
+
+.sports-motion-momentum__center-line {
+  position: absolute;
+  top: -0.18rem;
+  bottom: -0.18rem;
+  left: calc(50% - 1px);
+  width: 2px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.sports-motion-pulse-strip {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+}
+
+.sports-motion-pulse-strip__item {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.4rem;
+  background: linear-gradient(145deg, rgba(12, 24, 18, 0.98) 0%, rgba(8, 12, 22, 0.98) 62%, rgba(4, 8, 18, 1) 100%);
+  padding: 0.95rem 1rem;
+}
+
+.sports-motion-pulse-strip[data-motion-tone="cobalt"] .sports-motion-pulse-strip__item {
+  background: linear-gradient(145deg, rgba(8, 18, 42, 0.98) 0%, rgba(8, 12, 22, 0.98) 62%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-pulse-strip[data-motion-tone="ember"] .sports-motion-pulse-strip__item {
+  background: linear-gradient(145deg, rgba(28, 18, 12, 0.98) 0%, rgba(8, 12, 22, 0.98) 62%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-pulse-strip__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(116deg, transparent 0 26%, rgba(255, 255, 255, 0.14) 26.8%, transparent 28.2%);
+  animation: sports-metric-scan 5.2s linear infinite;
+  animation-delay: var(--metric-delay, 0ms);
+}
+
+.sports-motion-pulse-strip__item[data-trend="down"] {
+  border-color: rgba(255, 110, 91, 0.22);
+}
+
+.sports-motion-pulse-strip__item[data-trend="steady"] {
+  border-color: rgba(0, 225, 255, 0.18);
+}
+
+.sports-motion-pulse-strip__metric-label {
+  position: relative;
+  z-index: 1;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.sports-motion-pulse-strip__metric-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.sports-motion-pulse-strip__metric-value {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 0.84;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.sports-motion-pulse-strip__metric-delta {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.28rem 0.48rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #c5ff5f;
+}
+
+.sports-motion-pulse-strip__item[data-trend="down"] .sports-motion-pulse-strip__metric-delta {
+  color: #ff6e5b;
+}
+
+.sports-motion-pulse-strip__item[data-trend="steady"] .sports-motion-pulse-strip__metric-delta {
+  color: #00e1ff;
+}
+
+.sports-motion-heat-grid {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.9rem;
+  background: linear-gradient(145deg, rgba(28, 18, 12, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+  padding: 1rem;
+}
+
+.sports-motion-heat-grid[data-motion-tone="cobalt"] {
+  background: linear-gradient(145deg, rgba(8, 18, 42, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-heat-grid[data-motion-tone="volt"] {
+  background: linear-gradient(145deg, rgba(12, 24, 18, 0.98) 0%, rgba(8, 10, 24, 0.98) 58%, rgba(4, 8, 18, 1) 100%);
+}
+
+.sports-motion-heat-grid__title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffb847;
+}
+
+.sports-motion-heat-grid__matrix {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 0.9rem;
+}
+
+.sports-motion-heat-grid__cell {
+  position: relative;
+  overflow: hidden;
+  min-height: 5.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.15rem;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: sports-heat-breathe 2.8s ease-in-out infinite alternate;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.sports-motion-heat-grid__cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(118deg, transparent 0 28%, rgba(255, 255, 255, 0.14) 28.7%, transparent 30.2%);
+  opacity: 0.72;
+  animation: sports-metric-scan 5.4s linear infinite;
+}
+
+.sports-motion-heat-grid__cell-label,
+.sports-motion-heat-grid__cell-value {
+  position: relative;
+  z-index: 1;
+}
+
+.sports-motion-heat-grid__cell-label {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.sports-motion-heat-grid__cell-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+@keyframes sports-stage-grid-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(3%, -3%, 0);
+  }
+}
+
+@keyframes sports-ribbon-glide {
+  0% {
+    transform: translate3d(-8%, 0, 0) skewX(-26deg);
+  }
+
+  100% {
+    transform: translate3d(16%, 0, 0) skewX(-26deg);
+  }
+}
+
+@keyframes sports-orb-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate3d(0, -1rem, 0) scale(1.05);
+  }
+}
+
+@keyframes sports-ticker-slide {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes sports-rarity-bloom {
+  0% {
+    opacity: 0.18;
+    transform: scale(1);
+  }
+
+  70% {
+    opacity: 0;
+    transform: scale(1.14);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.14);
+  }
+}
+
+@keyframes sports-rarity-dot {
+  0% {
+    box-shadow: 0 0 0 0 currentColor;
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.5rem transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes sports-foil-sheen {
+  0% {
+    transform: translate3d(-22%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(22%, 0, 0);
+  }
+}
+
+@keyframes sports-fan-card-float {
+  0% {
+    translate: 0 0;
+  }
+
+  100% {
+    translate: 0 -10px;
+  }
+}
+
+@keyframes sports-spotlight-sweep {
+  0% {
+    transform: translate3d(-12%, 6%, 0);
+  }
+
+  100% {
+    transform: translate3d(24%, -8%, 0);
+  }
+}
+
+@keyframes sports-panel-scan {
+  0% {
+    transform: translate3d(-4%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(6%, 0, 0);
+  }
+}
+
+@keyframes sports-scorebug-scan {
+  0% {
+    transform: translate3d(-6%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(8%, 0, 0);
+  }
+}
+
+@keyframes sports-possession-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 184, 71, 0.56);
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.58rem transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes sports-possession-ring {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  70% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+
+@keyframes sports-lower-third-sweep {
+  0% {
+    transform: translate3d(-8%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(10%, 0, 0);
+  }
+}
+
+@keyframes sports-countdown-glow {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.92);
+  }
+
+  100% {
+    opacity: 0.2;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes sports-countdown-orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sports-momentum-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes sports-metric-scan {
+  0% {
+    transform: translate3d(-8%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(10%, 0, 0);
+  }
+}
+
+@keyframes sports-heat-breathe {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate3d(0, -4px, 0) scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sports-motion-stage__grid,
+  .sports-motion-stage__orb,
+  .sports-motion-stage__ribbon,
+  .sports-motion-ticker__belt,
+  .sports-motion-rarity::after,
+  .sports-motion-rarity__dot,
+  .sports-motion-foil-card::before,
+  .sports-motion-fan__card,
+  .sports-motion-spotlight::before,
+  .sports-motion-spotlight::after,
+  .sports-motion-scorebug::before,
+  .sports-motion-scorebug__pulse,
+  .sports-motion-scorebug__pulse::after,
+  .sports-motion-lower-third::before,
+  .sports-motion-countdown::before,
+  .sports-motion-countdown__ring::after,
+  .sports-motion-momentum__fill::after,
+  .sports-motion-pulse-strip__item::after,
+  .sports-motion-heat-grid__cell,
+  .sports-motion-heat-grid__cell::after {
+    animation: none !important;
+  }
+
+  .sports-motion-foil-card,
+  .sports-motion-fan__card,
+  .sports-motion-heat-grid__cell {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .sports-motion-stage {
+    border-radius: 2rem;
+    padding: 1.25rem;
+  }
+
+  .sports-motion-fan {
+    min-height: 22rem;
+  }
+
+  .sports-motion-fan__card {
+    width: min(100%, 15rem);
+  }
+
+  .sports-motion-fan__card[data-card-index="0"] {
+    transform: translate3d(-18%, 1.6rem, -12px) rotate(-10deg);
+  }
+
+  .sports-motion-fan__card[data-card-index="2"] {
+    transform: translate3d(18%, 1.6rem, -12px) rotate(10deg);
+  }
+
+  .sports-motion-lower-third {
+    grid-template-columns: 1fr;
+  }
+
+  .sports-motion-lower-third__number {
+    min-width: 3.3rem;
+    min-height: 3.3rem;
+  }
+
+  .sports-motion-scorebug__team-name {
+    font-size: 0.76rem;
+  }
+
+  .sports-motion-scorebug__center {
+    padding-inline: 0.62rem;
+  }
+}
