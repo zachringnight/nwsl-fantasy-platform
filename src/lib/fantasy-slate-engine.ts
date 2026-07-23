@@ -178,6 +178,10 @@ const weeklySlateWindows: FantasySlateWindow[] = Array.from(
   label: `Week ${index + 1} • ${formatRangeLabel(window.starts_at, window.ends_at)}`,
 }));
 
+export function getFantasyWeeklySlateWindows() {
+  return weeklySlateWindows;
+}
+
 const seasonSlateWindow: FantasySlateWindow = {
   key: "season-2026",
   label: "2026 Season",

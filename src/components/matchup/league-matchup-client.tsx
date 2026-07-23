@@ -10,7 +10,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { MotionReveal } from "@/components/ui/motion-reveal";
 import { getButtonClassName } from "@/components/ui/button";
 import { ClassicMatchupStoryboard } from "@/features/matchup/components/classic-matchup-storyboard";
-import { SalaryCapMatchupPlaceholder } from "@/features/matchup/components/salary-cap-matchup-placeholder";
+import { SalaryCapLeaderboard } from "@/features/matchup/components/salary-cap-leaderboard";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { useSwipe } from "@/hooks/use-swipe";
 import { buildLeagueLinks } from "@/lib/league-links";
@@ -18,6 +18,7 @@ import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import type {
   FantasyLeagueDetails,
   FantasyLeagueMatchupState,
+  FantasySalaryCapLeaderboardState,
 } from "@/types/fantasy";
 
 export interface LeagueMatchupClientProps {
@@ -32,6 +33,8 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [leagueDetails, setLeagueDetails] = useState<FantasyLeagueDetails | null>(null);
   const [matchupState, setMatchupState] = useState<FantasyLeagueMatchupState | null>(null);
+  const [salaryCapLeaderboard, setSalaryCapLeaderboard] =
+    useState<FantasySalaryCapLeaderboardState | null>(null);
   const switchWeekRef = useRef<(direction: -1 | 1) => void>(() => {});
 
   const swipeRef = useSwipe<HTMLDivElement>({
@@ -83,9 +86,15 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
 
       if (!hasClassicMatchupWindow) {
         setMatchupState(null);
+        setSalaryCapLeaderboard(
+          modeConfig.usesSalaryCap
+            ? await dataClient.loadSalaryCapLeaderboard(leagueId)
+            : null
+        );
         return;
       }
 
+      setSalaryCapLeaderboard(null);
       setMatchupState(await dataClient.loadLeagueMatchup(leagueId));
     } catch (loadError) {
       setError(
@@ -141,9 +150,19 @@ export function LeagueMatchupClient({ leagueId }: LeagueMatchupClientProps) {
         const modeConfig = getFantasyModeConfig(leagueDetails.league);
 
         if (modeConfig.usesSalaryCap) {
+          if (!salaryCapLeaderboard) {
+            return (
+              <EmptyState
+                description="Loading submitted entries and official slate scores."
+                title="Loading leaderboard"
+              />
+            );
+          }
+
           return (
             <MotionReveal>
-              <SalaryCapMatchupPlaceholder
+              <SalaryCapLeaderboard
+                leaderboard={salaryCapLeaderboard}
                 modeDescription={`${modeConfig.label} tracks entry results and slate movement instead of one-on-one weekly matchups.`}
                 playersHref={links.players}
                 teamHref={links.team}

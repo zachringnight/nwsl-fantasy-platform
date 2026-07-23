@@ -949,7 +949,7 @@ export function SalaryCapEntryBuilder({
                               </p>
                               <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
                                 {selectedPlayer
-                                  ? `${selectedPlayer.position} • ${selectedPlayer.club_name}`
+                                  ? `${selectedPlayer.position} • ${selectedPlayer.club_name}${selectedPlayer.availability !== "available" ? ` • ${selectedPlayer.availability}` : ""}`
                                   : `${eligiblePlayers.length} eligible players`}
                               </p>
                             </div>
@@ -974,6 +974,7 @@ export function SalaryCapEntryBuilder({
                               <option key={player.id} value={player.id}>
                                 {player.display_name} • {player.club_name} • ${player.salary_cost} •{" "}
                                 {formatPoints(player.average_points)} pts
+                                {player.availability === "questionable" ? " • QUESTIONABLE" : ""}
                               </option>
                             ))}
                           </select>
@@ -1056,7 +1057,7 @@ export function SalaryCapEntryBuilder({
                       {focusedPlayer.display_name}
                     </p>
                     <p className="text-sm text-muted">
-                      {focusedPlayer.position} • {focusedPlayer.club_name}
+                      {focusedPlayer.position} • {focusedPlayer.club_name} • {focusedPlayer.availability}
                     </p>
                   </div>
                   <div className="text-right text-sm text-muted">
@@ -1103,6 +1104,7 @@ export function SalaryCapEntryBuilder({
                         </p>
                         <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
                           {player.position} • {player.club_name}
+                          {player.availability !== "available" ? ` • ${player.availability}` : ""}
                         </p>
                       </div>
                       <div className="text-right text-sm text-muted">
@@ -1122,13 +1124,15 @@ export function SalaryCapEntryBuilder({
                       ) : null}
                       <button
                         className="rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white"
-                        disabled={!canEditEntry}
+                        disabled={!canEditEntry || player.availability === "out"}
                         onClick={() => {
                           handleQuickAdd(player);
                         }}
                         type="button"
                       >
-                        {buildSalaryCapActionLabel(player, currentSelections)}
+                        {player.availability === "out"
+                          ? "Unavailable"
+                          : buildSalaryCapActionLabel(player, currentSelections)}
                       </button>
                       <Link
                         href={`/players/${player.id}`}

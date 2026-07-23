@@ -70,6 +70,22 @@ export default function NotificationsPage() {
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [notifications, setNotifications] = useState<InAppNotification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const preferencesStorageKey = user?.id
+    ? `fantasy-notification-preferences:${user.id}`
+    : null;
+
+  useEffect(() => {
+    if (!preferencesStorageKey) return;
+
+    const saved = window.localStorage.getItem(preferencesStorageKey);
+    if (!saved) return;
+
+    try {
+      setPreferences(JSON.parse(saved) as NotificationPreference[]);
+    } catch {
+      window.localStorage.removeItem(preferencesStorageKey);
+    }
+  }, [preferencesStorageKey]);
 
   const fetchNotifications = useCallback(async () => {
     if (!user?.id) {
@@ -141,7 +157,8 @@ export default function NotificationsPage() {
 
   function toggleChannel(prefId: string, channel: NotificationChannel) {
     setPreferences((prev) =>
-      prev.map((pref) => {
+      {
+        const next = prev.map((pref) => {
         if (pref.id !== prefId) return pref;
         const hasChannel = pref.channels.includes(channel);
         return {
@@ -150,7 +167,17 @@ export default function NotificationsPage() {
             ? pref.channels.filter((c) => c !== channel)
             : [...pref.channels, channel],
         };
-      })
+        });
+
+        if (preferencesStorageKey) {
+          window.localStorage.setItem(
+            preferencesStorageKey,
+            JSON.stringify(next)
+          );
+        }
+
+        return next;
+      }
     );
   }
 

@@ -2,12 +2,18 @@
 
 Execution handoff for the packet graph in this directory. Grounded in a 7-lens discovery pass (`wf_47d50fb7-eed`) plus live verification against the actual Supabase project (`PrizmLounge`, `rnfvmqflktghriqefatc`).
 
+## Execution status
+
+Completed on `codex/fantasy-dfs-wave0`. See `VERIFICATION_SUMMARY.md` for the
+release gate, runtime smoke notes, and the exact boundary between real
+functionality and documented follow-up work.
+
 ## What this is
 
 - `manifest.md`: goal, out-of-scope list, architecture facts, decision record, task index with waves.
 - `packets/01-14`: one self-contained task per file.
 - `RLS_SECURITY_NOTE.md`: an unrelated security finding surfaced during verification (33 tables with RLS disabled, belonging to other apps in the shared Supabase project) — explicitly out of scope for this build, not acted on.
-- Review status: pending a 4-lens adversarial pass (same pattern used for the model-lab plan) before execution — see whether `REVIEW_NOTES.md` exists in this directory; if not, the review hasn't landed yet and packets may still need amendment before a full execution run.
+- Review status: the 4-lens adversarial pass landed in `REVIEW_NOTES.md` before execution.
 
 ## Preflight
 

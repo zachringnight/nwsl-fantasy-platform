@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "tmp/**",
+    "nwsl-model/data/raw/**",
   ]),
 ]);
 

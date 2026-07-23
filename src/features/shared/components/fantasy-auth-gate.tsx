@@ -6,6 +6,7 @@ import {
   useFantasyAuth,
   type FantasyAuthContextValue,
 } from "@/components/providers/fantasy-auth-provider";
+import { isAdminEmail } from "@/lib/admin";
 
 type ReadyFantasyAuthContext = FantasyAuthContextValue & {
   profile: NonNullable<FantasyAuthContextValue["profile"]>;
@@ -18,10 +19,13 @@ export interface FantasyAuthGateProps {
   onboardingAction?: ReactNode;
   onboardingDescription?: string;
   onboardingTitle?: string;
+  requireAdmin?: boolean;
   requireOnboarding?: boolean;
   signedOutAction?: ReactNode;
   signedOutDescription: string;
   signedOutTitle: string;
+  unauthorizedDescription?: string;
+  unauthorizedTitle?: string;
   unavailableDescription?: string;
   unavailableTitle?: string;
 }
@@ -33,10 +37,13 @@ export function FantasyAuthGate({
   onboardingAction,
   onboardingDescription = "Finish onboarding before using this screen.",
   onboardingTitle = "Finish onboarding first",
+  requireAdmin = false,
   requireOnboarding = true,
   signedOutAction,
   signedOutDescription,
   signedOutTitle,
+  unauthorizedDescription = "Your account isn't on the admin allowlist for this screen.",
+  unauthorizedTitle = "Not authorized",
   unavailableDescription = "Account services are temporarily unavailable. Try again in a moment.",
   unavailableTitle = "Something went wrong",
 }: FantasyAuthGateProps) {
@@ -63,6 +70,12 @@ export function FantasyAuthGate({
         description={onboardingDescription}
         title={onboardingTitle}
       />
+    );
+  }
+
+  if (requireAdmin && !isAdminEmail(auth.user?.email ?? auth.profile.email)) {
+    return (
+      <EmptyState description={unauthorizedDescription} title={unauthorizedTitle} />
     );
   }
 

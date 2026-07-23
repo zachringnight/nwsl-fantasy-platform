@@ -1,68 +1,30 @@
 import type { JobDefinition, JobContext, JobResult } from "@/types/jobs";
-import { prisma } from "@/lib/prisma";
-import { calculateFantasyScore, type StatLineInput } from "@/lib/scoring/scoring-engine";
+import { ingestMatchStats } from "@/lib/scoring/match-stat-ingest";
 
 async function run(context: JobContext): Promise<JobResult> {
   const jobId = "fantasy-scoring";
+  const matchId = String(context.params?.matchId ?? "");
+  const seasonId = String(context.params?.seasonId ?? "");
 
-  // Find all stat lines from live or recently final fixtures that need scoring
-  const unscoredStatLines = await prisma.playerMatchStatLine.findMany({
-    where: {
-      fixture: {
-        status: { in: ["LIVE", "FINAL"] },
-      },
-    },
-    include: {
-      fixture: true,
-      player: { select: { primaryPosition: true } },
-    },
-    take: 500,
-  });
-
-  if (unscoredStatLines.length === 0) {
-    return {
-      jobId,
-      status: "skipped",
-      summary: "No stat lines to score.",
-    };
+  if (!matchId || !seasonId) {
+    throw new Error(
+      "fantasy-scoring requires params.matchId and params.seasonId"
+    );
   }
 
-  let scored = 0;
-
-  for (const statLine of unscoredStatLines) {
-    const input: StatLineInput = {
-      position: statLine.player.primaryPosition,
-      minutes: statLine.minutes,
-      goals: statLine.goals,
-      assists: statLine.assists,
-      cleanSheet: statLine.cleanSheet,
-      saves: statLine.saves,
-      goalsConceded: statLine.goalsConceded,
-      yellowCards: statLine.yellowCards,
-      redCards: statLine.redCards,
-      penaltySaves: statLine.penaltySaves,
-      penaltyMisses: statLine.penaltyMisses,
-    };
-
-    calculateFantasyScore(input);
-
-    // The actual FantasyPointSnapshot upsert requires leagueId and leagueWeekId.
-    // In a full implementation, we would look up which leagues/weeks reference
-    // this fixture and create per-league snapshots.
-    // For now, we verify that scoring completes without error.
-    scored++;
-  }
+  const result = await ingestMatchStats(matchId, seasonId);
 
   return {
     jobId,
     status: "success",
-    summary: `Scored ${scored} player stat lines. Started at ${context.startedAt}.`,
+    summary: `Persisted ${result.statsWritten} stat lines and ${result.snapshotsComputed} point snapshots for ${matchId}.`,
   };
 }
 
 export const fantasyScoringJob: JobDefinition = {
   id: "fantasy-scoring",
-  description: "Calculate fantasy points from player stat lines and write FantasyPointSnapshot records.",
-  frequency: "every 2 minutes during live matches, once after final",
+  description:
+    "Ingest one official NWSL match and persist real fantasy point snapshots.",
+  frequency: "manual after lineup publication and again after final",
   run,
 };

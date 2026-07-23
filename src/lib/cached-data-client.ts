@@ -78,6 +78,7 @@ export const cachedFantasyDataClient: FantasyDataClient = {
   loadMyLeagues: withDedup("loadMyLeagues", supabaseFantasyDataClient.loadMyLeagues),
   loadRosterState: withDedup("loadRosterState", supabaseFantasyDataClient.loadRosterState),
   loadSalaryCapEntryState: withDedup("loadSalaryCapEntryState", supabaseFantasyDataClient.loadSalaryCapEntryState),
+  loadSalaryCapLeaderboard: withDedup("loadSalaryCapLeaderboard", supabaseFantasyDataClient.loadSalaryCapLeaderboard),
   loadDraftState: withDedup("loadDraftState", supabaseFantasyDataClient.loadDraftState),
   loadTransactionHub: withDedup("loadTransactionHub", supabaseFantasyDataClient.loadTransactionHub),
   fetchCurrentProfile: withDedup("fetchCurrentProfile", supabaseFantasyDataClient.fetchCurrentProfile),

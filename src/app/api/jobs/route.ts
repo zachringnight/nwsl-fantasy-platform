@@ -26,7 +26,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = (await request.json()) as { jobId?: string };
+  const body = (await request.json()) as {
+    jobId?: string;
+    params?: Record<string, unknown>;
+  };
 
   if (!body.jobId) {
     return NextResponse.json({ error: "Missing jobId" }, { status: 400 });
@@ -45,6 +48,7 @@ export async function POST(request: Request) {
     const result = await job.run({
       startedAt: new Date().toISOString(),
       requestedBy: "api",
+      params: body.params,
     });
 
     return NextResponse.json(result);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useDeferredValue, useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useDeferredValue, useCallback, useEffect, useRef, useState } from "react";
 import { Activity, AlarmClockCheck, PlayCircle, ShieldAlert, Sparkles } from "lucide-react";
 import { useDraftRealtime } from "@/hooks/use-draft-realtime";
 import { DraftBoard } from "@/components/draft/draft-board";
@@ -59,7 +59,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const pickPulseTimeoutRef = useRef<number | null>(null);
   const queuePulseTimeoutRef = useRef<number | null>(null);
 
-  const refreshDraftState = useEffectEvent(async () => {
+  const refreshDraftState = useCallback(async () => {
     if (!session || !profile?.onboarding_complete) {
       setDraftState(null);
       setIsLoading(false);
@@ -80,11 +80,11 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     } finally {
       setIsLoading(false);
     }
-  });
+  }, [dataClient, leagueId, profile?.onboarding_complete, session]);
 
   useEffect(() => {
     void refreshDraftState();
-  }, [dataClient, leagueId, profile?.onboarding_complete, session?.user.id]);
+  }, [refreshDraftState]);
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
@@ -104,7 +104,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       if (document.visibilityState === "visible") {
         void refreshDraftState();
       }
-    }, []),
+    }, [refreshDraftState]),
   });
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       window.removeEventListener("focus", refreshIfVisible);
       document.removeEventListener("visibilitychange", refreshIfVisible);
     };
-  }, [draftStatus, profile?.onboarding_complete, session]);
+  }, [draftStatus, profile?.onboarding_complete, refreshDraftState, session]);
 
   useEffect(() => {
     if (!draftState) {

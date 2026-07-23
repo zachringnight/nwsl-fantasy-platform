@@ -218,6 +218,7 @@ export interface FantasyStandingRecord {
   points_against: number;
   win_pct: number;
   projected_points: number;
+  is_approximated: boolean;
 }
 
 export interface FantasyStandingsState {
@@ -308,6 +309,34 @@ export interface FantasySalaryCapEntrySlotRecord {
   updated_at: string;
 }
 
+export interface FantasySalaryCapLeaderboardEntry {
+  rank: number;
+  entry_id: string;
+  user_id: string;
+  entry_name: string;
+  manager_name: string;
+  total_points: number;
+  is_approximated: boolean;
+  score_status: "projected" | "live" | "final";
+  top_scorer: string | null;
+}
+
+export interface FantasySalaryCapScoreDriver {
+  player_id: string;
+  player_name: string;
+  player_position: PlayerPosition;
+  points: number;
+  is_approximated: boolean;
+}
+
+export interface FantasySalaryCapLeaderboardState {
+  league: FantasyLeagueRecord;
+  slate: FantasySlateWindow;
+  current_user_id: string;
+  entries: FantasySalaryCapLeaderboardEntry[];
+  score_drivers: FantasySalaryCapScoreDriver[];
+}
+
 export interface FantasySalaryCapEntrySlot {
   lineup_slot: FantasySalaryCapLineupSlot;
   player: FantasyPoolPlayer | null;
@@ -381,6 +410,7 @@ export interface FantasyLeagueMatchupState {
   event_feed: FantasyMatchupEvent[];
   home_contributions: FantasyMatchupContribution[];
   away_contributions: FantasyMatchupContribution[];
+  is_approximated: boolean;
 }
 
 export interface DemoLeague {

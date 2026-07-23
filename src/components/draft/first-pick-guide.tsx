@@ -28,7 +28,7 @@ const GUIDE_STEPS = [
     icon: Clock,
     title: "Watch the clock",
     description:
-      "Each pick has a time limit. If time runs out, autopick selects the best available player for you.",
+      "Each pick has a time limit. If it expires, the active manager or commissioner can use the Autopick button to select the best legal player.",
   },
 ] as const;
 

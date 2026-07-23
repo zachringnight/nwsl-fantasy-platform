@@ -13,9 +13,19 @@ import {
   getFantasyPlayerPool,
 } from "@/lib/fantasy-player-pool";
 import {
-  buildSimulatedMatchup,
-  buildSimulatedStandings,
-} from "@/lib/fantasy-season-sim";
+  buildRealMatchup,
+  buildRealStandings,
+  buildWeekResults,
+  type FantasyPointSnapshot,
+} from "@/lib/fantasy-standings";
+import {
+  awardAchievement,
+  updateStreak,
+} from "@/lib/fantasy-achievements";
+import {
+  applyScoringOverrides,
+  type FantasyScoringOverride,
+} from "@/lib/fantasy-scoring-overrides";
 import {
   buildSalaryCapAutofillSelections,
   buildSalaryCapEntrySummary,
@@ -24,6 +34,7 @@ import {
   isSalaryCapEntryLocked,
   salaryCapLineupSlots,
 } from "@/lib/fantasy-salary-cap";
+import { buildSalaryCapLeaderboard } from "@/lib/fantasy-leaderboard";
 import {
   getFantasyLeagueModeFields,
   getFantasyModeConfig,
@@ -32,8 +43,14 @@ import {
   getFantasyDefaultLockAt,
   getFantasySlateWindows,
   getFantasyTargetSlate,
+  getFantasyWeeklySlateWindows,
 } from "@/lib/fantasy-slate-engine";
+import {
+  assertClassicLineupUnlocked,
+  buildClassicLineupLockState,
+} from "@/lib/fantasy-lineup-lock";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { queueNotification } from "@/lib/notifications/client";
 import type {
   FantasyDraftPickRecord,
   FantasyDraftQueueItemRecord,
@@ -55,6 +72,7 @@ import type {
   FantasySalaryCapEntryRecord,
   FantasySalaryCapEntrySlotRecord,
   FantasySalaryCapEntryState,
+  FantasySalaryCapLeaderboardState,
   FantasySalaryCapLineupSlot,
   FantasySlateWindow,
   FantasyStandingsState,
@@ -308,6 +326,54 @@ async function fetchRostersForLeague(leagueId: string) {
   }
 
   return (data ?? []) as FantasyRosterSlotRecord[];
+}
+
+async function fetchFantasyPointSnapshots(from: string, to: string) {
+  const supabase = getSupabaseBrowserClient();
+  const { data, error } = await supabase
+    .from("fantasy_point_snapshots")
+    .select(
+      "player_id, match_id, match_date_utc, points, breakdown, is_approximated"
+    )
+    .gte("match_date_utc", from)
+    .lte("match_date_utc", to);
+
+  if (error) {
+    throw new Error(
+      assertErrorMessage(error, "Unable to load official fantasy scores.")
+    );
+  }
+
+  const snapshots = (data ?? []).map((row) => ({
+    player_id: row.player_id as string,
+    match_id: row.match_id as string,
+    match_date_utc: row.match_date_utc as string,
+    points: Number(row.points),
+    breakdown: (row.breakdown as Record<string, number>) ?? {},
+    is_approximated: Boolean(row.is_approximated),
+  })) satisfies FantasyPointSnapshot[];
+  const matchIds = [...new Set(snapshots.map((snapshot) => snapshot.match_id))];
+
+  if (matchIds.length === 0) return snapshots;
+
+  const { data: overrides, error: overrideError } = await supabase
+    .from("fantasy_scoring_overrides")
+    .select(
+      "id, player_id, player_name, match_id, original_points, corrected_points, reason, status, created_by, created_at"
+    )
+    .in("match_id", matchIds)
+    .order("created_at", { ascending: true });
+
+  if (overrideError) {
+    throw new Error(
+      assertErrorMessage(overrideError, "Unable to load scoring corrections.")
+    );
+  }
+
+  return applyScoringOverrides(
+    snapshots,
+    (overrides ?? []) as FantasyScoringOverride[]
+  );
 }
 
 async function fetchSalaryCapEntryForUser(
@@ -799,6 +865,7 @@ async function writeLineupAssignments(
   assignments: Map<string, FantasyLineupSlot | null>
 ) {
   const supabase = getSupabaseBrowserClient();
+  assertClassicLineupUnlocked(await loadClassicLineupLockState());
 
   if (roster.length === 0) {
     throw new Error("No roster found. Draft or claim players before setting a lineup.");
@@ -854,6 +921,34 @@ async function writeLineupAssignments(
       throw new Error(assertErrorMessage(error, "Unable to save the lineup."));
     }
   }
+}
+
+async function loadClassicLineupLockState(now = new Date()) {
+  const supabase = getSupabaseBrowserClient();
+  const weekWindows = getFantasyWeeklySlateWindows();
+  const window =
+    weekWindows.find(
+      (candidate) => new Date(candidate.ends_at).getTime() >= now.getTime()
+    ) ?? weekWindows[weekWindows.length - 1]!;
+  const { data, error } = await supabase
+    .from("fantasy_player_match_stats")
+    .select("match_date_utc")
+    .gte("match_date_utc", window.starts_at)
+    .lte("match_date_utc", window.ends_at)
+    .order("match_date_utc", { ascending: true })
+    .limit(1);
+
+  if (error) {
+    throw new Error(
+      assertErrorMessage(error, "Unable to verify the lineup lock window.")
+    );
+  }
+
+  return buildClassicLineupLockState(
+    window,
+    (data?.[0]?.match_date_utc as string | undefined) ?? null,
+    now
+  );
 }
 
 async function recordDraftPick(
@@ -922,6 +1017,19 @@ async function recordDraftPick(
     throw new Error(assertErrorMessage(pickError, "Unable to record that draft pick."));
   }
 
+  if (
+    !picks.some(
+      (pick) => pick.manager_user_id === currentTurn.membership!.user_id
+    )
+  ) {
+    await awardAchievement(
+      currentTurn.membership.user_id,
+      "FIRST_DRAFT_PICK",
+      leagueId,
+      { overallPick: currentTurn.overallPick }
+    );
+  }
+
   const { error: rosterError } = await supabase.from("fantasy_roster_slots").insert({
     league_id: leagueId,
     user_id: currentTurn.membership.user_id,
@@ -961,6 +1069,38 @@ async function recordDraftPick(
       started_at: draft.started_at ?? new Date().toISOString(),
       paused_at: null,
     });
+
+    const nextTurn = buildSnakeTurn(
+      orderedMemberships,
+      picks.length + 2,
+      draft.total_rounds
+    );
+
+    if (nextTurn?.membership) {
+      const { data: nextProfile } = await supabase
+        .from("fantasy_profiles")
+        .select("email, display_name")
+        .eq("user_id", nextTurn.membership.user_id)
+        .maybeSingle();
+      const appUrl = window.location.origin;
+
+      void queueNotification({
+        userId: nextTurn.membership.user_id,
+        leagueId,
+        type: "DRAFT_STARTING",
+        title: "You are on the clock",
+        body: `Pick #${nextTurn.overallPick} in ${league.name} is ready.`,
+        channels: nextProfile?.email ? ["in_app", "email"] : ["in_app"],
+        emailPayload: nextProfile?.email
+          ? {
+              to: nextProfile.email,
+              subject: `${league.name}: your pick #${nextTurn.overallPick} is ready`,
+              text: `Your turn to pick in ${league.name}.`,
+              html: `<p>Hey ${nextProfile.display_name ?? "manager"}, your turn to pick in <strong>${league.name}</strong> is ready.</p><p><a href="${appUrl}/league/${leagueId}/draft">Open the draft room</a></p>`,
+            }
+          : undefined,
+      }).catch(() => undefined);
+    }
   }
 }
 
@@ -1475,47 +1615,173 @@ export async function loadLeagueStandings(leagueId: string) {
   const { league, memberships } = await fetchLeagueContext(leagueId);
   assertClassicLeagueMode(league, "Standings");
   const rosterSlots = await fetchRostersForLeague(leagueId);
-  const rostersByUserId = new Map<string, FantasyRosterPlayer[]>();
+  const weekWindows = getFantasyWeeklySlateWindows();
+  const snapshots = await fetchFantasyPointSnapshots(
+    weekWindows[0]!.starts_at,
+    weekWindows[weekWindows.length - 1]!.ends_at
+  );
+  const real = buildRealStandings(
+    memberships,
+    rosterSlots,
+    snapshots,
+    weekWindows
+  );
 
-  memberships.forEach((membership) => {
-    rostersByUserId.set(
-      membership.user_id,
-      hydrateRosterPlayers(
-        rosterSlots.filter((slot) => slot.user_id === membership.user_id)
-      )
-    );
-  });
-
-  const simulated = buildSimulatedStandings(memberships, rostersByUserId);
+  const latestCompletedWeek = real.completedWeekNumbers.at(-1);
+  if (latestCompletedWeek) {
+    await settleLeagueWeek(leagueId, latestCompletedWeek).catch(() => undefined);
+  }
 
   return {
     league,
-    completed_weeks: simulated.completedWeeks,
+    completed_weeks: real.completedWeeks,
     playoff_cutoff: Math.min(4, memberships.length),
-    standings: simulated.standings,
+    standings: real.standings,
   } satisfies FantasyStandingsState;
+}
+
+export async function settleLeagueWeek(leagueId: string, weekNumber: number) {
+  const supabase = getSupabaseBrowserClient();
+  const weekWindows = getFantasyWeeklySlateWindows();
+  const weekIndex = weekNumber - 1;
+  const window = weekWindows[weekIndex];
+
+  if (!window) throw new Error(`Unknown fantasy week: ${weekNumber}`);
+
+  const { data: existing, error: existingError } = await supabase
+    .from("fantasy_week_settlements")
+    .select("results")
+    .eq("league_id", leagueId)
+    .eq("week_key", window.key)
+    .maybeSingle();
+
+  if (existingError) {
+    throw new Error(
+      assertErrorMessage(existingError, "Unable to inspect week settlement.")
+    );
+  }
+
+  if (existing) {
+    return {
+      alreadySettled: true,
+      results: existing.results,
+    };
+  }
+
+  if (Date.now() <= new Date(window.ends_at).getTime()) {
+    throw new Error(`${window.label} has not ended yet.`);
+  }
+
+  const { memberships } = await fetchLeagueContext(leagueId);
+  const rosterSlots = await fetchRostersForLeague(leagueId);
+  const snapshots = await fetchFantasyPointSnapshots(
+    window.starts_at,
+    window.ends_at
+  );
+
+  if (snapshots.length === 0) {
+    throw new Error(`${window.label} has no official snapshots to settle.`);
+  }
+
+  const results = buildWeekResults(
+    memberships,
+    rosterSlots,
+    snapshots,
+    window,
+    weekIndex
+  );
+  const { error: insertError } = await supabase
+    .from("fantasy_week_settlements")
+    .insert({
+      league_id: leagueId,
+      week_key: window.key,
+      results,
+    });
+
+  if (insertError) {
+    const { data: racedSettlement } = await supabase
+      .from("fantasy_week_settlements")
+      .select("results")
+      .eq("league_id", leagueId)
+      .eq("week_key", window.key)
+      .maybeSingle();
+
+    if (racedSettlement) {
+      return { alreadySettled: true, results: racedSettlement.results };
+    }
+    throw new Error(
+      assertErrorMessage(insertError, "Unable to settle the fantasy week.")
+    );
+  }
+
+  const topPoints = Math.max(...results.map((result) => result.points));
+  await Promise.allSettled(
+    results.flatMap((result) => {
+      const tasks: Promise<unknown>[] = [
+        updateStreak(
+          result.user_id,
+          leagueId,
+          result.membership_id,
+          "matchup_wins",
+          result.won
+        ),
+      ];
+
+      if (result.points >= 100) {
+        tasks.push(
+          awardAchievement(
+            result.user_id,
+            "POINTS_100_WEEK",
+            leagueId,
+            { week: weekNumber, points: result.points }
+          )
+        );
+      }
+      if (result.points >= 150) {
+        tasks.push(
+          awardAchievement(
+            result.user_id,
+            "POINTS_150_WEEK",
+            leagueId,
+            { week: weekNumber, points: result.points }
+          )
+        );
+      }
+      if (result.points === topPoints) {
+        tasks.push(
+          awardAchievement(
+            result.user_id,
+            "TOP_SCORER_WEEK",
+            leagueId,
+            { week: weekNumber, points: result.points }
+          )
+        );
+      }
+
+      return tasks;
+    })
+  );
+
+  return { alreadySettled: false, results };
 }
 
 export async function loadLeagueMatchup(leagueId: string, options?: { weekNumber?: number }) {
   const { league, memberships, myMembership } = await fetchLeagueContext(leagueId);
   assertClassicLeagueMode(league, "Matchup scoring");
   const rosterSlots = await fetchRostersForLeague(leagueId);
-  const rostersByUserId = new Map<string, FantasyRosterPlayer[]>();
+  const weekWindows = getFantasyWeeklySlateWindows();
+  const snapshots = await fetchFantasyPointSnapshots(
+    weekWindows[0]!.starts_at,
+    weekWindows[weekWindows.length - 1]!.ends_at
+  );
 
-  memberships.forEach((membership) => {
-    rostersByUserId.set(
-      membership.user_id,
-      hydrateRosterPlayers(
-        rosterSlots.filter((slot) => slot.user_id === membership.user_id)
-      )
-    );
-  });
-
-  return buildSimulatedMatchup(
+  return buildRealMatchup(
     league,
     myMembership,
     memberships,
-    rostersByUserId,
+    rosterSlots,
+    snapshots,
+    weekWindows,
     options?.weekNumber
   ) satisfies FantasyLeagueMatchupState;
 }
@@ -1541,6 +1807,69 @@ export async function loadSalaryCapEntryState(
     entry,
     slotRecords
   );
+}
+
+export async function loadSalaryCapLeaderboard(
+  leagueId: string,
+  options?: { slateKey?: string }
+) {
+  const supabase = getSupabaseBrowserClient();
+  const { user, league, memberships } = await fetchLeagueContext(leagueId);
+  assertSalaryCapLeagueMode(league, "Salary-cap leaderboard");
+  const slate = resolveSalaryCapSlate(league, options?.slateKey);
+  const { data: entries, error: entryError } = await supabase
+    .from("fantasy_salary_cap_entries")
+    .select(
+      "id, league_id, user_id, slate_key, entry_name, status, salary_spent, submitted_at, created_at, updated_at"
+    )
+    .eq("league_id", leagueId)
+    .eq("slate_key", slate.key)
+    .eq("status", "submitted");
+
+  if (entryError) {
+    throw new Error(
+      assertErrorMessage(entryError, "Unable to load submitted entries.")
+    );
+  }
+
+  const entryIds = (entries ?? []).map((entry) => entry.id as string);
+  let slots: FantasySalaryCapEntrySlotRecord[] = [];
+
+  if (entryIds.length > 0) {
+    const { data, error } = await supabase
+      .from("fantasy_salary_cap_entry_slots")
+      .select(
+        "id, entry_id, league_id, user_id, lineup_slot, player_id, player_name, player_position, club_name, salary_cost, created_at, updated_at"
+      )
+      .in("entry_id", entryIds);
+
+    if (error) {
+      throw new Error(
+        assertErrorMessage(error, "Unable to load leaderboard lineups.")
+      );
+    }
+    slots = (data ?? []) as FantasySalaryCapEntrySlotRecord[];
+  }
+
+  const snapshots = await fetchFantasyPointSnapshots(
+    slate.starts_at,
+    slate.ends_at
+  );
+  const leaderboard = buildSalaryCapLeaderboard(
+    (entries ?? []) as FantasySalaryCapEntryRecord[],
+    slots,
+    memberships,
+    snapshots,
+    slate
+  );
+
+  return {
+    league,
+    slate,
+    current_user_id: user.id,
+    entries: leaderboard.entries,
+    score_drivers: leaderboard.scoreDrivers,
+  } satisfies FantasySalaryCapLeaderboardState;
 }
 
 export async function saveSalaryCapEntry(
@@ -2018,6 +2347,27 @@ export async function processWaiverClaims(leagueId: string) {
     await updateMembershipWaiverPriorities(leagueId, currentMemberships);
   }
 
+  const processedClaimIds = new Set(pendingClaims.map((claim) => claim.id));
+  const resolvedClaims = (
+    await fetchWaiverClaimsForLeague(leagueId, ["won", "lost"])
+  ).filter((claim) => processedClaimIds.has(claim.id));
+
+  await Promise.allSettled(
+    resolvedClaims.map((claim) =>
+      queueNotification({
+        userId: claim.user_id,
+        leagueId,
+        type: "WAIVER_PROCESSED",
+        title: `Waiver claim ${claim.status}`,
+        body:
+          claim.status === "won"
+            ? `${claim.requested_player_name} was added to your roster.`
+            : `Your claim for ${claim.requested_player_name} was not successful.`,
+        channels: ["in_app"],
+      })
+    )
+  );
+
   return loadTransactionHub(leagueId);
 }
 
@@ -2324,6 +2674,7 @@ export async function loadRosterState(leagueId: string) {
   const draft = await ensureDraftRecord(leagueId, league.commissioner_user_id, user.id);
   const picks = await fetchDraftPicks(leagueId);
   const roster = hydrateRosterPlayers(await fetchRosterForUser(leagueId, user.id));
+  const lineupLock = await loadClassicLineupLockState();
 
   return {
     league,
@@ -2331,6 +2682,7 @@ export async function loadRosterState(leagueId: string) {
     picks,
     roster,
     availablePlayers: buildAvailablePlayers(picks),
+    lineupLock,
   };
 }
 

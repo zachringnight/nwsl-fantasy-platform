@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { FantasyDataProvider, useFantasyDataClient } from "./fantasy-data-provider";
+import type { FantasyDataClient } from "@/lib/fantasy-data-client";
 
 vi.mock("@/lib/cached-data-client", () => ({
   cachedFantasyDataClient: { fetchCurrentProfile: vi.fn() },
@@ -22,7 +23,9 @@ describe("FantasyDataProvider", () => {
   });
 
   it("provides custom client when passed", () => {
-    const customClient = { fetchCurrentProfile: vi.fn() } as any;
+    const customClient = {
+      fetchCurrentProfile: vi.fn(),
+    } as unknown as FantasyDataClient;
     render(
       <FantasyDataProvider client={customClient}>
         <TestConsumer />

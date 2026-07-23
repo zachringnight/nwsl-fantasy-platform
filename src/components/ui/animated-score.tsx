@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface AnimatedScoreProps {
@@ -9,21 +9,29 @@ interface AnimatedScoreProps {
   decimals?: number;
 }
 
-export function AnimatedScore({ value, className, decimals = 1 }: AnimatedScoreProps) {
-  const [popping, setPopping] = useState(false);
-  const prevValue = useRef(value);
+export function AnimatedScore({
+  value,
+  className,
+  decimals = 1,
+}: AnimatedScoreProps) {
+  const elementRef = useRef<HTMLSpanElement>(null);
+  const previousValueRef = useRef(value);
 
   useEffect(() => {
-    if (prevValue.current !== value) {
-      setPopping(true);
-      prevValue.current = value;
-      const timer = setTimeout(() => setPopping(false), 400);
-      return () => clearTimeout(timer);
-    }
+    if (previousValueRef.current === value || !elementRef.current) return;
+
+    previousValueRef.current = value;
+    const element = elementRef.current;
+    element.classList.add("score-pop");
+    const timer = window.setTimeout(() => {
+      element.classList.remove("score-pop");
+    }, 400);
+
+    return () => window.clearTimeout(timer);
   }, [value]);
 
   return (
-    <span className={cn(popping && "score-pop", className)}>
+    <span ref={elementRef} className={cn(className)}>
       {value.toFixed(decimals)}
     </span>
   );

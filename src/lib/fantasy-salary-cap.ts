@@ -70,7 +70,10 @@ function buildCandidatePool(
   playerPool: FantasyPoolPlayer[],
   position: FantasyPoolPlayer["position"]
 ) {
-  const eligible = playerPool.filter((player) => player.position === position);
+  const eligible = playerPool.filter(
+    (player) =>
+      player.position === position && player.availability !== "out"
+  );
   const byProjection = [...eligible]
     .sort((left, right) => right.average_points - left.average_points)
     .slice(0, 8);
@@ -103,7 +106,10 @@ export function isPlayerEligibleForSalaryCapSlot(
   player: FantasyPoolPlayer,
   lineupSlot: FantasySalaryCapLineupSlot
 ) {
-  return getEligibleLineupSlots(player.position).includes(lineupSlot);
+  return (
+    player.availability !== "out" &&
+    getEligibleLineupSlots(player.position).includes(lineupSlot)
+  );
 }
 
 export function buildSalaryCapEntrySummary(
