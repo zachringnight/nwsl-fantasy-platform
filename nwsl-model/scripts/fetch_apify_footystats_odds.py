@@ -19,6 +19,7 @@ from src.odds.apify_footystats import (
     build_web_scraper_input,
     extract_text_from_apify_items,
     load_env_token,
+    merge_current_odds_contract,
     parse_footystats_odds_text,
     run_apify_web_scraper,
     update_dataset_manifest_odds,
@@ -72,8 +73,10 @@ def main() -> None:
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    contract.to_csv(output, index=False)
-    update_dataset_manifest_odds(output.parent / "dataset_manifest.json", contract)
+    existing_odds = pd.read_csv(output) if output.exists() else pd.DataFrame()
+    merged_odds = merge_current_odds_contract(existing_odds, contract)
+    merged_odds.to_csv(output, index=False)
+    update_dataset_manifest_odds(output.parent / "dataset_manifest.json", merged_odds)
 
     unmatched_output = Path(args.unmatched_output)
     if unmatched.empty:
@@ -85,7 +88,8 @@ def main() -> None:
 
     print(
         "Fetched Apify FootyStats odds: "
-        f"parsed_rows={len(parsed)} matched_rows={len(contract)} unmatched_rows={len(unmatched)} output={output}"
+        f"parsed_rows={len(parsed)} matched_rows={len(contract)} unmatched_rows={len(unmatched)} "
+        f"total_odds_rows={len(merged_odds)} output={output}"
     )
     if not unmatched.empty:
         print(f"Unmatched odds rows written to {unmatched_output}")

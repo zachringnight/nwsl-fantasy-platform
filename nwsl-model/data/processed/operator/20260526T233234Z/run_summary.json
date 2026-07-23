@@ -1,0 +1,40 @@
+{
+  "run_id": "20260526T233234Z",
+  "generated_at": "2026-05-26T23:32:34.803261+00:00",
+  "model_version": "20260526T232451Z",
+  "model_family": "spi_lite_baseline",
+  "gating_status": "baseline_fallback",
+  "fixtures": 8,
+  "calibration_applied": true,
+  "top_confidence_match_ids": [
+    "nwsl::Football_Match::f594f7fbe07945dc8ae460d92c5696f4",
+    "nwsl::Football_Match::6e288a27554f4af89fc3d08e7abdbf2b",
+    "nwsl::Football_Match::b9d827016f744de58afaee249641ed98",
+    "nwsl::Football_Match::3bd415d8b50c4025819575e1942de7db",
+    "nwsl::Football_Match::dfa52aae954d496b9673b480b577afce",
+    "nwsl::Football_Match::e64e64e55bac469b85f4ca1b7e5bf7eb",
+    "nwsl::Football_Match::2f03225824534720bc7e7ea97f5cb8b8",
+    "nwsl::Football_Match::ed19a249a6e44aecaceb54fafba6636e"
+  ],
+  "lowest_data_quality_match_ids": [
+    "nwsl::Football_Match::3bd415d8b50c4025819575e1942de7db",
+    "nwsl::Football_Match::dfa52aae954d496b9673b480b577afce",
+    "nwsl::Football_Match::e64e64e55bac469b85f4ca1b7e5bf7eb",
+    "nwsl::Football_Match::2f03225824534720bc7e7ea97f5cb8b8",
+    "nwsl::Football_Match::ed19a249a6e44aecaceb54fafba6636e",
+    "nwsl::Football_Match::b9d827016f744de58afaee249641ed98",
+    "nwsl::Football_Match::f594f7fbe07945dc8ae460d92c5696f4",
+    "nwsl::Football_Match::6e288a27554f4af89fc3d08e7abdbf2b"
+  ],
+  "largest_baseline_disagreement_match_ids": [
+    "nwsl::Football_Match::3bd415d8b50c4025819575e1942de7db",
+    "nwsl::Football_Match::dfa52aae954d496b9673b480b577afce",
+    "nwsl::Football_Match::e64e64e55bac469b85f4ca1b7e5bf7eb",
+    "nwsl::Football_Match::2f03225824534720bc7e7ea97f5cb8b8",
+    "nwsl::Football_Match::f594f7fbe07945dc8ae460d92c5696f4",
+    "nwsl::Football_Match::ed19a249a6e44aecaceb54fafba6636e",
+    "nwsl::Football_Match::6e288a27554f4af89fc3d08e7abdbf2b",
+    "nwsl::Football_Match::b9d827016f744de58afaee249641ed98"
+  ],
+  "output_dir": "data/processed/operator/20260526T233234Z"
+}

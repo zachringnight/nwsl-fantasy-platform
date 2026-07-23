@@ -1,0 +1,31 @@
+{
+  "files": {
+    "asa_match_xgoals": "data/raw/asa_match_xgoals.csv",
+    "asa_player_analytics": "data/raw/asa_player_analytics.csv",
+    "asa_team_analytics": "data/raw/asa_team_analytics.csv"
+  },
+  "generated_at": "2026-05-26T17:16:18.131452+00:00",
+  "rows": {
+    "match_xgoals": 275,
+    "player_analytics": 680,
+    "team_analytics": 30
+  },
+  "season_counts": {
+    "match_xgoals": {
+      "2025": 190,
+      "2026": 85
+    },
+    "player_analytics": {
+      "2025": 341,
+      "2026": 339
+    },
+    "team_analytics": {
+      "2025": 14,
+      "2026": 16
+    }
+  },
+  "seasons": [
+    2025,
+    2026
+  ]
+}

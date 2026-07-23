@@ -83,6 +83,24 @@ def test_build_candidate_config_sets_regularization_and_fit_overrides() -> None:
     assert candidate_config["bivariate_poisson"]["lambda3_regularization"] == 3000.0
 
 
+def test_build_candidate_config_can_separate_team_and_contextual_regularization() -> None:
+    candidate_config = build_candidate_config(
+        base_config={"backtest": {}},
+        regularization=250.0,
+        contextual_regularization=3000.0,
+        score_shape_regularization=1500.0,
+        step_size=28,
+        max_iter=125,
+    )
+
+    assert candidate_config["dixon_coles"]["regularization"] == 250.0
+    assert candidate_config["dixon_coles"]["contextual_regularization"] == 3000.0
+    assert candidate_config["dixon_coles"]["rho_regularization"] == 1500.0
+    assert candidate_config["bivariate_poisson"]["regularization"] == 250.0
+    assert candidate_config["bivariate_poisson"]["contextual_regularization"] == 3000.0
+    assert candidate_config["bivariate_poisson"]["lambda3_regularization"] == 1500.0
+
+
 def test_backtest_runner_consumes_candidate_dixon_coles_regularization_and_fit() -> None:
     candidate_config = build_candidate_config(
         base_config={"model": {"max_goals": 8}, "backtest": {"fit": {"common": {"tol": 1e-6}}}},

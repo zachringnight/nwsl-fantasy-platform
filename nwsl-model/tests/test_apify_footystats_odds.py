@@ -7,6 +7,7 @@ import pandas as pd
 
 from src.odds.apify_footystats import (
     build_current_odds_contract,
+    merge_current_odds_contract,
     parse_footystats_odds_text,
     update_dataset_manifest_odds,
 )
@@ -146,6 +147,61 @@ def test_build_current_odds_contract_matches_espn_upcoming_with_date_tolerance()
     assert pd.isna(contract.loc[0, "line"])
 
 
+def test_merge_current_odds_contract_preserves_historical_closes() -> None:
+    existing = pd.DataFrame(
+        [
+            {
+                "match_id": "completed-1",
+                "timestamp": "2026-05-01T00:00:00+00:00",
+                "sportsbook": "OddsPortalAvg",
+                "market_type": "1x2",
+                "line": pd.NA,
+                "home_odds": 2.0,
+                "draw_odds": 3.2,
+                "away_odds": 3.5,
+                "over_odds": pd.NA,
+                "under_odds": pd.NA,
+                "source_type": "close",
+            },
+            {
+                "match_id": "old-current",
+                "timestamp": "2026-05-25T00:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": pd.NA,
+                "home_odds": 1.9,
+                "draw_odds": 3.4,
+                "away_odds": 4.0,
+                "over_odds": pd.NA,
+                "under_odds": pd.NA,
+                "source_type": "current",
+            },
+        ]
+    )
+    current = pd.DataFrame(
+        [
+            {
+                "match_id": "new-current",
+                "timestamp": "2026-05-26T00:00:00+00:00",
+                "sportsbook": "FootyStats",
+                "market_type": "1x2",
+                "line": pd.NA,
+                "home_odds": 2.1,
+                "draw_odds": 3.1,
+                "away_odds": 3.8,
+                "over_odds": pd.NA,
+                "under_odds": pd.NA,
+                "source_type": "current",
+            }
+        ]
+    )
+
+    merged = merge_current_odds_contract(existing, current)
+
+    assert merged["match_id"].tolist() == ["completed-1", "new-current"]
+    assert merged["source_type"].tolist() == ["close", "current"]
+
+
 def test_update_dataset_manifest_odds_records_current_feed_without_changing_training_gap(tmp_path) -> None:
     manifest_path = tmp_path / "dataset_manifest.json"
     manifest_path.write_text(
@@ -189,3 +245,32 @@ def test_update_dataset_manifest_odds_records_current_feed_without_changing_trai
         "latest_timestamp": "2026-05-25T22:00:00+00:00",
     }
     assert updated["missing_feature_coverage"]["odds_missing_pct"] == 100.0
+
+
+def test_update_dataset_manifest_odds_updates_close_coverage_gap(tmp_path) -> None:
+    manifest_path = tmp_path / "dataset_manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "matches": {"rows": 4},
+                "missing_feature_coverage": {
+                    "odds_missing_pct": 100.0,
+                    "xg_missing_pct": 100.0,
+                },
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    odds = pd.DataFrame(
+        [
+            {"match_id": "m1", "sportsbook": "OddsPortalAvg", "market_type": "1x2", "source_type": "close"},
+            {"match_id": "m2", "sportsbook": "OddsPortalAvg", "market_type": "1x2", "source_type": "close"},
+            {"match_id": "u1", "sportsbook": "FootyStats", "market_type": "1x2", "source_type": "current"},
+        ]
+    )
+
+    update_dataset_manifest_odds(manifest_path, odds)
+
+    updated = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert updated["missing_feature_coverage"]["odds_missing_pct"] == 50.0

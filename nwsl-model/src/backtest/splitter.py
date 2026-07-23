@@ -54,7 +54,7 @@ class ExpandingWindowSplitter:
         Yields:
             BacktestFold objects.
         """
-        df = matches.sort_values("match_date").reset_index(drop=True)
+        df = matches.sort_values(["match_date", "match_id"]).reset_index(drop=True)
 
         if len(df) < self.min_train_matches + 1:
             logger.warning(
@@ -64,10 +64,21 @@ class ExpandingWindowSplitter:
             return
 
         fold_id = 0
-        test_start_idx = self.min_train_matches
+        train_end_boundary_date = df.loc[self.min_train_matches - 1, "match_date"]
+        later_dates = df.index[df["match_date"].gt(train_end_boundary_date)]
+        if len(later_dates) == 0:
+            logger.warning(
+                "Not enough future match dates for backtesting after respecting "
+                "same-date slate boundaries"
+            )
+            return
+        test_start_idx = int(later_dates[0])
 
         while test_start_idx < len(df):
             test_end_idx = min(test_start_idx + self.step_size, len(df))
+            test_end_date = df.iloc[test_end_idx - 1]["match_date"]
+            while test_end_idx < len(df) and df.iloc[test_end_idx]["match_date"] == test_end_date:
+                test_end_idx += 1
 
             train = df.iloc[:test_start_idx].copy()
             test = df.iloc[test_start_idx:test_end_idx].copy()
@@ -76,10 +87,10 @@ class ExpandingWindowSplitter:
             train_max_date = train["match_date"].max()
             test_min_date = test["match_date"].min()
 
-            if train_max_date > test_min_date:
+            if train_max_date >= test_min_date:
                 logger.warning(
                     f"Potential leakage in fold {fold_id}: "
-                    f"train_max={train_max_date} > test_min={test_min_date}"
+                    f"train_max={train_max_date} >= test_min={test_min_date}"
                 )
 
             yield BacktestFold(
@@ -92,7 +103,7 @@ class ExpandingWindowSplitter:
             )
 
             fold_id += 1
-            test_start_idx += self.step_size
+            test_start_idx = test_end_idx
 
         logger.info(f"Generated {fold_id} backtest folds")
 
@@ -100,4 +111,4 @@ class ExpandingWindowSplitter:
         """Verify no information leakage in a fold."""
         train_max = fold.train_matches["match_date"].max()
         test_min = fold.test_matches["match_date"].min()
-        return train_max <= test_min
+        return train_max < test_min

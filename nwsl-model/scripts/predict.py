@@ -72,6 +72,38 @@ def _match_odds_rows(odds: pd.DataFrame | None, match_id: str) -> pd.DataFrame:
     return rows
 
 
+def _format_decision(decision: object) -> str:
+    market = getattr(decision, "market")
+    price = float(getattr(decision, "market_price", 0.0))
+    probability_edge = float(getattr(decision, "probability_edge", 0.0))
+    expected_value = float(getattr(decision, "expected_value", 0.0))
+    stake = float(getattr(decision, "stake", 0.0))
+    return f"{market}@{price:.2f}(prob_edge={probability_edge:.3f},ev={expected_value:.3f},stake={stake:.1f})"
+
+
+def _top_pick_tier(accepted: list[object], leans: list[object]) -> str:
+    if accepted:
+        return "official_pick"
+    if leans:
+        return "lean"
+    return "no_bet"
+
+
+def _merge_prediction_market_odds(
+    matches: pd.DataFrame,
+    odds: pd.DataFrame | None,
+    *,
+    source_type: str,
+) -> pd.DataFrame:
+    """Attach moneyline and total prices used by prediction/slate outputs."""
+    if odds is None or odds.empty:
+        return matches
+
+    merged = merge_odds_to_matches(matches, odds, source_type=source_type, market_type="1x2")
+    merged = merge_odds_to_matches(merged, odds, source_type=source_type, market_type="total")
+    return merged
+
+
 def _load_calibration_artifact(artifact: dict[str, object]) -> dict[str, object] | None:
     calibration_path = Path(artifact["version_dir"]) / "calibration_artifacts.json"
     if not calibration_path.exists():
@@ -90,7 +122,10 @@ def _load_calibration_artifact(artifact: dict[str, object]) -> dict[str, object]
     return actionable or None
 
 
-def _load_model_stack(artifact: dict[str, object]) -> tuple[object, object | None, object | None]:
+def _load_model_stack(
+    artifact: dict[str, object],
+    config: dict[str, object],
+) -> tuple[object, object | None, object | None]:
     ratings_path = Path(artifact["version_dir"]) / "team_ratings.pkl"
     ratings_model = load_pickle(ratings_path) if ratings_path.exists() else None
     context_provider_path = Path(artifact["version_dir"]) / "context_provider.pkl"
@@ -100,6 +135,8 @@ def _load_model_stack(artifact: dict[str, object]) -> tuple[object, object | Non
         model = ProjectionBaselineModel(
             strategy=str(artifact["model_family"]),
             ratings_model=ratings_model,
+            max_goals=int(config.get("model", {}).get("max_goals", 8)),
+            spi_lite_config=config.get("spi_lite", {}),
         )
         return model, ratings_model, context_provider
 
@@ -129,7 +166,7 @@ def main() -> None:
         logger.error(str(exc))
         sys.exit(1)
 
-    model, ratings_model, context_provider = _load_model_stack(artifact)
+    model, ratings_model, context_provider = _load_model_stack(artifact, config)
     logger.info(
         "Loaded %s from %s",
         artifact["model_family"],
@@ -149,7 +186,7 @@ def main() -> None:
         if (source_types == "current").any():
             consensus_source = "current"
     if odds is not None:
-        upcoming = merge_odds_to_matches(upcoming, odds, source_type=consensus_source)
+        upcoming = _merge_prediction_market_odds(upcoming, odds, source_type=consensus_source)
         upcoming = compute_market_probabilities(upcoming)
         upcoming = compute_totals_market_probabilities(upcoming)
 
@@ -182,6 +219,7 @@ def main() -> None:
                 home_team=row["home_team"],
                 away_team=row["away_team"],
                 match_date=row.get("match_date"),
+                match_id=str(row["match_id"]),
             )
             if context_provider is not None
             else None
@@ -245,7 +283,9 @@ def main() -> None:
             gating_status=str(artifact.get("gating_status", "unknown")),
         )
         accepted = [decision for decision in decisions if decision.accepted]
+        leans = [decision for decision in decisions if decision.pick_tier == "lean"]
         rejected = [decision for decision in decisions if not decision.accepted]
+        actionable = accepted + leans
 
         pred_row = {
             "match_id": row["match_id"],
@@ -276,12 +316,23 @@ def main() -> None:
             "projection_notes": "; ".join(projection_quality["notes"]) if projection_quality["notes"] else "none",
             "candidate_bet_count": len(decisions),
             "accepted_bet_count": len(accepted),
+            "official_pick_count": len(accepted),
+            "lean_bet_count": len(leans),
+            "actionable_pick_count": len(actionable),
+            "top_pick_tier": _top_pick_tier(accepted, leans),
             "recommended_bets": (
-                "; ".join(
-                    f"{decision.market}@{decision.market_price:.2f}(edge={decision.edge:.3f},stake={decision.stake:.1f})"
-                    for decision in accepted
-                )
+                "; ".join(_format_decision(decision) for decision in accepted)
                 if accepted
+                else "none"
+            ),
+            "recommended_leans": (
+                "; ".join(_format_decision(decision) for decision in leans)
+                if leans
+                else "none"
+            ),
+            "actionable_picks": (
+                "; ".join(_format_decision(decision) for decision in actionable)
+                if actionable
                 else "none"
             ),
             "rejected_bet_reasons": (

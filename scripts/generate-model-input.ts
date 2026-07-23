@@ -42,9 +42,11 @@ writeFileSync(
       },
       matches: {
         rows: output.completedCount,
+        regular_season_rows: output.completedRegularSeasonCount,
+        non_regular_season_rows: output.completedNonRegularSeasonCount,
         season_coverage: output.completedSeasonCoverage,
         date_range: output.completedDateRange,
-        status: "completed_only",
+        status: "completed_with_regular_season_flag",
       },
       upcoming: {
         rows: output.upcomingCount,

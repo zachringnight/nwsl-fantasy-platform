@@ -320,6 +320,88 @@ def test_build_projected_lineups_uses_last_season_role_proxy_when_current_logs_m
     assert portland_rows.loc["starter-proxy", "projected_minutes"] > portland_rows.loc["bench-proxy", "projected_minutes"]
 
 
+def test_build_projected_lineups_uses_current_season_role_proxy(tmp_path: Path) -> None:
+    repo_root = tmp_path / "repo"
+    matches_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_matches.csv"
+    profiles_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_profiles.csv"
+    player_stats_2026_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_stats.csv"
+
+    _write_csv(
+        matches_path,
+        [
+            {
+                "season": 2026,
+                "match_id": "upcoming-1",
+                "match_date_utc": "2026-06-01T00:00:00Z",
+                "status": "UPCOMING",
+                "home_official_name": "Portland Thorns",
+                "away_official_name": "Washington Spirit",
+                "home_score": None,
+                "away_score": None,
+            }
+        ],
+    )
+    profile_rows = [
+        {"player_id": f"por-{idx}", "team_name": "Portland Thorns", "player_status": "Active", "role_label": "Forward"}
+        for idx in range(12)
+    ]
+    _write_csv(
+        profiles_path,
+        profile_rows + [{"player_id": "ws-1", "team_name": "Washington Spirit", "player_status": "Active", "role_label": "Midfielder"}],
+    )
+    _write_csv(
+        player_stats_2026_path,
+        [
+            {
+                "season": 2026,
+                "player_id": f"por-{idx}",
+                "team_official_name": "Portland Thorns",
+                "display_name": f"POR {idx}",
+                "role_label": "Forward",
+                "minutes_played": 800 if idx < 11 else 40,
+                "games_played": 10,
+                "appearances": 10,
+                "starts": 9 if idx < 11 else 0,
+                "substitute_on": 1 if idx < 11 else 10,
+                "substitute_off": 4 if idx < 11 else 0,
+                "goals": 1,
+                "assists": 1,
+                "xg": 1.0,
+                "total_scoring_attempts": 8,
+                "on_target_scoring_attempts": 3,
+            }
+            for idx in range(12)
+        ]
+        + [
+            {
+                "season": 2026,
+                "player_id": "ws-1",
+                "team_official_name": "Washington Spirit",
+                "display_name": "WS 1",
+                "role_label": "Midfielder",
+                "minutes_played": 500,
+                "games_played": 10,
+                "appearances": 10,
+                "starts": 5,
+                "substitute_on": 5,
+                "substitute_off": 2,
+                "goals": 1,
+                "assists": 1,
+                "xg": 1.0,
+                "total_scoring_attempts": 8,
+                "on_target_scoring_attempts": 3,
+            }
+        ],
+    )
+
+    projected = build_projected_lineups(repo_root, timestamp="2026-05-26T00:00:00Z")
+    portland_rows = projected[projected["team"] == "Portland Thorns"].set_index("player_id")
+
+    assert bool(portland_rows.loc["por-0", "projected_start"]) is True
+    assert bool(portland_rows.loc["por-11", "projected_start"]) is False
+    assert set(portland_rows["source"]) == {"official_current_season_role_model"}
+
+
 def test_normalize_odds_contract_maps_common_columns() -> None:
     raw = pd.DataFrame(
         [

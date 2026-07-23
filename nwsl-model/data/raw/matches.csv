@@ -181,13 +181,13 @@ match_id,match_date,season,competition,regular_season_flag,home_team,away_team,h
 731569,2025-11-02,2025,NWSL,true,Portland Thorns FC,Houston Dash,2,0,Providence Park,completed
 731570,2025-11-02,2025,NWSL,true,Racing Louisville FC,Bay FC,1,0,Lynn Family Stadium,completed
 731571,2025-11-02,2025,NWSL,true,Orlando Pride,Seattle Reign FC,1,1,Inter&Co Stadium,completed
-760608,2025-11-08,2025,NWSL,true,Orlando Pride,Seattle Reign FC,2,0,Inter&Co Stadium,completed
-760609,2025-11-08,2025,NWSL,true,Washington Spirit,Racing Louisville FC,1,1,Audi Field,completed
-760606,2025-11-09,2025,NWSL,true,Kansas City Current,Gotham FC,1,2,CPKC Stadium,completed
-760607,2025-11-09,2025,NWSL,true,Portland Thorns FC,San Diego Wave FC,1,0,Providence Park,completed
-760610,2025-11-15,2025,NWSL,true,Washington Spirit,Portland Thorns FC,2,0,Audi Field,completed
-760611,2025-11-16,2025,NWSL,true,Orlando Pride,Gotham FC,0,1,Inter&Co Stadium,completed
-760618,2025-11-23,2025,NWSL,true,Washington Spirit,Gotham FC,0,1,PayPal Park,completed
+760608,2025-11-08,2025,NWSL,false,Orlando Pride,Seattle Reign FC,2,0,Inter&Co Stadium,completed
+760609,2025-11-08,2025,NWSL,false,Washington Spirit,Racing Louisville FC,1,1,Audi Field,completed
+760606,2025-11-09,2025,NWSL,false,Kansas City Current,Gotham FC,1,2,CPKC Stadium,completed
+760607,2025-11-09,2025,NWSL,false,Portland Thorns FC,San Diego Wave FC,1,0,Providence Park,completed
+760610,2025-11-15,2025,NWSL,false,Washington Spirit,Portland Thorns FC,2,0,Audi Field,completed
+760611,2025-11-16,2025,NWSL,false,Orlando Pride,Gotham FC,0,1,Inter&Co Stadium,completed
+760618,2025-11-23,2025,NWSL,false,Washington Spirit,Gotham FC,0,1,PayPal Park,completed
 401853857,2026-03-14,2026,NWSL,true,Washington Spirit,Portland Thorns FC,0,1,Audi Field,completed
 401853858,2026-03-14,2026,NWSL,true,Kansas City Current,Utah Royals,2,1,CPKC Stadium,completed
 401853859,2026-03-14,2026,NWSL,true,North Carolina Courage,Racing Louisville FC,2,1,WakeMed Soccer Park,completed

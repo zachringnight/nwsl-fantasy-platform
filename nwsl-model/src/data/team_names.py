@@ -8,6 +8,7 @@ import unicodedata
 TEAM_ALIASES: dict[str, str] = {
     "angel city": "Angel City FC",
     "angel city fc": "Angel City FC",
+    "bay": "Bay FC",
     "bay fc": "Bay FC",
     "boston breakers": "Boston Breakers",
     "boston legacy": "Boston Legacy",
@@ -15,6 +16,8 @@ TEAM_ALIASES: dict[str, str] = {
     "chicago red stars": "Chicago Stars",
     "chicago stars": "Chicago Stars",
     "chicago stars fc": "Chicago Stars",
+    "denver summit": "Denver Summit",
+    "denver summit fc": "Denver Summit",
     "fc kansas city": "FC Kansas City",
     "gotham": "Gotham FC",
     "gotham fc": "Gotham FC",

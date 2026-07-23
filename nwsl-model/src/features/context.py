@@ -10,13 +10,19 @@ import pandas as pd
 
 from src.data.transforms import add_npxg_fallback, add_result_columns, melt_to_team_match
 from src.features.lineup_features import (
+    UNAVAILABLE_LINEUP_STATUSES,
     compute_availability_features,
     compute_projected_lineup_delta,
+    projected_start_mask,
 )
 from src.features.match_features import (
     build_match_features,
     compute_rolling_form,
     compute_season_stats,
+)
+from src.features.roster_continuity import (
+    compute_roster_continuity,
+    prior_weight_from_continuity,
 )
 from src.features.schedule_features import (
     add_short_rest_flags,
@@ -42,6 +48,8 @@ DEFAULT_CONTEXTUAL_COLUMNS = [
     "home_team_gplus_shooting_net_per90",
     "home_team_gplus_passing_net_per90",
     "home_team_gplus_receiving_net_per90",
+    "home_roster_continuity_score",
+    "home_roster_historical_prior_weight",
     "home_rest_days",
     "home_short_rest",
     "home_matches_prev_14d",
@@ -65,6 +73,8 @@ DEFAULT_CONTEXTUAL_COLUMNS = [
     "away_team_gplus_shooting_net_per90",
     "away_team_gplus_passing_net_per90",
     "away_team_gplus_receiving_net_per90",
+    "away_roster_continuity_score",
+    "away_roster_historical_prior_weight",
     "away_rest_days",
     "away_short_rest",
     "away_matches_prev_14d",
@@ -82,6 +92,8 @@ PURE_MODEL_CONTEXTUAL_PRIORITY = [
     "home_team_xg_per_match",
     "home_team_xg_against_per_match",
     "home_team_points_per_match",
+    "home_roster_continuity_score",
+    "home_roster_historical_prior_weight",
     "home_rest_days",
     "home_short_rest",
     "home_lineup_strength",
@@ -92,6 +104,8 @@ PURE_MODEL_CONTEXTUAL_PRIORITY = [
     "away_team_xg_per_match",
     "away_team_xg_against_per_match",
     "away_team_points_per_match",
+    "away_roster_continuity_score",
+    "away_roster_historical_prior_weight",
     "away_rest_days",
     "away_short_rest",
     "away_lineup_strength",
@@ -249,6 +263,7 @@ def _player_ratings_map(
 def _merge_team_season_priors(
     matches: pd.DataFrame,
     team_season_priors: Optional[pd.DataFrame] = None,
+    player_season_priors: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     if team_season_priors is None or team_season_priors.empty:
         return matches
@@ -265,11 +280,21 @@ def _merge_team_season_priors(
     priors[prior_value_columns] = (
         priors.groupby("team", sort=False)[prior_value_columns].shift(1)
     )
+    prior_means_by_season = {
+        column: pd.to_numeric(priors[column], errors="coerce").groupby(priors["season"]).mean()
+        for column in prior_value_columns
+    }
 
     available_columns = ["season", "team"] + [
         column for column in TEAM_PRIOR_COLUMNS if column in priors.columns
     ]
     priors = priors[available_columns].copy()
+    roster_continuity = compute_roster_continuity(
+        player_season_priors,
+        target_seasons=prepared["season"].dropna().astype(int).unique().tolist()
+        if "season" in prepared.columns and prepared["season"].notna().any()
+        else None,
+    )
 
     for prefix, team_col in (("home", "home_team"), ("away", "away_team")):
         rename_map = {
@@ -285,6 +310,47 @@ def _merge_team_season_priors(
             on=["season", team_col],
             how="left",
         )
+        if not roster_continuity.empty:
+            continuity_columns = [
+                "season",
+                "team",
+                "roster_continuity_score",
+                "preseason_historical_prior_weight",
+            ]
+            prepared = prepared.merge(
+                roster_continuity[continuity_columns].rename(columns={
+                    "team": team_col,
+                    "roster_continuity_score": f"{prefix}_roster_continuity_score",
+                    "preseason_historical_prior_weight": f"{prefix}_roster_preseason_prior_weight",
+                }),
+                on=["season", team_col],
+                how="left",
+            )
+            score_col = f"{prefix}_roster_continuity_score"
+            matches_col = f"{prefix}_season_matches_played"
+            dynamic_weight_col = f"{prefix}_roster_historical_prior_weight"
+            matches_played = (
+                pd.to_numeric(prepared[matches_col], errors="coerce").fillna(0.0)
+                if matches_col in prepared.columns
+                else pd.Series(0.0, index=prepared.index)
+            )
+            scores = pd.to_numeric(prepared[score_col], errors="coerce")
+            prepared[dynamic_weight_col] = [
+                prior_weight_from_continuity(score, int(max(matches, 0)))
+                if pd.notna(score)
+                else pd.NA
+                for score, matches in zip(scores, matches_played, strict=False)
+            ]
+            scale = pd.to_numeric(prepared[dynamic_weight_col], errors="coerce")
+            for column in prior_value_columns:
+                feature_col = f"{prefix}_team_{column}"
+                if feature_col not in prepared.columns:
+                    continue
+                values = pd.to_numeric(prepared[feature_col], errors="coerce")
+                league_mean = prepared["season"].map(prior_means_by_season[column])
+                scaled = league_mean + scale * (values - league_mean)
+                valid = values.notna() & league_mean.notna() & scale.notna()
+                prepared.loc[valid, feature_col] = scaled.loc[valid]
 
     return prepared
 
@@ -316,7 +382,11 @@ def build_contextual_training_frame(
     team_matches = compute_season_stats(team_matches)
     prepared = build_match_features(prepared, team_matches, list(rolling_windows))
     if include_team_priors:
-        prepared = _merge_team_season_priors(prepared, team_season_priors)
+        prepared = _merge_team_season_priors(
+            prepared,
+            team_season_priors,
+            player_season_priors=player_season_priors,
+        )
         if not include_asa_features:
             for column in ASA_TEAM_CONTEXTUAL_COLUMNS:
                 if column in prepared.columns:
@@ -371,6 +441,7 @@ class ContextualFeatureProvider:
 
     team_state: dict[str, TeamContextState]
     projected_lineup_strength: dict[str, float]
+    projected_match_lineup_strength: dict[tuple[str, str], float] | None = None
     short_rest_days: int = 4
 
     @classmethod
@@ -402,6 +473,8 @@ class ContextualFeatureProvider:
                 f"{prefix}_team_gplus_shooting_net_per90",
                 f"{prefix}_team_gplus_passing_net_per90",
                 f"{prefix}_team_gplus_receiving_net_per90",
+                f"{prefix}_roster_continuity_score",
+                f"{prefix}_roster_historical_prior_weight",
                 f"{prefix}_rest_days",
                 f"{prefix}_matches_prev_14d",
                 f"{prefix}_n_starters",
@@ -436,6 +509,8 @@ class ContextualFeatureProvider:
                 f"{prefix}_team_gplus_shooting_net_per90": "team_gplus_shooting_net_per90",
                 f"{prefix}_team_gplus_passing_net_per90": "team_gplus_passing_net_per90",
                 f"{prefix}_team_gplus_receiving_net_per90": "team_gplus_receiving_net_per90",
+                f"{prefix}_roster_continuity_score": "roster_continuity_score",
+                f"{prefix}_roster_historical_prior_weight": "roster_historical_prior_weight",
                 f"{prefix}_rest_days": "rest_days",
                 f"{prefix}_matches_prev_14d": "matches_prev_14d",
                 f"{prefix}_n_starters": "n_starters",
@@ -479,6 +554,8 @@ class ContextualFeatureProvider:
                 "team_gplus_shooting_net_per90": float(latest.get("team_gplus_shooting_net_per90", 0.0) or 0.0),
                 "team_gplus_passing_net_per90": float(latest.get("team_gplus_passing_net_per90", 0.0) or 0.0),
                 "team_gplus_receiving_net_per90": float(latest.get("team_gplus_receiving_net_per90", 0.0) or 0.0),
+                "roster_continuity_score": float(latest.get("roster_continuity_score", 0.0) or 0.0),
+                "roster_historical_prior_weight": float(latest.get("roster_historical_prior_weight", 0.0) or 0.0),
                 "rest_days": float(latest.get("rest_days", 7.0) or 7.0),
                 "matches_prev_14d": float(latest.get("matches_prev_14d", 0.0) or 0.0),
                 "n_starters": float(latest.get("n_starters", 0.0) or 0.0),
@@ -502,22 +579,50 @@ class ContextualFeatureProvider:
         player_season_priors: Optional[pd.DataFrame] = None,
     ) -> ContextualFeatureProvider:
         strength_by_team: dict[str, float] = {}
+        strength_by_match_team: dict[tuple[str, str], float] = {}
         if projected_lineups is not None and not projected_lineups.empty:
             player_ratings = _player_ratings_map(lineup_model, player_season_priors) or {}
-            starters = projected_lineups[projected_lineups["projected_start"].astype(bool)].copy()
+            starters = projected_lineups[projected_start_mask(projected_lineups)].copy()
+            if "status" in starters.columns:
+                starters = starters.loc[
+                    ~starters["status"].astype(str).str.lower().isin(UNAVAILABLE_LINEUP_STATUSES)
+                ].copy()
             if starters.empty:
                 strength_by_team = {}
             elif player_ratings:
-                strength_by_team = (
-                    starters.assign(player_rating=starters["player_id"].map(player_ratings).fillna(0.0))
-                    .groupby("team")["player_rating"]
-                    .sum()
-                    .astype(float)
-                    .to_dict()
-                )
+                starters = starters.assign(player_rating=starters["player_id"].map(player_ratings).fillna(0.0))
+                if "match_id" in starters.columns:
+                    strength_by_match_team = {
+                        (str(match_id), str(team)): float(value)
+                        for (match_id, team), value in starters.groupby(["match_id", "team"])["player_rating"].sum().items()
+                    }
+                    strength_by_team = (
+                        starters.groupby(["match_id", "team"])["player_rating"]
+                        .sum()
+                        .groupby("team")
+                        .mean()
+                        .astype(float)
+                        .to_dict()
+                    )
+                else:
+                    strength_by_team = (
+                        starters.groupby("team")["player_rating"]
+                        .sum()
+                        .astype(float)
+                        .to_dict()
+                    )
             else:
-                strength_by_team = starters.groupby("team").size().astype(float).to_dict()
+                if "match_id" in starters.columns:
+                    match_counts = starters.groupby(["match_id", "team"]).size().astype(float)
+                    strength_by_match_team = {
+                        (str(match_id), str(team)): float(value)
+                        for (match_id, team), value in match_counts.items()
+                    }
+                    strength_by_team = match_counts.groupby("team").mean().astype(float).to_dict()
+                else:
+                    strength_by_team = starters.groupby("team").size().astype(float).to_dict()
         self.projected_lineup_strength = strength_by_team
+        self.projected_match_lineup_strength = strength_by_match_team
         return self
 
     def for_match(
@@ -525,6 +630,7 @@ class ContextualFeatureProvider:
         home_team: str,
         away_team: str,
         match_date: date | None = None,
+        match_id: str | None = None,
     ) -> dict[str, float]:
         """Return the contextual feature dictionary for a fixture."""
         home_state = self.team_state.get(home_team, TeamContextState(last_match_date=None, features={}))
@@ -538,6 +644,26 @@ class ContextualFeatureProvider:
 
         home_rest_days = derive_rest_days(home_state)
         away_rest_days = derive_rest_days(away_state)
+        match_strengths = self.projected_match_lineup_strength or {}
+
+        def lineup_strengths(team: str, state: TeamContextState) -> tuple[float, float, float]:
+            normal_strength = float(state.features.get("lineup_strength", 0.0))
+            if match_id is not None:
+                match_key = (str(match_id), str(team))
+                if match_key in match_strengths:
+                    projected_strength = float(match_strengths[match_key])
+                    return projected_strength, normal_strength, projected_strength - normal_strength
+            projected_strength = float(self.projected_lineup_strength.get(team, normal_strength))
+            return projected_strength, normal_strength, projected_strength - normal_strength
+
+        home_lineup_strength, home_lineup_normal_strength, home_lineup_delta = lineup_strengths(
+            home_team,
+            home_state,
+        )
+        away_lineup_strength, away_lineup_normal_strength, away_lineup_delta = lineup_strengths(
+            away_team,
+            away_state,
+        )
 
         contextual = {
             "home_roll_5_npxg_for": float(home_state.features.get("roll_5_npxg_for", 0.0)),
@@ -557,14 +683,16 @@ class ContextualFeatureProvider:
             "home_team_gplus_shooting_net_per90": float(home_state.features.get("team_gplus_shooting_net_per90", 0.0)),
             "home_team_gplus_passing_net_per90": float(home_state.features.get("team_gplus_passing_net_per90", 0.0)),
             "home_team_gplus_receiving_net_per90": float(home_state.features.get("team_gplus_receiving_net_per90", 0.0)),
+            "home_roster_continuity_score": float(home_state.features.get("roster_continuity_score", 0.0)),
+            "home_roster_historical_prior_weight": float(home_state.features.get("roster_historical_prior_weight", 0.0)),
             "home_rest_days": home_rest_days,
             "home_short_rest": float(home_rest_days <= self.short_rest_days),
             "home_matches_prev_14d": float(home_state.features.get("matches_prev_14d", 0.0)),
             "home_n_starters": float(home_state.features.get("n_starters", 0.0)),
             "home_n_injured": float(home_state.features.get("n_injured", 0.0)),
-            "home_lineup_strength": float(
-                self.projected_lineup_strength.get(home_team, home_state.features.get("lineup_strength", 0.0))
-            ),
+            "home_lineup_strength": home_lineup_strength,
+            "home_lineup_normal_strength": home_lineup_normal_strength,
+            "home_lineup_strength_delta": home_lineup_delta,
             "away_roll_5_npxg_for": float(away_state.features.get("roll_5_npxg_for", 0.0)),
             "away_roll_5_npxg_against": float(away_state.features.get("roll_5_npxg_against", 0.0)),
             "away_season_avg_npxg_for": float(away_state.features.get("season_avg_npxg_for", 0.0)),
@@ -582,14 +710,16 @@ class ContextualFeatureProvider:
             "away_team_gplus_shooting_net_per90": float(away_state.features.get("team_gplus_shooting_net_per90", 0.0)),
             "away_team_gplus_passing_net_per90": float(away_state.features.get("team_gplus_passing_net_per90", 0.0)),
             "away_team_gplus_receiving_net_per90": float(away_state.features.get("team_gplus_receiving_net_per90", 0.0)),
+            "away_roster_continuity_score": float(away_state.features.get("roster_continuity_score", 0.0)),
+            "away_roster_historical_prior_weight": float(away_state.features.get("roster_historical_prior_weight", 0.0)),
             "away_rest_days": away_rest_days,
             "away_short_rest": float(away_rest_days <= self.short_rest_days),
             "away_matches_prev_14d": float(away_state.features.get("matches_prev_14d", 0.0)),
             "away_n_starters": float(away_state.features.get("n_starters", 0.0)),
             "away_n_injured": float(away_state.features.get("n_injured", 0.0)),
-            "away_lineup_strength": float(
-                self.projected_lineup_strength.get(away_team, away_state.features.get("lineup_strength", 0.0))
-            ),
+            "away_lineup_strength": away_lineup_strength,
+            "away_lineup_normal_strength": away_lineup_normal_strength,
+            "away_lineup_strength_delta": away_lineup_delta,
         }
         for suffix in {key for key in home_state.features if key.endswith("_missing")}:
             contextual[f"home_{suffix}"] = float(home_state.features.get(suffix, 0.0))

@@ -12,6 +12,8 @@ MODEL_ROOT = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, str(MODEL_ROOT))
 
+from src.utils.dates import parse_mixed_utc_datetime
+
 REQUIRED_OUTPUT_COLUMNS = [
     "match_id",
     "match_date",
@@ -20,12 +22,17 @@ REQUIRED_OUTPUT_COLUMNS = [
     "gating_status",
     "has_market_odds",
     "market_is_fresh",
+    "pick_tier",
+    "actionable_pick",
     "accepted_bet",
     "bet_reason",
 ]
 
-MARKET_ODDS_COLUMNS = ("mkt_home_odds", "mkt_draw_odds", "mkt_away_odds")
-ODDS_PRICE_COLUMNS = ("home_odds", "draw_odds", "away_odds")
+MONEYLINE_MARKET_ODDS_COLUMNS = ("mkt_home_odds", "mkt_draw_odds", "mkt_away_odds")
+TOTAL_MARKET_ODDS_COLUMNS = ("mkt_over_odds", "mkt_under_odds")
+MARKET_ODDS_COLUMNS = MONEYLINE_MARKET_ODDS_COLUMNS + ("main_total_line",) + TOTAL_MARKET_ODDS_COLUMNS
+MONEYLINE_ODDS_PRICE_COLUMNS = ("home_odds", "draw_odds", "away_odds")
+TOTAL_ODDS_PRICE_COLUMNS = ("over_odds", "under_odds")
 
 
 def positive_int(value: str) -> int:
@@ -61,17 +68,24 @@ def _derive_market_odds(predictions: pd.DataFrame) -> pd.Series:
     if "has_market_odds" in predictions.columns:
         market_flag = predictions["has_market_odds"].map(_coerce_bool)
 
-    available_odds = [column for column in MARKET_ODDS_COLUMNS if column in predictions.columns]
-    if not available_odds:
+    has_any_price_column = any(column in predictions.columns for column in MARKET_ODDS_COLUMNS)
+    if not has_any_price_column:
         if market_flag is not None:
             return market_flag
         return pd.Series(False, index=predictions.index)
 
-    if set(available_odds) != set(MARKET_ODDS_COLUMNS):
-        return pd.Series(False, index=predictions.index)
+    has_moneyline = pd.Series(False, index=predictions.index)
+    if all(column in predictions.columns for column in MONEYLINE_MARKET_ODDS_COLUMNS):
+        moneyline_prices = predictions[list(MONEYLINE_MARKET_ODDS_COLUMNS)].apply(pd.to_numeric, errors="coerce")
+        has_moneyline = moneyline_prices.gt(1.0).all(axis=1)
 
-    numeric_odds = predictions[available_odds].apply(pd.to_numeric, errors="coerce")
-    complete_price = numeric_odds.gt(1.0).all(axis=1)
+    has_total = pd.Series(False, index=predictions.index)
+    if all(column in predictions.columns for column in ("main_total_line", *TOTAL_MARKET_ODDS_COLUMNS)):
+        total_prices = predictions[list(TOTAL_MARKET_ODDS_COLUMNS)].apply(pd.to_numeric, errors="coerce")
+        total_line = pd.to_numeric(predictions["main_total_line"], errors="coerce")
+        has_total = total_line.notna() & total_prices.gt(1.0).all(axis=1)
+
+    complete_price = has_moneyline | has_total
     if market_flag is not None:
         return market_flag & complete_price
     return complete_price
@@ -89,6 +103,8 @@ def _latest_market_metadata(
                 "match_id",
                 "market_timestamp",
                 "market_sportsbook",
+                "market_type",
+                "market_types",
                 "market_age_minutes",
                 "market_is_fresh",
             ]
@@ -96,8 +112,6 @@ def _latest_market_metadata(
 
     frame = odds.copy()
     frame["match_id"] = frame["match_id"].astype(str)
-    if "market_type" in frame.columns:
-        frame = frame[frame["market_type"].astype(str).str.lower().eq("1x2")]
     if "source_type" in frame.columns:
         frame = frame[frame["source_type"].astype(str).str.lower().eq("current")]
     if frame.empty:
@@ -106,38 +120,51 @@ def _latest_market_metadata(
                 "match_id",
                 "market_timestamp",
                 "market_sportsbook",
+                "market_type",
+                "market_types",
                 "market_age_minutes",
                 "market_is_fresh",
             ]
         )
 
-    missing_price_cols = [column for column in ODDS_PRICE_COLUMNS if column not in frame.columns]
-    if missing_price_cols:
-        return pd.DataFrame(
-            columns=[
-                "match_id",
-                "market_timestamp",
-                "market_sportsbook",
-                "market_age_minutes",
-                "market_is_fresh",
-            ]
-        )
-    prices = frame[list(ODDS_PRICE_COLUMNS)].apply(pd.to_numeric, errors="coerce")
-    frame = frame.loc[prices.gt(1.0).all(axis=1)].copy()
+    market_type = (
+        frame["market_type"].astype(str).str.lower()
+        if "market_type" in frame.columns
+        else pd.Series("1x2", index=frame.index)
+    )
+    has_moneyline = pd.Series(False, index=frame.index)
+    if all(column in frame.columns for column in MONEYLINE_ODDS_PRICE_COLUMNS):
+        moneyline_prices = frame[list(MONEYLINE_ODDS_PRICE_COLUMNS)].apply(pd.to_numeric, errors="coerce")
+        has_moneyline = market_type.eq("1x2") & moneyline_prices.gt(1.0).all(axis=1)
+    has_total = pd.Series(False, index=frame.index)
+    if all(column in frame.columns for column in ("line", *TOTAL_ODDS_PRICE_COLUMNS)):
+        total_prices = frame[list(TOTAL_ODDS_PRICE_COLUMNS)].apply(pd.to_numeric, errors="coerce")
+        total_line = pd.to_numeric(frame["line"], errors="coerce")
+        has_total = market_type.isin({"total", "totals"}) & total_line.notna() & total_prices.gt(1.0).all(axis=1)
+    frame = frame.loc[has_moneyline | has_total].copy()
     if frame.empty:
         return pd.DataFrame(
             columns=[
                 "match_id",
                 "market_timestamp",
                 "market_sportsbook",
+                "market_type",
+                "market_types",
                 "market_age_minutes",
                 "market_is_fresh",
             ]
         )
 
-    frame["timestamp"] = pd.to_datetime(frame.get("timestamp"), utc=True, errors="coerce")
+    frame["timestamp"] = parse_mixed_utc_datetime(frame.get("timestamp"))
     frame = frame.dropna(subset=["timestamp"]).sort_values(["match_id", "timestamp"])
+    market_types = (
+        frame.groupby("match_id")["market_type"]
+        .apply(lambda values: ",".join(sorted({str(value) for value in values.dropna() if str(value)})))
+        .rename("market_types")
+        .reset_index()
+    )
     latest = frame.groupby("match_id", as_index=False).tail(1).copy()
+    latest = latest.merge(market_types, on="match_id", how="left")
     reference_time = pd.to_datetime(as_of, utc=True)
     if pd.isna(reference_time):
         reference_time = pd.Timestamp.now(tz="UTC")
@@ -146,6 +173,7 @@ def _latest_market_metadata(
     age_minutes = (reference_time - latest["timestamp"]).dt.total_seconds() / 60.0
     latest["market_timestamp"] = latest["timestamp"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
     latest["market_sportsbook"] = latest.get("sportsbook", "").astype(str)
+    latest["market_type"] = latest.get("market_type", "").astype(str)
     latest["market_age_minutes"] = age_minutes.round(2)
     latest["market_is_fresh"] = latest["market_age_minutes"].between(
         0,
@@ -157,6 +185,8 @@ def _latest_market_metadata(
             "match_id",
             "market_timestamp",
             "market_sportsbook",
+            "market_type",
+            "market_types",
             "market_age_minutes",
             "market_is_fresh",
         ]
@@ -199,7 +229,44 @@ def _accepted_bet(row: pd.Series) -> bool:
     return str(recommended).strip().lower() not in {"", "none", "nan", "[]"}
 
 
+def _count_from_row(row: pd.Series, column: str) -> int:
+    value = pd.to_numeric(row.get(column, 0), errors="coerce")
+    if pd.isna(value):
+        return 0
+    return int(max(float(value), 0.0))
+
+
+def _lean_bet_count(row: pd.Series) -> int:
+    count = _count_from_row(row, "lean_bet_count")
+    if count > 0:
+        return count
+    recommended = row.get("recommended_leans", "")
+    if recommended is None or (isinstance(recommended, float) and pd.isna(recommended)):
+        return 0
+    text = str(recommended).strip().lower()
+    return 0 if text in {"", "none", "nan", "[]"} else len([part for part in text.split(";") if part.strip()])
+
+
+def _pick_tier(row: pd.Series) -> str:
+    if bool(row.get("accepted_bet", False)):
+        return "official_pick"
+    if _lean_bet_count(row) > 0:
+        return "lean"
+    return "no_bet"
+
+
 def _bet_reason(row: pd.Series) -> str:
+    pick_tier = str(row.get("pick_tier", "no_bet"))
+    if pick_tier == "official_pick":
+        return "accepted"
+    if pick_tier == "lean":
+        reasons = str(row.get("rejected_bet_reasons", "") or "")
+        lean_reasons = [
+            reason.strip()
+            for reason in reasons.replace(",", ";").split(";")
+            if reason.strip().startswith("lean_")
+        ]
+        return lean_reasons[0] if lean_reasons else "lean"
     gating_status = str(row.get("gating_status", "unknown")).lower()
     if gating_status != "passed":
         return "model_gating_not_passed"
@@ -265,6 +332,13 @@ def filter_near_term_slate(
     slate["accepted_bet"] = slate.apply(_accepted_bet, axis=1)
     slate.loc[slate["gating_status"].astype(str).str.lower() != "passed", "accepted_bet"] = False
     slate.loc[~slate["has_market_odds"], "accepted_bet"] = False
+    slate["lean_bet_count"] = slate.apply(_lean_bet_count, axis=1)
+    slate.loc[~slate["has_market_odds"], "lean_bet_count"] = 0
+    slate["official_pick_count"] = slate.apply(lambda row: _count_from_row(row, "accepted_bet_count"), axis=1)
+    slate.loc[~slate["accepted_bet"], "official_pick_count"] = 0
+    slate["actionable_pick_count"] = slate["official_pick_count"] + slate["lean_bet_count"]
+    slate["pick_tier"] = slate.apply(_pick_tier, axis=1)
+    slate["actionable_pick"] = slate["pick_tier"].isin({"official_pick", "lean"})
     slate["bet_reason"] = slate.apply(_bet_reason, axis=1)
     slate["match_date"] = slate["_match_date"].dt.strftime("%Y-%m-%d")
 
@@ -277,11 +351,19 @@ def filter_near_term_slate(
             "model_family",
             "confidence_score",
             "confidence_band",
+            "official_pick_count",
+            "lean_bet_count",
+            "actionable_pick_count",
             "accepted_bet_count",
             "recommended_bets",
+            "recommended_leans",
+            "actionable_picks",
+            "top_pick_tier",
             "rejected_bet_reasons",
             "market_timestamp",
             "market_sportsbook",
+            "market_type",
+            "market_types",
             "market_age_minutes",
             *MARKET_ODDS_COLUMNS,
         )

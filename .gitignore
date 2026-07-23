@@ -42,3 +42,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
+__pycache__/
+*.pyc
+
+# nwsl-model: logs and regenerable run artifacts
+nwsl-model/logs/
+nwsl-model/data/processed/models/
+nwsl-model/data/processed/season_holdout/
+nwsl-model/data/processed/tuning/
+
+# nwsl-model: scraping debris and backups
+nwsl-model/data/raw/*.bak_*
+nwsl-model/data/raw/apify_*probe*.json
+nwsl-model/data/raw/oddsportal_ajax_*
+nwsl-model/data/raw/oddsportal_archive_*.json
+nwsl-model/data/raw/oddsportal_asset_*.js
+nwsl-model/data/raw/oddsportal_app_*.js
+nwsl-model/data/raw/oddsportal_lscompressor_*.js

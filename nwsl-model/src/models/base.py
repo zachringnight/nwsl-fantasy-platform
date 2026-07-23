@@ -17,6 +17,8 @@ class ModelConfig:
     max_goals: int = 8
     random_seed: int = 42
     home_advantage_init: float = 0.25
+    home_advantage_scale: float = 1.0
+    home_advantage_cap: Optional[float] = None
     max_iter: int = 2000
     tol: float = 1e-8
 
@@ -120,6 +122,28 @@ class BaseScoreModel(ABC):
             return self._team_map[team]
         # Unknown team: return -1 to signal league average
         return -1
+
+    def _effective_home_advantage(
+        self,
+        learned_home_advantage: float,
+        override: Optional[float] = None,
+    ) -> float:
+        """Return prediction-time home advantage after configured shrinkage.
+
+        Explicit per-prediction overrides are honored exactly; the scale/cap only
+        applies to the fitted default parameter.
+        """
+        if override is not None:
+            return float(override)
+
+        scale = float(getattr(self.config, "home_advantage_scale", 1.0))
+        value = float(learned_home_advantage) * scale
+        cap = getattr(self.config, "home_advantage_cap", None)
+        if cap is not None:
+            cap_abs = abs(float(cap))
+            if np.isfinite(cap_abs):
+                value = float(np.clip(value, -cap_abs, cap_abs))
+        return value
 
     def get_parameters(self) -> dict[str, Any]:
         """Return model parameters as a dictionary."""

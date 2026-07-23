@@ -45,7 +45,9 @@ from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoisso
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
 from src.models.elo_baseline import RegularizedEloBaseline
 from src.models.market_blend import MarketBlender
+from src.models.spi_lite import SpiLiteBaseline
 from src.models.team_ratings import TeamRatingsConfig, TeamRatingsModel
+from src.utils.dates import parse_mixed_utc_datetime
 
 logger = logging.getLogger("nwsl_model.backtest.runner")
 
@@ -55,6 +57,7 @@ BASELINE_MODELS = {
     "home_field_baseline",
     "team_ratings_poisson",
     "rolling_npxg_poisson",
+    "spi_lite_baseline",
     "regularized_elo_baseline",
 }
 ABLATION_SUFFIXES = ("no_asa", "no_lineup", "no_priors", "no_rest")
@@ -131,6 +134,7 @@ class BacktestRunner:
         matches = add_npxg_fallback(matches)
         if odds is not None:
             matches = merge_odds_to_matches(matches, odds)
+            matches = merge_odds_to_matches(matches, odds, market_type="total")
             matches = compute_market_probabilities(matches)
             matches = compute_totals_market_probabilities(matches)
 
@@ -191,8 +195,10 @@ class BacktestRunner:
             if fold_predictions:
                 all_preds = pd.concat(fold_predictions, ignore_index=True)
                 bet_log = staker.get_bet_log_df()
+                decision_log = staker.get_decision_log_df()
 
                 metrics = compute_all_metrics(all_preds, bet_log)
+                metrics.update(self._market_betting_diagnostics(all_preds, odds, bet_log, decision_log))
                 metrics["model"] = model_name
                 metrics["staking_summary"] = staker.summary()
                 fit_runs = self.fit_diagnostics.get(model_name, [])
@@ -220,6 +226,7 @@ class BacktestRunner:
                     "metrics": metrics,
                     "predictions": all_preds,
                     "bet_log": bet_log,
+                    "decision_log": decision_log,
                 }
 
                 logger.info(
@@ -319,6 +326,7 @@ class BacktestRunner:
                 home_team=row["home_team"],
                 away_team=row["away_team"],
                 match_date=row.get("match_date"),
+                match_id=str(row["match_id"]),
             )
             pred = model.predict_score_matrix(
                 home_team=row["home_team"],
@@ -402,7 +410,7 @@ class BacktestRunner:
                     result_row[f"prob_over_{total_line}"] = markets.over_probs[total_line]
                     result_row[f"fair_over_{total_line}"] = markets.over_fair_odds[total_line]
                     result_row[f"fair_under_{total_line}"] = markets.under_fair_odds[total_line]
-            total_line = row.get("total_line")
+            total_line = row.get("total_line", row.get("line"))
             if pd.notna(total_line):
                 total_line = float(total_line)
                 result_row["main_total_line"] = total_line
@@ -527,6 +535,23 @@ class BacktestRunner:
                 draw_prior_weight=elo_cfg.get("draw_prior_weight", 50.0),
                 max_goals=self.config.get("model", {}).get("max_goals", 8),
             ).fit(train)
+        spi_model = None
+        if base_model == "spi_lite_baseline":
+            spi_cfg = self.config.get("spi_lite", {})
+            spi_model = SpiLiteBaseline(
+                ratings_model=ratings_model,
+                max_goals=self.config.get("model", {}).get("max_goals", 8),
+                league_home_rate=max(train_home_npxg, 0.1),
+                league_away_rate=max(train_away_npxg, 0.1),
+                rating_weight=spi_cfg.get("rating_weight", 0.55),
+                current_full_weight_matches=spi_cfg.get("current_full_weight_matches", 10.0),
+                max_rating_log_adjustment=spi_cfg.get("max_rating_log_adjustment", 0.70),
+                lineup_log_scale=spi_cfg.get("lineup_log_scale", 0.035),
+                rest_log_scale=spi_cfg.get("rest_log_scale", 0.012),
+                pace_weight=spi_cfg.get("pace_weight", 0.20),
+                min_lambda=spi_cfg.get("min_lambda", 0.20),
+                max_lambda=spi_cfg.get("max_lambda", 3.75),
+            )
 
         rows: list[dict[str, Any]] = []
         for _, row in test.iterrows():
@@ -534,6 +559,7 @@ class BacktestRunner:
                 home_team=row["home_team"],
                 away_team=row["away_team"],
                 match_date=row.get("match_date"),
+                match_id=str(row["match_id"]),
             )
             if base_model == "uniform_baseline":
                 lambda_home = league_side_rate
@@ -547,8 +573,8 @@ class BacktestRunner:
                 home_rating = ratings_model.get_rating(row["home_team"])
                 away_rating = ratings_model.get_rating(row["away_team"])
                 home_adv = math.log(max(train_home_npxg, 0.1) / max(league_side_rate, 0.1))
-                lambda_home = league_side_rate * math.exp(home_adv + home_rating.attack - away_rating.defense)
-                lambda_away = league_side_rate * math.exp(away_rating.attack - home_rating.defense)
+                lambda_home = league_side_rate * math.exp(home_adv + home_rating.attack + away_rating.defense)
+                lambda_away = league_side_rate * math.exp(away_rating.attack + home_rating.defense)
                 probs_override = None
             elif base_model == "rolling_npxg_poisson":
                 home_for = float(contextual_features.get("home_roll_5_npxg_for", contextual_features.get("home_season_avg_npxg_for", train_home_npxg)))
@@ -573,10 +599,26 @@ class BacktestRunner:
                     elo_pred.draw_prob,
                     elo_pred.away_win_prob,
                 )
+            elif base_model == "spi_lite_baseline":
+                if spi_model is None:
+                    raise ValueError("SPI-lite baseline was not initialized")
+                spi_pred = spi_model.predict_score_matrix(
+                    home_team=row["home_team"],
+                    away_team=row["away_team"],
+                    contextual_features=contextual_features,
+                )
+                lambda_home = spi_pred.lambda_home
+                lambda_away = spi_pred.lambda_away
+                matrix = spi_pred.score_matrix
+                probs_override = (
+                    spi_pred.home_win_prob,
+                    spi_pred.draw_prob,
+                    spi_pred.away_win_prob,
+                )
             else:
                 raise ValueError(f"Unknown baseline model: {base_model}")
 
-            if base_model != "regularized_elo_baseline":
+            if base_model not in {"regularized_elo_baseline", "spi_lite_baseline"}:
                 matrix = self._build_independent_score_matrix(lambda_home, lambda_away)
             rows.append(
                 self._prediction_row_from_markets(
@@ -609,6 +651,8 @@ class BacktestRunner:
             return DixonColesModel(DixonColesConfig(
                 max_goals=max_goals,
                 home_advantage_init=dc_cfg.get("home_advantage_init", 0.25),
+                home_advantage_scale=dc_cfg.get("home_advantage_scale", 1.0),
+                home_advantage_cap=dc_cfg.get("home_advantage_cap"),
                 max_iter=dc_cfg.get("max_iter", 2000),
                 tol=dc_cfg.get("tol", 1e-8),
                 rho_init=dc_cfg.get("rho_init", -0.05),
@@ -622,6 +666,8 @@ class BacktestRunner:
             return BivariatePoissonModel(BivariatePoissonConfig(
                 max_goals=max_goals,
                 home_advantage_init=bp_cfg.get("home_advantage_init", 0.25),
+                home_advantage_scale=bp_cfg.get("home_advantage_scale", 1.0),
+                home_advantage_cap=bp_cfg.get("home_advantage_cap"),
                 max_iter=bp_cfg.get("max_iter", 2000),
                 tol=bp_cfg.get("tol", 1e-8),
                 lambda3_init=bp_cfg.get("lambda3_init", 0.1),
@@ -650,6 +696,7 @@ class BacktestRunner:
         if odds_rows is None or odds_rows.empty:
             return
 
+        evaluation_time = self._historical_odds_evaluation_time(odds_rows)
         decisions = evaluate_market_candidates(
             match_id=match_id,
             slate_key=str(row.get("match_date")),
@@ -657,11 +704,16 @@ class BacktestRunner:
             markets=markets,
             staker=staker,
             selection=self.selection_config,
+            now=evaluation_time,
             model_version="backtest",
             model_family=model_name,
             blended=model_name == "full_blend",
-            gating_status="backtest",
+            # Backtest candidate generation should not be blocked by live
+            # promotion gates; those gates are evaluated after validation.
+            gating_status="passed",
         )
+        for decision in decisions:
+            staker.log_decision(decision)
         accepted = [decision for decision in decisions if decision.accepted]
         if not accepted:
             return
@@ -675,6 +727,11 @@ class BacktestRunner:
                 model_prob=float(decision.model_probability),
                 market_odds=float(decision.market_price),
                 fair_odds=float(decision.model_price),
+                market_no_vig_probability=float(decision.market_no_vig_probability),
+                probability_edge=float(decision.probability_edge),
+                expected_value=float(decision.expected_value),
+                closing_market_odds=float(decision.closing_market_price),
+                clv=float(decision.clv),
                 edge=float(decision.edge),
                 sportsbook=decision.sportsbook,
                 source_type=decision.source_type,
@@ -686,6 +743,8 @@ class BacktestRunner:
                 model_family=decision.model_family,
                 blended=decision.blended,
                 gating_status=decision.gating_status,
+                pick_tier=decision.pick_tier,
+                actionable=decision.actionable,
                 stake=float(decision.stake),
                 stake_pct=float(decision.stake_pct),
             )
@@ -704,6 +763,176 @@ class BacktestRunner:
                     float(decision.line or 0.0),
                     decision.market_price,
                     rec.stake,
-                )
+            )
             staker.update_bankroll(result.pnl)
             staker.log_bet(rec, result.pnl, result.result.value)
+
+    @staticmethod
+    def _historical_odds_evaluation_time(odds_rows: pd.DataFrame) -> Any:
+        """Use the quote time as the backtest clock for historical close odds."""
+        if odds_rows is None or odds_rows.empty or "timestamp" not in odds_rows.columns:
+            return None
+        timestamps = parse_mixed_utc_datetime(odds_rows["timestamp"]).dropna()
+        if timestamps.empty:
+            return None
+        return timestamps.max().to_pydatetime()
+
+    @staticmethod
+    def _market_betting_diagnostics(
+        predictions: pd.DataFrame,
+        odds: pd.DataFrame | None,
+        bet_log: pd.DataFrame,
+        decision_log: pd.DataFrame | None = None,
+    ) -> dict[str, Any]:
+        """Summarize whether ML/1X2 and totals were actually testable."""
+        match_ids = (
+            set(predictions["match_id"].astype(str))
+            if predictions is not None and not predictions.empty and "match_id" in predictions.columns
+            else set()
+        )
+        close_odds = pd.DataFrame()
+        if odds is not None and not odds.empty:
+            close_odds = odds.copy()
+            close_odds["match_id"] = close_odds["match_id"].astype(str)
+            if "source_type" in close_odds.columns:
+                close_odds = close_odds[close_odds["source_type"].astype(str).str.lower() == "close"]
+            if match_ids:
+                close_odds = close_odds[close_odds["match_id"].isin(match_ids)]
+
+        def market_rows(market_type: str) -> pd.DataFrame:
+            if close_odds.empty or "market_type" not in close_odds.columns:
+                return pd.DataFrame()
+            return close_odds[close_odds["market_type"].astype(str).str.lower() == market_type].copy()
+
+        def bet_rows(prefix: str) -> pd.DataFrame:
+            if bet_log is None or bet_log.empty or "market" not in bet_log.columns:
+                return pd.DataFrame()
+            return bet_log[bet_log["market"].astype(str).str.startswith(prefix)].copy()
+
+        def decision_rows(prefix: str) -> pd.DataFrame:
+            if decision_log is None or decision_log.empty or "market" not in decision_log.columns:
+                return pd.DataFrame()
+            return decision_log[decision_log["market"].astype(str).str.startswith(prefix)].copy()
+
+        diagnostics: dict[str, Any] = {"market_coverage": {"validation_matches": len(match_ids)}}
+        for market_type, label, prefix in [
+            ("1x2", "moneyline", "1x2_"),
+            ("total", "totals", "total_"),
+        ]:
+            rows = market_rows(market_type)
+            bets = bet_rows(prefix)
+            decisions = decision_rows(prefix)
+            staked = float(bets["stake"].sum()) if not bets.empty and "stake" in bets.columns else 0.0
+            pnl = float(bets["pnl"].sum()) if not bets.empty and "pnl" in bets.columns else 0.0
+            matches_with_odds = int(rows["match_id"].nunique()) if not rows.empty else 0
+            diagnostics["market_coverage"][label] = {
+                "close_odds_rows": int(len(rows)),
+                "matches_with_close_odds": matches_with_odds,
+                "coverage_pct": float(matches_with_odds / max(len(match_ids), 1)),
+                "testable": matches_with_odds > 0,
+            }
+            diagnostics[f"{label}_n_bets"] = int(len(bets))
+            diagnostics[f"{label}_candidate_count"] = int(len(decisions))
+            diagnostics[f"{label}_accepted_count"] = int(decisions["accepted"].sum()) if not decisions.empty and "accepted" in decisions.columns else int(len(bets))
+            diagnostics[f"{label}_lean_count"] = (
+                int(decisions["pick_tier"].astype(str).eq("lean").sum())
+                if not decisions.empty and "pick_tier" in decisions.columns
+                else 0
+            )
+            diagnostics[f"{label}_official_pick_count"] = (
+                int(decisions["pick_tier"].astype(str).eq("official_pick").sum())
+                if not decisions.empty and "pick_tier" in decisions.columns
+                else int(len(bets))
+            )
+            diagnostics[f"{label}_rejected_reasons"] = (
+                {
+                    str(reason): int(count)
+                    for reason, count in decisions.loc[~decisions["accepted"].astype(bool), "reason"].value_counts().items()
+                }
+                if not decisions.empty and {"accepted", "reason"}.issubset(decisions.columns)
+                else {}
+            )
+            diagnostics[f"{label}_total_staked"] = staked
+            diagnostics[f"{label}_total_pnl"] = pnl
+            diagnostics[f"{label}_roi"] = float(pnl / staked) if staked > 0 else 0.0
+            diagnostics[f"{label}_hit_rate"] = (
+                float((bets["pnl"] > 0).mean())
+                if not bets.empty and "pnl" in bets.columns
+                else 0.0
+            )
+            diagnostics[f"{label}_mean_clv"] = (
+                float(bets["clv"].mean())
+                if not bets.empty and "clv" in bets.columns
+                else 0.0
+            )
+            diagnostics[f"{label}_positive_clv_rate"] = (
+                float((bets["clv"] > 0).mean())
+                if not bets.empty and "clv" in bets.columns
+                else 0.0
+            )
+            if market_type in {"1x2", "total"}:
+                sides = ("home", "draw", "away") if market_type == "1x2" else ("over", "under")
+                for side in sides:
+                    side_market = f"1x2_{side}" if market_type == "1x2" else f"total_{side}_"
+                    if bets.empty or "market" not in bets.columns:
+                        side_bets = pd.DataFrame()
+                    elif market_type == "1x2":
+                        side_bets = bets[bets["market"].astype(str).eq(side_market)].copy()
+                    else:
+                        side_bets = bets[bets["market"].astype(str).str.startswith(side_market)].copy()
+
+                    if decisions.empty or "market" not in decisions.columns:
+                        side_decisions = pd.DataFrame()
+                    elif market_type == "1x2":
+                        side_decisions = decisions[decisions["market"].astype(str).eq(side_market)].copy()
+                    else:
+                        side_decisions = decisions[
+                            decisions["market"].astype(str).str.startswith(side_market)
+                        ].copy()
+                    side_staked = (
+                        float(side_bets["stake"].sum())
+                        if not side_bets.empty and "stake" in side_bets.columns
+                        else 0.0
+                    )
+                    side_pnl = (
+                        float(side_bets["pnl"].sum())
+                        if not side_bets.empty and "pnl" in side_bets.columns
+                        else 0.0
+                    )
+                    prefix_key = f"{label}_{side}"
+                    diagnostics[f"{prefix_key}_candidate_count"] = int(len(side_decisions))
+                    diagnostics[f"{prefix_key}_n_bets"] = int(len(side_bets))
+                    diagnostics[f"{prefix_key}_accepted_count"] = (
+                        int(side_decisions["accepted"].sum())
+                        if not side_decisions.empty and "accepted" in side_decisions.columns
+                        else int(len(side_bets))
+                    )
+                    diagnostics[f"{prefix_key}_lean_count"] = (
+                        int(side_decisions["pick_tier"].astype(str).eq("lean").sum())
+                        if not side_decisions.empty and "pick_tier" in side_decisions.columns
+                        else 0
+                    )
+                    diagnostics[f"{prefix_key}_official_pick_count"] = (
+                        int(side_decisions["pick_tier"].astype(str).eq("official_pick").sum())
+                        if not side_decisions.empty and "pick_tier" in side_decisions.columns
+                        else int(len(side_bets))
+                    )
+                    diagnostics[f"{prefix_key}_rejected_reasons"] = (
+                        {
+                            str(reason): int(count)
+                            for reason, count in side_decisions.loc[
+                                ~side_decisions["accepted"].astype(bool), "reason"
+                            ].value_counts().items()
+                        }
+                        if not side_decisions.empty and {"accepted", "reason"}.issubset(side_decisions.columns)
+                        else {}
+                    )
+                    diagnostics[f"{prefix_key}_total_staked"] = side_staked
+                    diagnostics[f"{prefix_key}_total_pnl"] = side_pnl
+                    diagnostics[f"{prefix_key}_roi"] = float(side_pnl / side_staked) if side_staked > 0 else 0.0
+                    diagnostics[f"{prefix_key}_hit_rate"] = (
+                        float((side_bets["pnl"] > 0).mean())
+                        if not side_bets.empty and "pnl" in side_bets.columns
+                        else 0.0
+                    )
+        return diagnostics

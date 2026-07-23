@@ -17,6 +17,7 @@ BLENDED_ALIAS = "champion_blended"
 BASELINE_MODELS = (
     "home_field_baseline",
     "rolling_npxg_poisson",
+    "spi_lite_baseline",
     "team_ratings_poisson",
     "uniform_baseline",
 )

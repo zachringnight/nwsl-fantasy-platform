@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from src.utils.dates import parse_mixed_utc_datetime
+
 
 SNAPSHOT_COLUMNS = [
     "match_id",
@@ -24,8 +26,33 @@ SNAPSHOT_KEY_COLUMNS = [
 ]
 
 
+LIVE_SOURCE_TYPES = ("current", "live", "open")
+
+
 def _empty_snapshot_frame() -> pd.DataFrame:
     return pd.DataFrame(columns=SNAPSHOT_COLUMNS)
+
+
+def extract_live_snapshot_rows(
+    odds: pd.DataFrame,
+    live_source_types: tuple[str, ...] = LIVE_SOURCE_TYPES,
+) -> pd.DataFrame:
+    """Select the live (non-close) odds rows worth accumulating for CLV.
+
+    A capture run records the *current* line stamped with wall-clock time so the
+    open->close series builds up over repeated runs. Static "close" history rows
+    (e.g. consensus closing averages) carry a single fixed timestamp and would
+    only ever dedupe to themselves, so they are excluded here.
+    """
+    if odds is None or odds.empty or "source_type" not in odds.columns:
+        return _empty_snapshot_frame()
+    allowed = {value.lower() for value in live_source_types}
+    mask = odds["source_type"].astype(str).str.lower().isin(allowed)
+    live = odds.loc[mask].copy()
+    for column in SNAPSHOT_COLUMNS:
+        if column not in live.columns:
+            live[column] = pd.NA
+    return live.loc[:, SNAPSHOT_COLUMNS].reset_index(drop=True)
 
 
 def append_snapshot_rows(existing: pd.DataFrame, incoming: pd.DataFrame) -> pd.DataFrame:
@@ -80,7 +107,7 @@ def materialize_closing_odds(
         if column not in snap.columns:
             snap[column] = pd.NA
     snap["match_id"] = snap["match_id"].astype(str)
-    snap["timestamp_dt"] = pd.to_datetime(snap["timestamp"], utc=True, errors="coerce")
+    snap["timestamp_dt"] = parse_mixed_utc_datetime(snap["timestamp"])
     for match in completed.itertuples(index=False):
         if pd.isna(match.match_cutoff):
             continue

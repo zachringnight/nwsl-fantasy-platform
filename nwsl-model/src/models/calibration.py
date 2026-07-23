@@ -201,6 +201,49 @@ def apply_prediction_calibration(predictions: pd.DataFrame, calibrators: dict[st
     return output
 
 
+def compute_oof_calibrated_predictions(
+    predictions: pd.DataFrame,
+    n_folds: int = 5,
+    seed: int = 0,
+) -> pd.DataFrame:
+    """Cross-fit calibration so no row is calibrated by a map fit on itself.
+
+    The base backtest predictions are already walk-forward out-of-fold, but the
+    calibration overlay must also be out-of-fold or its measured benefit is an
+    in-sample artifact. Each row is assigned to one of ``n_folds`` folds; for
+    each fold the calibrator is fit on the *other* folds and applied to the
+    held-out fold. The assembled frame is an honest generalization estimate.
+    """
+    if predictions.empty:
+        return pd.DataFrame(index=predictions.index)
+
+    n = len(predictions)
+    effective_folds = max(2, min(n_folds, n))
+    rng = np.random.default_rng(seed)
+    shuffled = rng.permutation(n)
+    fold_of_position = np.empty(n, dtype=int)
+    fold_of_position[shuffled] = np.arange(n) % effective_folds
+
+    reset = predictions.reset_index(drop=True)
+    calibrated_parts: list[pd.DataFrame] = []
+    for fold in range(effective_folds):
+        train_mask = fold_of_position != fold
+        test_mask = fold_of_position == fold
+        if not test_mask.any():
+            continue
+        train_frame = reset.loc[train_mask]
+        test_frame = reset.loc[test_mask]
+        calibrators = fit_prediction_calibrators(train_frame) if not train_frame.empty else {}
+        if calibrators:
+            calibrated_parts.append(apply_prediction_calibration(test_frame, calibrators))
+        else:
+            calibrated_parts.append(apply_prediction_calibration(test_frame, fit_prediction_calibrators(test_frame)))
+
+    calibrated = pd.concat(calibrated_parts).sort_index()
+    calibrated.index = predictions.index
+    return calibrated
+
+
 def apply_market_calibration(markets: MarketPrices, calibration_artifact: dict[str, object]) -> MarketPrices:
     """Apply post-hoc calibration artifacts to derived market probabilities."""
     calibrated = copy.deepcopy(markets)

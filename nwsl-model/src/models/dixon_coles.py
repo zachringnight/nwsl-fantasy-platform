@@ -298,6 +298,12 @@ class DixonColesModel(BaseScoreModel):
             "team_regularization": float(self.dc_config.regularization),
             "contextual_regularization": float(self.dc_config.contextual_regularization),
             "rho_regularization": float(self.dc_config.rho_regularization),
+            "home_advantage_scale": float(self.dc_config.home_advantage_scale),
+            "home_advantage_cap": (
+                None
+                if self.dc_config.home_advantage_cap is None
+                else float(self.dc_config.home_advantage_cap)
+            ),
         }
         warnings = []
         if not result.success:
@@ -344,7 +350,7 @@ class DixonColesModel(BaseScoreModel):
         att_a = self._attack[a_idx] if a_idx >= 0 else 0.0
         def_a = self._defense[a_idx] if a_idx >= 0 else 0.0
 
-        ha = home_advantage if home_advantage is not None else self._home_adv
+        ha = self._effective_home_advantage(self._home_adv, home_advantage)
 
         log_lam_h = self._intercept + ha + att_h - def_a
         log_lam_a = self._intercept + att_a - def_h
@@ -398,6 +404,9 @@ class DixonColesModel(BaseScoreModel):
                 "model": "dixon_coles",
                 "rho": self._rho,
                 "home_advantage": ha,
+                "learned_home_advantage": self._home_adv,
+                "home_advantage_scale": self.dc_config.home_advantage_scale,
+                "home_advantage_cap": self.dc_config.home_advantage_cap,
             },
         )
 
@@ -407,6 +416,9 @@ class DixonColesModel(BaseScoreModel):
         team_names = {v: k for k, v in self._team_map.items()}
         return {
             "home_advantage": self._home_adv,
+            "effective_home_advantage": self._effective_home_advantage(self._home_adv),
+            "home_advantage_scale": self.dc_config.home_advantage_scale,
+            "home_advantage_cap": self.dc_config.home_advantage_cap,
             "intercept": self._intercept,
             "rho": self._rho,
             "attack": {team_names[i]: float(self._attack[i]) for i in range(self._n_teams)},

@@ -45,6 +45,17 @@ def _coerce_metric(row: pd.Series, *names: str, default: float = 0.0) -> float:
     return default
 
 
+def _coerce_int_value(value: object, default: int = 0) -> int:
+    if value is None:
+        return default
+    try:
+        if pd.isna(value):
+            return default
+        return int(float(value))
+    except (TypeError, ValueError):
+        return default
+
+
 def _predictions_path(model_dir: Path) -> Path:
     direct_path = model_dir / "predictions.csv"
     if direct_path.exists():
@@ -128,6 +139,17 @@ def export_predictions(model_dir: Path, output_dir: Path, config: dict) -> None:
             "lambdaAway": round(float(row.get("lambda_away", 0)), 3),
             "bttsYesProb": round(float(row.get("btts_yes_prob", 0)), 4),
             "model": row.get("model", "dixon_coles"),
+            "modelVersion": row.get("model_version", ""),
+            "modelFamily": row.get("model_family", ""),
+            "gatingStatus": row.get("gating_status", "unknown"),
+            "topPickTier": row.get("top_pick_tier", "no_bet"),
+            "officialPickCount": _coerce_int_value(row.get("official_pick_count", row.get("accepted_bet_count", 0))),
+            "leanBetCount": _coerce_int_value(row.get("lean_bet_count", 0)),
+            "actionablePickCount": _coerce_int_value(row.get("actionable_pick_count", 0)),
+            "recommendedBets": row.get("recommended_bets", "none"),
+            "recommendedLeans": row.get("recommended_leans", "none"),
+            "actionablePicks": row.get("actionable_picks", "none"),
+            "rejectedBetReasons": row.get("rejected_bet_reasons", "none"),
             "timestamp": str(row.get("timestamp", "")),
         }
 

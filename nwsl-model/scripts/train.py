@@ -31,6 +31,7 @@ from src.features.context import (
     select_model_contextual_columns,
 )
 from src.features.match_features import compute_rolling_form, compute_season_stats
+from src.features.roster_continuity import compute_roster_continuity
 from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoissonModel
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
 from src.models.lineup_adjustment import LineupAdjustmentModel
@@ -84,6 +85,12 @@ def main() -> None:
 
     if dataset.has_odds:
         matches = merge_odds_to_matches(matches, dataset.odds)
+    roster_continuity = compute_roster_continuity(
+        dataset.player_season_priors,
+        target_seasons=matches["season"].dropna().astype(int).unique().tolist()
+        if "season" in matches.columns and matches["season"].notna().any()
+        else None,
+    )
 
     # Team ratings
     base_prepared_matches, contextual_cols = build_contextual_training_frame(
@@ -187,6 +194,7 @@ def main() -> None:
         "model_contextual_columns": model_contextual_cols,
         "feature_policy": {
             "team_season_priors": "previous_available_season",
+            "team_season_prior_weighting": "roster_continuity_scaled_and_decayed_by_current_season_matches",
             "player_season_priors": "last_season_only_projection_fallback",
             "lineup_features": "observed_appearances_and_projected_lineups_only",
             "score_model_contextual_profile": "pure_projection_v1",
@@ -199,6 +207,17 @@ def main() -> None:
         },
         "dataset_manifest": dataset_manifest,
         "odds_quality": odds_quality_report,
+        "roster_continuity": {
+            "enabled": not roster_continuity.empty,
+            "rows": int(len(roster_continuity)),
+            "season_coverage": sorted(
+                roster_continuity["season"].dropna().astype(int).unique().tolist()
+            ) if not roster_continuity.empty and "season" in roster_continuity.columns else [],
+            "mean_score": float(roster_continuity["roster_continuity_score"].mean())
+            if not roster_continuity.empty else None,
+            "min_score": float(roster_continuity["roster_continuity_score"].min())
+            if not roster_continuity.empty else None,
+        },
     }
 
     for model_name in models_to_train:
@@ -209,6 +228,8 @@ def main() -> None:
             model = DixonColesModel(DixonColesConfig(
                 max_goals=max_goals,
                 home_advantage_init=dc_cfg.get("home_advantage_init", 0.25),
+                home_advantage_scale=dc_cfg.get("home_advantage_scale", 1.0),
+                home_advantage_cap=dc_cfg.get("home_advantage_cap"),
                 max_iter=dc_cfg.get("max_iter", 2000),
                 tol=dc_cfg.get("tol", 1e-8),
                 rho_init=dc_cfg.get("rho_init", -0.05),
@@ -222,6 +243,8 @@ def main() -> None:
             model = BivariatePoissonModel(BivariatePoissonConfig(
                 max_goals=max_goals,
                 home_advantage_init=bp_cfg.get("home_advantage_init", 0.25),
+                home_advantage_scale=bp_cfg.get("home_advantage_scale", 1.0),
+                home_advantage_cap=bp_cfg.get("home_advantage_cap"),
                 max_iter=bp_cfg.get("max_iter", 2000),
                 tol=bp_cfg.get("tol", 1e-8),
                 lambda3_init=bp_cfg.get("lambda3_init", 0.1),
@@ -260,6 +283,8 @@ def main() -> None:
     # Save team ratings
     save_pickle(ratings_model, output_dir / "team_ratings.pkl")
     ratings_model.to_dataframe().to_csv(output_dir / "team_ratings.csv", index=False)
+    if not roster_continuity.empty:
+        roster_continuity.to_csv(output_dir / "roster_continuity.csv", index=False)
 
     # Save lineup model if fitted
     if lineup_model is not None:

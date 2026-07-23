@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pandas as pd
+
 from src.backtest.runner import BacktestRunner
 
 
@@ -32,11 +34,15 @@ def test_backtest_fit_overrides_score_model_regularization_settings() -> None:
         {
             "model": {"max_goals": 8},
             "dixon_coles": {
+                "home_advantage_scale": 0.8,
+                "home_advantage_cap": 0.12,
                 "regularization": 0.1,
                 "contextual_regularization": 0.2,
                 "rho_regularization": 0.3,
             },
             "bivariate_poisson": {
+                "home_advantage_scale": 0.7,
+                "home_advantage_cap": 0.11,
                 "regularization": 0.4,
                 "contextual_regularization": 0.5,
                 "lambda3_regularization": 0.6,
@@ -57,6 +63,23 @@ def test_backtest_fit_overrides_score_model_regularization_settings() -> None:
     assert dixon_coles.dc_config.regularization == 0.7
     assert dixon_coles.dc_config.contextual_regularization == 0.2
     assert dixon_coles.dc_config.rho_regularization == 0.8
+    assert dixon_coles.dc_config.home_advantage_scale == 0.8
+    assert dixon_coles.dc_config.home_advantage_cap == 0.12
     assert bivariate_poisson.bp_config.regularization == 0.7
     assert bivariate_poisson.bp_config.contextual_regularization == 0.5
     assert bivariate_poisson.bp_config.lambda3_regularization == 0.9
+    assert bivariate_poisson.bp_config.home_advantage_scale == 0.7
+    assert bivariate_poisson.bp_config.home_advantage_cap == 0.11
+
+
+def test_backtest_uses_historical_quote_time_for_stale_check() -> None:
+    odds_rows = pd.DataFrame(
+        [
+            {"timestamp": "2025-04-01T20:00:00+00:00"},
+            {"timestamp": "2025-04-01T21:00:00+00:00"},
+        ]
+    )
+
+    evaluation_time = BacktestRunner._historical_odds_evaluation_time(odds_rows)
+
+    assert evaluation_time.isoformat() == "2025-04-01T21:00:00+00:00"

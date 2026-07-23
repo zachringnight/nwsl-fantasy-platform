@@ -38,6 +38,18 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_REGULARIZATION_VALUES,
         help="Regularization values to evaluate",
     )
+    parser.add_argument(
+        "--contextual-regularization",
+        type=float,
+        default=None,
+        help="Fixed contextual regularization to use; defaults to each candidate regularization.",
+    )
+    parser.add_argument(
+        "--score-shape-regularization",
+        type=float,
+        default=None,
+        help="Fixed rho/lambda3 regularization to use; defaults to each candidate regularization.",
+    )
     parser.add_argument("--max-candidates", type=int, default=None)
     parser.add_argument("--step-size", type=int, default=56)
     parser.add_argument("--max-iter", type=int, default=150)
@@ -72,12 +84,23 @@ def regularization_label(value: float) -> str:
     return f"reg_{value:g}".replace(".", "p")
 
 
-def build_candidate_params(regularization: float, step_size: int, max_iter: int) -> dict[str, Any]:
-    return {
+def build_candidate_params(
+    regularization: float,
+    step_size: int,
+    max_iter: int,
+    contextual_regularization: float | None = None,
+    score_shape_regularization: float | None = None,
+) -> dict[str, Any]:
+    params: dict[str, Any] = {
         "regularization": regularization,
         "step_size": step_size,
         "max_iter": max_iter,
     }
+    if contextual_regularization is not None:
+        params["contextual_regularization"] = contextual_regularization
+    if score_shape_regularization is not None:
+        params["score_shape_regularization"] = score_shape_regularization
+    return params
 
 
 def build_candidate_config(
@@ -85,18 +108,22 @@ def build_candidate_config(
     regularization: float,
     step_size: int,
     max_iter: int,
+    contextual_regularization: float | None = None,
+    score_shape_regularization: float | None = None,
 ) -> dict[str, Any]:
     config = copy.deepcopy(base_config)
+    contextual_reg = regularization if contextual_regularization is None else contextual_regularization
+    shape_reg = regularization if score_shape_regularization is None else score_shape_regularization
 
     dixon_coles = config.setdefault("dixon_coles", {})
     dixon_coles["regularization"] = regularization
-    dixon_coles["contextual_regularization"] = regularization
-    dixon_coles["rho_regularization"] = regularization
+    dixon_coles["contextual_regularization"] = contextual_reg
+    dixon_coles["rho_regularization"] = shape_reg
 
     bivariate_poisson = config.setdefault("bivariate_poisson", {})
     bivariate_poisson["regularization"] = regularization
-    bivariate_poisson["contextual_regularization"] = regularization
-    bivariate_poisson["lambda3_regularization"] = regularization
+    bivariate_poisson["contextual_regularization"] = contextual_reg
+    bivariate_poisson["lambda3_regularization"] = shape_reg
 
     backtest = config.setdefault("backtest", {})
     backtest["step_size"] = step_size
@@ -225,7 +252,13 @@ def main() -> int:
     summary_rows: list[dict[str, Any]] = []
 
     for regularization in regularization_values:
-        params = build_candidate_params(regularization, args.step_size, args.max_iter)
+        params = build_candidate_params(
+            regularization,
+            args.step_size,
+            args.max_iter,
+            contextual_regularization=args.contextual_regularization,
+            score_shape_regularization=args.score_shape_regularization,
+        )
         candidate = f"{regularization_label(regularization)}_{candidate_id(params)}"
         config_path = configs_dir / f"{candidate}.yaml"
         output_dir = backtests_dir / candidate
@@ -235,6 +268,8 @@ def main() -> int:
             regularization=regularization,
             step_size=args.step_size,
             max_iter=args.max_iter,
+            contextual_regularization=args.contextual_regularization,
+            score_shape_regularization=args.score_shape_regularization,
         )
         write_candidate_config(candidate_config, config_path)
 

@@ -3,11 +3,24 @@
 
 data:
   matches_path: "data/raw/matches.csv"
+  upcoming_path: "data/raw/upcoming.csv"
   odds_path: "data/raw/odds.csv"
+  normalized_odds_path: "data/raw/odds_normalized.csv"
   odds_snapshots_path: "data/raw/odds_snapshots.csv"
   venues_path: "data/raw/venues.csv"
   appearances_path: "data/raw/appearances.csv"
   projected_lineups_path: "data/raw/projected_lineups.csv"
+  official_matches_dir: "../data/nwsl-official"
+  asa_match_xgoals_path: "data/raw/asa_match_xgoals.csv"
+  team_season_priors_path: "data/raw/team_season_priors.csv"
+  player_season_priors_path: "data/raw/player_season_priors.csv"
+  # NWSL has high year-to-year roster churn and two 2026 expansion teams, but
+  # fitting/evaluating on 2026 alone leaves only ~33 completed matches, which
+  # makes OOF calibration noisy and the promotion gate statistically unreliable.
+  # Include 2025 in the fit/eval window so the backtest evaluates on 200+ matches
+  # and the score models have enough data to be honestly compared to the baseline.
+  history_start_season: 2025
+  prior_history_start_season: 2025
   output_dir: "data/processed"
   # Supported formats: csv, parquet
   format: "csv"
@@ -24,11 +37,11 @@ model:
 
 team_ratings:
   # Exponential decay half-life in days
-  half_life_days: 90
+  half_life_days: 45
   # Shrinkage toward league average for new/sparse teams
   prior_weight: 5.0
   # Season-to-season carryover factor (0=full reset, 1=full carry)
-  season_carryover: 0.6
+  season_carryover: 0.25
   # Older seasons get additional shrinkage: effective_carryover = season_carryover ^ seasons_ago
   multi_season_decay: true
 
@@ -36,13 +49,16 @@ dixon_coles:
   # Low-score correction parameter rho range
   rho_init: -0.05
   rho_bounds: [-0.5, 0.5]
-  # Strong shrinkage is intentional with only 2025-2026 match data; weak priors
-  # produced extreme 99%+ out-of-sample probabilities in early folds.
-  regularization: 2000.0
-  contextual_regularization: 2000.0
-  rho_regularization: 2000.0
+  # Team-strength shrinkage must not be so high that the fitted home term
+  # overwhelms team quality. A 2025->2026 holdout sweep fixed an all-home
+  # 1X2 ranking by lowering team shrinkage and capping prediction-time HA.
+  regularization: 2.0
+  contextual_regularization: 3000.0
+  rho_regularization: 3000.0
   # Home advantage initial value
   home_advantage_init: 0.25
+  home_advantage_scale: 1.0
+  home_advantage_cap: 0.10
   # Optimizer settings
   max_iter: 2000
   tol: 1.0e-8
@@ -51,11 +67,13 @@ bivariate_poisson:
   # Shared intensity lambda3 initial value
   lambda3_init: 0.1
   lambda3_bounds: [0.001, 2.0]
-  # Match Dixon-Coles shrinkage until the model has richer xG/odds history.
-  regularization: 2000.0
-  contextual_regularization: 2000.0
-  lambda3_regularization: 2000.0
+  # Match Dixon-Coles split shrinkage and HA treatment.
+  regularization: 2.0
+  contextual_regularization: 3000.0
+  lambda3_regularization: 3000.0
   home_advantage_init: 0.25
+  home_advantage_scale: 1.0
+  home_advantage_cap: 0.10
   max_iter: 2000
   tol: 1.0e-8
 
@@ -64,6 +82,18 @@ elo_baseline:
   home_advantage_elo: 45.0
   draw_prior: 0.27
   draw_prior_weight: 50.0
+
+spi_lite:
+  # Low-parameter public-methodology benchmark: dynamic team attack/defense,
+  # current-season xG form, roster-prior decay, rest, and projected-lineup deltas.
+  rating_weight: 0.55
+  current_full_weight_matches: 10.0
+  max_rating_log_adjustment: 0.70
+  lineup_log_scale: 0.035
+  rest_log_scale: 0.012
+  pace_weight: 0.20
+  min_lambda: 0.20
+  max_lambda: 3.75
 
 lineup_adjustment:
   # Ridge regularization alpha for adjusted plus-minus
@@ -104,8 +134,52 @@ market_blend:
   devig_method: "multiplicative"
 
 betting:
-  # Minimum edge to place a bet
+  # Official picks require promotion gates, this edge, and this confidence.
   min_edge: 0.02
+  min_confidence: 0.08
+  # Market-specific official-pick rules tuned on 2025 chronological folds and
+  # evaluated against the held-out 2026 season. ML gets more volume but avoids
+  # long prices; totals need a larger line-aware edge before becoming official.
+  market_rules:
+    moneyline:
+      min_edge: 0.03
+      min_confidence: 0.05
+      max_market_price: 4.0
+      side_rules:
+        # Draws are rarely the top raw 1X2 outcome, so they need a separate
+        # value-bet gate: line-aware edge vs no-vig market, not top-pick rank.
+        # The 2025->2026 holdout showed loose draw gates add volume but lose;
+        # keep draws as leans unless the model clears a much larger edge.
+        draw:
+          min_edge: 0.12
+          min_confidence: 0.0
+          min_probability_edge: 0.12
+          min_market_price: 3.0
+          max_market_price: 5.5
+    totals:
+      enabled: true
+      # Totals surface as LEANS only (tiny capped stake, labeled), not official
+      # picks. Calibration is still coarse/in-sample, so official_picks_enabled
+      # stays false until totals calibration is independently validated and
+      # clears promotion gates. This makes totals actionable without overclaiming.
+      official_picks_enabled: false
+      min_edge: 0.10
+      min_confidence: 0.0
+      # Current 2025->2026 holdout diagnostics show the score model materially
+      # underprices overs, creating a losing under bias. Keep under projections
+      # in reports, but do not publish them as actionable picks until totals
+      # calibration clears promotion gates.
+      allowed_sides: ["over"]
+  # Leans are lower-stake, volume-first ideas when the model sees edge but
+  # has not cleared strict official-pick gates.
+  allow_leans: true
+  lean_min_edge: 0.01
+  lean_min_confidence: 0.03
+  # Suppress unvalidated leans where model-vs-market disagreement is too large
+  # to publish without passing CLV/profit gates.
+  lean_max_probability_edge: 0.20
+  lean_kelly_fraction: 0.10
+  lean_max_stake_pct: 0.001
   # Kelly fraction
   kelly_fraction: 0.25
   # Maximum stake as fraction of bankroll
@@ -115,8 +189,7 @@ betting:
   # Markets to bet on
   markets:
     - "1x2"
-    - "asian_handicap"
-    - "totals"
+    - "total"
 
 backtest:
   # Minimum training matches before first prediction
@@ -136,6 +209,7 @@ backtest:
     - "home_field_baseline"
     - "team_ratings_poisson"
     - "rolling_npxg_poisson"
+    - "spi_lite_baseline"
 
 logging:
   level: "INFO"

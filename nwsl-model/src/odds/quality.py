@@ -9,6 +9,8 @@ from typing import Any
 
 import pandas as pd
 
+from src.utils.dates import parse_mixed_utc_datetime
+
 
 def build_odds_quality_report(
     matches: pd.DataFrame,
@@ -32,7 +34,12 @@ def build_odds_quality_report(
             "stale_rows": 0,
             "stale_pct": 0.0,
         },
+        "required_close_markets_for_backtest": ["1x2"],
         "excluded_backtest_matches": {"count": int(len(matches)), "sample_match_ids": matches["match_id"].astype(str).head(10).tolist()},
+        "excluded_backtest_matches_by_market": {
+            "1x2": {"count": int(len(matches)), "sample_match_ids": matches["match_id"].astype(str).head(10).tolist()},
+            "total": {"count": int(len(matches)), "sample_match_ids": matches["match_id"].astype(str).head(10).tolist()},
+        },
     }
 
     if odds is None or odds.empty:
@@ -43,7 +50,7 @@ def build_odds_quality_report(
     odds["source_type"] = odds["source_type"].astype(str).str.lower()
     odds["market_type"] = odds["market_type"].astype(str).str.lower()
     if "timestamp" in odds.columns:
-        odds["timestamp"] = pd.to_datetime(odds["timestamp"], utc=True, errors="coerce")
+        odds["timestamp"] = parse_mixed_utc_datetime(odds["timestamp"])
 
     report["source_available"] = True
     report["total_rows"] = int(len(odds))
@@ -65,12 +72,26 @@ def build_odds_quality_report(
 
     close_1x2_ids = set(close_1x2["match_id"].tolist())
     close_total_ids = set(close_total["match_id"].tolist())
-    excluded = matches[
-        ~matches["match_id"].isin(close_1x2_ids.intersection(close_total_ids))
+    excluded_1x2 = matches[
+        ~matches["match_id"].isin(close_1x2_ids)
+    ]["match_id"].astype(str)
+    excluded_total = matches[
+        ~matches["match_id"].isin(close_total_ids)
     ]["match_id"].astype(str)
     report["excluded_backtest_matches"] = {
-        "count": int(len(excluded)),
-        "sample_match_ids": excluded.head(10).tolist(),
+        "count": int(len(excluded_1x2)),
+        "sample_match_ids": excluded_1x2.head(10).tolist(),
+        "market": "1x2",
+    }
+    report["excluded_backtest_matches_by_market"] = {
+        "1x2": {
+            "count": int(len(excluded_1x2)),
+            "sample_match_ids": excluded_1x2.head(10).tolist(),
+        },
+        "total": {
+            "count": int(len(excluded_total)),
+            "sample_match_ids": excluded_total.head(10).tolist(),
+        },
     }
 
     coverage_by_season: dict[str, Any] = {}

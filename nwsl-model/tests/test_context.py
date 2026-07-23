@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 
 import pandas as pd
+import pytest
 
 from src.features.context import (
     ContextualFeatureProvider,
@@ -170,6 +171,78 @@ def test_contextual_training_frame_uses_team_and_player_priors() -> None:
     assert fixture_context["home_lineup_strength"] == 0.8
 
 
+def test_context_provider_uses_match_specific_projected_lineup_strength() -> None:
+    prepared = pd.DataFrame(
+        [
+            {
+                "match_date": date(2026, 5, 1),
+                "home_team": "Portland Thorns",
+                "away_team": "Current",
+                "home_lineup_strength": 0.0,
+                "away_lineup_strength": 0.0,
+            }
+        ]
+    )
+    player_priors = pd.DataFrame(
+        [
+            {"season": 2026, "player_id": "p1", "team": "Portland Thorns", "season_value_score": 0.8},
+            {"season": 2026, "player_id": "p2", "team": "Portland Thorns", "season_value_score": 0.4},
+            {"season": 2026, "player_id": "p3", "team": "Portland Thorns", "season_value_score": 0.2},
+            {"season": 2026, "player_id": "k1", "team": "Current", "season_value_score": 0.5},
+        ]
+    )
+    projected_lineups = pd.DataFrame(
+        [
+            {
+                "match_id": "m2",
+                "team": "Portland Thorns",
+                "player_id": "p1",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "available",
+            },
+            {
+                "match_id": "m2",
+                "team": "Portland Thorns",
+                "player_id": "p2",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "available",
+            },
+            {
+                "match_id": "m3",
+                "team": "Portland Thorns",
+                "player_id": "p3",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "available",
+            },
+            {
+                "match_id": "m2",
+                "team": "Current",
+                "player_id": "k1",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "out",
+            },
+        ]
+    )
+
+    provider = ContextualFeatureProvider.from_training_frame(prepared).attach_projected_lineups(
+        projected_lineups=projected_lineups,
+        player_season_priors=player_priors,
+    )
+
+    m2_context = provider.for_match("Portland Thorns", "Current", match_id="m2")
+    m3_context = provider.for_match("Portland Thorns", "Current", match_id="m3")
+    fallback_context = provider.for_match("Portland Thorns", "Current")
+
+    assert m2_context["home_lineup_strength"] == pytest.approx(1.2)
+    assert m3_context["home_lineup_strength"] == pytest.approx(0.2)
+    assert fallback_context["home_lineup_strength"] == pytest.approx(0.7)
+    assert m2_context["away_lineup_strength"] == 0.0
+
+
 def test_contextual_training_frame_uses_previous_available_team_priors() -> None:
     matches = pd.DataFrame(
         [
@@ -255,6 +328,113 @@ def test_contextual_training_frame_uses_previous_available_team_priors() -> None
     assert second_row["home_team_xg_per_match_missing"] == 0.0
 
 
+def test_contextual_training_frame_downweights_low_continuity_team_priors() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "match_date": date(2026, 3, 1),
+                "season": 2026,
+                "competition": "NWSL",
+                "regular_season_flag": True,
+                "home_team": "Stable FC",
+                "away_team": "Churn FC",
+                "home_goals_90": 1,
+                "away_goals_90": 1,
+                "home_npxg": 1.3,
+                "away_npxg": 1.1,
+                "home_xg": 1.3,
+                "away_xg": 1.1,
+                "match_status": "completed",
+                "resumed_flag": False,
+                "incomplete_flag": False,
+            }
+        ]
+    )
+    team_priors = pd.DataFrame(
+        [
+            {"season": 2025, "team": "Stable FC", "xg_per_match": 2.0, "points_per_match": 2.4},
+            {"season": 2025, "team": "Churn FC", "xg_per_match": 1.0, "points_per_match": 0.8},
+            {"season": 2026, "team": "Stable FC", "xg_per_match": 2.1, "points_per_match": 2.5},
+            {"season": 2026, "team": "Churn FC", "xg_per_match": 0.9, "points_per_match": 0.6},
+        ]
+    )
+    player_priors = pd.DataFrame(
+        [
+            {
+                "season": 2025,
+                "team": "Stable FC",
+                "player_id": "stable-keeper",
+                "position": "Goalkeeper",
+                "minutes_played": 900,
+                "season_value_score": 0.4,
+            },
+            {
+                "season": 2025,
+                "team": "Stable FC",
+                "player_id": "stable-forward",
+                "position": "Forward",
+                "minutes_played": 900,
+                "season_value_score": 0.6,
+            },
+            {
+                "season": 2025,
+                "team": "Churn FC",
+                "player_id": "churn-old-keeper",
+                "position": "Goalkeeper",
+                "minutes_played": 900,
+                "season_value_score": 0.4,
+            },
+            {
+                "season": 2025,
+                "team": "Churn FC",
+                "player_id": "churn-old-forward",
+                "position": "Forward",
+                "minutes_played": 900,
+                "season_value_score": 0.6,
+            },
+            {
+                "season": 2026,
+                "team": "Stable FC",
+                "player_id": "stable-keeper",
+                "position": "Goalkeeper",
+                "minutes_played": 0,
+                "season_value_score": 0.0,
+            },
+            {
+                "season": 2026,
+                "team": "Stable FC",
+                "player_id": "stable-forward",
+                "position": "Forward",
+                "minutes_played": 0,
+                "season_value_score": 0.0,
+            },
+            {
+                "season": 2026,
+                "team": "Churn FC",
+                "player_id": "churn-new-forward",
+                "position": "Forward",
+                "minutes_played": 0,
+                "season_value_score": 0.0,
+            },
+        ]
+    )
+
+    prepared, contextual_cols = build_contextual_training_frame(
+        matches,
+        team_season_priors=team_priors,
+        player_season_priors=player_priors,
+    )
+
+    row = prepared.iloc[0]
+    assert row["home_roster_historical_prior_weight"] == 0.6
+    assert row["away_roster_historical_prior_weight"] == 0.08
+    assert row["home_team_xg_per_match"] == 1.8
+    assert row["away_team_xg_per_match"] == 1.46
+    assert "home_roster_continuity_score" in contextual_cols
+    assert "away_roster_historical_prior_weight" in contextual_cols
+
+
 def test_select_model_contextual_columns_trims_fit_surface() -> None:
     contextual_cols = [
         "home_roll_5_npxg_for",
@@ -263,6 +443,8 @@ def test_select_model_contextual_columns_trims_fit_surface() -> None:
         "home_team_shots_per_match_missing",
         "home_team_xg_per_match",
         "home_team_xg_per_match_missing",
+        "home_roster_continuity_score",
+        "home_roster_historical_prior_weight",
         "home_lineup_strength",
         "home_lineup_strength_missing",
         "away_roll_5_npxg_for",
@@ -278,6 +460,8 @@ def test_select_model_contextual_columns_trims_fit_surface() -> None:
 
     assert "home_roll_5_npxg_for" in selected
     assert "home_team_xg_per_match" in selected
+    assert "home_roster_continuity_score" in selected
+    assert "home_roster_historical_prior_weight" in selected
     assert "home_lineup_strength_missing" in selected
     assert "away_team_points_per_match_missing" in selected
     assert "rest_diff" in selected

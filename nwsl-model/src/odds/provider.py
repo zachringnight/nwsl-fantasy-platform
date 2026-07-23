@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 
 from src.data.team_names import canonicalize_team_name
+from src.utils.dates import parse_mixed_utc_datetime
 
 logger = logging.getLogger("nwsl_model.odds.provider")
 
@@ -510,7 +511,7 @@ def build_consensus_match_odds(
     one_x_two = filtered[filtered["market_type"].astype(str).str.lower() == "1x2"].copy()
     if not one_x_two.empty:
         if "timestamp" in one_x_two.columns:
-            one_x_two["timestamp"] = pd.to_datetime(one_x_two["timestamp"], utc=True, errors="coerce")
+            one_x_two["timestamp"] = parse_mixed_utc_datetime(one_x_two["timestamp"])
         aggregations: dict[str, Any] = {
             "home_odds": ("home_odds", "mean"),
             "draw_odds": ("draw_odds", "mean"),
@@ -526,7 +527,7 @@ def build_consensus_match_odds(
     if not totals.empty:
         totals = canonicalize_main_total_rows(totals)
         if "timestamp" in totals.columns:
-            totals["timestamp"] = pd.to_datetime(totals["timestamp"], utc=True, errors="coerce")
+            totals["timestamp"] = parse_mixed_utc_datetime(totals["timestamp"])
         aggregations = {
             "total_line": ("line", _select_main_total_line),
             "over_odds": ("over_odds", "mean"),

@@ -145,3 +145,89 @@ def test_pure_projection_gates_choose_pure_champion_only() -> None:
     assert gate_results["bivariate_poisson"]["passed"] is False
     assert champions["aliases"]["champion_pure"]["model_family"] == "dixon_coles"
     assert champions["experimental"] == {}
+
+
+def _baseline_summary() -> dict:
+    return {
+        "uniform_baseline": {"log_loss_1x2": 1.20, "brier_score_1x2": 0.72, "expected_total_goals_mae": 1.05},
+        "spi_lite_baseline": {"log_loss_1x2": 1.00, "brier_score_1x2": 0.60, "expected_total_goals_mae": 1.10},
+    }
+
+
+def test_gate_uses_oof_calibrated_metric_not_raw_or_in_sample() -> None:
+    # The raw model loses to the baseline; in-sample calibration appears to win,
+    # but the honest out-of-fold calibration still loses. The gate must credit
+    # the OOF number, so beats_best_baseline must be False.
+    backtest_summary = {
+        "models": {
+            **_baseline_summary(),
+            "dixon_coles": {"log_loss_1x2": 1.08, "brier_score_1x2": 0.65, "expected_total_goals_mae": 1.12},
+        }
+    }
+    evaluation_summary = {
+        "models": {
+            "dixon_coles": {
+                "classwise_ece": {"home": 0.02, "draw": 0.03, "away": 0.04},
+                "totals": {"2.5": {"ece": 0.03, "brier": 0.20}, "3.5": {"ece": 0.04, "brier": 0.21}},
+                "posthoc_calibration": {
+                    "available": True,
+                    "multiclass_log_loss_after": 0.95,
+                    "multiclass_brier_after": 0.58,
+                    "multiclass_log_loss_after_oof": 1.04,
+                    "multiclass_brier_after_oof": 0.63,
+                },
+                "benchmark_comparison": {"strongest_baseline": "spi_lite_baseline"},
+            },
+        },
+        "slice_metrics": {},
+    }
+    dataset_manifest = {"history_start_season": 2025, "matches": {"season_coverage": [2025, 2026]}}
+
+    gate_results = evaluate_go_live_gates(
+        training_summary={"models": {"dixon_coles": {"converged": True}}},
+        backtest_summary=backtest_summary,
+        evaluation_summary=evaluation_summary,
+        dataset_manifest=dataset_manifest,
+    )
+
+    checks = gate_results["dixon_coles"]["checks"]
+    assert checks["beats_best_baseline_log_loss"] is False
+    assert checks["beats_best_baseline_brier"] is False
+
+
+def test_gate_credits_oof_calibration_that_genuinely_beats_baseline() -> None:
+    # Raw model loses to the baseline, but honest OOF calibration genuinely
+    # beats it; the gate should credit that real generalization improvement.
+    backtest_summary = {
+        "models": {
+            **_baseline_summary(),
+            "dixon_coles": {"log_loss_1x2": 1.08, "brier_score_1x2": 0.65, "expected_total_goals_mae": 1.12},
+        }
+    }
+    evaluation_summary = {
+        "models": {
+            "dixon_coles": {
+                "classwise_ece": {"home": 0.02, "draw": 0.03, "away": 0.04},
+                "totals": {"2.5": {"ece": 0.03, "brier": 0.20}, "3.5": {"ece": 0.04, "brier": 0.21}},
+                "posthoc_calibration": {
+                    "available": True,
+                    "multiclass_log_loss_after_oof": 0.93,
+                    "multiclass_brier_after_oof": 0.55,
+                },
+                "benchmark_comparison": {"strongest_baseline": "spi_lite_baseline"},
+            },
+        },
+        "slice_metrics": {},
+    }
+    dataset_manifest = {"history_start_season": 2025, "matches": {"season_coverage": [2025, 2026]}}
+
+    gate_results = evaluate_go_live_gates(
+        training_summary={"models": {"dixon_coles": {"converged": True}}},
+        backtest_summary=backtest_summary,
+        evaluation_summary=evaluation_summary,
+        dataset_manifest=dataset_manifest,
+    )
+
+    checks = gate_results["dixon_coles"]["checks"]
+    assert checks["beats_best_baseline_log_loss"] is True
+    assert checks["beats_best_baseline_brier"] is True

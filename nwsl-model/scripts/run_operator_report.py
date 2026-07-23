@@ -19,6 +19,7 @@ from scipy.stats import poisson
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.betting.market_derivation import derive_all_markets
+from src.data.match_ids import model_team_key
 from src.models.baseline import ProjectionBaselineModel
 from src.models.calibration import apply_market_calibration, summarize_projection_quality
 from src.odds.provider import load_official_match_reference
@@ -43,8 +44,8 @@ def _team_ratings_baseline(ratings_model: object | None, home_team: str, away_te
         return {"home": 1 / 3, "draw": 1 / 3, "away": 1 / 3}
     home_rating = ratings_model.get_rating(home_team)
     away_rating = ratings_model.get_rating(away_team)
-    lambda_home = 1.25 * math.exp(0.12 + home_rating.attack - away_rating.defense)
-    lambda_away = 1.05 * math.exp(away_rating.attack - home_rating.defense)
+    lambda_home = 1.25 * math.exp(0.12 + home_rating.attack + away_rating.defense)
+    lambda_away = 1.05 * math.exp(away_rating.attack + home_rating.defense)
     markets = derive_all_markets(_build_independent_score_matrix(lambda_home, lambda_away))
     return {"home": markets.home_prob, "draw": markets.draw_prob, "away": markets.away_prob}
 
@@ -71,6 +72,20 @@ def _rolling_npxg_baseline(contextual_features: dict[str, float] | None) -> dict
     return {"home": markets.home_prob, "draw": markets.draw_prob, "away": markets.away_prob}
 
 
+def _team_label_lookup(ratings_model: object | None, context_provider: object | None) -> dict[str, str]:
+    labels: set[str] = set()
+    rating_map = getattr(ratings_model, "ratings", {}) if ratings_model is not None else {}
+    labels.update(str(team) for team in getattr(rating_map, "keys", lambda: [])())
+    team_state = getattr(context_provider, "team_state", {}) if context_provider is not None else {}
+    labels.update(str(team) for team in getattr(team_state, "keys", lambda: [])())
+    return {model_team_key(label): label for label in labels}
+
+
+def _align_team_label(value: object, lookup: dict[str, str]) -> str:
+    text = str(value or "")
+    return lookup.get(model_team_key(text), text)
+
+
 def _load_calibration_artifact(artifact: dict[str, object]) -> dict[str, object] | None:
     calibration_path = Path(artifact["version_dir"]) / "calibration_artifacts.json"
     if not calibration_path.exists():
@@ -89,7 +104,10 @@ def _load_calibration_artifact(artifact: dict[str, object]) -> dict[str, object]
     return actionable or None
 
 
-def _load_model_stack(artifact: dict[str, object]) -> tuple[object, object | None, object | None]:
+def _load_model_stack(
+    artifact: dict[str, object],
+    config: dict[str, object],
+) -> tuple[object, object | None, object | None]:
     ratings_path = Path(artifact["version_dir"]) / "team_ratings.pkl"
     ratings_model = load_pickle(ratings_path) if ratings_path.exists() else None
     context_provider_path = Path(artifact["version_dir"]) / "context_provider.pkl"
@@ -99,6 +117,8 @@ def _load_model_stack(artifact: dict[str, object]) -> tuple[object, object | Non
         model = ProjectionBaselineModel(
             strategy=str(artifact["model_family"]),
             ratings_model=ratings_model,
+            max_goals=int(config.get("model", {}).get("max_goals", 8)),
+            spi_lite_config=config.get("spi_lite", {}),
         )
         return model, ratings_model, context_provider
 
@@ -131,8 +151,9 @@ def main() -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
 
     artifact = resolve_model_artifact(args.model, Path(args.model_dir))
-    model, ratings_model, context_provider = _load_model_stack(artifact)
+    model, ratings_model, context_provider = _load_model_stack(artifact, config)
     calibration_artifact = _load_calibration_artifact(artifact)
+    team_lookup = _team_label_lookup(ratings_model, context_provider)
 
     now = datetime.now(UTC)
     horizon = now + timedelta(days=days_ahead)
@@ -162,18 +183,21 @@ def main() -> None:
     upcoming["match_date"] = pd.to_datetime(upcoming["match_datetime"], utc=True).dt.date
     rows: list[dict[str, object]] = []
     for _, row in upcoming.sort_values("match_datetime").iterrows():
+        home_team = _align_team_label(row["home_team"], team_lookup)
+        away_team = _align_team_label(row["away_team"], team_lookup)
         contextual_features = (
             context_provider.for_match(
-                home_team=row["home_team"],
-                away_team=row["away_team"],
+                home_team=home_team,
+                away_team=away_team,
                 match_date=row["match_date"],
+                match_id=str(row["match_id"]),
             )
             if context_provider is not None
             else None
         )
         pred = model.predict_score_matrix(
-            home_team=row["home_team"],
-            away_team=row["away_team"],
+            home_team=home_team,
+            away_team=away_team,
             contextual_features=contextual_features,
         )
         raw_markets = derive_all_markets(pred.score_matrix, match_id=str(row["match_id"]))
@@ -186,7 +210,7 @@ def main() -> None:
             calibration_applied=bool(calibration_artifact),
         )
 
-        team_ratings_baseline = _team_ratings_baseline(ratings_model, row["home_team"], row["away_team"])
+        team_ratings_baseline = _team_ratings_baseline(ratings_model, home_team, away_team)
         rolling_baseline = _rolling_npxg_baseline(contextual_features)
         max_calibration_adjustment = max(
             abs(raw_markets.home_prob - calibrated_markets.home_prob),
@@ -206,8 +230,8 @@ def main() -> None:
             {
                 "match_id": row["match_id"],
                 "match_datetime": pd.to_datetime(row["match_datetime"], utc=True).isoformat(),
-                "home_team": row["home_team"],
-                "away_team": row["away_team"],
+                "home_team": home_team,
+                "away_team": away_team,
                 "prob_home": calibrated_markets.home_prob,
                 "prob_draw": calibrated_markets.draw_prob,
                 "prob_away": calibrated_markets.away_prob,

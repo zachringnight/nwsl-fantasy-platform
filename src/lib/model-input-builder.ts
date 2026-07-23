@@ -14,6 +14,8 @@ export interface ModelInputCsvs {
   upcomingCsv: string;
   completedCount: number;
   upcomingCount: number;
+  completedRegularSeasonCount: number;
+  completedNonRegularSeasonCount: number;
   seasonCoverage: number[];
   completedSeasonCoverage: number[];
   upcomingSeasonCoverage: number[];
@@ -35,6 +37,11 @@ const MODEL_INPUT_HEADER = [
   "match_status",
 ];
 
+const REGULAR_SEASON_MATCHES_PER_TEAM_BY_SEASON: Record<number, number> = {
+  2025: 26,
+  2026: 30,
+};
+
 function csvCell(value: string | number | boolean): string {
   const text = String(value);
   if (!/[",\n]/.test(text)) {
@@ -51,13 +58,48 @@ function seasonFromDate(date: string): number {
   return year;
 }
 
-function rowForMatch(match: EspnModelMatch): string {
+function regularSeasonMatchCount(matches: EspnModelMatch[]): number {
+  const teams = new Set<string>();
+  for (const match of matches) {
+    teams.add(match.homeTeam);
+    teams.add(match.awayTeam);
+  }
+
+  const season = seasonFromDate(matches[0]?.date ?? "");
+  const matchesPerTeam = REGULAR_SEASON_MATCHES_PER_TEAM_BY_SEASON[season];
+  if (!matchesPerTeam || teams.size === 0) {
+    return matches.length;
+  }
+  return Math.min(matches.length, (teams.size * matchesPerTeam) / 2);
+}
+
+function regularSeasonIdsBySeason(matches: EspnModelMatch[]): Set<string> {
+  const ids = new Set<string>();
+  const bySeason = new Map<number, EspnModelMatch[]>();
+  for (const match of matches) {
+    const season = seasonFromDate(match.date);
+    bySeason.set(season, [...(bySeason.get(season) ?? []), match]);
+  }
+
+  for (const seasonMatches of bySeason.values()) {
+    const sorted = [...seasonMatches].sort((left, right) => {
+      const dateOrder = left.date.localeCompare(right.date);
+      return dateOrder || left.matchId.localeCompare(right.matchId);
+    });
+    for (const match of sorted.slice(0, regularSeasonMatchCount(sorted))) {
+      ids.add(match.matchId);
+    }
+  }
+  return ids;
+}
+
+function rowForMatch(match: EspnModelMatch, regularSeasonIds: Set<string>): string {
   return [
     match.matchId,
     match.date,
     seasonFromDate(match.date),
     "NWSL",
-    true,
+    regularSeasonIds.has(match.matchId),
     match.homeTeam,
     match.awayTeam,
     match.homeGoals,
@@ -88,14 +130,18 @@ export function buildModelInputCsvs(
     const dateOrder = left.date.localeCompare(right.date);
     return dateOrder || left.matchId.localeCompare(right.matchId);
   });
+  const regularSeasonIds = regularSeasonIdsBySeason(allMatches);
   const completed = allMatches.filter((match) => match.status === "completed");
   const upcoming = allMatches.filter((match) => match.status !== "completed");
+  const completedRegularSeason = completed.filter((match) => regularSeasonIds.has(match.matchId));
 
   return {
-    matchesCsv: [MODEL_INPUT_HEADER.join(","), ...completed.map(rowForMatch)].join("\n") + "\n",
-    upcomingCsv: [MODEL_INPUT_HEADER.join(","), ...upcoming.map(rowForMatch)].join("\n") + "\n",
+    matchesCsv: [MODEL_INPUT_HEADER.join(","), ...completed.map((match) => rowForMatch(match, regularSeasonIds))].join("\n") + "\n",
+    upcomingCsv: [MODEL_INPUT_HEADER.join(","), ...upcoming.map((match) => rowForMatch(match, regularSeasonIds))].join("\n") + "\n",
     completedCount: completed.length,
     upcomingCount: upcoming.length,
+    completedRegularSeasonCount: completedRegularSeason.length,
+    completedNonRegularSeasonCount: completed.length - completedRegularSeason.length,
     seasonCoverage: seasonCoverage(allMatches),
     completedSeasonCoverage: seasonCoverage(completed),
     upcomingSeasonCoverage: seasonCoverage(upcoming),

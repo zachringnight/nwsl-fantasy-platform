@@ -1,6 +1,11 @@
 import pandas as pd
 
-from src.odds.snapshots import append_snapshot_file, append_snapshot_rows, materialize_closing_odds
+from src.odds.snapshots import (
+    append_snapshot_file,
+    append_snapshot_rows,
+    extract_live_snapshot_rows,
+    materialize_closing_odds,
+)
 
 
 EXPECTED_SNAPSHOT_COLUMNS = [
@@ -398,3 +403,73 @@ def test_materialize_closing_odds_returns_stable_columns_when_no_close_is_eligib
 
     assert close.empty
     assert close.columns.tolist() == EXPECTED_SNAPSHOT_COLUMNS
+
+
+def test_extract_live_snapshot_rows_keeps_only_live_source_types() -> None:
+    odds = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-05-25T23:01:00+00:00",
+                "sportsbook": "DraftKings",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 2.0,
+                "draw_odds": 3.2,
+                "away_odds": 3.6,
+                "source_type": "current",
+            },
+            {
+                "match_id": "1",
+                "timestamp": "2026-03-14T00:00:00+00:00",
+                "sportsbook": "OddsPortalAvg",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.41,
+                "draw_odds": 4.1,
+                "away_odds": 6.25,
+                "source_type": "close",
+            },
+        ]
+    )
+
+    live = extract_live_snapshot_rows(odds)
+
+    assert len(live) == 1
+    assert live.iloc[0]["sportsbook"] == "DraftKings"
+    assert live.columns.tolist() == EXPECTED_SNAPSHOT_COLUMNS
+
+
+def test_extract_live_snapshot_rows_returns_stable_columns_when_no_live_rows() -> None:
+    odds = pd.DataFrame(
+        [
+            {
+                "match_id": "1",
+                "timestamp": "2026-03-14T00:00:00+00:00",
+                "sportsbook": "OddsPortalAvg",
+                "market_type": "1x2",
+                "home_odds": 1.41,
+                "source_type": "close",
+            }
+        ]
+    )
+
+    live = extract_live_snapshot_rows(odds)
+
+    assert live.empty
+    assert live.columns.tolist() == EXPECTED_SNAPSHOT_COLUMNS
+
+
+def test_extract_live_snapshot_rows_treats_open_and_live_as_live() -> None:
+    odds = pd.DataFrame(
+        [
+            {"match_id": "1", "timestamp": "t1", "sportsbook": "DK", "market_type": "1x2", "source_type": "open"},
+            {"match_id": "1", "timestamp": "t2", "sportsbook": "DK", "market_type": "1x2", "source_type": "LIVE"},
+            {"match_id": "1", "timestamp": "t3", "sportsbook": "DK", "market_type": "1x2", "source_type": "close"},
+        ]
+    )
+
+    live = extract_live_snapshot_rows(odds)
+
+    assert len(live) == 2
+    assert set(live["timestamp"]) == {"t1", "t2"}

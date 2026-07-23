@@ -208,6 +208,35 @@ def build_current_odds_contract(
     return contract, unmatched
 
 
+def merge_current_odds_contract(
+    existing_odds: pd.DataFrame | None,
+    current_contract: pd.DataFrame,
+    *,
+    sportsbook: str = "FootyStats",
+) -> pd.DataFrame:
+    """Replace one sportsbook's current odds while preserving historical closes."""
+    if existing_odds is None or existing_odds.empty:
+        return current_contract.copy()
+
+    existing = existing_odds.copy()
+    current = current_contract.copy()
+    if current_contract.empty:
+        return existing
+
+    for column in ODDS_CONTRACT_COLUMNS:
+        if column not in existing.columns:
+            existing[column] = np.nan
+        if column not in current.columns:
+            current[column] = np.nan
+
+    source_type = existing.get("source_type", pd.Series("", index=existing.index)).astype(str).str.lower()
+    books = existing.get("sportsbook", pd.Series("", index=existing.index)).astype(str)
+    replace_mask = source_type.eq("current") & books.eq(sportsbook)
+    preserved = existing.loc[~replace_mask, ODDS_CONTRACT_COLUMNS].copy()
+    merged = pd.concat([preserved, current[ODDS_CONTRACT_COLUMNS].copy()], ignore_index=True)
+    return merged.drop_duplicates().reset_index(drop=True)
+
+
 def build_odds_manifest_summary(odds: pd.DataFrame) -> dict[str, Any]:
     """Summarize the current odds contract for dataset metadata."""
     if odds.empty:
@@ -240,6 +269,20 @@ def update_dataset_manifest_odds(manifest_path: Path, odds: pd.DataFrame) -> Non
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
 
     manifest["odds"] = build_odds_manifest_summary(odds)
+    matches_payload = manifest.get("matches", {})
+    match_rows = int(matches_payload.get("rows", 0) or 0)
+    if match_rows > 0 and not odds.empty and "match_id" in odds.columns:
+        source_type = odds["source_type"] if "source_type" in odds.columns else pd.Series(["close"] * len(odds), index=odds.index)
+        market_type = odds["market_type"] if "market_type" in odds.columns else pd.Series([""] * len(odds), index=odds.index)
+        close_1x2 = odds[
+            (source_type.astype(str).str.lower() == "close")
+            & (market_type.astype(str).str.lower() == "1x2")
+        ]
+        covered_matches = int(close_1x2["match_id"].astype(str).nunique())
+        missing_pct = max(0.0, 100.0 * (1.0 - covered_matches / match_rows))
+        missing = dict(manifest.get("missing_feature_coverage", {}))
+        missing["odds_missing_pct"] = round(missing_pct, 2)
+        manifest["missing_feature_coverage"] = missing
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 

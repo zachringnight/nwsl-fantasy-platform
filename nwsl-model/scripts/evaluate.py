@@ -26,6 +26,7 @@ from src.backtest.metrics import brier_score_multiclass, log_loss_1x2
 from src.betting.clv import clv_summary
 from src.models.calibration import (
     apply_prediction_calibration,
+    compute_oof_calibrated_predictions,
     expected_calibration_error,
     fit_prediction_calibrators,
     plot_calibration,
@@ -41,6 +42,10 @@ from src.utils.gating import (
 )
 from src.utils.io import load_json, save_json
 from src.utils.logging import setup_logging
+
+# Out-of-fold calibration folds for the honest post-hoc generalization estimate.
+OOF_CALIBRATION_FOLDS = 5
+OOF_CALIBRATION_SEED = 0
 
 
 def _safe_ratio(numerator: float, denominator: float) -> float:
@@ -81,7 +86,13 @@ def _group_metrics(frame: pd.DataFrame) -> dict[str, Any]:
             "roi": 0.0,
             "hit_rate": 0.0,
             "mean_edge": 0.0,
+            "mean_probability_edge": 0.0,
+            "mean_expected_value": 0.0,
+            "mean_clv": 0.0,
+            "positive_clv_rate": 0.0,
             "mean_confidence": 0.0,
+            "official_pick_count": 0,
+            "lean_count": 0,
         }
 
     total_staked = float(frame["stake"].sum())
@@ -93,7 +104,13 @@ def _group_metrics(frame: pd.DataFrame) -> dict[str, Any]:
         "roi": _safe_ratio(total_pnl, total_staked),
         "hit_rate": float((frame["pnl"] > 0).mean()),
         "mean_edge": float(frame["edge"].mean()) if "edge" in frame.columns else 0.0,
+        "mean_probability_edge": float(frame["probability_edge"].mean()) if "probability_edge" in frame.columns else 0.0,
+        "mean_expected_value": float(frame["expected_value"].mean()) if "expected_value" in frame.columns else 0.0,
+        "mean_clv": float(frame["clv"].mean()) if "clv" in frame.columns else 0.0,
+        "positive_clv_rate": float((frame["clv"] > 0).mean()) if "clv" in frame.columns else 0.0,
         "mean_confidence": float(frame["confidence"].mean()) if "confidence" in frame.columns else 0.0,
+        "official_pick_count": int(frame["pick_tier"].astype(str).eq("official_pick").sum()) if "pick_tier" in frame.columns else int(len(frame)),
+        "lean_count": int(frame["pick_tier"].astype(str).eq("lean").sum()) if "pick_tier" in frame.columns else 0,
     }
 
 
@@ -113,11 +130,28 @@ def _summarize_launch_totals(preds: pd.DataFrame) -> dict[str, Any]:
     subset = preds.loc[mask].copy()
     probabilities = subset["prob_over_main_total"].astype(float)
     actual = subset["main_total_over_actual"].astype(int)
+    mean_predicted_over = float(probabilities.mean())
+    actual_over_rate = float(actual.mean())
+    over_probability_bias = actual_over_rate - mean_predicted_over
+    if over_probability_bias >= 0.05:
+        bias_direction = "underprices_overs"
+        recommended_action = "suppress_totals_until_recalibrated"
+    elif over_probability_bias <= -0.05:
+        bias_direction = "overprices_overs"
+        recommended_action = "suppress_totals_until_recalibrated"
+    else:
+        bias_direction = "balanced"
+        recommended_action = "eligible_if_profit_gates_pass"
 
     return {
         "n": int(len(subset)),
         "ece": float(expected_calibration_error(probabilities.to_numpy(), actual.to_numpy())),
         "brier": float(np.mean((probabilities.to_numpy() - actual.to_numpy()) ** 2)),
+        "mean_predicted_over_probability": mean_predicted_over,
+        "actual_over_rate": actual_over_rate,
+        "over_probability_bias": over_probability_bias,
+        "bias_direction": bias_direction,
+        "recommended_action": recommended_action,
         "line_distribution": (
             subset["main_total_line"]
             .astype(float)
@@ -133,8 +167,10 @@ def _summarize_launch_totals(preds: pd.DataFrame) -> dict[str, Any]:
 def _summarize_posthoc_calibration(
     preds: pd.DataFrame,
     calibrated_preds: pd.DataFrame,
+    oof_calibrated_preds: pd.DataFrame | None = None,
 ) -> dict[str, Any]:
-    if calibrated_preds.empty or not {"prob_home_calibrated", "prob_draw_calibrated", "prob_away_calibrated"}.issubset(calibrated_preds.columns):
+    one_x_two_cols = {"prob_home_calibrated", "prob_draw_calibrated", "prob_away_calibrated"}
+    if calibrated_preds.empty or not one_x_two_cols.issubset(calibrated_preds.columns):
         return {"available": False}
 
     outcomes = np.where(
@@ -145,6 +181,9 @@ def _summarize_posthoc_calibration(
     after = calibrated_preds[["prob_home_calibrated", "prob_draw_calibrated", "prob_away_calibrated"]].to_numpy(dtype=float)
     summary: dict[str, Any] = {
         "available": True,
+        # "before"/"after" are in-sample (calibrator fit and scored on the same
+        # rows); they overstate the benefit. The *_oof fields are the honest,
+        # out-of-fold generalization estimates and are what promotion gates on.
         "multiclass_log_loss_before": float(log_loss_1x2(before, outcomes)),
         "multiclass_log_loss_after": float(log_loss_1x2(after, outcomes)),
         "multiclass_brier_before": float(brier_score_multiclass(before, outcomes)),
@@ -153,6 +192,19 @@ def _summarize_posthoc_calibration(
         "classwise_ece_after": {},
         "totals": {},
     }
+
+    if (
+        oof_calibrated_preds is not None
+        and not oof_calibrated_preds.empty
+        and one_x_two_cols.issubset(oof_calibrated_preds.columns)
+    ):
+        after_oof = oof_calibrated_preds[
+            ["prob_home_calibrated", "prob_draw_calibrated", "prob_away_calibrated"]
+        ].to_numpy(dtype=float)
+        summary["calibration_method"] = "out_of_fold_kfold"
+        summary["oof_n_folds"] = OOF_CALIBRATION_FOLDS
+        summary["multiclass_log_loss_after_oof"] = float(log_loss_1x2(after_oof, outcomes))
+        summary["multiclass_brier_after_oof"] = float(brier_score_multiclass(after_oof, outcomes))
 
     home_actual = (preds["home_goals_90"] > preds["away_goals_90"]).astype(int).to_numpy()
     draw_actual = (preds["home_goals_90"] == preds["away_goals_90"]).astype(int).to_numpy()
@@ -453,6 +505,9 @@ def main() -> None:
         model_calibration_artifact = dict(calibrators)
         model_calibration_artifact["score_matrix"] = score_matrix_artifact
         calibrated_preds = apply_prediction_calibration(preds, calibrators)
+        oof_calibrated_preds = compute_oof_calibrated_predictions(
+            preds, n_folds=OOF_CALIBRATION_FOLDS, seed=OOF_CALIBRATION_SEED
+        )
         calibration_artifacts["models"][model_name] = model_calibration_artifact
 
         if "prob_home" not in preds.columns:
@@ -470,7 +525,7 @@ def main() -> None:
         eval_results.setdefault(model_name, {})
         raw_classwise_ece = dict(eval_results[model_name].get("classwise_ece", {}))
         raw_totals = dict(eval_results[model_name].get("totals", {}))
-        posthoc = _summarize_posthoc_calibration(preds, calibrated_preds)
+        posthoc = _summarize_posthoc_calibration(preds, calibrated_preds, oof_calibrated_preds)
         calibrated_summary = _summarize_calibrated_predictions(preds, calibrated_preds)
         eval_results[model_name]["ece_home_win"] = float(ece)
         eval_results[model_name]["launch_totals"] = _summarize_launch_totals(preds)

@@ -308,29 +308,33 @@ def build_matches(
 
 
 def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
-    """Build historical appearance rows from current official player logs."""
-    logs_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv"
-    profiles_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_profiles.csv"
-    if not logs_path.exists():
-        return pd.DataFrame(
-            columns=[
-                "match_id",
-                "season",
-                "player_id",
-                "team",
-                "start_minute",
-                "end_minute",
-                "started_flag",
-                "position",
-                "projected_flag",
-                "available_flag",
-                "injury_flag",
-                "suspension_flag",
-                "national_team_absence_flag",
-            ]
-        )
+    """Build historical appearance rows from official per-match player logs.
 
-    logs = pd.read_csv(logs_path)
+    Reads every ``nwsl_*_official_player_match_logs.csv`` so multiple seasons
+    accumulate rather than only the most recent one.
+    """
+    official_dir = repo_root / "data" / "nwsl-official"
+    logs_paths = sorted(official_dir.glob("nwsl_*_official_player_match_logs.csv"))
+    profiles_path = official_dir / "nwsl_2026_official_player_profiles.csv"
+    empty_columns = [
+        "match_id",
+        "season",
+        "player_id",
+        "team",
+        "start_minute",
+        "end_minute",
+        "started_flag",
+        "position",
+        "projected_flag",
+        "available_flag",
+        "injury_flag",
+        "suspension_flag",
+        "national_team_absence_flag",
+    ]
+    if not logs_paths:
+        return pd.DataFrame(columns=empty_columns)
+
+    logs = pd.concat([pd.read_csv(path) for path in logs_paths], ignore_index=True)
     logs = logs[logs["match_id"].notna()].copy()
     if "season" in logs.columns:
         logs["season"] = pd.to_numeric(logs["season"], errors="coerce").astype("Int64")
@@ -352,6 +356,11 @@ def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
         profiles = pd.read_csv(profiles_path)
         position_map = profiles.set_index("player_id")["role_label"].fillna("Unknown").to_dict()
 
+    if "role_label" in logs.columns:
+        position = logs["role_label"].fillna(logs["player_id"].map(position_map)).fillna("Unknown")
+    else:
+        position = logs["player_id"].map(position_map).fillna("Unknown")
+
     appearances = pd.DataFrame(
         {
             "match_id": logs["match_id"].astype(str),
@@ -361,7 +370,7 @@ def build_appearances(repo_root: Path = ROOT_REPO) -> pd.DataFrame:
             "start_minute": start_minute.astype(int),
             "end_minute": np.maximum(end_minute, start_minute).astype(int),
             "started_flag": logs["started_flag"].astype(bool),
-            "position": logs["player_id"].map(position_map).fillna("Unknown"),
+            "position": position,
             "projected_flag": False,
             "available_flag": True,
             "injury_flag": False,
@@ -742,6 +751,32 @@ def _compute_projected_starter_scores(
     return pd.DataFrame(rows)
 
 
+def _prior_component(priors: pd.DataFrame, season_label: str) -> pd.DataFrame:
+    if priors.empty:
+        return pd.DataFrame(columns=["player_id"])
+    keep = [
+        "player_id",
+        "starter_rate",
+        "minutes_per_appearance",
+        "role_proxy_score",
+        "season_value_score",
+        "minutes_played",
+        "appearances",
+    ]
+    available = [column for column in keep if column in priors.columns]
+    output = priors[available].sort_values("player_id").drop_duplicates("player_id", keep="last").copy()
+    return output.rename(
+        columns={
+            "starter_rate": f"{season_label}_starter_rate",
+            "minutes_per_appearance": f"{season_label}_minutes_per_appearance",
+            "role_proxy_score": f"{season_label}_role_proxy_score",
+            "season_value_score": f"{season_label}_value_score",
+            "minutes_played": f"{season_label}_minutes_played",
+            "appearances": f"{season_label}_appearances",
+        }
+    )
+
+
 def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None = None) -> pd.DataFrame:
     """Build upcoming projected lineups from official profiles and recent role signals."""
     matches_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_matches.csv"
@@ -792,6 +827,10 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
     player_season_priors = build_player_season_priors(repo_root)
     reference_season = int(pd.to_numeric(upcoming.get("season"), errors="coerce").dropna().max()) if "season" in upcoming.columns and upcoming["season"].notna().any() else datetime.now(UTC).year
     prior_season = reference_season - 1
+    current_season_priors = (
+        player_season_priors[pd.to_numeric(player_season_priors["season"], errors="coerce") == reference_season].copy()
+        if not player_season_priors.empty else pd.DataFrame()
+    )
     last_season_priors = (
         player_season_priors[pd.to_numeric(player_season_priors["season"], errors="coerce") == prior_season].copy()
         if not player_season_priors.empty else pd.DataFrame()
@@ -820,33 +859,31 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
         scores = _compute_projected_starter_scores(logs, last_season_priors=last_season_priors)
 
     scored_profiles = profiles.merge(scores, on=["player_id", "team"], how="left")
-    if not last_season_priors.empty:
-        prior_columns = [
-            "player_id",
-            "starter_rate",
-            "minutes_per_appearance",
-            "role_proxy_score",
-            "season_value_score",
-        ]
-        scored_profiles = scored_profiles.merge(
-            last_season_priors[prior_columns].rename(
-                columns={
-                    "starter_rate": "last_season_starter_rate",
-                    "minutes_per_appearance": "last_season_minutes_per_appearance",
-                    "role_proxy_score": "last_season_role_proxy_score",
-                    "season_value_score": "last_season_value_score",
-                }
-            ),
-            on="player_id",
-            how="left",
-        )
-    else:
-        for column in (
-            "last_season_starter_rate",
-            "last_season_minutes_per_appearance",
-            "last_season_role_proxy_score",
-            "last_season_value_score",
-        ):
+    scored_profiles = scored_profiles.merge(
+        _prior_component(last_season_priors, "last_season"),
+        on="player_id",
+        how="left",
+    )
+    scored_profiles = scored_profiles.merge(
+        _prior_component(current_season_priors, "current_season"),
+        on="player_id",
+        how="left",
+    )
+    for column in (
+        "last_season_starter_rate",
+        "last_season_minutes_per_appearance",
+        "last_season_role_proxy_score",
+        "last_season_value_score",
+        "last_season_minutes_played",
+        "last_season_appearances",
+        "current_season_starter_rate",
+        "current_season_minutes_per_appearance",
+        "current_season_role_proxy_score",
+        "current_season_value_score",
+        "current_season_minutes_played",
+        "current_season_appearances",
+    ):
+        if column not in scored_profiles.columns:
             scored_profiles[column] = np.nan
 
     starts_last_five = pd.to_numeric(scored_profiles["starts_last_five"], errors="coerce").fillna(0.0)
@@ -856,21 +893,31 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
     season_value_score = pd.to_numeric(scored_profiles["season_value_score"], errors="coerce").fillna(0.0)
     season_minutes = pd.to_numeric(scored_profiles["season_minutes"], errors="coerce").fillna(0.0)
     last_season_minutes = pd.to_numeric(scored_profiles["last_season_minutes_per_appearance"], errors="coerce").fillna(0.0)
+    current_season_minutes = pd.to_numeric(scored_profiles["current_season_minutes_per_appearance"], errors="coerce").fillna(0.0)
+    current_season_appearances = pd.to_numeric(scored_profiles["current_season_appearances"], errors="coerce").fillna(0.0)
     current_component = (
         starts_last_five / recent_apps.replace(0, np.nan).fillna(1.0) * 0.55
         + season_start_rate * 0.25
         + np.clip(recent_minutes / 90.0, 0.0, 1.0) * 0.20
+    )
+    current_season_component = (
+        scored_profiles["current_season_role_proxy_score"].fillna(0.0) * 0.65
+        + scored_profiles["current_season_starter_rate"].fillna(0.0) * 0.25
+        + np.clip(current_season_minutes / 90.0, 0.0, 1.0) * 0.10
     )
     prior_component = (
         scored_profiles["last_season_role_proxy_score"].fillna(0.0) * 0.70
         + scored_profiles["last_season_starter_rate"].fillna(0.0) * 0.20
         + np.clip(last_season_minutes / 90.0, 0.0, 1.0) * 0.10
     )
-    current_reliability = np.clip(recent_apps / 5.0, 0.0, 1.0)
+    log_weight = 0.35 * np.clip(recent_apps / 5.0, 0.0, 1.0)
+    season_weight = 0.50 * np.clip(current_season_appearances / 6.0, 0.0, 1.0)
+    prior_weight = np.clip(1.0 - log_weight - season_weight, 0.0, 1.0)
     scored_profiles["starter_score"] = (
-        current_component * current_reliability
-        + prior_component * (1.0 - current_reliability)
-        + scored_profiles["last_season_value_score"].fillna(0.0) * 0.05
+        current_component * log_weight
+        + current_season_component * season_weight
+        + prior_component * prior_weight
+        + scored_profiles["current_season_value_score"].fillna(scored_profiles["last_season_value_score"]).fillna(0.0) * 0.05
     )
     scored_profiles["starter_score"] = scored_profiles["starter_score"].fillna(0.05)
     scored_profiles["recent_minutes"] = recent_minutes
@@ -878,6 +925,7 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
     scored_profiles["season_value_score"] = season_value_score
     scored_profiles["season_minutes"] = season_minutes
     scored_profiles["last_season_minutes_per_appearance"] = last_season_minutes
+    scored_profiles["current_season_minutes_per_appearance"] = current_season_minutes
     scored_profiles["player_status"] = scored_profiles["player_status"].replace(
         {"Active": "available", "Left Team": "unknown"}
     ).fillna("unknown").str.lower()
@@ -897,10 +945,16 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
                 projected_start = str(player["player_id"]) in projected_ids
                 projected_minutes = 0.0
                 if projected_start:
-                    baseline_minutes = max(player["recent_minutes"], player["last_season_minutes_per_appearance"])
+                    baseline_minutes = max(
+                        player["recent_minutes"],
+                        player["current_season_minutes_per_appearance"],
+                        player["last_season_minutes_per_appearance"],
+                    )
                     projected_minutes = max(58.0, min(90.0, 52.0 + player["starter_score"] * 28.0 + min(baseline_minutes / 12.0, 10.0)))
                 elif player["recent_minutes"] > 0:
                     projected_minutes = min(35.0, player["recent_minutes"] * 0.45)
+                elif player["current_season_minutes_per_appearance"] > 0:
+                    projected_minutes = min(34.0, player["current_season_minutes_per_appearance"] * 0.35)
                 elif player["last_season_minutes_per_appearance"] > 0:
                     projected_minutes = min(32.0, player["last_season_minutes_per_appearance"] * 0.30)
 
@@ -913,7 +967,7 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
                         "projected_start": projected_start,
                         "projected_minutes": round(float(projected_minutes), 1),
                         "status": player["player_status"] if player["player_status"] in {"available", "unknown"} else "unknown",
-                        "source": "official_recent_role_model",
+                        "source": "official_current_season_role_model" if not current_season_priors.empty else "official_recent_role_model",
                         "report_timestamp": stamp,
                     }
                 )

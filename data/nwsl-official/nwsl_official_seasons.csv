@@ -1,0 +1,12 @@
+season,season_id,competition_id,provider_id,start_date_utc,end_date_utc,name,official_name,short_name,acronym_name
+2026,nwsl::Football_Season::0b6761e4701749f593690c0f338da74c,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:4mrfrvsjf1xhltsvqyb6lx250,2026-03-14T00:00:00Z,2026-11-21T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2025,nwsl::Football_Season::fad050beee834db88fa9f2eb28ce5a5c,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:3ducfa94ga849pfvx8bjjgt1w,2025-03-15T00:00:00Z,2025-11-23T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2024,nwsl::Football_Season::fe17bea0b7234cf7957c7249cb828270,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:1y6f8h7azok4tqvz2qno41btg,2024-03-16T00:00:00Z,2024-11-24T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2023,nwsl::Football_Season::e7e78907d0b549aba3282000d7ed5437,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:gnqacg1k5u6wlm4kd6fo4u8k,2023-03-25T00:00:00Z,2023-11-12T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2022,nwsl::Football_Season::d1162e7ef3924fa19878d5c182e233bd,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:bus8n60i95d4ka5frxvgcrspg,2022-04-30T00:00:00Z,2022-10-30T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2021,nwsl::Football_Season::be274603a2704d7f95d5695efc7f7edc,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:7vobsvcksvurqhc540ei5nwq2,2021-05-15T00:00:00Z,2021-11-20T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2019,nwsl::Football_Season::79664e9589084e1b83d2dec2c279c18c,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:e5v9wk1zz2w8z5v83txy1w3fu,2019-04-14T00:00:00Z,2019-10-27T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2018,nwsl::Football_Season::3d604e1786094afea81f7580f011e732,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:26b52y1q2pg8fdysyjl0ywhgq,2018-03-24T00:00:00Z,2018-09-22T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2017,nwsl::Football_Season::94c1960d277841139f67628f8a71ff79,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:6h6nnk413zmldxiesd6nxoovd,2017-04-15T00:00:00Z,2017-10-14T00:00:00Z,NWSL,NWSL,NWSL,NWSL
+2016,nwsl::Football_Season::d2c9690effda46f698b046887407d1e7,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:8pmun6aeczwo55nkug3qfaew9,,,NWSL,NWSL,NWSL,NWSL
+2015,nwsl::Football_Season::6199a51e9a764735b006e19fb7b2fb64,nwsl::Football_Competition::3293333447504e83986ec13e794b68ea,opta:Season:8x2kd62wk248jks7ts983sjit,2015-04-11T00:00:00Z,2015-10-02T00:00:00Z,NWSL,NWSL,NWSL,NWSL

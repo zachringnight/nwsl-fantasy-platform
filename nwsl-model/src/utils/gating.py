@@ -16,6 +16,7 @@ BASELINE_MODELS = {
     "home_field_baseline",
     "team_ratings_poisson",
     "rolling_npxg_poisson",
+    "spi_lite_baseline",
 }
 PURE_PROJECTION_THRESHOLDS = {
     "relative_baseline_improvement": 0.98,
@@ -177,13 +178,20 @@ def evaluate_go_live_gates(
         brier = float(metrics.get("brier_score_1x2", 999.0))
         total_goals_mae = float(metrics.get("expected_total_goals_mae", 999.0))
 
+        # Production applies post-hoc calibration, so the fair comparison against
+        # the baseline is the *out-of-fold* calibrated metric (an honest
+        # generalization estimate), not the raw model or the in-sample "after"
+        # number. Fall back to the raw metric when no OOF estimate is available.
+        effective_log_loss = float(posthoc.get("multiclass_log_loss_after_oof", log_loss))
+        effective_brier = float(posthoc.get("multiclass_brier_after_oof", brier))
+
         baseline_log_loss_ok = (
             best_baseline_log_loss is not None
-            and log_loss <= best_baseline_log_loss * PURE_PROJECTION_THRESHOLDS["relative_baseline_improvement"]
+            and effective_log_loss <= best_baseline_log_loss * PURE_PROJECTION_THRESHOLDS["relative_baseline_improvement"]
         )
         baseline_brier_ok = (
             best_baseline_brier is not None
-            and brier <= best_baseline_brier * PURE_PROJECTION_THRESHOLDS["relative_baseline_improvement"]
+            and effective_brier <= best_baseline_brier * PURE_PROJECTION_THRESHOLDS["relative_baseline_improvement"]
         )
         total_goals_mae_ok = (
             best_baseline_total_mae is not None
@@ -227,6 +235,11 @@ def evaluate_go_live_gates(
             "metrics": {
                 "log_loss_1x2": log_loss,
                 "brier_score_1x2": brier,
+                "effective_log_loss_1x2": effective_log_loss,
+                "effective_brier_1x2": effective_brier,
+                "effective_metric_source": (
+                    "oof_calibrated" if "multiclass_log_loss_after_oof" in posthoc else "raw"
+                ),
                 "expected_total_goals_mae": total_goals_mae,
                 "max_classwise_ece": max_class_ece,
                 "totals_ece": totals_ece,
