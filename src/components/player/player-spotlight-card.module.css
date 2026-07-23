@@ -1,0 +1,286 @@
+.card {
+  --foil-pointer-x: 50%;
+  --foil-pointer-y: 50%;
+  --foil-rotate-x: 0deg;
+  --foil-rotate-y: 0deg;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100%;
+  border: 1px solid color-mix(in srgb, var(--color-brand-strong) 34%, transparent);
+  border-radius: 2rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 255, 255, 0.18), transparent 24%),
+    radial-gradient(circle at 86% 16%, rgba(0, 225, 255, 0.22), transparent 26%),
+    linear-gradient(145deg, rgba(18, 26, 106, 0.98), rgba(7, 10, 32, 0.98) 58%, #000 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 30px 90px rgba(0, 0, 0, 0.38);
+  transform:
+    perspective(1400px)
+    rotateX(var(--foil-rotate-x))
+    rotateY(var(--foil-rotate-y))
+    translateZ(0);
+  transform-style: preserve-3d;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.card[data-position="FWD"] {
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 196, 117, 0.24), transparent 24%),
+    radial-gradient(circle at 86% 16%, rgba(255, 126, 182, 0.2), transparent 26%),
+    linear-gradient(145deg, rgba(71, 26, 15, 0.98), rgba(34, 12, 28, 0.98) 58%, #05030a 100%);
+}
+
+.card[data-position="DEF"],
+.card[data-position="GK"] {
+  background:
+    radial-gradient(circle at 16% 12%, rgba(197, 255, 95, 0.2), transparent 24%),
+    radial-gradient(circle at 86% 16%, rgba(0, 225, 255, 0.2), transparent 26%),
+    linear-gradient(145deg, rgba(13, 47, 35, 0.98), rgba(7, 18, 32, 0.98) 58%, #02070a 100%);
+}
+
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.card::before {
+  z-index: -1;
+  background:
+    radial-gradient(
+      circle at var(--foil-pointer-x) var(--foil-pointer-y),
+      rgba(255, 255, 255, 0.42),
+      transparent 28%
+    ),
+    linear-gradient(
+      118deg,
+      transparent 4%,
+      rgba(255, 255, 255, 0.14) 18%,
+      transparent 30%,
+      transparent 54%,
+      rgba(0, 225, 255, 0.2) 66%,
+      transparent 76%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.72;
+  animation: foil-sheen 9s linear infinite;
+}
+
+.card::after {
+  z-index: -2;
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 5px),
+    linear-gradient(120deg, transparent 30%, rgba(255, 184, 71, 0.1), transparent 70%);
+  opacity: 0.45;
+}
+
+.card:hover {
+  border-color: rgba(0, 225, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 36px 110px rgba(0, 0, 0, 0.44);
+}
+
+.header,
+.metrics,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.06),
+    0 18px 42px rgba(0, 0, 0, 0.28);
+}
+
+.eyebrow {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin-top: 0.35rem;
+  color: #fff;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 0.84;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.club {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.78rem;
+}
+
+.rank {
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 1.15rem;
+  background: rgba(0, 0, 0, 0.24);
+  padding: 0.75rem 0.85rem;
+  color: #fff;
+  text-align: right;
+}
+
+.rankLabel {
+  display: block;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.rankValue {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.metric {
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 1.15rem;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 0.9rem;
+  backdrop-filter: blur(14px);
+}
+
+.metricLabel {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.metricValue {
+  display: block;
+  margin-top: 0.45rem;
+  color: #fff;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.badge,
+.season {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 0.5rem 0.75rem;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.badgeDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: #c5ff5f;
+  box-shadow: 0 0 14px rgba(197, 255, 95, 0.65);
+}
+
+@keyframes foil-sheen {
+  0% {
+    transform: translate3d(-8%, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(6%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-8%, 0, 0);
+  }
+}
+
+@media (max-width: 639px) {
+  .header {
+    display: grid;
+  }
+
+  .rank {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .identity {
+    display: grid;
+    padding-right: 4rem;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .card {
+    transform: none !important;
+    transition: none;
+  }
+
+  .card::before {
+    animation: none;
+  }
+}
