@@ -210,8 +210,11 @@ export default function AdminPage() {
     <FantasyAuthGate
       loadingTitle="Checking access"
       loadingDescription="Verifying your access."
+      requireAdmin
       signedOutTitle="Admin access required"
       signedOutDescription="Sign in with an admin account to access the operations desk."
+      unauthorizedTitle="Admin access required"
+      unauthorizedDescription="Your account isn't on the admin allowlist. Ask an existing admin to add your email to NEXT_PUBLIC_ADMIN_USER_EMAILS."
     >
       {() => (
     <AppShell

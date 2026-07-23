@@ -32,8 +32,8 @@ export async function loadTradeProposals(
       veto_count,
       veto_threshold,
       created_at,
-      proposer_team:fantasy_teams!fantasy_trade_proposals_proposer_team_id_fkey ( name ),
-      receiver_team:fantasy_teams!fantasy_trade_proposals_receiver_team_id_fkey ( name ),
+      proposer_team:fantasy_league_memberships!fantasy_trade_proposals_proposer_team_id_fkey ( team_name ),
+      receiver_team:fantasy_league_memberships!fantasy_trade_proposals_receiver_team_id_fkey ( team_name ),
       assets:fantasy_trade_assets ( id, trade_proposal_id, from_team_id, player_id, player_name, player_position, club_name ),
       votes:fantasy_trade_votes ( id, trade_proposal_id, fantasy_team_id, user_id, decision, created_at )
     `)
@@ -52,9 +52,9 @@ export async function loadTradeProposals(
     id: row.id as string,
     league_id: row.league_id as string,
     proposer_team_id: row.proposer_team_id as string,
-    proposer_team_name: ((row.proposer_team as Record<string, string>)?.name) ?? "Unknown",
+    proposer_team_name: ((row.proposer_team as Record<string, string>)?.team_name) ?? "Unknown",
     receiver_team_id: row.receiver_team_id as string,
-    receiver_team_name: ((row.receiver_team as Record<string, string>)?.name) ?? "Unknown",
+    receiver_team_name: ((row.receiver_team as Record<string, string>)?.team_name) ?? "Unknown",
     status: row.status as TradeProposalStatus,
     message: row.message as string | null,
     review_period_ends_at: row.review_period_ends_at as string,
