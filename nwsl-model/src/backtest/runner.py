@@ -19,7 +19,7 @@ from src.backtest.metrics import compute_all_metrics
 from src.backtest.splitter import BacktestFold, ExpandingWindowSplitter
 from src.betting.market_derivation import derive_all_markets
 from src.betting.recommendations import evaluate_market_candidates, load_bet_selection_config
-from src.betting.score_matrix import build_full_result, derive_1x2
+from src.betting.score_matrix import build_full_result, derive_1x2, expected_goals, rescale_matrix_to_targets
 from src.betting.settlement import settle_1x2, settle_total
 from src.betting.staking import BetRecommendation, StakingConfig, StakingEngine
 from src.data.transforms import (
@@ -45,7 +45,7 @@ from src.models.bivariate_poisson import BivariatePoissonConfig, BivariatePoisso
 from src.models.dixon_coles import DixonColesConfig, DixonColesModel
 from src.models.elo_baseline import RegularizedEloBaseline
 from src.models.market_blend import MarketBlender
-from src.models.market_residual import MarketResidualModel, _rescale_matrix_to_targets
+from src.models.market_residual import MarketResidualModel
 from src.models.spi_lite import SpiLiteBaseline
 from src.models.team_ratings import TeamRatingsConfig, TeamRatingsModel
 from src.utils.dates import parse_mixed_utc_datetime
@@ -715,7 +715,15 @@ class BacktestRunner:
             # probs_override is already the exact 1X2 summary of `matrix`,
             # so this rescale is a no-op beyond floating-point cleanup.
             if probs_override is not None:
-                matrix = _rescale_matrix_to_targets(matrix, *probs_override)
+                matrix = rescale_matrix_to_targets(matrix, *probs_override)
+                # The rescale redistributes mass across the matrix, which
+                # shifts its implied expected goals -- recompute lambda_home/
+                # lambda_away from the POST-rescale matrix so
+                # expected_total_goals_mae (computed from these two fields)
+                # and the totals-market probabilities (derived from `markets`
+                # below, i.e. this same rescaled matrix) stay consistent with
+                # each other rather than describing two different forecasts.
+                lambda_home, lambda_away = expected_goals(matrix)
 
             markets = derive_all_markets(matrix, match_id=str(row["match_id"]))
 

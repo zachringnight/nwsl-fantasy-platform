@@ -84,9 +84,22 @@ def load_model_bundle(model_name: str) -> ModelBundle:
             ratings_model = pickle.load(f)
 
     if artifact.get("kind") in {"baseline_fallback", "baseline_promoted"}:
+        # Mirror scripts/predict.py::_load_model_stack: without the trained
+        # league rates, this falls back to SpiLiteBaseline's hardcoded
+        # defaults (1.25/1.05), which can disagree with the rates the
+        # artifact actually passed its promotion gates with.
+        league_home_rate = None
+        league_away_rate = None
+        spi_summary_path = artifact["version_dir"] / "spi_lite_summary.json"
+        if spi_summary_path.exists():
+            spi_summary = load_json(spi_summary_path)
+            league_home_rate = spi_summary.get("league_home_rate")
+            league_away_rate = spi_summary.get("league_away_rate")
         model = ProjectionBaselineModel(
             strategy=str(artifact["model_family"]),
             ratings_model=ratings_model,
+            league_home_rate=league_home_rate,
+            league_away_rate=league_away_rate,
         )
     else:
         model_path = artifact["version_dir"] / f"{artifact['model_family']}_model.pkl"

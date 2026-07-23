@@ -428,3 +428,63 @@ class TestLoadModelBundleBaselinePromoted:
         assert isinstance(bundle.model, ProjectionBaselineModel)
         assert bundle.model_family == "spi_lite_baseline"
         assert bundle.gating_status == "passed"
+
+    def test_baseline_promoted_loads_trained_spi_lite_league_rates(self, tmp_path: Path) -> None:
+        """scripts/predict.py reads spi_lite_summary.json (written by train.py
+        from the training data's actual npxg means) and passes those rates
+        through, so a promoted baseline serves the same lambdas it was
+        trained and gated on. load_model_bundle previously never read this
+        file, silently falling back to SpiLiteBaseline's hardcoded 1.25/1.05
+        defaults regardless of what the artifact actually trained on."""
+        from api.deps import clear_model_cache, load_model_bundle
+
+        version_dir = tmp_path / "v1"
+        version_dir.mkdir()
+        (version_dir / "spi_lite_summary.json").write_text(
+            json.dumps({"league_home_rate": 1.7, "league_away_rate": 0.85, "n_matches": 200})
+        )
+        artifact = {
+            "kind": "baseline_promoted",
+            "model_family": "spi_lite_baseline",
+            "version": "v1",
+            "version_dir": version_dir,
+            "evaluation_model": "spi_lite_baseline",
+            "gating_status": "passed",
+            "blended": False,
+        }
+        clear_model_cache()
+        try:
+            with patch("api.deps.resolve_model_artifact", return_value=artifact):
+                bundle = load_model_bundle("champion_pure")
+        finally:
+            clear_model_cache()
+
+        assert bundle.model._spi_lite.config.league_home_rate == pytest.approx(1.7)
+        assert bundle.model._spi_lite.config.league_away_rate == pytest.approx(0.85)
+
+    def test_baseline_promoted_without_summary_file_keeps_spi_lite_defaults(self, tmp_path: Path) -> None:
+        """No spi_lite_summary.json (e.g. an older artifact) must not crash;
+        it should fall back to SpiLiteBaseline's own defaults, same as
+        before this fix."""
+        from api.deps import clear_model_cache, load_model_bundle
+
+        version_dir = tmp_path / "v1"
+        version_dir.mkdir()
+        artifact = {
+            "kind": "baseline_promoted",
+            "model_family": "spi_lite_baseline",
+            "version": "v1",
+            "version_dir": version_dir,
+            "evaluation_model": "spi_lite_baseline",
+            "gating_status": "passed",
+            "blended": False,
+        }
+        clear_model_cache()
+        try:
+            with patch("api.deps.resolve_model_artifact", return_value=artifact):
+                bundle = load_model_bundle("champion_pure")
+        finally:
+            clear_model_cache()
+
+        assert bundle.model._spi_lite.config.league_home_rate == pytest.approx(1.25)
+        assert bundle.model._spi_lite.config.league_away_rate == pytest.approx(1.05)

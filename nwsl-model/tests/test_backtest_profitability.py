@@ -351,6 +351,28 @@ def test_baseline_betting_uses_the_same_probabilities_it_reports() -> None:
             )
 
 
+def test_baseline_lambdas_match_the_matrix_used_for_totals_after_rescale() -> None:
+    """Rescaling the score matrix to match probs_override shifts its implied
+    expected goals; lambda_home/lambda_away (which expected_total_goals_mae
+    is computed from) must be recomputed from that same post-rescale matrix,
+    not left at their pre-rescale values, or totals/scoreline diagnostics
+    would describe a different forecast than the reported 1X2 markets do."""
+    from src.betting.score_matrix import expected_goals
+
+    matches = _synthetic_baseline_matches()
+    odds = _moneyline_odds_for(matches)
+
+    for model_name in ("uniform_baseline", "home_field_baseline"):
+        runner = BacktestRunner(_baseline_backtest_config())
+        results = runner.run(matches, odds=odds, models_to_run=[model_name])
+        predictions = results[model_name]["predictions"]
+
+        for _, row in predictions.iterrows():
+            expected_home, expected_away = expected_goals(row["score_matrix"])
+            assert row["lambda_home"] == pytest.approx(expected_home, abs=1e-6), model_name
+            assert row["lambda_away"] == pytest.approx(expected_away, abs=1e-6), model_name
+
+
 def test_fold_id_persists_across_baseline_decision_and_prediction_rows() -> None:
     matches = _synthetic_baseline_matches()
     odds = _moneyline_odds_for(matches)
