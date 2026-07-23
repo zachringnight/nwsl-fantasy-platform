@@ -83,7 +83,7 @@ def load_model_bundle(model_name: str) -> ModelBundle:
         with open(ratings_path, "rb") as f:
             ratings_model = pickle.load(f)
 
-    if artifact.get("kind") == "baseline_fallback":
+    if artifact.get("kind") in {"baseline_fallback", "baseline_promoted"}:
         model = ProjectionBaselineModel(
             strategy=str(artifact["model_family"]),
             ratings_model=ratings_model,

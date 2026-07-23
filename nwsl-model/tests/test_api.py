@@ -387,3 +387,44 @@ class TestAuthEdgeCases:
             payload = {"home_team": "A", "away_team": "B"}
             resp = client.post("/predict", json=payload, headers=AUTH_HEADER)
             assert resp.status_code == 500
+
+
+# ---------- load_model_bundle: baseline_promoted handling ----------
+
+
+class TestLoadModelBundleBaselinePromoted:
+    """resolve_model_artifact returns kind='baseline_promoted' when a
+    promotion alias points at a baseline (no pickle is ever persisted for
+    baselines). load_model_bundle previously only special-cased
+    'baseline_fallback' here, so a promoted baseline champion fell through
+    to a pickle-file lookup that never exists and 404'd."""
+
+    def test_baseline_promoted_builds_projection_baseline_model_without_pkl_lookup(
+        self, tmp_path: Path
+    ) -> None:
+        from api.deps import clear_model_cache, load_model_bundle
+        from src.models.baseline import ProjectionBaselineModel
+
+        version_dir = tmp_path / "v1"
+        version_dir.mkdir()
+        # Deliberately no {model_family}_model.pkl on disk: a baseline_promoted
+        # kind must never attempt to load one.
+        artifact = {
+            "kind": "baseline_promoted",
+            "model_family": "spi_lite_baseline",
+            "version": "v1",
+            "version_dir": version_dir,
+            "evaluation_model": "spi_lite_baseline",
+            "gating_status": "passed",
+            "blended": False,
+        }
+        clear_model_cache()
+        try:
+            with patch("api.deps.resolve_model_artifact", return_value=artifact):
+                bundle = load_model_bundle("champion_pure")
+        finally:
+            clear_model_cache()
+
+        assert isinstance(bundle.model, ProjectionBaselineModel)
+        assert bundle.model_family == "spi_lite_baseline"
+        assert bundle.gating_status == "passed"

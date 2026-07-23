@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from types import SimpleNamespace
 
 import pandas as pd
+import pytest
 
 from src.backtest.runner import BacktestRunner
 from src.betting.recommendations import evaluate_market_candidates, load_bet_selection_config
@@ -318,6 +319,36 @@ def test_baseline_predictions_include_main_total_columns() -> None:
     assert predictions["main_total_line"].eq(2.5).all()
     assert "main_total_over_actual" in predictions.columns
     assert "prob_over_main_total" in predictions.columns
+
+
+def test_baseline_betting_uses_the_same_probabilities_it_reports() -> None:
+    """uniform_baseline and home_field_baseline set probs_override to values
+    NOT derived from the raw independent-Poisson matrix (a flat 1/3 split,
+    and the empirical historical W/D/L rate, respectively). Before the
+    matrix-rescale fix, `markets` (used for betting edge/EV/settlement) was
+    derived straight from that raw matrix while predictions.prob_home/
+    draw/away reported probs_override instead -- silently scoring log-loss
+    against one forecast and profitability against a different one."""
+    matches = _synthetic_baseline_matches()
+    odds = _moneyline_odds_for(matches)
+
+    for model_name in ("uniform_baseline", "home_field_baseline"):
+        runner = BacktestRunner(_baseline_backtest_config())
+        results = runner.run(matches, odds=odds, models_to_run=[model_name])
+
+        predictions = results[model_name]["predictions"].set_index("match_id")
+        decision_log = results[model_name]["decision_log"]
+        moneyline_decisions = decision_log[decision_log["market"].str.startswith("1x2_")]
+        assert not moneyline_decisions.empty, f"{model_name}: expected settled moneyline candidates"
+
+        side_to_column = {"home": "prob_home", "draw": "prob_draw", "away": "prob_away"}
+        for _, decision in moneyline_decisions.iterrows():
+            side = decision["market"].removeprefix("1x2_")
+            reported = predictions.loc[decision["match_id"], side_to_column[side]]
+            assert decision["model_probability"] == pytest.approx(reported, abs=1e-6), (
+                f"{model_name}/{side}: betting used {decision['model_probability']} "
+                f"but predictions reported {reported}"
+            )
 
 
 def test_fold_id_persists_across_baseline_decision_and_prediction_rows() -> None:
