@@ -83,10 +83,38 @@ def load_model_bundle(model_name: str) -> ModelBundle:
         with open(ratings_path, "rb") as f:
             ratings_model = pickle.load(f)
 
-    if artifact.get("kind") == "baseline_fallback":
+    if artifact.get("kind") in {"baseline_fallback", "baseline_promoted"}:
+        # Mirror scripts/predict.py::_load_model_stack: without the trained
+        # league rates and the artifact's own model/spi_lite settings, this
+        # falls back to class defaults, which can disagree with whatever the
+        # artifact actually passed its promotion gates with. Source the
+        # model shape (max_goals) and spi_lite tuning knobs from this
+        # artifact's OWN config_snapshot.json (written once at train time)
+        # rather than the API's current config -- an artifact must keep
+        # serving with what it was actually trained on even if the live
+        # config's defaults later drift.
+        max_goals = 8
+        spi_lite_config: dict[str, Any] = {}
+        config_snapshot_path = artifact["version_dir"] / "config_snapshot.json"
+        if config_snapshot_path.exists():
+            config_snapshot = load_json(config_snapshot_path)
+            max_goals = int(config_snapshot.get("model", {}).get("max_goals", max_goals))
+            spi_lite_config = config_snapshot.get("spi_lite", {})
+
+        league_home_rate = None
+        league_away_rate = None
+        spi_summary_path = artifact["version_dir"] / "spi_lite_summary.json"
+        if spi_summary_path.exists():
+            spi_summary = load_json(spi_summary_path)
+            league_home_rate = spi_summary.get("league_home_rate")
+            league_away_rate = spi_summary.get("league_away_rate")
         model = ProjectionBaselineModel(
             strategy=str(artifact["model_family"]),
             ratings_model=ratings_model,
+            max_goals=max_goals,
+            spi_lite_config=spi_lite_config,
+            league_home_rate=league_home_rate,
+            league_away_rate=league_away_rate,
         )
     else:
         model_path = artifact["version_dir"] / f"{artifact['model_family']}_model.pkl"
