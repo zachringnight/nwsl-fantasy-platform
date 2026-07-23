@@ -8,6 +8,7 @@
 
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
+import { resolveEvaluatedMatchCount } from "../src/lib/model-export-utils";
 
 const ROOT = process.cwd();
 const PROCESSED = join(ROOT, "nwsl-model", "data", "processed");
@@ -139,19 +140,33 @@ console.log("Exporting backtest summary...");
 const metricsPath = artifactDir ? join(artifactDir, "backtest", "metrics_comparison.csv") : "";
 const metrics = metricsPath && existsSync(metricsPath) ? parseCsv(metricsPath) : [];
 const backtestSummary = Object.fromEntries(
-  metrics.map((r) => [
-    r.model || "unknown",
-    {
-      logLoss: round4(parseFloat(r.log_loss_1x2) || 0),
-      brierScore: round4(parseFloat(r.brier_score_1x2) || 0),
-      calibrationError: round4(parseFloat(r.calibration_error) || 0),
-      roi: round4(parseFloat(r.roi) || 0),
-      hitRate: round4(parseFloat(r.hit_rate) || 0),
-      totalPredictions: parseInt(r.n_predictions || "0", 10) || 0,
-      brierOver25: round4(parseFloat(r.brier_over_2_5) || 0),
-      totalGoalsMae: round4(parseFloat(r.expected_total_goals_mae) || 0),
-    },
-  ])
+  metrics.map((r) => {
+    const modelName = r.model || "unknown";
+    const explicitCount = parseInt(r.n_predictions || r.n_matches || "0", 10) || 0;
+    const predictionRowsPath = artifactDir
+      ? join(artifactDir, "backtest", `predictions_${modelName}.csv`)
+      : "";
+    const evaluatedMatches = resolveEvaluatedMatchCount(
+      explicitCount,
+      predictionRowsPath && existsSync(predictionRowsPath)
+        ? readFileSync(predictionRowsPath, "utf-8")
+        : undefined
+    );
+
+    return [
+      modelName,
+      {
+        logLoss: round4(parseFloat(r.log_loss_1x2) || 0),
+        brierScore: round4(parseFloat(r.brier_score_1x2) || 0),
+        calibrationError: round4(parseFloat(r.calibration_error) || 0),
+        roi: round4(parseFloat(r.roi) || 0),
+        hitRate: round4(parseFloat(r.hit_rate) || 0),
+        totalPredictions: evaluatedMatches,
+        brierOver25: round4(parseFloat(r.brier_over_2_5) || 0),
+        totalGoalsMae: round4(parseFloat(r.expected_total_goals_mae) || 0),
+      },
+    ];
+  })
 );
 
 writeFileSync(join(WEB_DIR, "backtest-summary.json"), JSON.stringify(backtestSummary, null, 2));

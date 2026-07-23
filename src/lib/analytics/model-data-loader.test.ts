@@ -10,5 +10,9 @@ describe("model data loader", () => {
 
     expect(first).not.toBeNull();
     expect(second).toEqual(first);
+    expect(first).toMatchObject({
+      totalPredictions: 251,
+      calibrationBuckets: [],
+    });
   });
 });

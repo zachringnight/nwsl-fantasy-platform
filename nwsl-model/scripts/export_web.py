@@ -236,13 +236,23 @@ def export_backtest_summary(model_dir: Path, output_dir: Path) -> None:
 
     for _, row in df.iterrows():
         model_name = row.get("model", "unknown")
+        prediction_rows_path = metrics_path.parent / f"predictions_{model_name}.csv"
+        total_predictions = int(_coerce_metric(row, "n_predictions", "n_matches"))
+        if prediction_rows_path.exists():
+            try:
+                total_predictions = len(pd.read_csv(prediction_rows_path))
+            except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError):
+                logging.warning(
+                    "Could not count prediction rows at %s.",
+                    prediction_rows_path,
+                )
         summary[model_name] = {
             "logLoss": round(_coerce_metric(row, "log_loss_1x2", "log_loss"), 4),
             "brierScore": round(_coerce_metric(row, "brier_score_1x2", "brier_score"), 4),
             "calibrationError": round(_coerce_metric(row, "calibration_error", "ece_home_win"), 4),
             "roi": round(_coerce_metric(row, "roi"), 4),
             "hitRate": round(_coerce_metric(row, "hit_rate"), 4),
-            "totalPredictions": int(_coerce_metric(row, "n_predictions")),
+            "totalPredictions": total_predictions,
             "brierOver25": round(_coerce_metric(row, "brier_over_2_5"), 4),
             "totalGoalsMae": round(_coerce_metric(row, "expected_total_goals_mae"), 4),
         }
