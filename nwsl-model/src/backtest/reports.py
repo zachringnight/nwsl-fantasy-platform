@@ -61,6 +61,9 @@ def generate_backtest_report(
         bet_log = result.get("bet_log")
         if bet_log is not None and len(bet_log) > 0:
             save_csv(bet_log, out / f"bet_log_{model_name}.csv")
+        decision_log = result.get("decision_log")
+        if decision_log is not None and len(decision_log) > 0:
+            save_csv(decision_log, out / f"decision_log_{model_name}.csv")
 
     # 4) Calibration plots
     for model_name, result in model_results.items():

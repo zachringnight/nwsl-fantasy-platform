@@ -1,18 +1,114 @@
 [
-  { "espnId": "21422", "name": "Angel City FC", "abbreviation": "LA" },
-  { "espnId": "22187", "name": "Bay FC", "abbreviation": "BAY" },
-  { "espnId": "131562", "name": "Boston Legacy FC", "abbreviation": "BOS" },
-  { "espnId": "15360", "name": "Chicago Stars FC", "abbreviation": "CHI" },
-  { "espnId": "131563", "name": "Denver Summit FC", "abbreviation": "DEN" },
-  { "espnId": "15364", "name": "Gotham FC", "abbreviation": "GFC" },
-  { "espnId": "17346", "name": "Houston Dash", "abbreviation": "HOU" },
-  { "espnId": "20907", "name": "Kansas City Current", "abbreviation": "KC" },
-  { "espnId": "15366", "name": "North Carolina Courage", "abbreviation": "NC" },
-  { "espnId": "18206", "name": "Orlando Pride", "abbreviation": "ORL" },
-  { "espnId": "15362", "name": "Portland Thorns FC", "abbreviation": "POR" },
-  { "espnId": "20905", "name": "Racing Louisville FC", "abbreviation": "LOU" },
-  { "espnId": "21423", "name": "San Diego Wave FC", "abbreviation": "SD" },
-  { "espnId": "15363", "name": "Seattle Reign FC", "abbreviation": "SEA" },
-  { "espnId": "19141", "name": "Utah Royals", "abbreviation": "UTA" },
-  { "espnId": "15365", "name": "Washington Spirit", "abbreviation": "WAS" }
+  {
+    "espnId": "21422",
+    "name": "Angel City FC",
+    "abbreviation": "LA",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/21422.png",
+    "color": "202121"
+  },
+  {
+    "espnId": "22187",
+    "name": "Bay FC",
+    "abbreviation": "BAY",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/22187.png",
+    "color": "ff5049"
+  },
+  {
+    "espnId": "131562",
+    "name": "Boston Legacy FC",
+    "abbreviation": "BOS",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/131562.png",
+    "color": "00FF00"
+  },
+  {
+    "espnId": "15360",
+    "name": "Chicago Stars FC",
+    "abbreviation": "CHI",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/15360.png",
+    "color": "c7102e"
+  },
+  {
+    "espnId": "131563",
+    "name": "Denver Summit FC",
+    "abbreviation": "DEN",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/131563.png",
+    "color": "20604E"
+  },
+  {
+    "espnId": "15364",
+    "name": "Gotham FC",
+    "abbreviation": "GFC",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/15364.png",
+    "color": "a9f1fd"
+  },
+  {
+    "espnId": "17346",
+    "name": "Houston Dash",
+    "abbreviation": "HOU",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/17346.png",
+    "color": "ff6900"
+  },
+  {
+    "espnId": "20907",
+    "name": "Kansas City Current",
+    "abbreviation": "KC",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/20907.png",
+    "color": "cf3339"
+  },
+  {
+    "espnId": "15366",
+    "name": "North Carolina Courage",
+    "abbreviation": "NC",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/15366.png",
+    "color": "ab0033"
+  },
+  {
+    "espnId": "18206",
+    "name": "Orlando Pride",
+    "abbreviation": "ORL",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/18206.png",
+    "color": "c5b5f2"
+  },
+  {
+    "espnId": "15362",
+    "name": "Portland Thorns FC",
+    "abbreviation": "POR",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/15362.png",
+    "color": "000000"
+  },
+  {
+    "espnId": "20905",
+    "name": "Racing Louisville FC",
+    "abbreviation": "LOU",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/20905.png",
+    "color": "c5b5f2"
+  },
+  {
+    "espnId": "21423",
+    "name": "San Diego Wave FC",
+    "abbreviation": "SD",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/21423.png",
+    "color": "032e62"
+  },
+  {
+    "espnId": "15363",
+    "name": "Seattle Reign FC",
+    "abbreviation": "SEA",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/15363.png",
+    "color": "292431"
+  },
+  {
+    "espnId": "19141",
+    "name": "Utah Royals",
+    "abbreviation": "UTA",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/19141.png",
+    "color": "ae122a"
+  },
+  {
+    "espnId": "15365",
+    "name": "Washington Spirit",
+    "abbreviation": "WAS",
+    "logoUrl": "https://a.espncdn.com/i/teamlogos/soccer/500/15365.png",
+    "color": "000000"
+  }
 ]

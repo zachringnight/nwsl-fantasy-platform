@@ -1,0 +1,72 @@
+{
+  "dixon_coles": {
+    "logLoss": 1.076,
+    "brierScore": 0.6516,
+    "calibrationError": 0.0,
+    "roi": -0.7328,
+    "hitRate": 0.1429,
+    "totalPredictions": 0,
+    "brierOver25": 0.2536,
+    "totalGoalsMae": 1.1233
+  },
+  "bivariate_poisson": {
+    "logLoss": 1.0919,
+    "brierScore": 0.6602,
+    "calibrationError": 0.0,
+    "roi": -0.7328,
+    "hitRate": 0.1429,
+    "totalPredictions": 0,
+    "brierOver25": 0.2578,
+    "totalGoalsMae": 1.133
+  },
+  "uniform_baseline": {
+    "logLoss": 1.0986,
+    "brierScore": 0.6667,
+    "calibrationError": 0.0,
+    "roi": 0.0,
+    "hitRate": 0.0,
+    "totalPredictions": 0,
+    "brierOver25": 0.2493,
+    "totalGoalsMae": 1.0873
+  },
+  "home_field_baseline": {
+    "logLoss": 1.0054,
+    "brierScore": 0.6086,
+    "calibrationError": 0.0,
+    "roi": 0.0,
+    "hitRate": 0.0,
+    "totalPredictions": 0,
+    "brierOver25": 0.2493,
+    "totalGoalsMae": 1.0873
+  },
+  "team_ratings_poisson": {
+    "logLoss": 1.0174,
+    "brierScore": 0.6088,
+    "calibrationError": 0.0,
+    "roi": 0.0,
+    "hitRate": 0.0,
+    "totalPredictions": 0,
+    "brierOver25": 0.2541,
+    "totalGoalsMae": 1.1422
+  },
+  "rolling_npxg_poisson": {
+    "logLoss": 1.0289,
+    "brierScore": 0.6173,
+    "calibrationError": 0.0,
+    "roi": 0.0,
+    "hitRate": 0.0,
+    "totalPredictions": 0,
+    "brierOver25": 0.2564,
+    "totalGoalsMae": 1.122
+  },
+  "spi_lite_baseline": {
+    "logLoss": 0.9957,
+    "brierScore": 0.5939,
+    "calibrationError": 0.0,
+    "roi": 0.0,
+    "hitRate": 0.0,
+    "totalPredictions": 0,
+    "brierOver25": 0.2532,
+    "totalGoalsMae": 1.1299
+  }
+}

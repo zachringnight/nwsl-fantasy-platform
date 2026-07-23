@@ -1,0 +1,102 @@
+{
+  "version": "20260526T030638Z",
+  "generated_at": "2026-05-26T03:13:15.726767+00:00",
+  "models": {
+    "bivariate_poisson": {
+      "overall": {
+        "n_bets": 0,
+        "total_staked": 0.0,
+        "total_pnl": 0.0,
+        "roi": 0.0,
+        "hit_rate": 0.0,
+        "mean_edge": 0.0,
+        "mean_confidence": 0.0
+      },
+      "by_market": {},
+      "by_edge_bucket": {},
+      "by_season": {},
+      "by_line_band": {},
+      "clv": {}
+    },
+    "dixon_coles": {
+      "overall": {
+        "n_bets": 0,
+        "total_staked": 0.0,
+        "total_pnl": 0.0,
+        "roi": 0.0,
+        "hit_rate": 0.0,
+        "mean_edge": 0.0,
+        "mean_confidence": 0.0
+      },
+      "by_market": {},
+      "by_edge_bucket": {},
+      "by_season": {},
+      "by_line_band": {},
+      "clv": {}
+    },
+    "home_field_baseline": {
+      "overall": {
+        "n_bets": 0,
+        "total_staked": 0.0,
+        "total_pnl": 0.0,
+        "roi": 0.0,
+        "hit_rate": 0.0,
+        "mean_edge": 0.0,
+        "mean_confidence": 0.0
+      },
+      "by_market": {},
+      "by_edge_bucket": {},
+      "by_season": {},
+      "by_line_band": {},
+      "clv": {}
+    },
+    "rolling_npxg_poisson": {
+      "overall": {
+        "n_bets": 0,
+        "total_staked": 0.0,
+        "total_pnl": 0.0,
+        "roi": 0.0,
+        "hit_rate": 0.0,
+        "mean_edge": 0.0,
+        "mean_confidence": 0.0
+      },
+      "by_market": {},
+      "by_edge_bucket": {},
+      "by_season": {},
+      "by_line_band": {},
+      "clv": {}
+    },
+    "team_ratings_poisson": {
+      "overall": {
+        "n_bets": 0,
+        "total_staked": 0.0,
+        "total_pnl": 0.0,
+        "roi": 0.0,
+        "hit_rate": 0.0,
+        "mean_edge": 0.0,
+        "mean_confidence": 0.0
+      },
+      "by_market": {},
+      "by_edge_bucket": {},
+      "by_season": {},
+      "by_line_band": {},
+      "clv": {}
+    },
+    "uniform_baseline": {
+      "overall": {
+        "n_bets": 0,
+        "total_staked": 0.0,
+        "total_pnl": 0.0,
+        "roi": 0.0,
+        "hit_rate": 0.0,
+        "mean_edge": 0.0,
+        "mean_confidence": 0.0
+      },
+      "by_market": {},
+      "by_edge_bucket": {},
+      "by_season": {},
+      "by_line_band": {},
+      "clv": {}
+    }
+  }
+}

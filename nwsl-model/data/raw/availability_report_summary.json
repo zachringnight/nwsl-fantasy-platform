@@ -1,0 +1,38 @@
+{
+  "source_url": "https://www.nwslsoccer.com/news/availability-report",
+  "rows": 88,
+  "teams": [
+    "Angel City FC",
+    "Bay FC",
+    "Boston Legacy",
+    "Chicago Stars",
+    "Current",
+    "Denver Summit",
+    "Gotham FC",
+    "Houston Dash",
+    "NC Courage",
+    "Orlando Pride",
+    "Portland Thorns",
+    "Racing Louisville",
+    "Reign",
+    "Royals",
+    "SD Wave",
+    "Washington Spirit"
+  ],
+  "status_counts": {
+    "out": 67,
+    "international_duty": 12,
+    "questionable": 9
+  },
+  "report_dates": [
+    "2026-07-18"
+  ],
+  "applied_to_projected_lineups": true,
+  "projected_rows_updated": 488,
+  "projected_start_removed": 193,
+  "snapshot_rows_total": 166,
+  "snapshot_report_dates": [
+    "2026-05-23",
+    "2026-07-18"
+  ]
+}

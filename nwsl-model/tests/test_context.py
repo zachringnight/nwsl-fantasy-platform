@@ -1,0 +1,469 @@
+from __future__ import annotations
+
+from datetime import date
+
+import pandas as pd
+import pytest
+
+from src.features.context import (
+    ContextualFeatureProvider,
+    build_contextual_training_frame,
+    select_model_contextual_columns,
+)
+
+
+def test_contextual_training_frame_uses_team_and_player_priors() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "match_date": date(2026, 3, 1),
+                "season": 2026,
+                "competition": "NWSL",
+                "regular_season_flag": True,
+                "home_team": "Portland Thorns",
+                "away_team": "Current",
+                "home_goals_90": 2,
+                "away_goals_90": 1,
+                "home_npxg": 1.8,
+                "away_npxg": 1.1,
+                "home_xg": 1.8,
+                "away_xg": 1.1,
+                "match_status": "completed",
+                "resumed_flag": False,
+                "incomplete_flag": False,
+            }
+        ]
+    )
+    team_priors = pd.DataFrame(
+        [
+            {
+                "season": 2025,
+                "team": "Portland Thorns",
+                "goals_per_match": 1.9,
+                "goals_against_per_match": 0.8,
+                "shots_per_match": 12.4,
+                "points_per_match": 2.2,
+                "average_possession": 54.0,
+                "xg_per_match": 1.7,
+                "xg_against_per_match": 0.9,
+                "xpoints_per_match": 2.1,
+                "gplus_net_per90": 0.18,
+                "gplus_shooting_net_per90": 0.05,
+                "gplus_passing_net_per90": 0.04,
+                "gplus_receiving_net_per90": 0.03,
+            },
+            {
+                "season": 2026,
+                "team": "Portland Thorns",
+                "goals_per_match": 2.4,
+                "goals_against_per_match": 0.6,
+                "shots_per_match": 13.8,
+                "points_per_match": 2.6,
+                "average_possession": 56.0,
+                "xg_per_match": 2.0,
+                "xg_against_per_match": 0.7,
+                "xpoints_per_match": 2.5,
+                "gplus_net_per90": 0.25,
+                "gplus_shooting_net_per90": 0.08,
+                "gplus_passing_net_per90": 0.06,
+                "gplus_receiving_net_per90": 0.04,
+            },
+            {
+                "season": 2025,
+                "team": "Current",
+                "goals_per_match": 1.5,
+                "goals_against_per_match": 1.0,
+                "shots_per_match": 11.1,
+                "points_per_match": 1.7,
+                "average_possession": 50.5,
+                "xg_per_match": 1.4,
+                "xg_against_per_match": 1.1,
+                "xpoints_per_match": 1.8,
+                "gplus_net_per90": 0.08,
+                "gplus_shooting_net_per90": 0.02,
+                "gplus_passing_net_per90": 0.01,
+                "gplus_receiving_net_per90": 0.015,
+            },
+            {
+                "season": 2026,
+                "team": "Current",
+                "goals_per_match": 1.8,
+                "goals_against_per_match": 0.9,
+                "shots_per_match": 12.0,
+                "points_per_match": 2.0,
+                "average_possession": 52.0,
+                "xg_per_match": 1.6,
+                "xg_against_per_match": 0.95,
+                "xpoints_per_match": 2.0,
+                "gplus_net_per90": 0.11,
+                "gplus_shooting_net_per90": 0.03,
+                "gplus_passing_net_per90": 0.02,
+                "gplus_receiving_net_per90": 0.02,
+            },
+        ]
+    )
+    player_priors = pd.DataFrame(
+        [
+            {
+                "season": 2026,
+                "player_id": "p1",
+                "team": "Portland Thorns",
+                "season_value_score": 0.8,
+            },
+            {
+                "season": 2026,
+                "player_id": "p2",
+                "team": "Current",
+                "season_value_score": 0.6,
+            },
+        ]
+    )
+    projected_lineups = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "team": "Portland Thorns",
+                "player_id": "p1",
+                "projected_start": True,
+                "projected_minutes": 88,
+                "status": "available",
+            },
+            {
+                "match_id": "m1",
+                "team": "Current",
+                "player_id": "p2",
+                "projected_start": True,
+                "projected_minutes": 84,
+                "status": "available",
+            },
+        ]
+    )
+
+    prepared, contextual_cols = build_contextual_training_frame(
+        matches,
+        projected_lineups=projected_lineups,
+        team_season_priors=team_priors,
+        player_season_priors=player_priors,
+    )
+
+    row = prepared.iloc[0]
+    assert row["home_team_xg_per_match"] == 1.7
+    assert row["away_team_points_per_match"] == 1.7
+    assert row["home_team_xpoints_per_match"] == 2.1
+    assert row["away_team_gplus_net_per90"] == 0.08
+    assert row["home_lineup_strength"] == 0.8
+    assert row["away_lineup_strength"] == 0.6
+    assert "home_team_shots_per_match" in contextual_cols
+    assert "home_team_gplus_passing_net_per90" in contextual_cols
+    assert "home_team_xg_per_match_missing" in contextual_cols
+    assert row["home_team_xg_per_match_missing"] == 0.0
+
+    provider = ContextualFeatureProvider.from_training_frame(prepared).attach_projected_lineups(
+        projected_lineups=projected_lineups,
+        player_season_priors=player_priors,
+    )
+    fixture_context = provider.for_match("Portland Thorns", "Current")
+    assert fixture_context["home_team_goals_per_match"] == 1.9
+    assert fixture_context["away_team_xg_per_match"] == 1.4
+    assert fixture_context["home_team_xpoints_per_match"] == 2.1
+    assert fixture_context["away_team_gplus_receiving_net_per90"] == 0.015
+    assert fixture_context["home_lineup_strength"] == 0.8
+
+
+def test_context_provider_uses_match_specific_projected_lineup_strength() -> None:
+    prepared = pd.DataFrame(
+        [
+            {
+                "match_date": date(2026, 5, 1),
+                "home_team": "Portland Thorns",
+                "away_team": "Current",
+                "home_lineup_strength": 0.0,
+                "away_lineup_strength": 0.0,
+            }
+        ]
+    )
+    player_priors = pd.DataFrame(
+        [
+            {"season": 2026, "player_id": "p1", "team": "Portland Thorns", "season_value_score": 0.8},
+            {"season": 2026, "player_id": "p2", "team": "Portland Thorns", "season_value_score": 0.4},
+            {"season": 2026, "player_id": "p3", "team": "Portland Thorns", "season_value_score": 0.2},
+            {"season": 2026, "player_id": "k1", "team": "Current", "season_value_score": 0.5},
+        ]
+    )
+    projected_lineups = pd.DataFrame(
+        [
+            {
+                "match_id": "m2",
+                "team": "Portland Thorns",
+                "player_id": "p1",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "available",
+            },
+            {
+                "match_id": "m2",
+                "team": "Portland Thorns",
+                "player_id": "p2",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "available",
+            },
+            {
+                "match_id": "m3",
+                "team": "Portland Thorns",
+                "player_id": "p3",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "available",
+            },
+            {
+                "match_id": "m2",
+                "team": "Current",
+                "player_id": "k1",
+                "projected_start": True,
+                "projected_minutes": 90,
+                "status": "out",
+            },
+        ]
+    )
+
+    provider = ContextualFeatureProvider.from_training_frame(prepared).attach_projected_lineups(
+        projected_lineups=projected_lineups,
+        player_season_priors=player_priors,
+    )
+
+    m2_context = provider.for_match("Portland Thorns", "Current", match_id="m2")
+    m3_context = provider.for_match("Portland Thorns", "Current", match_id="m3")
+    fallback_context = provider.for_match("Portland Thorns", "Current")
+
+    assert m2_context["home_lineup_strength"] == pytest.approx(1.2)
+    assert m3_context["home_lineup_strength"] == pytest.approx(0.2)
+    assert fallback_context["home_lineup_strength"] == pytest.approx(0.7)
+    assert m2_context["away_lineup_strength"] == 0.0
+
+
+def test_contextual_training_frame_uses_previous_available_team_priors() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "match_date": date(2025, 3, 1),
+                "season": 2025,
+                "competition": "NWSL",
+                "regular_season_flag": True,
+                "home_team": "Portland Thorns",
+                "away_team": "Current",
+                "home_goals_90": 1,
+                "away_goals_90": 0,
+                "home_npxg": 1.2,
+                "away_npxg": 0.7,
+                "home_xg": 1.2,
+                "away_xg": 0.7,
+                "match_status": "completed",
+                "resumed_flag": False,
+                "incomplete_flag": False,
+            },
+            {
+                "match_id": "m2",
+                "match_date": date(2026, 3, 1),
+                "season": 2026,
+                "competition": "NWSL",
+                "regular_season_flag": True,
+                "home_team": "Portland Thorns",
+                "away_team": "Current",
+                "home_goals_90": 2,
+                "away_goals_90": 1,
+                "home_npxg": 1.5,
+                "away_npxg": 1.0,
+                "home_xg": 1.5,
+                "away_xg": 1.0,
+                "match_status": "completed",
+                "resumed_flag": False,
+                "incomplete_flag": False,
+            },
+        ]
+    )
+    team_priors = pd.DataFrame(
+        [
+            {
+                "season": 2025,
+                "team": "Portland Thorns",
+                "goals_per_match": 1.4,
+                "points_per_match": 1.8,
+                "xg_per_match": 1.35,
+            },
+            {
+                "season": 2025,
+                "team": "Current",
+                "goals_per_match": 1.6,
+                "points_per_match": 2.0,
+                "xg_per_match": 1.5,
+            },
+            {
+                "season": 2026,
+                "team": "Portland Thorns",
+                "goals_per_match": 2.1,
+                "points_per_match": 2.4,
+                "xg_per_match": 1.9,
+            },
+            {
+                "season": 2026,
+                "team": "Current",
+                "goals_per_match": 1.9,
+                "points_per_match": 2.1,
+                "xg_per_match": 1.8,
+            },
+        ]
+    )
+
+    prepared, _ = build_contextual_training_frame(matches, team_season_priors=team_priors)
+
+    first_row = prepared.set_index("match_id").loc["m1"]
+    second_row = prepared.set_index("match_id").loc["m2"]
+    assert first_row["home_team_xg_per_match"] == 1.35
+    assert first_row["home_team_xg_per_match_missing"] == 1.0
+    assert second_row["home_team_xg_per_match"] == 1.35
+    assert second_row["away_team_points_per_match"] == 2.0
+    assert second_row["home_team_xg_per_match_missing"] == 0.0
+
+
+def test_contextual_training_frame_downweights_low_continuity_team_priors() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "match_date": date(2026, 3, 1),
+                "season": 2026,
+                "competition": "NWSL",
+                "regular_season_flag": True,
+                "home_team": "Stable FC",
+                "away_team": "Churn FC",
+                "home_goals_90": 1,
+                "away_goals_90": 1,
+                "home_npxg": 1.3,
+                "away_npxg": 1.1,
+                "home_xg": 1.3,
+                "away_xg": 1.1,
+                "match_status": "completed",
+                "resumed_flag": False,
+                "incomplete_flag": False,
+            }
+        ]
+    )
+    team_priors = pd.DataFrame(
+        [
+            {"season": 2025, "team": "Stable FC", "xg_per_match": 2.0, "points_per_match": 2.4},
+            {"season": 2025, "team": "Churn FC", "xg_per_match": 1.0, "points_per_match": 0.8},
+            {"season": 2026, "team": "Stable FC", "xg_per_match": 2.1, "points_per_match": 2.5},
+            {"season": 2026, "team": "Churn FC", "xg_per_match": 0.9, "points_per_match": 0.6},
+        ]
+    )
+    player_priors = pd.DataFrame(
+        [
+            {
+                "season": 2025,
+                "team": "Stable FC",
+                "player_id": "stable-keeper",
+                "position": "Goalkeeper",
+                "minutes_played": 900,
+                "season_value_score": 0.4,
+            },
+            {
+                "season": 2025,
+                "team": "Stable FC",
+                "player_id": "stable-forward",
+                "position": "Forward",
+                "minutes_played": 900,
+                "season_value_score": 0.6,
+            },
+            {
+                "season": 2025,
+                "team": "Churn FC",
+                "player_id": "churn-old-keeper",
+                "position": "Goalkeeper",
+                "minutes_played": 900,
+                "season_value_score": 0.4,
+            },
+            {
+                "season": 2025,
+                "team": "Churn FC",
+                "player_id": "churn-old-forward",
+                "position": "Forward",
+                "minutes_played": 900,
+                "season_value_score": 0.6,
+            },
+            {
+                "season": 2026,
+                "team": "Stable FC",
+                "player_id": "stable-keeper",
+                "position": "Goalkeeper",
+                "minutes_played": 0,
+                "season_value_score": 0.0,
+            },
+            {
+                "season": 2026,
+                "team": "Stable FC",
+                "player_id": "stable-forward",
+                "position": "Forward",
+                "minutes_played": 0,
+                "season_value_score": 0.0,
+            },
+            {
+                "season": 2026,
+                "team": "Churn FC",
+                "player_id": "churn-new-forward",
+                "position": "Forward",
+                "minutes_played": 0,
+                "season_value_score": 0.0,
+            },
+        ]
+    )
+
+    prepared, contextual_cols = build_contextual_training_frame(
+        matches,
+        team_season_priors=team_priors,
+        player_season_priors=player_priors,
+    )
+
+    row = prepared.iloc[0]
+    assert row["home_roster_historical_prior_weight"] == 0.6
+    assert row["away_roster_historical_prior_weight"] == 0.08
+    assert row["home_team_xg_per_match"] == 1.8
+    assert row["away_team_xg_per_match"] == 1.46
+    assert "home_roster_continuity_score" in contextual_cols
+    assert "away_roster_historical_prior_weight" in contextual_cols
+
+
+def test_select_model_contextual_columns_trims_fit_surface() -> None:
+    contextual_cols = [
+        "home_roll_5_npxg_for",
+        "home_roll_5_npxg_for_missing",
+        "home_team_shots_per_match",
+        "home_team_shots_per_match_missing",
+        "home_team_xg_per_match",
+        "home_team_xg_per_match_missing",
+        "home_roster_continuity_score",
+        "home_roster_historical_prior_weight",
+        "home_lineup_strength",
+        "home_lineup_strength_missing",
+        "away_roll_5_npxg_for",
+        "away_roll_5_npxg_for_missing",
+        "away_team_points_per_match",
+        "away_team_points_per_match_missing",
+        "away_lineup_strength",
+        "rest_diff",
+        "away_team_gplus_passing_net_per90",
+    ]
+
+    selected = select_model_contextual_columns(contextual_cols)
+
+    assert "home_roll_5_npxg_for" in selected
+    assert "home_team_xg_per_match" in selected
+    assert "home_roster_continuity_score" in selected
+    assert "home_roster_historical_prior_weight" in selected
+    assert "home_lineup_strength_missing" in selected
+    assert "away_team_points_per_match_missing" in selected
+    assert "rest_diff" in selected
+    assert "home_team_shots_per_match" not in selected
+    assert "away_team_gplus_passing_net_per90" not in selected

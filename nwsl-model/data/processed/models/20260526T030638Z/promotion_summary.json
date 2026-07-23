@@ -1,0 +1,211 @@
+{
+  "version": "20260526T030638Z",
+  "promoted_at": "2026-05-26T03:13:17.097154+00:00",
+  "gate_results": {
+    "dixon_coles": {
+      "passed": false,
+      "gating_status": "research_only",
+      "checks": {
+        "converged": true,
+        "season_coverage_ok": true,
+        "beats_best_baseline_log_loss": false,
+        "beats_best_baseline_brier": false,
+        "total_goals_mae_ok": false,
+        "classwise_ece_ok": true,
+        "totals_ece_ok": true,
+        "totals_brier_ok": false,
+        "posthoc_calibration_available": true,
+        "slice_stability_ok": false
+      },
+      "metrics": {
+        "log_loss_1x2": 1.0814769667951398,
+        "brier_score_1x2": 0.6548853874883067,
+        "expected_total_goals_mae": 1.263370163794932,
+        "max_classwise_ece": 0.00977150634522897,
+        "totals_ece": 0.03256272026512918,
+        "totals_brier_2.5": 0.25046516791423595,
+        "totals_brier_3.5": 0.18514230768256087,
+        "best_baseline_log_loss_model": "home_field_baseline",
+        "best_baseline_log_loss": 1.0904891186672154,
+        "best_baseline_brier_model": "home_field_baseline",
+        "best_baseline_brier": 0.6608288767158061,
+        "best_baseline_total_goals_mae_model": "uniform_baseline",
+        "best_baseline_total_goals_mae": 1.2612028630215206
+      },
+      "slice_comparisons": {
+        "early_season": {
+          "available": true,
+          "baseline_log_loss": 1.0601192879949028,
+          "candidate_log_loss": 1.0710342188214543,
+          "ratio": 1.0102959458903873,
+          "passed": true
+        },
+        "later_season": {
+          "available": true,
+          "baseline_log_loss": 1.0950056575877127,
+          "candidate_log_loss": 1.0830299908527652,
+          "ratio": 0.9890633745570504,
+          "passed": true
+        },
+        "home_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.0727290443770028,
+          "candidate_log_loss": 1.0761911779423083,
+          "ratio": 1.0032274073154384,
+          "passed": true
+        },
+        "away_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.1200892424842368,
+          "candidate_log_loss": 1.0919780673160993,
+          "ratio": 0.9749027362268117,
+          "passed": true
+        },
+        "short_rest": {
+          "available": true,
+          "baseline_log_loss": 0.9601352885622187,
+          "candidate_log_loss": 0.9019554361735416,
+          "ratio": 0.9394045265477116,
+          "passed": true
+        },
+        "normal_rest": {
+          "available": true,
+          "baseline_log_loss": 1.0916634774969907,
+          "candidate_log_loss": 1.0830942778818213,
+          "ratio": 0.9921503285657067,
+          "passed": true
+        },
+        "high_lineup_quality": {
+          "available": true,
+          "baseline_log_loss": 1.0904891186672159,
+          "candidate_log_loss": 1.08147696679514,
+          "ratio": 0.9917356792307195,
+          "passed": true
+        },
+        "low_lineup_quality": {
+          "available": false
+        },
+        "high_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.0801956222293303,
+          "candidate_log_loss": 1.0501577746487105,
+          "ratio": 0.9721922150372846,
+          "passed": true
+        },
+        "low_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.100782615105102,
+          "candidate_log_loss": 1.11279615894157,
+          "ratio": 1.0109136387799158,
+          "passed": true
+        }
+      }
+    },
+    "bivariate_poisson": {
+      "passed": false,
+      "gating_status": "research_only",
+      "checks": {
+        "converged": true,
+        "season_coverage_ok": true,
+        "beats_best_baseline_log_loss": false,
+        "beats_best_baseline_brier": false,
+        "total_goals_mae_ok": false,
+        "classwise_ece_ok": true,
+        "totals_ece_ok": true,
+        "totals_brier_ok": false,
+        "posthoc_calibration_available": true,
+        "slice_stability_ok": false
+      },
+      "metrics": {
+        "log_loss_1x2": 1.0822985608782365,
+        "brier_score_1x2": 0.6554342549519979,
+        "expected_total_goals_mae": 1.2620479815762111,
+        "max_classwise_ece": 0.006140014261423521,
+        "totals_ece": 0.01784980028195487,
+        "totals_brier_2.5": 0.24990775717397198,
+        "totals_brier_3.5": 0.18509249813826725,
+        "best_baseline_log_loss_model": "home_field_baseline",
+        "best_baseline_log_loss": 1.0904891186672154,
+        "best_baseline_brier_model": "home_field_baseline",
+        "best_baseline_brier": 0.6608288767158061,
+        "best_baseline_total_goals_mae_model": "uniform_baseline",
+        "best_baseline_total_goals_mae": 1.2612028630215206
+      },
+      "slice_comparisons": {
+        "early_season": {
+          "available": true,
+          "baseline_log_loss": 1.0601192879949028,
+          "candidate_log_loss": 1.077782349324607,
+          "ratio": 1.016661390401746,
+          "passed": true
+        },
+        "later_season": {
+          "available": true,
+          "baseline_log_loss": 1.0950056575877127,
+          "candidate_log_loss": 1.0829702025964687,
+          "ratio": 0.9890087736918565,
+          "passed": true
+        },
+        "home_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.0727290443770028,
+          "candidate_log_loss": 1.0784504040589245,
+          "ratio": 1.0053334620815122,
+          "passed": true
+        },
+        "away_favorite": {
+          "available": true,
+          "baseline_log_loss": 1.1200892424842368,
+          "candidate_log_loss": 1.0904224474967856,
+          "ratio": 0.9735139006230847,
+          "passed": true
+        },
+        "short_rest": {
+          "available": true,
+          "baseline_log_loss": 0.9601352885622187,
+          "candidate_log_loss": 0.9127557180981716,
+          "ratio": 0.9506532349883765,
+          "passed": true
+        },
+        "normal_rest": {
+          "available": true,
+          "baseline_log_loss": 1.0916634774969907,
+          "candidate_log_loss": 1.083825973876255,
+          "ratio": 0.9928205863965461,
+          "passed": true
+        },
+        "high_lineup_quality": {
+          "available": true,
+          "baseline_log_loss": 1.0904891186672159,
+          "candidate_log_loss": 1.0822985608782365,
+          "ratio": 0.9924890971869671,
+          "passed": true
+        },
+        "low_lineup_quality": {
+          "available": false
+        },
+        "high_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.0801956222293303,
+          "candidate_log_loss": 1.0534825383908373,
+          "ratio": 0.9752701424734883,
+          "passed": true
+        },
+        "low_confidence": {
+          "available": true,
+          "baseline_log_loss": 1.100782615105102,
+          "candidate_log_loss": 1.1111145833656362,
+          "ratio": 1.0093860205627865,
+          "passed": true
+        }
+      }
+    }
+  },
+  "champions": {
+    "aliases": {},
+    "experimental": {}
+  },
+  "available_aliases": [
+    "champion_pure"
+  ]
+}

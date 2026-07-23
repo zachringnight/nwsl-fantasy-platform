@@ -10,6 +10,26 @@ import pandas as pd
 
 logger = logging.getLogger("nwsl_model.features.lineup_features")
 
+UNAVAILABLE_LINEUP_STATUSES = {"out", "suspended", "international_duty", "injured"}
+
+
+def projected_start_mask(projected: pd.DataFrame) -> pd.Series:
+    """Return a robust boolean starter mask for loaded CSV/API values."""
+    values = projected["projected_start"]
+    if pd.api.types.is_bool_dtype(values):
+        return values.fillna(False)
+    return values.astype(str).str.strip().str.lower().isin({"1", "true", "yes", "y"})
+
+
+def _projection_available_for_match(team_proj: pd.DataFrame, match_date: object) -> pd.Series:
+    if "report_timestamp" not in team_proj.columns or match_date is None or pd.isna(match_date):
+        return pd.Series(True, index=team_proj.index)
+    report_dates = pd.to_datetime(team_proj["report_timestamp"], errors="coerce", utc=True).dt.date
+    match_day = pd.to_datetime(match_date, errors="coerce")
+    if pd.isna(match_day):
+        return pd.Series(True, index=team_proj.index)
+    return report_dates.isna() | (report_dates <= match_day.date())
+
 
 def compute_availability_features(
     matches: pd.DataFrame,
@@ -89,8 +109,13 @@ def compute_projected_lineup_delta(
             team_proj = projected[
                 (projected["match_id"] == row["match_id"])
                 & (projected["team"] == row[team_col])
-                & (projected["projected_start"])
-            ]
+                & projected_start_mask(projected)
+            ].copy()
+            if not team_proj.empty:
+                team_proj = team_proj.loc[_projection_available_for_match(team_proj, row.get("match_date"))]
+            if "status" in team_proj.columns:
+                available = ~team_proj["status"].astype(str).str.lower().isin(UNAVAILABLE_LINEUP_STATUSES)
+                team_proj = team_proj.loc[available]
             if player_ratings and not team_proj.empty:
                 total = sum(
                     player_ratings.get(pid, 0.0)

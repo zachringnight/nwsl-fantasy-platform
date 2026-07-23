@@ -1,0 +1,24 @@
+{
+  "season": 2026,
+  "season_id": "nwsl::Football_Season::0b6761e4701749f593690c0f338da74c",
+  "matches": {
+    "rows": 240,
+    "status_counts": {
+      "UPCOMING": 121,
+      "FINISHED": 119
+    }
+  },
+  "profiles": {
+    "rows": 453,
+    "teams": 16
+  },
+  "player_stats": {
+    "rows": 452,
+    "max_games_played": 16.0,
+    "max_starts": 16.0
+  },
+  "team_stats": {
+    "rows": 16,
+    "max_games_played": 16.0
+  }
+}

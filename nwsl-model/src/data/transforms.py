@@ -106,30 +106,47 @@ def merge_odds_to_matches(
     market_type: str = "1x2",
 ) -> pd.DataFrame:
     """Merge odds into matches for a given source_type and market_type."""
+    result_matches = matches.copy()
+    market_key = market_type.lower()
     if odds is None or odds.empty:
-        for col in ["home_odds", "draw_odds", "away_odds"]:
-            if col not in matches.columns:
-                matches[col] = np.nan
-        return matches
+        missing_cols = (
+            ["total_line", "over_odds", "under_odds"]
+            if market_key in {"total", "totals"}
+            else ["home_odds", "draw_odds", "away_odds"]
+        )
+        for col in missing_cols:
+            if col not in result_matches.columns:
+                result_matches[col] = np.nan
+        return result_matches
 
-    mask = odds["market_type"].str.lower() == market_type.lower()
+    mask = odds["market_type"].str.lower() == market_key
     if "source_type" in odds.columns:
         mask &= odds["source_type"].str.lower() == source_type.lower()
     filtered = odds[mask].copy()
 
     if filtered.empty:
         logger.warning(f"No odds found for {market_type}/{source_type}")
-        return matches
+        return result_matches
+
+    result_matches["match_id"] = result_matches["match_id"].astype(str)
+    filtered["match_id"] = filtered["match_id"].astype(str)
 
     # If multiple sportsbooks, average them
     agg_cols = {}
-    for col in ["home_odds", "draw_odds", "away_odds", "over_odds", "under_odds"]:
+    odds_columns = (
+        ["over_odds", "under_odds"]
+        if market_key in {"total", "totals"}
+        else ["home_odds", "draw_odds", "away_odds"]
+    )
+    for col in odds_columns:
         if col in filtered.columns:
             agg_cols[col] = "mean"
     if "line" in filtered.columns:
         agg_cols["line"] = "first"
 
     odds_agg = filtered.groupby("match_id").agg(agg_cols).reset_index()
+    if market_key in {"total", "totals"} and "line" in odds_agg.columns:
+        odds_agg = odds_agg.rename(columns={"line": "total_line"})
 
-    result = matches.merge(odds_agg, on="match_id", how="left", suffixes=("", "_mkt"))
+    result = result_matches.merge(odds_agg, on="match_id", how="left", suffixes=("", "_mkt"))
     return result

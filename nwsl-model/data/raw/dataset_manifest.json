@@ -1,0 +1,75 @@
+{
+  "asa": {
+    "match_xg_coverage_pct": 99.68,
+    "match_xgoals_rows": 310,
+    "season_coverage": [
+      2025,
+      2026
+    ],
+    "source_available": true
+  },
+  "feature_policy": {
+    "surface_features": "disabled",
+    "training_window": "ESPN 2025-2026 public scoreboard",
+    "travel_features": "disabled",
+    "weather_features": "disabled",
+    "xg_features": "asa_match_xgoals_loader_enrichment"
+  },
+  "generated_at": "2026-07-23T01:39:05.888Z",
+  "matches": {
+    "date_range": [
+      "2025-03-15",
+      "2026-07-19"
+    ],
+    "non_regular_season_rows": 7,
+    "regular_season_rows": 301,
+    "rows": 308,
+    "season_coverage": [
+      2025,
+      2026
+    ],
+    "status": "completed_with_regular_season_flag"
+  },
+  "missing_feature_coverage": {
+    "asa_match_xg_missing_pct": 0.32,
+    "odds_missing_pct": 20.13,
+    "xg_missing_pct": 0.32
+  },
+  "odds": {
+    "rows": 1195,
+    "source_available": true,
+    "markets": [
+      "1x2",
+      "total"
+    ],
+    "sportsbooks": [
+      "DraftKings",
+      "FootyStats",
+      "FoxSports",
+      "OddsPortalAvg",
+      "OddsPortalEvent"
+    ],
+    "source_types": [
+      "close",
+      "current",
+      "open"
+    ],
+    "latest_timestamp": "2026-06-09T16:21:50.683492+00:00"
+  },
+  "source": "espn_public_api",
+  "source_files": {
+    "matches_2025": "src/data/espn/matches-2025.json",
+    "matches_2026": "src/data/espn/matches-2026.json"
+  },
+  "upcoming": {
+    "date_range": [
+      "2026-07-25",
+      "2026-11-01"
+    ],
+    "rows": 121,
+    "season_coverage": [
+      2026
+    ],
+    "status": "scheduled_only"
+  }
+}

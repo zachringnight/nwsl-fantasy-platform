@@ -1,0 +1,47 @@
+{
+  "seasons": [
+    2025,
+    2026
+  ],
+  "season_pages": {
+    "2025": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "2026": [
+      1,
+      2
+    ]
+  },
+  "archive_rows": 248,
+  "parsed_rows_with_1x2": 246,
+  "total_market_payloads": 246,
+  "historical_1x2_rows": 246,
+  "historical_total_rows": 232,
+  "historical_total_matches": 232,
+  "historical_close_rows": 478,
+  "historical_close_matches": 246,
+  "unmatched_rows": 14,
+  "combined_odds_rows": 513,
+  "combined_markets": [
+    "1x2",
+    "total"
+  ],
+  "combined_source_types": [
+    "close",
+    "current"
+  ],
+  "combined_sportsbooks": [
+    "DraftKings",
+    "FootyStats",
+    "FoxSports",
+    "OddsPortalAvg"
+  ],
+  "raw_output": "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/apify_oddsportal_archive_raw.json",
+  "raw_total_output": "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/apify_oddsportal_total_markets_raw.json",
+  "historical_output": "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/oddsportal_historical_close.csv",
+  "historical_total_output": "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/oddsportal_historical_totals.csv",
+  "combined_output": "/Users/zsoskin/Downloads/nwsl-fantasy-platform-main/nwsl-model/data/raw/odds.csv"
+}

@@ -36,7 +36,7 @@ class TestExpandingWindowSplitter:
         assert len(folds) == 50  # 100 - 50
 
     def test_no_leakage(self):
-        """Every fold must have train dates strictly <= test dates."""
+        """Every fold must have train dates strictly before test dates."""
         matches = _make_matches(100)
         splitter = ExpandingWindowSplitter(min_train_matches=30, step_size=1)
 
@@ -44,7 +44,7 @@ class TestExpandingWindowSplitter:
             assert splitter.validate_no_leakage(fold)
             train_max = fold.train_matches["match_date"].max()
             test_min = fold.test_matches["match_date"].min()
-            assert train_max <= test_min
+            assert train_max < test_min
 
     def test_expanding_window(self):
         """Training set should grow with each fold."""
@@ -84,3 +84,27 @@ class TestExpandingWindowSplitter:
         all_ids = set(matches["match_id"])
         train_only = set(matches.iloc[:30]["match_id"])
         assert test_ids == all_ids - train_only
+
+    def test_same_date_slate_stays_in_one_side_of_fold(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": f"M{i:04d}",
+                    "match_date": date(2026, 3, 1) if i < 3 else date(2026, 3, 8),
+                    "season": 2026,
+                    "home_team": "Team_A",
+                    "away_team": "Team_B",
+                    "home_goals_90": 1,
+                    "away_goals_90": 0,
+                }
+                for i in range(6)
+            ]
+        )
+
+        splitter = ExpandingWindowSplitter(min_train_matches=2, step_size=1)
+        folds = list(splitter.split(matches))
+
+        assert len(folds) == 1
+        assert folds[0].train_matches["match_id"].tolist() == ["M0000", "M0001", "M0002"]
+        assert folds[0].test_matches["match_id"].tolist() == ["M0003", "M0004", "M0005"]
+        assert splitter.validate_no_leakage(folds[0])

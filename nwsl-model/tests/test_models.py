@@ -1,5 +1,6 @@
 """Tests for Dixon-Coles and bivariate Poisson models."""
 
+import math
 from datetime import date, timedelta
 
 import numpy as np
@@ -40,6 +41,45 @@ def _make_training_data(n=200, seed=42):
     return pd.DataFrame(records)
 
 
+def _make_contextual_training_data(n=200, seed=42):
+    data = _make_training_data(n=n, seed=seed).copy()
+    rng = np.random.RandomState(seed + 7)
+    for prefix in ("home", "away"):
+        base = data[f"{prefix}_npxg"].to_numpy(dtype=float)
+        data[f"{prefix}_roll_5_npxg_for"] = base + rng.normal(0, 0.2, size=len(data))
+        data[f"{prefix}_roll_5_npxg_against"] = np.maximum(base + rng.normal(0, 0.15, size=len(data)), 0.0)
+        data[f"{prefix}_team_xg_per_match"] = base + rng.normal(0, 0.1, size=len(data))
+        data[f"{prefix}_team_points_per_match"] = np.clip(base + rng.normal(0.0, 0.25, size=len(data)), 0.0, 3.0)
+    data["rest_diff"] = rng.normal(0.0, 1.0, size=len(data))
+    return data
+
+
+def _fit_equal_dixon_coles(config: DixonColesConfig) -> DixonColesModel:
+    model = DixonColesModel(config)
+    model._team_map = {"Team_A": 0, "Team_B": 1}
+    model._n_teams = 2
+    model._attack = np.array([0.0, 0.0])
+    model._defense = np.array([0.0, 0.0])
+    model._home_adv = 0.40
+    model._intercept = math.log(1.25)
+    model._rho = 0.0
+    model._fitted = True
+    return model
+
+
+def _fit_equal_bivariate(config: BivariatePoissonConfig) -> BivariatePoissonModel:
+    model = BivariatePoissonModel(config)
+    model._team_map = {"Team_A": 0, "Team_B": 1}
+    model._n_teams = 2
+    model._attack = np.array([0.0, 0.0])
+    model._defense = np.array([0.0, 0.0])
+    model._home_adv = 0.40
+    model._intercept = math.log(1.25)
+    model._lambda3 = 0.05
+    model._fitted = True
+    return model
+
+
 class TestDixonColes:
     def test_fit_converges(self):
         data = _make_training_data()
@@ -47,6 +87,27 @@ class TestDixonColes:
         result = model.fit(data)
         assert result.converged or result.log_likelihood != 0
         assert model.is_fitted
+        assert "grad_norm" in result.diagnostics
+        assert result.diagnostics["n_params"] > 0
+
+    def test_fit_with_contextual_features_converges_and_reports_diagnostics(self):
+        data = _make_contextual_training_data()
+        contextual_cols = [
+            "home_roll_5_npxg_for",
+            "home_roll_5_npxg_against",
+            "home_team_xg_per_match",
+            "home_team_points_per_match",
+            "away_roll_5_npxg_for",
+            "away_roll_5_npxg_against",
+            "away_team_xg_per_match",
+            "away_team_points_per_match",
+            "rest_diff",
+        ]
+        model = DixonColesModel(DixonColesConfig(max_iter=1000))
+        result = model.fit(data, contextual_cols=contextual_cols)
+        assert result.converged
+        assert result.diagnostics["n_contextual_features"] == len(contextual_cols)
+        assert result.diagnostics["optimizer"] == "L-BFGS-B"
 
     def test_predict_valid_matrix(self):
         data = _make_training_data()
@@ -85,6 +146,26 @@ class TestDixonColes:
         params = model.get_parameters()
         assert -0.3 <= params["rho"] <= 0.3
 
+    def test_prediction_home_advantage_cap_shrinks_fitted_default(self):
+        uncapped = _fit_equal_dixon_coles(DixonColesConfig(max_goals=6))
+        capped = _fit_equal_dixon_coles(DixonColesConfig(max_goals=6, home_advantage_cap=0.10))
+
+        raw = uncapped.predict_score_matrix("Team_A", "Team_B")
+        shrunk = capped.predict_score_matrix("Team_A", "Team_B")
+
+        assert shrunk.metadata["learned_home_advantage"] == pytest.approx(0.40)
+        assert shrunk.metadata["home_advantage"] == pytest.approx(0.10)
+        assert capped.get_parameters()["effective_home_advantage"] == pytest.approx(0.10)
+        assert shrunk.home_win_prob < raw.home_win_prob
+        assert shrunk.away_win_prob > raw.away_win_prob
+
+    def test_explicit_home_advantage_override_bypasses_prediction_cap(self):
+        model = _fit_equal_dixon_coles(DixonColesConfig(max_goals=6, home_advantage_cap=0.10))
+
+        pred = model.predict_score_matrix("Team_A", "Team_B", home_advantage=0.30)
+
+        assert pred.metadata["home_advantage"] == pytest.approx(0.30)
+
 
 class TestDixonColesCorrection:
     def test_correction_at_00(self):
@@ -114,6 +195,27 @@ class TestBivariatePoisson:
         result = model.fit(data)
         assert result.converged or result.log_likelihood != 0
         assert model.is_fitted
+        assert "grad_norm" in result.diagnostics
+        assert result.diagnostics["n_params"] > 0
+
+    def test_fit_with_contextual_features_converges_and_reports_diagnostics(self):
+        data = _make_contextual_training_data()
+        contextual_cols = [
+            "home_roll_5_npxg_for",
+            "home_roll_5_npxg_against",
+            "home_team_xg_per_match",
+            "home_team_points_per_match",
+            "away_roll_5_npxg_for",
+            "away_roll_5_npxg_against",
+            "away_team_xg_per_match",
+            "away_team_points_per_match",
+            "rest_diff",
+        ]
+        model = BivariatePoissonModel(BivariatePoissonConfig(max_iter=1000))
+        result = model.fit(data, contextual_cols=contextual_cols)
+        assert result.converged
+        assert result.diagnostics["n_contextual_features"] == len(contextual_cols)
+        assert result.diagnostics["optimizer"] == "L-BFGS-B"
 
     def test_predict_valid_matrix(self):
         data = _make_training_data()
@@ -130,6 +232,19 @@ class TestBivariatePoisson:
         model.fit(data)
         params = model.get_parameters()
         assert params["lambda3"] > 0
+
+    def test_prediction_home_advantage_cap_shrinks_fitted_default(self):
+        uncapped = _fit_equal_bivariate(BivariatePoissonConfig(max_goals=6))
+        capped = _fit_equal_bivariate(BivariatePoissonConfig(max_goals=6, home_advantage_cap=0.10))
+
+        raw = uncapped.predict_score_matrix("Team_A", "Team_B")
+        shrunk = capped.predict_score_matrix("Team_A", "Team_B")
+
+        assert shrunk.metadata["learned_home_advantage"] == pytest.approx(0.40)
+        assert shrunk.metadata["home_advantage"] == pytest.approx(0.10)
+        assert capped.get_parameters()["effective_home_advantage"] == pytest.approx(0.10)
+        assert shrunk.home_win_prob < raw.home_win_prob
+        assert shrunk.away_win_prob > raw.away_win_prob
 
 
 class TestBivariatePoissonPMF:

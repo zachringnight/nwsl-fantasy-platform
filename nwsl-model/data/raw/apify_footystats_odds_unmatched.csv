@@ -1,0 +1,86 @@
+match_date,home_team,away_team,home_odds,draw_odds,away_odds,sportsbook,reason
+2026-05-25,San Diego Wave,Orlando Pride,1.73,3.6,3.8,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-24,Bay,Chicago Red Stars,1.38,4.15,5.43,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-24,Kansas City,Portland Thorns,1.78,3.15,3.3,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-24,Houston Dash,Angel City,2.97,3.07,1.95,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-23,Utah Royals,Denver Summit W,1.98,3.4,3.1,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-23,Racing Louisville,North Carolina Courage,3.25,3.3,1.95,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-23,Boston Legacy W,Seattle Reign,1.92,3.25,3.73,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-21,Portland Thorns,Bay,1.76,3.55,3.75,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-21,Angel City,Kansas City,2.65,3.2,2.25,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-21,Houston Dash,San Diego Wave,4.2,3.6,1.75,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-18,Utah Royals,Racing Louisville,1.78,3.6,4.03,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-17,Portland Thorns,Angel City,2.05,3.25,3.3,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-17,Denver Summit W,Orlando Pride,2.38,3.51,2.45,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-16,North Carolina Courage,Chicago Red Stars,1.24,5.1,10.0,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-16,Bay,Boston Legacy W,2.77,3.1,2.16,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-16,Seattle Reign,Gotham FC,2.97,3.2,1.85,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-16,San Diego Wave,Washington Spirit,3.05,3.25,2.16,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-16,Kansas City,Houston Dash,1.35,4.25,6.1,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-13,Boston Legacy W,Orlando Pride,2.85,2.98,2.03,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-11,Seattle Reign,Washington Spirit,4.33,3.4,1.7,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-10,Bay,Utah Royals,3.2,3.2,2.05,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-10,Kansas City,Chicago Red Stars,1.22,5.5,8.0,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-10,Angel City,San Diego Wave,2.7,3.3,2.2,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-10,Houston Dash,Denver Summit W,2.25,3.1,2.8,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-09,Gotham FC,Boston Legacy W,1.28,4.15,7.8,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-09,Orlando Pride,North Carolina Courage,2.2,3.45,3.0,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-08,Racing Louisville,Portland Thorns,3.3,3.4,1.91,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-07,Utah Royals,Houston Dash,1.89,3.4,3.5,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-04,San Diego Wave,Bay,1.4,4.3,6.25,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-03,Gotham FC,Racing Louisville,1.34,4.55,8.58,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-03,Boston Legacy W,Denver Summit W,2.0,3.3,3.25,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-03,Chicago Red Stars,Portland Thorns,4.62,3.75,1.61,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-03,Angel City,Utah Royals,2.2,3.3,2.82,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-02,North Carolina Courage,Kansas City,2.31,3.2,2.75,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-02,Orlando Pride,Washington Spirit,2.56,3.25,2.41,FootyStats,no_upcoming_match_within_date_tolerance
+2026-05-02,Houston Dash,Seattle Reign,2.5,3.0,2.62,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-30,Portland Thorns,San Diego Wave,2.8,3.2,2.2,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-30,Chicago Red Stars,Gotham FC,6.3,4.1,1.43,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-30,Washington Spirit,Racing Louisville,1.44,4.37,6.48,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-30,Boston Legacy W,North Carolina Courage,2.69,3.4,2.45,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-27,Seattle Reign,Utah Royals,2.04,3.2,3.45,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-26,Angel City,Portland Thorns,2.25,3.2,2.75,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-26,Denver Summit W,San Diego Wave,3.1,3.35,2.08,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-26,Houston Dash,North Carolina Courage,2.5,3.3,2.4,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-25,Chicago Red Stars,Boston Legacy W,2.62,3.1,2.3,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-25,Gotham FC,Bay,1.6,3.4,4.8,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-25,Washington Spirit,Kansas City,1.98,3.3,3.7,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-24,Racing Louisville,Orlando Pride,3.19,3.44,2.01,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-05,Bay,Washington Spirit,3.04,3.4,2.06,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-05,Seattle Reign,Denver Summit W,1.99,3.28,3.41,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-04,North Carolina Courage,Portland Thorns,2.1,3.25,3.07,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-04,Kansas City,Gotham FC,2.32,3.08,2.89,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-04,Utah Royals,Chicago Red Stars,1.69,3.64,4.27,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-04,Houston Dash,Racing Louisville,2.45,3.3,2.66,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-04,Orlando Pride,Angel City,2.0,3.1,3.48,FootyStats,no_upcoming_match_within_date_tolerance
+2026-04-04,Boston Legacy W,San Diego Wave,3.32,3.18,2.0,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-30,Gotham FC,Orlando Pride,1.98,3.25,3.4,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-29,San Diego Wave,Chicago Red Stars,1.23,4.95,7.5,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-28,North Carolina Courage,Bay,1.5,3.85,3.6,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-28,Seattle Reign,Racing Louisville,2.1,3.1,3.0,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-28,Portland Thorns,Kansas City,3.76,3.6,1.75,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-28,Denver Summit W,Washington Spirit,2.84,3.5,2.05,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-28,Boston Legacy W,Utah Royals,1.87,3.35,3.6,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-28,Angel City,Houston Dash,1.85,3.34,4.04,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-26,San Diego Wave,Portland Thorns,1.91,3.25,3.78,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-26,Seattle Reign,Kansas City,3.79,3.2,1.73,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-26,Chicago Red Stars,Orlando Pride,3.45,3.35,1.99,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-25,Gotham FC,Denver Summit W,1.5,3.9,5.25,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-25,Washington Spirit,Utah Royals,1.53,4.0,4.95,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-22,Utah Royals,San Diego Wave,2.65,3.03,2.34,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-22,Chicago Red Stars,Kansas City,5.25,3.8,1.52,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-22,Bay,Angel City,2.52,2.75,3.05,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-21,Gotham FC,North Carolina Courage,1.72,3.12,5.01,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-21,Houston Dash,Boston Legacy W,2.29,2.94,2.66,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-21,Portland Thorns,Seattle Reign,1.94,2.8,4.58,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-21,Orlando Pride,Denver Summit W,1.57,3.9,4.33,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-21,Racing Louisville,Washington Spirit,3.54,3.4,1.95,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-15,Angel City,Chicago Red Stars,1.85,3.4,3.95,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-15,Orlando Pride,Seattle Reign,1.58,3.6,5.15,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-15,San Diego Wave,Houston Dash,1.55,3.8,5.0,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-14,North Carolina Courage,Racing Louisville,1.83,3.4,3.67,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-14,Bay,Denver Summit W,1.95,3.5,3.2,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-14,Kansas City,Utah Royals,1.38,4.73,6.83,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-14,Boston Legacy W,Gotham FC,4.04,3.4,1.8,FootyStats,no_upcoming_match_within_date_tolerance
+2026-03-14,Washington Spirit,Portland Thorns,1.55,3.9,5.0,FootyStats,no_upcoming_match_within_date_tolerance
