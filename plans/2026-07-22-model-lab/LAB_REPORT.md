@@ -17,6 +17,8 @@ Artifact version: `lab2026-07-22`. All numbers below are read directly from the 
 | 8 | `season_holdout.py --train-season 2025 --test-season 2026 --models spi_lite_baseline dixon_coles bivariate_poisson market_residual` | completed, exit 0 |
 | 8b | verify all 4 models present in `season_holdout_summary.json` | passed: `['bivariate_poisson', 'dixon_coles', 'market_residual', 'spi_lite_baseline']` |
 | 9 | `audit_model_inputs.py` | 2 HIGH, 1 MEDIUM issue (see §1) |
+| 10 | regenerate predictions, slate, season database, and web exports | completed from `lab2026-07-22`; 121 predictions, all `baseline_fallback` / `no_bet`, 0 slate rows |
+| 11 | full verification suites | 358 pytest + 239 Vitest passed; TypeScript typecheck passed; all 3 fail-closed invariants passed |
 
 **The bet-settlement bug this lab specifically re-checks (baseline models never settling bets in `_evaluate_baseline_fold`) is confirmed fixed.** Both `spi_lite_baseline` (40 bets, rolling backtest) and `market_residual` (29 bets, rolling backtest) now have real, non-zero bet counts — previously this path silently produced zero bets for every baseline-family model. See §2 for full counts.
 
@@ -26,14 +28,14 @@ Source: `data/processed/models/lab2026-07-22/dataset_manifest.json`, `data/proce
 
 - Completed matches: 308 rows (301 regular-season after filtering 7 non-regulation), date range **2025-03-15 to 2026-07-19**, covering seasons 2025 (189 matches) and 2026 (119 matches).
 - Upcoming/fixtures: 121 rows, 2026-07-25 to 2026-11-01.
-- Odds: 1,369 rows across 5 sportsbooks (OddsPortalAvg, OddsPortalEvent, FootyStats, FoxSports, DraftKings), latest timestamp 2026-07-19T23:00:00Z.
-- **June/July close-odds backfill (packet 10, already run, non-Apify direct HTTP mode):**
-  - Before: June/July 2026 1X2 close coverage = 0.0% (34 matches with no close line).
-  - After: June/July 2026 1X2 close coverage = **100.0%** (34/34 matches), +103 new close rows, 7 unmatched.
+- Odds: 1,367 rows across 5 sportsbooks (OddsPortalAvg, OddsPortalEvent, FootyStats, FoxSports, DraftKings), latest timestamp 2026-07-19T23:00:00Z.
+- **Post-May 24 close-odds backfill (packet 10, already run, non-Apify direct HTTP mode):**
+  - Before: May 29-July 19, 2026 1X2 close coverage = 0.0% (34 matches with no close line).
+  - After: May 29-July 19, 2026 1X2 close coverage = **100.0%** (34/34 matches), +102 net close rows, 11 unmatched totals payloads.
   - Overall close coverage moved from 79.87%→90.91% (1X2) and 79.22%→89.61% (totals).
   - `fetch_mode: "direct"` — the no-token HTTP path worked as designed; no Apify actor calls were made.
 - Remaining coverage gaps flagged by `audit_model_inputs.py` (HIGH/MEDIUM, not just June/July):
-  - **[HIGH]** 2025 1X2 close coverage is still incomplete: 162/189 matches (85.71%), 62 matches missing close 1X2 league-wide.
+  - **[HIGH]** 2025 1X2 close coverage is still incomplete: 162/189 matches (85.71%); 28 matches are missing close 1X2 league-wide (27 in 2025, 1 in 2026).
   - **[MEDIUM]** Historical totals close coverage incomplete (79.22% pre-backfill baseline in the audit's own snapshot; totals backfill also ran but general historical totals gaps remain, primarily pre-2026).
   - **[HIGH]** Projected lineups are stale/synthetic for completed matches (latest projected-lineup report is 57 days old for the completed-match slice; upcoming fixtures are current).
 
@@ -173,9 +175,18 @@ No aliases, no promotions. Both pure models remain `research_only`; the baseline
 
 Caveats that qualify every number above and should travel with this verdict:
 - `clv_vs_close_degenerate` for `market_residual` (§3) — its CLV metric is structurally ~0 and uninformative by the model's own design, not a data problem.
-- Coverage gaps remain: 2025 1X2 close odds still 85.71% (not 100%), projected lineups for completed matches are 57 days stale (§1). June/July 2026 close-odds coverage is now 100% thanks to packet 10's backfill, so the newest data is the most reliable, not the least.
+- Coverage gaps remain: 2025 1X2 close odds still 85.71% (not 100%), projected lineups for completed matches are 57 days stale (§1). May 29-July 19, 2026 close-odds coverage is now 100% thanks to packet 10's backfill, so the newest data is the most reliable, not the least.
 - OOF-calibration k-fold randomness means "the strongest baseline" is not a stable label run-to-run (§6) — this makes any single-run baseline-gate pass or fail somewhat noisy at the margin; a persistent multi-run pattern would be stronger evidence than this one snapshot.
 - The evidence-transfer caveat attached to every baseline-gate result regardless of pass/fail: OOS ROI is measured on close-time, uncalibrated backtest odds, while live picks run on current, calibrated odds under current gating — this evidence does not directly transfer to live performance even when it does pass.
 - Season holdout is a single 2025-train/2026-test split (119 test matches) — not multiple independent holdout windows, and `market_residual`'s holdout n=2 is too small to read directionally at all.
 
 **Net: fail-closed is the correct and actual end state.** No thresholds, gates, or config were edited to force a different outcome, consistent with the packet's hard constraints. `no_bet` / suppressed remains the operative state for totals, for the baseline candidacy, and for both pure models.
+
+## 8. Final consumer-output verification
+
+Source: `plans/2026-07-22-model-lab/verification_summary.json` and `fail_closed_checks.json`.
+
+- Regenerated 121 forward predictions from `lab2026-07-22`; every row resolved to `baseline_fallback` with `top_pick_tier=no_bet`.
+- The 14-day betting slate contains 0 rows because no current market lines qualify; accepted bets and leans are both 0.
+- Hard invariants all passed: no official pick without passed gating, no accepted slate bet without passed gating, and no official totals pick.
+- Verification gates: 358/358 pytest, 37 Vitest files / 239 tests, and TypeScript typecheck all passed.

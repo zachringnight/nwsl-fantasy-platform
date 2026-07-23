@@ -4,7 +4,7 @@
       "1x2": 79.87,
       "total": 79.22
     },
-    "june_july_2026_close_1x2": {
+    "post_may_24_2026_close_1x2": {
       "coverage_pct": 0.0,
       "match_count": 34
     },
@@ -16,15 +16,15 @@
       "1x2": 90.91,
       "total": 89.61
     },
-    "june_july_2026_close_1x2": {
+    "post_may_24_2026_close_1x2": {
       "coverage_pct": 100.0,
       "match_count": 34
     },
-    "total_odds_rows": 1369,
-    "close_rows": 821
+    "total_odds_rows": 1367,
+    "close_rows": 820
   },
-  "new_close_rows": 103,
-  "unmatched": 7,
+  "new_close_rows": 102,
+  "unmatched": 11,
   "fetch_mode": "direct",
   "command": "python3 scripts/fetch_apify_oddsportal_history.py --seasons 2026 --archive-fetch-mode direct --total-market-fetch-mode direct --include-1x2-opening"
 }

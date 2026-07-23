@@ -1,0 +1,30 @@
+{
+  "pytest": {
+    "passed": 358,
+    "failed": 0,
+    "duration_s": 114.64
+  },
+  "vitest": {
+    "files_passed": 37,
+    "tests_passed": 239,
+    "failed": 0
+  },
+  "typecheck": "pass",
+  "fail_closed": {
+    "no_official_without_passed": true,
+    "slate_accepted_requires_passed": true,
+    "totals_never_official": true
+  },
+  "predictions": {
+    "rows": 121,
+    "baseline_fallback": 121,
+    "no_bet": 121
+  },
+  "slate": {
+    "rows": 0,
+    "accepted_bets": 0,
+    "leans": 0,
+    "no_bet": 121
+  },
+  "artifact_version": "lab2026-07-22"
+}

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { LeagueCard } from "./league-card";
 import type { DemoLeague } from "@/types/fantasy";
 
