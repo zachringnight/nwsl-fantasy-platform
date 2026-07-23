@@ -462,6 +462,64 @@ class TestLoadModelBundleBaselinePromoted:
         assert bundle.model._spi_lite.config.league_home_rate == pytest.approx(1.7)
         assert bundle.model._spi_lite.config.league_away_rate == pytest.approx(0.85)
 
+    def test_baseline_promoted_loads_trained_max_goals_and_spi_lite_config(self, tmp_path: Path) -> None:
+        """Beyond the league rates, an artifact can be trained with a
+        non-default model.max_goals or tuned spi_lite hyperparameters
+        (config_snapshot.json, written once by train.py). Serving with the
+        class defaults instead means API predictions can diverge from the
+        exact model shape that passed promotion gates."""
+        from api.deps import clear_model_cache, load_model_bundle
+
+        version_dir = tmp_path / "v1"
+        version_dir.mkdir()
+        (version_dir / "config_snapshot.json").write_text(
+            json.dumps({"model": {"max_goals": 10}, "spi_lite": {"rating_weight": 0.42, "pace_weight": 0.31}})
+        )
+        artifact = {
+            "kind": "baseline_promoted",
+            "model_family": "spi_lite_baseline",
+            "version": "v1",
+            "version_dir": version_dir,
+            "evaluation_model": "spi_lite_baseline",
+            "gating_status": "passed",
+            "blended": False,
+        }
+        clear_model_cache()
+        try:
+            with patch("api.deps.resolve_model_artifact", return_value=artifact):
+                bundle = load_model_bundle("champion_pure")
+        finally:
+            clear_model_cache()
+
+        assert bundle.model.max_goals == 10
+        assert bundle.model._spi_lite.config.rating_weight == pytest.approx(0.42)
+        assert bundle.model._spi_lite.config.pace_weight == pytest.approx(0.31)
+
+    def test_baseline_promoted_without_config_snapshot_keeps_class_defaults(self, tmp_path: Path) -> None:
+        """No config_snapshot.json (e.g. an older artifact) must not crash;
+        falls back to ProjectionBaselineModel's own class defaults."""
+        from api.deps import clear_model_cache, load_model_bundle
+
+        version_dir = tmp_path / "v1"
+        version_dir.mkdir()
+        artifact = {
+            "kind": "baseline_promoted",
+            "model_family": "spi_lite_baseline",
+            "version": "v1",
+            "version_dir": version_dir,
+            "evaluation_model": "spi_lite_baseline",
+            "gating_status": "passed",
+            "blended": False,
+        }
+        clear_model_cache()
+        try:
+            with patch("api.deps.resolve_model_artifact", return_value=artifact):
+                bundle = load_model_bundle("champion_pure")
+        finally:
+            clear_model_cache()
+
+        assert bundle.model.max_goals == 8
+
     def test_baseline_promoted_without_summary_file_keeps_spi_lite_defaults(self, tmp_path: Path) -> None:
         """No spi_lite_summary.json (e.g. an older artifact) must not crash;
         it should fall back to SpiLiteBaseline's own defaults, same as
