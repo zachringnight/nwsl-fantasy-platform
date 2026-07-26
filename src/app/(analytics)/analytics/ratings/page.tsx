@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
+import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
-import { Pill } from "@/components/ui/pill";
 import { ThemedBarChart } from "@/components/analytics/charts/themed-bar-chart";
 import { getTeamRatings } from "@/lib/analytics/analytics-data";
+import { analyticsTeamHref } from "@/lib/analytics/entity-routes";
 import { ArrowUp, ArrowDown, Minus } from "lucide-react";
 
 export default function RatingsPage() {
@@ -31,19 +32,43 @@ export default function RatingsPage() {
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <MetricTile
           label="Top Rated"
-          value={best?.team ?? "—"}
+          value={
+            best ? (
+              <Link href={analyticsTeamHref(best.teamId)} className="hover:underline">
+                {best.team}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
           detail={`Rating: ${best?.overallRating.toFixed(1)}`}
           tone="brand"
         />
         <MetricTile
           label="Best Attack"
-          value={bestAttack?.team ?? "—"}
+          value={
+            bestAttack ? (
+              <Link href={analyticsTeamHref(bestAttack.teamId)} className="hover:underline">
+                {bestAttack.team}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
           detail={`Attack: ${bestAttack?.attackRating.toFixed(1)}`}
           tone="accent"
         />
         <MetricTile
           label="Best Defense"
-          value={bestDefense?.team ?? "—"}
+          value={
+            bestDefense ? (
+              <Link href={analyticsTeamHref(bestDefense.teamId)} className="hover:underline">
+                {bestDefense.team}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
           detail={`Defense: ${bestDefense?.defenseRating.toFixed(1)}`}
         />
       </section>
@@ -108,7 +133,14 @@ export default function RatingsPage() {
                         <Minus className="size-3 text-muted/50" />
                       )}
                     </td>
-                    <td className="px-4 py-3 font-medium text-foreground">{team.team}</td>
+                    <td className="px-4 py-3">
+                      <Link
+                        href={analyticsTeamHref(team.teamId)}
+                        className="font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {team.team}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3 text-right">
                       <span className="font-mono font-semibold text-foreground">
                         {team.overallRating.toFixed(1)}

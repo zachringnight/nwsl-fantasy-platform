@@ -18,7 +18,7 @@ src/
   odds/      # api_football shadow, foxsports, historical imports, freshness/quality
   utils/     # artifacts, gating, dates, io
 api/         # FastAPI prediction server (api/main.py, api/deps.py)
-tests/       # pytest suite (393 tests at the 2026-07-26 policy checkpoint)
+tests/       # pytest suite (396 tests at the 2026-07-26 publishing checkpoint)
 configs/default.yaml   # single source of truth for all parameters
 ```
 
@@ -164,6 +164,21 @@ Serving fails closed when the evidence/model/market/side contract does not
 match, a quote is stale, a later price is worse than first seen, or the frozen
 thresholds are not met. Every near-term decision is recorded locally, at most
 one actionable pick is locked per match, and settlement uses 90-minute goals.
+After the complete runner succeeds, `scripts/publish_frozen_policy.py` posts
+the run, slate, immutable locked picks, and settlement updates to the
+Supabase-backed predictions page. A failed run never replaces the latest good
+publication, and daily publications do not create GitHub commits or Vercel
+deployments.
+
+Validate the publication contract without writing:
+
+```bash
+python3 scripts/publish_frozen_policy.py --dry-run
+```
+
+The live publisher reads `NWSL_MODEL_PUBLISH_SECRET` from the process,
+gitignored `.env.local`, or the `nwsl-model-publish` / `codex` macOS Keychain
+item. Never print or commit it.
 
 ### 4. Evaluate and promote
 ```bash
@@ -219,6 +234,6 @@ Full definitions and optional columns: `src/data/schemas.py`.
 ## Testing
 
 ```bash
-python3 -m pytest                 # full suite (393 tests at this checkpoint)
+python3 -m pytest                 # full suite (396 tests at this checkpoint)
 make test-fast                    # skip the two slow files (optimizer fits + subprocess pipeline)
 ```

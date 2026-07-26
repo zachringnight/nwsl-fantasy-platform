@@ -1,8 +1,14 @@
+import Link from "next/link";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { AppShell } from "@/components/common/app-shell";
 import { PlayerSpotlightCard } from "@/components/player/player-spotlight-card";
 import { getFantasyPlayerById } from "@/lib/fantasy-player-pool";
 import { formatTitleFromSlug } from "@/lib/utils";
+import {
+  analyticsPlayerHref,
+  analyticsTeamHref,
+  analyticsTeamId,
+} from "@/lib/analytics/entity-routes";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 import type { AsyncRouteProps } from "@/types/routes";
 
@@ -44,8 +50,36 @@ export default async function PlayerDetailPage({
       title={playerName}
       description={
         player
-          ? `${player.club_name} • ${player.position} • #${player.rank} overall`
+          ? (
+              <>
+                <Link
+                  href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                  className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  {player.club_name}
+                </Link>{" "}
+                • {player.position} • #{player.rank} overall
+              </>
+            )
           : "Player not found."
+      }
+      actions={
+        player ? (
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={analyticsPlayerHref(player.id)}
+              className="rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-sm font-medium text-brand-strong transition hover:border-brand-strong/50"
+            >
+              Performance analytics
+            </Link>
+            <Link
+              href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+              className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm font-medium text-muted transition hover:text-foreground"
+            >
+              {player.club_name}
+            </Link>
+          </div>
+        ) : null
       }
     >
       <section className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
@@ -84,7 +118,20 @@ export default async function PlayerDetailPage({
           {player ? (
             <div className="space-y-3 text-sm leading-6 text-foreground">
               <p>
-                {player.display_name} represents {player.club_name} in the current fantasy player pool.
+                <Link
+                  href={analyticsPlayerHref(player.id)}
+                  className="font-medium hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  {player.display_name}
+                </Link>{" "}
+                represents{" "}
+                <Link
+                  href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                  className="font-medium hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  {player.club_name}
+                </Link>{" "}
+                in the current fantasy player pool.
               </p>
               <p>
                 {player.position === "GK"

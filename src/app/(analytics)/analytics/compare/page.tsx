@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
@@ -13,6 +14,10 @@ import {
   getMatchResults,
   getTeamRatings,
 } from "@/lib/analytics/analytics-data";
+import {
+  analyticsMatchHref,
+  analyticsTeamHref,
+} from "@/lib/analytics/entity-routes";
 
 export default function ComparePage() {
   const standings = useMemo(() => getLeagueTable(), []);
@@ -138,7 +143,14 @@ export default function ComparePage() {
           {/* Standings Comparison */}
           <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="space-y-3 text-center">
-              <h3 className="text-lg font-semibold text-brand-strong">{teamA.team}</h3>
+              <h3 className="text-lg font-semibold text-brand-strong">
+                <Link
+                  href={analyticsTeamHref(teamA.teamId)}
+                  className="hover:underline hover:underline-offset-4"
+                >
+                  {teamA.team}
+                </Link>
+              </h3>
               <div className="grid grid-cols-2 gap-2">
                 <MetricTile label="Pts" value={teamA.points} tone="brand" />
                 <MetricTile label="GD" value={`${teamA.goalDifference >= 0 ? "+" : ""}${teamA.goalDifference}`} />
@@ -159,7 +171,14 @@ export default function ComparePage() {
             </div>
 
             <div className="space-y-3 text-center">
-              <h3 className="text-lg font-semibold text-accent">{teamB.team}</h3>
+              <h3 className="text-lg font-semibold text-accent">
+                <Link
+                  href={analyticsTeamHref(teamB.teamId)}
+                  className="hover:underline hover:underline-offset-4"
+                >
+                  {teamB.team}
+                </Link>
+              </h3>
               <div className="grid grid-cols-2 gap-2">
                 <MetricTile label="Pts" value={teamB.points} tone="accent" />
                 <MetricTile label="GD" value={`${teamB.goalDifference >= 0 ? "+" : ""}${teamB.goalDifference}`} />
@@ -268,15 +287,25 @@ export default function ComparePage() {
                         <span className="text-xs text-muted">{m.date}</span>
                       </div>
                       <div className="flex items-center gap-2 sm:gap-3">
-                        <span className="hidden text-sm text-foreground sm:inline">
+                        <Link
+                          href={analyticsTeamHref(m.homeTeamId)}
+                          className="hidden text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4 sm:inline"
+                        >
                           {m.homeTeam}
-                        </span>
-                        <span className="font-mono text-lg font-semibold text-foreground">
+                        </Link>
+                        <Link
+                          href={analyticsMatchHref(m.matchId)}
+                          aria-label={`Open ${m.homeTeam} vs ${m.awayTeam}`}
+                          className="font-mono text-lg font-semibold text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                        >
                           {m.homeGoals} - {m.awayGoals}
-                        </span>
-                        <span className="hidden text-sm text-foreground sm:inline">
+                        </Link>
+                        <Link
+                          href={analyticsTeamHref(m.awayTeamId)}
+                          className="hidden text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4 sm:inline"
+                        >
                           {m.awayTeam}
-                        </span>
+                        </Link>
                       </div>
                     </div>
                   );

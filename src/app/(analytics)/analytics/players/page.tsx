@@ -6,6 +6,10 @@ import { Search } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { Pill } from "@/components/ui/pill";
 import { getPlayerRankings } from "@/lib/analytics/analytics-data";
+import {
+  analyticsPlayerHref,
+  analyticsTeamHref,
+} from "@/lib/analytics/entity-routes";
 import type { PlayerPosition } from "@/types/fantasy";
 import type { PlayerSortKey } from "@/types/analytics";
 
@@ -130,13 +134,20 @@ export default function PlayerRankingsPage() {
                 <td className="px-4 py-3 font-mono text-muted">{i + 1}</td>
                 <td className="px-4 py-3">
                   <Link
-                    href={`/analytics/players/${player.playerId}`}
+                    href={analyticsPlayerHref(player.playerId)}
                     className="font-medium text-foreground hover:text-brand-strong"
                   >
                     {player.name}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-muted">{player.team}</td>
+                <td className="px-4 py-3">
+                  <Link
+                    href={analyticsTeamHref(player.teamId)}
+                    className="text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {player.team}
+                  </Link>
+                </td>
                 <td className="px-4 py-3">
                   <Pill tone="default">{player.position}</Pill>
                 </td>

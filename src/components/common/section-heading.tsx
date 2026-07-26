@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
 export interface SectionHeadingProps {
-  eyebrow: string;
-  title: string;
-  description: string;
+  eyebrow: ReactNode;
+  title: ReactNode;
+  description: ReactNode;
   action?: ReactNode;
 }
 

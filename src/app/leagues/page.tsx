@@ -7,6 +7,11 @@ import {
   formatFantasySlateRange,
   getFantasyTargetSlate,
 } from "@/lib/fantasy-slate-engine";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 
 const leagueModes = [
   {
@@ -155,10 +160,22 @@ export default function LeaguesPage() {
               >
                 <div>
                   <p className="text-sm font-semibold text-foreground">
-                    #{player.rank} {player.display_name}
+                    #{player.rank}{" "}
+                    <Link
+                      href={fantasyPlayerHref(player.id)}
+                      className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {player.display_name}
+                    </Link>
                   </p>
                   <p className="mt-1 text-sm text-muted">
-                    {player.club_name} • {player.position}
+                    <Link
+                      href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                      className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {player.club_name}
+                    </Link>{" "}
+                    • {player.position}
                   </p>
                 </div>
                 <div className="text-right">

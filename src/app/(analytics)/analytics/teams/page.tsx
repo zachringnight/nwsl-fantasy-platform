@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { FormIndicator } from "@/components/analytics/form-indicator";
 import { getLeagueTableBySeason, type Season } from "@/lib/analytics/analytics-data";
+import { analyticsTeamHref } from "@/lib/analytics/entity-routes";
 
 export const metadata = {
   title: "League Table",
@@ -58,7 +59,7 @@ export default async function TeamsPage({
                   <td className="px-4 py-3 font-mono text-muted">{i + 1}</td>
                   <td className="px-4 py-3">
                     <Link
-                      href={`/analytics/teams/${team.teamId}`}
+                      href={analyticsTeamHref(team.teamId)}
                       className="font-medium text-foreground hover:text-brand-strong"
                     >
                       {team.team}

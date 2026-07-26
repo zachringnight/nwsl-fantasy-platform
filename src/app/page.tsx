@@ -20,6 +20,10 @@ import {
   getFantasySlateWindows,
 } from "@/lib/fantasy-slate-engine";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+} from "@/lib/analytics/entity-routes";
 
 const experiencePillars = [
   {
@@ -269,9 +273,22 @@ export default function Home() {
                     <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
                       #{player.rank} overall
                     </p>
-                    <h3 className="mt-2 text-lg font-semibold text-foreground">{player.display_name}</h3>
+                    <h3 className="mt-2 text-lg font-semibold text-foreground">
+                      <Link
+                        href={`/players/${encodeURIComponent(player.id)}`}
+                        className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {player.display_name}
+                      </Link>
+                    </h3>
                     <p className="mt-1 text-sm text-muted">
-                      {player.club_name} • {player.position}
+                      <Link
+                        href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                        className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {player.club_name}
+                      </Link>{" "}
+                      • {player.position}
                     </p>
                   </div>
                   <span className="rounded-full border border-brand/30 bg-brand/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-brand-strong">

@@ -6,6 +6,11 @@ import { getButtonClassName } from "@/components/ui/button";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { PlayerAvatar } from "@/components/ui/player-avatar";
 import { Pill } from "@/components/ui/pill";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 
 export interface PlayerCardProps {
   actionHref?: string;
@@ -32,10 +37,24 @@ export function PlayerCard({
   ownershipLabel,
   player,
 }: PlayerCardProps) {
+  const resolvedDetailHref = detailHref ?? fantasyPlayerHref(player.id);
+  const teamHref = analyticsTeamHref(analyticsTeamId(player.club_name));
+
   return (
     <SurfaceCard
-      eyebrow={`${player.position} • ${player.club_name}`}
-      title={player.display_name}
+      eyebrow={
+        <>
+          {player.position} •{" "}
+          <Link href={teamHref} className="hover:underline hover:underline-offset-4">
+            {player.club_name}
+          </Link>
+        </>
+      }
+      title={
+        <Link href={resolvedDetailHref} className="hover:underline hover:underline-offset-4">
+          {player.display_name}
+        </Link>
+      }
       description={`Rank ${player.rank} • ${player.average_points.toFixed(1)} avg fantasy points${player.salary_cost ? ` • $${player.salary_cost}` : ""}`}
     >
       <div className="space-y-4">
@@ -46,10 +65,23 @@ export function PlayerCard({
             size={56}
           />
           <div>
-            <p className="text-sm font-semibold text-foreground">{player.display_name}</p>
+            <p className="text-sm font-semibold text-foreground">
+              <Link
+                href={resolvedDetailHref}
+                className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+              >
+                {player.display_name}
+              </Link>
+            </p>
             <p className="flex items-center gap-1.5 text-xs text-muted">
               <ClubLogo club={player.club_name} size={16} />
-              {player.position} &middot; {player.club_name}
+              {player.position} &middot;{" "}
+              <Link
+                href={teamHref}
+                className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+              >
+                {player.club_name}
+              </Link>
             </p>
           </div>
         </div>
@@ -86,10 +118,12 @@ export function PlayerCard({
             <ShieldCheck className="size-3.5" />
             {player.availability}
           </Pill>
-          <Pill tone="brand">
-            <Star className="size-3.5" />
-            {player.club_name}
-          </Pill>
+          <Link href={teamHref} aria-label={`${player.club_name} analytics`}>
+            <Pill tone="brand">
+              <Star className="size-3.5" />
+              {player.club_name}
+            </Pill>
+          </Link>
           {ownershipLabel ? (
             <Pill tone="default">{ownershipLabel}</Pill>
           ) : null}
@@ -134,7 +168,7 @@ export function PlayerCard({
             </button>
           ) : null}
           <Link
-            href={detailHref ?? `/players/${player.id}`}
+            href={resolvedDetailHref}
             className={getButtonClassName({
               className: "group",
             })}

@@ -40,6 +40,15 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+function normalizePersonName(value: string): string {
+  return value
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
 // ── Player Data (real 2025 stats) ───────────────────────────────────────────
 
 export function getRealPlayerRankings(): PlayerSeasonStats[] {
@@ -52,6 +61,14 @@ export function getRealPlayerById(playerId: string): PlayerSeasonStats | undefin
   const p = officialFantasyPlayerPool.find((x) => x.id === playerId);
   if (!p) return undefined;
   return toPlayerSeasonStats(p);
+}
+
+export function getRealPlayerIdByName(playerName: string): string | undefined {
+  const normalizedName = normalizePersonName(playerName);
+  if (!normalizedName) return undefined;
+  return officialFantasyPlayerPool.find(
+    (player) => normalizePersonName(player.display_name) === normalizedName
+  )?.id;
 }
 
 function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonStats {

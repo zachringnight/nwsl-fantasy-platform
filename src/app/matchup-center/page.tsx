@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Activity, CalendarRange, Shield, Zap } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -8,6 +9,11 @@ import {
   getFantasyTargetSlate,
 } from "@/lib/fantasy-slate-engine";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 
 const nextDailySlate = getFantasyTargetSlate("salary_cap_daily");
 const nextWeeklySlate = getFantasyTargetSlate("salary_cap_weekly");
@@ -105,9 +111,22 @@ export default function MatchupCenterPage() {
                 className="flex items-center justify-between gap-4 rounded-[1.2rem] border border-line bg-panel-soft px-4 py-3"
               >
                 <div>
-                  <p className="text-sm font-semibold text-foreground">{player.display_name}</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    <Link
+                      href={fantasyPlayerHref(player.id)}
+                      className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {player.display_name}
+                    </Link>
+                  </p>
                   <p className="mt-1 text-sm text-muted">
-                    {player.club_name} • {player.position}
+                    <Link
+                      href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                      className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {player.club_name}
+                    </Link>{" "}
+                    • {player.position}
                   </p>
                 </div>
                 <div className="text-right">

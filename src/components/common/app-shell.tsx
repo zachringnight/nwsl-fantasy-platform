@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import { SectionHeading } from "@/components/common/section-heading";
 
 export interface AppShellProps {
-  eyebrow: string;
-  title: string;
-  description: string;
+  eyebrow: ReactNode;
+  title: ReactNode;
+  description: ReactNode;
   actions?: ReactNode;
   children: ReactNode;
 }

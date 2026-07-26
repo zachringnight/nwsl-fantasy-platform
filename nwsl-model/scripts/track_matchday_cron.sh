@@ -87,6 +87,13 @@ echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) track_matchday ===" >>"$LOG_FILE"
 status=$?
 echo "--- track_matchday exit $status ---" >>"$LOG_FILE"
 
+# 6. Publish only a fully successful snapshot. The authenticated endpoint
+#    writes the run, complete slate, immutable picks, and settlements to
+#    Supabase atomically; a failed pipeline never replaces the latest good run.
+if [ "$status" -eq 0 ] && [ "$REQUIRED_FAILURE" -eq 0 ]; then
+    run_required_step "publish_supabase" "$PY" scripts/publish_frozen_policy.py
+fi
+
 echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) done ===" >>"$LOG_FILE"
 if [ "$REQUIRED_FAILURE" -ne 0 ]; then
     exit 1

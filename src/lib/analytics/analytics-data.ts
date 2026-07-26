@@ -26,6 +26,7 @@ import type {
 import {
   getRealPlayerRankings,
   getRealPlayerById,
+  getRealPlayerIdByName,
   getRealStandings,
   getRealTeamStats,
   getRealTeamRatings,
@@ -74,6 +75,10 @@ export function getPlayerRankings(): PlayerSeasonStats[] {
 
 export function getPlayerDetail(playerId: string): PlayerSeasonStats | undefined {
   return getRealPlayerById(playerId);
+}
+
+export function getPlayerIdByName(playerName: string): string | undefined {
+  return getRealPlayerIdByName(playerName);
 }
 
 /** Per-match data requires API-Football. Returns empty until configured. */

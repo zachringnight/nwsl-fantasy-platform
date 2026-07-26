@@ -15,6 +15,11 @@ import {
   getPlayerForm,
   getPlayerMatchLog,
 } from "@/lib/analytics/analytics-data";
+import {
+  analyticsMatchHref,
+  analyticsTeamHref,
+  analyticsTeamId,
+} from "@/lib/analytics/entity-routes";
 
 export default function PlayerDetailPage() {
   const params = useParams<{ playerId: string }>();
@@ -57,17 +62,38 @@ export default function PlayerDetailPage() {
 
   return (
     <AppShell
-      eyebrow={player.team}
+      eyebrow={
+        <Link
+          href={analyticsTeamHref(player.teamId)}
+          className="hover:underline hover:underline-offset-4"
+        >
+          {player.team}
+        </Link>
+      }
       title={player.name}
       description={`${player.position} · ${player.appearances} appearances · ${player.minutes} minutes`}
       actions={
-        <Link
-          href="/analytics/players"
-          className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted transition hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-          All Players
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/players/${encodeURIComponent(player.playerId)}`}
+            className="inline-flex items-center rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted transition hover:text-foreground"
+          >
+            Fantasy player card
+          </Link>
+          <Link
+            href={analyticsTeamHref(player.teamId)}
+            className="inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-sm text-brand-strong transition hover:border-brand-strong/50"
+          >
+            {player.team} profile
+          </Link>
+          <Link
+            href="/analytics/players"
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted transition hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" />
+            All Players
+          </Link>
+        </div>
       }
     >
       {/* Key Stats */}
@@ -199,8 +225,22 @@ export default function PlayerDetailPage() {
               <tbody>
                 {matchLog.map((m) => (
                   <tr key={m.matchId} className="border-b border-line/50 transition hover:bg-white/4">
-                    <td className="px-4 py-3 text-muted">{m.date}</td>
-                    <td className="px-4 py-3 text-foreground">{m.opponent}</td>
+                    <td className="px-4 py-3">
+                      <Link
+                        href={analyticsMatchHref(m.matchId)}
+                        className="text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {m.date}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        href={analyticsTeamHref(analyticsTeamId(m.opponent))}
+                        className="text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {m.opponent}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3">
                       <Pill tone={m.home ? "brand" : "default"}>
                         {m.home ? "H" : "A"}

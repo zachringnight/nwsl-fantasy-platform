@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   allLineupSlots,
   benchLineupSlots,
@@ -5,6 +6,11 @@ import {
   starterLineupSlots,
 } from "@/lib/fantasy-draft";
 import { SurfaceCard } from "@/components/common/surface-card";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 import type { FantasyRosterPlayer } from "@/types/fantasy";
 
 const formationRows = [
@@ -110,12 +116,31 @@ export function LineupPitch({
                         {lineupSlotLabels[slot]}
                       </p>
                       <p className="mt-2 text-sm font-semibold text-white">
-                        {player ? player.player_name : "Open slot"}
+                        {player ? (
+                          <Link
+                            href={fantasyPlayerHref(player.player_id)}
+                            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.player_name}
+                          </Link>
+                        ) : (
+                          "Open slot"
+                        )}
                       </p>
                       <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
-                        {player
-                          ? `${player.player_position} • ${player.club_name}`
-                          : "Assign an eligible player"}
+                        {player ? (
+                          <>
+                            {player.player_position} •{" "}
+                            <Link
+                              href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                              className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                            >
+                              {player.club_name}
+                            </Link>
+                          </>
+                        ) : (
+                          "Assign an eligible player"
+                        )}
                       </p>
                     </div>
                   );
@@ -138,10 +163,31 @@ export function LineupPitch({
                     className="rounded-[1rem] border border-white/10 bg-white/6 px-4 py-3 text-sm"
                   >
                     <p className="font-medium text-white">
-                      {player ? player.player_name : lineupSlotLabels[slot]}
+                      {player ? (
+                        <Link
+                          href={fantasyPlayerHref(player.player_id)}
+                          className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                        >
+                          {player.player_name}
+                        </Link>
+                      ) : (
+                        lineupSlotLabels[slot]
+                      )}
                     </p>
                     <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
-                      {player ? `${player.player_position} • ${player.club_name}` : "Bench slot"}
+                      {player ? (
+                        <>
+                          {player.player_position} •{" "}
+                          <Link
+                            href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.club_name}
+                          </Link>
+                        </>
+                      ) : (
+                        "Bench slot"
+                      )}
                     </p>
                   </div>
                 );
