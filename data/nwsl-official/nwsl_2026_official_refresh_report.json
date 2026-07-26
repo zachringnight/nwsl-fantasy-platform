@@ -4,8 +4,8 @@
   "matches": {
     "rows": 240,
     "status_counts": {
-      "UPCOMING": 121,
-      "FINISHED": 119
+      "FINISHED": 124,
+      "UPCOMING": 116
     }
   },
   "profiles": {
@@ -13,12 +13,12 @@
     "teams": 16
   },
   "player_stats": {
-    "rows": 452,
-    "max_games_played": 16.0,
-    "max_starts": 16.0
+    "rows": 453,
+    "max_games_played": 17.0,
+    "max_starts": 17.0
   },
   "team_stats": {
     "rows": 16,
-    "max_games_played": 16.0
+    "max_games_played": 17.0
   }
 }

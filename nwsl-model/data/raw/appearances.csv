@@ -7801,6 +7801,38 @@ match_id,season,player_id,team,start_minute,end_minute,started_flag,position,pro
 401853921,2026,nwsl::Football_Player::eba535f02a004e97908fa57322f852c3,SD Wave,0,90,True,Defender,False,True,False,False,False
 401853921,2026,nwsl::Football_Player::ecf8d72c11704bb49de0461fa77d8cae,SD Wave,0,90,True,Goalkeeper,False,True,False,False,False
 401853921,2026,nwsl::Football_Player::fef02bf35a784dfc873b4addfc4e16a4,SD Wave,0,69,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::06897a454ecd4389a815a64dfb95ba2d,Bay FC,0,74,True,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::300fc21c88214cf191d546d1cf81d8ec,Bay FC,0,90,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::302019e51dc048ab8fba8c2e3bb54dd1,Bay FC,0,74,True,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::4ad3b3ad9d90407181d76c98bb47e17a,Bay FC,0,90,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::4b281c71242c4738abb687a332286be0,Bay FC,0,90,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::51d52da9f6724e00a97ec29e7fe459dc,Bay FC,0,90,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::963846c568d34a539e360dcd93046ebd,Bay FC,0,90,True,Goalkeeper,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::b66f7bcff55c49fcbadd2bd156e62c4f,Bay FC,74,90,False,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::c9e1f316ddb24fa680b4806d95e707c6,Bay FC,62,90,False,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::cee456c338e246a08218cf350ed0ba50,Bay FC,0,90,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::dcc2564e748442b7a956fa4f8056ba87,Bay FC,74,90,False,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::dd0a7a6f7ee5446e9ef8c0a20ed56e97,Bay FC,0,62,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::f9aafcad554041328a5420822e10d5a0,Bay FC,82,90,False,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::fa5ea5a9ad7d4694b932641bbe257de1,Bay FC,62,90,False,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::fc271855025e4ff3a5bb2ff67c569709,Bay FC,0,82,True,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::fe7346f5616c46bb935320ed272de297,Bay FC,0,62,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::0021a2896ee54ef191fb324dec97dd78,Orlando Pride,0,90,True,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::021370e22b6846a48f5e988c6f4c9478,Orlando Pride,0,90,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::15cbd2b4b39042eeb04d03affb712899,Orlando Pride,0,90,True,Goalkeeper,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::4cb80ed654ff46e8916779187fb88553,Orlando Pride,65,90,False,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::521bad7c3a2f49a185c968f9206da5b8,Orlando Pride,0,90,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::65b00a37c89a4fbaba9fbfb76969a7df,Orlando Pride,0,74,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::909a06c8277b428f8e6acae7e1a62d39,Orlando Pride,0,33,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::a79161648fb0412187766de7176ab440,Orlando Pride,0,46,True,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::ac29e17a8bff414e8ede153e5067e250,Orlando Pride,0,90,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::c390f57b0fe54464b1c2efec9aeee043,Orlando Pride,74,90,False,Forward,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::c7c35bca896849439784a5cdee73a0b1,Orlando Pride,0,74,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::e0083709d64e4f7aa5329c7b17fc6687,Orlando Pride,74,90,False,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::e217f693d9c1472c9ca602ef93c69386,Orlando Pride,0,65,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::e51fe8ea427c4f39894fce94ed9fadcd,Orlando Pride,0,90,True,Midfielder,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::ebfc177248a54a0e972527b41871071e,Orlando Pride,33,90,False,Defender,False,True,False,False,False
+401853922,2026,nwsl::Football_Player::f225dce81f0f4e28ae0ba7e09bb1e601,Orlando Pride,46,90,False,Forward,False,True,False,False,False
 401853923,2026,nwsl::Football_Player::0faee2ad9e40492cbb9336bcbf79d651,Portland Thorns,0,90,True,Forward,False,True,False,False,False
 401853923,2026,nwsl::Football_Player::347119dbb56e4f5ca6eef714cf55cf00,Portland Thorns,85,90,False,Midfielder,False,True,False,False,False
 401853923,2026,nwsl::Football_Player::40a07c6e4fd74acd864ee7f812351843,Portland Thorns,0,90,True,Forward,False,True,False,False,False
@@ -8546,6 +8578,133 @@ match_id,season,player_id,team,start_minute,end_minute,started_flag,position,pro
 401853946,2026,nwsl::Football_Player::d570c9dcade14352bec26996bfab1c00,Royals,0,74,True,Forward,False,True,False,False,False
 401853946,2026,nwsl::Football_Player::ea630eb197bb4762b4b8b4c1b7ef363c,Royals,0,90,True,Forward,False,True,False,False,False
 401853946,2026,nwsl::Football_Player::f02a507bde074f68ac65cbd2ac77104b,Royals,61,90,False,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::03ef0251e6f546d09c0a41a5c52ce7b0,Chicago Stars,0,46,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::09140d97bf314b7193afa990b5f36308,Chicago Stars,0,83,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::0fd2f43637c941a58f9944a3f2649538,Chicago Stars,0,90,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::13f55375d4344a56ab4ae19e39d9342d,Chicago Stars,0,90,True,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::1841294306f54421b12ef8cf61212c97,Chicago Stars,46,90,False,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::241e9862359f42fc9434c287d7d231b0,Chicago Stars,83,90,False,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::336dc7bf1e5642c1a7a4a9fd8973f2a9,Chicago Stars,0,90,True,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::45bf406d7ed24ab3bb75e6e7ead8721c,Chicago Stars,0,62,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::63da20737e074579b1383973fc24c6a1,Chicago Stars,62,90,False,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::7cf959e060cf44b9afda98c1b3c893d9,Chicago Stars,0,90,True,Goalkeeper,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::8e4ef1a9758b4eea8d00aa2fd5abc101,Chicago Stars,46,90,False,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::920f2b3f71554778a0f38f3ada7405ad,Chicago Stars,62,90,False,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::badbf997458d485caabfecfba5bb76f1,Chicago Stars,0,46,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::ca64614f15f447ffbad8df1731cf8af9,Chicago Stars,0,90,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::f9e929bd0d8944df84529c5f31696413,Chicago Stars,0,62,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::fb71a19cd7524e63bdb58f0686fbd97e,Chicago Stars,0,90,True,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::021370e22b6846a48f5e988c6f4c9478,Orlando Pride,61,90,False,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::15cbd2b4b39042eeb04d03affb712899,Orlando Pride,0,90,True,Goalkeeper,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::1707398003674ec2a9b8855574cba470,Orlando Pride,0,61,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::3fa6c6b9fff049ddb7e32f7ea04d33ca,Orlando Pride,0,91,True,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::4cb80ed654ff46e8916779187fb88553,Orlando Pride,70,90,False,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::514d945291b44c78adaabb4dfbf7ba03,Orlando Pride,0,70,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::521bad7c3a2f49a185c968f9206da5b8,Orlando Pride,0,90,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::65b00a37c89a4fbaba9fbfb76969a7df,Orlando Pride,61,90,False,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::909a06c8277b428f8e6acae7e1a62d39,Orlando Pride,0,61,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::a79161648fb0412187766de7176ab440,Orlando Pride,0,61,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::ac29e17a8bff414e8ede153e5067e250,Orlando Pride,0,90,True,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::c390f57b0fe54464b1c2efec9aeee043,Orlando Pride,0,90,True,Forward,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::c7c35bca896849439784a5cdee73a0b1,Orlando Pride,61,90,False,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::e0083709d64e4f7aa5329c7b17fc6687,Orlando Pride,0,90,True,Defender,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::e217f693d9c1472c9ca602ef93c69386,Orlando Pride,91,91,False,Midfielder,False,True,False,False,False
+401853947,2026,nwsl::Football_Player::e51fe8ea427c4f39894fce94ed9fadcd,Orlando Pride,0,90,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::22261c24359f46599769f406a32e5d23,Bay FC,0,90,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::300fc21c88214cf191d546d1cf81d8ec,Bay FC,0,90,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::302019e51dc048ab8fba8c2e3bb54dd1,Bay FC,65,90,False,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::3a05f90ee4774e9e9cc460fef290f3c4,Bay FC,0,90,True,Goalkeeper,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::4ad3b3ad9d90407181d76c98bb47e17a,Bay FC,0,93,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::4b281c71242c4738abb687a332286be0,Bay FC,0,90,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::51d52da9f6724e00a97ec29e7fe459dc,Bay FC,0,90,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::c9e1f316ddb24fa680b4806d95e707c6,Bay FC,0,65,True,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::cee456c338e246a08218cf350ed0ba50,Bay FC,0,90,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::d05274ce6faa42d48bec0325f29568e2,Bay FC,0,82,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::dcc2564e748442b7a956fa4f8056ba87,Bay FC,65,90,False,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::dd0a7a6f7ee5446e9ef8c0a20ed56e97,Bay FC,82,90,False,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::e430381cd0da42f193b7801fc9f23009,Bay FC,0,65,True,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::f9aafcad554041328a5420822e10d5a0,Bay FC,93,93,False,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::fa5ea5a9ad7d4694b932641bbe257de1,Bay FC,82,90,False,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::fc271855025e4ff3a5bb2ff67c569709,Bay FC,0,82,True,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::0bb3c16212754939b111d70c83644b8e,Houston Dash,0,75,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::10b990f3432f4383891922232cca020a,Houston Dash,83,90,False,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::37c762eb698644fa88b9cb94cf4f0940,Houston Dash,0,83,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::55c607b8f8ea48efa308facc28601331,Houston Dash,75,90,False,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::7b95e77ca5184ed39abbd7481af81fee,Houston Dash,0,83,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::7e125d671c06445880e000972f3ae412,Houston Dash,0,90,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::907a57b1c41046b08063e94229484b5e,Houston Dash,83,90,False,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::9e98c713a7154c928697e3cf043fec63,Houston Dash,75,90,False,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::a508823d48c24d818a9b76c99106c143,Houston Dash,0,90,True,Goalkeeper,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::b7f052b3fd2b44e798841bb74f5af288,Houston Dash,0,75,True,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::cfe14710edf54a02806026e010c8c0cf,Houston Dash,0,90,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::d576555bc98d477a9c831e65e16f7626,Houston Dash,0,90,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::dc3910a88592482d933542fb999e21fe,Houston Dash,65,90,False,Forward,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::dd58c531924040d7b2a296847b8e2ef2,Houston Dash,0,90,True,Defender,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::defa5ede49564c5c9b518c5c5281cf9a,Houston Dash,0,65,True,Midfielder,False,True,False,False,False
+401853948,2026,nwsl::Football_Player::e9488064a60149bebd3650cfc6bb8a5c,Houston Dash,0,90,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::169fa964031141e98831884983375011,Gotham FC,0,60,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::266288af33ed4b378e529b0cb8957ecf,Gotham FC,0,11,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::39fe0dbc3b0a49c0a46d405d30b7141d,Gotham FC,0,90,True,Forward,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::68b02adc0cac4f9280733b42cd06ddc2,Gotham FC,0,90,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::891ad63d168c42aebeaeaa7359ec1fb5,Gotham FC,78,90,False,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::8bc2b0ed38a346f2a782d7236d278aa3,Gotham FC,60,90,False,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::925b70520fdb41b3afd6477937c4d93c,Gotham FC,0,90,True,Forward,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::95d2c552a83342bc947134ce8db57d56,Gotham FC,0,78,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::aca2fdf863f449bda03f5f46f28ed9f4,Gotham FC,46,90,False,Forward,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::b7b10520cd77421e97f225c988f93e57,Gotham FC,0,90,True,Goalkeeper,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::d1485dcbe6f34e4c9ba927371173260d,Gotham FC,0,90,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::d34c603875494308b83fc6a75c948837,Gotham FC,0,90,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::d73ddb615f3149cfb6432c6f82b21ac9,Gotham FC,78,90,False,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::d9bb4ddad5e34f7b89ab4608dc8277d1,Gotham FC,0,90,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::eb192101ab34425984a49075a90f3b0c,Gotham FC,0,78,True,Forward,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::f1674817643d4409ae98e3f26ec72dc4,Gotham FC,11,46,False,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::0faee2ad9e40492cbb9336bcbf79d651,Portland Thorns,0,76,True,Forward,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::1e26ef7b8de140f1bb2ee7bcefdcbfe7,Portland Thorns,76,90,False,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::2257efccf0f246d7a3943fdf31185577,Portland Thorns,76,90,False,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::40a07c6e4fd74acd864ee7f812351843,Portland Thorns,0,90,True,Forward,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::625570ba882b4714a771f4f09fd81cf6,Portland Thorns,69,90,False,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::7ff572896b4146d78ff5e10f1d8d65ab,Portland Thorns,0,90,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::8513285029bf40cb99fa4947006018a2,Portland Thorns,0,90,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::8d5a9316dcc64f99bade9c227befbceb,Portland Thorns,0,69,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::9ccd079f4b56432e8f21ede69aabddee,Portland Thorns,0,90,True,Goalkeeper,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::aa256aeb38a8454589438798a521ae12,Portland Thorns,0,90,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::ae9264d3ca7c4028a3972204a2793e62,Portland Thorns,0,76,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::b936d03963c947e7a137521ff4f578b3,Portland Thorns,0,82,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::d2e295e660ac4110bb3ab9be9185c86d,Portland Thorns,0,90,True,Defender,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::e36d5228fd7541d394bb2df04fded14f,Portland Thorns,0,90,True,Midfielder,False,True,False,False,False
+401853949,2026,nwsl::Football_Player::efa33936147948539e131def3f2df42a,Portland Thorns,82,90,False,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::09958b13c0eb4f6da37c9de8dca9877a,NC Courage,0,90,True,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::0be30b0d97e24aa39d443c4436a4c2a1,NC Courage,0,90,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::22fe350a7bf44f1f8e008c44d92b45f9,NC Courage,56,90,False,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::23fbf942a9564991bb975594e94b02d7,NC Courage,0,90,True,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::405bbcc7f91848b4a28e72f45ffb7d55,NC Courage,0,56,True,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::55bd66bfbc3240c7acf59ca32209868c,NC Courage,0,84,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::7a3d8828fb0941f88dd72a728f9f61e4,NC Courage,0,90,True,Goalkeeper,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::81f566b89fa04830b4b1657453e4f818,NC Courage,0,90,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::93ab29167bcd49b1a9d06e29f2cfb3c2,NC Courage,84,90,False,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::98dcb1c31ca44fd195fa3302144a6140,NC Courage,56,90,False,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::b59aacbdbb734601810422f27dff5ddb,NC Courage,0,91,True,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::cb6caff04d61498b9fef4c71d0c3f1e1,NC Courage,84,90,False,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::d24c806737e2498c980976b0695bfbe8,NC Courage,0,56,True,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::e878c5789b6a4af382182129004de27d,NC Courage,91,91,False,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::ed7ee4eca97044dd97750b29c3850769,NC Courage,0,90,True,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::f866f99ea9e247179534881de6f30154,NC Courage,0,84,True,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::0fc6e8c0cd724c14b06c64c27c8331e6,Royals,0,64,True,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::10444fea4ff6483da41b77457cf2cbac,Royals,0,90,True,Goalkeeper,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::22f45241df0547e691e8ba6db03aaf7c,Royals,78,90,False,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::3a45298a6ded492baa53c54797a41912,Royals,0,78,True,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::446bca9a37f94c40b40ff500f4dd6870,Royals,63,90,False,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::6f8212aec8f14cdbbd061c7129d3dc20,Royals,0,90,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::7df864b150be44a58be51599cfd7dd80,Royals,0,63,True,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::7fc702ff232644208fc4c5d6841f46d6,Royals,0,90,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::9088cd3919ae4facb366b7f4cf1ca493,Royals,0,90,True,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::96199c0cfb7245f6b6460174fb25883b,Royals,0,85,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::9aa0ae7f0bc648da9095a03174257a3c,Royals,0,63,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::a5495110a1614676bdd04a42f6068041,Royals,0,90,True,Defender,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::c75e5a65dfaf42b588cbdf8ef5069537,Royals,85,90,False,Midfielder,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::d570c9dcade14352bec26996bfab1c00,Royals,63,90,False,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::ea630eb197bb4762b4b8b4c1b7ef363c,Royals,0,90,True,Forward,False,True,False,False,False
+401853950,2026,nwsl::Football_Player::f02a507bde074f68ac65cbd2ac77104b,Royals,64,90,False,Forward,False,True,False,False,False
 401854039,2026,nwsl::Football_Player::0d2b0629ed6b43b8ae5e01f2d88fa515,Boston Legacy,0,90,True,Forward,False,True,False,False,False
 401854039,2026,nwsl::Football_Player::38925931e59c4bb6ac8e7965e81ab06d,Boston Legacy,0,82,True,Midfielder,False,True,False,False,False
 401854039,2026,nwsl::Football_Player::463e97cd35e944de9f49f54da30fd8c7,Boston Legacy,0,100,True,Forward,False,True,False,False,False
@@ -9438,3 +9597,32 @@ match_id,season,player_id,team,start_minute,end_minute,started_flag,position,pro
 401854067,2026,nwsl::Football_Player::d07feb8cd7c94d03b741e2326515241f,Washington Spirit,0,90,True,Midfielder,False,True,False,False,False
 401854067,2026,nwsl::Football_Player::e13f13ced32c4de9bdbedf05c00e5ed5,Washington Spirit,0,90,True,Defender,False,True,False,False,False
 401854067,2026,nwsl::Football_Player::ebadefdb2cd142aa92580387d5fde3b8,Washington Spirit,76,90,False,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::0d2b0629ed6b43b8ae5e01f2d88fa515,Boston Legacy,0,90,True,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::38925931e59c4bb6ac8e7965e81ab06d,Boston Legacy,0,90,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::463e97cd35e944de9f49f54da30fd8c7,Boston Legacy,0,67,True,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::572ca1acdb37419a843dafa8e828be66,Boston Legacy,0,90,True,Goalkeeper,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::5b3b23196eed4d9f900e4f3ab4d7113d,Boston Legacy,0,90,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::6d53483ebf1e436d96c8edacb96a8cca,Boston Legacy,0,90,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::80072c037c734d7eb4b7401b29bd575d,Boston Legacy,0,85,True,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::8c0148936e98403ca045b722790deea0,Boston Legacy,0,90,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::a0afe0dd22bc4b4eb895446288d523c8,Boston Legacy,85,90,False,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::a58cdc45fc0448a28cbd965d9601aaf7,Boston Legacy,0,85,True,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::c8daea44150e40579e2c46716e16246e,Boston Legacy,0,67,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::d3f96dfb6d4a416694444e80657ead00,Boston Legacy,67,90,False,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::e9e4589be89b4dc4a5da3df021cffc4b,Boston Legacy,85,90,False,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::f0b65e91132d452792a90bd80e377f0f,Boston Legacy,67,90,False,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::fbe120b3952b43e4a95a632f285ffe38,Boston Legacy,0,90,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::04a1aad603eb46dd9c349c2ba91d2322,Current,0,90,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::24d14aecb1aa4505a96c39f52a558e47,Current,72,90,False,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::27615fa77e0f4bc78e0365f58a4df924,Current,0,90,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::2b79fff663274280b57a60c00163ff51,Current,72,90,False,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::53377155ab4b4c08b6ff7a3c66865fe3,Current,0,72,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::6d6d4a5642834e01ac61867306e1e367,Current,0,90,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::71105581a0a143b18ac92760cc09c609,Current,0,90,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::85023bcbe613492da8caaa35221257ed,Current,0,90,True,Defender,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::9b7fd5c1259c48b1a87f1cc0c10f713c,Current,0,90,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::a1626364867445b3b33022e19cac46ff,Current,0,90,True,Goalkeeper,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::a74c35267e4b4a689431f9d3be7522c6,Current,0,72,True,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::af41af05521443b5b718ca9cac9c7427,Current,0,46,True,Forward,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::cac9bfef965b49f9a20bbc0deb15ccfa,Current,46,90,False,Midfielder,False,True,False,False,False
+401854068,2026,nwsl::Football_Player::f82ac82c607145468005f6b2e5da5b72,Current,0,90,True,Forward,False,True,False,False,False

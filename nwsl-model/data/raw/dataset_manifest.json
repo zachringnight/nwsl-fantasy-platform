@@ -1,7 +1,7 @@
 {
   "asa": {
     "match_xg_coverage_pct": 99.68,
-    "match_xgoals_rows": 310,
+    "match_xgoals_rows": 315,
     "season_coverage": [
       2025,
       2026
@@ -15,15 +15,15 @@
     "weather_features": "disabled",
     "xg_features": "asa_match_xgoals_loader_enrichment"
   },
-  "generated_at": "2026-07-23T01:39:05.888Z",
+  "generated_at": "2026-07-26T18:24:22.479Z",
   "matches": {
     "date_range": [
       "2025-03-15",
-      "2026-07-19"
+      "2026-07-25"
     ],
     "non_regular_season_rows": 7,
-    "regular_season_rows": 301,
-    "rows": 308,
+    "regular_season_rows": 306,
+    "rows": 313,
     "season_coverage": [
       2025,
       2026
@@ -32,11 +32,11 @@
   },
   "missing_feature_coverage": {
     "asa_match_xg_missing_pct": 0.32,
-    "odds_missing_pct": 9.09,
+    "odds_missing_pct": 10.54,
     "xg_missing_pct": 0.32
   },
   "odds": {
-    "rows": 1367,
+    "rows": 1366,
     "source_available": true,
     "markets": [
       "1x2",
@@ -54,7 +54,7 @@
       "current",
       "open"
     ],
-    "latest_timestamp": "2026-07-19T23:00:00+00:00"
+    "latest_timestamp": "2026-07-26T18:38:55.973853+00:00"
   },
   "source": "espn_public_api",
   "source_files": {
@@ -63,10 +63,10 @@
   },
   "upcoming": {
     "date_range": [
-      "2026-07-25",
+      "2026-07-26",
       "2026-11-01"
     ],
-    "rows": 121,
+    "rows": 116,
     "season_coverage": [
       2026
     ],

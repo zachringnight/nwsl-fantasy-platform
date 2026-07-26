@@ -1434,9 +1434,9 @@
     "homeTeamId": "17346",
     "awayTeam": "Bay FC",
     "awayTeamId": "22187",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Shell Energy Stadium"
   },
   {
@@ -1446,9 +1446,9 @@
     "homeTeamId": "18206",
     "awayTeam": "Chicago Stars FC",
     "awayTeamId": "15360",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Inter&Co Stadium"
   },
   {
@@ -1458,9 +1458,9 @@
     "homeTeamId": "15362",
     "awayTeam": "Gotham FC",
     "awayTeamId": "15364",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Providence Park"
   },
   {
@@ -1470,9 +1470,9 @@
     "homeTeamId": "131562",
     "awayTeam": "Kansas City Current",
     "awayTeamId": "20907",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Centreville Bank Stadium"
   },
   {
@@ -1482,9 +1482,9 @@
     "homeTeamId": "15366",
     "awayTeam": "Utah Royals",
     "awayTeamId": "19141",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 4,
+    "status": "completed",
     "venue": "WakeMed Soccer Park"
   },
   {
