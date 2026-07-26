@@ -224,6 +224,9 @@ logging:
 odds_provider:
   # Odds lines older than this are treated as stale and gated out of official picks.
   stale_line_minutes: 180
+  # API-Football remains shadow-only until its forward health gate is ready for
+  # manual review. This fixed feed contains no provider credentials.
+  api_football_shadow_url: "https://ncaa-zach-soskins-projects-95c2533d.vercel.app/api/nwsl/odds"
 
 threshold_tuning:
   # Grid searched during nested chronological threshold tuning: edge/confidence

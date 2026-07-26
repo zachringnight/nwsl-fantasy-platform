@@ -2,12 +2,12 @@
 # Daily matchday tracker: refresh odds, regenerate picks, settle past picks.
 #
 # This is the deterministic data pipeline behind the forward pick-log. It does
-# NOT send Slack itself (no webhook in this repo) -- a scheduled Claude job runs
-# this, reads data/processed/pick_record_report.md, and DMs the report to Zach.
+# NOT send messages itself. A scheduled Codex task runs this and summarizes the
+# resulting pick record and source-health artifacts for Zach.
 #
-# Each odds fetch reads its Apify token from the gitignored .env.local itself,
-# so no secret is placed in the shell environment or logged here. A single book
-# failing must not block the rest, so fetches are best-effort.
+# Odds polling uses the fixed API-Football shadow feed plus the public FOX
+# fallback. Provider failures remain best-effort; freshness, snapshot, and
+# source-health checks are required and fail closed.
 
 set -u
 
@@ -61,13 +61,10 @@ run_required_repo_step "espn_schedule" npx tsx scripts/fetch-espn-nwsl.ts
 run_required_repo_step "model_input" npx tsx scripts/generate-model-input.ts
 run_required_step "asa_xg" "$PY" scripts/fetch_asa_data.py --seasons 2025 2026
 
-# 2. Best-effort refresh of each book's current line into data/raw/odds.csv.
-run_step "draftkings" "$PY" scripts/fetch_apify_draftkings_odds.py
-run_step "footystats" "$PY" scripts/fetch_apify_footystats_odds.py
-run_step "foxsports"  "$PY" scripts/fetch_foxsports_odds.py
-run_required_step "odds_snapshot" "$PY" scripts/append_odds_snapshot.py \
-    --incoming data/raw/odds.csv \
-    --snapshot data/raw/odds_snapshots.csv
+# 2. Capture current prices, remove stale "current" rows, append snapshots, and
+#    write the provider-health/manual-review gate. API-Football never enters the
+#    frozen policy's eligible odds file in this shadow phase.
+run_required_step "odds_poll" bash scripts/poll_current_odds.sh
 
 # 3. Fit and serve the isolated, frozen totals-over policy.
 run_required_step "policy_train" "$PY" scripts/train.py \

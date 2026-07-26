@@ -1,7 +1,7 @@
 # Run make from nwsl-model/. pythonpath is cwd-relative (pyproject.toml),
 # and config paths (data.official_matches_dir etc.) assume this directory.
 
-.PHONY: test test-fast refresh backtest holdout slate policy-train policy-slate policy-settle
+.PHONY: test test-fast refresh odds-poll backtest holdout slate policy-train policy-slate policy-settle
 
 test:
 	python3 -m pytest
@@ -18,11 +18,11 @@ refresh:
 	python3 scripts/fetch_asa_data.py --seasons 2025 2026
 	python3 scripts/rebuild_operational_features.py --season 2026
 	python3 scripts/fetch_nwsl_availability.py
-	python3 scripts/fetch_foxsports_odds.py --days 14
-	python3 -c "from pathlib import Path; import pandas as pd; from src.odds.apify_footystats import update_dataset_manifest_odds; \
-	  update_dataset_manifest_odds(Path('data/raw/dataset_manifest.json'), pd.read_csv('data/raw/odds.csv'))"
-	python3 scripts/append_odds_snapshot.py --incoming data/raw/odds.csv --snapshot data/raw/odds_snapshots.csv
+	bash scripts/poll_current_odds.sh
 	python3 scripts/audit_model_inputs.py --config configs/default.yaml --artifact-root data/processed/models
+
+odds-poll:
+	bash scripts/poll_current_odds.sh
 
 backtest:
 	python3 scripts/backtest.py --config configs/default.yaml
