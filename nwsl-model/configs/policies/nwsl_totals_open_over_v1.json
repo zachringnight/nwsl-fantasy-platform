@@ -107,9 +107,6 @@
     ],
     "flat_backtest_stake_units": 1.0,
     "forward_stake_cap_bankroll_pct": 0.25,
-    "full_promotion_min_forward_decisions": 50,
-    "historical_forward_test_decisions": 30,
-    "additional_live_decisions_required_for_full_promotion": 20,
     "require_fresh_price": true,
     "require_model_family_match": true
   },

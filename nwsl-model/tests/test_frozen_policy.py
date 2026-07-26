@@ -85,3 +85,29 @@ def test_frozen_policy_exports_one_selected_row_per_test_match() -> None:
     assert result.summary["readiness_checks"]["one_bet_per_test_match"] is True
     assert result.selected_bets["match_id"].nunique() == len(result.selected_bets)
     assert set(result.selected_bets["side"]) == {"over"}
+
+
+def test_frozen_policy_has_no_separate_full_promotion_gate() -> None:
+    decisions, predictions = _inputs()
+    result = validate_frozen_policy(
+        decisions,
+        predictions,
+        policy_id="test-policy",
+        model_family="team_ratings_poisson",
+        train_season=2025,
+        test_season=2026,
+        market_group="totals",
+        side="over",
+        edge_grid=[0.0, 0.01, 0.02, 0.05],
+        confidence_grid=[0.0, 0.03, 0.05],
+        bootstrap_iterations=200,
+        minimum_test_bets=10,
+    )
+
+    operating_contract = result.summary["operating_contract"]
+    assert "full_promotion_min_forward_decisions" not in operating_contract
+    assert "historical_forward_test_decisions" not in operating_contract
+    assert (
+        "additional_live_decisions_required_for_full_promotion"
+        not in operating_contract
+    )
