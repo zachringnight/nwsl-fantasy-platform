@@ -11,6 +11,11 @@ import { FormIndicator } from "@/components/analytics/form-indicator";
 import { ThemedRadarChart } from "@/components/analytics/charts/themed-radar-chart";
 import { ScoringTrends } from "@/components/analytics/scoring-trends";
 import { getTeamDetail, getLeagueTable, getMatchResults } from "@/lib/analytics/analytics-data";
+import {
+  analyticsMatchHref,
+  analyticsPlayerHref,
+  analyticsTeamHref,
+} from "@/lib/analytics/entity-routes";
 
 export default function TeamDetailPage() {
   const params = useParams<{ teamId: string }>();
@@ -145,7 +150,7 @@ export default function TeamDetailPage() {
             {topPlayers.map((player, i) => (
               <Link
                 key={player.playerId}
-                href={`/analytics/players/${player.playerId}`}
+                href={analyticsPlayerHref(player.playerId)}
                 className="glass-card rounded-xl border border-line bg-white/4 p-4 transition hover:border-brand/30"
               >
                 <div className="flex items-center gap-3">
@@ -186,25 +191,33 @@ export default function TeamDetailPage() {
               const ga = isHome ? match.awayGoals : match.homeGoals;
               const result = gf > ga ? "W" : gf < ga ? "L" : "D";
               const opponent = isHome ? match.awayTeam : match.homeTeam;
+              const opponentId = isHome ? match.awayTeamId : match.homeTeamId;
 
               return (
-                <Link
+                <article
                   key={match.matchId}
-                  href={`/analytics/matches/${match.matchId}`}
                   className="flex items-center justify-between rounded-xl border border-line bg-white/4 px-4 py-3 transition hover:border-brand/30"
                 >
                   <div className="flex items-center gap-3">
                     <Pill tone={result === "W" ? "success" : result === "L" ? "accent" : "default"}>
                       {result}
                     </Pill>
-                    <span className="text-sm text-foreground">
-                      {isHome ? "vs" : "@"} {opponent}
-                    </span>
+                    <span className="text-sm text-muted">{isHome ? "vs" : "@"}</span>
+                    <Link
+                      href={analyticsTeamHref(opponentId)}
+                      className="text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {opponent}
+                    </Link>
                   </div>
-                  <span className="font-mono text-lg font-semibold text-foreground">
+                  <Link
+                    href={analyticsMatchHref(match.matchId)}
+                    aria-label={`Open ${match.homeTeam} vs ${match.awayTeam}`}
+                    className="font-mono text-lg font-semibold text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
                     {match.homeGoals} - {match.awayGoals}
-                  </span>
-                </Link>
+                  </Link>
+                </article>
               );
             })}
           </div>

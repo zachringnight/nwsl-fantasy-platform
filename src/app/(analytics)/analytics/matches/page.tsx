@@ -5,6 +5,10 @@ import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { Pill } from "@/components/ui/pill";
 import { getMatchResults } from "@/lib/analytics/analytics-data";
+import {
+  analyticsMatchHref,
+  analyticsTeamHref,
+} from "@/lib/analytics/entity-routes";
 import { useAnalyticsSeason } from "@/components/analytics/season-selector";
 
 type StatusFilter = "all" | "completed" | "upcoming";
@@ -96,15 +100,18 @@ export default function MatchesPage() {
               </h3>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {group.matches.map((match) => (
-                  <Link
+                  <article
                     key={match.matchId}
-                    href={`/analytics/matches/${match.matchId}`}
                     className="glass-card rounded-xl border border-line bg-white/6 p-4 transition hover:border-brand/30"
                   >
                     <div className="mb-2 flex items-center justify-between">
-                      <span className="text-[0.65rem] font-medium uppercase tracking-widest text-muted">
+                      <Link
+                        href={analyticsMatchHref(match.matchId)}
+                        aria-label={`Open ${match.homeTeam} vs ${match.awayTeam}`}
+                        className="text-[0.65rem] font-medium uppercase tracking-widest text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
                         {match.date}
-                      </span>
+                      </Link>
                       <Pill
                         tone={
                           match.status === "completed"
@@ -117,20 +124,38 @@ export default function MatchesPage() {
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-foreground">{match.homeTeam}</span>
+                        <Link
+                          href={analyticsTeamHref(match.homeTeamId)}
+                          className="text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                        >
+                          {match.homeTeam}
+                        </Link>
                         <span className="font-mono text-lg font-semibold text-foreground">
                           {match.status === "completed" ? match.homeGoals : "-"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-foreground">{match.awayTeam}</span>
+                        <Link
+                          href={analyticsTeamHref(match.awayTeamId)}
+                          className="text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                        >
+                          {match.awayTeam}
+                        </Link>
                         <span className="font-mono text-lg font-semibold text-foreground">
                           {match.status === "completed" ? match.awayGoals : "-"}
                         </span>
                       </div>
                     </div>
-                    <div className="mt-2 text-xs text-muted/70">{match.venue}</div>
-                  </Link>
+                    <div className="mt-3 flex items-center justify-between gap-3 border-t border-line/70 pt-3">
+                      <span className="truncate text-xs text-muted/70">{match.venue}</span>
+                      <Link
+                        href={analyticsMatchHref(match.matchId)}
+                        className="shrink-0 text-xs font-medium text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        Match details
+                      </Link>
+                    </div>
+                  </article>
                 ))}
               </div>
             </section>

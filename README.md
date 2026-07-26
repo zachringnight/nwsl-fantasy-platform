@@ -67,8 +67,15 @@ See `.env.example` for the full list. The key variables are:
 | `SUPABASE_SECRET_KEY` | Supabase secret key for server-side access |
 | `DATABASE_URL` | PostgreSQL connection string |
 | `AUTH_SECRET` | Auth.js session secret |
+| `NWSL_MODEL_PUBLISH_SECRET` | Bearer secret accepted only by the automated NWSL model publisher |
 
 The app reads Supabase config from environment variables. `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are still accepted as compatibility fallbacks for older local setups.
+
+The predictions page reads the latest frozen-policy run, full evaluated slate,
+locked picks, and settlements from Supabase. The local Codex model runner posts
+one authenticated snapshot after each successful run, so daily data updates do
+not require a GitHub commit or a Vercel deployment. Failed runs publish nothing;
+successful zero-pick runs publish an explicit no-bet state.
 
 ## License
 

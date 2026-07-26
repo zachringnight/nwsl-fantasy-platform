@@ -13,6 +13,11 @@ import { usePersistedList } from "@/hooks/use-persisted-list";
 import { getButtonClassName } from "@/components/ui/button";
 import { getFantasyPlayerPool } from "@/lib/fantasy-player-pool";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 
 type BoardFilter = "ALL" | "WATCHLIST" | "TRENDING" | "QUESTIONABLE" | "VALUE";
@@ -246,10 +251,21 @@ export default function PlayersPage() {
                     className="rounded-[1.3rem] border border-line bg-white/6 p-4"
                   >
                     <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-brand-strong">
-                      {player.position} • {player.club_name}
+                      {player.position} •{" "}
+                      <Link
+                        href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                        className="hover:underline hover:underline-offset-4"
+                      >
+                        {player.club_name}
+                      </Link>
                     </p>
                     <p className="mt-3 text-xl font-semibold leading-tight text-foreground">
-                      {player.display_name}
+                      <Link
+                        href={fantasyPlayerHref(player.id)}
+                        className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {player.display_name}
+                      </Link>
                     </p>
                     <p className="mt-2 text-sm text-muted">
                       {player.average_points.toFixed(1)} proj • ${player.salary_cost} • value {getValueScore(player).toFixed(2)}
@@ -301,20 +317,28 @@ export default function PlayersPage() {
           {watchlistPlayers.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {watchlistPlayers.slice(0, 8).map((player) => (
-                <button
+                <div
                   key={player.id}
-                  className="min-h-10 rounded-full border border-line bg-white/8 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-strong/35 hover:text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
-                  onClick={() => {
-                    setSearch(player.display_name);
-                    setFilter("WATCHLIST");
-                  }}
-                  type="button"
+                  className="inline-flex min-h-10 items-center overflow-hidden rounded-full border border-line bg-white/8 text-sm font-semibold text-foreground transition hover:border-brand-strong/35"
                 >
-                  <span className="inline-flex items-center gap-2">
+                  <button
+                    aria-label={`Filter to ${player.display_name}`}
+                    className="inline-flex min-h-10 items-center px-3 text-accent transition hover:bg-white/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-strong/55"
+                    onClick={() => {
+                      setSearch(player.display_name);
+                      setFilter("WATCHLIST");
+                    }}
+                    type="button"
+                  >
                     <Heart className="size-3.5 text-accent" />
+                  </button>
+                  <Link
+                    href={fantasyPlayerHref(player.id)}
+                    className="inline-flex min-h-10 items-center pr-4 transition hover:text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-strong/55"
+                  >
                     {player.display_name}
-                  </span>
-                </button>
+                  </Link>
+                </div>
               ))}
             </div>
           ) : (

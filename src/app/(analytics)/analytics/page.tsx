@@ -10,6 +10,12 @@ import {
   getMatchPredictions,
 } from "@/lib/analytics/analytics-data";
 import { getRealPlayerCount, getRealTeamNames } from "@/lib/analytics/analytics-real-data";
+import {
+  analyticsMatchHref,
+  analyticsPlayerHref,
+  analyticsPredictionHref,
+  analyticsTeamHref,
+} from "@/lib/analytics/entity-routes";
 
 export const metadata = {
   title: "Analytics",
@@ -39,24 +45,90 @@ export default function AnalyticsPage() {
       <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <MetricTile
           label="Table Leader"
-          value={leader?.team ?? "—"}
+          value={
+            leader ? (
+              <Link href={analyticsTeamHref(leader.teamId)} className="hover:underline">
+                {leader.team}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
           detail={`${leader?.points ?? 0} pts · ${leader?.played ?? 0} played`}
           tone="brand"
         />
         <MetricTile
           label="Top Scorer"
-          value={topScorer?.name ?? "—"}
-          detail={`${topScorer?.goals ?? 0} goals · ${topScorer?.team}`}
+          value={
+            topScorer ? (
+              <Link
+                href={analyticsPlayerHref(topScorer.playerId)}
+                className="hover:underline"
+              >
+                {topScorer.name}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
+          detail={
+            topScorer ? (
+              <>
+                {topScorer.goals} goals ·{" "}
+                <Link
+                  href={analyticsTeamHref(topScorer.teamId)}
+                  className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  {topScorer.team}
+                </Link>
+              </>
+            ) : (
+              "0 goals"
+            )
+          }
           tone="accent"
         />
         <MetricTile
           label="Most Assists"
-          value={topAssister?.name ?? "—"}
-          detail={`${topAssister?.assists ?? 0} assists · ${topAssister?.team}`}
+          value={
+            topAssister ? (
+              <Link
+                href={analyticsPlayerHref(topAssister.playerId)}
+                className="hover:underline"
+              >
+                {topAssister.name}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
+          detail={
+            topAssister ? (
+              <>
+                {topAssister.assists} assists ·{" "}
+                <Link
+                  href={analyticsTeamHref(topAssister.teamId)}
+                  className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  {topAssister.team}
+                </Link>
+              </>
+            ) : (
+              "0 assists"
+            )
+          }
         />
         <MetricTile
           label="Fantasy Leader"
-          value={topFP?.name ?? "—"}
+          value={
+            topFP ? (
+              <Link href={analyticsPlayerHref(topFP.playerId)} className="hover:underline">
+                {topFP.name}
+              </Link>
+            ) : (
+              "—"
+            )
+          }
           detail={`${topFP?.fantasyPoints ?? 0} pts · ${topFP?.pointsPer90 ?? 0}/90`}
           tone="brand"
         />
@@ -65,21 +137,26 @@ export default function AnalyticsPage() {
       {/* Quick-access sections */}
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {/* League Table Preview */}
-        <Link
-          href="/analytics/teams"
+        <section
           className="group glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
         >
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+            <Link
+              href="/analytics/teams"
+              className="text-sm font-semibold uppercase tracking-widest text-brand-strong hover:underline hover:underline-offset-4"
+            >
               League Table
-            </h2>
-            <Pill tone="brand">View all</Pill>
+            </Link>
+            <Link href="/analytics/teams" aria-label="View all teams">
+              <Pill tone="brand">View all</Pill>
+            </Link>
           </div>
           <div className="space-y-2">
             {standings.slice(0, 5).map((team, i) => (
-              <div
+              <Link
                 key={team.teamId}
-                className="flex items-center justify-between text-sm"
+                href={analyticsTeamHref(team.teamId)}
+                className="flex items-center justify-between rounded-lg text-sm transition hover:bg-white/5 hover:text-brand-strong"
               >
                 <span className="flex items-center gap-3">
                   <span className="w-5 text-center font-mono text-muted">
@@ -88,27 +165,32 @@ export default function AnalyticsPage() {
                   <span className="text-foreground">{team.team}</span>
                 </span>
                 <span className="font-mono text-muted">{team.points} pts</span>
-              </div>
+              </Link>
             ))}
           </div>
-        </Link>
+        </section>
 
         {/* Top Players Preview */}
-        <Link
-          href="/analytics/players"
+        <section
           className="group glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
         >
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+            <Link
+              href="/analytics/players"
+              className="text-sm font-semibold uppercase tracking-widest text-brand-strong hover:underline hover:underline-offset-4"
+            >
               Top Players
-            </h2>
-            <Pill tone="brand">{playerCount} players</Pill>
+            </Link>
+            <Link href="/analytics/players" aria-label={`View all ${playerCount} players`}>
+              <Pill tone="brand">{playerCount} players</Pill>
+            </Link>
           </div>
           <div className="space-y-2">
             {players.slice(0, 5).map((player, i) => (
-              <div
+              <Link
                 key={player.playerId}
-                className="flex items-center justify-between text-sm"
+                href={analyticsPlayerHref(player.playerId)}
+                className="flex items-center justify-between rounded-lg text-sm transition hover:bg-white/5"
               >
                 <span className="flex items-center gap-3">
                   <span className="w-5 text-center font-mono text-muted">
@@ -120,28 +202,35 @@ export default function AnalyticsPage() {
                 <span className="font-mono text-muted">
                   {player.fantasyPoints} fp
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
-        </Link>
+        </section>
 
         {/* Predictions or Data Status */}
         {predictions.length > 0 ? (
-          <Link
-            href="/analytics/predictions"
+          <section
             className="group glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
           >
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              <Link
+                href="/analytics/predictions"
+                className="text-sm font-semibold uppercase tracking-widest text-brand-strong hover:underline hover:underline-offset-4"
+              >
                 Predictions
-              </h2>
+              </Link>
               <Pill tone="accent">AI Model</Pill>
             </div>
             <div className="space-y-3">
               {predictions.slice(0, 4).map((pred) => (
-                <div key={pred.matchId} className="space-y-1">
+                <article key={pred.matchId} className="space-y-1 rounded-lg">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">{pred.homeTeam}</span>
+                    <Link
+                      href={analyticsTeamHref(pred.homeTeamId)}
+                      className="text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {pred.homeTeam}
+                    </Link>
                     <span className="font-mono text-brand-strong">
                       {(pred.homeProb * 100).toFixed(0)}%
                     </span>
@@ -152,15 +241,34 @@ export default function AnalyticsPage() {
                     <div className="bg-accent" style={{ width: `${pred.awayProb * 100}%` }} />
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">{pred.awayTeam}</span>
+                    <Link
+                      href={analyticsTeamHref(pred.awayTeamId)}
+                      className="text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {pred.awayTeam}
+                    </Link>
                     <span className="font-mono text-accent">
                       {(pred.awayProb * 100).toFixed(0)}%
                     </span>
                   </div>
-                </div>
+                  <div className="flex justify-end gap-3 pt-1 text-[0.65rem]">
+                    <Link
+                      href={analyticsMatchHref(pred.matchId)}
+                      className="text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      Match
+                    </Link>
+                    <Link
+                      href={analyticsPredictionHref(pred.matchId)}
+                      className="font-semibold text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      Prediction
+                    </Link>
+                  </div>
+                </article>
               ))}
             </div>
-          </Link>
+          </section>
         ) : (
           <div className="glass-card rounded-[1.4rem] border border-line bg-white/6 p-5">
             <div className="mb-4 flex items-center justify-between">
@@ -171,19 +279,39 @@ export default function AnalyticsPage() {
             </div>
             <div className="space-y-3 text-sm text-muted">
               <div className="flex items-center justify-between">
-                <span>Player stats</span>
+                <Link
+                  href="/analytics/players"
+                  className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  Player stats
+                </Link>
                 <Pill tone="success">{playerCount} loaded</Pill>
               </div>
               <div className="flex items-center justify-between">
-                <span>Team standings</span>
+                <Link
+                  href="/analytics/teams"
+                  className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  Team standings
+                </Link>
                 <Pill tone="success">{teamCount} teams</Pill>
               </div>
               <div className="flex items-center justify-between">
-                <span>Match results</span>
+                <Link
+                  href="/analytics/matches"
+                  className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  Match results
+                </Link>
                 <Pill tone="success">{matches.length} from ESPN</Pill>
               </div>
               <div className="flex items-center justify-between">
-                <span>Model predictions</span>
+                <Link
+                  href="/analytics/predictions"
+                  className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  Model predictions
+                </Link>
                 <Pill tone="default">Awaiting model run</Pill>
               </div>
             </div>
@@ -219,28 +347,49 @@ export default function AnalyticsPage() {
         {matches.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {matches.filter((m) => m.status === "completed").slice(-8).reverse().map((match) => (
-              <Link
+              <article
                 key={match.matchId}
-                href={`/analytics/matches/${match.matchId}`}
                 className="glass-card rounded-xl border border-line bg-white/6 p-4 transition hover:border-brand/30"
               >
-                <p className="mb-2 text-[0.65rem] font-medium uppercase tracking-widest text-muted">
+                <Link
+                  href={analyticsMatchHref(match.matchId)}
+                  aria-label={`Open ${match.homeTeam} vs ${match.awayTeam}`}
+                  className="mb-2 inline-flex text-[0.65rem] font-medium uppercase tracking-widest text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
                   Matchday {match.matchday}
-                </p>
+                </Link>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground">{match.homeTeam}</span>
+                  <Link
+                    href={analyticsTeamHref(match.homeTeamId)}
+                    className="text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {match.homeTeam}
+                  </Link>
                   <span className="font-mono text-lg font-semibold text-foreground">
                     {match.homeGoals}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-foreground">{match.awayTeam}</span>
+                  <Link
+                    href={analyticsTeamHref(match.awayTeamId)}
+                    className="text-sm text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {match.awayTeam}
+                  </Link>
                   <span className="font-mono text-lg font-semibold text-foreground">
                     {match.awayGoals}
                   </span>
                 </div>
-                <div className="mt-1 text-xs text-muted/70">{match.venue}</div>
-              </Link>
+                <div className="mt-2 flex items-center justify-between gap-2 text-xs">
+                  <span className="truncate text-muted/70">{match.venue}</span>
+                  <Link
+                    href={analyticsMatchHref(match.matchId)}
+                    className="shrink-0 font-medium text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    Details
+                  </Link>
+                </div>
+              </article>
             ))}
           </div>
         ) : (

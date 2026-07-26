@@ -6,6 +6,10 @@ import { getButtonClassName } from "@/components/ui/button";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
 import { getFantasyPlayerById, getFantasyPlayerPool } from "@/lib/fantasy-player-pool";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+} from "@/lib/analytics/entity-routes";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 
@@ -91,10 +95,21 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
                     <div className="mt-4 space-y-3">
                       <div>
                         <p className="text-2xl font-semibold leading-tight tracking-[-0.03em] text-white">
-                          {player.display_name}
+                          <Link
+                            href={`/players/${encodeURIComponent(player.id)}`}
+                            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.display_name}
+                          </Link>
                         </p>
                         <p className="mt-1 text-sm text-white/72">
-                          {player.club_name} • {player.position} • rank #{player.rank}
+                          <Link
+                            href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.club_name}
+                          </Link>{" "}
+                          • {player.position} • rank #{player.rank}
                         </p>
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -199,8 +214,25 @@ export default async function PlayerComparePage({ searchParams }: PlayerCompareP
             <SurfaceCard
               key={player.id}
               eyebrow={index === 0 ? "Player A profile" : "Player B profile"}
-              title={player.display_name}
-              description={`${player.club_name} • ${player.position} • ${fit.label}`}
+              title={
+                <Link
+                  href={`/players/${encodeURIComponent(player.id)}`}
+                  className="hover:underline hover:underline-offset-4"
+                >
+                  {player.display_name}
+                </Link>
+              }
+              description={
+                <>
+                  <Link
+                    href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                    className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {player.club_name}
+                  </Link>{" "}
+                  • {player.position} • {fit.label}
+                </>
+              }
               tone={index === 0 ? "brand" : "accent"}
             >
               <div className="space-y-4">

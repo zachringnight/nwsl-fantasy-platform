@@ -9,6 +9,10 @@ import { MetricTile } from "@/components/ui/metric-tile";
 import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { ScoreMatrixHeatmap } from "@/components/analytics/charts/score-matrix-heatmap";
 import { getMatchPrediction } from "@/lib/analytics/analytics-data";
+import {
+  analyticsMatchHref,
+  analyticsTeamHref,
+} from "@/lib/analytics/entity-routes";
 
 export default function PredictionDetailPage() {
   const params = useParams<{ matchId: string }>();
@@ -37,16 +41,52 @@ export default function PredictionDetailPage() {
   return (
     <AppShell
       eyebrow={`Prediction · ${prediction.date}`}
-      title={`${prediction.homeTeam} vs ${prediction.awayTeam}`}
+      title={
+        <>
+          <Link
+            href={analyticsTeamHref(prediction.homeTeamId)}
+            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+          >
+            {prediction.homeTeam}
+          </Link>{" "}
+          vs{" "}
+          <Link
+            href={analyticsTeamHref(prediction.awayTeamId)}
+            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+          >
+            {prediction.awayTeam}
+          </Link>
+        </>
+      }
       description={`${prediction.model.replace("_", "-")} model · Generated ${new Date(prediction.timestamp).toLocaleDateString()}`}
       actions={
-        <Link
-          href="/analytics/predictions"
-          className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted transition hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" />
-          All Predictions
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={analyticsTeamHref(prediction.homeTeamId)}
+            className="inline-flex items-center rounded-full border border-line bg-white/6 px-3 py-2 text-sm text-muted transition hover:border-brand/30 hover:text-brand-strong"
+          >
+            {prediction.homeTeam}
+          </Link>
+          <Link
+            href={analyticsTeamHref(prediction.awayTeamId)}
+            className="inline-flex items-center rounded-full border border-line bg-white/6 px-3 py-2 text-sm text-muted transition hover:border-brand/30 hover:text-brand-strong"
+          >
+            {prediction.awayTeam}
+          </Link>
+          <Link
+            href={analyticsMatchHref(matchId)}
+            className="inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-3 py-2 text-sm text-brand-strong transition hover:border-brand-strong/50"
+          >
+            Match page
+          </Link>
+          <Link
+            href="/analytics/predictions"
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm text-muted transition hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" />
+            All Predictions
+          </Link>
+        </div>
       }
     >
       {/* 1X2 Probabilities */}

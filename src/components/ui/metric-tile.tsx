@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export interface MetricTileProps {
   label: string;
   value: ReactNode;
-  detail?: string;
+  detail?: ReactNode;
   tone?: "default" | "brand" | "accent";
   className?: string;
 }

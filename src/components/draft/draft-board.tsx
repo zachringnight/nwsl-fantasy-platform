@@ -1,9 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { BadgeDollarSign, ListPlus, TimerReset } from "lucide-react";
 import { SurfaceCard } from "@/components/common/surface-card";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { feedback } from "@/lib/feedback";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 import type { FantasyPoolPlayer } from "@/types/fantasy";
 
 export interface DraftBoardProps {
@@ -64,11 +70,22 @@ export function DraftBoard({
 
                 <div className="min-w-0 flex-1">
                   <p className="font-display text-2xl uppercase leading-none tracking-[0.05em]">
-                    {player.display_name}
+                    <Link
+                      href={fantasyPlayerHref(player.id)}
+                      className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {player.display_name}
+                    </Link>
                   </p>
                   <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
                     <ClubLogo club={player.club_name} size={18} />
-                    {player.club_name} • {player.position}
+                    <Link
+                      href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                      className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {player.club_name}
+                    </Link>{" "}
+                    • {player.position}
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em]">

@@ -1,7 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { ListOrdered, ShieldCheck, Swords } from "lucide-react";
 import { SurfaceCard } from "@/components/common/surface-card";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 import type {
   FantasyDraftQueueItemRecord,
   FantasyRosterPlayer,
@@ -63,9 +69,22 @@ export function DraftQueuePanel({
                         Q{index + 1}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium">{player.player_name}</p>
+                        <p className="font-medium">
+                          <Link
+                            href={fantasyPlayerHref(player.player_id)}
+                            className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.player_name}
+                          </Link>
+                        </p>
                         <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
-                          {player.player_position} • {player.club_name}
+                          {player.player_position} •{" "}
+                          <Link
+                            href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                            className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.club_name}
+                          </Link>
                         </p>
                       </div>
                     </div>
@@ -157,9 +176,20 @@ export function DraftQueuePanel({
                 key={player.id}
                 className="flex items-center justify-between rounded-[1.15rem] border border-line bg-white/6 px-4 py-3 text-sm"
               >
-                <span className="font-medium">{player.player_name}</span>
+                <Link
+                  href={fantasyPlayerHref(player.player_id)}
+                  className="font-medium transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                >
+                  {player.player_name}
+                </Link>
                 <span className="text-xs uppercase tracking-[0.18em] text-muted">
-                  {player.player_position} • {player.club_name}
+                  {player.player_position} •{" "}
+                  <Link
+                    href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                    className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {player.club_name}
+                  </Link>
                 </span>
               </div>
             ))

@@ -26,6 +26,11 @@ import { launchScoringRules } from "@/lib/scoring/scoring-rules";
 import { cn } from "@/lib/utils";
 import { useSwipe } from "@/hooks/use-swipe";
 import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
+import {
   buildSalaryCapActionLabel,
   buildSalaryCapEntrySummary,
   getRecommendedSalaryCapSlot,
@@ -945,12 +950,36 @@ export function SalaryCapEntryBuilder({
                                 {lineupSlotLabels[slot]}
                               </p>
                               <p className="mt-2 text-sm font-semibold text-white">
-                                {selectedPlayer?.display_name ?? "Open slot"}
+                                {selectedPlayer ? (
+                                  <Link
+                                    href={fantasyPlayerHref(selectedPlayer.id)}
+                                    className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                                  >
+                                    {selectedPlayer.display_name}
+                                  </Link>
+                                ) : (
+                                  "Open slot"
+                                )}
                               </p>
                               <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/75">
-                                {selectedPlayer
-                                  ? `${selectedPlayer.position} • ${selectedPlayer.club_name}${selectedPlayer.availability !== "available" ? ` • ${selectedPlayer.availability}` : ""}`
-                                  : `${eligiblePlayers.length} eligible players`}
+                                {selectedPlayer ? (
+                                  <>
+                                    {selectedPlayer.position} •{" "}
+                                    <Link
+                                      href={analyticsTeamHref(
+                                        analyticsTeamId(selectedPlayer.club_name)
+                                      )}
+                                      className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                                    >
+                                      {selectedPlayer.club_name}
+                                    </Link>
+                                    {selectedPlayer.availability !== "available"
+                                      ? ` • ${selectedPlayer.availability}`
+                                      : ""}
+                                  </>
+                                ) : (
+                                  `${eligiblePlayers.length} eligible players`
+                                )}
                               </p>
                             </div>
                             {selectedPlayer ? (
@@ -1004,11 +1033,31 @@ export function SalaryCapEntryBuilder({
         <SurfaceCard
           eyebrow={focusedPlayer ? "Builder spotlight" : "Quick add"}
           title={
-            focusedPlayer ? focusedPlayer.display_name : "Search the shared player pool"
+            focusedPlayer ? (
+              <Link
+                href={fantasyPlayerHref(focusedPlayer.id)}
+                className="hover:underline hover:underline-offset-4"
+              >
+                {focusedPlayer.display_name}
+              </Link>
+            ) : (
+              "Search the shared player pool"
+            )
           }
           description={
             focusedPlayer
-              ? `${focusedPlayer.club_name} • ${focusedPlayer.position} • $${focusedPlayer.salary_cost}. Add this player directly into the active lineup from here.`
+              ? (
+                  <>
+                    <Link
+                      href={analyticsTeamHref(analyticsTeamId(focusedPlayer.club_name))}
+                      className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                    >
+                      {focusedPlayer.club_name}
+                    </Link>{" "}
+                    • {focusedPlayer.position} • ${focusedPlayer.salary_cost}. Add this
+                    player directly into the active lineup from here.
+                  </>
+                )
               : "Search by player or club, filter by position, then add players straight into the next recommended slot."
           }
           tone="accent"
@@ -1054,10 +1103,22 @@ export function SalaryCapEntryBuilder({
                       Focus player
                     </p>
                     <p className="mt-2 text-lg font-semibold text-foreground">
-                      {focusedPlayer.display_name}
+                      <Link
+                        href={fantasyPlayerHref(focusedPlayer.id)}
+                        className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {focusedPlayer.display_name}
+                      </Link>
                     </p>
                     <p className="text-sm text-muted">
-                      {focusedPlayer.position} • {focusedPlayer.club_name} • {focusedPlayer.availability}
+                      {focusedPlayer.position} •{" "}
+                      <Link
+                        href={analyticsTeamHref(analyticsTeamId(focusedPlayer.club_name))}
+                        className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {focusedPlayer.club_name}
+                      </Link>{" "}
+                      • {focusedPlayer.availability}
                     </p>
                   </div>
                   <div className="text-right text-sm text-muted">
@@ -1100,10 +1161,21 @@ export function SalaryCapEntryBuilder({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-foreground">
-                          {player.display_name}
+                          <Link
+                            href={fantasyPlayerHref(player.id)}
+                            className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.display_name}
+                          </Link>
                         </p>
                         <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
-                          {player.position} • {player.club_name}
+                          {player.position} •{" "}
+                          <Link
+                            href={analyticsTeamHref(analyticsTeamId(player.club_name))}
+                            className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {player.club_name}
+                          </Link>
                           {player.availability !== "available" ? ` • ${player.availability}` : ""}
                         </p>
                       </div>

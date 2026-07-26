@@ -8,7 +8,17 @@ import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { Pill } from "@/components/ui/pill";
 import { StatComparisonBar } from "@/components/analytics/stat-comparison-bar";
-import { getMatchDetail, getMatchPrediction } from "@/lib/analytics/analytics-data";
+import {
+  getMatchDetail,
+  getMatchPrediction,
+  getPlayerIdByName,
+} from "@/lib/analytics/analytics-data";
+import {
+  analyticsPlayerHref,
+  analyticsPredictionHref,
+  analyticsTeamHref,
+  analyticsTeamId,
+} from "@/lib/analytics/entity-routes";
 
 export default function MatchDetailPage() {
   const params = useParams<{ matchId: string }>();
@@ -33,7 +43,23 @@ export default function MatchDetailPage() {
   return (
     <AppShell
       eyebrow={`Matchday ${match.matchday} · ${match.date}`}
-      title={`${match.homeTeam} vs ${match.awayTeam}`}
+      title={
+        <>
+          <Link
+            href={analyticsTeamHref(match.homeTeamId)}
+            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+          >
+            {match.homeTeam}
+          </Link>{" "}
+          vs{" "}
+          <Link
+            href={analyticsTeamHref(match.awayTeamId)}
+            className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+          >
+            {match.awayTeam}
+          </Link>
+        </>
+      }
       description={match.venue}
       actions={
         <Link
@@ -45,22 +71,40 @@ export default function MatchDetailPage() {
         </Link>
       }
     >
-      {/* Score */}
-      {isCompleted && (
-        <section className="flex items-center justify-center gap-8 py-4">
-          <div className="text-center">
-            <p className="text-lg font-medium text-foreground">{match.homeTeam}</p>
-            <p className="font-display text-7xl leading-none text-foreground">{match.homeGoals}</p>
-          </div>
-          <div className="text-center">
-            <Pill tone="default">FT</Pill>
-          </div>
-          <div className="text-center">
-            <p className="text-lg font-medium text-foreground">{match.awayTeam}</p>
-            <p className="font-display text-7xl leading-none text-foreground">{match.awayGoals}</p>
-          </div>
-        </section>
-      )}
+      {/* Score and connected team profiles */}
+      <section className="flex items-center justify-center gap-6 py-4 sm:gap-10">
+        <div className="min-w-0 flex-1 text-right">
+          <Link
+            href={analyticsTeamHref(match.homeTeamId)}
+            className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+          >
+            {match.homeTeam}
+          </Link>
+          {isCompleted ? (
+            <p className="font-display text-7xl leading-none text-foreground">
+              {match.homeGoals}
+            </p>
+          ) : null}
+        </div>
+        <div className="shrink-0 text-center">
+          <Pill tone={isCompleted ? "default" : "brand"}>
+            {isCompleted ? "FT" : "VS"}
+          </Pill>
+        </div>
+        <div className="min-w-0 flex-1 text-left">
+          <Link
+            href={analyticsTeamHref(match.awayTeamId)}
+            className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+          >
+            {match.awayTeam}
+          </Link>
+          {isCompleted ? (
+            <p className="font-display text-7xl leading-none text-foreground">
+              {match.awayGoals}
+            </p>
+          ) : null}
+        </div>
+      </section>
 
       {/* Stats Comparison */}
       {isCompleted && hasDetailedStats && (
@@ -99,23 +143,47 @@ export default function MatchDetailPage() {
             Match Timeline
           </h3>
           <div className="space-y-3">
-            {match.events.map((event, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4"
-              >
-                <span className="w-10 text-right font-mono text-sm text-muted">
-                  {event.minute}&apos;
-                </span>
-                <span className="flex size-6 items-center justify-center rounded-full bg-brand-strong/20 text-xs">
-                  {event.type === "goal" ? "G" : event.type === "yellow_card" ? "Y" : event.type === "red_card" ? "R" : "S"}
-                </span>
-                <div>
-                  <span className="text-sm font-medium text-foreground">{event.playerName}</span>
-                  <span className="ml-2 text-xs text-muted">({event.team})</span>
+            {match.events.map((event, i) => {
+              const playerId = getPlayerIdByName(event.playerName);
+
+              return (
+                <div
+                  key={`${event.minute}-${event.playerName}-${i}`}
+                  className="flex items-center gap-4"
+                >
+                  <span className="w-10 text-right font-mono text-sm text-muted">
+                    {event.minute}&apos;
+                  </span>
+                  <span className="flex size-6 items-center justify-center rounded-full bg-brand-strong/20 text-xs">
+                    {event.type === "goal" ? "G" : event.type === "yellow_card" ? "Y" : event.type === "red_card" ? "R" : "S"}
+                  </span>
+                  <div>
+                    {playerId ? (
+                      <Link
+                        href={analyticsPlayerHref(playerId)}
+                        className="text-sm font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {event.playerName}
+                      </Link>
+                    ) : (
+                      <span className="text-sm font-medium text-foreground">
+                        {event.playerName}
+                      </span>
+                    )}
+                    <span className="ml-2 text-xs text-muted">
+                      (
+                      <Link
+                        href={analyticsTeamHref(analyticsTeamId(event.team))}
+                        className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                      >
+                        {event.team}
+                      </Link>
+                      )
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
@@ -144,7 +212,7 @@ export default function MatchDetailPage() {
           </div>
           <div className="mt-4">
             <Link
-              href={`/analytics/predictions/${matchId}`}
+              href={analyticsPredictionHref(matchId)}
               className="text-sm text-brand-strong hover:underline"
             >
               View full prediction details

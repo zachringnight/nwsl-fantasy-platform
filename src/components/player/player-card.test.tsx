@@ -77,6 +77,17 @@ describe("PlayerCard", () => {
     expect(link).toHaveAttribute("href", "/custom/path");
   });
 
+  it("links the listed player and club to their detail pages", () => {
+    render(<PlayerCard player={mockPlayer} />);
+
+    expect(
+      screen.getAllByRole("link", { name: "Sophia Smith" })[0]
+    ).toHaveAttribute("href", "/players/player-1");
+    expect(
+      screen.getByRole("link", { name: "Portland Thorns analytics" })
+    ).toHaveAttribute("href", "/analytics/teams/portland-thorns");
+  });
+
   it("renders action link when provided", () => {
     render(<PlayerCard player={mockPlayer} actionHref="/add" actionLabel="Add to team" />);
     expect(screen.getByRole("link", { name: "Add to team" })).toBeInTheDocument();

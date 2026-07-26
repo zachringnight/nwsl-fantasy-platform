@@ -16,6 +16,11 @@ import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
 import { getFantasyPlayerById } from "@/lib/fantasy-player-pool";
 import { launchScoringRules } from "@/lib/scoring/scoring-rules";
+import {
+  analyticsTeamHref,
+  analyticsTeamId,
+  fantasyPlayerHref,
+} from "@/lib/analytics/entity-routes";
 import type { FantasyTransactionHubState } from "@/types/fantasy";
 
 export interface TransactionsClientProps {
@@ -406,7 +411,14 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                           Claim impact preview
                         </p>
                         <p className="mt-3">
-                          {selectedPlayer.display_name} projects for {selectedPlayer.average_points.toFixed(1)} fantasy points.{" "}
+                          <Link
+                            href={fantasyPlayerHref(selectedPlayer.id)}
+                            className="font-medium hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          >
+                            {selectedPlayer.display_name}
+                          </Link>{" "}
+                          projects for {selectedPlayer.average_points.toFixed(1)} fantasy
+                          points.{" "}
                           {selectedDropPlayer
                             ? `Compared with ${selectedDropPlayer.player_name} at ${selectedDropPlayer.player.average_points.toFixed(1)}, this move shifts your baseline by ${selectedProjectionDelta > 0 ? "+" : ""}${selectedProjectionDelta.toFixed(1)}.`
                             : "If your roster is not full, that full projection lands as upside."}
@@ -438,10 +450,24 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                           <div className="flex items-start justify-between gap-3">
                             <div>
                               <p className="text-sm font-semibold text-foreground">
-                                {claim.requested_player_name}
+                                <Link
+                                  href={fantasyPlayerHref(claim.requested_player_id)}
+                                  className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                                >
+                                  {claim.requested_player_name}
+                                </Link>
                               </p>
                               <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
-                                Priority {claim.priority_at_submission} • {claim.requested_club_name} • {claim.requested_player_position}
+                                Priority {claim.priority_at_submission} •{" "}
+                                <Link
+                                  href={analyticsTeamHref(
+                                    analyticsTeamId(claim.requested_club_name)
+                                  )}
+                                  className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                                >
+                                  {claim.requested_club_name}
+                                </Link>{" "}
+                                • {claim.requested_player_position}
                               </p>
                             </div>
                             <Button
@@ -458,7 +484,17 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                           </div>
                           {claim.dropped_player_name ? (
                             <p className="mt-2 text-sm leading-6 text-muted">
-                              Drop attached: {claim.dropped_player_name}
+                              Drop attached:{" "}
+                              {claim.dropped_player_id ? (
+                                <Link
+                                  href={fantasyPlayerHref(claim.dropped_player_id)}
+                                  className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                                >
+                                  {claim.dropped_player_name}
+                                </Link>
+                              ) : (
+                                claim.dropped_player_name
+                              )}
                             </p>
                           ) : null}
                           <p className="mt-2 text-sm leading-6 text-muted">
@@ -488,14 +524,35 @@ export function TransactionsClient({ leagueId }: TransactionsClientProps) {
                           className="rounded-[1.2rem] border border-line bg-night/35 px-4 py-3"
                         >
                           <p className="text-sm font-semibold text-foreground">
-                            {transaction.player_name}
+                            <Link
+                              href={fantasyPlayerHref(transaction.player_id)}
+                              className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                            >
+                              {transaction.player_name}
+                            </Link>
                           </p>
                           <p className="mt-1 text-xs uppercase tracking-[0.18em] text-muted">
-                            {transaction.type.replaceAll("_", " ")} • {transaction.status} • {transaction.club_name}
+                            {transaction.type.replaceAll("_", " ")} • {transaction.status} •{" "}
+                            <Link
+                              href={analyticsTeamHref(analyticsTeamId(transaction.club_name))}
+                              className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                            >
+                              {transaction.club_name}
+                            </Link>
                           </p>
                           {transaction.dropped_player_name ? (
                             <p className="mt-2 text-sm leading-6 text-muted">
-                              Dropped: {transaction.dropped_player_name}
+                              Dropped:{" "}
+                              {transaction.dropped_player_id ? (
+                                <Link
+                                  href={fantasyPlayerHref(transaction.dropped_player_id)}
+                                  className="hover:text-brand-strong hover:underline hover:underline-offset-4"
+                                >
+                                  {transaction.dropped_player_name}
+                                </Link>
+                              ) : (
+                                transaction.dropped_player_name
+                              )}
                             </p>
                           ) : null}
                           {transaction.note ? (
