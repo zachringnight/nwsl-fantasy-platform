@@ -7,7 +7,12 @@ import { FantasyDataProvider } from "@/components/providers/fantasy-data-provide
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
+const canonicalSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  "https://nwsl-fantasy-platform.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(canonicalSiteUrl),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
