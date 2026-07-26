@@ -1,6 +1,9 @@
 import pandas as pd
 
-from scripts.fetch_official_player_appearances import build_appearance_rows
+from scripts.fetch_official_player_appearances import (
+    build_appearance_rows,
+    build_match_crosswalk,
+)
 from src.data.official_api import (
     flatten_match_lineup,
     flatten_matches,
@@ -210,6 +213,42 @@ def test_build_appearance_rows_carries_match_date_utc() -> None:
     assert (rows["match_date_utc"] == "2026-05-24T00:00:00Z").all()
     assert (rows["match_id"] == "m1").all()
     assert (rows["season"] == 2026).all()
+
+
+def test_appearance_crosswalk_accepts_local_date_at_utc_boundary() -> None:
+    model_matches = pd.DataFrame(
+        [
+            {
+                "match_id": "espn-1",
+                "match_date": "2026-05-29",
+                "season": 2026,
+                "home_team": "Orlando Pride",
+                "away_team": "Bay FC",
+                "home_goals_90": 3,
+                "away_goals_90": 1,
+            }
+        ]
+    )
+    official_matches = [
+        {
+            "matchId": "official-1",
+            "matchDateUtc": "2026-05-30T00:10:00Z",
+            "matchDateLocal": "2026-05-29T20:10:00",
+            "home": {"officialName": "Orlando Pride"},
+            "away": {"officialName": "Bay"},
+            "providerHomeScore": 3,
+            "providerAwayScore": 1,
+        }
+    ]
+
+    crosswalk = build_match_crosswalk(
+        official_matches,
+        model_matches,
+        2026,
+        season_id="season-2026",
+    )
+
+    assert crosswalk == {"official-1": "espn-1"}
 
 
 def test_build_appearance_rows_output_is_superset_for_projected_lineups() -> None:

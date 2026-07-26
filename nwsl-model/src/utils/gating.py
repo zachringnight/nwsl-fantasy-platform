@@ -27,13 +27,14 @@ PURE_PROJECTION_THRESHOLDS = {
 }
 
 # Baseline (e.g. spi_lite_baseline) promotion gate. Backtest ROI is measured
-# on close-time, uncalibrated odds while live picks run on current, calibrated
-# odds and current gating -- the evidence does not directly transfer, so the
-# bar is raised well above "beats zero" and a caveat always ships alongside
-# the result so a human sees the gap even when the gate passes.
+# on structurally eligible close-time candidates with uncalibrated model
+# probabilities, while live picks run on current, calibrated odds and current
+# gating. The evidence does not directly transfer, so the bar is raised well
+# above "beats zero" and a caveat always ships alongside the result.
 BASELINE_EVIDENCE_CAVEAT = (
-    "OOS ROI measured on close-time, uncalibrated backtest odds; live picks run on "
-    "current, calibrated odds and current gating — this evidence does not directly transfer"
+    "OOS ROI measured on structurally eligible close-time candidates with uncalibrated "
+    "model probabilities; live picks run on current, calibrated odds and current gating "
+    "— this evidence does not directly transfer"
 )
 BASELINE_OOS_THRESHOLDS = {
     "min_n_blocks_tuned": 5,
@@ -179,6 +180,9 @@ def evaluate_baseline_go_live_gates(
     evidence_missing = not bool(oos_summary)
     oos_model = oos_summary.get("model") if oos_summary else None
     moneyline_oos = (oos_summary or {}).get("oos", {}).get("moneyline", {}) or {}
+    oos_metadata = (oos_summary or {}).get("metadata", {}) or {}
+    candidate_eligibility = oos_metadata.get("candidate_eligibility")
+    odds_source_types = oos_metadata.get("odds_source_types", [])
 
     eval_model = evaluation_summary.get("models", {}).get(strongest_name, {}) if strongest_name else {}
     classwise_ece = eval_model.get("classwise_ece", {})
@@ -198,6 +202,10 @@ def evaluate_baseline_go_live_gates(
         "classwise_ece_ok": max_class_ece <= PURE_PROJECTION_THRESHOLDS["classwise_ece"],
         "posthoc_calibration_available": posthoc_available,
         "is_strongest_baseline": is_strongest_baseline,
+        "oos_structural_eligibility_ok": (
+            candidate_eligibility == "structural_rules_v1"
+        ),
+        "oos_close_line_source_ok": odds_source_types == ["close"],
         "oos_n_blocks_tuned_ok": (
             (not evidence_missing) and float(n_blocks_tuned) >= BASELINE_OOS_THRESHOLDS["min_n_blocks_tuned"]
         ),
@@ -216,6 +224,8 @@ def evaluate_baseline_go_live_gates(
         "metrics": {
             "effective_log_loss_1x2": strongest_effective_log_loss,
             "max_classwise_ece": max_class_ece,
+            "oos_candidate_eligibility": candidate_eligibility,
+            "oos_odds_source_types": odds_source_types,
             "oos_moneyline": {
                 "n_blocks_tuned": n_blocks_tuned,
                 "n_bets": n_bets,

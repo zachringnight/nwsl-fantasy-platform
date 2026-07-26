@@ -152,6 +152,28 @@ def test_missing_market_probs_returns_base_prediction_with_fallback_flag() -> No
     assert pred.home_win_prob == base_model.home_prob
     assert pred.draw_prob == base_model.draw_prob
     assert pred.away_win_prob == base_model.away_prob
+    assert pred.metadata["market_source_type"] == "close"
+    assert pred.metadata["clv_vs_close_degenerate"] is True
+
+
+def test_opening_market_residual_marks_clv_as_non_degenerate() -> None:
+    base_model = _ConstantBaseModel()
+    model = MarketResidualModel(
+        base_model=base_model,
+        min_train_matches=5,
+        market_source_type="open",
+    )
+    model.fit(_synthetic_market_rows(30, seed=11), _StubContextProvider())
+
+    pred = model.predict_score_matrix(
+        "Home",
+        "Away",
+        market_probs=(0.5, 0.3, 0.2),
+        contextual_features={},
+    )
+
+    assert pred.metadata["market_source_type"] == "open"
+    assert pred.metadata["clv_vs_close_degenerate"] is False
 
 
 def test_unfitted_model_falls_back_even_with_market_probs_present() -> None:

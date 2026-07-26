@@ -70,7 +70,12 @@ def compute_clv_report(
             df["closing_odds"] = pd.to_numeric(df["closing_market_odds"], errors="coerce")
 
     if closing_odds is None or closing_odds.empty:
-        logger.warning("No closing odds available for CLV computation.")
+        has_precomputed_clv = (
+            "clv" in df.columns
+            and pd.to_numeric(df["clv"], errors="coerce").notna().any()
+        )
+        if not has_precomputed_clv:
+            logger.warning("No closing odds available for CLV computation.")
         if "closing_odds" not in df.columns:
             df["closing_odds"] = np.nan
         if "clv" not in df.columns:
@@ -78,8 +83,9 @@ def compute_clv_report(
             df["clv_pct"] = np.nan
         return df
 
-    # Attempt to merge closing odds
-    # This is a simplified merge; real implementation would match on market/side/line
+    # Match like-for-like close rows. Preserve any precomputed CLV when a
+    # historical close cannot be paired rather than overwriting it with a
+    # cross-market or cross-book value.
     if "closing_odds" not in df.columns:
         df["closing_odds"] = np.nan
     if "clv" not in df.columns:
@@ -87,33 +93,17 @@ def compute_clv_report(
         df["clv_pct"] = np.nan
 
     for idx, row in df.iterrows():
-        match_close = closing_odds[closing_odds["match_id"] == row["match_id"]]
-        if match_close.empty:
-            continue
-
-        # Try to find matching closing odds
-        close_row = match_close.iloc[0]
-        close_odds_val = np.nan
-
-        market = row.get("market", "")
-        side = row.get("side", "")
-
-        if "1x2" in market:
-            if side == "home" and "home_odds" in close_row:
-                close_odds_val = close_row["home_odds"]
-            elif side == "draw" and "draw_odds" in close_row:
-                close_odds_val = close_row["draw_odds"]
-            elif side == "away" and "away_odds" in close_row:
-                close_odds_val = close_row["away_odds"]
-        elif "total" in market or "over" in market or "under" in market:
-            if "over" in side and "over_odds" in close_row:
-                close_odds_val = close_row["over_odds"]
-            elif "under" in side and "under_odds" in close_row:
-                close_odds_val = close_row["under_odds"]
-
-        if not np.isnan(close_odds_val):
+        close_odds_val = match_closing_price(
+            closing_odds,
+            match_id=row.get("match_id"),
+            market=str(row.get("market", "")),
+            side=str(row.get("side", "")),
+            sportsbook=str(row.get("sportsbook")) if pd.notna(row.get("sportsbook")) else None,
+            line=row.get("line"),
+        )
+        if close_odds_val is not None:
             df.at[idx, "closing_odds"] = close_odds_val
-            df.at[idx, "clv"] = compute_clv(row["market_odds"], close_odds_val)
+            df.at[idx, "clv"] = compute_clv(float(row["market_odds"]), close_odds_val)
             df.at[idx, "clv_pct"] = df.at[idx, "clv"] * 100
 
     return df
@@ -140,6 +130,72 @@ _OPEN_CLOSE_COLUMNS = [
     "clv",
     "clv_pct",
 ]
+
+
+def match_closing_price(
+    closing_odds: pd.DataFrame,
+    *,
+    match_id: object,
+    market: str,
+    side: str,
+    sportsbook: str | None = None,
+    line: float | None = None,
+) -> float | None:
+    """Return the latest like-for-like closing price for one bet candidate.
+
+    CLV is only meaningful when the close is for the same match, market,
+    side, book, and (for totals) line as the evaluated price. Returning
+    ``None`` instead of falling back across books or markets keeps incomplete
+    pairs out of CLV summaries rather than silently manufacturing a zero.
+    """
+    if closing_odds is None or closing_odds.empty:
+        return None
+
+    rows = closing_odds.copy()
+    if "match_id" not in rows.columns:
+        return None
+    rows = rows[rows["match_id"].astype(str) == str(match_id)]
+    if rows.empty:
+        return None
+
+    if "source_type" in rows.columns:
+        rows = rows[rows["source_type"].astype(str).str.lower() == "close"]
+    if rows.empty:
+        return None
+
+    market_name = str(market).lower()
+    market_type = "1x2" if market_name.startswith("1x2_") else "total"
+    if "market_type" in rows.columns:
+        normalized_market_type = rows["market_type"].astype(str).str.lower().replace({"totals": "total"})
+        rows = rows[normalized_market_type == market_type]
+    if rows.empty:
+        return None
+
+    if not sportsbook or "sportsbook" not in rows.columns:
+        return None
+    rows = rows[rows["sportsbook"].astype(str) == str(sportsbook)]
+    if rows.empty:
+        return None
+
+    if market_type == "total":
+        if line is None or pd.isna(line) or "line" not in rows.columns:
+            return None
+        numeric_lines = pd.to_numeric(rows["line"], errors="coerce")
+        rows = rows[np.isclose(numeric_lines, float(line), equal_nan=False)]
+    if rows.empty:
+        return None
+
+    if "timestamp" in rows.columns:
+        rows = rows.assign(_timestamp_dt=parse_mixed_utc_datetime(rows["timestamp"]))
+        rows = rows.sort_values("_timestamp_dt", na_position="first")
+
+    odds_column = _SIDE_ODDS_COLUMNS.get(str(side).lower())
+    if odds_column is None or odds_column not in rows.columns:
+        return None
+    price = pd.to_numeric(rows.iloc[-1].get(odds_column), errors="coerce")
+    if pd.isna(price) or not np.isfinite(float(price)) or float(price) <= 1.0:
+        return None
+    return float(price)
 
 
 def open_close_clv_report(snapshots: pd.DataFrame) -> pd.DataFrame:

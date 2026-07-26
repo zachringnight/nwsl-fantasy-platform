@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+data/processed/research/
+data/processed/policy/
+data/raw/foxsports_current_totals_unmatched.csv
+data/raw/operational_feature_refresh.json

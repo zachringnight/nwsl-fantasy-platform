@@ -6,12 +6,12 @@ Falls back cleanly to the base model's raw prediction whenever no-vig market
 probabilities are unavailable or the classifier has not seen enough training
 rows to fit.
 
-This is a research candidate only. It settles bets at close odds using close
-odds as an input feature, which is a legitimate close-time betting strategy
-(the residual layer never sees test-fold rows during fit), but it makes
-CLV-vs-close a degenerate (always ~0) metric by construction -- callers
-should treat `metadata["clv_vs_close_degenerate"]` as an honesty flag, not a
-bug.
+This is a research candidate only. The operating default uses close odds as
+both an input feature and settlement price, which makes CLV-vs-close
+degenerate by construction. Opening-line research can instead fit and settle
+on opening odds, then pair the result to a later close; callers should inspect
+``metadata["market_source_type"]`` and
+``metadata["clv_vs_close_degenerate"]`` rather than assume one timing.
 """
 
 from __future__ import annotations
@@ -77,11 +77,13 @@ class MarketResidualModel:
         regularization_c: float = 1.0,
         min_train_matches: int = 60,
         max_goals: int = 8,
+        market_source_type: str = "close",
     ) -> None:
         self.base_model = base_model
         self.regularization_c = float(regularization_c)
         self.min_train_matches = int(min_train_matches)
         self.max_goals = int(max_goals)
+        self.market_source_type = str(market_source_type).strip().lower() or "close"
         self.fitted_: bool = False
         self.classifier_: LogisticRegression | None = None
         self.n_train_rows_: int = 0
@@ -168,7 +170,13 @@ class MarketResidualModel:
                 home_win_prob=base_pred.home_win_prob,
                 draw_prob=base_pred.draw_prob,
                 away_win_prob=base_pred.away_win_prob,
-                metadata={"model": "market_residual", "base": "spi_lite_baseline", "fallback": True},
+                metadata={
+                    "model": "market_residual",
+                    "base": "spi_lite_baseline",
+                    "fallback": True,
+                    "market_source_type": self.market_source_type,
+                    "clv_vs_close_degenerate": self.market_source_type == "close",
+                },
             )
 
         base_probs = (base_pred.home_win_prob, base_pred.draw_prob, base_pred.away_win_prob)
@@ -201,6 +209,7 @@ class MarketResidualModel:
                 "model": "market_residual",
                 "base": "spi_lite_baseline",
                 "fallback": False,
-                "clv_vs_close_degenerate": True,
+                "market_source_type": self.market_source_type,
+                "clv_vs_close_degenerate": self.market_source_type == "close",
             },
         )

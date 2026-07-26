@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 import pandas as pd
+import pytest
 
-from src.betting.clv import clv_summary, compute_clv_report, open_close_clv_report
+from src.betting.clv import (
+    clv_summary,
+    compute_clv_report,
+    match_closing_price,
+    open_close_clv_report,
+)
 
 
 def test_compute_clv_report_preserves_bet_log_clv_when_close_rematch_missing() -> None:
@@ -26,6 +32,148 @@ def test_compute_clv_report_preserves_bet_log_clv_when_close_rematch_missing() -
     assert report.loc[0, "clv"] == 0.0
     assert summary["n_bets_with_clv"] == 1
     assert summary["mean_clv"] == 0.0
+
+
+def test_match_closing_price_requires_same_market_book_and_total_line() -> None:
+    closes = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book A",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.90,
+                "draw_odds": 3.40,
+                "away_odds": 4.00,
+                "source_type": "close",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book A",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.80,
+                "under_odds": 2.00,
+                "source_type": "close",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book A",
+                "market_type": "total",
+                "line": 3.5,
+                "over_odds": 2.40,
+                "under_odds": 1.55,
+                "source_type": "close",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book B",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 2.25,
+                "draw_odds": 3.20,
+                "away_odds": 3.40,
+                "source_type": "close",
+            },
+        ]
+    )
+
+    assert match_closing_price(
+        closes,
+        match_id="m1",
+        market="1x2_home",
+        side="home",
+        sportsbook="Book A",
+    ) == 1.90
+    assert match_closing_price(
+        closes,
+        match_id="m1",
+        market="total_over_2.5",
+        side="over",
+        sportsbook="Book A",
+        line=2.5,
+    ) == 1.80
+    assert match_closing_price(
+        closes,
+        match_id="m1",
+        market="1x2_home",
+        side="home",
+        sportsbook="Missing Book",
+    ) is None
+    assert match_closing_price(
+        closes.drop(columns=["sportsbook"]),
+        match_id="m1",
+        market="1x2_home",
+        side="home",
+        sportsbook="Book A",
+    ) is None
+    assert match_closing_price(
+        closes,
+        match_id="m1",
+        market="1x2_home",
+        side="home",
+    ) is None
+
+
+def test_compute_clv_report_does_not_cross_match_market_or_sportsbook() -> None:
+    bet_log = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "market": "total_over_2.5",
+                "side": "over",
+                "line": 2.5,
+                "sportsbook": "Book A",
+                "market_odds": 2.10,
+                "closing_market_odds": float("nan"),
+                "clv": float("nan"),
+            }
+        ]
+    )
+    closes = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book A",
+                "market_type": "1x2",
+                "line": None,
+                "home_odds": 1.50,
+                "draw_odds": 4.00,
+                "away_odds": 7.00,
+                "source_type": "close",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book B",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.10,
+                "under_odds": 7.00,
+                "source_type": "close",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-05-29T17:00:00+00:00",
+                "sportsbook": "Book A",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.90,
+                "under_odds": 1.95,
+                "source_type": "close",
+            },
+        ]
+    )
+
+    report = compute_clv_report(bet_log, closes)
+
+    assert report.loc[0, "closing_odds"] == 1.90
+    assert report.loc[0, "clv"] == pytest.approx(2.10 / 1.90 - 1.0)
 
 
 def _snap(match_id, ts, book, mtype, **odds):

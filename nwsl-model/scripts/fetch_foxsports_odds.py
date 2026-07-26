@@ -39,6 +39,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", default="data/raw/odds.csv")
     parser.add_argument("--raw-output", default="data/raw/foxsports_current_totals_raw.json")
     parser.add_argument("--unmatched-output", default="data/raw/foxsports_current_totals_unmatched.csv")
+    parser.add_argument("--workers", type=positive_int, default=8)
     return parser.parse_args()
 
 
@@ -46,8 +47,19 @@ def main() -> None:
     args = parse_args()
     start_date = datetime.strptime(args.start_date, "%Y-%m-%d").date()
 
-    event_urls = discover_event_urls(start_date=start_date, days=args.days)
-    parsed, fetch_unmatched = fetch_current_total_rows(event_urls, captured_at=datetime.now(UTC))
+    discovery_unmatched: list[dict] = []
+    event_urls = discover_event_urls(
+        start_date=start_date,
+        days=args.days,
+        workers=args.workers,
+        failures=discovery_unmatched,
+    )
+    parsed, fetch_unmatched = fetch_current_total_rows(
+        event_urls,
+        captured_at=datetime.now(UTC),
+        workers=args.workers,
+    )
+    discovery_unmatched_frame = pd.DataFrame(discovery_unmatched)
 
     raw_output = Path(args.raw_output)
     raw_output.parent.mkdir(parents=True, exist_ok=True)
@@ -58,6 +70,7 @@ def main() -> None:
                 "days": args.days,
                 "event_urls": event_urls,
                 "parsed": parsed.to_dict(orient="records"),
+                "discovery_unmatched": discovery_unmatched,
                 "fetch_unmatched": fetch_unmatched.to_dict(orient="records"),
             },
             indent=2,
@@ -69,9 +82,21 @@ def main() -> None:
     upcoming = pd.read_csv(args.upcoming)
     contract, match_unmatched = build_current_total_contract(parsed, upcoming)
     unmatched = pd.concat(
-        [frame for frame in (fetch_unmatched, match_unmatched) if not frame.empty],
+        [
+            frame
+            for frame in (
+                discovery_unmatched_frame,
+                fetch_unmatched,
+                match_unmatched,
+            )
+            if not frame.empty
+        ],
         ignore_index=True,
-    ) if not fetch_unmatched.empty or not match_unmatched.empty else pd.DataFrame()
+    ) if (
+        not discovery_unmatched_frame.empty
+        or not fetch_unmatched.empty
+        or not match_unmatched.empty
+    ) else pd.DataFrame()
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)

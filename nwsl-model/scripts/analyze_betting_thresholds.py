@@ -20,6 +20,27 @@ from src.utils.io import save_csv, save_json
 DEFAULT_EDGE_THRESHOLDS = [0.0, 0.01, 0.02, 0.03, 0.05, 0.08, 0.10]
 DEFAULT_CONFIDENCE_THRESHOLDS = [0.0, 0.03, 0.05, 0.08, 0.10, 0.15]
 
+# These outcomes passed every structural market rule, or were rejected only
+# by a threshold/staking/gating decision that this research layer is allowed
+# to vary or evaluate independently. Price bounds, allowed-side rules,
+# probability-edge bounds, disabled markets, and incomplete lines are fixed
+# constraints and must never re-enter a threshold sweep.
+THRESHOLD_TUNABLE_DECISION_REASONS = frozenset(
+    {
+        "accepted",
+        "lean",
+        "lean_market_official_picks_disabled",
+        "lean_model_gating_not_passed",
+        "lean_confidence_below_official_threshold",
+        "lean_edge_below_official_threshold",
+        "official_picks_disabled",
+        "model_gating_not_passed",
+        "confidence_below_threshold",
+        "edge_below_threshold",
+        "slate_exposure_cap",
+    }
+)
+
 
 def _market_group(market: Any) -> str:
     text = str(market or "").lower()
@@ -64,6 +85,19 @@ def _settle_candidate(row: pd.Series) -> float:
     return 0.0
 
 
+def threshold_tunable_decision_mask(decisions: pd.DataFrame) -> pd.Series:
+    """Identify rows eligible for edge/confidence threshold research.
+
+    Older synthetic and historical inputs may predate the ``reason`` column;
+    those rows remain eligible for backward compatibility. When a reason is
+    present, fail closed to the explicit allowlist above.
+    """
+    if "reason" not in decisions.columns:
+        return pd.Series(True, index=decisions.index, dtype=bool)
+    reasons = decisions["reason"].fillna("").astype(str).str.strip().str.lower()
+    return reasons.isin(THRESHOLD_TUNABLE_DECISION_REASONS)
+
+
 def _prepare_candidates(decisions: pd.DataFrame, predictions: pd.DataFrame) -> pd.DataFrame:
     if decisions.empty:
         return pd.DataFrame()
@@ -75,7 +109,9 @@ def _prepare_candidates(decisions: pd.DataFrame, predictions: pd.DataFrame) -> p
         raise ValueError("predictions must include match_id, home_goals_90, and away_goals_90")
 
     preds = predictions[["match_id", "home_goals_90", "away_goals_90"]].drop_duplicates("match_id")
-    frame = decisions.copy()
+    frame = decisions.loc[threshold_tunable_decision_mask(decisions)].copy()
+    if frame.empty:
+        return pd.DataFrame()
     frame["match_id"] = frame["match_id"].astype(str)
     preds = preds.copy()
     preds["match_id"] = preds["match_id"].astype(str)
@@ -196,8 +232,27 @@ def main() -> None:
             continue
         summary.insert(0, "model", model)
         all_rows.append(summary)
+        tunable_mask = threshold_tunable_decision_mask(decisions)
+        excluded_reasons = (
+            decisions.loc[~tunable_mask, "reason"]
+            .fillna("<missing>")
+            .astype(str)
+            .value_counts()
+            .astype(int)
+            .to_dict()
+            if "reason" in decisions.columns
+            else {}
+        )
         model_summaries[model] = {
-            "candidate_rows": int(len(decisions)),
+            "decision_rows_input": int(len(decisions)),
+            "decision_rows_threshold_eligible": int(tunable_mask.sum()),
+            "decision_rows_excluded_by_structural_rule": int((~tunable_mask).sum()),
+            "structural_exclusion_reasons": excluded_reasons,
+            "candidate_eligibility": (
+                "structural_rules_v1"
+                if "reason" in decisions.columns
+                else "legacy_unverified"
+            ),
             "top_configs": _top_configs(summary, min_bets=args.min_bets),
         }
 

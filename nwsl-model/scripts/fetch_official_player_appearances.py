@@ -5,7 +5,9 @@ The official season stats endpoints only expose season-aggregated player rows.
 Per-match appearances (who started, who came on, minutes) live on the match
 ``lineups`` endpoint. This script walks every finished match in a season,
 derives appearance rows from the lineup payload, and writes them in the
-``player_match_logs`` schema that ``build_appearances`` consumes.
+``player_match_logs`` schema that ``build_appearances`` consumes. The default
+output is intentionally model-local because these rows have already been
+crosswalked from official IDs to the ESPN IDs used by matches and odds.
 
 Match ids are crosswalked to the ids used in ``data/raw/matches.csv`` via
 (date, canonical home, canonical away) so the resulting appearances join the
@@ -26,14 +28,15 @@ import pandas as pd
 MODEL_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(MODEL_ROOT))
 
-from src.data.official_api import (
+from src.data.official_api import (  # noqa: E402
     API_ROOT,
     fetch_json,
     fetch_match_lineup,
     flatten_match_lineup,
+    flatten_matches,
 )
-from src.data.team_names import canonicalize_team_name
-from src.utils.io import save_csv
+from src.data.match_ids import build_match_id_crosswalk  # noqa: E402
+from src.utils.io import save_csv  # noqa: E402
 
 COMPETITION_ID = "nwsl::Football_Competition::3293333447504e83986ec13e794b68ea"
 
@@ -60,25 +63,28 @@ def resolve_season_ids() -> dict[int, str]:
     return year_to_id
 
 
-def build_match_crosswalk(season_matches: list[dict], matches_csv: pd.DataFrame, season: int) -> dict[str, str]:
-    """Map API matchId -> matches.csv match_id via (date, home, away)."""
-    ref = matches_csv[matches_csv["season"].astype(str) == str(season)].copy()
-    ref["date"] = ref["match_date"].astype(str).str[:10]
-    ref["home"] = ref["home_team"].map(canonicalize_team_name)
-    ref["away"] = ref["away_team"].map(canonicalize_team_name)
-    lookup = {
-        (r["date"], r["home"], r["away"]): str(r["match_id"]) for _, r in ref.iterrows()
-    }
-    crosswalk: dict[str, str] = {}
-    for match in season_matches:
-        api_id = match.get("matchId")
-        date = (match.get("matchDateUtc") or "")[:10]
-        home = canonicalize_team_name((match.get("home") or {}).get("officialName", ""))
-        away = canonicalize_team_name((match.get("away") or {}).get("officialName", ""))
-        target = lookup.get((date, home, away))
-        if target is not None:
-            crosswalk[api_id] = target
-    return crosswalk
+def build_match_crosswalk(
+    season_matches: list[dict],
+    matches_csv: pd.DataFrame,
+    season: int,
+    season_id: str = "",
+) -> dict[str, str]:
+    """Map API matchId to model match_id across UTC/local date boundaries."""
+    official = flatten_matches(
+        season_matches,
+        season=season,
+        season_id=season_id,
+    )
+    crosswalk = build_match_id_crosswalk(matches_csv, official)
+    if crosswalk.empty:
+        return {}
+    return dict(
+        zip(
+            crosswalk["official_match_id"].astype(str),
+            crosswalk["model_match_id"].astype(str),
+            strict=True,
+        )
+    )
 
 
 def build_appearance_rows(
@@ -113,7 +119,12 @@ def fetch_season_appearances(season: int, season_id: str, matches_csv: pd.DataFr
         f"{API_ROOT}/seasons/{encoded_season}/matches?locale=en-US&page=1&pageNumElement=500"
     ).get("matches") or []
     finished = [m for m in season_matches if str(m.get("status", "")).upper() == "FINISHED"]
-    crosswalk = build_match_crosswalk(finished, matches_csv, season)
+    crosswalk = build_match_crosswalk(
+        finished,
+        matches_csv,
+        season,
+        season_id=season_id,
+    )
 
     def worker(match: dict) -> pd.DataFrame:
         api_id = match.get("matchId")
@@ -151,7 +162,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Fetch historical per-match player appearances")
     parser.add_argument("--seasons", nargs="+", type=int, default=[2025, 2026])
     parser.add_argument("--matches", default="data/raw/matches.csv")
-    parser.add_argument("--data-dir", default="data/nwsl-official")
+    parser.add_argument(
+        "--data-dir",
+        default="data/nwsl-official",
+        help="Directory for ESPN-ID-crosswalked per-match logs (relative to nwsl-model)",
+    )
     parser.add_argument("--workers", type=int, default=8)
     args = parser.parse_args()
 

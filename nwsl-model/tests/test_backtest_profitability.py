@@ -117,6 +117,111 @@ def test_backtest_settles_moneyline_and_total_bets_when_prices_exist() -> None:
     assert diagnostics["moneyline_away_n_bets"] == 0
 
 
+def test_opening_price_bets_are_paired_with_like_for_like_closing_prices() -> None:
+    runner = BacktestRunner(
+        {
+            "betting": {
+                "min_edge": 0.01,
+                "min_confidence": 0.01,
+                "max_stake_pct": 0.01,
+                "max_slate_exposure_pct": 0.05,
+                "starting_bankroll": 10000.0,
+            },
+            "backtest": {"odds_source_type": "open"},
+            "odds_provider": {"stale_line_minutes": 180},
+        }
+    )
+    staker = StakingEngine(
+        StakingConfig(
+            min_edge=0.01,
+            max_stake_pct=0.01,
+            max_slate_exposure_pct=0.05,
+            bankroll=10000.0,
+        )
+    )
+    markets = SimpleNamespace(
+        home_prob=0.80,
+        draw_prob=0.10,
+        away_prob=0.10,
+        over_probs={2.5: 0.70},
+        under_probs={2.5: 0.30},
+    )
+    opening_rows = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "timestamp": "2026-03-31T00:00:00+00:00",
+                "sportsbook": "DraftKings",
+                "source_type": "open",
+                "market_type": "1x2",
+                "home_odds": 1.70,
+                "draw_odds": 8.00,
+                "away_odds": 9.00,
+                "line": None,
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-03-31T00:00:00+00:00",
+                "sportsbook": "DraftKings",
+                "source_type": "open",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.95,
+                "under_odds": 2.00,
+            },
+        ]
+    )
+    closing_rows = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "timestamp": "2026-04-01T00:00:00+00:00",
+                "sportsbook": "DraftKings",
+                "source_type": "close",
+                "market_type": "1x2",
+                "home_odds": 1.50,
+                "draw_odds": 8.50,
+                "away_odds": 10.00,
+                "line": None,
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-04-01T00:00:00+00:00",
+                "sportsbook": "DraftKings",
+                "source_type": "close",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.80,
+                "under_odds": 2.10,
+            },
+        ]
+    )
+
+    runner._generate_and_settle_bets(
+        row=pd.Series(
+            {
+                "match_id": "m1",
+                "match_date": date(2026, 4, 1),
+                "home_goals_90": 2,
+                "away_goals_90": 1,
+            }
+        ),
+        pred=None,
+        markets=markets,
+        odds_rows=opening_rows,
+        closing_odds_rows=closing_rows,
+        staker=staker,
+        model_name="dixon_coles",
+    )
+
+    bets = staker.get_bet_log_df().set_index("market")
+    assert set(bets["source_type"]) == {"open"}
+    assert bets.loc["1x2_home", "closing_market_odds"] == 1.50
+    assert bets.loc["1x2_home", "clv"] == pytest.approx(1.70 / 1.50 - 1.0)
+    assert bets.loc["total_over_2.5", "closing_market_odds"] == 1.80
+    assert bets.loc["total_over_2.5", "clv"] == pytest.approx(1.95 / 1.80 - 1.0)
+
+
 def test_total_candidate_accepts_raw_line_column_from_odds_file() -> None:
     staker = StakingEngine(
         StakingConfig(
@@ -301,6 +406,39 @@ def test_spi_lite_baseline_backtest_settles_bets_via_full_run() -> None:
     assert not bet_log.empty
     assert (bet_log["pnl"] != 0).all()
     assert results["spi_lite_baseline"]["metrics"].get("n_bets", 0) > 0
+
+
+def test_full_backtest_uses_configured_opening_prices_and_reports_clv() -> None:
+    matches = _synthetic_baseline_matches()
+    closing = _moneyline_odds_for(matches)
+    opening = closing.copy()
+    opening["source_type"] = "open"
+    opening["timestamp"] = (
+        pd.to_datetime(opening["timestamp"], utc=True) - pd.Timedelta(days=1)
+    ).astype(str)
+    opening["home_odds"] = 3.30
+    opening["draw_odds"] = 4.20
+    opening["away_odds"] = 16.00
+    odds = pd.concat([opening, closing], ignore_index=True)
+    config = _baseline_backtest_config()
+    config["backtest"]["odds_source_type"] = "open"
+
+    runner = BacktestRunner(config)
+    results = runner.run(matches, odds=odds, models_to_run=["home_field_baseline"])
+
+    decisions = results["home_field_baseline"]["decision_log"]
+    assert set(decisions["source_type"]) == {"open"}
+    assert decisions["closing_market_price"].notna().all()
+    assert (decisions["clv"].abs() > 0).all()
+    metrics = results["home_field_baseline"]["metrics"]
+    assert metrics["odds_source_type"] == "open"
+    assert metrics["market_coverage"]["moneyline"]["matches_with_open_odds"] > 0
+    assert metrics["moneyline_n_bets_with_clv"] == metrics["moneyline_n_bets"]
+
+
+def test_backtest_rejects_unsupported_odds_source_type() -> None:
+    with pytest.raises(ValueError, match="Unsupported backtest.odds_source_type"):
+        BacktestRunner({"backtest": {"odds_source_type": "future"}})
 
 
 def test_baseline_predictions_include_main_total_columns() -> None:

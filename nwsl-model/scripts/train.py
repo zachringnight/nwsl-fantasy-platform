@@ -46,7 +46,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Train NWSL betting model")
     parser.add_argument("--config", type=str, default="configs/default.yaml")
     parser.add_argument("--model", type=str, default="all",
-                        choices=["dixon_coles", "bivariate_poisson", "all"])
+                        choices=[
+                            "dixon_coles",
+                            "bivariate_poisson",
+                            "team_ratings_only",
+                            "all",
+                        ])
     parser.add_argument("--output-dir", type=str, default="data/processed/models")
     parser.add_argument("--version", type=str, default="")
     parser.add_argument(
@@ -116,7 +121,7 @@ def main() -> None:
         prior_weight=ratings_cfg.get("prior_weight", 5.0),
         season_carryover=ratings_cfg.get("season_carryover", 0.6),
     ))
-    ratings = ratings_model.fit(team_matches)
+    ratings_model.fit(team_matches)
 
     # Lineup adjustment (if data available)
     lineup_model = None
@@ -153,10 +158,12 @@ def main() -> None:
 
     output_dir = create_version_dir(args.version or None, Path(args.output_dir))
 
-    models_to_train = (
-        ["dixon_coles", "bivariate_poisson"] if args.model == "all"
-        else [args.model]
-    )
+    if args.model == "all":
+        models_to_train = ["dixon_coles", "bivariate_poisson"]
+    elif args.model == "team_ratings_only":
+        models_to_train = []
+    else:
+        models_to_train = [args.model]
 
     model_cfg = config.get("model", {})
     max_goals = model_cfg.get("max_goals", 8)

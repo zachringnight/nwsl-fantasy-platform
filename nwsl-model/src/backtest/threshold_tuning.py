@@ -21,7 +21,10 @@ from typing import Any, Iterable
 
 import pandas as pd
 
-from scripts.analyze_betting_thresholds import _prepare_candidates
+from scripts.analyze_betting_thresholds import (
+    _prepare_candidates,
+    threshold_tunable_decision_mask,
+)
 
 MARKET_GROUPS: tuple[str, ...] = ("moneyline", "totals")
 
@@ -55,16 +58,17 @@ GLOBAL_MIN_EDGE_NOTE = (
     "jointly with the global floor, not in isolation."
 )
 
-CAVEATS: list[str] = [
+BASE_CAVEATS: list[str] = [
     "Backtest decision-log probabilities are uncalibrated (no OOF isotonic/"
     "Platt calibration applied at decision-log generation time).",
     "gating_status is hardcoded to 'passed' in backtest candidate generation; "
     "live promotion gating is not reflected in this evidence.",
-    "Odds coverage used here is close-line only; there is no current/live-line "
-    "sensitivity captured in these thresholds.",
     "The same underlying candidate can appear once per sportsbook row per "
     "market side; flat-stake settlement is applied over all candidate rows "
     "passing the cell thresholds, matching analyze_betting_thresholds.",
+    "Structural selection rules (market/side enablement, price bounds, and "
+    "probability-edge bounds) remain fixed; only rows rejected by tunable "
+    "edge/confidence, gating, or exposure decisions enter this sweep.",
 ]
 
 
@@ -113,16 +117,82 @@ def _build_metadata(
     rank_metric: str,
     model: str,
     generated_at: str,
+    decisions: pd.DataFrame | None,
 ) -> dict[str, Any]:
+    source_types: list[str] = []
+    if decisions is not None and not decisions.empty and "source_type" in decisions.columns:
+        source_types = sorted(
+            {
+                str(value).strip().lower()
+                for value in decisions["source_type"].dropna()
+                if str(value).strip()
+            }
+        )
+    if source_types == ["open"]:
+        odds_caveat = (
+            "Odds coverage used here is opening-line only; matched closes support "
+            "CLV diagnostics, but no current/live-line sensitivity is captured."
+        )
+    elif source_types == ["close"]:
+        odds_caveat = (
+            "Odds coverage used here is close-line only; there is no current/live-line "
+            "sensitivity captured in these thresholds."
+        )
+    elif source_types:
+        odds_caveat = (
+            f"Odds coverage mixes quote timings ({', '.join(source_types)}); interpret "
+            "threshold results separately by source before operational use."
+        )
+    else:
+        odds_caveat = "Odds quote timing is unavailable in the decision log."
+
+    decision_rows_input = int(len(decisions)) if decisions is not None else 0
+    if decisions is not None and not decisions.empty:
+        tunable_mask = threshold_tunable_decision_mask(decisions)
+        decision_rows_eligible = int(tunable_mask.sum())
+        excluded_reasons = (
+            decisions.loc[~tunable_mask, "reason"]
+            .fillna("<missing>")
+            .astype(str)
+            .value_counts()
+            .astype(int)
+            .to_dict()
+            if "reason" in decisions.columns
+            else {}
+        )
+    else:
+        decision_rows_eligible = 0
+        excluded_reasons = {}
+
+    candidate_eligibility = (
+        "structural_rules_v1"
+        if decisions is not None and "reason" in decisions.columns
+        else "legacy_unverified"
+    )
+    caveats = [*BASE_CAVEATS, odds_caveat]
+    if candidate_eligibility != "structural_rules_v1":
+        caveats.append(
+            "Decision reasons are unavailable, so structural-rule eligibility "
+            "cannot be verified and this evidence cannot pass promotion."
+        )
+
     return {
         "edge_grid": list(edge_grid),
         "confidence_grid": list(confidence_grid),
         "min_bets_per_cell": int(min_bets_per_cell),
         "min_history_bets": int(min_history_bets),
         "rank_metric": rank_metric,
-        "caveats": list(CAVEATS),
+        "caveats": caveats,
         "model": model,
         "generated_at": generated_at,
+        "odds_source_types": source_types,
+        "decision_rows_input": decision_rows_input,
+        "decision_rows_threshold_eligible": decision_rows_eligible,
+        "decision_rows_excluded_by_structural_rule": (
+            decision_rows_input - decision_rows_eligible
+        ),
+        "structural_exclusion_reasons": excluded_reasons,
+        "candidate_eligibility": candidate_eligibility,
         "evidence_missing": False,
     }
 
@@ -251,6 +321,7 @@ def run_nested_threshold_tuning(
         rank_metric=rank_metric,
         model=model,
         generated_at=generated_at,
+        decisions=decisions,
     )
 
     # Step 0: empty-input contract. No decision log, or no match_date

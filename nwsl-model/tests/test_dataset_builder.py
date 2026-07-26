@@ -225,6 +225,69 @@ def test_build_projected_lineups_prefers_recent_starters(tmp_path: Path) -> None
     assert portland_rows.loc["starter-1", "projected_minutes"] > portland_rows.loc["bench-1", "projected_minutes"]
 
 
+def test_build_projected_lineups_accepts_crosswalked_logs_path(tmp_path: Path) -> None:
+    repo_root = tmp_path / "repo"
+    model_root = tmp_path / "model"
+    matches_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_matches.csv"
+    profiles_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_profiles.csv"
+    logs_path = model_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv"
+
+    _write_csv(
+        matches_path,
+        [
+            {
+                "season": 2026,
+                "match_id": "official-upcoming",
+                "match_date_utc": "2026-07-30T00:00:00Z",
+                "status": "UPCOMING",
+                "home_official_name": "Portland Thorns",
+                "away_official_name": "Washington Spirit",
+                "home_score": None,
+                "away_score": None,
+            }
+        ],
+    )
+    _write_csv(
+        profiles_path,
+        [
+            {
+                "player_id": "recent-starter",
+                "team_name": "Portland Thorns",
+                "player_status": "Active",
+            },
+            {
+                "player_id": "ws-player",
+                "team_name": "Washington Spirit",
+                "player_status": "Active",
+            },
+        ],
+    )
+    _write_csv(
+        logs_path,
+        [
+            {
+                "player_id": "recent-starter",
+                "team_name": "Portland Thorns",
+                "match_id": "espn-completed",
+                "match_date_utc": "2026-07-20T00:00:00Z",
+                "gamestarted": 1,
+                "minsplayed": 90,
+            }
+        ],
+    )
+
+    projected = build_projected_lineups(
+        repo_root,
+        timestamp="2026-07-26T00:00:00Z",
+        logs_path=logs_path,
+    )
+
+    starter = projected.set_index("player_id").loc["recent-starter"]
+    assert starter["match_id"] == "official-upcoming"
+    assert bool(starter["projected_start"]) is True
+    assert starter["projected_minutes"] >= 58.0
+
+
 def test_build_projected_lineups_uses_last_season_role_proxy_when_current_logs_missing(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
     matches_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_matches.csv"

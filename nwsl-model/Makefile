@@ -1,7 +1,7 @@
 # Run make from nwsl-model/. pythonpath is cwd-relative (pyproject.toml),
 # and config paths (data.official_matches_dir etc.) assume this directory.
 
-.PHONY: test test-fast refresh backtest holdout slate
+.PHONY: test test-fast refresh backtest holdout slate policy-train policy-slate policy-settle
 
 test:
 	python3 -m pytest
@@ -15,9 +15,8 @@ test-fast:
 refresh:
 	python3 scripts/fetch_official_nwsl_data.py --season 2026
 	python3 scripts/fetch_official_player_appearances.py --seasons 2025 2026
-	python3 -c "from pathlib import Path; from src.data.dataset_builder import build_appearances; \
-	  build_appearances(Path('.')).to_csv('data/raw/appearances.csv', index=False)"
 	python3 scripts/fetch_asa_data.py --seasons 2025 2026
+	python3 scripts/rebuild_operational_features.py --season 2026
 	python3 scripts/fetch_nwsl_availability.py
 	python3 scripts/fetch_foxsports_odds.py --days 14
 	python3 -c "from pathlib import Path; import pandas as pd; from src.odds.apify_footystats import update_dataset_manifest_odds; \
@@ -33,3 +32,13 @@ holdout:
 
 slate:
 	python3 scripts/generate_betting_slate.py --days 14
+
+policy-train:
+	python3 scripts/train.py --model team_ratings_only \
+	  --output-dir data/processed/policy/nwsl-totals-open-over-v1/models
+
+policy-slate:
+	python3 scripts/generate_frozen_policy_slate.py --days 14
+
+policy-settle:
+	python3 scripts/settle_frozen_policy.py
