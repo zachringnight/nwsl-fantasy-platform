@@ -332,12 +332,6 @@ def validate_frozen_policy(
             "allowed_sides": [str(side).lower()],
             "flat_backtest_stake_units": 1.0,
             "forward_stake_cap_bankroll_pct": 0.25,
-            "full_promotion_min_forward_decisions": 50,
-            "historical_forward_test_decisions": test_metrics["unique_matches"],
-            "additional_live_decisions_required_for_full_promotion": max(
-                50 - test_metrics["unique_matches"],
-                0,
-            ),
             "require_fresh_price": True,
             "require_model_family_match": True,
         },

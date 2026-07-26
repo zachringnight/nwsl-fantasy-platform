@@ -122,9 +122,11 @@ Additional checks:
 - Every selected row is one unique match, structurally eligible, an over, and
   an OddsPortal average opening quote.
 
-The exported evidence status is `ready_for_capped_forward_use`. Full promotion
-still requires 50 forward decisions with positive ROI and CLV. The historical
-test supplies 30, leaving 20 additional locked live decisions.
+The exported evidence status is `ready_for_capped_forward_use`. By owner
+decision on 2026-07-26, there is no separate full-promotion decision quota or
+positive-ROI/CLV gate. Forward ROI and like-for-like CLV remain monitored
+evidence, while pick-level and source-health safeguards continue to fail
+closed.
 
 ## Current operational proof
 

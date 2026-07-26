@@ -18,7 +18,7 @@ src/
   odds/      # api_football shadow, foxsports, historical imports, freshness/quality
   utils/     # artifacts, gating, dates, io
 api/         # FastAPI prediction server (api/main.py, api/deps.py)
-tests/       # pytest suite (392 tests at the 2026-07-26 policy checkpoint)
+tests/       # pytest suite (393 tests at the 2026-07-26 policy checkpoint)
 configs/default.yaml   # single source of truth for all parameters
 ```
 
@@ -136,9 +136,9 @@ totals rules.
 - Stake cap: 0.25% of bankroll per locked match
 - Test design: thresholds selected on 2025 only and held fixed for the 2026
   rolling test
-- Full-promotion boundary: 50 forward decisions with positive ROI and CLV;
-  the historical forward test contributes 30, leaving 20 additional locked
-  live decisions
+- No separate full-promotion quota or ROI/CLV gate. The capped policy remains
+  governed by its pick-level thresholds, quote contract, and source-health
+  safeguards; forward ROI and CLV remain monitoring evidence.
 
 Rebuild the validation evidence:
 
@@ -219,6 +219,6 @@ Full definitions and optional columns: `src/data/schemas.py`.
 ## Testing
 
 ```bash
-python3 -m pytest                 # full suite (392 tests at this checkpoint)
+python3 -m pytest                 # full suite (393 tests at this checkpoint)
 make test-fast                    # skip the two slow files (optimizer fits + subprocess pipeline)
 ```
