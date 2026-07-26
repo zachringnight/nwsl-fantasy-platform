@@ -11,7 +11,7 @@ import {
 } from "@/lib/analytics/entity-routes";
 import { useAnalyticsSeason } from "@/components/analytics/season-selector";
 
-type StatusFilter = "all" | "completed" | "upcoming";
+type StatusFilter = "all" | "completed" | "live" | "upcoming";
 
 export default function MatchesPage() {
   const season = useAnalyticsSeason();
@@ -59,7 +59,7 @@ export default function MatchesPage() {
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex gap-1">
-          {(["all", "completed", "upcoming"] as StatusFilter[]).map((s) => (
+          {(["all", "completed", "live", "upcoming"] as StatusFilter[]).map((s) => (
             <button
               key={s}
               type="button"
@@ -116,10 +116,16 @@ export default function MatchesPage() {
                         tone={
                           match.status === "completed"
                             ? "default"
-                            : "brand"
+                            : match.status === "live"
+                              ? "accent"
+                              : "brand"
                         }
                       >
-                        {match.status === "completed" ? "FT" : "Upcoming"}
+                        {match.status === "completed"
+                          ? "FT"
+                          : match.status === "live"
+                            ? "LIVE"
+                            : "Upcoming"}
                       </Pill>
                     </div>
                     <div className="space-y-1">
@@ -131,7 +137,7 @@ export default function MatchesPage() {
                           {match.homeTeam}
                         </Link>
                         <span className="font-mono text-lg font-semibold text-foreground">
-                          {match.status === "completed" ? match.homeGoals : "-"}
+                          {match.status === "upcoming" ? "-" : match.homeGoals}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
@@ -142,7 +148,7 @@ export default function MatchesPage() {
                           {match.awayTeam}
                         </Link>
                         <span className="font-mono text-lg font-semibold text-foreground">
-                          {match.status === "completed" ? match.awayGoals : "-"}
+                          {match.status === "upcoming" ? "-" : match.awayGoals}
                         </span>
                       </div>
                     </div>

@@ -1,44 +1,130 @@
-"use client";
-
-import { useMemo } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
-import { MetricTile } from "@/components/ui/metric-tile";
+import { LiveMatchRefresh } from "@/components/analytics/live-match-refresh";
+import { LocalKickoffTime } from "@/components/analytics/local-kickoff-time";
+import { MatchStory } from "@/components/analytics/match-story";
 import { Pill } from "@/components/ui/pill";
-import { StatComparisonBar } from "@/components/analytics/stat-comparison-bar";
 import {
+  getLeagueTableBySeason,
   getMatchDetail,
   getMatchPrediction,
-  getPlayerIdByName,
+  getMatchResults,
+  getTeamRatings,
+  type Season,
 } from "@/lib/analytics/analytics-data";
+import { getEspnLiveMatch } from "@/lib/analytics/espn-live-match";
 import {
-  analyticsPlayerHref,
-  analyticsPredictionHref,
-  analyticsTeamHref,
-  analyticsTeamId,
-} from "@/lib/analytics/entity-routes";
+  buildMatchStateNarrative,
+  buildPrematchNarrative,
+  getHeadToHead,
+  getRecentTeamForm,
+  type RankedStanding,
+} from "@/lib/analytics/match-context";
+import { analyticsTeamHref } from "@/lib/analytics/entity-routes";
 
-export default function MatchDetailPage() {
-  const params = useParams<{ matchId: string }>();
-  const matchId = params.matchId;
+export const dynamic = "force-dynamic";
 
-  const match = useMemo(() => getMatchDetail(matchId), [matchId]);
-  const prediction = useMemo(() => getMatchPrediction(matchId), [matchId]);
+function rankedStanding(
+  standings: ReturnType<typeof getLeagueTableBySeason>,
+  teamId: string
+): RankedStanding | undefined {
+  const index = standings.findIndex((standing) => standing.teamId === teamId);
+  return index === -1
+    ? undefined
+    : {
+        rank: index + 1,
+        standing: standings[index],
+      };
+}
+
+export default async function MatchDetailPage({
+  params,
+}: {
+  params: Promise<{ matchId: string }>;
+}) {
+  const { matchId } = await params;
+  const match = getMatchDetail(matchId);
 
   if (!match) {
     return (
-      <AppShell eyebrow="Match Analytics" title="Not Found" description="Match not found.">
-        <Link href="/analytics/matches" className="text-sm text-brand-strong hover:underline">
+      <AppShell
+        eyebrow="Match Analytics"
+        title="Not Found"
+        description="Match not found."
+      >
+        <Link
+          href="/analytics/matches"
+          className="text-sm text-brand-strong hover:underline"
+        >
           Back to matches
         </Link>
       </AppShell>
     );
   }
 
-  const isCompleted = match.status === "completed";
-  const hasDetailedStats = match.homeShots > 0 || match.awayShots > 0;
+  const snapshot = await getEspnLiveMatch(matchId);
+  const phase =
+    snapshot?.phase ??
+    (match.status === "completed"
+      ? "final"
+      : match.status === "live"
+        ? "live"
+        : "prematch");
+  const homeScore = snapshot?.homeScore ?? match.homeGoals;
+  const awayScore = snapshot?.awayScore ?? match.awayGoals;
+  const prediction = getMatchPrediction(matchId);
+  const allMatches = getMatchResults();
+  const season: Season = match.date.startsWith("2025") ? "2025" : "2026";
+  const standings = getLeagueTableBySeason(season);
+  const ratings = getTeamRatings();
+  const homeStanding = rankedStanding(standings, match.homeTeamId);
+  const awayStanding = rankedStanding(standings, match.awayTeamId);
+  const homeForm = getRecentTeamForm(
+    allMatches,
+    match.homeTeamId,
+    match.date,
+    match.matchId
+  );
+  const awayForm = getRecentTeamForm(
+    allMatches,
+    match.awayTeamId,
+    match.date,
+    match.matchId
+  );
+  const headToHead = getHeadToHead(
+    allMatches,
+    match.homeTeamId,
+    match.awayTeamId,
+    match.date,
+    match.matchId
+  );
+  const narrative =
+    phase === "prematch"
+      ? buildPrematchNarrative({
+          match,
+          prediction,
+          homeStanding,
+          awayStanding,
+          homeForm,
+          awayForm,
+          homeRating: ratings.find(
+            (rating) => rating.teamId === match.homeTeamId
+          ),
+          awayRating: ratings.find(
+            (rating) => rating.teamId === match.awayTeamId
+          ),
+        })
+      : buildMatchStateNarrative({
+          phase,
+          statusLabel: snapshot?.statusLabel ?? "Full time",
+          homeTeam: match.homeTeam,
+          awayTeam: match.awayTeam,
+          homeScore,
+          awayScore,
+          stats: snapshot?.stats ?? null,
+          events: snapshot?.events ?? [],
+        });
 
   return (
     <AppShell
@@ -60,7 +146,7 @@ export default function MatchDetailPage() {
           </Link>
         </>
       }
-      description={match.venue}
+      description={snapshot?.venue || match.venue}
       actions={
         <Link
           href="/analytics/matches"
@@ -71,7 +157,6 @@ export default function MatchDetailPage() {
         </Link>
       }
     >
-      {/* Score and connected team profiles */}
       <section className="flex items-center justify-center gap-6 py-4 sm:gap-10">
         <div className="min-w-0 flex-1 text-right">
           <Link
@@ -80,16 +165,36 @@ export default function MatchDetailPage() {
           >
             {match.homeTeam}
           </Link>
-          {isCompleted ? (
+          {phase !== "prematch" ? (
             <p className="font-display text-7xl leading-none text-foreground">
-              {match.homeGoals}
+              {homeScore}
             </p>
           ) : null}
         </div>
         <div className="shrink-0 text-center">
-          <Pill tone={isCompleted ? "default" : "brand"}>
-            {isCompleted ? "FT" : "VS"}
+          <Pill
+            tone={
+              phase === "live"
+                ? "accent"
+                : phase === "prematch"
+                  ? "brand"
+                  : "default"
+            }
+          >
+            {phase === "live" ? "LIVE" : phase === "final" ? "FT" : "VS"}
           </Pill>
+          {phase === "live" && snapshot?.statusLabel ? (
+            <p className="mt-2 max-w-28 text-xs text-muted">
+              {snapshot.statusLabel}
+            </p>
+          ) : phase === "prematch" ? (
+            <p className="mt-2 max-w-36 text-xs leading-5 text-muted">
+              <LocalKickoffTime
+                value={snapshot?.kickoff ?? null}
+                fallback={match.date}
+              />
+            </p>
+          ) : null}
         </div>
         <div className="min-w-0 flex-1 text-left">
           <Link
@@ -98,128 +203,28 @@ export default function MatchDetailPage() {
           >
             {match.awayTeam}
           </Link>
-          {isCompleted ? (
+          {phase !== "prematch" ? (
             <p className="font-display text-7xl leading-none text-foreground">
-              {match.awayGoals}
+              {awayScore}
             </p>
           ) : null}
         </div>
       </section>
 
-      {/* Stats Comparison */}
-      {isCompleted && hasDetailedStats && (
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5 space-y-4">
-          <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Match Stats
-          </h3>
-          <StatComparisonBar label="Shots" homeValue={match.homeShots} awayValue={match.awayShots} />
-          <StatComparisonBar label="On Target" homeValue={match.homeShotsOnTarget} awayValue={match.awayShotsOnTarget} />
-          <StatComparisonBar
-            label="Possession"
-            homeValue={match.homePossession}
-            awayValue={match.awayPossession}
-            format={(v) => `${v.toFixed(0)}%`}
-          />
-          <StatComparisonBar label="Corners" homeValue={match.homeCorners} awayValue={match.awayCorners} />
-          <StatComparisonBar label="Fouls" homeValue={match.homeFouls} awayValue={match.awayFouls} />
-        </section>
-      )}
+      <LiveMatchRefresh active={phase === "live"} />
 
-      {/* Match Info (when no detailed stats) */}
-      {isCompleted && !hasDetailedStats && (
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <MetricTile label="Venue" value={match.venue} />
-            <MetricTile label="Date" value={match.date} />
-            <MetricTile label="Status" value="Full Time" />
-          </div>
-        </section>
-      )}
-
-      {/* Match Events */}
-      {isCompleted && match.events.length > 0 && (
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            Match Timeline
-          </h3>
-          <div className="space-y-3">
-            {match.events.map((event, i) => {
-              const playerId = getPlayerIdByName(event.playerName);
-
-              return (
-                <div
-                  key={`${event.minute}-${event.playerName}-${i}`}
-                  className="flex items-center gap-4"
-                >
-                  <span className="w-10 text-right font-mono text-sm text-muted">
-                    {event.minute}&apos;
-                  </span>
-                  <span className="flex size-6 items-center justify-center rounded-full bg-brand-strong/20 text-xs">
-                    {event.type === "goal" ? "G" : event.type === "yellow_card" ? "Y" : event.type === "red_card" ? "R" : "S"}
-                  </span>
-                  <div>
-                    {playerId ? (
-                      <Link
-                        href={analyticsPlayerHref(playerId)}
-                        className="text-sm font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                      >
-                        {event.playerName}
-                      </Link>
-                    ) : (
-                      <span className="text-sm font-medium text-foreground">
-                        {event.playerName}
-                      </span>
-                    )}
-                    <span className="ml-2 text-xs text-muted">
-                      (
-                      <Link
-                        href={analyticsTeamHref(analyticsTeamId(event.team))}
-                        className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                      >
-                        {event.team}
-                      </Link>
-                      )
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Prediction (for upcoming matches or as comparison) */}
-      {prediction && (
-        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-            {isCompleted ? "Pre-Match Prediction" : "Model Prediction"}
-          </h3>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <MetricTile
-              label={match.homeTeam}
-              value={`${(prediction.homeProb * 100).toFixed(0)}%`}
-              tone="brand"
-            />
-            <MetricTile
-              label="Draw"
-              value={`${(prediction.drawProb * 100).toFixed(0)}%`}
-            />
-            <MetricTile
-              label={match.awayTeam}
-              value={`${(prediction.awayProb * 100).toFixed(0)}%`}
-              tone="accent"
-            />
-          </div>
-          <div className="mt-4">
-            <Link
-              href={analyticsPredictionHref(matchId)}
-              className="text-sm text-brand-strong hover:underline"
-            >
-              View full prediction details
-            </Link>
-          </div>
-        </section>
-      )}
+      <MatchStory
+        match={match}
+        phase={phase}
+        snapshot={snapshot}
+        prediction={prediction}
+        narrative={narrative}
+        homeStanding={homeStanding}
+        awayStanding={awayStanding}
+        homeForm={homeForm}
+        awayForm={awayForm}
+        headToHead={headToHead}
+      />
     </AppShell>
   );
 }
