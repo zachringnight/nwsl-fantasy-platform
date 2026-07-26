@@ -15,10 +15,10 @@ src/
              # totals_market_model, market_blend, calibration, team_ratings
   betting/   # score_matrix, market_derivation, recommendations, staking, clv
   backtest/  # splitter, runner, threshold_tuning, metrics, reports
-  odds/      # apify_footystats, apify_oddsportal, foxsports, provider, quality
+  odds/      # api_football shadow, foxsports, historical imports, freshness/quality
   utils/     # artifacts, gating, dates, io
 api/         # FastAPI prediction server (api/main.py, api/deps.py)
-tests/       # pytest suite (381 tests at the 2026-07-26 policy checkpoint)
+tests/       # pytest suite (392 tests at the 2026-07-26 policy checkpoint)
 configs/default.yaml   # single source of truth for all parameters
 ```
 
@@ -36,13 +36,42 @@ python3 scripts/fetch_official_player_appearances.py --seasons 2025 2026
 python3 scripts/fetch_asa_data.py --seasons 2025 2026
 python3 scripts/rebuild_operational_features.py --season 2026
 python3 scripts/fetch_nwsl_availability.py
-python3 scripts/fetch_foxsports_odds.py --days 14
-python3 -c "from pathlib import Path; import pandas as pd; from src.odds.apify_footystats import update_dataset_manifest_odds; \
-  update_dataset_manifest_odds(Path('data/raw/dataset_manifest.json'), pd.read_csv('data/raw/odds.csv'))"
-python3 scripts/append_odds_snapshot.py --incoming data/raw/odds.csv --snapshot data/raw/odds_snapshots.csv
+bash scripts/poll_current_odds.sh
 python3 scripts/audit_model_inputs.py --config configs/default.yaml --artifact-root data/processed/models
 ```
-Or `make refresh` for everything except the ESPN pair. No Apify, no tokens needed for any of the above.
+Or `make refresh` for everything except the ESPN pair. No local odds credential
+or Apify token is needed: the poller reads the fixed, cached API-Football NWSL
+feed and the public FOX pages.
+
+The lightweight source-only command is:
+
+```bash
+make odds-poll
+```
+
+It performs five bounded actions:
+
+1. Captures multi-book API-Football goal totals into
+   `data/raw/api_football_shadow_current.csv` and its own snapshot history.
+2. Refreshes FOX Sports into the authoritative `odds.csv`.
+3. Removes rows older than `odds_provider.stale_line_minutes` that are still
+   labeled `current`; historical `open`, `close`, and shadow evidence is kept.
+4. Captures the cleaned authoritative line history for CLV.
+5. Writes `data/raw/odds_source_health.json`, including a forward-observation
+   gate for API-Football.
+
+API-Football is deliberately shadow-only. It cannot affect picks until it has
+at least seven observation days, five matched fixtures, two sportsbooks, full
+freshness, zero unmatched rows, and at least 90% coverage of FOX-priced
+fixtures. Clearing those checks only makes the feed ready for manual review;
+promotion is never automatic. Set `ENABLE_LEGACY_APIFY_ODDS=1` only for an
+explicit diagnostic retry of the old DraftKings/FootyStats actors.
+
+The recurring Codex cadence is intentionally bounded: the full tracker runs
+once at 8:00 AM Pacific every day. On dates present in `upcoming.csv`, two
+additional gated runs occur at 2:00 PM and 8:00 PM Pacific. The extra task runs
+`scripts/run_matchday_refresh_if_scheduled.sh`, which exits before any provider
+call on non-match days.
 
 Historical closing-odds backfill (OddsPortal, direct HTTP, no Apify/tokens):
 ```bash
@@ -183,10 +212,13 @@ Full definitions and optional columns: `src/data/schemas.py`.
 5. Policy-only ratings belong under
    `data/processed/policy/nwsl-totals-open-over-v1/models`, never the global
    `data/processed/models` root.
+6. `api_football_shadow_*` files are research evidence only. Never merge them
+   into `odds.csv` or change their `source_type` without an explicit,
+   forward-validated policy review.
 
 ## Testing
 
 ```bash
-python3 -m pytest                 # full suite (381 tests at this checkpoint)
+python3 -m pytest                 # full suite (392 tests at this checkpoint)
 make test-fast                    # skip the two slow files (optimizer fits + subprocess pipeline)
 ```

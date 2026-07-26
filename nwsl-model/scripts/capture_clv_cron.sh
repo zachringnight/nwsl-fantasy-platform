@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Recurring CLV capture: refresh current odds from each book, then append the
-# live line into the snapshot store so open->close movement accumulates.
+# Recurring CLV capture: run the lightweight source poller, then accumulate the
+# official availability report.
 #
-# Each fetch reads its Apify token from the gitignored .env.local itself, so the
-# token is never placed in the shell environment or logged here. A single book
-# failing (proxy hiccup, no upcoming slate) must not block the others or the
-# snapshot append, so fetches are run best-effort.
+# API-Football is captured in a separate shadow history. FOX Sports remains the
+# authoritative totals source until the forward health gate is ready for manual
+# review. The poller removes stale rows before capturing the active snapshot.
 #
 # Install via launchd/cron to run a few times a day. See README note at bottom.
 
@@ -30,13 +29,7 @@ run_step() {
     fi
 }
 
-# Best-effort refresh of each book's current line into data/raw/odds.csv.
-run_step "draftkings" "$PY" scripts/fetch_apify_draftkings_odds.py
-run_step "footystats" "$PY" scripts/fetch_apify_footystats_odds.py
-run_step "foxsports"  "$PY" scripts/fetch_foxsports_odds.py
-
-# Append whatever live rows now sit in odds.csv into the snapshot history.
-run_step "snapshot" "$PY" scripts/capture_clv_snapshot.py
+run_step "odds_poll" bash scripts/poll_current_odds.sh
 
 # Accumulate the weekly official availability report (injury/suspension/intl
 # duty) into its dated snapshot store so historical availability builds up.
