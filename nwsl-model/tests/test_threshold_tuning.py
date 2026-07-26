@@ -184,6 +184,88 @@ def test_oos_accumulation_matches_hand_computed_values():
     assert summary["n_blocks_fallback"] == 1
 
 
+def test_structural_market_rejections_cannot_reenter_threshold_sweep():
+    decisions = pd.DataFrame(
+        [
+            {
+                **_decision(
+                    "eligible_win",
+                    "2026-01-01",
+                    edge=0.10,
+                    confidence=0.10,
+                    price=2.0,
+                ),
+                "reason": "edge_below_threshold",
+                "source_type": "open",
+            },
+            {
+                **_decision(
+                    "excluded_longshot",
+                    "2026-01-01",
+                    edge=0.50,
+                    confidence=0.50,
+                    price=10.0,
+                ),
+                "reason": "market_price_above_max",
+                "source_type": "open",
+            },
+            {
+                **_decision(
+                    "eligible_loss",
+                    "2026-01-02",
+                    edge=0.10,
+                    confidence=0.10,
+                    price=2.0,
+                ),
+                "reason": "accepted",
+                "source_type": "open",
+            },
+        ]
+    )
+    predictions = pd.DataFrame(
+        [
+            _prediction("eligible_win", 1, 0),
+            _prediction("excluded_longshot", 1, 0),
+            _prediction("eligible_loss", 0, 1),
+        ]
+    )
+
+    result = _run(
+        decisions,
+        predictions,
+        min_history_bets=99,
+        min_bets_per_cell=1,
+        base_thresholds={
+            "moneyline": {"min_edge": 0.0, "min_confidence": 0.0},
+            "totals": {"min_edge": 0.0, "min_confidence": 0.0},
+        },
+    )
+
+    summary = result.oos_summary["moneyline"]
+    assert summary["n_bets"] == 2
+    assert summary["pnl_units"] == 0.0
+    assert result.metadata["odds_source_types"] == ["open"]
+    assert result.metadata["decision_rows_input"] == 3
+    assert result.metadata["decision_rows_threshold_eligible"] == 2
+    assert result.metadata["decision_rows_excluded_by_structural_rule"] == 1
+    assert result.metadata["structural_exclusion_reasons"] == {
+        "market_price_above_max": 1
+    }
+    assert any("opening-line only" in caveat for caveat in result.metadata["caveats"])
+    assert not any("close-line only" in caveat for caveat in result.metadata["caveats"])
+
+
+def test_legacy_decisions_without_reasons_cannot_claim_structural_eligibility():
+    decisions, predictions = _base_fixture()
+
+    result = _run(decisions, predictions)
+
+    assert result.metadata["candidate_eligibility"] == "legacy_unverified"
+    assert any(
+        "cannot pass promotion" in caveat for caveat in result.metadata["caveats"]
+    )
+
+
 def test_recommended_shape_matches_market_rules_fragment_and_json_roundtrips():
     decisions, predictions = _base_fixture()
     result = _run(decisions, predictions)

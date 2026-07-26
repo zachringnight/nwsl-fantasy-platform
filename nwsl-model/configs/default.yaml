@@ -197,6 +197,9 @@ betting:
 backtest:
   # Minimum training matches before first prediction
   min_train_matches: 50
+  # Historical price used to evaluate model decisions. Keep close as the
+  # operating default; use the CLI's --odds-source-type open for CLV research.
+  odds_source_type: "close"
   # Step size: predict this many matches at a time for the operating validation sweep.
   step_size: 28
   # Deep feature ablations are useful for research runs but too slow for the operating pipeline.

@@ -283,7 +283,11 @@ def _passing_oos_summary(model: str = "spi_lite_baseline") -> dict:
             "totals": {"n_bets": 0, "pnl_units": 0.0, "roi_units": 0.0, "hit_rate": 0.0, "n_blocks_tuned": 0, "n_blocks_fallback": 0},
         },
         "recommended": {},
-        "metadata": {"evidence_missing": False},
+        "metadata": {
+            "evidence_missing": False,
+            "candidate_eligibility": "structural_rules_v1",
+            "odds_source_types": ["close"],
+        },
     }
 
 
@@ -365,10 +369,42 @@ def test_evaluate_baseline_go_live_gates_fails_when_oos_evidence_targets_a_diffe
     assert result["checks"]["is_strongest_baseline"] is False
 
 
+@pytest.mark.parametrize(
+    ("metadata_update", "failed_check"),
+    [
+        (
+            {"candidate_eligibility": "unfiltered"},
+            "oos_structural_eligibility_ok",
+        ),
+        (
+            {"odds_source_types": ["open"]},
+            "oos_close_line_source_ok",
+        ),
+    ],
+)
+def test_evaluate_baseline_go_live_gates_rejects_incompatible_oos_evidence(
+    metadata_update,
+    failed_check,
+) -> None:
+    oos_summary = _passing_oos_summary()
+    oos_summary["metadata"].update(metadata_update)
+
+    result = evaluate_baseline_go_live_gates(
+        backtest_summary=_baseline_backtest_summary(),
+        evaluation_summary=_baseline_evaluation_summary(),
+        dataset_manifest=_dataset_manifest(),
+        oos_summary=oos_summary,
+    )
+
+    assert result["passed"] is False
+    assert result["checks"][failed_check] is False
+
+
 def test_evaluate_baseline_go_live_gates_evidence_caveat_present_regardless_of_pass_fail() -> None:
     expected_caveat = (
-        "OOS ROI measured on close-time, uncalibrated backtest odds; live picks run on "
-        "current, calibrated odds and current gating — this evidence does not directly transfer"
+        "OOS ROI measured on structurally eligible close-time candidates with uncalibrated "
+        "model probabilities; live picks run on current, calibrated odds and current gating "
+        "— this evidence does not directly transfer"
     )
     failing = evaluate_baseline_go_live_gates(
         backtest_summary=_baseline_backtest_summary(),

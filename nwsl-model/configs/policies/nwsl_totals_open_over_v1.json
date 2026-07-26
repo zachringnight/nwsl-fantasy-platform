@@ -1,0 +1,128 @@
+{
+  "policy_id": "nwsl-totals-open-over-v1",
+  "evidence_version": "2026-07-26",
+  "status": "ready_for_capped_forward_use",
+  "model_family": "team_ratings_poisson",
+  "market_group": "totals",
+  "side": "over",
+  "odds_source_types": [
+    "open"
+  ],
+  "train_season": 2025,
+  "test_season": 2026,
+  "thresholds": {
+    "min_edge": 0.02,
+    "min_confidence": 0.03,
+    "selection_source": "tuned",
+    "rank_metric": "roi_units",
+    "training_cell": {
+      "min_edge": 0.02,
+      "min_confidence": 0.03,
+      "n_bets": 26,
+      "pnl_units": 2.2,
+      "roi_units": 0.0846153846153846,
+      "hit_rate": 0.5769230769230769,
+      "wins": 15
+    }
+  },
+  "train": {
+    "n_bets": 26,
+    "unique_matches": 26,
+    "pnl_units": 2.2,
+    "roi_units": 0.0846153846153846,
+    "hit_rate": 0.5769230769230769,
+    "mean_clv": 0.0247718576174926,
+    "positive_clv_rate": 0.4615384615384616,
+    "average_market_price": 1.8746153846153848,
+    "first_match_date": "2025-05-11",
+    "last_match_date": "2025-11-02"
+  },
+  "test": {
+    "n_bets": 30,
+    "unique_matches": 30,
+    "pnl_units": 10.685,
+    "roi_units": 0.3561666666666666,
+    "hit_rate": 0.7333333333333333,
+    "mean_clv": 0.0461381436033716,
+    "positive_clv_rate": 0.7,
+    "average_market_price": 1.8486666666666665,
+    "first_match_date": "2026-03-14",
+    "last_match_date": "2026-07-18"
+  },
+  "naive_always_side_comparator": {
+    "train": {
+      "n_bets": 102,
+      "roi_units": -0.1631372549019608
+    },
+    "test": {
+      "n_bets": 115,
+      "roi_units": 0.0422608695652174
+    },
+    "test_roi_lift": 0.3139057971014492
+  },
+  "bootstrap": {
+    "iterations": 20000,
+    "seed": 20260726,
+    "clusters": 30,
+    "roi_95_ci": [
+      0.0453291666666667,
+      0.6381708333333329
+    ],
+    "clv_95_ci": [
+      0.0294077081712476,
+      0.0640388626528191
+    ],
+    "probability_roi_positive": 0.98605,
+    "probability_clv_positive": 1.0
+  },
+  "threshold_grid_robustness": {
+    "eligible_cells": 35,
+    "positive_test_roi_cells": 35,
+    "positive_test_clv_cells": 35,
+    "positive_test_roi_share": 1.0,
+    "positive_test_clv_share": 1.0,
+    "minimum_required_share": 0.8
+  },
+  "readiness_checks": {
+    "thresholds_selected_on_training_only": true,
+    "opening_quotes_only": true,
+    "test_sample_minimum_met": true,
+    "one_bet_per_test_match": true,
+    "roi_interval_above_zero": true,
+    "clv_interval_above_zero": true,
+    "threshold_grid_roi_robust": true,
+    "threshold_grid_clv_robust": true
+  },
+  "candidate_eligibility": {
+    "contract": "structural_rules_v1",
+    "decision_rows_input": 1069,
+    "decision_rows_threshold_eligible": 763,
+    "decision_rows_structurally_excluded": 306
+  },
+  "operating_contract": {
+    "quote_timing": "opening_or_first_seen_only",
+    "market": "total",
+    "allowed_sides": [
+      "over"
+    ],
+    "flat_backtest_stake_units": 1.0,
+    "forward_stake_cap_bankroll_pct": 0.25,
+    "full_promotion_min_forward_decisions": 50,
+    "historical_forward_test_decisions": 30,
+    "additional_live_decisions_required_for_full_promotion": 20,
+    "require_fresh_price": true,
+    "require_model_family_match": true
+  },
+  "source_artifacts": {
+    "backtest_dir": "data/processed/research/opening-line-2026-07-26",
+    "decision_log": "decision_log_team_ratings_poisson.csv",
+    "predictions": "predictions_team_ratings_poisson.csv",
+    "reproduction_script": "scripts/validate_frozen_policy.py"
+  },
+  "caveats": [
+    "The test is walk-forward by match date, but model ratings may update from earlier test-season results; only thresholds remain frozen.",
+    "Evidence uses OddsPortal average opening prices and exact matched closes, not arbitrary intraday or closing prices.",
+    "The bootstrap resamples matches and does not remove league-wide regime risk.",
+    "Forward use must keep the policy, model, side, and quote-timing contract unchanged and track every eligible decision."
+  ]
+}

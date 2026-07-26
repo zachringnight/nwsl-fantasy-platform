@@ -62,13 +62,27 @@ def season_split(matches: pd.DataFrame, train_season: int, test_season: int) -> 
     return train, test
 
 
-def _prepare_matches(matches: pd.DataFrame, odds: pd.DataFrame | None) -> pd.DataFrame:
+def _prepare_matches(
+    matches: pd.DataFrame,
+    odds: pd.DataFrame | None,
+    *,
+    odds_source_type: str = "close",
+) -> pd.DataFrame:
     prepared = run_all_validations(matches)
     prepared = add_result_columns(prepared)
     prepared = add_npxg_fallback(prepared)
     if odds is not None and not odds.empty:
-        prepared = merge_odds_to_matches(prepared, odds)
-        prepared = merge_odds_to_matches(prepared, odds, market_type="total")
+        prepared = merge_odds_to_matches(
+            prepared,
+            odds,
+            source_type=odds_source_type,
+        )
+        prepared = merge_odds_to_matches(
+            prepared,
+            odds,
+            source_type=odds_source_type,
+            market_type="total",
+        )
         prepared = compute_market_probabilities(prepared)
         prepared = compute_totals_market_probabilities(prepared)
     return prepared
@@ -119,7 +133,14 @@ def run_season_holdout(
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Fit requested models on train_season and evaluate on test_season."""
     dataset = NWSLDataset.from_config(_holdout_config(config, train_season, test_season))
-    matches = _prepare_matches(dataset.matches, dataset.odds)
+    odds_source_type = str(
+        config.get("backtest", {}).get("odds_source_type", "close")
+    ).lower()
+    matches = _prepare_matches(
+        dataset.matches,
+        dataset.odds,
+        odds_source_type=odds_source_type,
+    )
     train, test = season_split(matches, train_season, test_season)
     fold = BacktestFold(
         fold_id=0,
@@ -177,6 +198,7 @@ def run_season_holdout(
         "train_date_range": [str(train["match_date"].min()), str(train["match_date"].max())],
         "test_date_range": [str(test["match_date"].min()), str(test["match_date"].max())],
         "models": models_to_run,
+        "odds_source_type": odds_source_type,
     }
     return all_results, metadata
 
@@ -202,13 +224,27 @@ def main() -> None:
     parser.add_argument("--test-season", type=int, default=2026)
     parser.add_argument("--models", nargs="+", default=None)
     parser.add_argument("--output-dir", default="")
+    parser.add_argument(
+        "--odds-source-type",
+        choices=("close", "open"),
+        default="",
+        help="Historical quote timing to evaluate; opening runs are paired to closes for CLV.",
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
+    if args.odds_source_type:
+        config["backtest"] = {
+            **(config.get("backtest", {}) or {}),
+            "odds_source_type": args.odds_source_type,
+        }
+    odds_source_type = str(config.get("backtest", {}).get("odds_source_type", "close")).lower()
     requested_models = args.models or DEFAULT_MODELS
     models_to_run = resolve_models_to_run(requested_models, {**config.get("backtest", {}), "benchmarks": []})
+    output_suffix = "" if odds_source_type == "close" else f"_{odds_source_type}"
     output_dir = Path(args.output_dir) if args.output_dir else Path(
-        f"data/processed/season_holdout/{args.train_season}_to_{args.test_season}"
+        f"data/processed/season_holdout/"
+        f"{args.train_season}_to_{args.test_season}{output_suffix}"
     )
 
     results, metadata = run_season_holdout(

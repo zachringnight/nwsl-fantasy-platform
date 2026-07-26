@@ -25,11 +25,16 @@ from src.utils.io import load_config
 from src.utils.logging import setup_logging
 
 
-def _build_version_backtest_summary(report_summary: dict, version_name: str) -> dict:
+def _build_version_backtest_summary(
+    report_summary: dict,
+    version_name: str,
+    odds_source_type: str,
+) -> dict:
     """Normalize report metrics into the schema promotion gates expect."""
     metrics_rows = report_summary.get("metrics_comparison", [])
     return {
         "version": version_name,
+        "odds_source_type": odds_source_type,
         "models": {
             str(row["model"]): {
                 key: value
@@ -53,9 +58,24 @@ def main() -> None:
     parser.add_argument("--output-dir", type=str, default="")
     parser.add_argument("--artifact-root", type=str, default="data/processed/models")
     parser.add_argument("--version", type=str, default="")
+    parser.add_argument(
+        "--odds-source-type",
+        choices=("close", "open"),
+        default="",
+        help=(
+            "Historical quote timing to evaluate. 'open' writes separate research "
+            "artifacts and pairs bets with like-for-like closing prices for CLV."
+        ),
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
+    if args.odds_source_type:
+        config["backtest"] = {
+            **(config.get("backtest", {}) or {}),
+            "odds_source_type": args.odds_source_type,
+        }
+    odds_source_type = str(config.get("backtest", {}).get("odds_source_type", "close")).lower()
     log_cfg = config.get("logging", {})
     setup_logging(log_cfg.get("level", "INFO"), log_cfg.get("file"))
     logger = logging.getLogger("nwsl_model.backtest")
@@ -67,11 +87,18 @@ def main() -> None:
     version_dir = None
     if artifact_mode:
         version_dir = resolve_version_dir(args.version or None, Path(args.artifact_root))
+    backtest_dir_name = "backtest" if odds_source_type == "close" else f"backtest_{odds_source_type}"
     output_dir = Path(args.output_dir) if args.output_dir else (
-        version_dir / "backtest" if version_dir is not None else Path("data/processed/backtest")
+        version_dir / backtest_dir_name
+        if version_dir is not None
+        else Path("data/processed") / backtest_dir_name
     )
 
-    logger.info(f"Running backtest with models: {args.models}")
+    logger.info(
+        "Running backtest with models=%s odds_source_type=%s",
+        args.models,
+        odds_source_type,
+    )
     runner = BacktestRunner(config)
     results = runner.run(
         matches=dataset.matches,
@@ -88,10 +115,19 @@ def main() -> None:
 
     report_summary = generate_backtest_report(results, str(output_dir), closing_odds)
     if version_dir is not None:
+        summary_name = (
+            "backtest_summary.json"
+            if odds_source_type == "close"
+            else f"backtest_{odds_source_type}_summary.json"
+        )
         write_artifact_json(
             version_dir,
-            "backtest_summary.json",
-            _build_version_backtest_summary(report_summary, version_dir.name),
+            summary_name,
+            _build_version_backtest_summary(
+                report_summary,
+                version_dir.name,
+                odds_source_type,
+            ),
         )
     print_summary(results)
 

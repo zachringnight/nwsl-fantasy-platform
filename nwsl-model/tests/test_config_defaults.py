@@ -23,6 +23,7 @@ def test_default_backtest_runtime_settings_are_operational() -> None:
 
     assert config["backtest"]["step_size"] >= 5
     assert config["backtest"]["run_ablations"] is False
+    assert config["backtest"]["odds_source_type"] == "close"
     assert "spi_lite_baseline" in config["backtest"]["benchmarks"]
 
 

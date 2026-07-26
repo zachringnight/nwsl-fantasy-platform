@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import html
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from typing import Any
@@ -110,18 +111,42 @@ def discover_event_urls(
     start_date: date,
     days: int,
     fetcher: Any = _fetch_text,
+    workers: int = 8,
+    failures: list[dict[str, Any]] | None = None,
 ) -> list[str]:
     """Discover NWSL event pages from FOX Sports score pages."""
     urls: list[str] = []
-    for offset in range(days):
-        html_text = fetcher(scores_url(start_date + timedelta(days=offset)))
-        for path in EVENT_URL_RE.findall(html_text):
-            if path.startswith("http"):
-                url = path
-            else:
-                url = f"https://www.foxsports.com{path}"
-            if event_from_url(url) is not None:
-                urls.append(url)
+
+    def worker(day: date) -> tuple[date, str | None, str | None]:
+        url = scores_url(day)
+        try:
+            return day, fetcher(url), None
+        except Exception as exc:  # noqa: BLE001 - provider failures are data
+            return day, None, type(exc).__name__
+
+    dates = [start_date + timedelta(days=offset) for offset in range(days)]
+    with ThreadPoolExecutor(max_workers=max(1, min(int(workers), len(dates)))) as pool:
+        futures = [pool.submit(worker, day) for day in dates]
+        for future in as_completed(futures):
+            day, html_text, error_type = future.result()
+            if error_type is not None:
+                if failures is not None:
+                    failures.append(
+                        {
+                            "url": scores_url(day),
+                            "match_date": day.isoformat(),
+                            "reason": "score_page_fetch_error",
+                            "error_type": error_type,
+                        }
+                    )
+                continue
+            for path in EVENT_URL_RE.findall(html_text or ""):
+                if path.startswith("http"):
+                    url = path
+                else:
+                    url = f"https://www.foxsports.com{path}"
+                if event_from_url(url) is not None:
+                    urls.append(url)
     return sorted(dict.fromkeys(urls))
 
 
@@ -158,24 +183,30 @@ def fetch_current_total_rows(
     *,
     captured_at: datetime | None = None,
     fetcher: Any = _fetch_text,
+    workers: int = 8,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Fetch FOX event pages and return parsed total odds plus unmatched pages."""
     timestamp = (captured_at or datetime.now(UTC)).astimezone(UTC).isoformat()
     rows: list[dict[str, Any]] = []
     unmatched: list[dict[str, Any]] = []
 
-    for url in event_urls:
+    def worker(url: str) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
         event = event_from_url(url)
         if event is None:
-            unmatched.append({"url": url, "reason": "unparseable_event_url"})
-            continue
-        html_text = fetcher(url)
+            return None, {"url": url, "reason": "unparseable_event_url"}
+        try:
+            html_text = fetcher(url)
+        except Exception as exc:  # noqa: BLE001 - isolate provider failures
+            return None, {
+                "url": url,
+                "reason": "event_page_fetch_error",
+                "error_type": type(exc).__name__,
+            }
         total = parse_event_total_odds(html_text)
         if total is None:
-            unmatched.append({"url": url, "reason": "missing_total_market"})
-            continue
+            return None, {"url": url, "reason": "missing_total_market"}
         line, over_odds, under_odds = total
-        rows.append(
+        return (
             {
                 "foxsports_event_id": event.event_id,
                 "source_url": event.url,
@@ -189,10 +220,33 @@ def fetch_current_total_rows(
                 "over_odds": over_odds,
                 "under_odds": under_odds,
                 "source_type": "current",
-            }
+            },
+            None,
         )
 
-    return pd.DataFrame(rows), pd.DataFrame(unmatched)
+    if event_urls:
+        with ThreadPoolExecutor(
+            max_workers=max(1, min(int(workers), len(event_urls)))
+        ) as pool:
+            futures = [pool.submit(worker, url) for url in event_urls]
+            for future in as_completed(futures):
+                row, failure = future.result()
+                if row is not None:
+                    rows.append(row)
+                if failure is not None:
+                    unmatched.append(failure)
+
+    parsed = pd.DataFrame(rows)
+    if not parsed.empty:
+        parsed = parsed.sort_values(
+            ["match_date", "home_team", "away_team", "foxsports_event_id"]
+        ).reset_index(drop=True)
+    unmatched_frame = pd.DataFrame(unmatched)
+    if not unmatched_frame.empty:
+        unmatched_frame = unmatched_frame.sort_values(
+            ["reason", "url"]
+        ).reset_index(drop=True)
+    return parsed, unmatched_frame
 
 
 def build_current_total_contract(

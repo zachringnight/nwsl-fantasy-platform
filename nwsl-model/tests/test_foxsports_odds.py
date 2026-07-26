@@ -82,6 +82,34 @@ def test_discover_event_urls_reads_date_scoped_score_pages() -> None:
     ]
 
 
+def test_discover_event_urls_isolates_score_page_failure() -> None:
+    failures: list[dict] = []
+
+    def fetcher(url: str) -> str:
+        if url.endswith("2026-05-29"):
+            raise TimeoutError("provider timeout")
+        return """
+        <a href="/soccer/nwsl-kansas-city-current-vs-boston-legacy-fc-may-30-2026-game-boxscore-651657">game</a>
+        """
+
+    urls = discover_event_urls(
+        start_date=date(2026, 5, 29),
+        days=2,
+        fetcher=fetcher,
+        failures=failures,
+    )
+
+    assert len(urls) == 1
+    assert failures == [
+        {
+            "url": "https://www.foxsports.com/soccer/nwsl/scores?date=2026-05-29",
+            "match_date": "2026-05-29",
+            "reason": "score_page_fetch_error",
+            "error_type": "TimeoutError",
+        }
+    ]
+
+
 def test_fetch_current_total_rows_and_contract_match_upcoming() -> None:
     url = (
         "https://www.foxsports.com/soccer/"
@@ -113,6 +141,34 @@ def test_fetch_current_total_rows_and_contract_match_upcoming() -> None:
     assert contract.loc[0, "line"] == 2.5
     assert round(contract.loc[0, "over_odds"], 4) == 1.8197
     assert round(contract.loc[0, "under_odds"], 4) == 1.8929
+
+
+def test_fetch_current_total_rows_isolates_event_page_failure() -> None:
+    good_url = (
+        "https://www.foxsports.com/soccer/"
+        "nwsl-orlando-pride-vs-bay-fc-may-29-2026-game-boxscore-651655"
+    )
+    bad_url = (
+        "https://www.foxsports.com/soccer/"
+        "nwsl-kansas-city-current-vs-boston-legacy-fc-may-30-2026-game-boxscore-651657"
+    )
+
+    def fetcher(url: str) -> str:
+        if url == bad_url:
+            raise TimeoutError("provider timeout")
+        return "OVER/UNDER 2.5 GOALS -122 OVER 2.5 -112 UNDER 2.5"
+
+    parsed, unmatched = fetch_current_total_rows(
+        [bad_url, good_url],
+        captured_at=datetime(2026, 5, 26, 20, 0, tzinfo=timezone.utc),
+        fetcher=fetcher,
+    )
+
+    assert len(parsed) == 1
+    assert parsed.loc[0, "home_team"] == "Orlando Pride"
+    assert unmatched[["reason", "error_type"]].to_dict("records") == [
+        {"reason": "event_page_fetch_error", "error_type": "TimeoutError"}
+    ]
 
 
 def test_current_total_contract_allows_one_day_timezone_boundary() -> None:

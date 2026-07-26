@@ -8,6 +8,7 @@ This directory holds dated execution plans and completed-run evidence.
 
 ## Completed or narrower workstreams
 
+- `2026-07-26-opening-line-validation/`: opening-price and CLV backtest support, corrected threshold-candidate eligibility, and the no-promotion evidence report.
 - `2026-07-22-fantasy-dfs/`: the completed fantasy and DFS stabilization run, its verification evidence, and remaining autopick follow-up.
 - `2026-07-22-model-lab/`: the completed model-lab run, reports, and verification evidence.
 

@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
-
-UTC = timezone.utc
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +20,8 @@ from src.data.asa import (
 from src.data.team_names import canonicalize_team_name
 from src.odds.quality import build_odds_quality_report
 from src.utils.io import save_csv, save_json
+
+UTC = timezone.utc
 
 ODDS_OUTPUT_COLUMNS = [
     "match_id",
@@ -777,11 +777,22 @@ def _prior_component(priors: pd.DataFrame, season_label: str) -> pd.DataFrame:
     )
 
 
-def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None = None) -> pd.DataFrame:
+def build_projected_lineups(
+    repo_root: Path = ROOT_REPO,
+    timestamp: str | None = None,
+    *,
+    season: int = 2026,
+    logs_path: Path | None = None,
+) -> pd.DataFrame:
     """Build upcoming projected lineups from official profiles and recent role signals."""
-    matches_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_matches.csv"
-    profiles_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_profiles.csv"
-    logs_path = repo_root / "data" / "nwsl-official" / "nwsl_2026_official_player_match_logs.csv"
+    official_dir = repo_root / "data" / "nwsl-official"
+    matches_path = official_dir / f"nwsl_{season}_official_matches.csv"
+    profiles_path = official_dir / f"nwsl_{season}_official_player_profiles.csv"
+    resolved_logs_path = (
+        Path(logs_path)
+        if logs_path is not None
+        else official_dir / f"nwsl_{season}_official_player_match_logs.csv"
+    )
     if not matches_path.exists() or not profiles_path.exists():
         return pd.DataFrame(
             columns=[
@@ -852,8 +863,8 @@ def build_projected_lineups(repo_root: Path = ROOT_REPO, timestamp: str | None =
             "prior_role_proxy_score",
         ]
     )
-    if logs_path.exists():
-        logs = pd.read_csv(logs_path)
+    if resolved_logs_path.exists():
+        logs = pd.read_csv(resolved_logs_path)
         logs["match_date"] = pd.to_datetime(logs["match_date_utc"], errors="coerce", utc=True).dt.date
         logs["started_flag"] = logs["gamestarted"].fillna(0).astype(float).gt(0)
         scores = _compute_projected_starter_scores(logs, last_season_priors=last_season_priors)
@@ -1075,10 +1086,6 @@ def build_dataset(
         "generated_at": generated_at,
         "history_start_season": history_start_season,
         "refresh_mode": "cache_first",
-        "feature_policy": {
-            "team_season_priors": "previous_available_season_baseline_applied_at_training_time",
-            "player_season_priors": "last_season_only_for_projection_fallback",
-        },
         "source_batches": [
             _source_batch(
                 name="official_match_archive",
@@ -1265,6 +1272,8 @@ def build_dataset(
             },
         },
         "feature_policy": {
+            "team_season_priors": "previous_available_season_baseline_applied_at_training_time",
+            "player_season_priors": "last_season_only_for_projection_fallback",
             "training_window": f"{history_start_season}+ only" if history_start_season is not None else "all_available_seasons",
             "travel_features": "disabled",
             "weather_features": "disabled",

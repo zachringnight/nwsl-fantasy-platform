@@ -2,6 +2,24 @@
 
 Artifact version: `lab2026-07-22`. All numbers below are read directly from the JSON/CSV outputs of this run; file paths are given so every figure can be traced back to source. Working tree is `nwsl-model/` unless stated otherwise.
 
+## 2026-07-26 threshold-evidence correction
+
+The original nested-threshold tables below predate the
+`structural_rules_v1` eligibility fix. They included rows already rejected by
+fixed market-price, side, or probability-edge rules, so those specific
+threshold counts/returns are retained as historical run output but are
+superseded for model decisions.
+
+The same close-line logs, reprocessed with fixed structural rules held in
+force, produced: SPI-lite 65 bets / +2.99% OOS ROI; team-ratings 151 /
+-25.09%; market-residual 50 / -18.60%; Dixon-Coles 99 / -19.16%; bivariate
+Poisson 108 / -30.89%. SPI-lite remains below the +5% baseline threshold, and
+the run's OOF-strongest baseline (`team_ratings_poisson`) remains decisively
+negative. The reject-promotion verdict is unchanged.
+
+Opening-line/CLV implementation and evidence are recorded in
+`plans/2026-07-26-opening-line-validation/README.md`.
+
 ## 0. Run log (this packet's steps, in order)
 
 | step | command | result |

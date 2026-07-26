@@ -17,15 +17,15 @@ from scipy.stats import poisson
 
 from src.backtest.metrics import compute_all_metrics
 from src.backtest.splitter import BacktestFold, ExpandingWindowSplitter
+from src.betting.clv import compute_clv, match_closing_price
 from src.betting.market_derivation import derive_all_markets
 from src.betting.recommendations import evaluate_market_candidates, load_bet_selection_config
-from src.betting.score_matrix import build_full_result, derive_1x2, expected_goals, rescale_matrix_to_targets
+from src.betting.score_matrix import expected_goals, rescale_matrix_to_targets
 from src.betting.settlement import settle_1x2, settle_total
 from src.betting.staking import BetRecommendation, StakingConfig, StakingEngine
 from src.data.transforms import (
     add_npxg_fallback,
     add_result_columns,
-    encode_teams,
     melt_to_team_match,
     merge_odds_to_matches,
 )
@@ -61,10 +61,12 @@ BASELINE_MODELS = {
     "spi_lite_baseline",
     "regularized_elo_baseline",
 }
-# Market-input models use close odds as a feature, so they must never join
-# BASELINE_MODELS (gating.py's promotion bar for pure projection models).
+# Market-input models use the configured evaluation quote as a feature, so
+# they must never join BASELINE_MODELS (gating.py's promotion bar for pure
+# projection models).
 MARKET_MODELS = {"market_residual"}
 ABLATION_SUFFIXES = ("no_asa", "no_lineup", "no_priors", "no_rest")
+SUPPORTED_BACKTEST_ODDS_SOURCE_TYPES = {"close", "open"}
 
 
 def _unique_in_order(values: list[str]) -> list[str]:
@@ -105,6 +107,16 @@ class BacktestRunner:
 
     def __init__(self, config: dict[str, Any]):
         self.config = config
+        odds_source_type = str(
+            self.config.get("backtest", {}).get("odds_source_type", "close")
+        ).strip().lower()
+        if odds_source_type not in SUPPORTED_BACKTEST_ODDS_SOURCE_TYPES:
+            supported = ", ".join(sorted(SUPPORTED_BACKTEST_ODDS_SOURCE_TYPES))
+            raise ValueError(
+                f"Unsupported backtest.odds_source_type '{odds_source_type}'. "
+                f"Expected one of: {supported}"
+            )
+        self.odds_source_type = odds_source_type
         self.results: list[dict[str, Any]] = []
         self.predictions: list[pd.DataFrame] = []
         self.bet_logs: list[pd.DataFrame] = []
@@ -137,8 +149,17 @@ class BacktestRunner:
         matches = add_result_columns(matches)
         matches = add_npxg_fallback(matches)
         if odds is not None:
-            matches = merge_odds_to_matches(matches, odds)
-            matches = merge_odds_to_matches(matches, odds, market_type="total")
+            matches = merge_odds_to_matches(
+                matches,
+                odds,
+                source_type=self.odds_source_type,
+            )
+            matches = merge_odds_to_matches(
+                matches,
+                odds,
+                source_type=self.odds_source_type,
+                market_type="total",
+            )
             matches = compute_market_probabilities(matches)
             matches = compute_totals_market_probabilities(matches)
 
@@ -349,13 +370,15 @@ class BacktestRunner:
                 row,
                 pred,
                 markets=markets,
-                odds_rows=(
-                    odds[
-                        (odds["match_id"].astype(str) == str(row["match_id"]))
-                        & (odds["source_type"].astype(str).str.lower() == "close")
-                    ].copy()
-                    if odds is not None and not odds.empty
-                    else pd.DataFrame()
+                odds_rows=self._odds_rows_for_match(
+                    odds,
+                    row["match_id"],
+                    self.odds_source_type,
+                ),
+                closing_odds_rows=self._odds_rows_for_match(
+                    odds,
+                    row["match_id"],
+                    "close",
                 ),
                 staker=staker,
                 model_name=base_model,
@@ -609,6 +632,7 @@ class BacktestRunner:
                 regularization_c=market_residual_cfg.get("regularization_c", 1.0),
                 min_train_matches=market_residual_cfg.get("min_train_matches", 60),
                 max_goals=self.config.get("model", {}).get("max_goals", 8),
+                market_source_type=self.odds_source_type,
             )
             market_residual_model.fit(train, context_provider)
 
@@ -733,13 +757,15 @@ class BacktestRunner:
                 row,
                 pred=None,
                 markets=markets,
-                odds_rows=(
-                    odds[
-                        (odds["match_id"].astype(str) == str(row["match_id"]))
-                        & (odds["source_type"].astype(str).str.lower() == "close")
-                    ].copy()
-                    if odds is not None and not odds.empty
-                    else pd.DataFrame()
+                odds_rows=self._odds_rows_for_match(
+                    odds,
+                    row["match_id"],
+                    self.odds_source_type,
+                ),
+                closing_odds_rows=self._odds_rows_for_match(
+                    odds,
+                    row["match_id"],
+                    "close",
                 ),
                 staker=staker,
                 model_name=base_model,
@@ -815,6 +841,7 @@ class BacktestRunner:
         *,
         markets: Any,
         odds_rows: pd.DataFrame,
+        closing_odds_rows: pd.DataFrame | None = None,
         staker: StakingEngine,
         model_name: str,
         fold_id: int | None = None,
@@ -847,6 +874,21 @@ class BacktestRunner:
             match_date=match_date,
         )
         for decision in decisions:
+            if str(decision.source_type).lower() != "close":
+                closing_price = match_closing_price(
+                    closing_odds_rows if closing_odds_rows is not None else pd.DataFrame(),
+                    match_id=decision.match_id,
+                    market=decision.market,
+                    side=decision.side,
+                    sportsbook=decision.sportsbook,
+                    line=decision.line,
+                )
+                if closing_price is None:
+                    decision.closing_market_price = float("nan")
+                    decision.clv = float("nan")
+                else:
+                    decision.closing_market_price = closing_price
+                    decision.clv = compute_clv(decision.market_price, closing_price)
             staker.log_decision(decision)
         accepted = [decision for decision in decisions if decision.accepted]
         if not accepted:
@@ -902,8 +944,24 @@ class BacktestRunner:
             staker.log_bet(rec, result.pnl, result.result.value)
 
     @staticmethod
+    def _odds_rows_for_match(
+        odds: pd.DataFrame | None,
+        match_id: object,
+        source_type: str,
+    ) -> pd.DataFrame:
+        """Return one match's rows for the requested historical quote timing."""
+        if odds is None or odds.empty or "match_id" not in odds.columns:
+            return pd.DataFrame()
+        mask = odds["match_id"].astype(str) == str(match_id)
+        if "source_type" in odds.columns:
+            mask &= odds["source_type"].astype(str).str.lower() == str(source_type).lower()
+        elif str(source_type).lower() != "close":
+            return pd.DataFrame()
+        return odds.loc[mask].copy()
+
+    @staticmethod
     def _historical_odds_evaluation_time(odds_rows: pd.DataFrame) -> Any:
-        """Use the quote time as the backtest clock for historical close odds."""
+        """Use the quote time as the backtest clock for historical odds."""
         if odds_rows is None or odds_rows.empty or "timestamp" not in odds_rows.columns:
             return None
         timestamps = parse_mixed_utc_datetime(odds_rows["timestamp"]).dropna()
@@ -911,8 +969,8 @@ class BacktestRunner:
             return None
         return timestamps.max().to_pydatetime()
 
-    @staticmethod
     def _market_betting_diagnostics(
+        self,
         predictions: pd.DataFrame,
         odds: pd.DataFrame | None,
         bet_log: pd.DataFrame,
@@ -924,19 +982,23 @@ class BacktestRunner:
             if predictions is not None and not predictions.empty and "match_id" in predictions.columns
             else set()
         )
-        close_odds = pd.DataFrame()
+        evaluation_odds = pd.DataFrame()
         if odds is not None and not odds.empty:
-            close_odds = odds.copy()
-            close_odds["match_id"] = close_odds["match_id"].astype(str)
-            if "source_type" in close_odds.columns:
-                close_odds = close_odds[close_odds["source_type"].astype(str).str.lower() == "close"]
+            evaluation_odds = odds.copy()
+            evaluation_odds["match_id"] = evaluation_odds["match_id"].astype(str)
+            if "source_type" in evaluation_odds.columns:
+                evaluation_odds = evaluation_odds[
+                    evaluation_odds["source_type"].astype(str).str.lower() == self.odds_source_type
+                ]
             if match_ids:
-                close_odds = close_odds[close_odds["match_id"].isin(match_ids)]
+                evaluation_odds = evaluation_odds[evaluation_odds["match_id"].isin(match_ids)]
 
         def market_rows(market_type: str) -> pd.DataFrame:
-            if close_odds.empty or "market_type" not in close_odds.columns:
+            if evaluation_odds.empty or "market_type" not in evaluation_odds.columns:
                 return pd.DataFrame()
-            return close_odds[close_odds["market_type"].astype(str).str.lower() == market_type].copy()
+            return evaluation_odds[
+                evaluation_odds["market_type"].astype(str).str.lower() == market_type
+            ].copy()
 
         def bet_rows(prefix: str) -> pd.DataFrame:
             if bet_log is None or bet_log.empty or "market" not in bet_log.columns:
@@ -948,7 +1010,13 @@ class BacktestRunner:
                 return pd.DataFrame()
             return decision_log[decision_log["market"].astype(str).str.startswith(prefix)].copy()
 
-        diagnostics: dict[str, Any] = {"market_coverage": {"validation_matches": len(match_ids)}}
+        diagnostics: dict[str, Any] = {
+            "odds_source_type": self.odds_source_type,
+            "market_coverage": {
+                "validation_matches": len(match_ids),
+                "odds_source_type": self.odds_source_type,
+            },
+        }
         for market_type, label, prefix in [
             ("1x2", "moneyline", "1x2_"),
             ("total", "totals", "total_"),
@@ -960,11 +1028,26 @@ class BacktestRunner:
             pnl = float(bets["pnl"].sum()) if not bets.empty and "pnl" in bets.columns else 0.0
             matches_with_odds = int(rows["match_id"].nunique()) if not rows.empty else 0
             diagnostics["market_coverage"][label] = {
-                "close_odds_rows": int(len(rows)),
-                "matches_with_close_odds": matches_with_odds,
+                "odds_source_type": self.odds_source_type,
+                "evaluation_odds_rows": int(len(rows)),
+                "matches_with_evaluation_odds": matches_with_odds,
                 "coverage_pct": float(matches_with_odds / max(len(match_ids), 1)),
                 "testable": matches_with_odds > 0,
             }
+            if self.odds_source_type == "close":
+                diagnostics["market_coverage"][label].update(
+                    {
+                        "close_odds_rows": int(len(rows)),
+                        "matches_with_close_odds": matches_with_odds,
+                    }
+                )
+            elif self.odds_source_type == "open":
+                diagnostics["market_coverage"][label].update(
+                    {
+                        "open_odds_rows": int(len(rows)),
+                        "matches_with_open_odds": matches_with_odds,
+                    }
+                )
             diagnostics[f"{label}_n_bets"] = int(len(bets))
             diagnostics[f"{label}_candidate_count"] = int(len(decisions))
             diagnostics[f"{label}_accepted_count"] = int(decisions["accepted"].sum()) if not decisions.empty and "accepted" in decisions.columns else int(len(bets))
@@ -994,15 +1077,15 @@ class BacktestRunner:
                 if not bets.empty and "pnl" in bets.columns
                 else 0.0
             )
-            diagnostics[f"{label}_mean_clv"] = (
-                float(bets["clv"].mean())
+            valid_clv = (
+                pd.to_numeric(bets["clv"], errors="coerce").dropna()
                 if not bets.empty and "clv" in bets.columns
-                else 0.0
+                else pd.Series(dtype=float)
             )
+            diagnostics[f"{label}_n_bets_with_clv"] = int(len(valid_clv))
+            diagnostics[f"{label}_mean_clv"] = float(valid_clv.mean()) if not valid_clv.empty else 0.0
             diagnostics[f"{label}_positive_clv_rate"] = (
-                float((bets["clv"] > 0).mean())
-                if not bets.empty and "clv" in bets.columns
-                else 0.0
+                float((valid_clv > 0).mean()) if not valid_clv.empty else 0.0
             )
             if market_type in {"1x2", "total"}:
                 sides = ("home", "draw", "away") if market_type == "1x2" else ("over", "under")
