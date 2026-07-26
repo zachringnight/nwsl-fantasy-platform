@@ -1,15 +1,9 @@
-import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
-import { Pill } from "@/components/ui/pill";
-import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { LiveModelPicks } from "@/components/analytics/live-model-picks";
+import { MatchPredictionBrowser } from "@/components/analytics/match-prediction-browser";
 import { getMatchPredictions } from "@/lib/analytics/analytics-data";
 import { getLiveModelBoard } from "@/lib/analytics/live-model-board";
-import {
-  analyticsMatchHref,
-  analyticsPredictionHref,
-  analyticsTeamHref,
-} from "@/lib/analytics/entity-routes";
+import Link from "next/link";
 
 export const metadata = {
   title: "Predictions",
@@ -39,110 +33,7 @@ export default async function PredictionsPage() {
           </p>
         </div>
       ) : (
-        <section>
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-foreground">Match probabilities</h2>
-            <p className="mt-1 text-sm text-muted">
-              Full score-model projections are separate from threshold-clearing policy picks.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {predictions.map((pred) => (
-              <article
-                key={pred.matchId}
-                className="glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
-              >
-                {/* Header */}
-                <div className="mb-3 flex items-center justify-between">
-                  <Link
-                    href={analyticsPredictionHref(pred.matchId)}
-                    aria-label={`Open prediction for ${pred.homeTeam} vs ${pred.awayTeam}`}
-                    className="text-[0.65rem] font-medium uppercase tracking-widest text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                  >
-                    {pred.date}
-                  </Link>
-                  <Pill tone="accent">AI Prediction</Pill>
-                </div>
-
-                {/* Teams */}
-                <div className="mb-4 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={analyticsTeamHref(pred.homeTeamId)}
-                      className="text-sm font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                    >
-                      {pred.homeTeam}
-                    </Link>
-                    <span className="font-mono text-sm font-semibold text-brand-strong">
-                      {(pred.homeProb * 100).toFixed(0)}%
-                    </span>
-                  </div>
-                  <ProbabilityBar
-                    homeProb={pred.homeProb}
-                    drawProb={pred.drawProb}
-                    awayProb={pred.awayProb}
-                    showPercentages={false}
-                  />
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={analyticsTeamHref(pred.awayTeamId)}
-                      className="text-sm font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                    >
-                      {pred.awayTeam}
-                    </Link>
-                    <span className="font-mono text-sm font-semibold text-accent">
-                      {(pred.awayProb * 100).toFixed(0)}%
-                    </span>
-                  </div>
-                </div>
-
-                {/* Key Markets */}
-                <div className="grid grid-cols-3 gap-2 border-t border-line pt-3">
-                  <div className="text-center">
-                    <p className="text-[0.6rem] uppercase tracking-widest text-muted">BTTS</p>
-                    <p className="font-mono text-sm text-foreground">
-                      {(pred.bttsYesProb * 100).toFixed(0)}%
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-[0.6rem] uppercase tracking-widest text-muted">O2.5</p>
-                    <p className="font-mono text-sm text-foreground">
-                      {pred.overUnder["2.5"]
-                        ? (pred.overUnder["2.5"].over * 100).toFixed(0)
-                        : "—"}%
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-[0.6rem] uppercase tracking-widest text-muted">Draw</p>
-                    <p className="font-mono text-sm text-foreground">
-                      {(pred.drawProb * 100).toFixed(0)}%
-                    </p>
-                  </div>
-                </div>
-
-                {/* Expected Goals */}
-                <div className="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-muted">
-                  <span>Expected: {pred.lambdaHome.toFixed(1)} - {pred.lambdaAway.toFixed(1)}</span>
-                  <span className="capitalize">{pred.model.replace("_", "-")}</span>
-                </div>
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <Link
-                    href={analyticsMatchHref(pred.matchId)}
-                    className="text-xs text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                  >
-                    Match page
-                  </Link>
-                  <Link
-                    href={analyticsPredictionHref(pred.matchId)}
-                    className="text-xs font-semibold text-brand-strong hover:underline hover:underline-offset-4"
-                  >
-                    Full prediction
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        <MatchPredictionBrowser predictions={predictions} />
       )}
 
       {/* Model info */}
