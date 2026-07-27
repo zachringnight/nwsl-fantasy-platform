@@ -23,6 +23,69 @@ function secretsMatch(received: string | null, expected: string): boolean {
   return timingSafeEqual(suppliedDigest, expectedDigest);
 }
 
+export async function GET(request: Request) {
+  const expectedSecret = process.env.NWSL_DATA_PUBLISH_SECRET;
+  if (!expectedSecret) {
+    return NextResponse.json(
+      { error: "NWSL data publishing is not configured" },
+      { status: 503 }
+    );
+  }
+  if (!secretsMatch(request.headers.get("authorization"), expectedSecret)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!hasSupabaseServerConfig()) {
+    return NextResponse.json(
+      { error: "Supabase server configuration is unavailable" },
+      { status: 503 }
+    );
+  }
+  const runKey = new URL(request.url).searchParams.get("runKey") ?? "";
+  if (
+    !/^nwsl-data:2026:[A-Za-z0-9._:+-]+$/.test(runKey) ||
+    runKey.length > 320
+  ) {
+    return NextResponse.json({ error: "Invalid run key" }, { status: 400 });
+  }
+
+  const { data, error } = await getSupabaseServerClient()
+    .from("nwsl_data_runs")
+    .select(
+      "id,run_key,season,generated_at,payload_checksum,teams_count,players_count,matches_count,player_season_stats_count,team_season_stats_count,player_match_stats_count,finished_matches_count,published_at"
+    )
+    .eq("run_key", runKey)
+    .maybeSingle();
+  if (error) {
+    return NextResponse.json(
+      { error: "NWSL data publication readback failed" },
+      { status: 500 }
+    );
+  }
+  if (!data) {
+    return NextResponse.json({ error: "Run not found" }, { status: 404 });
+  }
+  return NextResponse.json({
+    ok: true,
+    publication: {
+      runId: data.id,
+      runKey: data.run_key,
+      season: data.season,
+      generatedAt: data.generated_at,
+      payloadChecksum: data.payload_checksum,
+      publishedAt: data.published_at,
+      counts: {
+        teams: data.teams_count,
+        players: data.players_count,
+        matches: data.matches_count,
+        playerSeasonStats: data.player_season_stats_count,
+        teamSeasonStats: data.team_season_stats_count,
+        playerMatchStats: data.player_match_stats_count,
+        finishedMatches: data.finished_matches_count,
+      },
+    },
+  });
+}
+
 export async function POST(request: Request) {
   const expectedSecret = process.env.NWSL_DATA_PUBLISH_SECRET;
   if (!expectedSecret) {

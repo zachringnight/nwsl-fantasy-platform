@@ -7,8 +7,8 @@ import {
   getLeagueTable,
   getLeagueTableBySeason,
   getPlayerRankings,
-  getMatchPredictions,
 } from "@/lib/analytics/analytics-data";
+import { getMatchPredictions } from "@/lib/analytics/general-predictions-data";
 import { getLiveNwslPublicData } from "@/lib/analytics/live-nwsl-public-data";
 import { getMatchResultsBySeason } from "@/lib/analytics/analytics-real-data";
 import {
@@ -39,7 +39,7 @@ export default async function AnalyticsPage({
       ? live?.players ?? getPlayerRankings()
       : [];
   const matches = live?.matches ?? getMatchResultsBySeason(season);
-  const predictions = getMatchPredictions().filter((prediction) =>
+  const predictions = (await getMatchPredictions()).filter((prediction) =>
     prediction.date.startsWith(season)
   );
   const playerCount = players.length;

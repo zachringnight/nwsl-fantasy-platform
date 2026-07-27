@@ -14,7 +14,10 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.data.asa import fetch_asa_datasets, write_asa_datasets
-from src.data.xg_enrichment import enrich_matches_with_asa_xg
+from src.data.xg_enrichment import (
+    enrich_matches_with_asa_xg,
+    summarize_asa_xg_coverage,
+)
 
 
 def _season_counts(frame, column: str = "season") -> dict[str, int]:
@@ -42,6 +45,7 @@ def _update_manifest_xg(raw_dir: Path, match_xgoals: pd.DataFrame) -> dict[str, 
     }
     mean_coverage = round(float(sum(coverage.values()) / max(len(coverage), 1)), 2)
     missing_pct = round(100.0 - mean_coverage, 2)
+    source_coverage = summarize_asa_xg_coverage(matches, match_xgoals)
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     feature_policy = dict(manifest.get("feature_policy", {}))
@@ -58,6 +62,8 @@ def _update_manifest_xg(raw_dir: Path, match_xgoals: pd.DataFrame) -> dict[str, 
             )
             if "season" in match_xgoals.columns and not match_xgoals.empty
             else [],
+            "coverage_by_season": source_coverage["seasons"],
+            "fallback_match_ids": source_coverage["fallback_match_ids"],
         }
     )
     manifest["asa"] = asa
@@ -66,7 +72,11 @@ def _update_manifest_xg(raw_dir: Path, match_xgoals: pd.DataFrame) -> dict[str, 
     missing["asa_match_xg_missing_pct"] = missing_pct
     manifest["missing_feature_coverage"] = missing
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return coverage
+    return {
+        **coverage,
+        "coverage_by_season": source_coverage["seasons"],
+        "fallback_match_ids": source_coverage["fallback_match_ids"],
+    }
 
 
 def main() -> None:

@@ -5,7 +5,7 @@ import { ModelMarketOdds } from "@/components/analytics/model-market-odds";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { ScoreMatrixHeatmap } from "@/components/analytics/charts/score-matrix-heatmap";
-import { getMatchPrediction } from "@/lib/analytics/analytics-data";
+import { getMatchPrediction } from "@/lib/analytics/general-predictions-data";
 import {
   getArchivedPrematchModelMarket,
   getLiveModelBoard,
@@ -29,7 +29,7 @@ export default async function PredictionDetailPage({
   const season = query.season === "2025" ? "2025" : "2026";
   const liveModelBoard =
     season === "2026" ? await getLiveModelBoard() : null;
-  const prediction = getMatchPrediction(matchId);
+  const prediction = await getMatchPrediction(matchId);
 
   if (!prediction || !prediction.date.startsWith(`${season}-`)) {
     return (

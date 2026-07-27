@@ -23,6 +23,7 @@ LOG_FILE="$LOG_DIR/track_matchday_$(date -u +%Y%m%dT%H%M%SZ).log"
 PY="${PYTHON:-python3}"
 REQUIRED_FAILURE=0
 PUBLIC_DATA_FAILURE=0
+GENERAL_PROJECTION_FAILURE=0
 
 run_step() {
     local label="$1"; shift
@@ -72,10 +73,29 @@ run_public_data_step() {
     fi
 }
 
+# General match probabilities publish independently from both public website
+# data and the frozen DraftKings-only policy. A partial context refresh may be
+# published only when its machine-readable artifact explicitly says partial;
+# a blocked refresh never advances the latest prediction snapshot.
+run_general_projection_step() {
+    local label="$1"; shift
+    echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) $label ===" >>"$LOG_FILE"
+    if "$@" >>"$LOG_FILE" 2>&1; then
+        echo "--- $label ok ---" >>"$LOG_FILE"
+    else
+        echo "--- $label FAILED ---" >>"$LOG_FILE"
+        GENERAL_PROJECTION_FAILURE=1
+    fi
+}
+
 # 1. Refresh completed results/upcoming fixtures and xG before fitting ratings.
 run_required_repo_step "espn_schedule" npx tsx scripts/fetch-espn-nwsl.ts
 run_required_repo_step "model_input" npx tsx scripts/generate-model-input.ts
 run_required_step "asa_xg" "$PY" scripts/fetch_asa_data.py --seasons 2025 2026
+run_required_step "daily_lineage" "$PY" scripts/validate_daily_lineage.py
+if [ "$REQUIRED_FAILURE" -ne 0 ]; then
+    GENERAL_PROJECTION_FAILURE=1
+fi
 
 # 2. Refresh the website's official 2026 teams, players, schedule, season
 #    totals, and exact player-match stats. This publication is intentionally
@@ -84,25 +104,59 @@ run_required_step "asa_xg" "$PY" scripts/fetch_asa_data.py --seasons 2025 2026
 run_public_data_step "publish_public_data_supabase" \
     "$PY" scripts/refresh_public_data.py
 
-# 3. Capture current DraftKings prices and FOX context, remove stale "current"
+# 3. Refresh the official historical appearance rows and rebuild historical
+#    context separately from projected-lineup coverage. The quality report
+#    records every missing completed/upcoming match ID.
+if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    run_general_projection_step "official_player_appearances" \
+        "$PY" scripts/fetch_official_player_appearances.py --seasons 2025 2026
+fi
+if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    run_general_projection_step "operational_features" \
+        "$PY" scripts/rebuild_operational_features.py --season 2026
+fi
+
+# 4. Capture current DraftKings prices and FOX context, remove stale "current"
 #    rows, append snapshots, and write source health. Only DraftKings 2.5 totals
 #    are eligible; API-Football stays shadow-only.
 run_required_step "odds_poll" bash scripts/poll_current_odds.sh
 
-# 4. Fit and serve the isolated, frozen totals-over policy.
+# 5. Fit and serve the isolated, frozen totals-over policy.
 run_required_step "policy_train" "$PY" scripts/train.py \
     --model team_ratings_only \
     --output-dir data/processed/policy/nwsl-totals-open-over-v1/models
 run_required_step "policy_slate" "$PY" scripts/generate_frozen_policy_slate.py
 run_required_step "policy_settle" "$PY" scripts/settle_frozen_policy.py
 
-# 5. Regenerate the legacy/general projections and actionable slate.
-run_step "predict" "$PY" scripts/predict.py \
-    --matches data/raw/upcoming.csv \
-    --output data/processed/predictions.csv
+# 6. Rebuild and publish the separate general match-probability artifact. The
+#    version is stable for this invocation, and publication does not require a
+#    Git commit or Vercel deployment.
+GENERAL_VERSION="$(date -u +%Y%m%dT%H%M%SZ)"
+if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    run_general_projection_step "general_train" "$PY" scripts/train.py \
+        --model team_ratings_only \
+        --output-dir data/processed/general/models \
+        --version "$GENERAL_VERSION" \
+        --serving-model-family spi_lite_baseline \
+        --require-operational-quality
+fi
+if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    run_general_projection_step "general_predict" "$PY" scripts/predict.py \
+        --matches data/raw/upcoming.csv \
+        --model spi_lite_baseline \
+        --model-dir data/processed/general/models \
+        --output data/processed/predictions.csv
+fi
+if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    run_general_projection_step "publish_general_predictions_supabase" \
+        "$PY" scripts/publish_general_predictions.py
+fi
+
+# The legacy actionable-slate ledger remains best-effort and distinct from the
+# frozen policy and from the general probability feed.
 run_step "slate" "$PY" scripts/generate_betting_slate.py
 
-# 6. Lock today's general picks into the forward ledger and settle anything now played.
+# 7. Lock today's general picks into the forward ledger and settle anything now played.
 #    track_matchday must succeed -- it is the point of the job -- so its exit
 #    status is the script's exit status.
 echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) track_matchday ===" >>"$LOG_FILE"
@@ -110,7 +164,7 @@ echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) track_matchday ===" >>"$LOG_FILE"
 status=$?
 echo "--- track_matchday exit $status ---" >>"$LOG_FILE"
 
-# 7. Publish only a fully successful model snapshot. The authenticated endpoint
+# 8. Publish only a fully successful frozen-policy snapshot. The authenticated endpoint
 #    writes the run, complete slate, immutable picks, and settlements to
 #    Supabase atomically; a failed pipeline never replaces the latest good run.
 if [ "$status" -eq 0 ] && [ "$REQUIRED_FAILURE" -eq 0 ]; then
@@ -118,7 +172,7 @@ if [ "$status" -eq 0 ] && [ "$REQUIRED_FAILURE" -eq 0 ]; then
 fi
 
 echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) done ===" >>"$LOG_FILE"
-if [ "$REQUIRED_FAILURE" -ne 0 ] || [ "$PUBLIC_DATA_FAILURE" -ne 0 ]; then
+if [ "$REQUIRED_FAILURE" -ne 0 ] || [ "$PUBLIC_DATA_FAILURE" -ne 0 ] || [ "$GENERAL_PROJECTION_FAILURE" -ne 0 ]; then
     exit 1
 fi
 exit "$status"

@@ -7,12 +7,11 @@
  * - Players: 410 official NWSL players with 2025 season stats
  * - Standings: ESPN 2025/2026 real standings
  * - Matches: ESPN real match results (2025 + 2026 seasons)
- * - Predictions: Pre-computed JSON from Python model (when available)
+ * - Predictions: Supabase snapshot first; committed JSON is a stale fallback
  */
 
 import type {
   MatchDetail,
-  MatchPrediction,
   MatchResult,
   ModelPerformance,
   PlayerFormPoint,
@@ -40,7 +39,6 @@ import {
 export type { Season } from "@/lib/analytics/analytics-real-data";
 
 import {
-  loadModelPredictions,
   loadModelTeamRatings,
   loadModelPerformance,
 } from "@/lib/analytics/model-data-loader";
@@ -129,17 +127,6 @@ export function getUpcomingMatches(): MatchResult[] {
 
 export function getCompletedMatches(): MatchResult[] {
   return getRealMatchResults().filter((m) => m.status === "completed");
-}
-
-// ── Model predictions (from Python pipeline — empty until model runs) ──────
-
-export function getMatchPredictions(): MatchPrediction[] {
-  return loadModelPredictions();
-}
-
-export function getMatchPrediction(matchId: string): MatchPrediction | undefined {
-  const preds = loadModelPredictions();
-  return preds.find((p) => p.matchId === matchId);
 }
 
 export function getModelPerformance(): ModelPerformance | null {

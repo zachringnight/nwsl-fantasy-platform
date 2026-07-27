@@ -8,7 +8,6 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from urllib import error, request
 
 import pandas as pd
 
@@ -17,6 +16,7 @@ from src.data.match_ids import (
     load_official_match_archive,
 )
 from src.utils.dates import parse_mixed_utc_datetime
+from src.publishing.http import publish_with_readback
 
 POLICY_ID = "nwsl-totals-open-over-v1"
 MODEL_FAMILY = "team_ratings_poisson"
@@ -663,27 +663,14 @@ def publish_payload(
     secret: str,
     timeout_seconds: int = 30,
 ) -> dict[str, Any]:
-    """POST one model snapshot without ever logging the publishing secret."""
-    body = json.dumps(payload, allow_nan=False, separators=(",", ":")).encode("utf-8")
-    req = request.Request(
-        url,
-        data=body,
-        method="POST",
-        headers={
-            "Authorization": f"Bearer {secret}",
-            "Content-Type": "application/json",
-            "Content-Length": str(len(body)),
+    """Publish one stable model run and verify ambiguous responses by readback."""
+    return publish_with_readback(
+        payload=payload,
+        publish_url=url,
+        secret=secret,
+        expected={
+            "runKey": payload["run"]["runKey"],
+            "artifactVersion": payload["run"]["artifactVersion"],
         },
+        timeout=float(timeout_seconds),
     )
-    try:
-        with request.urlopen(req, timeout=timeout_seconds) as response:
-            response_body = response.read()
-    except error.HTTPError as exc:
-        raise RuntimeError(f"Model publisher returned HTTP {exc.code}") from exc
-    except error.URLError as exc:
-        raise RuntimeError("Model publisher could not be reached") from exc
-
-    result = json.loads(response_body.decode("utf-8"))
-    if not result.get("ok"):
-        raise RuntimeError("Model publisher did not confirm the snapshot")
-    return result

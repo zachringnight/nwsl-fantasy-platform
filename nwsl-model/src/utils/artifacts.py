@@ -184,6 +184,38 @@ def resolve_model_artifact(model_name: str, root: Path = ARTIFACT_ROOT) -> dict[
             "kind": fallback["kind"],
         }
 
+    if model_name in BASELINE_MODELS:
+        version_dir = latest_version_dir(root)
+        if version_dir is None:
+            raise FileNotFoundError(f"No artifacts found under {root}")
+        if model_name in {
+            "team_ratings_poisson",
+            "spi_lite_baseline",
+        } and not (version_dir / "team_ratings.pkl").exists():
+            raise FileNotFoundError(
+                f"Baseline '{model_name}' requires team_ratings.pkl in {version_dir}"
+            )
+        training_summary_path = version_dir / "training_summary.json"
+        training_summary = (
+            load_json(training_summary_path)
+            if training_summary_path.exists()
+            else {}
+        )
+        return {
+            "requested_model": model_name,
+            "version": version_dir.name,
+            "version_dir": version_dir,
+            "model_family": model_name,
+            "evaluation_model": model_name,
+            "blended": False,
+            "gating_status": training_summary.get(
+                "gating_status",
+                "baseline_fallback",
+            ),
+            "metadata": training_summary,
+            "kind": "baseline_explicit",
+        }
+
     version_dir = latest_version_dir(root)
     if version_dir is None:
         raise FileNotFoundError(f"No artifacts found under {root}")

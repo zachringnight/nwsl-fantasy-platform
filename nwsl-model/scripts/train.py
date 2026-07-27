@@ -13,6 +13,7 @@ import argparse
 import logging
 import math
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -41,6 +42,8 @@ from src.utils.artifacts import create_version_dir, write_artifact_json
 from src.utils.io import load_config, load_json, save_json, save_pickle
 from src.utils.logging import setup_logging
 
+UTC = timezone.utc
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train NWSL betting model")
@@ -54,6 +57,17 @@ def main() -> None:
                         ])
     parser.add_argument("--output-dir", type=str, default="data/processed/models")
     parser.add_argument("--version", type=str, default="")
+    parser.add_argument(
+        "--serving-model-family",
+        choices=["spi_lite_baseline"],
+        default=None,
+        help="Record the explicit general-projection serving family.",
+    )
+    parser.add_argument(
+        "--require-operational-quality",
+        action="store_true",
+        help="Fail unless the current operational feature report is ready.",
+    )
     parser.add_argument(
         "--build-dataset",
         action="store_true",
@@ -172,6 +186,38 @@ def main() -> None:
     manifest_path = raw_data_dir / "dataset_manifest.json"
     if manifest_path.exists():
         dataset_manifest = load_json(manifest_path)
+    operational_report_path = raw_data_dir / "operational_feature_refresh.json"
+    operational_report = (
+        load_json(operational_report_path)
+        if operational_report_path.exists()
+        else {}
+    )
+    if args.require_operational_quality:
+        if operational_report.get("status") != "ready":
+            logger.error(
+                "Operational feature quality is not ready: %s",
+                operational_report.get("blockers", ["report_missing"]),
+            )
+            sys.exit(1)
+        report_generated_at = pd.to_datetime(
+            operational_report.get("generated_at"),
+            utc=True,
+            errors="coerce",
+        )
+        manifest_generated_at = pd.to_datetime(
+            dataset_manifest.get("generated_at"),
+            utc=True,
+            errors="coerce",
+        )
+        if (
+            pd.isna(report_generated_at)
+            or pd.isna(manifest_generated_at)
+            or report_generated_at < manifest_generated_at
+        ):
+            logger.error(
+                "Operational feature quality predates the refreshed source manifest"
+            )
+            sys.exit(1)
     odds_for_quality = dataset.odds if dataset.has_odds else None
     odds_path_value = data_cfg.get("odds_path", "")
     odds_path = Path(odds_path_value)
@@ -193,6 +239,19 @@ def main() -> None:
     )
     training_summary = {
         "version": output_dir.name,
+        "generated_at": datetime.now(UTC).isoformat(),
+        "training_cutoff": str(pd.to_datetime(reference_date).date()),
+        "source_manifest_generated_at": dataset_manifest.get("generated_at"),
+        "serving_model_family": args.serving_model_family,
+        "feature_status": operational_report.get(
+            "feature_status",
+            "excluded",
+        ),
+        "gating_status": operational_report.get(
+            "gating_status",
+            "blocked",
+        ),
+        "operational_feature_quality": operational_report,
         "models": {},
         "n_matches": len(prepared_matches),
         "n_teams": len(team_map),
