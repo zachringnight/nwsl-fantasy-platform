@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Lightweight current-odds poller. API-Football is shadow-only; FOX Sports
-# remains the authoritative live total source for the frozen policy.
+# Lightweight current-odds poller. The structured Apify DraftKings API is the
+# frozen policy's authoritative price source. FOX is market context and
+# API-Football remains shadow-only; neither can create an actionable pick.
 
 set -u
 
@@ -35,13 +36,14 @@ run_required_step() {
 }
 
 run_step "api_football_shadow" "$PY" scripts/fetch_api_football_shadow.py
+run_step "draftkings_api" "$PY" scripts/fetch_apify_draftkings_api_odds.py
 run_step "foxsports" "$PY" scripts/fetch_foxsports_odds.py
 
-# The legacy Apify feeds require a residential proxy that is not currently
-# available on this account. Keep an explicit opt-in for future diagnostics,
-# but do not burn predictable failing requests on every poll.
+# The browser-based Apify feeds require a residential proxy. Keep them behind
+# an explicit opt-in for diagnostics; the structured DraftKings API above runs
+# best-effort on every existing scheduled poll.
 if [ "${ENABLE_LEGACY_APIFY_ODDS:-0}" = "1" ]; then
-    run_step "draftkings_legacy" "$PY" scripts/fetch_apify_draftkings_odds.py
+    run_step "draftkings_browser_legacy" "$PY" scripts/fetch_apify_draftkings_odds.py
     run_step "footystats_legacy" "$PY" scripts/fetch_apify_footystats_odds.py
 fi
 

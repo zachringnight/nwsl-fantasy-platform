@@ -37,9 +37,7 @@ def filter_fresh_current_rows(
             "sample_removed_match_ids": [],
         }
 
-    source_type = frame.get(
-        "source_type", pd.Series("", index=frame.index)
-    ).astype(str).str.lower()
+    source_type = frame.get("source_type", pd.Series("", index=frame.index)).astype(str).str.lower()
     current_mask = source_type.eq("current")
     timestamps = (
         parse_mixed_utc_datetime(frame["timestamp"])
@@ -75,19 +73,19 @@ def filter_fresh_current_rows(
         "removed_rows": int(remove_mask.sum()),
         "removed_by_reason": {
             str(key): int(value)
-            for key, value in removed.get(
-                "removal_reason", pd.Series(dtype=str)
-            ).value_counts().items()
+            for key, value in removed.get("removal_reason", pd.Series(dtype=str))
+            .value_counts()
+            .items()
         },
         "removed_by_sportsbook": {
             str(key): int(value)
-            for key, value in removed.get(
-                "sportsbook", pd.Series(dtype=str)
-            ).value_counts().items()
+            for key, value in removed.get("sportsbook", pd.Series(dtype=str)).value_counts().items()
         },
-        "sample_removed_match_ids": removed.get(
-            "match_id", pd.Series(dtype=str)
-        ).astype(str).drop_duplicates().head(10).tolist(),
+        "sample_removed_match_ids": removed.get("match_id", pd.Series(dtype=str))
+        .astype(str)
+        .drop_duplicates()
+        .head(10)
+        .tolist(),
     }
     return cleaned, report
 
@@ -149,6 +147,7 @@ def build_odds_source_health_report(
     shadow_snapshots: pd.DataFrame | None,
     *,
     shadow_status: dict[str, Any] | None = None,
+    draftkings_status: dict[str, Any] | None = None,
     unmatched_count: int = 0,
     now: datetime | None = None,
     max_age_minutes: int = 180,
@@ -171,33 +170,110 @@ def build_odds_source_health_report(
         current_time=current_time,
         max_age_minutes=max_age_minutes,
     )
+    authoritative_frame = (
+        authoritative_odds.copy() if authoritative_odds is not None else pd.DataFrame()
+    )
+    if authoritative_frame.empty:
+        draftkings_candidates = pd.DataFrame()
+        valid_draftkings = pd.DataFrame()
+    else:
+        sportsbook = (
+            authoritative_frame.get(
+                "sportsbook",
+                pd.Series("", index=authoritative_frame.index),
+            )
+            .astype(str)
+            .str.casefold()
+        )
+        source = (
+            authoritative_frame.get(
+                "source_type",
+                pd.Series("", index=authoritative_frame.index),
+            )
+            .astype(str)
+            .str.lower()
+        )
+        market = (
+            authoritative_frame.get(
+                "market_type",
+                pd.Series("", index=authoritative_frame.index),
+            )
+            .astype(str)
+            .str.lower()
+        )
+        draftkings_candidates = authoritative_frame[
+            sportsbook.eq("draftkings") & source.isin({"current", "live"}) & market.eq("total")
+        ].copy()
+        line = pd.to_numeric(
+            draftkings_candidates.get(
+                "line",
+                pd.Series(float("nan"), index=draftkings_candidates.index),
+            ),
+            errors="coerce",
+        )
+        over = pd.to_numeric(
+            draftkings_candidates.get(
+                "over_odds",
+                pd.Series(float("nan"), index=draftkings_candidates.index),
+            ),
+            errors="coerce",
+        )
+        under = pd.to_numeric(
+            draftkings_candidates.get(
+                "under_odds",
+                pd.Series(float("nan"), index=draftkings_candidates.index),
+            ),
+            errors="coerce",
+        )
+        valid_draftkings = draftkings_candidates[line.gt(0) & over.gt(1) & under.gt(1)].copy()
+    _, draftkings_summary = _fresh_total_rows(
+        valid_draftkings,
+        source_types={"current", "live"},
+        current_time=current_time,
+        max_age_minutes=max_age_minutes,
+    )
+    draftkings_provider_status = str((draftkings_status or {}).get("status") or "missing")
+    draftkings_summary.update(
+        {
+            "provider_status": draftkings_provider_status,
+            "status": (
+                "healthy"
+                if (draftkings_provider_status == "ok" and draftkings_summary["fresh_rows"] > 0)
+                else "unavailable"
+                if (draftkings_provider_status == "missing" and draftkings_summary["rows"] == 0)
+                else "degraded"
+            ),
+            "invalid_paired_total_rows": int(len(draftkings_candidates) - len(valid_draftkings)),
+            "checked_at": (draftkings_status or {}).get("checked_at"),
+            "scraped_at": (draftkings_status or {}).get("scraped_at"),
+            "event_count": int((draftkings_status or {}).get("event_count") or 0),
+            "parsed_rows": int((draftkings_status or {}).get("parsed_rows") or 0),
+            "matched_rows": int((draftkings_status or {}).get("matched_rows") or 0),
+            "unmatched_rows": int((draftkings_status or {}).get("unmatched_rows") or 0),
+        }
+    )
 
     schedule = upcoming.copy()
-    schedule["match_id"] = schedule.get(
-        "match_id", pd.Series(dtype=str)
-    ).astype(str)
-    schedule["match_date_dt"] = pd.to_datetime(
-        schedule.get("match_date"), errors="coerce"
-    ).dt.date
+    schedule["match_id"] = schedule.get("match_id", pd.Series(dtype=str)).astype(str)
+    schedule["match_date_dt"] = pd.to_datetime(schedule.get("match_date"), errors="coerce").dt.date
     window_end = current_time.date() + pd.Timedelta(days=3)
     near_term = schedule[
-        schedule["match_date_dt"].ge(current_time.date())
-        & schedule["match_date_dt"].le(window_end)
+        schedule["match_date_dt"].ge(current_time.date()) & schedule["match_date_dt"].le(window_end)
     ]
     near_term_ids = set(near_term["match_id"].astype(str))
     authoritative_ids = set(authoritative_fresh.get("match_id", pd.Series(dtype=str)).astype(str))
     shadow_ids = set(shadow_fresh.get("match_id", pd.Series(dtype=str)).astype(str))
     fox_ids = set(
         authoritative_fresh[
-            authoritative_fresh.get(
-                "sportsbook", pd.Series("", index=authoritative_fresh.index)
-            ).astype(str).eq("FoxSports")
-        ].get("match_id", pd.Series(dtype=str)).astype(str)
+            authoritative_fresh.get("sportsbook", pd.Series("", index=authoritative_fresh.index))
+            .astype(str)
+            .eq("FoxSports")
+        ]
+        .get("match_id", pd.Series(dtype=str))
+        .astype(str)
     )
     coverage_vs_fox = (
-        len(shadow_ids.intersection(fox_ids)) / len(fox_ids) * 100.0
-        if fox_ids
-        else 0.0
+        len(shadow_ids.intersection(fox_ids)) / len(fox_ids) * 100.0 if fox_ids else 0.0
     )
 
     snapshots = shadow_snapshots.copy() if shadow_snapshots is not None else pd.DataFrame()
@@ -205,9 +281,7 @@ def build_odds_source_health_report(
         snapshots["timestamp_dt"] = parse_mixed_utc_datetime(snapshots["timestamp"])
         valid_snapshot_times = snapshots["timestamp_dt"].dropna()
         observation_days = (
-            int(valid_snapshot_times.dt.date.nunique())
-            if not valid_snapshot_times.empty
-            else 0
+            int(valid_snapshot_times.dt.date.nunique()) if not valid_snapshot_times.empty else 0
         )
         observed_matches = int(snapshots["match_id"].astype(str).nunique())
         observed_books = int(snapshots["sportsbook"].astype(str).nunique())
@@ -218,9 +292,7 @@ def build_odds_source_health_report(
 
     provider_status = str((shadow_status or {}).get("status") or "missing")
     fresh_ratio = (
-        shadow_summary["fresh_rows"] / shadow_summary["rows"]
-        if shadow_summary["rows"]
-        else 0.0
+        shadow_summary["fresh_rows"] / shadow_summary["rows"] if shadow_summary["rows"] else 0.0
     )
     thresholds = {
         "provider_status": "ok",
@@ -248,9 +320,7 @@ def build_odds_source_health_report(
         reasons.append("stale_or_missing_shadow_rows")
 
     authoritative_summary["status"] = (
-        "healthy"
-        if authoritative_summary["fresh_rows"] > 0
-        else "unavailable"
+        "healthy" if authoritative_summary["fresh_rows"] > 0 else "unavailable"
     )
     shadow_summary["provider_status"] = provider_status
     shadow_summary["status"] = (
@@ -265,19 +335,16 @@ def build_odds_source_health_report(
         "generated_at": current_time.isoformat(),
         "max_age_minutes": int(max_age_minutes),
         "authoritative": authoritative_summary,
+        "apify_draftkings": draftkings_summary,
         "api_football_shadow": shadow_summary,
         "coverage": {
             "near_term_schedule_matches": int(len(near_term_ids)),
             "authoritative_near_term_matches": int(
                 len(near_term_ids.intersection(authoritative_ids))
             ),
-            "shadow_near_term_matches": int(
-                len(near_term_ids.intersection(shadow_ids))
-            ),
+            "shadow_near_term_matches": int(len(near_term_ids.intersection(shadow_ids))),
             "fox_priced_matches": int(len(fox_ids)),
-            "shadow_matches_overlapping_fox": int(
-                len(shadow_ids.intersection(fox_ids))
-            ),
+            "shadow_matches_overlapping_fox": int(len(shadow_ids.intersection(fox_ids))),
             "coverage_vs_fox_pct": round(float(coverage_vs_fox), 2),
         },
         "promotion_gate": {

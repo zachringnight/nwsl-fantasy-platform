@@ -74,16 +74,10 @@ def test_filter_fresh_current_rows_removes_stale_and_invalid_current_only() -> N
 
 def test_shadow_gate_stays_manual_and_requires_forward_observation() -> None:
     upcoming = pd.DataFrame(
-        [
-            {"match_id": f"m{index}", "match_date": "2026-07-27"}
-            for index in range(1, 6)
-        ]
+        [{"match_id": f"m{index}", "match_date": "2026-07-27"} for index in range(1, 6)]
     )
     authoritative = pd.DataFrame(
-        [
-            odds_row(f"m{index}", "2026-07-26T19:30:00+00:00")
-            for index in range(1, 6)
-        ]
+        [odds_row(f"m{index}", "2026-07-26T19:30:00+00:00") for index in range(1, 6)]
     )
     shadow_current = pd.DataFrame(
         [
@@ -99,9 +93,7 @@ def test_shadow_gate_stays_manual_and_requires_forward_observation() -> None:
     )
     shadow_snapshots = pd.concat(
         [
-            shadow_current.assign(
-                timestamp=f"2026-07-{day:02d}T19:30:00+00:00"
-            )
+            shadow_current.assign(timestamp=f"2026-07-{day:02d}T19:30:00+00:00")
             for day in range(20, 27)
         ],
         ignore_index=True,
@@ -143,3 +135,48 @@ def test_shadow_gate_reports_missing_provider_and_insufficient_evidence() -> Non
     assert "insufficient_observation_days" in reasons
     assert "unmatched_rows_present" in reasons
     assert "stale_or_missing_shadow_rows" in reasons
+
+
+def test_source_health_reports_apify_draftkings_fresh_totals() -> None:
+    authoritative = pd.DataFrame(
+        [
+            odds_row(
+                "m1",
+                "2026-07-26T19:30:00+00:00",
+                sportsbook="DraftKings",
+            ),
+            {
+                **odds_row(
+                    "m2",
+                    "2026-07-26T12:00:00+00:00",
+                    sportsbook="DraftKings",
+                ),
+                "over_odds": None,
+            },
+        ]
+    )
+
+    report = build_odds_source_health_report(
+        upcoming=pd.DataFrame([{"match_id": "m1", "match_date": "2026-07-27"}]),
+        authoritative_odds=authoritative,
+        shadow_current=pd.DataFrame(),
+        shadow_snapshots=pd.DataFrame(),
+        draftkings_status={
+            "status": "ok",
+            "checked_at": "2026-07-26T19:31:00+00:00",
+            "scraped_at": "2026-07-26T19:30:00+00:00",
+            "event_count": 1,
+            "parsed_rows": 2,
+            "matched_rows": 2,
+            "unmatched_rows": 0,
+        },
+        now=NOW,
+    )
+
+    draftkings = report["apify_draftkings"]
+    assert draftkings["status"] == "healthy"
+    assert draftkings["provider_status"] == "ok"
+    assert draftkings["fresh_rows"] == 1
+    assert draftkings["matches"] == 1
+    assert draftkings["invalid_paired_total_rows"] == 1
+    assert draftkings["scraped_at"] == "2026-07-26T19:30:00+00:00"

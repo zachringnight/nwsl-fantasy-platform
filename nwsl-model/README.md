@@ -15,7 +15,7 @@ src/
              # totals_market_model, market_blend, calibration, team_ratings
   betting/   # score_matrix, market_derivation, recommendations, staking, clv
   backtest/  # splitter, runner, threshold_tuning, metrics, reports
-  odds/      # api_football shadow, foxsports, historical imports, freshness/quality
+  odds/      # DraftKings/Apify, FOX, API-Football shadow, history, freshness/quality
   utils/     # artifacts, gating, dates, io
 api/         # FastAPI prediction server (api/main.py, api/deps.py)
 tests/       # pytest suite (396 tests at the 2026-07-26 publishing checkpoint)
@@ -39,9 +39,10 @@ python3 scripts/fetch_nwsl_availability.py
 bash scripts/poll_current_odds.sh
 python3 scripts/audit_model_inputs.py --config configs/default.yaml --artifact-root data/processed/models
 ```
-Or `make refresh` for everything except the ESPN pair. No local odds credential
-or Apify token is needed: the poller reads the fixed, cached API-Football NWSL
-feed and the public FOX pages.
+Or `make refresh` for everything except the ESPN pair. `APIFY_TOKEN` enables
+the structured DraftKings NWSL feed. The poller still checks the public FOX
+pages for independent market context, while API-Football remains isolated as
+shadow evidence. Neither source can create a frozen-policy pick.
 
 The lightweight source-only command is:
 
@@ -49,15 +50,18 @@ The lightweight source-only command is:
 make odds-poll
 ```
 
-It performs five bounded actions:
+It performs six bounded actions:
 
 1. Captures multi-book API-Football goal totals into
    `data/raw/api_football_shadow_current.csv` and its own snapshot history.
-2. Refreshes FOX Sports into the authoritative `odds.csv`.
-3. Removes rows older than `odds_provider.stale_line_minutes` that are still
+2. Fetches current DraftKings 1X2 and paired totals through the Zen Studio
+   Apify Standby API and maps them to ESPN match ids.
+3. Refreshes FOX Sports into `odds.csv` for display and source-health context.
+4. Removes rows older than `odds_provider.stale_line_minutes` that are still
    labeled `current`; historical `open`, `close`, and shadow evidence is kept.
-4. Captures the cleaned authoritative line history for CLV.
-5. Writes `data/raw/odds_source_health.json`, including a forward-observation
+5. Captures the cleaned authoritative line history for CLV.
+6. Writes `data/raw/odds_source_health.json`, including DraftKings freshness
+   and a forward-observation
    gate for API-Football.
 
 API-Football is deliberately shadow-only. It cannot affect picks until it has
@@ -129,7 +133,7 @@ alias by accident.
 totals rules.
 
 - Model: `team_ratings_poisson`
-- Market/side: total over only
+- Sportsbook/market/side: DraftKings total over 2.5 only
 - Quote contract: opening or first-seen current quote; a later quote is usable
   only if the over price is no worse
 - Frozen thresholds: expected-value edge `>= 0.02`, confidence `>= 0.03`
@@ -160,13 +164,18 @@ make policy-slate
 make policy-settle
 ```
 
-Serving fails closed when the evidence/model/market/side contract does not
-match, a quote is stale, a later price is worse than first seen, or the frozen
-thresholds are not met. Every near-term decision is recorded locally, at most
-one actionable pick is locked per match, and settlement uses 90-minute goals.
+Serving fails closed when the evidence/model/sportsbook/market/side contract
+does not match, the paired DraftKings 2.5 quote is missing or stale, a later
+price is worse than first seen, or the frozen thresholds are not met. FOX can
+remain visible as source-health or market context but cannot create an
+actionable frozen-policy pick. Every near-term decision is recorded locally,
+at most one actionable pick is locked per match, and settlement uses
+90-minute goals.
 After the complete runner succeeds, `scripts/publish_frozen_policy.py` posts
-the run, slate, immutable locked picks, and settlement updates to the
-Supabase-backed predictions page. A failed run never replaces the latest good
+the run, slate, exact fresh odds snapshots, immutable locked picks, and
+settlement updates to the Supabase-backed predictions and match pages. Every
+priced slate row must match one stored sportsbook, timestamp, line, over price,
+and under price exactly. A failed run never replaces the latest good
 publication, and daily publications do not create GitHub commits or Vercel
 deployments.
 

@@ -13,27 +13,38 @@ export const metadata = {
 
 export const revalidate = 300;
 
-export default async function PredictionsPage() {
-  const predictions = getMatchPredictions();
-  const liveModelBoard = await getLiveModelBoard();
+export default async function PredictionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ season?: string }>;
+}) {
+  const query = await searchParams;
+  const season = query.season === "2025" ? "2025" : "2026";
+  const predictions = getMatchPredictions().filter((prediction) =>
+    prediction.date.startsWith(`${season}-`)
+  );
+  const liveModelBoard =
+    season === "2026" ? await getLiveModelBoard() : null;
 
   return (
     <AppShell
       eyebrow="Predictive Models"
       title="Predictions"
-      description="Daily frozen-policy picks, tracked results, and match probabilities from the NWSL model lab."
+      description={`${season} frozen-policy picks, tracked results, and match probabilities from the NWSL model lab.`}
     >
       {liveModelBoard ? <LiveModelPicks board={liveModelBoard} /> : null}
 
       {predictions.length === 0 ? (
         <div className="text-center py-16">
-          <p className="text-lg text-muted">No upcoming predictions available.</p>
+          <p className="text-lg text-muted">
+            No {season} model projections available.
+          </p>
           <p className="mt-2 text-sm text-muted/60">
             Predictions appear when upcoming matches are scheduled.
           </p>
         </div>
       ) : (
-        <MatchPredictionBrowser predictions={predictions} />
+        <MatchPredictionBrowser predictions={predictions} season={season} />
       )}
 
       {/* Model info */}

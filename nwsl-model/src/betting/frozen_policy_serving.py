@@ -12,6 +12,8 @@ from src.betting.market_derivation import derive_all_markets
 from src.utils.dates import parse_mixed_utc_datetime
 
 UTC = timezone.utc
+FROZEN_TOTAL_LINE = 2.5
+FROZEN_SPORTSBOOK = "draftkings"
 
 
 def validate_policy_evidence(
@@ -31,9 +33,7 @@ def validate_policy_evidence(
     }
     failed = [name for name, passed in required.items() if not passed]
     if failed:
-        raise ValueError(
-            "Frozen policy evidence is not serveable: " + ", ".join(failed)
-        )
+        raise ValueError("Frozen policy evidence is not serveable: " + ", ".join(failed))
 
     thresholds = evidence.get("thresholds", {})
     min_edge = float(thresholds.get("min_edge", -1.0))
@@ -67,6 +67,7 @@ def _normalized_total_rows(frame: pd.DataFrame) -> pd.DataFrame:
     return output[
         output["market_type"].isin({"total", "totals"})
         & output["line"].notna()
+        & output["line"].sub(FROZEN_TOTAL_LINE).abs().le(1.0e-9)
         & output["over_odds"].gt(1.0)
         & output["under_odds"].gt(1.0)
     ].copy()
@@ -101,18 +102,14 @@ def annotate_first_seen_quotes(
         }
     )
     annotated = current_totals.merge(first_seen, on=keys, how="left")
-    annotated["first_seen_timestamp"] = annotated[
-        "first_seen_timestamp"
-    ].combine_first(annotated["timestamp_dt"])
-    annotated["first_seen_over_odds"] = annotated[
-        "first_seen_over_odds"
-    ].combine_first(annotated["over_odds"])
-    annotated["price_vs_first_seen"] = (
-        annotated["over_odds"] - annotated["first_seen_over_odds"]
+    annotated["first_seen_timestamp"] = annotated["first_seen_timestamp"].combine_first(
+        annotated["timestamp_dt"]
     )
-    annotated["first_seen_contract_ok"] = annotated["price_vs_first_seen"].ge(
-        -1.0e-9
+    annotated["first_seen_over_odds"] = annotated["first_seen_over_odds"].combine_first(
+        annotated["over_odds"]
     )
+    annotated["price_vs_first_seen"] = annotated["over_odds"] - annotated["first_seen_over_odds"]
+    annotated["first_seen_contract_ok"] = annotated["price_vs_first_seen"].ge(-1.0e-9)
     return annotated
 
 
@@ -151,12 +148,14 @@ def build_frozen_policy_slate(
         errors="coerce",
     ).dt.date
     fixtures = fixtures[
-        fixtures["match_date_dt"].ge(start_date)
-        & fixtures["match_date_dt"].le(end_date)
+        fixtures["match_date_dt"].ge(start_date) & fixtures["match_date_dt"].le(end_date)
     ].sort_values(["match_date_dt", "match_id"])
 
     current = _normalized_total_rows(odds)
-    current = current[current["source_type"].eq("current")]
+    current = current[
+        current["source_type"].eq("current")
+        & current["sportsbook"].astype(str).str.casefold().eq(FROZEN_SPORTSBOOK)
+    ]
     current = annotate_first_seen_quotes(current, snapshots)
     if not current.empty:
         current = (
@@ -199,9 +198,7 @@ def build_frozen_policy_slate(
             )
             continue
 
-        quote_age = (
-            reference_time - pd.Timestamp(quote["timestamp_dt"])
-        ).total_seconds() / 60.0
+        quote_age = (reference_time - pd.Timestamp(quote["timestamp_dt"])).total_seconds() / 60.0
         line = float(quote["line"])
         over_odds = float(quote["over_odds"])
         under_odds = float(quote["under_odds"])
@@ -216,9 +213,7 @@ def build_frozen_policy_slate(
                 {
                     **base,
                     "sportsbook": quote.get("sportsbook"),
-                    "quote_timestamp": pd.Timestamp(
-                        quote["timestamp_dt"]
-                    ).isoformat(),
+                    "quote_timestamp": pd.Timestamp(quote["timestamp_dt"]).isoformat(),
                     "line": line,
                     "over_odds": over_odds,
                     "under_odds": under_odds,
@@ -253,12 +248,8 @@ def build_frozen_policy_slate(
             {
                 **base,
                 "sportsbook": quote.get("sportsbook"),
-                "quote_timestamp": pd.Timestamp(
-                    quote["timestamp_dt"]
-                ).isoformat(),
-                "first_seen_timestamp": pd.Timestamp(
-                    quote["first_seen_timestamp"]
-                ).isoformat(),
+                "quote_timestamp": pd.Timestamp(quote["timestamp_dt"]).isoformat(),
+                "first_seen_timestamp": pd.Timestamp(quote["first_seen_timestamp"]).isoformat(),
                 "line": line,
                 "over_odds": over_odds,
                 "under_odds": under_odds,
@@ -298,13 +289,9 @@ def build_frozen_policy_slate(
         "matches_with_current_total_price": int(
             slate.get("over_odds", pd.Series(dtype=float)).notna().sum()
         ),
-        "actionable_picks": int(
-            slate.get("actionable", pd.Series(dtype=bool)).fillna(False).sum()
-        ),
+        "actionable_picks": int(slate.get("actionable", pd.Series(dtype=bool)).fillna(False).sum()),
         "reason_counts": (
-            slate["reason"].value_counts().astype(int).to_dict()
-            if not slate.empty
-            else {}
+            slate["reason"].value_counts().astype(int).to_dict() if not slate.empty else {}
         ),
         "thresholds": {
             "min_edge": policy["min_edge"],
@@ -321,11 +308,7 @@ def append_forward_decisions(
     incoming: pd.DataFrame,
 ) -> pd.DataFrame:
     """Append policy decisions idempotently and lock at most one pick per match."""
-    frames = [
-        frame
-        for frame in (existing, incoming)
-        if frame is not None and not frame.empty
-    ]
+    frames = [frame for frame in (existing, incoming) if frame is not None and not frame.empty]
     if not frames:
         return pd.DataFrame()
     combined = pd.concat(frames, ignore_index=True, sort=False)
@@ -352,12 +335,7 @@ def append_forward_decisions(
         pd.Series(False, index=combined.index),
     )
     if actionable.dtype != bool:
-        actionable = (
-            actionable.fillna(False)
-            .astype(str)
-            .str.lower()
-            .isin({"true", "1", "yes"})
-        )
+        actionable = actionable.fillna(False).astype(str).str.lower().isin({"true", "1", "yes"})
     combined["actionable"] = actionable
     if {"policy_id", "match_id"}.issubset(combined.columns):
         locked = combined[combined["actionable"]].groupby(
@@ -401,14 +379,10 @@ def settle_forward_decisions(
         pd.Series(False, index=output.index),
     )
     if actionable.dtype != bool:
-        actionable = (
-            actionable.fillna(False)
-            .astype(str)
-            .str.lower()
-            .isin({"true", "1", "yes"})
-        )
+        actionable = actionable.fillna(False).astype(str).str.lower().isin({"true", "1", "yes"})
     output["actionable"] = actionable
     for column, default in (
+        ("official_match_id", ""),
         ("settlement_status", "not_applicable"),
         ("result", ""),
         ("pnl_units", np.nan),
@@ -422,13 +396,24 @@ def settle_forward_decisions(
 
     reference = matches.copy()
     reference["match_id"] = reference["match_id"].astype(str)
-    if "match_status" in reference.columns:
-        reference = reference[
-            reference["match_status"].astype(str).str.lower().eq("completed")
-        ]
-    reference = reference.drop_duplicates("match_id", keep="last").set_index(
-        "match_id"
-    )
+    required_final_columns = {"match_status", "official_match_id"}
+    if not required_final_columns.issubset(reference.columns):
+        reference = reference.iloc[0:0]
+    else:
+        final_status = (
+            reference["match_status"]
+            .astype(str)
+            .str.strip()
+            .str.casefold()
+            .isin({"completed", "final"})
+        )
+        canonical_official_id = (
+            reference["official_match_id"]
+            .astype(str)
+            .str.fullmatch(r"nwsl::Football_Match::[0-9a-f]{32}")
+        )
+        reference = reference[final_status & canonical_official_id.fillna(False)]
+    reference = reference.drop_duplicates("match_id", keep="last").set_index("match_id")
     stamp = (settled_at or datetime.now(UTC)).astimezone(UTC).isoformat()
     for index, row in output[output["actionable"]].iterrows():
         match_id = str(row["match_id"])
@@ -456,20 +441,17 @@ def settle_forward_decisions(
         output.loc[index, "pnl_units"] = pnl
         output.loc[index, "home_goals_90"] = float(home_goals)
         output.loc[index, "away_goals_90"] = float(away_goals)
+        output.loc[index, "official_match_id"] = str(match["official_match_id"])
         output.loc[index, "settled_at"] = stamp
 
     action_rows = output[output["actionable"]]
-    settled_rows = action_rows[
-        action_rows["settlement_status"].astype(str).eq("settled")
-    ]
+    settled_rows = action_rows[action_rows["settlement_status"].astype(str).eq("settled")]
     pnl = pd.to_numeric(settled_rows["pnl_units"], errors="coerce")
     summary = {
         "generated_at": stamp,
         "actionable_decisions": int(len(action_rows)),
         "settled": int(len(settled_rows)),
-        "pending": int(
-            action_rows["settlement_status"].astype(str).eq("pending").sum()
-        ),
+        "pending": int(action_rows["settlement_status"].astype(str).eq("pending").sum()),
         "wins": int(settled_rows["result"].astype(str).eq("win").sum()),
         "losses": int(settled_rows["result"].astype(str).eq("loss").sum()),
         "pushes": int(settled_rows["result"].astype(str).eq("push").sum()),

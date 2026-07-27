@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo } from "react";
 import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { Pill } from "@/components/ui/pill";
 import {
@@ -9,6 +10,14 @@ import {
   analyticsPredictionHref,
   analyticsTeamHref,
 } from "@/lib/analytics/entity-routes";
+import {
+  browserStateHref,
+  nextAvailableDate,
+  resolveDateFilter,
+  resolveMatchOrder,
+  sortedUniqueDates,
+  stableSortByDate,
+} from "@/lib/analytics/match-browser-state";
 import type { MatchPrediction } from "@/types/analytics";
 
 function dateLabel(value: string): string {
@@ -24,12 +33,16 @@ function dateLabel(value: string): string {
 
 export function MatchPredictionBrowser({
   predictions,
+  season,
 }: {
   predictions: MatchPrediction[];
+  season: "2025" | "2026";
 }) {
-  const [selectedDate, setSelectedDate] = useState("all");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const dates = useMemo(
-    () => [...new Set(predictions.map((prediction) => prediction.date))].sort(),
+    () => sortedUniqueDates(predictions.map((prediction) => prediction.date)),
     [predictions]
   );
   const dateCounts = useMemo(
@@ -40,14 +53,28 @@ export function MatchPredictionBrowser({
       }, {}),
     [predictions]
   );
-  const filteredPredictions = useMemo(
-    () =>
+  const dateFilter = resolveDateFilter(searchParams.get("date"), dates);
+  const order = resolveMatchOrder(searchParams.get("order"));
+  const nextDate = useMemo(
+    () => nextAvailableDate(predictions.map((prediction) => prediction.date)),
+    [predictions]
+  );
+  const filteredPredictions = useMemo(() => {
+    const selectedDate = dateFilter === "next" ? nextDate : dateFilter;
+    const matching =
       selectedDate === "all"
         ? predictions
         : predictions.filter(
             (prediction) => prediction.date === selectedDate
-          ),
-    [predictions, selectedDate]
+          );
+
+    return stableSortByDate(matching, order);
+  }, [dateFilter, nextDate, order, predictions]);
+  const navigate = useCallback(
+    (updates: Record<string, string | null>) => {
+      router.push(browserStateHref(pathname, searchParams, updates));
+    },
+    [pathname, router, searchParams]
   );
 
   return (
@@ -71,16 +98,31 @@ export function MatchPredictionBrowser({
           </label>
           <select
             id="prediction-date"
-            value={selectedDate}
-            onChange={(event) => setSelectedDate(event.target.value)}
+            value={dateFilter}
+            onChange={(event) => navigate({ date: event.target.value })}
             className="rounded-full border border-line bg-panel-strong px-4 py-2 text-sm text-foreground outline-none transition focus:border-brand/40 focus-visible:ring-2 focus-visible:ring-brand-strong/55"
           >
+            <option value="next">
+              {nextDate ? `Next: ${dateLabel(nextDate)}` : "Next available date"}
+            </option>
             <option value="all">All dates ({predictions.length})</option>
             {dates.map((date) => (
               <option key={date} value={date}>
                 {dateLabel(date)} ({dateCounts[date]})
               </option>
             ))}
+          </select>
+          <label className="sr-only" htmlFor="prediction-order">
+            Sort prediction dates
+          </label>
+          <select
+            id="prediction-order"
+            value={order}
+            onChange={(event) => navigate({ order: event.target.value })}
+            className="rounded-full border border-line bg-panel-strong px-4 py-2 text-sm text-foreground outline-none transition focus:border-brand/40 focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+          >
+            <option value="asc">Earliest first</option>
+            <option value="desc">Latest first</option>
           </select>
           <span
             className="text-xs text-muted"
@@ -108,7 +150,7 @@ export function MatchPredictionBrowser({
             >
               <div className="mb-3 flex items-center justify-between">
                 <Link
-                  href={analyticsPredictionHref(prediction.matchId)}
+                  href={analyticsPredictionHref(prediction.matchId, season)}
                   aria-label={`Open prediction for ${prediction.homeTeam} vs ${prediction.awayTeam}`}
                   className="text-[0.65rem] font-medium uppercase tracking-widest text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
                 >
@@ -120,7 +162,7 @@ export function MatchPredictionBrowser({
               <div className="mb-4 space-y-1">
                 <div className="flex items-center justify-between">
                   <Link
-                    href={analyticsTeamHref(prediction.homeTeamId)}
+                    href={analyticsTeamHref(prediction.homeTeamId, season)}
                     className="text-sm font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
                   >
                     {prediction.homeTeam}
@@ -137,7 +179,7 @@ export function MatchPredictionBrowser({
                 />
                 <div className="flex items-center justify-between">
                   <Link
-                    href={analyticsTeamHref(prediction.awayTeamId)}
+                    href={analyticsTeamHref(prediction.awayTeamId, season)}
                     className="text-sm font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
                   >
                     {prediction.awayTeam}
@@ -189,13 +231,13 @@ export function MatchPredictionBrowser({
               </div>
               <div className="mt-3 flex items-center justify-between gap-3">
                 <Link
-                  href={analyticsMatchHref(prediction.matchId)}
+                  href={analyticsMatchHref(prediction.matchId, season)}
                   className="text-xs text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
                 >
                   Match page
                 </Link>
                 <Link
-                  href={analyticsPredictionHref(prediction.matchId)}
+                  href={analyticsPredictionHref(prediction.matchId, season)}
                   className="text-xs font-semibold text-brand-strong hover:underline hover:underline-offset-4"
                 >
                   Full prediction

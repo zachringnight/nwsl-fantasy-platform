@@ -22,9 +22,7 @@ from src.publishing.model_picks import (  # noqa: E402
     publish_payload,
 )
 
-DEFAULT_URL = (
-    "https://nwsl-fantasy-platform.vercel.app/api/model-picks/publish"
-)
+DEFAULT_URL = "https://nwsl-fantasy-platform.vercel.app/api/model-picks/publish"
 
 
 def _load_json(path: Path, *, required: bool = True) -> dict:
@@ -66,9 +64,7 @@ def _load_secret(env_name: str) -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Publish the latest frozen NWSL policy snapshot"
-    )
+    parser = argparse.ArgumentParser(description="Publish the latest frozen NWSL policy snapshot")
     parser.add_argument(
         "--policy-dir",
         default="data/processed/policy/nwsl-totals-open-over-v1",
@@ -81,6 +77,14 @@ def main() -> None:
         "--source-health",
         default="data/raw/odds_source_health.json",
     )
+    parser.add_argument("--odds", default="data/raw/odds.csv")
+    parser.add_argument("--matches", default="data/raw/matches.csv")
+    parser.add_argument("--upcoming", default="data/raw/upcoming.csv")
+    parser.add_argument(
+        "--official-matches-dir",
+        default="../data/nwsl-official",
+    )
+    parser.add_argument("--max-odds-age-minutes", type=int, default=180)
     parser.add_argument(
         "--url",
         default=os.getenv("NWSL_MODEL_PUBLISH_URL", DEFAULT_URL),
@@ -104,19 +108,31 @@ def main() -> None:
         summary=summary,
         slate=pd.read_csv(slate_path, dtype={"match_id": str}),
         decisions=pd.read_csv(decisions_path, dtype={"match_id": str}),
+        odds=pd.read_csv(Path(args.odds), dtype={"match_id": str}),
+        matches=pd.read_csv(
+            Path(args.matches),
+            dtype={"match_id": str},
+        ),
+        upcoming=pd.read_csv(
+            Path(args.upcoming),
+            dtype={"match_id": str},
+        ),
+        official_matches_dir=Path(args.official_matches_dir),
         forward_results=_load_json(
             policy_dir / "forward_results.json",
             required=False,
         ),
         evidence=_load_json(Path(args.policy_evidence)),
         source_health=_load_json(Path(args.source_health), required=False),
+        max_odds_age_minutes=args.max_odds_age_minutes,
     )
 
     print(
         "Prepared model publication: "
         f"run={payload['run']['runKey']} "
         f"slate_rows={len(payload['slate'])} "
-        f"locked_picks={len(payload['picks'])}"
+        f"locked_picks={len(payload['picks'])} "
+        f"odds_rows={len(payload['odds'])}"
     )
     if args.dry_run:
         return
@@ -133,7 +149,8 @@ def main() -> None:
         f"run={publication.get('runKey', payload['run']['runKey'])} "
         f"slate_rows={publication.get('slateRows', len(payload['slate']))} "
         f"locked_picks_processed="
-        f"{publication.get('lockedPicksProcessed', len(payload['picks']))}"
+        f"{publication.get('lockedPicksProcessed', len(payload['picks']))} "
+        f"odds_rows={publication.get('oddsRows', len(payload['odds']))}"
     )
 
 

@@ -10,6 +10,8 @@ const mocks = vi.hoisted(() => ({
   getMatchResultsBySeason: vi.fn(),
   getEspnLiveMatch: vi.fn(),
   getLiveNwslPublicData: vi.fn(),
+  getLiveModelBoard: vi.fn(),
+  getArchivedPrematchModelMarket: vi.fn(),
   getRecentTeamForm: vi.fn(),
   getHeadToHead: vi.fn(),
   buildPrematchNarrative: vi.fn(),
@@ -53,6 +55,11 @@ vi.mock("@/lib/analytics/live-nwsl-public-data", () => ({
   getLiveNwslPublicData: mocks.getLiveNwslPublicData,
 }));
 
+vi.mock("@/lib/analytics/live-model-board", () => ({
+  getLiveModelBoard: mocks.getLiveModelBoard,
+  getArchivedPrematchModelMarket: mocks.getArchivedPrematchModelMarket,
+}));
+
 vi.mock("@/lib/analytics/match-context", () => ({
   getRecentTeamForm: mocks.getRecentTeamForm,
   getHeadToHead: mocks.getHeadToHead,
@@ -84,6 +91,8 @@ describe("MatchDetailPage archived context", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.getEspnLiveMatch.mockResolvedValue(null);
+    mocks.getLiveModelBoard.mockResolvedValue(null);
+    mocks.getArchivedPrematchModelMarket.mockResolvedValue(null);
     mocks.getLeagueTableBySeason.mockReturnValue([]);
     mocks.getTeamRatings.mockReturnValue([]);
     mocks.getMatchPrediction.mockReturnValue(undefined);
@@ -201,5 +210,39 @@ describe("MatchDetailPage archived context", () => {
     );
     expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
+  });
+
+  it("loads retained pre-match odds for a completed 2026 match", async () => {
+    const completedMatch = {
+      ...result("completed-2026", "2026-07-26"),
+      officialMatchId:
+        "nwsl::Football_Match::0123456789abcdef0123456789abcdef",
+      homeShots: 0,
+      awayShots: 0,
+      homeShotsOnTarget: 0,
+      awayShotsOnTarget: 0,
+      homePossession: 0,
+      awayPossession: 0,
+      homeCorners: 0,
+      awayCorners: 0,
+      homeFouls: 0,
+      awayFouls: 0,
+      events: [],
+    };
+    mocks.getMatchDetail.mockReturnValue(completedMatch);
+    mocks.getLiveNwslPublicData.mockResolvedValue({
+      matches: [completedMatch],
+      standings: [],
+      teamRatings: [],
+    });
+
+    await MatchDetailPage({
+      params: Promise.resolve({ matchId: completedMatch.matchId }),
+    });
+
+    expect(mocks.getArchivedPrematchModelMarket).toHaveBeenCalledWith({
+      matchId: "completed-2026",
+      officialMatchId: completedMatch.officialMatchId,
+    });
   });
 });

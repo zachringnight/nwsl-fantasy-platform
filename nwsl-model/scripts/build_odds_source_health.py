@@ -36,18 +36,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Build current odds source health report")
     parser.add_argument("--upcoming", default="data/raw/upcoming.csv")
     parser.add_argument("--odds", default="data/raw/odds.csv")
+    parser.add_argument("--shadow-current", default="data/raw/api_football_shadow_current.csv")
+    parser.add_argument("--shadow-snapshots", default="data/raw/api_football_shadow_snapshots.csv")
+    parser.add_argument("--shadow-status", default="data/raw/api_football_shadow_status.json")
     parser.add_argument(
-        "--shadow-current", default="data/raw/api_football_shadow_current.csv"
+        "--draftkings-status",
+        default="data/raw/apify_draftkings_api_odds_status.json",
     )
-    parser.add_argument(
-        "--shadow-snapshots", default="data/raw/api_football_shadow_snapshots.csv"
-    )
-    parser.add_argument(
-        "--shadow-status", default="data/raw/api_football_shadow_status.json"
-    )
-    parser.add_argument(
-        "--shadow-unmatched", default="data/raw/api_football_shadow_unmatched.csv"
-    )
+    parser.add_argument("--shadow-unmatched", default="data/raw/api_football_shadow_unmatched.csv")
     parser.add_argument("--output", default="data/raw/odds_source_health.json")
     parser.add_argument("--max-age-minutes", type=int, default=180)
     args = parser.parse_args()
@@ -60,6 +56,7 @@ def main() -> None:
         shadow_current=read_csv(resolve_path(args.shadow_current)),
         shadow_snapshots=read_csv(resolve_path(args.shadow_snapshots)),
         shadow_status=read_json(resolve_path(args.shadow_status)),
+        draftkings_status=read_json(resolve_path(args.draftkings_status)),
         unmatched_count=unmatched_count,
         max_age_minutes=args.max_age_minutes,
     )
@@ -70,6 +67,7 @@ def main() -> None:
     print(
         "Odds source health: "
         f"authoritative={report['authoritative']['status']} "
+        f"apify_draftkings={report['apify_draftkings']['status']} "
         f"api_football_shadow={report['api_football_shadow']['status']} "
         f"manual_review_ready={gate['ready_for_manual_review']} "
         f"reasons={','.join(gate['reasons']) or 'none'}"

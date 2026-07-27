@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LocalKickoffTime } from "@/components/analytics/local-kickoff-time";
+import { ModelMarketOdds } from "@/components/analytics/model-market-odds";
 import { StatComparisonBar } from "@/components/analytics/stat-comparison-bar";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { getPlayerIdByName } from "@/lib/analytics/analytics-data";
@@ -15,6 +16,10 @@ import type {
   MatchNarrative,
   RankedStanding,
 } from "@/lib/analytics/match-context";
+import type {
+  LiveMatchOdds,
+  LiveModelSlateRow,
+} from "@/lib/analytics/live-model-board";
 import {
   analyticsMatchHref,
   analyticsPlayerHref,
@@ -37,6 +42,9 @@ interface MatchStoryProps {
   homeForm: MatchFormEntry[];
   awayForm: MatchFormEntry[];
   headToHead: HeadToHeadEntry[];
+  marketOdds: LiveMatchOdds[];
+  marketRow?: LiveModelSlateRow;
+  marketArchived?: boolean;
 }
 
 function NarrativeSection({
@@ -660,7 +668,18 @@ export function MatchStory({
   homeForm,
   awayForm,
   headToHead,
+  marketOdds,
+  marketRow,
+  marketArchived = false,
 }: MatchStoryProps) {
+  const marketHeading = marketArchived
+    ? "Archived pre-match odds"
+    : phase === "live" && marketOdds.some((row) => row.sourceType === "live")
+      ? "Live market odds"
+      : phase === "final"
+        ? "Archived match odds"
+        : "Market odds";
+
   return (
     <>
       <NarrativeSection narrative={narrative} />
@@ -673,6 +692,12 @@ export function MatchStory({
         </>
       ) : null}
 
+      <ModelMarketOdds
+        odds={marketOdds}
+        modelRow={marketRow}
+        heading={marketHeading}
+        archived={marketArchived || phase === "final"}
+      />
       <ModelPredictionSection
         match={match}
         prediction={prediction}
