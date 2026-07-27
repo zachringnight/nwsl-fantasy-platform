@@ -37,16 +37,21 @@ export function SeasonSelector() {
   );
 
   return (
-    <div className="flex items-center gap-1">
+    <div
+      role="group"
+      aria-label="Analytics season"
+      className="flex items-center gap-1"
+    >
       {SEASONS.map((s) => (
         <button
           key={s.value}
           type="button"
+          aria-pressed={season === s.value}
           onClick={() => setSeason(s.value)}
           className={
             season === s.value
-              ? "rounded-full bg-brand/20 px-3 py-1.5 text-xs font-semibold text-brand-strong"
-              : "rounded-full px-3 py-1.5 text-xs font-semibold text-muted hover:bg-white/6 hover:text-foreground"
+              ? "rounded-full bg-brand/20 px-3 py-1.5 text-xs font-semibold text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/70 focus-visible:ring-offset-2 focus-visible:ring-offset-panel-strong"
+              : "rounded-full px-3 py-1.5 text-xs font-semibold text-muted hover:bg-white/6 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/70 focus-visible:ring-offset-2 focus-visible:ring-offset-panel-strong"
           }
         >
           {s.label}

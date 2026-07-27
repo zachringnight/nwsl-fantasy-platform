@@ -238,14 +238,14 @@ export default async function TeamDetailPage({
 
       <section>
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-          2026 Players
+          {season} Players
         </h3>
         {topPlayers.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {topPlayers.map((player, index) => (
               <Link
                 key={player.playerId}
-                href={analyticsPlayerHref(player.playerId, "2026")}
+                href={analyticsPlayerHref(player.playerId, season)}
                 className="glass-card rounded-xl border border-line bg-white/4 p-4 transition hover:border-brand/30"
               >
                 <div className="flex items-center gap-3">

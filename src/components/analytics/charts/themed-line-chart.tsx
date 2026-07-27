@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 interface LineConfig {
   dataKey: string;
@@ -33,6 +34,8 @@ export function ThemedLineChart({
   lines,
   height = 300,
 }: ThemedLineChartProps) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
@@ -64,6 +67,7 @@ export function ThemedLineChart({
             type="monotone"
             dataKey={line.dataKey}
             name={line.label}
+            isAnimationActive={!prefersReducedMotion}
             stroke={line.color}
             strokeWidth={2}
             strokeDasharray={line.dashed ? "5 5" : undefined}

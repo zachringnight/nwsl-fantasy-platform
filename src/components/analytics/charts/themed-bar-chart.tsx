@@ -11,6 +11,7 @@ import {
   Legend,
   Cell,
 } from "recharts";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 interface BarConfig {
   dataKey: string;
@@ -39,6 +40,8 @@ export function ThemedBarChart({
   positiveColor = "#00e1ff",
   negativeColor = "#ff3c22",
 }: ThemedBarChartProps) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <ResponsiveContainer width="100%" height={height}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
@@ -68,6 +71,7 @@ export function ThemedBarChart({
             dataKey={bar.dataKey}
             name={bar.label}
             fill={bar.color}
+            isAnimationActive={!prefersReducedMotion}
             radius={[4, 4, 0, 0]}
             stackId={stacked ? "stack" : undefined}
           >

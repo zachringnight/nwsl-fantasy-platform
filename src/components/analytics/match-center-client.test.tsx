@@ -55,4 +55,46 @@ describe("MatchCenterClient", () => {
     expect(screen.queryByText("Home postponed-match")).not.toBeInTheDocument();
     expect(screen.getByText("Home canceled-match")).toBeInTheDocument();
   });
+
+  it("announces filtered counts and distinguishes filtered-empty from no data", () => {
+    render(
+      <MatchCenterClient
+        matches={[
+          match("completed-match", "completed"),
+          match("upcoming-match", "upcoming"),
+        ]}
+        season="2026"
+        source="Official NWSL"
+      />
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "2 of 2 matches shown"
+    );
+    const postponedFilter = screen.getByRole("button", {
+      name: "postponed",
+    });
+    fireEvent.click(postponedFilter);
+
+    expect(postponedFilter).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "0 of 2 matches shown"
+    );
+    expect(
+      screen.getByText(
+        "No matches match the current status and matchday filters."
+      )
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Clear match filters" })
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "2 of 2 matches shown"
+    );
+    expect(screen.getByRole("button", { name: "all" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+  });
 });
