@@ -2,9 +2,9 @@
 # Recurring CLV capture: run the lightweight source poller, then accumulate the
 # official availability report.
 #
-# API-Football is captured in a separate shadow history. FOX Sports remains the
-# authoritative totals source until the forward health gate is ready for manual
-# review. The poller removes stale rows before capturing the active snapshot.
+# DraftKings via Apify and FOX Sports are authoritative current sources.
+# API-Football is captured in a separate shadow history. The poller removes
+# stale rows before capturing the active snapshot.
 #
 # Install via launchd/cron to run a few times a day. See README note at bottom.
 

@@ -90,7 +90,7 @@ export async function POST(request: Request) {
   };
 
   const supabase = getSupabaseServerClient();
-  const { data, error } = await supabase.rpc("publish_nwsl_model_snapshot", {
+  const { data, error } = await supabase.rpc("publish_nwsl_model_snapshot_v2", {
     p_payload: payload,
   });
 
@@ -106,5 +106,6 @@ export async function POST(request: Request) {
   }
 
   revalidatePath("/analytics/predictions");
+  revalidatePath("/analytics/matches");
   return NextResponse.json({ ok: true, publication: data });
 }

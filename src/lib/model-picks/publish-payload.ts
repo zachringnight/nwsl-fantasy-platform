@@ -2,20 +2,24 @@ import { z } from "zod";
 
 const finiteNullable = z.number().finite().nullable();
 const dateOnly = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const officialMatchId = z
+  .string()
+  .regex(/^nwsl::Football_Match::[0-9a-f]{32}$/);
 const jsonObject = z.record(z.string(), z.unknown());
 
 export const modelSlateRowSchema = z.object({
   policyId: z.literal("nwsl-totals-open-over-v1"),
+  officialMatchId,
   matchId: z.string().min(1).max(128),
   matchDate: dateOnly,
   homeTeam: z.string().min(1).max(160),
   awayTeam: z.string().min(1).max(160),
   market: z.literal("total_over"),
   side: z.literal("over"),
-  sportsbook: z.string().max(120).nullable(),
+  sportsbook: z.literal("DraftKings").nullable(),
   quoteTimestamp: z.string().datetime({ offset: true }).nullable(),
   firstSeenTimestamp: z.string().datetime({ offset: true }).nullable(),
-  line: finiteNullable,
+  line: z.literal(2.5).nullable(),
   overOdds: finiteNullable,
   underOdds: finiteNullable,
   modelProbability: finiteNullable,
@@ -36,16 +40,17 @@ export const modelSlateRowSchema = z.object({
 export const lockedModelPickSchema = z.object({
   pickKey: z.string().min(1).max(320),
   policyId: z.literal("nwsl-totals-open-over-v1"),
+  officialMatchId,
   matchId: z.string().min(1).max(128),
   matchDate: dateOnly,
   homeTeam: z.string().min(1).max(160),
   awayTeam: z.string().min(1).max(160),
   market: z.literal("total_over"),
   side: z.literal("over"),
-  sportsbook: z.string().min(1).max(120),
+  sportsbook: z.literal("DraftKings"),
   quoteTimestamp: z.string().datetime({ offset: true }),
   firstSeenTimestamp: z.string().datetime({ offset: true }).nullable(),
-  line: z.number().finite(),
+  line: z.literal(2.5),
   overOdds: z.number().finite().gt(1),
   underOdds: finiteNullable,
   modelProbability: z.number().finite().min(0).max(1),
@@ -60,6 +65,27 @@ export const lockedModelPickSchema = z.object({
   homeGoals90: finiteNullable,
   awayGoals90: finiteNullable,
   settledAt: z.string().datetime({ offset: true }).nullable(),
+  rawRow: jsonObject,
+});
+
+export const modelOddsSnapshotSchema = z.object({
+  officialMatchId,
+  matchId: z.string().min(1).max(128),
+  matchDate: dateOnly,
+  homeTeam: z.string().min(1).max(160),
+  awayTeam: z.string().min(1).max(160),
+  sportsbook: z.string().min(1).max(120),
+  quoteTimestamp: z.string().datetime({ offset: true }),
+  marketType: z.enum(["1x2", "total"]),
+  line: finiteNullable,
+  homeOdds: finiteNullable,
+  drawOdds: finiteNullable,
+  awayOdds: finiteNullable,
+  overOdds: finiteNullable,
+  underOdds: finiteNullable,
+  sourceType: z.enum(["current", "live"]),
+  quoteAgeMinutes: z.number().finite().min(0).max(180),
+  isFresh: z.literal(true),
   rawRow: jsonObject,
 });
 
@@ -86,16 +112,32 @@ export const modelPublishPayloadSchema = z.object({
   }),
   slate: z.array(modelSlateRowSchema).max(500),
   picks: z.array(lockedModelPickSchema).max(500),
+  odds: z.array(modelOddsSnapshotSchema).max(2_000),
 });
 
 export type ModelPublishPayload = z.infer<typeof modelPublishPayloadSchema>;
 
 export function validateModelPublishInvariants(payload: ModelPublishPayload): string[] {
   const errors: string[] = [];
+  const generatedAt = Date.parse(payload.run.generatedAt);
   const actionableRows = payload.slate.filter((row) => row.actionable);
+  const pricedRows = payload.slate.filter(
+    (row) =>
+      row.line !== null &&
+      row.overOdds !== null &&
+      row.underOdds !== null &&
+      row.sportsbook !== null &&
+      row.quoteTimestamp !== null
+  );
 
   if (actionableRows.length !== payload.run.actionablePicks) {
     errors.push("run actionable count does not match the slate");
+  }
+  if (payload.slate.length !== payload.run.matchesInWindow) {
+    errors.push("run match count does not match the slate");
+  }
+  if (pricedRows.length !== payload.run.pricedMatches) {
+    errors.push("run priced count does not match the slate");
   }
 
   if (
@@ -135,9 +177,109 @@ export function validateModelPublishInvariants(payload: ModelPublishPayload): st
     if (pick.settlementStatus === "pending" && pick.result !== "pending") {
       errors.push(`pending pick ${pick.pickKey} has a final result`);
     }
+
+    const lockedSlateRow = actionableRows.find(
+      (row) => row.matchId === pick.matchId
+    );
+    if (
+      lockedSlateRow &&
+      (lockedSlateRow.officialMatchId !== pick.officialMatchId ||
+        lockedSlateRow.sportsbook !== pick.sportsbook ||
+        lockedSlateRow.quoteTimestamp !== pick.quoteTimestamp ||
+        lockedSlateRow.line !== pick.line ||
+        lockedSlateRow.overOdds !== pick.overOdds)
+    ) {
+      errors.push(`locked pick ${pick.pickKey} does not match its slate quote`);
+    }
   }
 
-  const generatedAt = Date.parse(payload.run.generatedAt);
+  const slateMatchIds = new Set(payload.slate.map((row) => row.matchId));
+  const uniqueOdds = new Set<string>();
+  for (const odds of payload.odds) {
+    if (!slateMatchIds.has(odds.matchId)) {
+      errors.push(`odds row ${odds.matchId} is outside the published slate`);
+    }
+
+    const oddsKey = [
+      odds.matchId,
+      odds.sportsbook,
+      odds.marketType,
+      odds.line ?? "none",
+      odds.quoteTimestamp,
+    ].join(":");
+    if (uniqueOdds.has(oddsKey)) {
+      errors.push(`duplicate odds row ${oddsKey}`);
+    }
+    uniqueOdds.add(oddsKey);
+
+    const quoteTimestamp = Date.parse(odds.quoteTimestamp);
+    const computedAgeMinutes =
+      (generatedAt - quoteTimestamp) / (60 * 1_000);
+    if (
+      !Number.isFinite(generatedAt) ||
+      !Number.isFinite(quoteTimestamp) ||
+      computedAgeMinutes < -15 ||
+      computedAgeMinutes > 180
+    ) {
+      errors.push(`odds row ${oddsKey} is outside the publish freshness window`);
+    } else if (
+      Math.abs(
+        odds.quoteAgeMinutes - Math.max(computedAgeMinutes, 0)
+      ) > 0.05
+    ) {
+      errors.push(`odds row ${oddsKey} has an invalid supplied quote age`);
+    }
+
+    if (odds.marketType === "total") {
+      if (
+        odds.line === null ||
+        odds.overOdds === null ||
+        odds.overOdds <= 1 ||
+        odds.underOdds === null ||
+        odds.underOdds <= 1 ||
+        odds.homeOdds !== null ||
+        odds.drawOdds !== null ||
+        odds.awayOdds !== null
+      ) {
+        errors.push(`total odds row ${oddsKey} violates the market contract`);
+      }
+    } else if (
+      odds.line !== null ||
+      odds.homeOdds === null ||
+      odds.homeOdds <= 1 ||
+      odds.drawOdds === null ||
+      odds.drawOdds <= 1 ||
+      odds.awayOdds === null ||
+      odds.awayOdds <= 1 ||
+      odds.overOdds !== null ||
+      odds.underOdds !== null
+    ) {
+      errors.push(`1x2 odds row ${oddsKey} violates the market contract`);
+    }
+  }
+
+  for (const row of pricedRows) {
+    const exactQuote = payload.odds.find(
+      (odds) =>
+        odds.matchId === row.matchId &&
+        odds.officialMatchId === row.officialMatchId &&
+        odds.marketType === "total" &&
+        odds.sportsbook === row.sportsbook &&
+        odds.quoteTimestamp === row.quoteTimestamp &&
+        odds.line === row.line &&
+        odds.overOdds === row.overOdds &&
+        odds.underOdds === row.underOdds
+    );
+    if (!exactQuote) {
+      errors.push(`priced slate row ${row.matchId} has no exact odds snapshot`);
+    } else if (
+      row.quoteAgeMinutes === null ||
+      Math.abs(row.quoteAgeMinutes - exactQuote.quoteAgeMinutes) > 0.05
+    ) {
+      errors.push(`priced slate row ${row.matchId} has an invalid quote age`);
+    }
+  }
+
   const now = Date.now();
   if (!Number.isFinite(generatedAt)) {
     errors.push("run generatedAt is invalid");

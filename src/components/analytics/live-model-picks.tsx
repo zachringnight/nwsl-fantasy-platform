@@ -62,6 +62,18 @@ function Metric({
 
 export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
   const currentPicks = board.slate.filter((row) => row.actionable);
+  const pricedRows = board.slate.filter(
+    (row) =>
+      row.line !== null &&
+      row.overOdds !== null &&
+      row.underOdds !== null &&
+      row.sportsbook !== null &&
+      row.quoteTimestamp !== null
+  );
+  const unpricedMatches = Math.max(
+    board.matchesInWindow - board.pricedMatches,
+    0
+  );
   const settled = numberFrom(board.forwardResults, "settled");
   const pending = numberFrom(board.forwardResults, "pending");
   const wins = numberFrom(board.forwardResults, "wins");
@@ -79,6 +91,12 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
       ? (board.sourceHealth.authoritative as Record<string, unknown>)
       : {};
   const sourceStatus = stringFrom(authoritative, "status") || "unknown";
+  const draftKings =
+    board.sourceHealth.draftkings_apify &&
+    typeof board.sourceHealth.draftkings_apify === "object"
+      ? (board.sourceHealth.draftkings_apify as Record<string, unknown>)
+      : {};
+  const draftKingsStatus = stringFrom(draftKings, "status") || "unknown";
   const topReasons = Object.entries(board.reasonCounts)
     .sort(([, left], [, right]) => right - left)
     .slice(0, 3);
@@ -99,9 +117,9 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
               Frozen totals policy
             </h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-              Automated OVER selections using fresh, paired prices and the locked 0.25%
-              bankroll cap. The system records research picks and outcomes; it never places a
-              wager.
+              Automated DraftKings OVER 2.5 selections using fresh, paired prices and the
+              locked 0.25% bankroll cap. The system records research picks and outcomes; it
+              never places a wager.
             </p>
           </div>
           <div className="shrink-0 text-left text-xs leading-5 text-muted sm:text-right">
@@ -110,8 +128,9 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
               {board.pricedMatches}/{board.matchesInWindow} fixtures priced
             </p>
             <p className={sourceStatus === "healthy" ? "text-brand-lime" : "text-accent"}>
-              Authoritative source: {sourceStatus}
+              Odds pipeline: {sourceStatus}
             </p>
+            <p>DraftKings via Apify: {draftKingsStatus}</p>
           </div>
         </div>
       </div>
@@ -247,6 +266,129 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
                 </Link>
               </article>
             ))}
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-line p-5 sm:p-6">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Totals market decision board
+            </h3>
+            <p className="mt-1 text-xs leading-5 text-muted">
+              These are the exact paired prices evaluated by this run, including
+              rows that correctly finished as no bet.
+            </p>
+          </div>
+          <span className="text-xs text-muted">
+            {pricedRows.length} priced · {unpricedMatches} odds not posted
+          </span>
+        </div>
+
+        {pricedRows.length > 0 ? (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {pricedRows.map((row) => (
+              <article
+                key={`${row.matchId}-${row.sportsbook}-${row.line}`}
+                className={
+                  row.actionable
+                    ? "rounded-2xl border border-brand-strong/30 bg-brand/10 p-5"
+                    : "rounded-2xl border border-line bg-black/10 p-5"
+                }
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <Link
+                    href={analyticsMatchHref(row.matchId)}
+                    aria-label={`Open ${row.homeTeam} vs ${row.awayTeam}`}
+                    className="text-xs uppercase tracking-widest text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {row.matchDate}
+                  </Link>
+                  <Pill tone={row.actionable ? "success" : "default"}>
+                    {row.actionable ? "Validated pick" : reasonLabel(row.reason)}
+                  </Pill>
+                </div>
+                <h4 className="mt-3 flex flex-wrap items-center gap-x-2 font-semibold text-foreground">
+                  <Link
+                    href={analyticsTeamHref(analyticsTeamId(row.homeTeam))}
+                    className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {row.homeTeam}
+                  </Link>
+                  <span className="text-muted">vs</span>
+                  <Link
+                    href={analyticsTeamHref(analyticsTeamId(row.awayTeam))}
+                    className="transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                  >
+                    {row.awayTeam}
+                  </Link>
+                </h4>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-xl border border-line bg-white/4 px-3 py-2.5">
+                    <p className="text-[0.62rem] uppercase tracking-widest text-muted">
+                      Over {row.line?.toFixed(1)}
+                    </p>
+                    <p className="mt-1 font-mono text-lg font-semibold text-brand-lime">
+                      {row.overOdds?.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-line bg-white/4 px-3 py-2.5">
+                    <p className="text-[0.62rem] uppercase tracking-widest text-muted">
+                      Under {row.line?.toFixed(1)}
+                    </p>
+                    <p className="mt-1 font-mono text-lg font-semibold text-foreground">
+                      {row.underOdds?.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 grid grid-cols-3 gap-3 border-t border-line pt-4 text-sm">
+                  <div>
+                    <p className="text-xs text-muted">Model over</p>
+                    <p className="mt-1 font-mono text-foreground">
+                      {row.modelProbability === null
+                        ? "—"
+                        : percent(row.modelProbability)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted">Market no-vig</p>
+                    <p className="mt-1 font-mono text-foreground">
+                      {row.marketNoVigProbability === null
+                        ? "—"
+                        : percent(row.marketNoVigProbability)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted">Expected value</p>
+                    <p className="mt-1 font-mono text-foreground">
+                      {row.expectedValue === null
+                        ? "—"
+                        : percent(row.expectedValue)}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
+                  <span>{row.sportsbook}</span>
+                  <span>
+                    Captured{" "}
+                    {row.quoteTimestamp
+                      ? dateTimeLabel(row.quoteTimestamp)
+                      : "Unknown"}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-line bg-black/10 p-5">
+            <p className="font-medium text-foreground">
+              No paired totals prices available
+            </p>
+            <p className="mt-1 text-sm leading-6 text-muted">
+              The model kept every fixture as no bet because no fresh over/under
+              pair was stored for this run.
+            </p>
           </div>
         )}
       </div>

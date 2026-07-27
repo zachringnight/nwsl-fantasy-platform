@@ -82,7 +82,7 @@ def test_annotate_first_seen_rejects_worse_later_price() -> None:
             {
                 "match_id": "m1",
                 "timestamp": "2026-07-26T18:00:00Z",
-                "sportsbook": "FoxSports",
+                "sportsbook": "DraftKings",
                 "market_type": "total",
                 "line": 2.5,
                 "over_odds": 1.80,
@@ -96,7 +96,7 @@ def test_annotate_first_seen_rejects_worse_later_price() -> None:
             {
                 "match_id": "m1",
                 "timestamp": "2026-07-26T16:00:00Z",
-                "sportsbook": "FoxSports",
+                "sportsbook": "DraftKings",
                 "market_type": "total",
                 "line": 2.5,
                 "over_odds": 1.90,
@@ -128,7 +128,7 @@ def test_build_frozen_policy_slate_accepts_fresh_first_seen_edge() -> None:
             {
                 "match_id": "m1",
                 "timestamp": "2026-07-26T18:00:00Z",
-                "sportsbook": "FoxSports",
+                "sportsbook": "DraftKings",
                 "market_type": "total",
                 "line": 2.5,
                 "over_odds": 1.80,
@@ -153,6 +153,68 @@ def test_build_frozen_policy_slate_accepts_fresh_first_seen_edge() -> None:
     assert bool(slate.loc[0, "actionable"]) is True
     assert slate.loc[0, "pick_tier"] == "validated_policy_pick"
     assert slate.loc[0, "stake_pct"] == 0.0025
+
+
+def test_build_frozen_policy_slate_uses_only_validated_total_2_5_line() -> None:
+    upcoming = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "match_date": "2026-07-26",
+                "home_team": "Home",
+                "away_team": "Away",
+            }
+        ]
+    )
+    odds = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "timestamp": "2026-07-26T18:00:00Z",
+                "sportsbook": "DraftKings",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.80,
+                "under_odds": 1.95,
+                "source_type": "current",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-07-26T18:01:00Z",
+                "sportsbook": "DraftKings",
+                "market_type": "total",
+                "line": 3.5,
+                "over_odds": 4.50,
+                "under_odds": 1.20,
+                "source_type": "current",
+            },
+            {
+                "match_id": "m1",
+                "timestamp": "2026-07-26T18:02:00Z",
+                "sportsbook": "FoxSports",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 2.20,
+                "under_odds": 1.60,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    slate, _ = build_frozen_policy_slate(
+        upcoming=upcoming,
+        odds=odds,
+        snapshots=odds,
+        model=_FixedModel(),
+        evidence=_evidence(),
+        artifact_version="v1",
+        as_of=datetime(2026, 7, 26, 18, 30, tzinfo=timezone.utc),
+        days=1,
+    )
+
+    assert slate.loc[0, "line"] == 2.5
+    assert slate.loc[0, "over_odds"] == 1.80
+    assert slate.loc[0, "sportsbook"] == "DraftKings"
 
 
 def test_append_forward_decisions_locks_only_first_pick_per_match() -> None:
@@ -217,6 +279,7 @@ def test_settle_forward_decisions_grades_total_over() -> None:
         [
             {
                 "match_id": "m1",
+                "official_match_id": ("nwsl::Football_Match::0123456789abcdef0123456789abcdef"),
                 "match_status": "completed",
                 "home_goals_90": 2,
                 "away_goals_90": 1,
@@ -235,3 +298,38 @@ def test_settle_forward_decisions_grades_total_over() -> None:
     assert round(float(pick["pnl_units"]), 6) == 0.9
     assert summary["settled"] == 1
     assert summary["wins"] == 1
+
+
+def test_settle_forward_decisions_requires_final_status_and_official_id() -> None:
+    decisions = pd.DataFrame(
+        [
+            {
+                "policy_id": "p1",
+                "match_id": "m1",
+                "actionable": True,
+                "line": 2.5,
+                "over_odds": 1.9,
+            }
+        ]
+    )
+    missing_status = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "official_match_id": ("nwsl::Football_Match::0123456789abcdef0123456789abcdef"),
+                "home_goals_90": 2,
+                "away_goals_90": 1,
+            }
+        ]
+    )
+    invalid_official_id = missing_status.assign(
+        match_status="completed",
+        official_match_id="not-canonical",
+    )
+
+    for matches in (missing_status, invalid_official_id):
+        settled, summary = settle_forward_decisions(decisions, matches)
+
+        assert settled.loc[0, "settlement_status"] == "pending"
+        assert summary["settled"] == 0
+        assert summary["pending"] == 1

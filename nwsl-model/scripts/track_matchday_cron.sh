@@ -5,9 +5,10 @@
 # NOT send messages itself. A scheduled Codex task runs this and summarizes the
 # resulting pick record and source-health artifacts for Zach.
 #
-# Odds polling uses the fixed API-Football shadow feed plus the public FOX
-# fallback. Provider failures remain best-effort; freshness, snapshot, and
-# source-health checks are required and fail closed.
+# Odds polling uses DraftKings through Apify plus public FOX market context.
+# Only DraftKings can create a pick; API-Football remains shadow-only.
+# Provider failures remain best-effort;
+# freshness, snapshot, and source-health checks are required and fail closed.
 
 set -u
 
@@ -83,9 +84,9 @@ run_required_step "asa_xg" "$PY" scripts/fetch_asa_data.py --seasons 2025 2026
 run_public_data_step "publish_public_data_supabase" \
     "$PY" scripts/refresh_public_data.py
 
-# 3. Capture current prices, remove stale "current" rows, append snapshots, and
-#    write the provider-health/manual-review gate. API-Football never enters the
-#    frozen policy's eligible odds file in this shadow phase.
+# 3. Capture current DraftKings prices and FOX context, remove stale "current"
+#    rows, append snapshots, and write source health. Only DraftKings 2.5 totals
+#    are eligible; API-Football stays shadow-only.
 run_required_step "odds_poll" bash scripts/poll_current_odds.sh
 
 # 4. Fit and serve the isolated, frozen totals-over policy.

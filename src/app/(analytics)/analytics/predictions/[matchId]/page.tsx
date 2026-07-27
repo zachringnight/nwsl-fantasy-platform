@@ -1,29 +1,42 @@
-"use client";
-
-import { useMemo } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
+import { ModelMarketOdds } from "@/components/analytics/model-market-odds";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { ScoreMatrixHeatmap } from "@/components/analytics/charts/score-matrix-heatmap";
 import { getMatchPrediction } from "@/lib/analytics/analytics-data";
 import {
+  getArchivedPrematchModelMarket,
+  getLiveModelBoard,
+} from "@/lib/analytics/live-model-board";
+import {
   analyticsMatchHref,
   analyticsTeamHref,
 } from "@/lib/analytics/entity-routes";
 
-export default function PredictionDetailPage() {
-  const params = useParams<{ matchId: string }>();
-  const matchId = params.matchId;
+export const dynamic = "force-dynamic";
 
-  const prediction = useMemo(() => getMatchPrediction(matchId), [matchId]);
+export default async function PredictionDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ matchId: string }>;
+  searchParams: Promise<{ season?: string }>;
+}) {
+  const [{ matchId }, query] = await Promise.all([params, searchParams]);
+  const season = query.season === "2025" ? "2025" : "2026";
+  const liveModelBoard =
+    season === "2026" ? await getLiveModelBoard() : null;
+  const prediction = getMatchPrediction(matchId);
 
-  if (!prediction) {
+  if (!prediction || !prediction.date.startsWith(`${season}-`)) {
     return (
       <AppShell eyebrow="Predictions" title="Not Found" description="Prediction not found.">
-        <Link href="/analytics/predictions" className="text-sm text-brand-strong hover:underline">
+        <Link
+          href={`/analytics/predictions${season === "2025" ? "?season=2025" : ""}`}
+          className="text-sm text-brand-strong hover:underline"
+        >
           Back to predictions
         </Link>
       </AppShell>
@@ -37,6 +50,27 @@ export default function PredictionDetailPage() {
   const ahLines = Object.entries(prediction.asianHandicap).sort(
     ([a], [b]) => parseFloat(a) - parseFloat(b)
   );
+  const activeBoard = season === "2026" ? liveModelBoard : null;
+  let marketRow = activeBoard?.slate.find(
+    (row) => row.matchId === matchId
+  );
+  let marketOdds =
+    activeBoard?.odds.filter((row) => row.matchId === matchId) ?? [];
+  let marketArchived = false;
+  if (season === "2026" && marketOdds.length === 0) {
+    const archivedMarket = await getArchivedPrematchModelMarket({ matchId });
+    if (archivedMarket?.odds.length) {
+      marketRow = archivedMarket.modelRow;
+      marketOdds = archivedMarket.odds;
+      marketArchived = true;
+    }
+  }
+  const generatedLabel = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(prediction.timestamp));
 
   return (
     <AppShell
@@ -44,43 +78,43 @@ export default function PredictionDetailPage() {
       title={
         <>
           <Link
-            href={analyticsTeamHref(prediction.homeTeamId)}
+            href={analyticsTeamHref(prediction.homeTeamId, season)}
             className="hover:text-brand-strong hover:underline hover:underline-offset-4"
           >
             {prediction.homeTeam}
           </Link>{" "}
           vs{" "}
           <Link
-            href={analyticsTeamHref(prediction.awayTeamId)}
+            href={analyticsTeamHref(prediction.awayTeamId, season)}
             className="hover:text-brand-strong hover:underline hover:underline-offset-4"
           >
             {prediction.awayTeam}
           </Link>
         </>
       }
-      description={`${prediction.model.replace("_", "-")} model · Generated ${new Date(prediction.timestamp).toLocaleDateString()}`}
+      description={`${prediction.model.replace("_", "-")} model · Generated ${generatedLabel}`}
       actions={
         <div className="flex flex-wrap gap-2">
           <Link
-            href={analyticsTeamHref(prediction.homeTeamId)}
+            href={analyticsTeamHref(prediction.homeTeamId, season)}
             className="inline-flex items-center rounded-full border border-line bg-white/6 px-3 py-2 text-sm text-muted transition hover:border-brand/30 hover:text-brand-strong"
           >
             {prediction.homeTeam}
           </Link>
           <Link
-            href={analyticsTeamHref(prediction.awayTeamId)}
+            href={analyticsTeamHref(prediction.awayTeamId, season)}
             className="inline-flex items-center rounded-full border border-line bg-white/6 px-3 py-2 text-sm text-muted transition hover:border-brand/30 hover:text-brand-strong"
           >
             {prediction.awayTeam}
           </Link>
           <Link
-            href={analyticsMatchHref(matchId)}
+            href={analyticsMatchHref(matchId, season)}
             className="inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-3 py-2 text-sm text-brand-strong transition hover:border-brand-strong/50"
           >
             Match page
           </Link>
           <Link
-            href="/analytics/predictions"
+            href={`/analytics/predictions${season === "2025" ? "?season=2025" : ""}`}
             className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-3 py-2 text-sm text-muted transition hover:text-foreground"
           >
             <ArrowLeft className="size-4" />
@@ -121,6 +155,13 @@ export default function PredictionDetailPage() {
           awayLabel={prediction.awayTeam}
         />
       </section>
+
+      <ModelMarketOdds
+        odds={marketOdds}
+        modelRow={marketRow}
+        heading={marketArchived ? "Archived pre-match odds" : "Market odds"}
+        archived={marketArchived}
+      />
 
       {/* Score Matrix */}
       <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">

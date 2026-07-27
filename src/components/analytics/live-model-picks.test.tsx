@@ -24,6 +24,7 @@ function board(): LiveModelBoard {
     },
     sourceHealth: {
       authoritative: { status: "healthy" },
+      draftkings_apify: { status: "healthy" },
     },
     forwardResults: {
       settled: 0,
@@ -42,6 +43,7 @@ function board(): LiveModelBoard {
     },
     slate: [],
     picks: [],
+    odds: [],
   };
 }
 
@@ -72,6 +74,8 @@ describe("LiveModelPicks", () => {
     const liveBoard = board();
     liveBoard.slate = [
       {
+        officialMatchId:
+          "nwsl::Football_Match::0123456789abcdef0123456789abcdef",
         matchId: "401853951",
         matchDate: "2026-07-26",
         homeTeam: "San Diego Wave FC",
@@ -80,29 +84,69 @@ describe("LiveModelPicks", () => {
         quoteTimestamp: new Date().toISOString(),
         line: 2.5,
         overOdds: 1.91,
+        underOdds: 1.91,
         modelProbability: 0.61,
+        marketNoVigProbability: 0.5,
         probabilityEdge: 0.06,
         expectedValue: 0.08,
         confidence: 0.05,
+        quoteAgeMinutes: 2,
+        quoteIsFresh: true,
+        firstSeenContractOk: true,
         actionable: true,
-        reason: "thresholds_cleared",
+        reason: "accepted",
         stakePct: 0.0025,
       },
     ];
 
     render(<LiveModelPicks board={liveBoard} />);
 
-    expect(screen.getByRole("link", { name: "San Diego Wave FC" })).toHaveAttribute(
-      "href",
-      "/analytics/teams/san-diego-wave-fc"
-    );
-    expect(screen.getByRole("link", { name: "Seattle Reign FC" })).toHaveAttribute(
-      "href",
-      "/analytics/teams/seattle-reign-fc"
-    );
+    expect(
+      screen.getAllByRole("link", { name: "San Diego Wave FC" })[0]
+    ).toHaveAttribute("href", "/analytics/teams/san-diego-wave-fc");
+    expect(
+      screen.getAllByRole("link", { name: "Seattle Reign FC" })[0]
+    ).toHaveAttribute("href", "/analytics/teams/seattle-reign-fc");
     expect(screen.getByRole("link", { name: "Open match page" })).toHaveAttribute(
       "href",
       "/analytics/matches/401853951"
     );
+  });
+
+  it("shows every priced row, including a no-bet decision", () => {
+    const liveBoard = board();
+    liveBoard.slate = [
+      {
+        officialMatchId:
+          "nwsl::Football_Match::fedcba9876543210fedcba9876543210",
+        matchId: "401853952",
+        matchDate: "2026-07-27",
+        homeTeam: "Angel City FC",
+        awayTeam: "Racing Louisville FC",
+        sportsbook: "DraftKings",
+        quoteTimestamp: new Date().toISOString(),
+        line: 2.5,
+        overOdds: 1.88,
+        underOdds: 1.94,
+        modelProbability: 0.47,
+        marketNoVigProbability: 0.51,
+        probabilityEdge: -0.04,
+        expectedValue: -0.12,
+        confidence: 0.03,
+        quoteAgeMinutes: 5,
+        quoteIsFresh: true,
+        firstSeenContractOk: true,
+        actionable: false,
+        reason: "edge_below_threshold",
+        stakePct: 0,
+      },
+    ];
+
+    render(<LiveModelPicks board={liveBoard} />);
+
+    expect(screen.getByText("Totals market decision board")).toBeInTheDocument();
+    expect(screen.getByText("DraftKings")).toBeInTheDocument();
+    expect(screen.getByText("1.88")).toBeInTheDocument();
+    expect(screen.getByText("Edge Below Threshold")).toBeInTheDocument();
   });
 });

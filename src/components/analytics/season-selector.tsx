@@ -19,21 +19,26 @@ export function useAnalyticsSeason(): Season {
 
 export function SeasonSelector() {
   const season = useAnalyticsSeason();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
   const setSeason = useCallback(
-    (s: string) => {
-      const params = new URLSearchParams(window.location.search);
+    (s: Season) => {
+      if (s === season) return;
+
+      const params = new URLSearchParams(searchParams.toString());
       if (s === "2026") {
         params.delete("season");
       } else {
         params.set("season", s);
       }
+      params.delete("date");
+      params.delete("matchday");
       const qs = params.toString();
       router.push(qs ? `${pathname}?${qs}` : pathname);
     },
-    [router, pathname]
+    [pathname, router, searchParams, season]
   );
 
   return (
