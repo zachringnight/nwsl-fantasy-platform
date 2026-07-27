@@ -103,6 +103,11 @@ describe("PredictionsPage season routing", () => {
 
     expect(screen.getByText("Live 2026 model board")).toBeInTheDocument();
     expect(screen.getByText("2026 prediction browser: 1")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /General match probabilities use the traceable SPI-lite baseline/
+      )
+    ).toBeInTheDocument();
     expect(mocks.getLiveModelBoard).toHaveBeenCalledTimes(1);
   });
 });

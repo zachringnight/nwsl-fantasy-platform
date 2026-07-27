@@ -94,10 +94,10 @@ export default async function PredictionsPage({
               About the Model
             </h3>
             <p className="mt-2 max-w-2xl text-sm text-muted">
-              Predictions use a Dynamic Dixon-Coles model that computes the full joint score
-              distribution P(home=i, away=j) for each match. All markets — 1X2, over/under,
-              BTTS, Asian handicaps — derive from a single score matrix. Team strength ratings
-              are driven by non-penalty expected goals (npxG) with exponential decay weighting.
+              General match probabilities use the traceable SPI-lite baseline
+              and its Poisson score matrix. The frozen DraftKings Over 2.5 board
+              is evaluated separately under the locked research policy, so a
+              match projection is not a policy pick.
             </p>
           </div>
           <Link
