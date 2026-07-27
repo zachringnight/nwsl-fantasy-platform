@@ -40,7 +40,7 @@ vi.mock("@/components/analytics/match-prediction-browser", () => ({
   ),
 }));
 
-vi.mock("@/lib/analytics/analytics-data", () => ({
+vi.mock("@/lib/analytics/general-predictions-data", () => ({
   getMatchPredictions: mocks.getMatchPredictions,
 }));
 

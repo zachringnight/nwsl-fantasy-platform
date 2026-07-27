@@ -48,6 +48,9 @@ TEAM_CATEGORIES = ("general", "attacking", "passing", "defending")
 MODEL_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = MODEL_ROOT.parent
 DEFAULT_OUTPUT = MODEL_ROOT / "data/nwsl-official/nwsl_2026_public_data.json"
+sys.path.insert(0, str(MODEL_ROOT))
+
+from src.publishing.http import PublicationError, publish_with_readback
 
 OFFICIAL_PLAYER_ID = re.compile(r"^nwsl::Football_Player::[0-9a-f]{32}$")
 OFFICIAL_TEAM_ID = re.compile(r"^nwsl::Football_Team::[0-9a-f]{32}$")
@@ -2362,52 +2365,18 @@ def publish_payload(
     timeout: float = 45.0,
     opener: Callable[..., Any] = urllib.request.urlopen,
 ) -> dict[str, Any]:
-    if not secret:
-        raise RefreshError("publish secret is empty")
-    parsed = urllib.parse.urlparse(publish_url)
-    if parsed.scheme != "https" or not parsed.netloc:
-        raise RefreshError("publish URL must be an absolute HTTPS URL")
-    body = json.dumps(
-        payload,
-        ensure_ascii=False,
-        allow_nan=False,
-        separators=(",", ":"),
-        sort_keys=True,
-    ).encode("utf-8")
-    request = urllib.request.Request(
-        publish_url,
-        data=body,
-        method="POST",
-        headers={
-            "Accept": "application/json",
-            "Authorization": f"Bearer {secret}",
-            "Content-Type": "application/json",
-            "User-Agent": "nwsl-public-data-refresh/1.0",
-        },
-    )
     try:
-        with opener(request, timeout=timeout) as response:
-            status = int(getattr(response, "status", 200))
-            raw = response.read(65_537)
-            if len(raw) > 65_536:
-                raise RefreshError("publish response exceeded the safety limit")
-    except urllib.error.HTTPError as exc:
-        raise RefreshError(f"publish endpoint returned HTTP {exc.code}") from exc
-    except (TimeoutError, socket.timeout, urllib.error.URLError) as exc:
-        raise RefreshError(f"publish request failed ({type(exc).__name__})") from exc
-    if status < 200 or status >= 300:
-        raise RefreshError(f"publish endpoint returned HTTP {status}")
-    response_value: Any = None
-    if raw:
-        try:
-            response_value = json.loads(raw.decode("utf-8"))
-        except (UnicodeDecodeError, json.JSONDecodeError):
-            response_value = {"message": "publish succeeded with a non-JSON response"}
-    return {
-        "published": True,
-        "status": status,
-        "response": _scrub_publish_response(response_value, secret),
-    }
+        result = publish_with_readback(
+            payload=payload,
+            publish_url=publish_url,
+            secret=secret,
+            expected={"runKey": payload["run"]["runKey"]},
+            timeout=timeout,
+            opener=opener,
+        )
+    except PublicationError as exc:
+        raise RefreshError(str(exc)) from exc
+    return _scrub_publish_response(result, secret)
 
 
 def write_payload(payload: Mapping[str, Any], output: Path) -> Path:
@@ -2486,6 +2455,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 secret=secret,
             )
         print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+        if "publication" in result:
+            print(
+                "PUBLICATION "
+                f"publisher=public_data "
+                f"status={result['publication']['status']} "
+                f"run={payload['run']['runKey']}"
+            )
         return 0
     except RefreshError as exc:
         print(f"refresh blocked: {exc}", file=sys.stderr)

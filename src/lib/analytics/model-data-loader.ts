@@ -47,6 +47,12 @@ interface RawModelPrediction {
   asianHandicap?: Record<string, { home: number; away: number }>;
   scoreMatrix?: number[][];
   model: string;
+  modelVersion?: string;
+  modelFamily?: string;
+  trainingCutoff?: string;
+  sourceManifestGeneratedAt?: string;
+  gatingStatus?: "current" | "degraded_context" | "unknown";
+  featureStatus?: "complete" | "partial" | "unknown";
   timestamp: string;
 }
 
@@ -111,6 +117,14 @@ export function loadModelPredictions(): MatchPrediction[] {
     scoreMatrix: p.scoreMatrix ?? generateScoreMatrix(p.lambdaHome, p.lambdaAway),
     model: p.model,
     timestamp: p.timestamp,
+    modelVersion: p.modelVersion,
+    modelFamily: p.modelFamily,
+    trainingCutoff: p.trainingCutoff,
+    sourceManifestGeneratedAt: p.sourceManifestGeneratedAt,
+    gatingStatus: p.gatingStatus ?? "unknown",
+    featureStatus: p.featureStatus ?? "unknown",
+    dataSource: "static_fallback",
+    isStale: true,
   }));
 }
 

@@ -145,11 +145,30 @@ def build_operational_features(
         blockers.append("projected_lineup_match_coverage_below_threshold")
     if duplicate_projection_rows:
         blockers.append("duplicate_projected_lineup_rows")
+    complete = (
+        not appearance_coverage["missing_match_ids"]
+        and not projected_coverage["missing_match_ids"]
+    )
+    feature_status = (
+        "excluded"
+        if blockers
+        else "complete"
+        if complete
+        else "partial"
+    )
 
     report = {
         "generated_at": generated_at,
         "season": int(season),
         "status": "ready" if not blockers else "blocked",
+        "feature_status": feature_status,
+        "gating_status": (
+            "current"
+            if feature_status == "complete"
+            else "degraded_context"
+            if feature_status == "partial"
+            else "blocked"
+        ),
         "blockers": blockers,
         "minimum_match_coverage_pct": float(minimum_match_coverage_pct),
         "source_paths": {
@@ -194,19 +213,21 @@ def write_operational_features(
     raw_dir: Path,
 ) -> dict[str, Path]:
     """Write validated operational feature tables and their refresh report."""
+    raw_dir = Path(raw_dir)
+    report_path = raw_dir / "operational_feature_refresh.json"
     if outputs.report.get("status") != "ready":
+        save_json(outputs.report, report_path)
         raise ValueError(
             "Operational feature refresh is blocked: "
             + ", ".join(outputs.report.get("blockers", []))
         )
 
-    raw_dir = Path(raw_dir)
     paths = {
         "appearances": raw_dir / "appearances.csv",
         "projected_lineups": raw_dir / "projected_lineups.csv",
         "team_season_priors": raw_dir / "team_season_priors.csv",
         "player_season_priors": raw_dir / "player_season_priors.csv",
-        "report": raw_dir / "operational_feature_refresh.json",
+        "report": report_path,
     }
     save_csv(outputs.appearances, paths["appearances"])
     save_csv(outputs.projected_lineups, paths["projected_lineups"])

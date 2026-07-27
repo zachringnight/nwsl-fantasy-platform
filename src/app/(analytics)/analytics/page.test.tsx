@@ -47,6 +47,9 @@ vi.mock("@/lib/analytics/analytics-data", () => ({
   getLeagueTable: mocks.getLeagueTable,
   getLeagueTableBySeason: mocks.getLeagueTableBySeason,
   getPlayerRankings: mocks.getPlayerRankings,
+}));
+
+vi.mock("@/lib/analytics/general-predictions-data", () => ({
   getMatchPredictions: mocks.getMatchPredictions,
 }));
 

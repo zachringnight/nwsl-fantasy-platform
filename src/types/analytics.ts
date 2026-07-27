@@ -217,6 +217,14 @@ export interface MatchPrediction {
   scoreMatrix: number[][];
   model: string;
   timestamp: string;
+  modelVersion?: string;
+  modelFamily?: string;
+  trainingCutoff?: string;
+  sourceManifestGeneratedAt?: string;
+  gatingStatus?: "current" | "degraded_context" | "unknown";
+  featureStatus?: "complete" | "partial" | "unknown";
+  dataSource?: "supabase" | "static_fallback";
+  isStale?: boolean;
 }
 
 export interface ModelPerformance {

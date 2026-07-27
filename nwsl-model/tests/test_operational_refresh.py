@@ -25,4 +25,6 @@ def test_write_operational_features_fails_closed_when_report_blocked(
     with pytest.raises(ValueError, match="appearances_empty"):
         write_operational_features(outputs, raw_dir=tmp_path)
 
-    assert list(tmp_path.iterdir()) == []
+    assert [path.name for path in tmp_path.iterdir()] == [
+        "operational_feature_refresh.json"
+    ]

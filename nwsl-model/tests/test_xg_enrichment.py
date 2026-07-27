@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import pandas as pd
 
-from src.data.xg_enrichment import enrich_matches_with_asa_xg
+from src.data.xg_enrichment import (
+    enrich_matches_with_asa_xg,
+    summarize_asa_xg_coverage,
+)
 
 
 def test_enrich_matches_with_asa_xg_matches_team_aliases() -> None:
@@ -79,3 +82,46 @@ def test_enrich_matches_with_asa_xg_preserves_existing_values() -> None:
     assert enriched.loc[0, "away_xg"] == 0.5
     assert enriched.loc[0, "home_npxg"] == 1.9
     assert enriched.loc[0, "away_npxg"] == 0.4
+
+
+def test_asa_coverage_lists_every_goals_fallback_match_id() -> None:
+    matches = pd.DataFrame(
+        [
+            {
+                "match_id": "covered",
+                "match_date": "2026-04-01",
+                "season": 2026,
+                "home_team": "San Diego Wave FC",
+                "away_team": "Kansas City Current",
+            },
+            {
+                "match_id": "fallback",
+                "match_date": "2026-04-02",
+                "season": 2026,
+                "home_team": "Orlando Pride",
+                "away_team": "Bay FC",
+            },
+        ]
+    )
+    asa = pd.DataFrame(
+        [
+            {
+                "season": 2026,
+                "match_date": "2026-04-01",
+                "home_team": "SD Wave",
+                "away_team": "Current",
+                "home_xg": 1.4,
+                "away_xg": 0.8,
+            }
+        ]
+    )
+
+    coverage = summarize_asa_xg_coverage(matches, asa)
+
+    assert coverage["fallback_match_ids"] == ["fallback"]
+    assert coverage["seasons"]["2026"] == {
+        "covered_matches": 1,
+        "reference_matches": 2,
+        "coverage_pct": 50.0,
+        "fallback_match_ids": ["fallback"],
+    }

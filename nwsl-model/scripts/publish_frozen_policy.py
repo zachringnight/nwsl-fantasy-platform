@@ -143,7 +143,7 @@ def main() -> None:
         secret=_load_secret(args.secret_env),
         timeout_seconds=args.timeout_seconds,
     )
-    publication = result.get("publication") or {}
+    publication = result.get("receipt") or {}
     print(
         "Published model snapshot: "
         f"run={publication.get('runKey', payload['run']['runKey'])} "
@@ -151,6 +151,11 @@ def main() -> None:
         f"locked_picks_processed="
         f"{publication.get('lockedPicksProcessed', len(payload['picks']))} "
         f"odds_rows={publication.get('oddsRows', len(payload['odds']))}"
+    )
+    print(
+        "PUBLICATION "
+        f"publisher=frozen_policy status={result['status']} "
+        f"run={payload['run']['runKey']}"
     )
 
 

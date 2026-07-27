@@ -11,10 +11,10 @@ import { Pill } from "@/components/ui/pill";
 import {
   getLeagueTableBySeason,
   getMatchDetail,
-  getMatchPrediction,
   getTeamRatings,
   type Season,
 } from "@/lib/analytics/analytics-data";
+import { getMatchPrediction } from "@/lib/analytics/general-predictions-data";
 import { getMatchResultsBySeason } from "@/lib/analytics/analytics-real-data";
 import { getEspnLiveMatch } from "@/lib/analytics/espn-live-match";
 import { getLiveNwslPublicData } from "@/lib/analytics/live-nwsl-public-data";
@@ -52,10 +52,11 @@ export default async function MatchDetailPage({
   params: Promise<{ matchId: string }>;
 }) {
   const { matchId } = await params;
-  const [live, liveModelBoard, snapshot] = await Promise.all([
+  const [live, liveModelBoard, snapshot, prediction] = await Promise.all([
     getLiveNwslPublicData(),
     getLiveModelBoard(),
     getEspnLiveMatch(matchId),
+    getMatchPrediction(matchId),
   ]);
   const liveMatch = live?.matches.find(
     (candidate) => candidate.matchId === matchId
@@ -106,7 +107,6 @@ export default async function MatchDetailPage({
         : "prematch");
   const homeScore = snapshot?.homeScore ?? match.homeGoals;
   const awayScore = snapshot?.awayScore ?? match.awayGoals;
-  const prediction = getMatchPrediction(matchId);
   const season: Season = match.date.startsWith("2025") ? "2025" : "2026";
   const allMatches =
     season === "2026" && live
