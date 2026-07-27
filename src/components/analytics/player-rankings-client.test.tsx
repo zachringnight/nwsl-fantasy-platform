@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type {
   AnalyticsProvenance,
@@ -79,5 +79,57 @@ describe("PlayerRankingsClient match-log coverage", () => {
     expect(marker).toHaveTextContent("Partial");
     expect(marker).toHaveAttribute("title", coverageLabel);
     expect(screen.getAllByText("Partial")).toHaveLength(1);
+  });
+
+  it("announces filtered counts and offers a working reset for no results", () => {
+    render(
+      <PlayerRankingsClient
+        players={[
+          player("midfielder", {
+            matchStatsAppearances: 8,
+            matchStatsComplete: true,
+          }),
+          {
+            ...player("forward", {
+              matchStatsAppearances: 8,
+              matchStatsComplete: true,
+            }),
+            position: "FWD",
+          },
+        ]}
+        provenance={provenance}
+        season="2026"
+      />
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "2 of 2 players shown"
+    );
+    const forwardFilter = screen.getByRole("button", { name: "FWD" });
+    fireEvent.click(forwardFilter);
+    expect(forwardFilter).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "1 of 2 players shown"
+    );
+
+    fireEvent.change(screen.getByLabelText("Search players or teams"), {
+      target: { value: "no matching player" },
+    });
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "0 of 2 players shown"
+    );
+    expect(
+      screen.getByText(
+        "No players match the current search and position filters."
+      )
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Clear player filters" })
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "2 of 2 players shown"
+    );
+    expect(screen.getByLabelText("Search players or teams")).toHaveValue("");
   });
 });

@@ -35,30 +35,35 @@ function AnalyticsNavigation() {
       aria-label="Analytics"
       className="page-shell sticky top-[5.5rem] z-40 border-b border-line bg-panel-strong/80 backdrop-blur-xl"
     >
-      <div className="flex items-center gap-1 overflow-x-auto px-4 py-2.5 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {analyticsNav.map((item) => {
-          const isActive = item.exact
-            ? pathname === item.href
-            : pathname.startsWith(item.href);
-          const Icon = item.icon;
+      <div className="flex items-center gap-2 px-4 py-2.5 sm:gap-4 sm:px-6 lg:px-8">
+        <div className="min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex w-max items-center gap-1">
+            {analyticsNav.map((item) => {
+              const isActive = item.exact
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+              const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.href}
-              href={`${item.href}?season=${season}`}
-              className={cn(
-                "flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition",
-                isActive
-                  ? "bg-brand/20 text-brand-strong"
-                  : "text-muted hover:bg-white/6 hover:text-foreground"
-              )}
-            >
-              <Icon className="size-4" />
-              {item.label}
-            </Link>
-          );
-        })}
-        <div className="ml-auto shrink-0 pl-4">
+              return (
+                <Link
+                  key={item.href}
+                  href={`${item.href}?season=${season}`}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/70 focus-visible:ring-offset-2 focus-visible:ring-offset-panel-strong",
+                    isActive
+                      ? "bg-brand/20 text-brand-strong"
+                      : "text-muted hover:bg-white/6 hover:text-foreground"
+                  )}
+                >
+                  <Icon aria-hidden="true" className="size-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+        <div className="shrink-0 border-l border-line pl-2 sm:pl-4">
           <SeasonSelector />
         </div>
       </div>

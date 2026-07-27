@@ -177,7 +177,10 @@ export function LeaguePlayersClient({ leagueId }: LeaguePlayersClientProps) {
 
             <section className="grid gap-5 lg:grid-cols-3">
               {filteredPlayers.map((listing, index) => (
-                <MotionReveal key={listing.player.id} delay={40 + index * 30}>
+                <MotionReveal
+                  key={listing.player.id}
+                  delay={Math.min(40 + index * 30, 280)}
+                >
                   <PlayerCard
                     actionHref={buildPlayerActionHref(
                       links.team,

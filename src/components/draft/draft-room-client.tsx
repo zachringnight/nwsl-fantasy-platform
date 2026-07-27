@@ -24,6 +24,7 @@ import type { FantasyDraftState, PlayerPosition } from "@/types/fantasy";
 import { cn } from "@/lib/utils";
 
 const timerThresholdRound = 9;
+const confettiDurationMs = 2500;
 
 export interface DraftRoomClientProps {
   leagueId: string;
@@ -58,6 +59,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   const turnPulseTimeoutRef = useRef<number | null>(null);
   const pickPulseTimeoutRef = useRef<number | null>(null);
   const queuePulseTimeoutRef = useRef<number | null>(null);
+  const confettiTimeoutRef = useRef<number | null>(null);
 
   const refreshDraftState = useCallback(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -210,6 +212,9 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
       if (queuePulseTimeoutRef.current) {
         window.clearTimeout(queuePulseTimeoutRef.current);
       }
+      if (confettiTimeoutRef.current) {
+        window.clearTimeout(confettiTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -299,7 +304,17 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
     if ((draftState?.picks.length ?? 0) >= prevPickCount) {
       setShowConfetti(true);
       feedback.celebrate();
-      setTimeout(() => setShowConfetti(false), 100);
+
+      if (confettiTimeoutRef.current) {
+        window.clearTimeout(confettiTimeoutRef.current);
+      }
+
+      // Keep the trigger active beyond the final animation frame so the
+      // ConfettiBurst effect can complete before its cleanup runs.
+      confettiTimeoutRef.current = window.setTimeout(() => {
+        setShowConfetti(false);
+        confettiTimeoutRef.current = null;
+      }, confettiDurationMs + 250);
     }
   }
 
@@ -536,7 +551,7 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
 
   return (
     <section className="space-y-5">
-      <ConfettiBurst active={showConfetti} />
+      <ConfettiBurst active={showConfetti} duration={confettiDurationMs} />
       <LiveRegion message={screenReaderAnnouncement} politeness="assertive" />
       {error ? (
         <StatusBanner title="Draft action" message={error} tone="warning" />

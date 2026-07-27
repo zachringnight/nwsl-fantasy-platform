@@ -10,6 +10,7 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 interface RadarConfig {
   dataKey: string;
@@ -29,6 +30,8 @@ export function ThemedRadarChart({
   radars,
   height = 320,
 }: ThemedRadarChartProps) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <ResponsiveContainer width="100%" height={height}>
       <RadarChart cx="50%" cy="50%" outerRadius="72%" data={data}>
@@ -57,6 +60,7 @@ export function ThemedRadarChart({
             key={r.dataKey}
             name={r.label}
             dataKey={r.dataKey}
+            isAnimationActive={!prefersReducedMotion}
             stroke={r.color}
             fill={r.color}
             fillOpacity={r.fillOpacity ?? 0.2}

@@ -69,6 +69,10 @@ export function MatchCenterClient({
       }))
       .sort((left, right) => right.matchday - left.matchday);
   }, [filtered]);
+  const resetFilters = () => {
+    setStatusFilter("all");
+    setMatchdayFilter(null);
+  };
 
   return (
     <AppShell
@@ -77,28 +81,37 @@ export function MatchCenterClient({
       description={`${matches.length} NWSL matches from the ${season} season. Data from ${source}.`}
     >
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1">
+        <div
+          role="group"
+          aria-label="Filter matches by status"
+          className="flex flex-wrap gap-1"
+        >
           {statusFilters.map((status) => (
             <button
               key={status}
               type="button"
+              aria-pressed={statusFilter === status}
               onClick={() => setStatusFilter(status)}
               className={
                 statusFilter === status
-                  ? "rounded-full bg-brand/20 px-3 py-2 text-xs font-semibold capitalize text-brand-strong"
-                  : "rounded-full px-3 py-2 text-xs font-semibold capitalize text-muted hover:bg-white/6 hover:text-foreground"
+                  ? "rounded-full bg-brand/20 px-3 py-2 text-xs font-semibold capitalize text-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/70 focus-visible:ring-offset-2 focus-visible:ring-offset-panel"
+                  : "rounded-full px-3 py-2 text-xs font-semibold capitalize text-muted hover:bg-white/6 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/70 focus-visible:ring-offset-2 focus-visible:ring-offset-panel"
               }
             >
               {status}
             </button>
           ))}
         </div>
+        <label className="sr-only" htmlFor="matchday-filter">
+          Filter matches by matchday
+        </label>
         <select
+          id="matchday-filter"
           value={matchdayFilter ?? ""}
           onChange={(event) =>
             setMatchdayFilter(event.target.value ? Number(event.target.value) : null)
           }
-          className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-foreground outline-none focus:border-brand/40"
+          className="rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-foreground outline-none focus:border-brand/40 focus-visible:ring-2 focus-visible:ring-brand-strong/50"
         >
           <option value="">All Matchdays</option>
           {matchdays.map((matchday) => (
@@ -109,7 +122,18 @@ export function MatchCenterClient({
         </select>
       </div>
 
-      {matches.length > 0 ? (
+      {matches.length > 0 && (
+        <p
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="text-sm text-muted"
+        >
+          {filtered.length} of {matches.length} matches shown
+        </p>
+      )}
+
+      {filtered.length > 0 ? (
         <div className="space-y-8">
           {grouped.map((group) => (
             <section key={group.matchday}>
@@ -182,6 +206,19 @@ export function MatchCenterClient({
               </div>
             </section>
           ))}
+        </div>
+      ) : matches.length > 0 ? (
+        <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-8 text-center">
+          <p className="text-sm text-muted">
+            No matches match the current status and matchday filters.
+          </p>
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="mt-4 rounded-full border border-brand-strong/30 bg-brand/15 px-4 py-2 text-sm font-semibold text-brand-strong transition hover:bg-brand/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/70 focus-visible:ring-offset-2 focus-visible:ring-offset-panel"
+          >
+            Clear match filters
+          </button>
         </div>
       ) : (
         <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-8 text-center">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 interface ConfettiBurstProps {
   active: boolean;
@@ -27,12 +28,16 @@ export function ConfettiBurst({ active, duration = 2500 }: ConfettiBurstProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
   const particlesRef = useRef<Particle[]>([]);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    if (!active) return;
-
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    if (!active || prefersReducedMotion) {
+      canvas.style.display = "none";
+      return;
+    }
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -89,6 +94,7 @@ export function ConfettiBurst({ active, duration = 2500 }: ConfettiBurstProps) {
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
+        animationRef.current = 0;
         canvas!.style.display = "none";
       }
     }
@@ -96,10 +102,13 @@ export function ConfettiBurst({ active, duration = 2500 }: ConfettiBurstProps) {
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
-      cancelAnimationFrame(animationRef.current);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = 0;
+      }
       if (canvas) canvas.style.display = "none";
     };
-  }, [active, duration]);
+  }, [active, duration, prefersReducedMotion]);
 
   return (
     <canvas

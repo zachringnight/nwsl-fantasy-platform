@@ -4,6 +4,9 @@ import { AppShell } from "@/components/common/app-shell";
 import { LiveMatchRefresh } from "@/components/analytics/live-match-refresh";
 import { LocalKickoffTime } from "@/components/analytics/local-kickoff-time";
 import { MatchStory } from "@/components/analytics/match-story";
+import { AnimatedScore } from "@/components/ui/animated-score";
+import { LiveRegion } from "@/components/ui/live-region";
+import { MotionReveal } from "@/components/ui/motion-reveal";
 import { Pill } from "@/components/ui/pill";
 import {
   getLeagueTableBySeason,
@@ -187,67 +190,78 @@ export default async function MatchDetailPage({
         </Link>
       }
     >
-      <section className="flex items-center justify-center gap-6 py-4 sm:gap-10">
-        <div className="min-w-0 flex-1 text-right">
-          <Link
-            href={analyticsTeamHref(match.homeTeamId, season)}
-            className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-          >
-            {match.homeTeam}
-          </Link>
-          {phase !== "prematch" ? (
-            <p className="font-display text-7xl leading-none text-foreground">
-              {homeScore}
-            </p>
-          ) : null}
-        </div>
-        <div className="shrink-0 text-center">
-          <Pill
-            tone={
-              phase === "live"
-                ? "accent"
-                : phase === "prematch"
-                  ? "brand"
-                  : "default"
-            }
-          >
-            {match.status === "postponed"
-              ? "POSTPONED"
-              : match.status === "canceled"
-                ? "CANCELED"
-                : phase === "live"
-                  ? "LIVE"
-                  : phase === "final"
-                    ? "FT"
-                    : "VS"}
-          </Pill>
-          {phase === "live" && snapshot?.statusLabel ? (
-            <p className="mt-2 max-w-28 text-xs text-muted">
-              {snapshot.statusLabel}
-            </p>
-          ) : phase === "prematch" ? (
-            <p className="mt-2 max-w-36 text-xs leading-5 text-muted">
-              <LocalKickoffTime
-                value={snapshot?.kickoff ?? null}
-                fallback={match.date}
-              />
-            </p>
-          ) : null}
-        </div>
-        <div className="min-w-0 flex-1 text-left">
-          <Link
-            href={analyticsTeamHref(match.awayTeamId, season)}
-            className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-          >
-            {match.awayTeam}
-          </Link>
-          {phase !== "prematch" ? (
-            <p className="font-display text-7xl leading-none text-foreground">
-              {awayScore}
-            </p>
-          ) : null}
-        </div>
-      </section>
+      <MotionReveal
+        emphasis={phase === "live" ? "live" : "default"}
+        variant="scale"
+        className="overflow-hidden rounded-[1.4rem]"
+      >
+        <section className="flex items-center justify-center gap-6 py-4 sm:gap-10">
+          <div className="min-w-0 flex-1 text-right">
+            <Link
+              href={analyticsTeamHref(match.homeTeamId, season)}
+              className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+            >
+              {match.homeTeam}
+            </Link>
+            {phase !== "prematch" ? (
+              <p className="font-display text-7xl leading-none text-foreground">
+                <AnimatedScore value={homeScore} decimals={0} />
+              </p>
+            ) : null}
+          </div>
+          <div className="shrink-0 text-center">
+            <Pill
+              tone={
+                phase === "live"
+                  ? "accent"
+                  : phase === "prematch"
+                    ? "brand"
+                    : "default"
+              }
+            >
+              {match.status === "postponed"
+                ? "POSTPONED"
+                : match.status === "canceled"
+                  ? "CANCELED"
+                  : phase === "live"
+                    ? "LIVE"
+                    : phase === "final"
+                      ? "FT"
+                      : "VS"}
+            </Pill>
+            {phase === "live" && snapshot?.statusLabel ? (
+              <p className="mt-2 max-w-28 text-xs text-muted">
+                {snapshot.statusLabel}
+              </p>
+            ) : phase === "prematch" ? (
+              <p className="mt-2 max-w-36 text-xs leading-5 text-muted">
+                <LocalKickoffTime
+                  value={snapshot?.kickoff ?? null}
+                  fallback={match.date}
+                />
+              </p>
+            ) : null}
+          </div>
+          <div className="min-w-0 flex-1 text-left">
+            <Link
+              href={analyticsTeamHref(match.awayTeamId, season)}
+              className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+            >
+              {match.awayTeam}
+            </Link>
+            {phase !== "prematch" ? (
+              <p className="font-display text-7xl leading-none text-foreground">
+                <AnimatedScore value={awayScore} decimals={0} />
+              </p>
+            ) : null}
+          </div>
+        </section>
+      </MotionReveal>
+      {phase === "live" ? (
+        <LiveRegion
+          message={`Score: ${match.homeTeam} ${homeScore}, ${match.awayTeam} ${awayScore}.`}
+        />
+      ) : null}
 
       <LiveMatchRefresh active={phase === "live"} />
 
