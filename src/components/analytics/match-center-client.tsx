@@ -9,6 +9,7 @@ import {
   analyticsMatchHref,
   analyticsTeamHref,
 } from "@/lib/analytics/entity-routes";
+import { formatAmericanOdds } from "@/lib/odds-format";
 import {
   browserStateHref,
   nextAvailableDate,
@@ -334,8 +335,8 @@ export function MatchCenterClient({
                               </div>
                               <p className="mt-1 font-mono text-foreground">
                                 {marketOdds.marketType === "total"
-                                  ? `O ${marketOdds.overOdds?.toFixed(2) ?? "—"} · U ${marketOdds.underOdds?.toFixed(2) ?? "—"}`
-                                  : `H ${marketOdds.homeOdds?.toFixed(2) ?? "—"} · D ${marketOdds.drawOdds?.toFixed(2) ?? "—"} · A ${marketOdds.awayOdds?.toFixed(2) ?? "—"}`}
+                                  ? `O ${formatAmericanOdds(marketOdds.overOdds)} · U ${formatAmericanOdds(marketOdds.underOdds)}`
+                                  : `H ${formatAmericanOdds(marketOdds.homeOdds)} · D ${formatAmericanOdds(marketOdds.drawOdds)} · A ${formatAmericanOdds(marketOdds.awayOdds)}`}
                               </p>
                             </>
                           ) : (

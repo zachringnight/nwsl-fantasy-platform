@@ -62,8 +62,9 @@ describe("ModelMarketOdds", () => {
     render(<ModelMarketOdds odds={[totalOdds()]} modelRow={slateRow()} />);
 
     expect(screen.getByText("DraftKings")).toBeInTheDocument();
-    expect(screen.getByText("1.91")).toBeInTheDocument();
-    expect(screen.getByText("1.95")).toBeInTheDocument();
+    expect(screen.getByText("-110")).toBeInTheDocument();
+    expect(screen.getByText("-105")).toBeInTheDocument();
+    expect(screen.getByText(/American prices captured/i)).toBeInTheDocument();
     expect(screen.getByText("Edge Below Threshold")).toBeInTheDocument();
     expect(screen.getByText("47.0%")).toBeInTheDocument();
     expect(screen.getByText("50.5%")).toBeInTheDocument();

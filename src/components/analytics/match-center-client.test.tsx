@@ -269,7 +269,7 @@ describe("MatchCenterClient", () => {
     );
 
     expect(screen.getByText("Total 2.5")).toBeInTheDocument();
-    expect(screen.getByText("O 1.81 · U 1.86")).toBeInTheDocument();
+    expect(screen.getByText("O -123 · U -116")).toBeInTheDocument();
     expect(screen.queryByText("Total 1.5")).not.toBeInTheDocument();
   });
 });

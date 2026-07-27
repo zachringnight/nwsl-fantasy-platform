@@ -4,13 +4,10 @@ import type {
   LiveMatchOdds,
   LiveModelSlateRow,
 } from "@/lib/analytics/live-model-board";
+import { formatAmericanOdds } from "@/lib/odds-format";
 
 function percent(value: number | null, digits = 1): string {
   return value === null ? "—" : `${(value * 100).toFixed(digits)}%`;
-}
-
-function decimalOdds(value: number | null): string {
-  return value === null ? "—" : value.toFixed(2);
 }
 
 function dateTimeLabel(value: string): string {
@@ -52,7 +49,7 @@ function OddsCell({
             : "mt-1 font-mono text-base font-semibold text-foreground"
         }
       >
-        {decimalOdds(value)}
+        {formatAmericanOdds(value)}
       </p>
     </div>
   );
@@ -84,7 +81,7 @@ export function ModelMarketOdds({
             {heading}
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
-            Decimal prices captured by the automated odds pipeline. A model pick
+            American prices captured by the automated odds pipeline. A model pick
             is only possible when a fresh, paired DraftKings total 2.5 price is
             available.
           </p>
@@ -166,7 +163,7 @@ export function ModelMarketOdds({
                 </p>
                 <p className="mt-0.5 text-xs text-muted">
                   {modelRow.sportsbook && modelRow.line !== null
-                    ? `${modelRow.sportsbook} · Over ${modelRow.line.toFixed(1)} @ ${decimalOdds(modelRow.overOdds)}`
+                    ? `${modelRow.sportsbook} · Over ${modelRow.line.toFixed(1)} @ ${formatAmericanOdds(modelRow.overOdds)}`
                     : "No eligible paired total quote"}
                 </p>
               </div>
