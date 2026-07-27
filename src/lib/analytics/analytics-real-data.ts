@@ -1,7 +1,7 @@
 /**
  * Real NWSL data adapter.
  *
- * Player stats: 410 official NWSL players with 2025 season stats.
+ * Player stats: official 2026 NWSL roster snapshot with 2026 season stats.
  * Team standings: Real ESPN standings for 2025 and 2026 seasons.
  * Match results: Real ESPN match data.
  * Form: Derived from actual match results.
@@ -49,7 +49,7 @@ function normalizePersonName(value: string): string {
     .trim();
 }
 
-// ── Player Data (real 2025 stats) ───────────────────────────────────────────
+// ── Player Data (official 2026 snapshot fallback) ───────────────────────────
 
 export function getRealPlayerRankings(): PlayerSeasonStats[] {
   return officialFantasyPlayerPool
@@ -75,7 +75,6 @@ function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonSt
   const minutes = p.minutes_2025;
   const nineties = minutes / 90;
   const fp = p.raw_average_points_2025 * p.appearances_2025;
-  const totalPassAttempts = p.successful_passes_2025 + p.fouls_committed_2025 * 3; // rough estimate
 
   return {
     playerId: p.id,
@@ -84,16 +83,15 @@ function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonSt
     teamId: slugify(p.club_name),
     position: p.position,
     appearances: p.appearances_2025,
+    starts: p.starts_2025,
     minutes: p.minutes_2025,
     goals: p.goals_2025,
     assists: p.assists_2025,
-    xg: 0, // not available without API-Football — shown as N/A in UI
-    xa: 0,
+    xg: p.xg_2025,
+    xa: p.xa_2025,
     shots: p.shots_2025,
     shotsOnTarget: p.shots_on_target_2025,
-    passAccuracy: totalPassAttempts > 0
-      ? Math.min(99, Math.round((p.successful_passes_2025 / totalPassAttempts) * 100))
-      : 0,
+    passAccuracy: p.pass_accuracy_2025,
     tackles: p.tackles_won_2025,
     interceptions: p.interceptions_2025,
     cleanSheets: p.clean_sheets_2025,
@@ -102,6 +100,16 @@ function toPlayerSeasonStats(p: OfficialFantasyPoolPlayerRecord): PlayerSeasonSt
     redCards: p.red_cards_2025,
     fantasyPoints: Math.round(fp * 10) / 10,
     pointsPer90: nineties > 0 ? Math.round((fp / nineties) * 10) / 10 : 0,
+    chancesCreated: p.chances_created_2025,
+    passes: p.passes_2025,
+    successfulPasses: p.successful_passes_2025,
+    crosses: p.successful_crosses_2025,
+    foulsWon: p.fouls_won_2025,
+    foulsCommitted: p.fouls_committed_2025,
+    blocks: p.blocks_2025,
+    goalsConceded: p.goals_conceded_2025,
+    penaltySaves: p.penalty_saves_2025,
+    officialPlayerId: p.official_player_id,
   };
 }
 

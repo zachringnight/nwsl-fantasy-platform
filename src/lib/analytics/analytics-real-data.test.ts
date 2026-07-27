@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   getMatchResultsBySeason,
+  getRealPlayerRankings,
   getRealMatchResults,
 } from "./analytics-real-data";
+import { officialFantasyPlayerPoolSource } from "@/lib/generated/fantasy-player-pool.generated";
 
 describe("real NWSL match data", () => {
   it("restarts date-based matchday numbering for each season", () => {
@@ -27,5 +29,17 @@ describe("real NWSL match data", () => {
           .every((match) => match.matchday === 1)
       ).toBe(true);
     }
+  });
+
+  it("ships a unique, current 2026 fallback player pool", () => {
+    const players = getRealPlayerRankings();
+    const playerIds = new Set(players.map((player) => player.playerId));
+    const teams = new Set(players.map((player) => player.teamId));
+
+    expect(players.length).toBeGreaterThanOrEqual(440);
+    expect(playerIds.size).toBe(players.length);
+    expect(teams.size).toBe(16);
+    expect(officialFantasyPlayerPoolSource.rosterSeason).toContain("2026");
+    expect(officialFantasyPlayerPoolSource.scoringSeason).toContain("2026");
   });
 });

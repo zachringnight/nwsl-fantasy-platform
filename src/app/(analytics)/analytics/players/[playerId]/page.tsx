@@ -1,8 +1,4 @@
-"use client";
-
-import { useMemo } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
@@ -10,68 +6,190 @@ import { Pill } from "@/components/ui/pill";
 import { ThemedLineChart } from "@/components/analytics/charts/themed-line-chart";
 import { ThemedBarChart } from "@/components/analytics/charts/themed-bar-chart";
 import { ThemedRadarChart } from "@/components/analytics/charts/themed-radar-chart";
-import {
-  getPlayerDetail,
-  getPlayerForm,
-  getPlayerMatchLog,
-} from "@/lib/analytics/analytics-data";
+import { getPlayerDetail } from "@/lib/analytics/analytics-data";
+import { getLiveNwslPublicData } from "@/lib/analytics/live-nwsl-public-data";
 import {
   analyticsMatchHref,
+  analyticsPlayerHref,
   analyticsTeamHref,
-  analyticsTeamId,
 } from "@/lib/analytics/entity-routes";
+import { calculateAggregateFantasyScore } from "@/lib/scoring/scoring-engine";
+import type {
+  PlayerMatchLog,
+  PlayerSeasonStats,
+} from "@/types/analytics";
 
-export default function PlayerDetailPage() {
-  const params = useParams<{ playerId: string }>();
-  const playerId = params.playerId;
+const breakdownLabels: Record<string, string> = {
+  appearance: "Appearances",
+  minutes60Plus: "60+ Minutes",
+  goals: "Goals",
+  assists: "Assists",
+  shots: "Shots",
+  shotsOnTarget: "Shots on Target",
+  chancesCreated: "Chances Created",
+  successfulPasses: "Successful Passes",
+  successfulCrosses: "Successful Crosses",
+  foulsWon: "Fouls Won",
+  foulsCommitted: "Fouls Committed",
+  tacklesWon: "Tackles Won",
+  interceptions: "Interceptions",
+  blocks: "Blocks",
+  cleanSheets: "Clean Sheets",
+  saves: "Saves",
+  goalsConceded: "Goals Conceded",
+  yellowCards: "Yellow Cards",
+  redCards: "Red Cards",
+  penaltySaves: "Penalty Saves",
+  penaltyMisses: "Penalty Misses",
+  penaltyConceded: "Penalties Conceded",
+  ownGoals: "Own Goals",
+  goalkeeperWins: "Goalkeeper Wins",
+  goalkeeperDraws: "Goalkeeper Draws",
+};
 
-  const player = useMemo(() => getPlayerDetail(playerId), [playerId]);
-  const form = useMemo(() => getPlayerForm(playerId), [playerId]);
-  const matchLog = useMemo(() => getPlayerMatchLog(playerId), [playerId]);
+function aggregateFantasyBreakdown(
+  player: PlayerSeasonStats,
+  matchLog: PlayerMatchLog[]
+): Record<string, number> {
+  if (matchLog.some((match) => Object.keys(match.fantasyBreakdown ?? {}).length)) {
+    const total: Record<string, number> = {};
+    for (const match of matchLog) {
+      for (const [key, value] of Object.entries(match.fantasyBreakdown ?? {})) {
+        total[key] = (total[key] ?? 0) + value;
+      }
+    }
+    return total;
+  }
+
+  return calculateAggregateFantasyScore({
+    position: player.position,
+    appearances: player.appearances,
+    sixtyPlusAppearances: player.starts ?? 0,
+    goals: player.goals,
+    assists: player.assists,
+    cleanSheets: player.cleanSheets,
+    saves: player.saves,
+    goalsConceded: player.goalsConceded ?? 0,
+    yellowCards: player.yellowCards,
+    redCards: player.redCards,
+    penaltySaves: player.penaltySaves ?? 0,
+    penaltyMisses: 0,
+    shots: player.shots,
+    shotsOnTarget: player.shotsOnTarget,
+    chancesCreated: player.chancesCreated,
+    successfulPasses: player.successfulPasses,
+    successfulCrosses: player.crosses,
+    foulsWon: player.foulsWon,
+    foulsCommitted: player.foulsCommitted,
+    tacklesWon: player.tackles,
+    interceptions: player.interceptions,
+    blocks: player.blocks,
+  }).breakdown;
+}
+
+export default async function PlayerDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ playerId: string }>;
+  searchParams: Promise<{ season?: string }>;
+}) {
+  const [{ playerId }, query] = await Promise.all([params, searchParams]);
+  const season = query.season === "2025" ? "2025" : "2026";
+  const live = season === "2026" ? await getLiveNwslPublicData() : null;
+  const player =
+    season === "2026"
+      ? live?.players.find((candidate) => candidate.playerId === playerId) ??
+        getPlayerDetail(playerId)
+      : undefined;
+  const form = live?.playerForms[playerId] ?? [];
+  const matchLog = live?.playerMatchLogs[playerId] ?? [];
 
   if (!player) {
     return (
-      <AppShell eyebrow="Player Analytics" title="Not Found" description="Player not found.">
-        <Link href="/analytics/players" className="text-sm text-brand-strong hover:underline">
+      <AppShell
+        eyebrow="Player Analytics"
+        title={season === "2025" ? "Player Archive Unavailable" : "Not Found"}
+        description={
+          season === "2025"
+            ? "Verified player-level records are not available for the 2025 archive."
+            : "Player not found."
+        }
+      >
+        <Link
+          href={`/analytics/players?season=${season}`}
+          className="text-sm text-brand-strong hover:underline"
+        >
           Back to rankings
         </Link>
       </AppShell>
     );
   }
 
-  // Radar chart data - normalize to 0-100 scale
-  const maxStats = { goals: 10, assists: 8, shots: 40, tackles: 40, interceptions: 30, passAccuracy: 100 };
+  const maxStats = {
+    goals: 10,
+    assists: 8,
+    shots: 40,
+    tackles: 40,
+    interceptions: 30,
+  };
   const radarData = [
     { subject: "Goals", value: Math.min(100, (player.goals / maxStats.goals) * 100) },
-    { subject: "Assists", value: Math.min(100, (player.assists / maxStats.assists) * 100) },
+    {
+      subject: "Assists",
+      value: Math.min(100, (player.assists / maxStats.assists) * 100),
+    },
     { subject: "Shots", value: Math.min(100, (player.shots / maxStats.shots) * 100) },
-    { subject: "Tackles", value: Math.min(100, (player.tackles / maxStats.tackles) * 100) },
-    { subject: "Interceptions", value: Math.min(100, (player.interceptions / maxStats.interceptions) * 100) },
+    {
+      subject: "Tackles",
+      value: Math.min(100, (player.tackles / maxStats.tackles) * 100),
+    },
+    {
+      subject: "Interceptions",
+      value: Math.min(
+        100,
+        (player.interceptions / maxStats.interceptions) * 100
+      ),
+    },
     { subject: "Pass Acc.", value: player.passAccuracy },
   ];
-
-  // Scoring breakdown
-  const breakdown = [
-    { category: "Goals", points: player.goals * 8 },
-    { category: "Assists", points: player.assists * 5 },
-    { category: "Clean Sheets", points: player.cleanSheets * 4 },
-    { category: "Saves", points: Math.round(player.saves * 1.5) },
-    { category: "Appearances", points: player.appearances * 2 },
-    { category: "Cards", points: -(player.yellowCards * 2 + player.redCards * 5) },
-  ].filter((b) => b.points !== 0);
+  const breakdown = Object.entries(
+    aggregateFantasyBreakdown(player, matchLog)
+  )
+    .map(([key, points]) => ({
+      category: breakdownLabels[key] ?? key,
+      points: Math.round(points * 10) / 10,
+    }))
+    .filter((item) => item.points !== 0);
+  const sourceAsOf = live?.provenance.generatedAt
+    ? new Date(live.provenance.generatedAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "the latest checked-in snapshot";
+  const matchStatsAppearances = Math.max(
+    0,
+    Math.round(player.matchStatsAppearances ?? matchLog.length)
+  );
+  const matchStatsIncomplete = player.matchStatsComplete === false;
 
   return (
     <AppShell
       eyebrow={
-        <Link
-          href={analyticsTeamHref(player.teamId)}
-          className="hover:underline hover:underline-offset-4"
-        >
-          {player.team}
-        </Link>
+        player.teamId ? (
+          <Link
+            href={analyticsTeamHref(player.teamId, season)}
+            className="hover:underline hover:underline-offset-4"
+          >
+            {player.team}
+          </Link>
+        ) : (
+          player.team
+        )
       }
       title={player.name}
-      description={`${player.position} · ${player.appearances} appearances · ${player.minutes} minutes`}
+      description={`${player.position} · ${player.appearances} appearances · ${player.minutes} minutes · Official 2026 NWSL data through ${sourceAsOf}`}
       actions={
         <div className="flex flex-wrap gap-2">
           <Link
@@ -80,14 +198,16 @@ export default function PlayerDetailPage() {
           >
             Fantasy player card
           </Link>
+          {player.teamId && (
+            <Link
+              href={analyticsTeamHref(player.teamId, season)}
+              className="inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-sm text-brand-strong transition hover:border-brand-strong/50"
+            >
+              {player.team} profile
+            </Link>
+          )}
           <Link
-            href={analyticsTeamHref(player.teamId)}
-            className="inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-sm text-brand-strong transition hover:border-brand-strong/50"
-          >
-            {player.team} profile
-          </Link>
-          <Link
-            href="/analytics/players"
+            href={`/analytics/players?season=${season}`}
             className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted transition hover:text-foreground"
           >
             <ArrowLeft className="size-4" />
@@ -96,13 +216,53 @@ export default function PlayerDetailPage() {
         </div>
       }
     >
-      {/* Key Stats */}
+      {matchStatsIncomplete ? (
+        <aside
+          aria-label="Match-by-match source coverage"
+          className="flex flex-wrap items-center gap-3 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3"
+        >
+          <Pill tone="default">Partial match log</Pill>
+          <p className="text-sm leading-6 text-muted">
+            Official season totals remain available, but match-by-match detail is
+            available for {matchStatsAppearances} of {player.appearances}{" "}
+            appearances. Tracked fantasy totals reflect only those matches.
+          </p>
+        </aside>
+      ) : null}
+
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <MetricTile label="Goals" value={player.goals} detail={`${player.shots} shots`} tone="brand" />
-        <MetricTile label="Assists" value={player.assists} detail={`${player.shotsOnTarget} on target`} tone="brand" />
-        <MetricTile label="Fantasy Pts" value={player.fantasyPoints} detail={`${player.pointsPer90}/90`} tone="accent" />
-        <MetricTile label="Minutes" value={player.minutes} detail={`${player.appearances} apps`} />
-        <MetricTile label="Pass Acc." value={`${player.passAccuracy.toFixed(0)}%`} />
+        <MetricTile
+          label="Goals"
+          value={player.goals}
+          detail={`${player.shots} shots · ${player.xg > 0 ? `${player.xg.toFixed(1)} xG` : "xG —"}`}
+          tone="brand"
+        />
+        <MetricTile
+          label="Assists"
+          value={player.assists}
+          detail={`${player.chancesCreated ?? 0} chances created`}
+          tone="brand"
+        />
+        <MetricTile
+          label="Fantasy Pts"
+          value={player.fantasyPoints}
+          detail={`${player.pointsPer90}/90`}
+          tone="accent"
+        />
+        <MetricTile
+          label="Minutes"
+          value={player.minutes}
+          detail={`${player.starts ?? 0} starts · ${player.appearances} apps`}
+        />
+        <MetricTile
+          label="Pass Acc."
+          value={player.passes ? `${player.passAccuracy.toFixed(0)}%` : "—"}
+          detail={
+            player.passes
+              ? `${player.successfulPasses ?? 0}/${player.passes} complete`
+              : undefined
+          }
+        />
         <MetricTile
           label="Discipline"
           value={
@@ -116,18 +276,16 @@ export default function PlayerDetailPage() {
         />
       </section>
 
-      {/* Charts Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Fantasy Points Over Time */}
         {form.length > 0 ? (
           <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
               Fantasy Points Trend
             </h3>
             <ThemedLineChart
-              data={form.map((f) => ({
-                matchday: `MD ${f.matchday}`,
-                points: f.fantasyPoints,
+              data={form.map((point) => ({
+                matchday: `MD ${point.matchday}`,
+                points: point.fantasyPoints,
               }))}
               xKey="matchday"
               lines={[
@@ -136,30 +294,26 @@ export default function PlayerDetailPage() {
             />
           </section>
         ) : (
-          <section className="glass-card rounded-[1.4rem] border border-dashed border-line bg-white/4 p-5 flex flex-col items-center justify-center text-center">
+          <section className="glass-card flex flex-col items-center justify-center rounded-[1.4rem] border border-dashed border-line bg-white/4 p-5 text-center">
             <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
               Fantasy Points Trend
             </h3>
             <p className="text-sm text-muted">
-              Per-match data will appear here once API-Football fixture sync is configured.
+              No official 2026 match breakdown has been recorded for this player.
             </p>
           </section>
         )}
 
-        {/* Performance Radar */}
         <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
             Performance Profile
           </h3>
           <ThemedRadarChart
             data={radarData}
-            radars={[
-              { dataKey: "value", label: player.name, color: "#00e1ff" },
-            ]}
+            radars={[{ dataKey: "value", label: player.name, color: "#00e1ff" }]}
           />
         </section>
 
-        {/* Scoring Breakdown */}
         <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
             Scoring Breakdown
@@ -174,41 +328,31 @@ export default function PlayerDetailPage() {
           />
         </section>
 
-        {/* Minutes Per Match */}
-        {matchLog.length > 0 ? (
-          <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-              Minutes Per Match
-            </h3>
-            <ThemedBarChart
-              data={matchLog.map((m, i) => ({
-                match: `MD ${i + 1}`,
-                minutes: m.minutes,
-              }))}
-              xKey="match"
-              bars={[{ dataKey: "minutes", label: "Minutes", color: "#0522ff" }]}
+        <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+          <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
+            Season Detail
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <MetricTile label="Shots on Target" value={player.shotsOnTarget} />
+            <MetricTile label="Chances Created" value={player.chancesCreated ?? 0} />
+            <MetricTile label="Tackles Won" value={player.tackles} />
+            <MetricTile label="Interceptions" value={player.interceptions} />
+            <MetricTile label="Clean Sheets" value={player.cleanSheets} />
+            <MetricTile
+              label={player.position === "GK" ? "Saves" : "Blocks"}
+              value={player.position === "GK" ? player.saves : player.blocks ?? 0}
             />
-          </section>
-        ) : (
-          <section className="glass-card rounded-[1.4rem] border border-dashed border-line bg-white/4 p-5 flex flex-col items-center justify-center text-center">
-            <h3 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-strong">
-              Minutes Per Match
-            </h3>
-            <p className="text-sm text-muted">
-              Per-match minutes data will appear here once API-Football fixture sync is configured.
-            </p>
-          </section>
-        )}
+          </div>
+        </section>
       </div>
 
-      {/* Match Log Table */}
       <section>
         <h3 className="mb-4 text-sm font-semibold uppercase tracking-widest text-brand-strong">
           Match Log
         </h3>
         {matchLog.length > 0 ? (
           <div className="overflow-x-auto rounded-[1.4rem] border border-line bg-white/4">
-            <table className="w-full min-w-[700px] text-sm">
+            <table className="w-full min-w-[800px] text-sm">
               <thead>
                 <tr className="border-b border-line text-left text-xs uppercase tracking-widest text-muted">
                   <th className="px-4 py-3">Date</th>
@@ -223,36 +367,45 @@ export default function PlayerDetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {matchLog.map((m) => (
-                  <tr key={m.matchId} className="border-b border-line/50 transition hover:bg-white/4">
+                {[...matchLog].reverse().map((match) => (
+                  <tr
+                    key={match.officialMatchId ?? match.matchId}
+                    className="border-b border-line/50 transition hover:bg-white/4"
+                  >
                     <td className="px-4 py-3">
                       <Link
-                        href={analyticsMatchHref(m.matchId)}
+                        href={analyticsMatchHref(match.matchId, season)}
                         className="text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
                       >
-                        {m.date}
+                        {match.date}
                       </Link>
                     </td>
                     <td className="px-4 py-3">
-                      <Link
-                        href={analyticsTeamHref(analyticsTeamId(m.opponent))}
-                        className="text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
-                      >
-                        {m.opponent}
-                      </Link>
+                      {match.opponentId ? (
+                        <Link
+                          href={analyticsTeamHref(match.opponentId, season)}
+                          className="text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                        >
+                          {match.opponent}
+                        </Link>
+                      ) : (
+                        match.opponent
+                      )}
                     </td>
                     <td className="px-4 py-3">
-                      <Pill tone={m.home ? "brand" : "default"}>
-                        {m.home ? "H" : "A"}
+                      <Pill tone={match.home ? "brand" : "default"}>
+                        {match.home ? "H" : "A"}
                       </Pill>
                     </td>
-                    <td className="px-4 py-3 text-right font-mono">{m.minutes}</td>
-                    <td className="px-4 py-3 text-right font-mono">{m.goals}</td>
-                    <td className="px-4 py-3 text-right font-mono">{m.assists}</td>
-                    <td className="px-4 py-3 text-right font-mono">{m.shots}</td>
-                    <td className="px-4 py-3 text-right font-mono">{m.passAccuracy.toFixed(0)}%</td>
+                    <td className="px-4 py-3 text-right font-mono">{match.minutes}</td>
+                    <td className="px-4 py-3 text-right font-mono">{match.goals}</td>
+                    <td className="px-4 py-3 text-right font-mono">{match.assists}</td>
+                    <td className="px-4 py-3 text-right font-mono">{match.shots}</td>
+                    <td className="px-4 py-3 text-right font-mono">
+                      {match.passes > 0 ? `${match.passAccuracy.toFixed(0)}%` : "—"}
+                    </td>
                     <td className="px-4 py-3 text-right font-mono font-semibold text-brand-strong">
-                      {m.fantasyPoints.toFixed(1)}
+                      {match.fantasyPoints.toFixed(1)}
                     </td>
                   </tr>
                 ))}
@@ -262,11 +415,15 @@ export default function PlayerDetailPage() {
         ) : (
           <div className="rounded-[1.4rem] border border-dashed border-line bg-white/4 p-6 text-center">
             <p className="text-sm text-muted">
-              Match-by-match performance data will appear here once API-Football fixture sync is configured.
+              This player has no official match-by-match record in the current
+              2026 snapshot.
             </p>
-            <p className="mt-1 text-xs text-muted/60">
-              Set the <code className="font-mono text-brand-strong">API_FOOTBALL_KEY</code> environment variable to enable per-match stats.
-            </p>
+            <Link
+              href={analyticsPlayerHref(player.playerId, season)}
+              className="mt-2 inline-flex text-xs text-brand-strong hover:underline"
+            >
+              Refresh this player page
+            </Link>
           </div>
         )}
       </section>
