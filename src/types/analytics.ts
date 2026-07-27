@@ -5,6 +5,17 @@
 
 import type { PlayerPosition } from "@/types/fantasy";
 
+export interface AnalyticsProvenance {
+  season: "2025" | "2026";
+  source: string;
+  sourceUrl?: string;
+  generatedAt: string;
+  publishedAt?: string;
+  checksum?: string;
+  isLive: boolean;
+  isStale: boolean;
+}
+
 // ── Team Analytics ──────────────────────────────────────────────────────────
 
 export type FormResult = "W" | "D" | "L";
@@ -39,6 +50,12 @@ export interface TeamStats {
   interceptions: number;
   cleanSheets: number;
   corners: number;
+  passes?: number;
+  successfulPasses?: number;
+  crosses?: number;
+  blocks?: number;
+  yellowCards?: number;
+  redCards?: number;
 }
 
 export interface TeamRating {
@@ -62,6 +79,7 @@ export interface PlayerSeasonStats {
   teamId: string;
   position: PlayerPosition;
   appearances: number;
+  starts?: number;
   minutes: number;
   goals: number;
   assists: number;
@@ -78,13 +96,30 @@ export interface PlayerSeasonStats {
   redCards: number;
   fantasyPoints: number;
   pointsPer90: number;
+  /** Appearances represented by the available match-by-match stat rows. */
+  matchStatsAppearances?: number;
+  /** Whether match-by-match stat rows cover every official season appearance. */
+  matchStatsComplete?: boolean;
   photoUrl?: string;
+  chancesCreated?: number;
+  passes?: number;
+  successfulPasses?: number;
+  crosses?: number;
+  foulsWon?: number;
+  foulsCommitted?: number;
+  blocks?: number;
+  goalsConceded?: number;
+  penaltySaves?: number;
+  officialPlayerId?: string;
 }
 
 export interface PlayerMatchLog {
   matchId: string;
+  officialMatchId?: string;
   date: string;
   opponent: string;
+  opponentId?: string;
+  teamId?: string;
   home: boolean;
   minutes: number;
   goals: number;
@@ -92,11 +127,26 @@ export interface PlayerMatchLog {
   shots: number;
   shotsOnTarget: number;
   passes: number;
+  successfulPasses?: number;
   passAccuracy: number;
   tackles: number;
   interceptions: number;
   saves: number;
+  chancesCreated?: number;
+  crosses?: number;
+  foulsWon?: number;
+  foulsCommitted?: number;
+  blocks?: number;
+  cleanSheet?: boolean;
+  goalsConceded?: number;
+  yellowCards?: number;
+  redCards?: number;
+  penaltySaves?: number;
+  penaltyMisses?: number;
+  goalkeeperWin?: boolean;
+  goalkeeperDraw?: boolean;
   fantasyPoints: number;
+  fantasyBreakdown?: Record<string, number>;
 }
 
 export interface PlayerFormPoint {
@@ -110,6 +160,7 @@ export interface PlayerFormPoint {
 
 export interface MatchResult {
   matchId: string;
+  officialMatchId?: string;
   date: string;
   matchday: number;
   homeTeam: string;
@@ -121,7 +172,7 @@ export interface MatchResult {
   homeXg: number;
   awayXg: number;
   venue: string;
-  status: "completed" | "upcoming" | "live";
+  status: "completed" | "upcoming" | "live" | "postponed" | "canceled";
 }
 
 export interface MatchDetail extends MatchResult {

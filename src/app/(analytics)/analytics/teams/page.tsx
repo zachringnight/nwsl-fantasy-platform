@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
 import { FormIndicator } from "@/components/analytics/form-indicator";
 import { getLeagueTableBySeason, type Season } from "@/lib/analytics/analytics-data";
+import { getLiveNwslPublicData } from "@/lib/analytics/live-nwsl-public-data";
 import { analyticsTeamHref } from "@/lib/analytics/entity-routes";
 
 export const metadata = {
@@ -16,14 +17,23 @@ export default async function TeamsPage({
 }) {
   const params = await searchParams;
   const season: Season = params.season === "2025" ? "2025" : "2026";
-  const standings = getLeagueTableBySeason(season);
+  const live = season === "2026" ? await getLiveNwslPublicData() : null;
+  const standings = live?.standings ?? getLeagueTableBySeason(season);
+  const source =
+    live?.provenance.source ?? (season === "2026" ? "ESPN" : "ESPN archive");
 
   return (
     <AppShell
       eyebrow="Team Analytics"
       title="League Table"
-      description={`${season} NWSL standings with real W/D/L records, goal difference, and recent form from ESPN.`}
+      description={`${season} NWSL standings with W/D/L records, goal difference, and recent form from ${source}.`}
     >
+      {live?.provenance.isStale && (
+        <div className="rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning">
+          The last complete official snapshot is older than 36 hours. It remains
+          visible while the next automated refresh retries.
+        </div>
+      )}
       <div className="overflow-x-auto rounded-[1.4rem] border border-line bg-white/4">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
@@ -43,23 +53,20 @@ export default async function TeamsPage({
           </thead>
           <tbody>
             {standings.map((team, i) => {
-              const isPlayoff = season === "2025" ? i < 8 : i < 4;
-              const isBottom = i >= standings.length - 2;
+              const isPlayoff = i < 8;
               return (
                 <tr
                   key={team.teamId}
                   className={`border-b border-line/50 transition hover:bg-white/4 ${
                     isPlayoff
                       ? "border-l-2 border-l-brand-strong"
-                      : isBottom
-                        ? "border-l-2 border-l-danger/60"
-                        : ""
+                      : ""
                   }`}
                 >
                   <td className="px-4 py-3 font-mono text-muted">{i + 1}</td>
                   <td className="px-4 py-3">
                     <Link
-                      href={analyticsTeamHref(team.teamId)}
+                      href={analyticsTeamHref(team.teamId, season)}
                       className="font-medium text-foreground hover:text-brand-strong"
                     >
                       {team.team}

@@ -9,11 +9,12 @@ import {
   getLeagueTableBySeason,
   getMatchDetail,
   getMatchPrediction,
-  getMatchResults,
   getTeamRatings,
   type Season,
 } from "@/lib/analytics/analytics-data";
+import { getMatchResultsBySeason } from "@/lib/analytics/analytics-real-data";
 import { getEspnLiveMatch } from "@/lib/analytics/espn-live-match";
+import { getLiveNwslPublicData } from "@/lib/analytics/live-nwsl-public-data";
 import {
   buildMatchStateNarrative,
   buildPrematchNarrative,
@@ -44,7 +45,29 @@ export default async function MatchDetailPage({
   params: Promise<{ matchId: string }>;
 }) {
   const { matchId } = await params;
-  const match = getMatchDetail(matchId);
+  const live = await getLiveNwslPublicData();
+  const liveMatch = live?.matches.find(
+    (candidate) => candidate.matchId === matchId
+  );
+  const staticMatch = getMatchDetail(matchId);
+  const match = staticMatch
+    ? { ...staticMatch, ...liveMatch }
+    : liveMatch
+      ? {
+          ...liveMatch,
+          homeShots: 0,
+          awayShots: 0,
+          homeShotsOnTarget: 0,
+          awayShotsOnTarget: 0,
+          homePossession: 0,
+          awayPossession: 0,
+          homeCorners: 0,
+          awayCorners: 0,
+          homeFouls: 0,
+          awayFouls: 0,
+          events: [],
+        }
+      : undefined;
 
   if (!match) {
     return (
@@ -54,7 +77,7 @@ export default async function MatchDetailPage({
         description="Match not found."
       >
         <Link
-          href="/analytics/matches"
+          href="/analytics/matches?season=2026"
           className="text-sm text-brand-strong hover:underline"
         >
           Back to matches
@@ -74,10 +97,17 @@ export default async function MatchDetailPage({
   const homeScore = snapshot?.homeScore ?? match.homeGoals;
   const awayScore = snapshot?.awayScore ?? match.awayGoals;
   const prediction = getMatchPrediction(matchId);
-  const allMatches = getMatchResults();
   const season: Season = match.date.startsWith("2025") ? "2025" : "2026";
-  const standings = getLeagueTableBySeason(season);
-  const ratings = getTeamRatings();
+  const allMatches =
+    season === "2026" && live
+      ? live.matches
+      : getMatchResultsBySeason(season);
+  const standings =
+    season === "2026" && live
+      ? live.standings
+      : getLeagueTableBySeason(season);
+  const ratings =
+    season === "2026" && live ? live.teamRatings : getTeamRatings();
   const homeStanding = rankedStanding(standings, match.homeTeamId);
   const awayStanding = rankedStanding(standings, match.awayTeamId);
   const homeForm = getRecentTeamForm(
@@ -132,14 +162,14 @@ export default async function MatchDetailPage({
       title={
         <>
           <Link
-            href={analyticsTeamHref(match.homeTeamId)}
+            href={analyticsTeamHref(match.homeTeamId, season)}
             className="hover:text-brand-strong hover:underline hover:underline-offset-4"
           >
             {match.homeTeam}
           </Link>{" "}
           vs{" "}
           <Link
-            href={analyticsTeamHref(match.awayTeamId)}
+            href={analyticsTeamHref(match.awayTeamId, season)}
             className="hover:text-brand-strong hover:underline hover:underline-offset-4"
           >
             {match.awayTeam}
@@ -149,7 +179,7 @@ export default async function MatchDetailPage({
       description={snapshot?.venue || match.venue}
       actions={
         <Link
-          href="/analytics/matches"
+          href={`/analytics/matches?season=${season}`}
           className="inline-flex items-center gap-2 rounded-full border border-line bg-white/6 px-4 py-2 text-sm text-muted transition hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
@@ -160,7 +190,7 @@ export default async function MatchDetailPage({
       <section className="flex items-center justify-center gap-6 py-4 sm:gap-10">
         <div className="min-w-0 flex-1 text-right">
           <Link
-            href={analyticsTeamHref(match.homeTeamId)}
+            href={analyticsTeamHref(match.homeTeamId, season)}
             className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
           >
             {match.homeTeam}
@@ -181,7 +211,15 @@ export default async function MatchDetailPage({
                   : "default"
             }
           >
-            {phase === "live" ? "LIVE" : phase === "final" ? "FT" : "VS"}
+            {match.status === "postponed"
+              ? "POSTPONED"
+              : match.status === "canceled"
+                ? "CANCELED"
+                : phase === "live"
+                  ? "LIVE"
+                  : phase === "final"
+                    ? "FT"
+                    : "VS"}
           </Pill>
           {phase === "live" && snapshot?.statusLabel ? (
             <p className="mt-2 max-w-28 text-xs text-muted">
@@ -198,7 +236,7 @@ export default async function MatchDetailPage({
         </div>
         <div className="min-w-0 flex-1 text-left">
           <Link
-            href={analyticsTeamHref(match.awayTeamId)}
+            href={analyticsTeamHref(match.awayTeamId, season)}
             className="text-lg font-medium text-foreground transition hover:text-brand-strong hover:underline hover:underline-offset-4"
           >
             {match.awayTeam}

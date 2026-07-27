@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   BarChart3,
   Brain,
@@ -25,49 +25,64 @@ const analyticsNav = [
   { href: "/analytics/ratings", label: "Ratings", icon: Gauge },
 ];
 
+function AnalyticsNavigation() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const season = searchParams.get("season") === "2025" ? "2025" : "2026";
+
+  return (
+    <nav
+      aria-label="Analytics"
+      className="page-shell sticky top-[5.5rem] z-40 border-b border-line bg-panel-strong/80 backdrop-blur-xl"
+    >
+      <div className="flex items-center gap-1 overflow-x-auto px-4 py-2.5 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {analyticsNav.map((item) => {
+          const isActive = item.exact
+            ? pathname === item.href
+            : pathname.startsWith(item.href);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={`${item.href}?season=${season}`}
+              className={cn(
+                "flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition",
+                isActive
+                  ? "bg-brand/20 text-brand-strong"
+                  : "text-muted hover:bg-white/6 hover:text-foreground"
+              )}
+            >
+              <Icon className="size-4" />
+              {item.label}
+            </Link>
+          );
+        })}
+        <div className="ml-auto shrink-0 pl-4">
+          <SeasonSelector />
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 export default function AnalyticsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-
   return (
     <div className="space-y-0">
-      <nav
-        aria-label="Analytics"
-        className="page-shell sticky top-[5.5rem] z-40 border-b border-line bg-panel-strong/80 backdrop-blur-xl"
+      <Suspense
+        fallback={
+          <nav
+            aria-label="Analytics"
+            className="page-shell sticky top-[5.5rem] z-40 h-[3.8rem] border-b border-line bg-panel-strong/80 backdrop-blur-xl"
+          />
+        }
       >
-        <div className="flex items-center gap-1 overflow-x-auto px-4 py-2.5 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {analyticsNav.map((item) => {
-            const isActive = item.exact
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
-            const Icon = item.icon;
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition",
-                  isActive
-                    ? "bg-brand/20 text-brand-strong"
-                    : "text-muted hover:bg-white/6 hover:text-foreground"
-                )}
-              >
-                <Icon className="size-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-          <div className="ml-auto shrink-0 pl-4">
-            <Suspense>
-              <SeasonSelector />
-            </Suspense>
-          </div>
-        </div>
-      </nav>
+        <AnalyticsNavigation />
+      </Suspense>
       {children}
     </div>
   );

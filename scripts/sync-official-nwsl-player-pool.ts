@@ -41,8 +41,7 @@ interface OfficialStatsResponse {
 
 const ROSTER_SEASON_ID =
   "nwsl::Football_Season::0b6761e4701749f593690c0f338da74c";
-const SCORING_SEASON_ID =
-  "nwsl::Football_Season::fad050beee834db88fa9f2eb28ce5a5c";
+const SCORING_SEASON_ID = ROSTER_SEASON_ID;
 const OUTPUT_FILE = path.join(
   process.cwd(),
   "src/lib/generated/fantasy-player-pool.generated.ts"
@@ -208,6 +207,14 @@ function computeProjectionInputs(
   const minutes = getStatValue(statMaps, ["general"], ["minutes-played", "Time Played"]);
   const goals = getStatValue(statMaps, ["general"], ["goals", "Goals"]);
   const assists = getStatValue(statMaps, ["general"], ["assists", "Assists (Intentional)"]);
+  const xg = getStatValue(statMaps, ["general"], [
+    "expected-goals",
+    "Expected Goals",
+  ]);
+  const xa = getStatValue(statMaps, ["passing", "general"], [
+    "expected-assists",
+    "Expected Assists",
+  ]);
   const shots = getStatValue(statMaps, ["general"], ["total-scoring-attempts", "Total Shots"]);
   const shotsOnTarget = getStatValue(statMaps, ["general"], [
     "on-target-scoring-attempts",
@@ -221,6 +228,14 @@ function computeProjectionInputs(
     "accurate-pass",
     "Total Successful Passes ( Excl Crosses & Corners ) ",
     "Total Successful Passes ( Excl Crosses & Corners )",
+  ]);
+  const passes = getStatValue(statMaps, ["passing", "general"], [
+    "total-pass",
+    "Total Passes",
+  ]);
+  const passAccuracy = getStatValue(statMaps, ["passing", "general"], [
+    "accurate-pass-percentage",
+    "Passing Accuracy",
   ]);
   const successfulCrosses = getStatMax(statMaps, ["passing", "general"], [
     "cross",
@@ -323,10 +338,14 @@ function computeProjectionInputs(
     minutes,
     goals,
     assists,
+    xg,
+    xa,
     shots,
     shotsOnTarget,
     chancesCreated,
     successfulPasses,
+    passes,
+    passAccuracy,
     successfulCrosses,
     foulsWon,
     foulsCommitted,
@@ -372,7 +391,7 @@ async function main() {
     }))
   );
 
-  const poolRows = rosterGroups.flatMap(({ team, roster }) =>
+  const rawPoolRows = rosterGroups.flatMap(({ team, roster }) =>
     roster.map((rosterPlayer) => {
       const position = mapPosition(rosterPlayer.roleLabel, rosterPlayer.role);
       const statMaps: StatMapsByCategory = {
@@ -406,16 +425,20 @@ async function main() {
         salary_cost: 0,
         availability: getAvailability(rosterPlayer.playerStatus),
         rank: 0,
-        stats_source_season: "2025 NWSL regular season",
+        stats_source_season: "2026 NWSL regular season",
         appearances_2025: projection.appearances,
         starts_2025: projection.starts,
         minutes_2025: projection.minutes,
         goals_2025: projection.goals,
         assists_2025: projection.assists,
+        xg_2025: projection.xg,
+        xa_2025: projection.xa,
         shots_2025: projection.shots,
         shots_on_target_2025: projection.shotsOnTarget,
         chances_created_2025: projection.chancesCreated,
         successful_passes_2025: projection.successfulPasses,
+        passes_2025: projection.passes,
+        pass_accuracy_2025: projection.passAccuracy,
         successful_crosses_2025: projection.successfulCrosses,
         fouls_won_2025: projection.foulsWon,
         fouls_committed_2025: projection.foulsCommitted,
@@ -434,6 +457,33 @@ async function main() {
       };
     })
   );
+  const poolRowsById = new Map<string, (typeof rawPoolRows)[number]>();
+
+  for (const player of rawPoolRows) {
+    const existing = poolRowsById.get(player.id);
+    if (!existing) {
+      poolRowsById.set(player.id, player);
+      continue;
+    }
+
+    const availabilityPriority = {
+      available: 2,
+      questionable: 1,
+      out: 0,
+    } as const;
+    const playerPriority = availabilityPriority[player.availability];
+    const existingPriority = availabilityPriority[existing.availability];
+
+    if (
+      playerPriority > existingPriority ||
+      (playerPriority === existingPriority &&
+        player.appearances_2025 > existing.appearances_2025)
+    ) {
+      poolRowsById.set(player.id, player);
+    }
+  }
+
+  const poolRows = [...poolRowsById.values()];
 
   const positionBaselines: Record<PlayerPosition, number> = {
     GK: 3,
@@ -515,10 +565,14 @@ export interface OfficialFantasyPoolPlayerRecord extends FantasyPoolPlayer {
   minutes_2025: number;
   goals_2025: number;
   assists_2025: number;
+  xg_2025: number;
+  xa_2025: number;
   shots_2025: number;
   shots_on_target_2025: number;
   chances_created_2025: number;
   successful_passes_2025: number;
+  passes_2025: number;
+  pass_accuracy_2025: number;
   successful_crosses_2025: number;
   fouls_won_2025: number;
   fouls_committed_2025: number;
@@ -538,7 +592,7 @@ export interface OfficialFantasyPoolPlayerRecord extends FantasyPoolPlayer {
 
 export const officialFantasyPlayerPoolSource = {
   rosterSeason: "2026 NWSL roster",
-  scoringSeason: "2025 NWSL regular season",
+  scoringSeason: "2026 NWSL regular season",
   generatedAt: ${JSON.stringify(new Date().toISOString())},
 } as const;
 

@@ -31,4 +31,16 @@ describe("analytics entity routes", () => {
       "/analytics/predictions/match%207"
     );
   });
+
+  it("preserves an explicit analytics season across entity links", () => {
+    expect(analyticsTeamHref("bay-fc", "2026")).toBe(
+      "/analytics/teams/bay-fc?season=2026"
+    );
+    expect(analyticsPlayerHref("player/7", "2026")).toBe(
+      "/analytics/players/player%2F7?season=2026"
+    );
+    expect(analyticsMatchHref("match 7", "2025")).toBe(
+      "/analytics/matches/match%207?season=2025"
+    );
+  });
 });
