@@ -111,6 +111,7 @@ describe("LiveModelPicks", () => {
       "href",
       "/analytics/matches/401853951"
     );
+    expect(screen.getAllByText(/OVER 2\.5 @ -110/).length).toBeGreaterThan(0);
   });
 
   it("shows every priced row, including a no-bet decision", () => {
@@ -146,7 +147,7 @@ describe("LiveModelPicks", () => {
 
     expect(screen.getByText("Totals market decision board")).toBeInTheDocument();
     expect(screen.getByText("DraftKings")).toBeInTheDocument();
-    expect(screen.getByText("1.88")).toBeInTheDocument();
+    expect(screen.getByText("-114")).toBeInTheDocument();
     expect(screen.getByText("Edge Below Threshold")).toBeInTheDocument();
   });
 });

@@ -7,6 +7,7 @@ import {
   analyticsTeamHref,
   analyticsTeamId,
 } from "@/lib/analytics/entity-routes";
+import { formatAmericanOdds } from "@/lib/odds-format";
 
 function numberFrom(record: Record<string, unknown>, key: string): number {
   const value = Number(record[key]);
@@ -235,7 +236,7 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
                   </Link>
                 </h3>
                 <p className="mt-3 font-mono text-xl font-semibold text-brand-lime">
-                  OVER {pick.line?.toFixed(1)} @ {pick.overOdds?.toFixed(2)}
+                  OVER {pick.line?.toFixed(1)} @ {formatAmericanOdds(pick.overOdds)}
                 </p>
                 <p className="mt-1 text-sm text-muted">{pick.sportsbook}</p>
                 <div className="mt-4 grid grid-cols-3 gap-3 border-t border-line pt-4 text-sm">
@@ -330,7 +331,7 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
                       Over {row.line?.toFixed(1)}
                     </p>
                     <p className="mt-1 font-mono text-lg font-semibold text-brand-lime">
-                      {row.overOdds?.toFixed(2)}
+                      {formatAmericanOdds(row.overOdds)}
                     </p>
                   </div>
                   <div className="rounded-xl border border-line bg-white/4 px-3 py-2.5">
@@ -338,7 +339,7 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
                       Under {row.line?.toFixed(1)}
                     </p>
                     <p className="mt-1 font-mono text-lg font-semibold text-foreground">
-                      {row.underOdds?.toFixed(2)}
+                      {formatAmericanOdds(row.underOdds)}
                     </p>
                   </div>
                 </div>
@@ -436,7 +437,7 @@ export function LiveModelPicks({ board }: { board: LiveModelBoard }) {
                   </p>
                 </div>
                 <div className="font-mono text-sm text-foreground">
-                  OVER {pick.line.toFixed(1)} @ {pick.overOdds.toFixed(2)}
+                  OVER {pick.line.toFixed(1)} @ {formatAmericanOdds(pick.overOdds)}
                 </div>
                 <div className="flex items-center justify-between gap-3 sm:justify-end">
                   <Pill

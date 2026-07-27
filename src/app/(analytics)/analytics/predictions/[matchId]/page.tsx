@@ -14,6 +14,7 @@ import {
   analyticsMatchHref,
   analyticsTeamHref,
 } from "@/lib/analytics/entity-routes";
+import { formatAmericanOdds } from "@/lib/odds-format";
 
 export const dynamic = "force-dynamic";
 
@@ -132,18 +133,18 @@ export default async function PredictionDetailPage({
           <MetricTile
             label={prediction.homeTeam}
             value={`${(prediction.homeProb * 100).toFixed(1)}%`}
-            detail={`Fair odds: ${(1 / prediction.homeProb).toFixed(2)}`}
+            detail={`Fair odds: ${formatAmericanOdds(1 / prediction.homeProb)}`}
             tone="brand"
           />
           <MetricTile
             label="Draw"
             value={`${(prediction.drawProb * 100).toFixed(1)}%`}
-            detail={`Fair odds: ${(1 / prediction.drawProb).toFixed(2)}`}
+            detail={`Fair odds: ${formatAmericanOdds(1 / prediction.drawProb)}`}
           />
           <MetricTile
             label={prediction.awayTeam}
             value={`${(prediction.awayProb * 100).toFixed(1)}%`}
-            detail={`Fair odds: ${(1 / prediction.awayProb).toFixed(2)}`}
+            detail={`Fair odds: ${formatAmericanOdds(1 / prediction.awayProb)}`}
             tone="accent"
           />
         </div>
