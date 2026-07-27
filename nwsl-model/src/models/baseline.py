@@ -51,6 +51,7 @@ class ProjectionBaselineModel:
             max_rating_log_adjustment=spi_cfg.get("max_rating_log_adjustment", 0.70),
             lineup_log_scale=spi_cfg.get("lineup_log_scale", 0.035),
             rest_log_scale=spi_cfg.get("rest_log_scale", 0.012),
+            travel_log_scale=spi_cfg.get("travel_log_scale", 0.0),
             pace_weight=spi_cfg.get("pace_weight", 0.20),
             min_lambda=spi_cfg.get("min_lambda", 0.20),
             max_lambda=spi_cfg.get("max_lambda", 3.75),

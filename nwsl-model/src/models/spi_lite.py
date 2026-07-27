@@ -29,6 +29,7 @@ class SpiLiteConfig:
     max_rating_log_adjustment: float = 0.70
     lineup_log_scale: float = 0.035
     rest_log_scale: float = 0.012
+    travel_log_scale: float = 0.0
     pace_weight: float = 0.20
     min_lambda: float = 0.20
     max_lambda: float = 3.75
@@ -95,6 +96,7 @@ class SpiLiteBaseline:
         max_rating_log_adjustment: float = 0.70,
         lineup_log_scale: float = 0.035,
         rest_log_scale: float = 0.012,
+        travel_log_scale: float = 0.0,
         pace_weight: float = 0.20,
         min_lambda: float = 0.20,
         max_lambda: float = 3.75,
@@ -109,6 +111,7 @@ class SpiLiteBaseline:
             max_rating_log_adjustment=max(float(max_rating_log_adjustment), 0.05),
             lineup_log_scale=float(lineup_log_scale),
             rest_log_scale=float(rest_log_scale),
+            travel_log_scale=float(travel_log_scale),
             pace_weight=float(np.clip(pace_weight, 0.0, 1.0)),
             min_lambda=max(float(min_lambda), 0.05),
             max_lambda=max(float(max_lambda), 0.2),
@@ -199,6 +202,13 @@ class SpiLiteBaseline:
         lambda_home *= math.exp(rest_adjustment)
         lambda_away *= math.exp(-rest_adjustment)
 
+        travel_diff_1000km = float(
+            np.clip(_finite_float(context.get("travel_diff_km"), 0.0) / 1000.0, -5.0, 5.0)
+        )
+        travel_adjustment = float(np.clip(self.config.travel_log_scale * travel_diff_1000km, -0.08, 0.08))
+        lambda_home *= math.exp(travel_adjustment)
+        lambda_away *= math.exp(-travel_adjustment)
+
         lambda_home = float(np.clip(lambda_home, self.config.min_lambda, self.config.max_lambda))
         lambda_away = float(np.clip(lambda_away, self.config.min_lambda, self.config.max_lambda))
 
@@ -211,6 +221,7 @@ class SpiLiteBaseline:
             "pace_multiplier": float(pace_multiplier),
             "lineup_adjustment": float(lineup_adjustment),
             "rest_adjustment": float(rest_adjustment),
+            "travel_adjustment": float(travel_adjustment),
             "home_attack_rating": float(home_rating["attack"]),
             "home_defense_rating": float(home_rating["defense"]),
             "away_attack_rating": float(away_rating["attack"]),

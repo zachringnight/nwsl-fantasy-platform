@@ -119,6 +119,7 @@ def main() -> None:
         team_season_priors=dataset.team_season_priors,
         player_season_priors=dataset.player_season_priors,
         lineup_model=None,
+        venues=dataset.venues,
         rolling_windows=config.get("features", {}).get("rolling_windows", [3, 5, 10]),
         short_rest_days=config.get("features", {}).get("short_rest_days", 4),
     )
@@ -155,6 +156,7 @@ def main() -> None:
         team_season_priors=dataset.team_season_priors,
         player_season_priors=dataset.player_season_priors,
         lineup_model=lineup_model,
+        venues=dataset.venues,
         rolling_windows=config.get("features", {}).get("rolling_windows", [3, 5, 10]),
         short_rest_days=config.get("features", {}).get("short_rest_days", 4),
     )
@@ -393,6 +395,7 @@ def main() -> None:
             lineup_model=lineup_model,
             player_season_priors=dataset.player_season_priors,
         )
+        .attach_venues(dataset.venues)
     )
     save_pickle(context_provider, output_dir / "context_provider.pkl")
 

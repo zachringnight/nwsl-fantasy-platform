@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from typing import Any, Optional
 
@@ -29,6 +29,7 @@ from src.features.schedule_features import (
     compute_rest_days,
     compute_schedule_density,
 )
+from src.features.travel_features import compute_travel_distance, haversine_km
 
 DEFAULT_CONTEXTUAL_COLUMNS = [
     "home_roll_5_npxg_for",
@@ -56,6 +57,7 @@ DEFAULT_CONTEXTUAL_COLUMNS = [
     "home_n_starters",
     "home_n_injured",
     "home_lineup_strength",
+    "home_travel_km",
     "away_roll_5_npxg_for",
     "away_roll_5_npxg_against",
     "away_season_avg_npxg_for",
@@ -81,7 +83,9 @@ DEFAULT_CONTEXTUAL_COLUMNS = [
     "away_n_starters",
     "away_n_injured",
     "away_lineup_strength",
+    "away_travel_km",
     "rest_diff",
+    "travel_diff_km",
 ]
 
 PURE_MODEL_CONTEXTUAL_PRIORITY = [
@@ -97,6 +101,7 @@ PURE_MODEL_CONTEXTUAL_PRIORITY = [
     "home_rest_days",
     "home_short_rest",
     "home_lineup_strength",
+    "home_travel_km",
     "away_roll_5_npxg_for",
     "away_roll_5_npxg_against",
     "away_season_avg_npxg_for",
@@ -109,7 +114,9 @@ PURE_MODEL_CONTEXTUAL_PRIORITY = [
     "away_rest_days",
     "away_short_rest",
     "away_lineup_strength",
+    "away_travel_km",
     "rest_diff",
+    "travel_diff_km",
 ]
 
 TEAM_PRIOR_COLUMNS = [
@@ -153,6 +160,8 @@ STRUCTURAL_ZERO_CONTEXT_COLUMNS = {
     "away_n_starters",
     "home_n_injured",
     "away_n_injured",
+    "home_travel_km",
+    "away_travel_km",
 }
 
 
@@ -164,7 +173,7 @@ def _apply_contextual_missing_policy(
     final_cols: list[str] = []
 
     for col in contextual_cols:
-        if col not in frame.columns or col == "rest_diff":
+        if col not in frame.columns or col in {"rest_diff", "travel_diff_km"}:
             continue
 
         series = pd.to_numeric(frame[col], errors="coerce")
@@ -185,6 +194,12 @@ def _apply_contextual_missing_policy(
             frame["away_rest_days"], errors="coerce"
         ).fillna(0.0)
         final_cols.append("rest_diff")
+
+    if "travel_diff_km" in contextual_cols and {"home_travel_km", "away_travel_km"}.issubset(frame.columns):
+        frame["travel_diff_km"] = pd.to_numeric(frame["away_travel_km"], errors="coerce").fillna(0.0) - pd.to_numeric(
+            frame["home_travel_km"], errors="coerce"
+        ).fillna(0.0)
+        final_cols.append("travel_diff_km")
 
     return frame, final_cols
 
@@ -362,6 +377,7 @@ def build_contextual_training_frame(
     team_season_priors: Optional[pd.DataFrame] = None,
     player_season_priors: Optional[pd.DataFrame] = None,
     lineup_model: Any | None = None,
+    venues: Optional[pd.DataFrame] = None,
     rolling_windows: list[int] | tuple[int, ...] = (3, 5, 10),
     short_rest_days: int = 4,
     include_team_priors: bool = True,
@@ -376,6 +392,7 @@ def build_contextual_training_frame(
         prepared = compute_rest_days(prepared)
         prepared = add_short_rest_flags(prepared, short_rest_days)
         prepared = compute_schedule_density(prepared, windows_days=[14])
+        prepared = compute_travel_distance(prepared, venues)
 
     team_matches = melt_to_team_match(prepared)
     team_matches = compute_rolling_form(team_matches, list(rolling_windows))
@@ -409,7 +426,7 @@ def build_contextual_training_frame(
     if not include_schedule_features:
         contextual_cols = [
             col for col in contextual_cols
-            if "rest" not in col and "matches_prev_14d" not in col
+            if "rest" not in col and "matches_prev_14d" not in col and "travel" not in col
         ]
     if not include_lineup_features:
         contextual_cols = [
@@ -443,6 +460,7 @@ class ContextualFeatureProvider:
     projected_lineup_strength: dict[str, float]
     projected_match_lineup_strength: dict[tuple[str, str], float] | None = None
     short_rest_days: int = 4
+    venue_lookup: dict[str, tuple[float, float]] = field(default_factory=dict)
 
     @classmethod
     def from_training_frame(
@@ -625,6 +643,19 @@ class ContextualFeatureProvider:
         self.projected_match_lineup_strength = strength_by_match_team
         return self
 
+    def attach_venues(
+        self,
+        venues: Optional[pd.DataFrame] = None,
+    ) -> ContextualFeatureProvider:
+        if venues is None or venues.empty:
+            self.venue_lookup = {}
+            return self
+        self.venue_lookup = {
+            str(row["team"]): (float(row["stadium_lat"]), float(row["stadium_lon"]))
+            for _, row in venues.iterrows()
+        }
+        return self
+
     def for_match(
         self,
         home_team: str,
@@ -726,4 +757,15 @@ class ContextualFeatureProvider:
         for suffix in {key for key in away_state.features if key.endswith("_missing")}:
             contextual[f"away_{suffix}"] = float(away_state.features.get(suffix, 0.0))
         contextual["rest_diff"] = contextual["home_rest_days"] - contextual["away_rest_days"]
+
+        home_venue = self.venue_lookup.get(home_team)
+        away_venue = self.venue_lookup.get(away_team)
+        away_travel_km = (
+            haversine_km(away_venue[0], away_venue[1], home_venue[0], home_venue[1])
+            if home_venue and away_venue
+            else 0.0
+        )
+        contextual["home_travel_km"] = 0.0
+        contextual["away_travel_km"] = away_travel_km
+        contextual["travel_diff_km"] = away_travel_km
         return contextual

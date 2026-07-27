@@ -91,6 +91,14 @@ spi_lite:
   max_rating_log_adjustment: 0.70
   lineup_log_scale: 0.035
   rest_log_scale: 0.012
+  # Log-scale adjustment per 1000km of away-team travel disadvantage
+  # (away_travel_km - home_travel_km), clipped to +/-0.08 like rest/lineup.
+  # 0.05 chosen from a 4-point rolling-backtest sweep (0.02/0.05/0.10/0.20):
+  # log_loss improved monotonically 0->0.05 (1.0453->1.0389) then plateaued
+  # as the clip saturates for typical NWSL travel distances. This is a coarse
+  # global sweep, not chronological nested tuning like the betting thresholds -
+  # treat as a reasonable starting point, not a fully validated OOS value.
+  travel_log_scale: 0.05
   pace_weight: 0.20
   min_lambda: 0.20
   max_lambda: 3.75
