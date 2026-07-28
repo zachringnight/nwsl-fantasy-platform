@@ -117,13 +117,18 @@ scope is chosen.
 Keep these lanes separate:
 
 - General NWSL predictions are production SPI-lite data.
-- The frozen DraftKings Over 2.5 policy is research-only.
+- The frozen totals-over policy is separately approved for capped forward use;
+  it is not the general-predictions surface or a fully promoted model.
 
 PR #35 does not authorize model retuning or a change in data authority. The
-frozen research policy requires exact, fresh, paired DraftKings total 2.5
-quotes. FOX remains context only, API-Football remains shadow data, and no
-provider substitution is allowed. A gated `NO RUN` or no-pick result is valid
-when the required stop conditions are met.
+frozen policy requires exact, fresh, paired total 2.5 quotes and keeps its
+existing model, side, thresholds, quote-timing contract, and fail-closed gates.
+DraftKings has first priority. When it has no qualifying quote for a match, the
+current repository contract allows `FoxSports`, `FootyStats`,
+`OddsPortalEvent`, then `OddsPortalAvg`, in that order; every slate row must
+record the source that actually filled it. API-Football remains shadow data.
+A gated `NO RUN` or no-pick result is valid when the required stop conditions
+are met.
 
 ## Environment and deployment boundaries
 
