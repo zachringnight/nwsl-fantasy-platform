@@ -9,7 +9,13 @@
  * The analytics data layer will fall back to mock data when this happens.
  */
 
-import type { MatchPrediction, ModelPerformance, TeamRating } from "@/types/analytics";
+import type {
+  MatchMarketOdds,
+  MatchPickSummary,
+  MatchPrediction,
+  ModelPerformance,
+  TeamRating,
+} from "@/types/analytics";
 
 function loadJsonFile<T>(filename: string): T | null {
   // Only run on the server — fs/path are not available in the browser bundle
@@ -51,9 +57,51 @@ interface RawModelPrediction {
   modelFamily?: string;
   trainingCutoff?: string;
   sourceManifestGeneratedAt?: string;
-  gatingStatus?: "current" | "degraded_context" | "unknown";
+  gatingStatus?: string;
   featureStatus?: "complete" | "partial" | "unknown";
+  topPickTier?: string;
+  officialPickCount?: number;
+  leanBetCount?: number;
+  actionablePickCount?: number;
+  recommendedBets?: string;
+  recommendedLeans?: string;
+  actionablePicks?: string;
+  rejectedBetReasons?: string;
+  mktHomeOdds?: number;
+  mktDrawOdds?: number;
+  mktAwayOdds?: number;
+  mainTotalLine?: number;
+  mktOverOdds?: number;
+  mktUnderOdds?: number;
   timestamp: string;
+}
+
+interface RawBettingSlateRow {
+  match_id: string;
+  has_market_odds?: boolean;
+  market_is_fresh?: boolean;
+  pick_tier?: string;
+  actionable_pick?: boolean;
+  accepted_bet?: boolean;
+  bet_reason?: string;
+  official_pick_count?: number;
+  lean_bet_count?: number;
+  actionable_pick_count?: number;
+  recommended_bets?: string;
+  recommended_leans?: string;
+  actionable_picks?: string;
+  rejected_bet_reasons?: string;
+  market_timestamp?: string;
+  market_sportsbook?: string;
+  market_type?: string;
+  market_types?: string;
+  market_age_minutes?: number;
+  mkt_home_odds?: number;
+  mkt_draw_odds?: number;
+  mkt_away_odds?: number;
+  main_total_line?: number;
+  mkt_over_odds?: number;
+  mkt_under_odds?: number;
 }
 
 function slugify(value: string): string {
@@ -95,37 +143,148 @@ function factorial(n: number): number {
   return result;
 }
 
+function cleanText(value: unknown, fallback = "none"): string {
+  if (typeof value !== "string") return fallback;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : fallback;
+}
+
+function numberOrUndefined(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
+  return value;
+}
+
+function loadBettingSlateByMatchId(): Map<string, RawBettingSlateRow> {
+  const raw = loadJsonFile<RawBettingSlateRow[]>("betting_slate.json");
+  const rows = new Map<string, RawBettingSlateRow>();
+  if (!raw) return rows;
+
+  for (const row of raw) {
+    if (row.match_id) rows.set(String(row.match_id), row);
+  }
+
+  return rows;
+}
+
+function marketOddsFromRaw(
+  prediction: RawModelPrediction,
+  slate?: RawBettingSlateRow,
+): MatchMarketOdds {
+  const hasPredictionMoneyline =
+    numberOrUndefined(prediction.mktHomeOdds) !== undefined &&
+    numberOrUndefined(prediction.mktDrawOdds) !== undefined &&
+    numberOrUndefined(prediction.mktAwayOdds) !== undefined;
+  const hasPredictionTotal =
+    numberOrUndefined(prediction.mainTotalLine) !== undefined &&
+    numberOrUndefined(prediction.mktOverOdds) !== undefined &&
+    numberOrUndefined(prediction.mktUnderOdds) !== undefined;
+  const hasMarketOdds = Boolean(
+    slate?.has_market_odds ?? (hasPredictionMoneyline || hasPredictionTotal),
+  );
+
+  return {
+    hasMarketOdds,
+    marketIsFresh: Boolean(slate?.market_is_fresh ?? hasMarketOdds),
+    sportsbook: slate?.market_sportsbook,
+    marketType: slate?.market_type,
+    marketTypes: slate?.market_types,
+    timestamp: slate?.market_timestamp,
+    ageMinutes: numberOrUndefined(slate?.market_age_minutes),
+    homeOdds: numberOrUndefined(slate?.mkt_home_odds ?? prediction.mktHomeOdds),
+    drawOdds: numberOrUndefined(slate?.mkt_draw_odds ?? prediction.mktDrawOdds),
+    awayOdds: numberOrUndefined(slate?.mkt_away_odds ?? prediction.mktAwayOdds),
+    totalLine: numberOrUndefined(slate?.main_total_line ?? prediction.mainTotalLine),
+    overOdds: numberOrUndefined(slate?.mkt_over_odds ?? prediction.mktOverOdds),
+    underOdds: numberOrUndefined(slate?.mkt_under_odds ?? prediction.mktUnderOdds),
+  };
+}
+
+function pickSummaryFromRaw(
+  prediction: RawModelPrediction,
+  odds: MatchMarketOdds,
+  slate?: RawBettingSlateRow,
+): MatchPickSummary {
+  const tier = cleanText(slate?.pick_tier ?? prediction.topPickTier, "no_bet");
+  const officialPickCount = Number(slate?.official_pick_count ?? prediction.officialPickCount ?? 0);
+  const leanBetCount = Number(slate?.lean_bet_count ?? prediction.leanBetCount ?? 0);
+  const actionablePickCount = Number(
+    slate?.actionable_pick_count ??
+      prediction.actionablePickCount ??
+      officialPickCount + leanBetCount,
+  );
+  const accepted = Boolean(slate?.accepted_bet ?? officialPickCount > 0);
+  const actionable = Boolean(slate?.actionable_pick ?? actionablePickCount > 0);
+  const fallbackReason = odds.hasMarketOdds
+    ? prediction.gatingStatus && prediction.gatingStatus !== "passed"
+      ? "model_gating_not_passed"
+      : "no_bet"
+    : "missing_market_price";
+
+  return {
+    tier,
+    actionable,
+    accepted,
+    reason: cleanText(slate?.bet_reason ?? fallbackReason, fallbackReason),
+    officialPickCount,
+    leanBetCount,
+    actionablePickCount,
+    recommendedBets: cleanText(slate?.recommended_bets ?? prediction.recommendedBets),
+    recommendedLeans: cleanText(slate?.recommended_leans ?? prediction.recommendedLeans),
+    actionablePicks: cleanText(slate?.actionable_picks ?? prediction.actionablePicks),
+    rejectedBetReasons: cleanText(
+      slate?.rejected_bet_reasons ?? prediction.rejectedBetReasons,
+    ),
+  };
+}
+
 export function loadModelPredictions(): MatchPrediction[] {
   const raw = loadJsonFile<RawModelPrediction[]>("predictions.json");
   if (!raw || raw.length === 0) return [];
+  const slateRows = loadBettingSlateByMatchId();
 
-  return raw.map((p) => ({
-    matchId: p.matchId,
-    date: p.date,
-    homeTeam: p.homeTeam,
-    homeTeamId: slugify(p.homeTeam),
-    awayTeam: p.awayTeam,
-    awayTeamId: slugify(p.awayTeam),
-    homeProb: p.homeProb,
-    drawProb: p.drawProb,
-    awayProb: p.awayProb,
-    bttsYesProb: p.bttsYesProb,
-    overUnder: p.overUnder ?? {},
-    asianHandicap: p.asianHandicap ?? {},
-    lambdaHome: p.lambdaHome,
-    lambdaAway: p.lambdaAway,
-    scoreMatrix: p.scoreMatrix ?? generateScoreMatrix(p.lambdaHome, p.lambdaAway),
-    model: p.model,
-    timestamp: p.timestamp,
-    modelVersion: p.modelVersion,
-    modelFamily: p.modelFamily,
-    trainingCutoff: p.trainingCutoff,
-    sourceManifestGeneratedAt: p.sourceManifestGeneratedAt,
-    gatingStatus: p.gatingStatus ?? "unknown",
-    featureStatus: p.featureStatus ?? "unknown",
-    dataSource: "static_fallback",
-    isStale: true,
-  }));
+  return raw.map((p) => {
+    const slate = slateRows.get(String(p.matchId));
+    const marketOdds = marketOddsFromRaw(p, slate);
+    const pickSummary = pickSummaryFromRaw(p, marketOdds, slate);
+
+    return {
+      matchId: p.matchId,
+      date: p.date,
+      homeTeam: p.homeTeam,
+      homeTeamId: slugify(p.homeTeam),
+      awayTeam: p.awayTeam,
+      awayTeamId: slugify(p.awayTeam),
+      homeProb: p.homeProb,
+      drawProb: p.drawProb,
+      awayProb: p.awayProb,
+      bttsYesProb: p.bttsYesProb,
+      overUnder: p.overUnder ?? {},
+      asianHandicap: p.asianHandicap ?? {},
+      lambdaHome: p.lambdaHome,
+      lambdaAway: p.lambdaAway,
+      scoreMatrix: p.scoreMatrix ?? generateScoreMatrix(p.lambdaHome, p.lambdaAway),
+      model: p.model,
+      timestamp: p.timestamp,
+      modelVersion: p.modelVersion,
+      modelFamily: p.modelFamily,
+      trainingCutoff: p.trainingCutoff,
+      sourceManifestGeneratedAt: p.sourceManifestGeneratedAt,
+      gatingStatus: p.gatingStatus ?? "unknown",
+      featureStatus: p.featureStatus ?? "unknown",
+      topPickTier: p.topPickTier,
+      officialPickCount: p.officialPickCount ?? pickSummary.officialPickCount,
+      leanBetCount: p.leanBetCount ?? pickSummary.leanBetCount,
+      actionablePickCount: p.actionablePickCount ?? pickSummary.actionablePickCount,
+      recommendedBets: p.recommendedBets ?? pickSummary.recommendedBets,
+      recommendedLeans: p.recommendedLeans ?? pickSummary.recommendedLeans,
+      actionablePicks: p.actionablePicks ?? pickSummary.actionablePicks,
+      rejectedBetReasons: p.rejectedBetReasons ?? pickSummary.rejectedBetReasons,
+      marketOdds,
+      pickSummary,
+      dataSource: "static_fallback",
+      isStale: true,
+    };
+  });
 }
 
 // ── Team Ratings ────────────────────────────────────────────────────────────

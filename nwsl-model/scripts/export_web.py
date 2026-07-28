@@ -56,6 +56,17 @@ def _coerce_int_value(value: object, default: int = 0) -> int:
         return default
 
 
+def _coerce_optional_float(value: object) -> float | None:
+    if value is None:
+        return None
+    try:
+        if pd.isna(value):
+            return None
+        return round(float(value), 6)
+    except (TypeError, ValueError):
+        return None
+
+
 def _predictions_path(model_dir: Path) -> Path:
     direct_path = model_dir / "predictions.csv"
     if direct_path.exists():
@@ -152,6 +163,22 @@ def export_predictions(model_dir: Path, output_dir: Path, config: dict) -> None:
             "rejectedBetReasons": row.get("rejected_bet_reasons", "none"),
             "timestamp": str(row.get("timestamp", "")),
         }
+
+        optional_market_fields = {
+            "mktHomeOdds": _coerce_optional_float(row.get("mkt_home_odds")),
+            "mktDrawOdds": _coerce_optional_float(row.get("mkt_draw_odds")),
+            "mktAwayOdds": _coerce_optional_float(row.get("mkt_away_odds")),
+            "mainTotalLine": _coerce_optional_float(row.get("main_total_line")),
+            "mktOverOdds": _coerce_optional_float(row.get("mkt_over_odds")),
+            "mktUnderOdds": _coerce_optional_float(row.get("mkt_under_odds")),
+        }
+        pred.update(
+            {
+                key: value
+                for key, value in optional_market_fields.items()
+                if value is not None
+            }
+        )
 
         # Over/Under lines
         ou = {}

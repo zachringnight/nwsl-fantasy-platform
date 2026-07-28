@@ -221,10 +221,50 @@ export interface MatchPrediction {
   modelFamily?: string;
   trainingCutoff?: string;
   sourceManifestGeneratedAt?: string;
-  gatingStatus?: "current" | "degraded_context" | "unknown";
+  gatingStatus?: string;
   featureStatus?: "complete" | "partial" | "unknown";
+  topPickTier?: "official_pick" | "lean" | "no_bet" | string;
+  officialPickCount?: number;
+  leanBetCount?: number;
+  actionablePickCount?: number;
+  recommendedBets?: string;
+  recommendedLeans?: string;
+  actionablePicks?: string;
+  rejectedBetReasons?: string;
+  marketOdds?: MatchMarketOdds;
+  pickSummary?: MatchPickSummary;
   dataSource?: "supabase" | "static_fallback";
   isStale?: boolean;
+}
+
+export interface MatchMarketOdds {
+  hasMarketOdds: boolean;
+  marketIsFresh: boolean;
+  sportsbook?: string;
+  marketType?: string;
+  marketTypes?: string;
+  timestamp?: string;
+  ageMinutes?: number;
+  homeOdds?: number;
+  drawOdds?: number;
+  awayOdds?: number;
+  totalLine?: number;
+  overOdds?: number;
+  underOdds?: number;
+}
+
+export interface MatchPickSummary {
+  tier: "official_pick" | "lean" | "no_bet" | string;
+  actionable: boolean;
+  accepted: boolean;
+  reason: string;
+  officialPickCount: number;
+  leanBetCount: number;
+  actionablePickCount: number;
+  recommendedBets: string;
+  recommendedLeans: string;
+  actionablePicks: string;
+  rejectedBetReasons: string;
 }
 
 export interface ModelPerformance {
