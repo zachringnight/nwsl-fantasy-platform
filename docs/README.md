@@ -4,8 +4,13 @@ Use `plans/README.md` at the repository root to find current execution plans
 and completed-run evidence. The current long-range product plan is
 `plans/2026-07-22-best-possible-nwsl-app/`.
 
-`handoffs/` holds dated model handoff documents written at the end of model-lab
-sessions. They summarize what changed and what remained open at that date.
+The current canonical continuation handoff is
+`handoffs/HANDOFF_MODERNIZATION_PR35_2026-07-28.md`. It records PR #35 status,
+verification, environment boundaries, preserved local WIP, and the exact
+post-merge sequence.
+
+The other files in `handoffs/` are dated historical model-lab handoffs. They
+summarize what changed and what remained open at that date.
 
 `archive/initial-product-planning/` preserves the original product prompt chain
 and expanded strategy, research, information architecture, design system,
