@@ -29,13 +29,13 @@
     "market_sportsbook":"FoxSports",
     "market_type":"total",
     "market_types":"1x2,total",
-    "market_age_minutes":144.45,
+    "market_age_minutes":176.16,
     "mkt_home_odds":1.47619048,
     "mkt_draw_odds":4.4,
     "mkt_away_odds":5.0,
-    "main_total_line":0.5,
-    "mkt_over_odds":2.9634266982,
-    "mkt_under_odds":2.2571552075
+    "main_total_line":3.25,
+    "mkt_over_odds":1.994545455,
+    "mkt_under_odds":1.6868260712
   },
   {
     "match_id":"401853954",
@@ -67,13 +67,13 @@
     "market_sportsbook":"FoxSports",
     "market_type":"total",
     "market_types":"1x2,total",
-    "market_age_minutes":144.45,
+    "market_age_minutes":176.16,
     "mkt_home_odds":3.05,
     "mkt_draw_odds":3.45,
     "mkt_away_odds":2.05,
-    "main_total_line":0.5,
-    "mkt_over_odds":2.6267015434,
-    "mkt_under_odds":2.5230693851
+    "main_total_line":2.5,
+    "mkt_over_odds":1.7236154688,
+    "mkt_under_odds":1.939153443
   },
   {
     "match_id":"401853955",
@@ -105,13 +105,13 @@
     "market_sportsbook":"FoxSports",
     "market_type":"total",
     "market_types":"1x2,total",
-    "market_age_minutes":144.45,
+    "market_age_minutes":176.16,
     "mkt_home_odds":4.4,
     "mkt_draw_odds":3.6,
     "mkt_away_odds":1.66666667,
-    "main_total_line":0.5,
-    "mkt_over_odds":2.3556037136,
-    "mkt_under_odds":2.4690973656
+    "main_total_line":1.5,
+    "mkt_over_odds":1.6102307513,
+    "mkt_under_odds":2.3703703704
   },
   {
     "match_id":"401853956",
@@ -143,7 +143,7 @@
     "market_sportsbook":"FoxSports",
     "market_type":"total",
     "market_types":"total",
-    "market_age_minutes":144.45,
+    "market_age_minutes":176.16,
     "mkt_home_odds":null,
     "mkt_draw_odds":null,
     "mkt_away_odds":null,
@@ -181,7 +181,7 @@
     "market_sportsbook":"FoxSports",
     "market_type":"total",
     "market_types":"total",
-    "market_age_minutes":144.45,
+    "market_age_minutes":176.16,
     "mkt_home_odds":null,
     "mkt_draw_odds":null,
     "mkt_away_odds":null,

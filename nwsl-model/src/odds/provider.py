@@ -327,11 +327,11 @@ def canonicalize_main_total_rows(odds: pd.DataFrame) -> pd.DataFrame:
         if selected_groups
         else totals.iloc[0:0].copy()
     )
-    return (
-        pd.concat([non_totals, totals_selected], ignore_index=True)
-        .sort_values(["match_id", "market_type", "sportsbook", "timestamp"], na_position="last")
-        .reset_index(drop=True)
-    )
+    combined = pd.concat([non_totals, totals_selected], ignore_index=True)
+    sort_cols = ["match_id", "market_type", "sportsbook"]
+    if "timestamp" in combined.columns:
+        sort_cols.append("timestamp")
+    return combined.sort_values(sort_cols, na_position="last").reset_index(drop=True)
 
 
 def normalize_provider_payload(
