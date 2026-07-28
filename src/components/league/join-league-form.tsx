@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useFantasyDataClient } from "@/components/providers/fantasy-data-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { trackProductEvent } from "@/lib/analytics/events";
 
 export interface JoinLeagueFormProps {
   initialCode?: string;
@@ -25,6 +26,7 @@ export function JoinLeagueForm({ initialCode }: JoinLeagueFormProps) {
 
     try {
       const league = await dataClient.joinHostedLeagueByCode(code);
+      trackProductEvent("league_joined", { league_id: league.id });
       router.push(`/leagues/${league.id}`);
     } catch (submissionError) {
       setError(

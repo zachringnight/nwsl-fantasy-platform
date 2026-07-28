@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { lazy, Suspense, useEffect, useEffectEvent, useState } from "react";
+import { lazy, Suspense, useEffect, useEffectEvent, useRef, useState } from "react";
 import { Crown } from "lucide-react";
 import { EmptyState } from "@/components/common/empty-state";
 import { GuidedLeagueState } from "@/components/league/guided-setup-state";
@@ -18,6 +18,7 @@ import { MotionReveal } from "@/components/ui/motion-reveal";
 import { ClassicTeamManager } from "@/features/classic/components/classic-team-manager";
 import { SalaryCapLeagueBrief } from "@/features/salary-cap/components/salary-cap-league-brief";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { trackProductEvent } from "@/lib/analytics/events";
 import { buildSuggestedLineup, starterLineupSlots } from "@/lib/fantasy-draft";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
@@ -45,6 +46,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
     isLocked: false,
     label: "Lineup is editable.",
   });
+  const viewedLineupLocksRef = useRef(new Set<string>());
 
   const refreshRoster = useEffectEvent(async () => {
     if (!session || !profile?.onboarding_complete) {
@@ -76,6 +78,14 @@ export function TeamClient({ leagueId }: TeamClientProps) {
       setRoster(nextState.roster);
       setAssignments(createAssignmentState(nextState.roster));
       setLineupLock(nextState.lineupLock);
+      const lockKey = `${leagueId}:${nextState.lineupLock.lockAt}`;
+      if (!viewedLineupLocksRef.current.has(lockKey)) {
+        viewedLineupLocksRef.current.add(lockKey);
+        trackProductEvent("lineup_lock_viewed", {
+          league_id: leagueId,
+          is_locked: nextState.lineupLock.isLocked,
+        });
+      }
     } catch (loadError) {
       setError(
         loadError instanceof Error
@@ -127,6 +137,7 @@ export function TeamClient({ leagueId }: TeamClientProps) {
       setRoster(nextState.roster);
       setAssignments(createAssignmentState(nextState.roster));
       setLineupLock(nextState.lineupLock);
+      trackProductEvent("lineup_submitted", { league_id: leagueId });
     } catch (actionError) {
       setError(
         actionError instanceof Error

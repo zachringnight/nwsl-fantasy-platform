@@ -20,6 +20,7 @@ import { feedback } from "@/lib/feedback";
 import { ClubLogo } from "@/components/ui/club-logo";
 import { buildLeagueLinks } from "@/lib/league-links";
 import { getFantasyModeConfig } from "@/lib/fantasy-modes";
+import { trackProductEvent } from "@/lib/analytics/events";
 import type { FantasyDraftState, PlayerPosition } from "@/types/fantasy";
 import { cn } from "@/lib/utils";
 
@@ -221,18 +222,21 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   async function withDraftAction(
     action: string,
     run: () => Promise<FantasyDraftState>
-  ) {
+  ): Promise<FantasyDraftState | null> {
     setBusyAction(action);
     setError("");
 
     try {
-      setDraftState(await run());
+      const nextState = await run();
+      setDraftState(nextState);
+      return nextState;
     } catch (actionError) {
       setError(
         actionError instanceof Error
           ? actionError.message
           : "Unable to update the draft room."
       );
+      return null;
     } finally {
       setBusyAction("");
       setBusyPlayerId(null);
@@ -296,12 +300,38 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   async function handleDraftPlayer(playerId: string) {
     setBusyPlayerId(playerId);
     const prevPickCount = draftState?.picks.length ?? 0;
-    await withDraftAction("pick", () => dataClient.makeDraftPick(leagueId, playerId));
+    const previousDraftStatus = draftState?.draft.status;
+    const nextState = await withDraftAction("pick", () =>
+      dataClient.makeDraftPick(leagueId, playerId)
+    );
+    const newPick = nextState?.picks
+      .slice(prevPickCount)
+      .find((pick) => pick.player_id === playerId);
+
+    if (!nextState || !newPick) {
+      return;
+    }
+
+    trackProductEvent("draft_pick", {
+      league_id: leagueId,
+      player_id: newPick.player_id,
+      pick_number: newPick.overall_pick,
+    });
+    if (
+      previousDraftStatus &&
+      previousDraftStatus !== "complete" &&
+      nextState.draft.status === "complete"
+    ) {
+      trackProductEvent("draft_completed", {
+        league_id: leagueId,
+        total_picks: nextState.picks.length,
+      });
+    }
     // If we got a new pick, celebrate
     const player = draftState?.availablePlayers.find((p) => p.id === playerId);
     const playerName = player?.display_name ?? "Player";
     setScreenReaderAnnouncement(`${playerName} drafted successfully.`);
-    if ((draftState?.picks.length ?? 0) >= prevPickCount) {
+    if (nextState.picks.length > prevPickCount) {
       setShowConfetti(true);
       feedback.celebrate();
 
@@ -319,7 +349,30 @@ export function DraftRoomClient({ leagueId }: DraftRoomClientProps) {
   }
 
   async function handleAutopick() {
-    await withDraftAction("autopick", () => dataClient.autopickCurrentDraftTurn(leagueId));
+    const prevPickCount = draftState?.picks.length ?? 0;
+    const previousDraftStatus = draftState?.draft.status;
+    const nextState = await withDraftAction("autopick", () =>
+      dataClient.autopickCurrentDraftTurn(leagueId)
+    );
+    const newPick = nextState?.picks.slice(prevPickCount).at(0);
+
+    if (newPick) {
+      trackProductEvent("draft_autopick", {
+        league_id: leagueId,
+        player_id: newPick.player_id,
+        pick_number: newPick.overall_pick,
+      });
+      if (
+        previousDraftStatus &&
+        previousDraftStatus !== "complete" &&
+        nextState?.draft.status === "complete"
+      ) {
+        trackProductEvent("draft_completed", {
+          league_id: leagueId,
+          total_picks: nextState.picks.length,
+        });
+      }
+    }
   }
 
   async function handleStatusChange(nextStatus: "live" | "paused") {

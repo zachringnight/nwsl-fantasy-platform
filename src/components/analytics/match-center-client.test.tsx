@@ -8,6 +8,7 @@ const navigation = vi.hoisted(() => ({
   query: "",
   pushed: [] as string[],
 }));
+const trackProductEvent = vi.hoisted(() => vi.fn());
 
 vi.mock("next/navigation", () => ({
   usePathname: () => navigation.pathname,
@@ -18,6 +19,10 @@ vi.mock("next/navigation", () => ({
     },
   }),
   useSearchParams: () => new URLSearchParams(navigation.query),
+}));
+
+vi.mock("@/lib/analytics/events", () => ({
+  trackProductEvent,
 }));
 
 function match(
@@ -47,6 +52,7 @@ describe("MatchCenterClient", () => {
   beforeEach(() => {
     navigation.query = "";
     navigation.pushed = [];
+    trackProductEvent.mockClear();
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-07-26T12:00:00Z"));
   });
@@ -271,5 +277,27 @@ describe("MatchCenterClient", () => {
     expect(screen.getByText("Total 2.5")).toBeInTheDocument();
     expect(screen.getByText("O -123 · U -116")).toBeInTheDocument();
     expect(screen.queryByText("Total 1.5")).not.toBeInTheDocument();
+  });
+
+  it("tracks one match-center open per match even when both detail links are clicked", () => {
+    render(
+      <MatchCenterClient
+        matches={[match("tracked-match", "upcoming")]}
+        season="2026"
+        source="Official NWSL"
+      />
+    );
+
+    fireEvent.click(
+      screen.getByRole("link", {
+        name: "Open Home tracked-match vs Away tracked-match",
+      })
+    );
+    fireEvent.click(screen.getByRole("link", { name: "Match details" }));
+
+    expect(trackProductEvent).toHaveBeenCalledTimes(1);
+    expect(trackProductEvent).toHaveBeenCalledWith("match_center_opened", {
+      match_id: "tracked-match",
+    });
   });
 });

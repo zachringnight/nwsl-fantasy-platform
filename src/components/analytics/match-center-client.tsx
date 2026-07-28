@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { AppShell } from "@/components/common/app-shell";
 import { Pill } from "@/components/ui/pill";
 import {
   analyticsMatchHref,
   analyticsTeamHref,
 } from "@/lib/analytics/entity-routes";
+import { trackProductEvent } from "@/lib/analytics/events";
 import { formatAmericanOdds } from "@/lib/odds-format";
 import {
   browserStateHref,
@@ -81,6 +82,7 @@ export function MatchCenterClient({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const openedMatchesRef = useRef(new Set<string>());
   const dates = useMemo(
     () => sortedUniqueDates(matches.map((match) => match.date)),
     [matches]
@@ -181,6 +183,11 @@ export function MatchCenterClient({
   const resetFilters = useCallback(() => {
     navigate({ date: "next", status: "all", order: "asc" });
   }, [navigate]);
+  const handleMatchOpen = useCallback((matchId: string) => {
+    if (openedMatchesRef.current.has(matchId)) return;
+    openedMatchesRef.current.add(matchId);
+    trackProductEvent("match_center_opened", { match_id: matchId });
+  }, []);
 
   return (
     <AppShell
@@ -279,6 +286,7 @@ export function MatchCenterClient({
                           href={analyticsMatchHref(match.matchId, season)}
                           aria-label={`Open ${match.homeTeam} vs ${match.awayTeam}`}
                           className="text-[0.65rem] font-medium uppercase tracking-widest text-muted transition hover:text-brand-strong hover:underline hover:underline-offset-4"
+                          onClick={() => handleMatchOpen(match.matchId)}
                         >
                           {match.date}
                         </Link>
@@ -351,6 +359,7 @@ export function MatchCenterClient({
                         <Link
                           href={analyticsMatchHref(match.matchId, season)}
                           className="shrink-0 text-xs font-medium text-brand-strong hover:underline hover:underline-offset-4"
+                          onClick={() => handleMatchOpen(match.matchId)}
                         >
                           Match details
                         </Link>

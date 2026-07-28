@@ -8,6 +8,7 @@ import { MetricTile } from "@/components/ui/metric-tile";
 import { Button } from "@/components/ui/button";
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { trackProductEvent } from "@/lib/analytics/events";
 
 type NotificationChannel = "in_app" | "email" | "push";
 
@@ -159,29 +160,33 @@ export default function NotificationsPage() {
   }
 
   function toggleChannel(prefId: string, channel: NotificationChannel) {
-    setPreferences((prev) =>
-      {
-        const next = prev.map((pref) => {
+    const preference = preferences.find((pref) => pref.id === prefId);
+    if (!preference) return;
+    const hasChannel = preference.channels.includes(channel);
+    const next = preferences.map((pref) => {
         if (pref.id !== prefId) return pref;
-        const hasChannel = pref.channels.includes(channel);
         return {
           ...pref,
           channels: hasChannel
             ? pref.channels.filter((c) => c !== channel)
             : [...pref.channels, channel],
         };
-        });
+    });
 
-        if (preferencesStorageKey) {
-          window.localStorage.setItem(
-            preferencesStorageKey,
-            JSON.stringify(next)
-          );
-        }
+    if (preferencesStorageKey) {
+      window.localStorage.setItem(
+        preferencesStorageKey,
+        JSON.stringify(next)
+      );
+    }
 
-        return next;
-      }
-    );
+    setPreferences(next);
+    if (!hasChannel && channel !== "in_app") {
+      trackProductEvent("notification_opt_in", {
+        channel,
+        preference_id: prefId,
+      });
+    }
   }
 
   return (

@@ -30,6 +30,7 @@ import {
   analyticsTeamId,
   fantasyPlayerHref,
 } from "@/lib/analytics/entity-routes";
+import { trackProductEvent } from "@/lib/analytics/events";
 import {
   buildSalaryCapActionLabel,
   buildSalaryCapEntrySummary,
@@ -147,6 +148,7 @@ export function SalaryCapEntryBuilder({
   const slotPulseTimeoutRef = useRef<number | null>(null);
   const budgetPulseTimeoutRef = useRef<number | null>(null);
   const projectionPulseTimeoutRef = useRef<number | null>(null);
+  const viewedLineupLocksRef = useRef(new Set<string>());
   const refreshEntry = useCallback(async (slateKey?: string) => {
     setIsLoading(true);
     setError("");
@@ -158,6 +160,14 @@ export function SalaryCapEntryBuilder({
       setEntryState(nextState);
       setEntryName(nextState.entry.entry_name);
       setAssignments(createAssignmentState(nextState));
+      const lockKey = `${leagueId}:${nextState.entry_window.slate_key}:${nextState.entry_window.lock_at}`;
+      if (!viewedLineupLocksRef.current.has(lockKey)) {
+        viewedLineupLocksRef.current.add(lockKey);
+        trackProductEvent("lineup_lock_viewed", {
+          league_id: leagueId,
+          is_locked: nextState.entry_window.is_locked,
+        });
+      }
     } catch (loadError) {
       setError(
         loadError instanceof Error
@@ -497,6 +507,10 @@ export function SalaryCapEntryBuilder({
       setEntryState(nextState);
       setEntryName(nextState.entry.entry_name);
       setAssignments(createAssignmentState(nextState));
+      trackProductEvent("entry_submitted", {
+        league_id: leagueId,
+        slate_key: activeSlateKey,
+      });
     } catch (actionError) {
       setError(
         actionError instanceof Error
