@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/components/common/app-shell";
-import { Pill } from "@/components/ui/pill";
-import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
+import { PredictionsClient } from "@/components/analytics/predictions-client";
 import { getMatchPredictions } from "@/lib/analytics/analytics-data";
 
 export const metadata = {
@@ -16,86 +15,9 @@ export default function PredictionsPage() {
     <AppShell
       eyebrow="Predictive Models"
       title="Predictions"
-      description="Match outcome probabilities powered by Dixon-Coles and Bivariate Poisson score models trained on NWSL data."
+      description="Match probabilities, stored market odds, and fail-closed pick status from the NWSL model pipeline."
     >
-      {predictions.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-lg text-muted">No upcoming predictions available.</p>
-          <p className="mt-2 text-sm text-muted/60">
-            Predictions appear when upcoming matches are scheduled.
-          </p>
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {predictions.map((pred) => (
-            <Link
-              key={pred.matchId}
-              href={`/analytics/predictions/${pred.matchId}`}
-              className="glass-card rounded-[1.4rem] border border-line bg-white/6 p-5 transition hover:border-brand/30"
-            >
-              {/* Header */}
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-[0.65rem] font-medium uppercase tracking-widest text-muted">
-                  {pred.date}
-                </span>
-                <Pill tone="accent">AI Prediction</Pill>
-              </div>
-
-              {/* Teams */}
-              <div className="mb-4 space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">{pred.homeTeam}</span>
-                  <span className="font-mono text-sm font-semibold text-brand-strong">
-                    {(pred.homeProb * 100).toFixed(0)}%
-                  </span>
-                </div>
-                <ProbabilityBar
-                  homeProb={pred.homeProb}
-                  drawProb={pred.drawProb}
-                  awayProb={pred.awayProb}
-                  showPercentages={false}
-                />
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">{pred.awayTeam}</span>
-                  <span className="font-mono text-sm font-semibold text-accent">
-                    {(pred.awayProb * 100).toFixed(0)}%
-                  </span>
-                </div>
-              </div>
-
-              {/* Key Markets */}
-              <div className="grid grid-cols-3 gap-2 border-t border-line pt-3">
-                <div className="text-center">
-                  <p className="text-[0.6rem] uppercase tracking-widest text-muted">BTTS</p>
-                  <p className="font-mono text-sm text-foreground">
-                    {(pred.bttsYesProb * 100).toFixed(0)}%
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-[0.6rem] uppercase tracking-widest text-muted">O2.5</p>
-                  <p className="font-mono text-sm text-foreground">
-                    {pred.overUnder["2.5"]
-                      ? (pred.overUnder["2.5"].over * 100).toFixed(0)
-                      : "—"}%
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-[0.6rem] uppercase tracking-widest text-muted">Draw</p>
-                  <p className="font-mono text-sm text-foreground">
-                    {(pred.drawProb * 100).toFixed(0)}%
-                  </p>
-                </div>
-              </div>
-
-              {/* Expected Goals */}
-              <div className="mt-3 flex items-center justify-between border-t border-line pt-3 text-xs text-muted">
-                <span>Expected: {pred.lambdaHome.toFixed(1)} - {pred.lambdaAway.toFixed(1)}</span>
-                <span className="capitalize">{pred.model.replace("_", "-")}</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
+      <PredictionsClient predictions={predictions} />
 
       {/* Model info */}
       <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">

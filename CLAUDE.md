@@ -39,8 +39,12 @@ predict, slate, season db, web export).
    `source_type` changes what `timestamp` means: `close` = kickoff-stamped
    consensus, `current` = wall-clock capture, `open` = opening line. Always
    filter on `source_type` before reading `timestamp`.
-4. Tokens (`APIFY_TOKEN`, `THE_ODDS_API_KEY`) live only in gitignored
-   `.env.local` files. Never print or commit them.
+4. Runtime values live only in gitignored `.env.local` files or the linked
+   Vercel project. The root app uses Supabase/database/auth variables,
+   `JOBS_API_SECRET`, the two publishing secrets, and `APIFY_TOKEN`; the Python
+   package may also use provider tokens from `nwsl-model/.env.local`. Use
+   `.env.example` as the variable-name contract. Never print, commit, paste
+   into instructions, or include secret values in handoffs.
 
 ## Fail-closed philosophy
 

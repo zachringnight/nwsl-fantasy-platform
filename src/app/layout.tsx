@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/common/site-header";
 import { SiteFooter } from "@/components/common/site-footer";
 import { AnalyticsProvider } from "@/components/providers/analytics-provider";
+import { ProductAnalyticsProvider } from "@/components/providers/product-analytics-provider";
 import { FantasyAuthProvider } from "@/components/providers/fantasy-auth-provider";
 import { FantasyDataProvider } from "@/components/providers/fantasy-data-provider";
 import { siteConfig } from "@/config/site";
@@ -42,19 +43,21 @@ export default function RootLayout({
       <body>
         <FantasyDataProvider>
           <FantasyAuthProvider>
-            <AnalyticsProvider>
-              <div className="flex min-h-screen flex-col">
-                <a
-                  href="#main-content"
-                  className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[100] focus-visible:rounded-full focus-visible:bg-brand focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
-                >
-                  Skip to main content
-                </a>
-                <SiteHeader />
-                <div id="main-content" className="page-enter flex-1">{children}</div>
-                <SiteFooter />
-              </div>
-            </AnalyticsProvider>
+            <ProductAnalyticsProvider>
+              <AnalyticsProvider>
+                <div className="flex min-h-screen flex-col">
+                  <a
+                    href="#main-content"
+                    className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[100] focus-visible:rounded-full focus-visible:bg-brand focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-strong/55"
+                  >
+                    Skip to main content
+                  </a>
+                  <SiteHeader />
+                  <div id="main-content" className="page-enter flex-1">{children}</div>
+                  <SiteFooter />
+                </div>
+              </AnalyticsProvider>
+            </ProductAnalyticsProvider>
           </FantasyAuthProvider>
         </FantasyDataProvider>
       </body>

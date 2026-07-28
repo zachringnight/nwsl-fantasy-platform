@@ -1,20 +1,29 @@
-"use client";
-
-import { useMemo } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { MetricTile } from "@/components/ui/metric-tile";
+import { Pill } from "@/components/ui/pill";
 import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { ScoreMatrixHeatmap } from "@/components/analytics/charts/score-matrix-heatmap";
 import { getMatchPrediction } from "@/lib/analytics/analytics-data";
 
-export default function PredictionDetailPage() {
-  const params = useParams<{ matchId: string }>();
-  const matchId = params.matchId;
+function formatDecimalOdds(value: number | undefined): string {
+  if (value === undefined) return "—";
+  return value.toFixed(2);
+}
 
-  const prediction = useMemo(() => getMatchPrediction(matchId), [matchId]);
+function readableReason(value: string | undefined): string {
+  if (!value || value === "none") return "No edge";
+  return value.replaceAll("_", " ");
+}
+
+export default async function PredictionDetailPage({
+  params,
+}: {
+  params: Promise<{ matchId: string }>;
+}) {
+  const { matchId } = await params;
+  const prediction = getMatchPrediction(matchId);
 
   if (!prediction) {
     return (
@@ -80,6 +89,58 @@ export default function PredictionDetailPage() {
           homeLabel={prediction.homeTeam}
           awayLabel={prediction.awayTeam}
         />
+      </section>
+
+      <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-widest text-brand-strong">
+              Stored Market Odds & Pick Gate
+            </h3>
+            <p className="mt-2 text-sm text-muted">
+              Picks are based only on stored market prices. If odds are missing, stale, or the
+              model gate fails, this page stays no-pick.
+            </p>
+          </div>
+          <Pill tone={prediction.pickSummary?.actionable ? "success" : "default"}>
+            {prediction.pickSummary?.tier?.replaceAll("_", " ") ?? "No pick"}
+          </Pill>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <MetricTile
+            label="Home odds"
+            value={formatDecimalOdds(prediction.marketOdds?.homeOdds)}
+            detail={prediction.homeTeam}
+            tone="brand"
+          />
+          <MetricTile
+            label="Draw odds"
+            value={formatDecimalOdds(prediction.marketOdds?.drawOdds)}
+            detail="Market price"
+          />
+          <MetricTile
+            label="Away odds"
+            value={formatDecimalOdds(prediction.marketOdds?.awayOdds)}
+            detail={prediction.awayTeam}
+            tone="accent"
+          />
+          <MetricTile
+            label={`Total ${prediction.marketOdds?.totalLine ?? "—"}`}
+            value={`O ${formatDecimalOdds(prediction.marketOdds?.overOdds)}`}
+            detail={`U ${formatDecimalOdds(prediction.marketOdds?.underOdds)}`}
+          />
+          <MetricTile
+            label="Sportsbook"
+            value={prediction.marketOdds?.sportsbook ?? "—"}
+            detail={prediction.marketOdds?.marketTypes ?? "No stored odds"}
+          />
+          <MetricTile
+            label="No-pick reason"
+            value={readableReason(prediction.pickSummary?.reason)}
+            detail={prediction.marketOdds?.marketIsFresh ? "Fresh odds" : "Missing or stale odds"}
+          />
+        </div>
       </section>
 
       {/* Score Matrix */}
