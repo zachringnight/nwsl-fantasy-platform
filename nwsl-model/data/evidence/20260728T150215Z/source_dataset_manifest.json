@@ -1,24 +1,5 @@
 {
   "asa": {
-    "coverage_by_season": {
-      "2025": {
-        "coverage_pct": 100.0,
-        "covered_matches": 189,
-        "fallback_match_ids": [],
-        "reference_matches": 189
-      },
-      "2026": {
-        "coverage_pct": 99.21,
-        "covered_matches": 126,
-        "fallback_match_ids": [
-          "401853922"
-        ],
-        "reference_matches": 127
-      }
-    },
-    "fallback_match_ids": [
-      "401853922"
-    ],
     "match_xg_coverage_pct": 99.68,
     "match_xgoals_rows": 318,
     "season_coverage": [
@@ -55,24 +36,23 @@
     "xg_missing_pct": 0.32
   },
   "odds": {
-    "latest_timestamp": "2026-07-28T15:39:57.007973+00:00",
+    "rows": 1355,
+    "source_available": true,
     "markets": [
       "1x2",
       "total"
     ],
-    "rows": 1386,
-    "source_available": true,
+    "sportsbooks": [
+      "FoxSports",
+      "OddsPortalAvg",
+      "OddsPortalEvent"
+    ],
     "source_types": [
       "close",
       "current",
       "open"
     ],
-    "sportsbooks": [
-      "DraftKings",
-      "FoxSports",
-      "OddsPortalAvg",
-      "OddsPortalEvent"
-    ]
+    "latest_timestamp": "2026-07-28T15:02:50.672940+00:00"
   },
   "source": "espn_public_api",
   "source_files": {

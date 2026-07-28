@@ -254,6 +254,31 @@ def test_build_publish_payload_requires_exact_fresh_slate_quote(
         )
 
 
+def test_build_publish_payload_accepts_equivalent_utc_quote_timestamps(
+    tmp_path: Path,
+) -> None:
+    context = _publish_context(tmp_path)
+    context["odds"].loc[
+        context["odds"]["market_type"].eq("total"),
+        "timestamp",
+    ] = "2026-07-26T19:59:00Z"
+
+    payload = build_publish_payload(
+        summary=_summary(),
+        slate=pd.DataFrame([_row()]),
+        decisions=pd.DataFrame([_row()]),
+        forward_results={},
+        evidence=_evidence(),
+        source_health={},
+        **context,
+    )
+
+    assert len(payload["odds"]) == 2
+    assert payload["slate"][0]["quoteTimestamp"] == "2026-07-26T19:59:00+00:00"
+    total_odds = next(row for row in payload["odds"] if row["marketType"] == "total")
+    assert total_odds["quoteTimestamp"] == payload["slate"][0]["quoteTimestamp"]
+
+
 def test_build_publish_payload_fails_closed_on_unmapped_2026_slate(
     tmp_path: Path,
 ) -> None:

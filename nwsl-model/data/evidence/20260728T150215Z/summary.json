@@ -1,0 +1,16 @@
+{
+  "currentOddsOverwritten": false,
+  "failure": "public-data validation rejected a player season-stat row assigned to a non-league team with zero games played",
+  "generatedPredictionsPromoted": false,
+  "matchRowsAdded": 3,
+  "modelPublication": "ok",
+  "modelRunCompleted": true,
+  "oddsSnapshotRowsAdded": 122,
+  "officialPicksAdded": 0,
+  "publicDataPublication": "failed_validation",
+  "researchLedgerPromotedToOperationalLedger": false,
+  "researchLedgerRowsPreserved": 5,
+  "runId": "20260728T150215Z",
+  "sourceWorktree": "/Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation",
+  "status": "partial"
+}

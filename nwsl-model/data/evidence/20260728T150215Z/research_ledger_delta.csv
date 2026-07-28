@@ -1,0 +1,6 @@
+pick_id,match_id,match_date,home_team,away_team,recorded_at,tier,market,side,line,odds,stake,prob_edge,ev,model_version,result,pnl_per_unit,settled_at
+7bf470807d48b7a0,401853953,2026-07-30,Kansas City Current,Racing Louisville FC,2026-07-27T15:08:04Z,lean,1x2,draw,,4.6,10.0,0.101,0.368,20260526T030638Z,pending,,
+1c29db488d416ccd,401853954,2026-07-30,Utah Royals,Washington Spirit,2026-07-27T15:08:04Z,lean,1x2,home,,3.0,10.0,0.091,0.182,20260526T030638Z,pending,,
+267bd4d10ace1a4f,401853954,2026-07-30,Utah Royals,Washington Spirit,2026-07-27T15:08:04Z,lean,total,over,2.25,1.71,10.0,0.119,0.108,20260526T030638Z,pending,,
+f57f998977062846,401853954,2026-07-30,Utah Royals,Washington Spirit,2026-07-27T15:08:04Z,lean,total,over,2.5,1.93,10.0,0.046,0.014,20260526T030638Z,pending,,
+33ae241dba393113,401853955,2026-07-30,Bay FC,Gotham FC,2026-07-27T15:08:04Z,lean,1x2,draw,,3.6,10.0,0.046,0.071,20260526T030638Z,pending,,
