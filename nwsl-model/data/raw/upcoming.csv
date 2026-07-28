@@ -1,7 +1,4 @@
 match_id,match_date,season,competition,regular_season_flag,home_team,away_team,home_goals_90,away_goals_90,venue,match_status
-401853951,2026-07-26,2026,NWSL,true,San Diego Wave FC,Seattle Reign FC,0,0,Snapdragon Stadium,scheduled
-401854069,2026-07-26,2026,NWSL,true,Washington Spirit,Denver Summit FC,0,0,Audi Field,scheduled
-401853952,2026-07-27,2026,NWSL,true,Angel City FC,Racing Louisville FC,0,0,BMO Stadium,scheduled
 401853953,2026-07-30,2026,NWSL,true,Kansas City Current,Racing Louisville FC,0,0,CPKC Stadium,scheduled
 401853954,2026-07-30,2026,NWSL,true,Utah Royals,Washington Spirit,0,0,America First Field,scheduled
 401853955,2026-07-30,2026,NWSL,true,Bay FC,Gotham FC,0,0,PayPal Park,scheduled

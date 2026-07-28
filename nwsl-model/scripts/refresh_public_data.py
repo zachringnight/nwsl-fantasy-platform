@@ -18,6 +18,7 @@ import math
 import os
 import re
 import socket
+import ssl
 import subprocess
 import sys
 import tempfile
@@ -50,7 +51,7 @@ REPOSITORY_ROOT = MODEL_ROOT.parent
 DEFAULT_OUTPUT = MODEL_ROOT / "data/nwsl-official/nwsl_2026_public_data.json"
 sys.path.insert(0, str(MODEL_ROOT))
 
-from src.publishing.http import PublicationError, publish_with_readback
+from src.publishing.http import PublicationError, publish_with_readback  # noqa: E402
 
 OFFICIAL_PLAYER_ID = re.compile(r"^nwsl::Football_Player::[0-9a-f]{32}$")
 OFFICIAL_TEAM_ID = re.compile(r"^nwsl::Football_Team::[0-9a-f]{32}$")
@@ -498,7 +499,12 @@ class OfficialApiClient:
                 if exc.code != 429 and not 500 <= exc.code <= 599:
                     raise FetchError(f"official API returned HTTP {exc.code}") from exc
                 last_error = exc
-            except (TimeoutError, socket.timeout, urllib.error.URLError) as exc:
+            except (
+                TimeoutError,
+                socket.timeout,
+                ssl.SSLError,
+                urllib.error.URLError,
+            ) as exc:
                 last_error = exc
 
             if attempt + 1 < self.max_attempts:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+import ssl
 import urllib.error
 from datetime import datetime, timezone
 from typing import Any
@@ -170,6 +171,7 @@ def test_official_client_retries_429_and_timeout_with_deterministic_backoff() ->
     outcomes: list[Any] = [
         urllib.error.HTTPError("https://example.test", 429, "rate limited", {}, None),
         TimeoutError("slow"),
+        ssl.SSLError("temporary TLS failure"),
         _Response({"ok": True}),
     ]
     sleeps: list[float] = []
@@ -193,10 +195,11 @@ def test_official_client_retries_429_and_timeout_with_deterministic_backoff() ->
     url = "https://example.test/data"
 
     assert client.get_json(url) == {"ok": True}
-    assert calls == [3.0, 3.0, 3.0]
+    assert calls == [3.0, 3.0, 3.0, 3.0]
     assert sleeps == [
         _retry_delay(url, 0, base_delay=0.1, max_delay=2.0),
         _retry_delay(url, 1, base_delay=0.1, max_delay=2.0),
+        _retry_delay(url, 2, base_delay=0.1, max_delay=2.0),
     ]
 
 

@@ -1,0 +1,260 @@
+=== 2026-07-28T15:02:15Z espn_schedule ===
+Fetching NWSL data from ESPN...
+
+[1/3] Teams
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/teams
+(node:95959) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  Wrote /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/src/data/espn/teams.json
+  → 16 teams
+
+[2/3] Standings
+  Fetching https://site.api.espn.com/apis/v2/sports/soccer/usa.nwsl/standings?season=2025
+  Wrote /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/src/data/espn/standings-2025.json
+  → 2025: 14 teams
+  Fetching https://site.api.espn.com/apis/v2/sports/soccer/usa.nwsl/standings?season=2026
+  Wrote /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/src/data/espn/standings-2026.json
+  → 2026: 16 teams
+
+[3/3] Matches
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20250301-20250501&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20250501-20250701&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20250701-20250901&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20250901-20251201&limit=200
+  Wrote /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/src/data/espn/matches-2025.json
+  → 2025: 189 matches
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20260301-20260501&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20260501-20260701&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20260701-20260901&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20260901-20261109&limit=200
+  Fetching https://site.api.espn.com/apis/site/v2/sports/soccer/usa.nwsl/scoreboard?dates=20261109-20261201&limit=200
+  Wrote /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/src/data/espn/matches-2026.json
+  → 2026: 240 matches
+
+Done! ESPN data written to src/data/espn/
+--- espn_schedule ok ---
+=== 2026-07-28T15:02:17Z model_input ===
+Wrote 316 completed matches to /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/data/raw/matches.csv
+Wrote 113 upcoming fixtures to /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/data/raw/upcoming.csv
+Wrote dataset manifest to /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/data/raw/dataset_manifest.json
+(node:96023) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+--- model_input ok ---
+=== 2026-07-28T15:02:19Z asa_xg ===
+{
+  "files": {
+    "asa_match_xgoals": "data/raw/asa_match_xgoals.csv",
+    "asa_player_analytics": "data/raw/asa_player_analytics.csv",
+    "asa_team_analytics": "data/raw/asa_team_analytics.csv"
+  },
+  "generated_at": "2026-07-28T15:02:35.755454+00:00",
+  "manifest_xg_coverage": {
+    "away_npxg": 99.68,
+    "away_xg": 99.68,
+    "home_npxg": 99.68,
+    "home_xg": 99.68
+  },
+  "rows": {
+    "match_xgoals": 318,
+    "player_analytics": 702,
+    "team_analytics": 30
+  },
+  "season_counts": {
+    "match_xgoals": {
+      "2025": 190,
+      "2026": 128
+    },
+    "player_analytics": {
+      "2025": 341,
+      "2026": 361
+    },
+    "team_analytics": {
+      "2025": 14,
+      "2026": 16
+    }
+  },
+  "seasons": [
+    2025,
+    2026
+  ]
+}
+--- asa_xg ok ---
+=== 2026-07-28T15:02:35Z publish_public_data_supabase ===
+refresh blocked: player nwsl::Football_Player::a62cd15f05c645a188617a4ced02ab5c has a non-league season-stat team with 0 games played
+--- publish_public_data_supabase FAILED ---
+=== 2026-07-28T15:02:44Z odds_poll ===
+Odds polling complete. Log: /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/logs/poll_current_odds_20260728T150244Z.log
+--- odds_poll ok ---
+=== 2026-07-28T15:03:02Z policy_train ===
+2026-07-28 08:03:03 | nwsl_model.train | INFO | Loading data...
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 316 matches from data/raw/matches.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 318 ASA match xG records from data/raw/asa_match_xgoals.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 113 matches from data/raw/upcoming.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 1355 odds records from data/raw/odds.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | WARNING | Venues file not found at data/raw/venues.csv. Running without venue data.
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 9627 appearance records from data/raw/appearances.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 6561 projected lineup records from data/raw/projected_lineups.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 125 team season prior rows from data/raw/team_season_priors.csv
+2026-07-28 08:03:03 | nwsl_model.data.loaders | INFO | Loaded 3068 player season prior rows from data/raw/player_season_priors.csv
+2026-07-28 08:03:03 | nwsl_model.data.validation | INFO | Filtered out 7 non-regulation matches (309 remaining)
+2026-07-28 08:03:04 | nwsl_model.models.team_ratings | INFO | Computed ratings for 16 teams (league avg attack=1.493, defense=1.493)
+/Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/src/models/lineup_adjustment.py:63: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+  player_minutes = appearances.groupby("player_id").apply(
+2026-07-28 08:03:04 | nwsl_model.models.lineup_adjustment | INFO | Fitting APM with 370 players
+2026-07-28 08:03:04 | nwsl_model.models.lineup_adjustment | INFO | Fitted APM ratings for 370 players
+/Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/src/features/context.py:180: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  frame[missing_indicator] = missing_mask.astype(float)
+2026-07-28 08:03:05 | nwsl_model.data.transforms | INFO | Encoded 16 teams
+2026-07-28 08:03:05 | nwsl_model.train | INFO | Training complete. Artifacts saved to data/processed/policy/nwsl-totals-open-over-v1/models/20260728T150305Z
+--- policy_train ok ---
+=== 2026-07-28T15:03:05Z policy_slate ===
+nwsl-totals-open-over-v1: priced=0/20 actionable=0 artifact=20260728T150305Z
+Wrote data/processed/policy/nwsl-totals-open-over-v1/runs/20260728T150306Z, data/processed/policy/nwsl-totals-open-over-v1/latest_slate.csv, data/processed/policy/nwsl-totals-open-over-v1/forward_decisions.csv
+--- policy_slate ok ---
+=== 2026-07-28T15:03:06Z policy_settle ===
+/Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/src/betting/frozen_policy_serving.py:395: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise an error in a future version of pandas. Value 'pending' has dtype incompatible with float64, please explicitly cast to a compatible dtype first.
+  output.loc[output["actionable"], "settlement_status"] = "pending"
+Settled 0/0 policy picks; pending=0 ROI=0.0%
+Wrote data/processed/policy/nwsl-totals-open-over-v1/forward_decisions.csv and data/processed/policy/nwsl-totals-open-over-v1/forward_results.json
+--- policy_settle ok ---
+=== 2026-07-28T15:03:07Z predict ===
+2026-07-28 08:03:07 | nwsl_model.predict | INFO | Loaded home_field_baseline from data/processed/models/20260526T030638Z
+2026-07-28 08:03:07 | nwsl_model.predict | INFO | Predicting 113 matches
+2026-07-28 08:03:07 | nwsl_model.data.loaders | INFO | Loaded 1355 odds records from data/raw/odds.csv
+2026-07-28 08:03:07 | nwsl_model.data.transforms | WARNING | No odds found for 1x2/current
+2026-07-28 08:03:07 | nwsl_model.features.market_features | WARNING | 1X2 odds not available. Market probabilities will be null.
+2026-07-28 08:03:07 | nwsl_model.predict | INFO | Predictions saved to data/processed/predictions.csv
+
+Predictions for 113 matches:
+  Kansas City Current  vs Racing Louisville FC | H=39.97% D=29.74% A=30.29% | Bets: none
+  Utah Royals          vs Washington Spirit    | H=39.39% D=29.31% A=31.30% | Bets: none
+  Bay FC               vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs Orlando Pride        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Racing Louisville FC vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs Angel City FC        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Houston Dash         vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  Bay FC               vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Washington Spirit    vs San Diego Wave FC    | H=39.97% D=29.74% A=30.29% | Bets: none
+  Utah Royals          vs Portland Thorns FC   | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs North Carolina Courage | H=39.97% D=29.74% A=30.29% | Bets: none
+  Orlando Pride        vs Racing Louisville FC | H=39.97% D=29.74% A=30.29% | Bets: none
+  Gotham FC            vs San Diego Wave FC    | H=39.39% D=29.31% A=31.30% | Bets: none
+  Washington Spirit    vs North Carolina Courage | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Utah Royals          | H=39.97% D=29.74% A=30.29% | Bets: none
+  Houston Dash         vs Kansas City Current  | H=39.97% D=29.74% A=30.29% | Bets: none
+  Chicago Stars FC     vs Bay FC               | H=39.39% D=29.31% A=31.30% | Bets: none
+  Boston Legacy FC     vs Portland Thorns FC   | H=39.39% D=29.31% A=31.30% | Bets: none
+  Seattle Reign FC     vs Angel City FC        | H=39.39% D=29.31% A=31.30% | Bets: none
+  Gotham FC            vs Kansas City Current  | H=39.39% D=29.31% A=31.30% | Bets: none
+  Seattle Reign FC     vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Utah Royals          vs Bay FC               | H=39.97% D=29.74% A=30.29% | Bets: none
+  San Diego Wave FC    vs Denver Summit FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Racing Louisville FC vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Portland Thorns FC   vs Orlando Pride        | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs Houston Dash         | H=39.97% D=29.74% A=30.29% | Bets: none
+  Angel City FC        vs Washington Spirit    | H=39.97% D=29.74% A=30.29% | Bets: none
+  Racing Louisville FC vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Houston Dash         vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  San Diego Wave FC    vs Utah Royals          | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Chicago Stars FC     vs Racing Louisville FC | H=39.39% D=29.31% A=31.30% | Bets: none
+  Washington Spirit    vs Orlando Pride        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Bay FC               vs Houston Dash         | H=39.39% D=29.31% A=31.30% | Bets: none
+  Portland Thorns FC   vs Denver Summit FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Angel City FC        vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs Angel City FC        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Gotham FC            vs Portland Thorns FC   | H=39.39% D=29.31% A=31.30% | Bets: none
+  San Diego Wave FC    vs Racing Louisville FC | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs North Carolina Courage | H=39.97% D=29.74% A=30.29% | Bets: none
+  Orlando Pride        vs Utah Royals          | H=39.97% D=29.74% A=30.29% | Bets: none
+  Washington Spirit    vs Bay FC               | H=39.97% D=29.74% A=30.29% | Bets: none
+  Seattle Reign FC     vs Houston Dash         | H=39.39% D=29.31% A=31.30% | Bets: none
+  Denver Summit FC     vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Boston Legacy FC     vs Angel City FC        | H=39.39% D=29.31% A=31.30% | Bets: none
+  Bay FC               vs Kansas City Current  | H=39.39% D=29.31% A=31.30% | Bets: none
+  Racing Louisville FC vs Angel City FC        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Utah Royals          vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Chicago Stars FC     vs North Carolina Courage | H=39.39% D=29.31% A=31.30% | Bets: none
+  Portland Thorns FC   vs Washington Spirit    | H=39.97% D=29.74% A=30.29% | Bets: none
+  Orlando Pride        vs Houston Dash         | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  Seattle Reign FC     vs San Diego Wave FC    | H=39.39% D=29.31% A=31.30% | Bets: none
+  Racing Louisville FC vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs Orlando Pride        | H=39.97% D=29.74% A=30.29% | Bets: none
+  San Diego Wave FC    vs North Carolina Courage | H=39.97% D=29.74% A=30.29% | Bets: none
+  Angel City FC        vs Denver Summit FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Seattle Reign FC     vs Bay FC               | H=39.97% D=29.74% A=30.29% | Bets: none
+  Houston Dash         vs Utah Royals          | H=39.97% D=29.74% A=30.29% | Bets: none
+  Portland Thorns FC   vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Washington Spirit    vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Angel City FC        vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Bay FC               | H=39.97% D=29.74% A=30.29% | Bets: none
+  San Diego Wave FC    vs Kansas City Current  | H=39.97% D=29.74% A=30.29% | Bets: none
+  Orlando Pride        vs Portland Thorns FC   | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  Chicago Stars FC     vs Washington Spirit    | H=39.39% D=29.31% A=31.30% | Bets: none
+  Bay FC               vs Racing Louisville FC | H=39.39% D=29.31% A=31.30% | Bets: none
+  Utah Royals          vs Angel City FC        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Boston Legacy FC     vs Houston Dash         | H=39.97% D=29.74% A=30.29% | Bets: none
+  Racing Louisville FC vs San Diego Wave FC    | H=39.97% D=29.74% A=30.29% | Bets: none
+  Gotham FC            vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Washington Spirit    vs Angel City FC        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Seattle Reign FC     vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs Denver Summit FC     | H=39.39% D=29.31% A=31.30% | Bets: none
+  Portland Thorns FC   vs Houston Dash         | H=39.97% D=29.74% A=30.29% | Bets: none
+  Bay FC               vs Orlando Pride        | H=39.39% D=29.31% A=31.30% | Bets: none
+  Utah Royals          vs North Carolina Courage | H=39.97% D=29.74% A=30.29% | Bets: none
+  Orlando Pride        vs San Diego Wave FC    | H=39.97% D=29.74% A=30.29% | Bets: none
+  Seattle Reign FC     vs North Carolina Courage | H=39.39% D=29.31% A=31.30% | Bets: none
+  Racing Louisville FC vs Utah Royals          | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs Bay FC               | H=39.97% D=29.74% A=30.29% | Bets: none
+  Gotham FC            vs Angel City FC        | H=39.39% D=29.31% A=31.30% | Bets: none
+  Houston Dash         vs Washington Spirit    | H=39.39% D=29.31% A=31.30% | Bets: none
+  Portland Thorns FC   vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Chicago Stars FC     vs Denver Summit FC     | H=39.39% D=29.31% A=31.30% | Bets: none
+  Washington Spirit    vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  Utah Royals          vs Kansas City Current  | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs San Diego Wave FC    | H=39.97% D=29.74% A=30.29% | Bets: none
+  Boston Legacy FC     vs Racing Louisville FC | H=39.39% D=29.31% A=31.30% | Bets: none
+  Houston Dash         vs Orlando Pride        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Bay FC               vs Portland Thorns FC   | H=39.39% D=29.31% A=31.30% | Bets: none
+  Chicago Stars FC     vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Angel City FC        | H=39.97% D=29.74% A=30.29% | Bets: none
+  Chicago Stars FC     vs Houston Dash         | H=39.39% D=29.31% A=31.30% | Bets: none
+  Utah Royals          vs Seattle Reign FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Portland Thorns FC   vs North Carolina Courage | H=39.97% D=29.74% A=30.29% | Bets: none
+  Denver Summit FC     vs Racing Louisville FC | H=39.97% D=29.74% A=30.29% | Bets: none
+  Angel City FC        vs Bay FC               | H=39.97% D=29.74% A=30.29% | Bets: none
+  Orlando Pride        vs Gotham FC            | H=39.97% D=29.74% A=30.29% | Bets: none
+  Kansas City Current  vs Washington Spirit    | H=39.39% D=29.31% A=31.30% | Bets: none
+  San Diego Wave FC    vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Bay FC               vs San Diego Wave FC    | H=39.39% D=29.31% A=31.30% | Bets: none
+  Gotham FC            vs Utah Royals          | H=39.39% D=29.31% A=31.30% | Bets: none
+  Washington Spirit    vs Chicago Stars FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  Racing Louisville FC vs Kansas City Current  | H=39.97% D=29.74% A=30.29% | Bets: none
+  Seattle Reign FC     vs Orlando Pride        | H=39.39% D=29.31% A=31.30% | Bets: none
+  Houston Dash         vs Portland Thorns FC   | H=39.39% D=29.31% A=31.30% | Bets: none
+  Angel City FC        vs Boston Legacy FC     | H=39.97% D=29.74% A=30.29% | Bets: none
+  North Carolina Courage vs Denver Summit FC     | H=39.39% D=29.31% A=31.30% | Bets: none
+--- predict ok ---
+=== 2026-07-28T15:03:08Z slate ===
+Wrote 5 betting slate rows to /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/data/processed/betting_slate.csv
+Wrote betting slate JSON to /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/data/processed/web/betting_slate.json
+--- slate ok ---
+=== 2026-07-28T15:03:08Z track_matchday ===
+*NWSL model — forward pick log*
+0 new pick(s) locked this run.
+Record: 5-8 (W-L) | 13 settled, 5 pending | win rate 38.5% | -3.70u | ROI -28.5%
+  lean: 5-8 | -3.70u | ROI -28.5%
+
+[ledger: 18 picks at /Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/nwsl-model/data/processed/pick_ledger.csv]
+STATUS new_picks=0 newly_settled=0 pending=5
+--- track_matchday exit 0 ---
+=== 2026-07-28T15:03:09Z publish_supabase ===
+Prepared model publication: run=nwsl-totals-open-over-v1:2026-07-28T15:03:06.571009+00:00 slate_rows=20 locked_picks=0 odds_rows=5
+Published model snapshot: run=nwsl-totals-open-over-v1:2026-07-28T15:03:06.571009+00:00 slate_rows=20 locked_picks_processed=0 odds_rows=5
+--- publish_supabase ok ---
+=== 2026-07-28T15:03:11Z done ===

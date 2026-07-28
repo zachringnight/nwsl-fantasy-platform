@@ -1,6 +1,20 @@
 [
   {
     "rank": 1,
+    "teamId": "15365",
+    "team": "Washington Spirit",
+    "abbreviation": "WAS",
+    "played": 16,
+    "won": 10,
+    "drawn": 3,
+    "lost": 3,
+    "goalsFor": 25,
+    "goalsAgainst": 12,
+    "goalDifference": 13,
+    "points": 33
+  },
+  {
+    "rank": 2,
     "teamId": "15364",
     "team": "Gotham FC",
     "abbreviation": "GFC",
@@ -12,20 +26,6 @@
     "goalsAgainst": 12,
     "goalDifference": 9,
     "points": 31
-  },
-  {
-    "rank": 2,
-    "teamId": "15365",
-    "team": "Washington Spirit",
-    "abbreviation": "WAS",
-    "played": 15,
-    "won": 9,
-    "drawn": 3,
-    "lost": 3,
-    "goalsFor": 24,
-    "goalsAgainst": 12,
-    "goalDifference": 12,
-    "points": 30
   },
   {
     "rank": 3,
@@ -46,13 +46,13 @@
     "teamId": "21423",
     "team": "San Diego Wave FC",
     "abbreviation": "SD",
-    "played": 16,
+    "played": 17,
     "won": 9,
     "drawn": 2,
-    "lost": 5,
+    "lost": 6,
     "goalsFor": 23,
-    "goalsAgainst": 17,
-    "goalDifference": 6,
+    "goalsAgainst": 19,
+    "goalDifference": 4,
     "points": 29
   },
   {
@@ -102,13 +102,13 @@
     "teamId": "21422",
     "team": "Angel City FC",
     "abbreviation": "LA",
-    "played": 14,
+    "played": 15,
     "won": 7,
     "drawn": 1,
-    "lost": 6,
-    "goalsFor": 22,
-    "goalsAgainst": 14,
-    "goalDifference": 8,
+    "lost": 7,
+    "goalsFor": 23,
+    "goalsAgainst": 16,
+    "goalDifference": 7,
     "points": 22
   },
   {
@@ -127,20 +127,34 @@
   },
   {
     "rank": 10,
-    "teamId": "131563",
-    "team": "Denver Summit FC",
-    "abbreviation": "DEN",
-    "played": 14,
-    "won": 5,
-    "drawn": 4,
-    "lost": 5,
-    "goalsFor": 21,
+    "teamId": "15363",
+    "team": "Seattle Reign FC",
+    "abbreviation": "SEA",
+    "played": 15,
+    "won": 6,
+    "drawn": 2,
+    "lost": 7,
+    "goalsFor": 17,
     "goalsAgainst": 19,
-    "goalDifference": 2,
-    "points": 19
+    "goalDifference": -2,
+    "points": 20
   },
   {
     "rank": 11,
+    "teamId": "131563",
+    "team": "Denver Summit FC",
+    "abbreviation": "DEN",
+    "played": 15,
+    "won": 5,
+    "drawn": 4,
+    "lost": 6,
+    "goalsFor": 21,
+    "goalsAgainst": 20,
+    "goalDifference": 1,
+    "points": 19
+  },
+  {
+    "rank": 12,
     "teamId": "17346",
     "team": "Houston Dash",
     "abbreviation": "HOU",
@@ -154,7 +168,7 @@
     "points": 19
   },
   {
-    "rank": 12,
+    "rank": 13,
     "teamId": "131562",
     "team": "Boston Legacy FC",
     "abbreviation": "BOS",
@@ -168,7 +182,7 @@
     "points": 19
   },
   {
-    "rank": 13,
+    "rank": 14,
     "teamId": "22187",
     "team": "Bay FC",
     "abbreviation": "BAY",
@@ -180,20 +194,6 @@
     "goalsAgainst": 20,
     "goalDifference": -4,
     "points": 18
-  },
-  {
-    "rank": 14,
-    "teamId": "15363",
-    "team": "Seattle Reign FC",
-    "abbreviation": "SEA",
-    "played": 14,
-    "won": 5,
-    "drawn": 2,
-    "lost": 7,
-    "goalsFor": 15,
-    "goalsAgainst": 19,
-    "goalDifference": -4,
-    "points": 17
   },
   {
     "rank": 15,
@@ -214,13 +214,13 @@
     "teamId": "20905",
     "team": "Racing Louisville FC",
     "abbreviation": "LOU",
-    "played": 14,
-    "won": 2,
+    "played": 15,
+    "won": 3,
     "drawn": 2,
     "lost": 10,
-    "goalsFor": 16,
-    "goalsAgainst": 27,
-    "goalDifference": -11,
-    "points": 8
+    "goalsFor": 18,
+    "goalsAgainst": 28,
+    "goalDifference": -10,
+    "points": 11
   }
 ]

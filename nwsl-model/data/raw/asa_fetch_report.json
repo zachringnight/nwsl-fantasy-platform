@@ -4,7 +4,7 @@
     "asa_player_analytics": "data/raw/asa_player_analytics.csv",
     "asa_team_analytics": "data/raw/asa_team_analytics.csv"
   },
-  "generated_at": "2026-07-26T18:24:57.716924+00:00",
+  "generated_at": "2026-07-28T15:02:35.755454+00:00",
   "manifest_xg_coverage": {
     "away_npxg": 99.68,
     "away_xg": 99.68,
@@ -12,18 +12,18 @@
     "home_xg": 99.68
   },
   "rows": {
-    "match_xgoals": 315,
-    "player_analytics": 699,
+    "match_xgoals": 318,
+    "player_analytics": 702,
     "team_analytics": 30
   },
   "season_counts": {
     "match_xgoals": {
       "2025": 190,
-      "2026": 125
+      "2026": 128
     },
     "player_analytics": {
       "2025": 341,
-      "2026": 358
+      "2026": 361
     },
     "team_analytics": {
       "2025": 14,

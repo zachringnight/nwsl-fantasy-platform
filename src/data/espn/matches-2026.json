@@ -1495,8 +1495,8 @@
     "awayTeam": "Seattle Reign FC",
     "awayTeamId": "15363",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Snapdragon Stadium"
   },
   {
@@ -1506,9 +1506,9 @@
     "homeTeamId": "15365",
     "awayTeam": "Denver Summit FC",
     "awayTeamId": "131563",
-    "homeGoals": 0,
+    "homeGoals": 1,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "Audi Field"
   },
   {
@@ -1518,9 +1518,9 @@
     "homeTeamId": "21422",
     "awayTeam": "Racing Louisville FC",
     "awayTeamId": "20905",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "BMO Stadium"
   },
   {

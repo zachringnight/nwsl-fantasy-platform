@@ -1,0 +1,4 @@
+match_id,match_date,season,competition,regular_season_flag,home_team,away_team,home_goals_90,away_goals_90,venue,match_status
+401853951,2026-07-26,2026,NWSL,true,San Diego Wave FC,Seattle Reign FC,0,2,Snapdragon Stadium,completed
+401854069,2026-07-26,2026,NWSL,true,Washington Spirit,Denver Summit FC,1,0,Audi Field,completed
+401853952,2026-07-27,2026,NWSL,true,Angel City FC,Racing Louisville FC,1,2,BMO Stadium,completed
