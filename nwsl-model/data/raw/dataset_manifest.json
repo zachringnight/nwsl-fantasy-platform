@@ -36,7 +36,7 @@
     "xg_missing_pct": 0.32
   },
   "odds": {
-    "rows": 1366,
+    "rows": 1386,
     "source_available": true,
     "markets": [
       "1x2",
@@ -44,7 +44,6 @@
     ],
     "sportsbooks": [
       "DraftKings",
-      "FootyStats",
       "FoxSports",
       "OddsPortalAvg",
       "OddsPortalEvent"
@@ -54,7 +53,7 @@
       "current",
       "open"
     ],
-    "latest_timestamp": "2026-07-26T18:38:55.973853+00:00"
+    "latest_timestamp": "2026-07-28T15:39:57.007973+00:00"
   },
   "source": "espn_public_api",
   "source_files": {
