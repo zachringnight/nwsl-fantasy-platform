@@ -17,6 +17,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
+import { trackProductEvent } from "@/lib/analytics/events";
 import { getFantasyModeConfig, getFantasyModeOptions } from "@/lib/fantasy-modes";
 import {
   formatFantasySlateRange,
@@ -67,6 +68,10 @@ export function CreateLeagueForm() {
         draftAt,
         gameVariant,
         managerCountTarget: Number(managerCountTarget),
+      });
+      trackProductEvent("league_created", {
+        variant: gameVariant,
+        build_mode: selectedMode.rosterBuildMode,
       });
       router.push(`/leagues/${league.id}`);
     } catch (submissionError) {

@@ -16,7 +16,12 @@ const sections = [
   {
     title: "How we use your information",
     content:
-      "Your information powers your fantasy experience — roster management, scoring, standings, and notifications. We use aggregated, anonymized data to improve the platform. We never sell your personal information to third parties.",
+      "Your information powers your fantasy experience — roster management, scoring, standings, and notifications. We use aggregated and pseudonymous product analytics to improve the platform. We never sell your personal information to third parties.",
+  },
+  {
+    title: "Product analytics",
+    content:
+      "When product analytics is enabled, we may associate actions such as signup, league setup, draft picks, and lineup submissions with a pseudonymous account identifier. Analytics events exclude email addresses, display names, league names, messages, and other free text. PostHog and Vercel may process this limited usage and performance data on our behalf.",
   },
   {
     title: "Data storage and security",
@@ -26,7 +31,7 @@ const sections = [
   {
     title: "Cookies and local storage",
     content:
-      "We use essential cookies and local storage to keep you signed in and remember your preferences. We do not use third-party tracking cookies for advertising purposes.",
+      "We use essential cookies and local storage to keep you signed in and remember your preferences. Product analytics uses session storage for a per-tab identifier and, when PostHog is enabled, local storage for analytics state. We do not use third-party tracking cookies for advertising purposes.",
   },
   {
     title: "Your rights",
@@ -50,7 +55,7 @@ export default function PrivacyPage() {
       <SurfaceCard
         eyebrow="Policy"
         title="Privacy policy"
-        description={`Last updated: March ${siteConfig.copyrightYear}`}
+        description={`Last updated: July ${siteConfig.copyrightYear}`}
       >
         <div className="space-y-4">
           {sections.map((section) => (

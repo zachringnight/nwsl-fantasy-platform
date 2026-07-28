@@ -9,6 +9,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { trackProductEvent } from "@/lib/analytics/events";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { registerLocalUser } from "@/lib/local-mode-store";
 
@@ -65,6 +66,7 @@ export function SignupLocalForm() {
       if (!supabaseReady) {
         registerLocalUser({ displayName: displayName.trim(), email: "" });
         await refreshProfile();
+        trackProductEvent("sign_up", { method: "guest" });
         router.push("/onboarding");
         return;
       }
@@ -74,6 +76,7 @@ export function SignupLocalForm() {
         onboardingComplete: false,
       });
       await refreshProfile();
+      trackProductEvent("sign_up", { method: "guest" });
       router.push("/onboarding");
     } catch (submissionError) {
       setError(
@@ -108,6 +111,7 @@ export function SignupLocalForm() {
       if (!supabaseReady) {
         registerLocalUser({ displayName: displayName.trim(), email: email.trim() });
         await refreshProfile();
+        trackProductEvent("sign_up", { method: "email" });
         router.push("/onboarding");
         return;
       }
@@ -144,6 +148,7 @@ export function SignupLocalForm() {
         onboardingComplete: false,
       });
       await refreshProfile();
+      trackProductEvent("sign_up", { method: "email" });
       router.push("/onboarding");
     } catch (err) {
       setError(

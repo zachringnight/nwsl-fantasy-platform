@@ -8,6 +8,7 @@ import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { getButtonClassName, Button } from "@/components/ui/button";
 import { FantasyAuthGate } from "@/features/shared/components/fantasy-auth-gate";
 import { NWSL_CLUBS_LIST } from "@/config/nwsl-clubs";
+import { trackProductEvent } from "@/lib/analytics/events";
 import { completeLocalOnboarding } from "@/lib/local-mode-store";
 import type { FantasyProfile } from "@/types/fantasy";
 
@@ -82,6 +83,9 @@ function OnboardingLocalFields({ profile, refreshProfile }: OnboardingLocalField
       return;
     }
 
+    if (!isReturning) {
+      trackProductEvent("onboarding_completed", { next_step: nextStep });
+    }
     setIsSubmitting(false);
     const destinations = {
       create: "/leagues/create",

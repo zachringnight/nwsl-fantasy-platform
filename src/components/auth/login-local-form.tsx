@@ -9,6 +9,7 @@ import { useFantasyDataClient } from "@/components/providers/fantasy-data-provid
 import { useFantasyAuth } from "@/components/providers/fantasy-auth-provider";
 import { Button, getButtonClassName } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { trackProductEvent } from "@/lib/analytics/events";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { loginLocalUser, registerLocalUser } from "@/lib/local-mode-store";
 
@@ -59,11 +60,13 @@ export function LoginLocalForm() {
       if (!supabaseReady) {
         registerLocalUser({ displayName: "Guest", email: "" });
         await refreshProfile();
+        trackProductEvent("sign_in", { method: "guest" });
         router.push("/onboarding");
         return;
       }
       await dataClient.ensureHostedSession();
       await refreshProfile();
+      trackProductEvent("sign_in", { method: "guest" });
       router.push("/onboarding");
     } catch (submissionError) {
       setError(
@@ -100,6 +103,7 @@ export function LoginLocalForm() {
           return;
         }
         await refreshProfile();
+        trackProductEvent("sign_in", { method: "email" });
         router.push(localUser.onboardingComplete ? "/dashboard" : "/onboarding");
         return;
       }
@@ -115,6 +119,7 @@ export function LoginLocalForm() {
       }
 
       await refreshProfile();
+      trackProductEvent("sign_in", { method: "email" });
       router.push("/dashboard");
     } catch (err) {
       setError(
