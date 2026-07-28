@@ -230,7 +230,7 @@ export type FantasyPointSnapshotGroupByOutputType = {
   _max: FantasyPointSnapshotMaxAggregateOutputType | null
 }
 
-type GetFantasyPointSnapshotGroupByPayload<T extends FantasyPointSnapshotGroupByArgs> = Prisma.PrismaPromise<
+export type GetFantasyPointSnapshotGroupByPayload<T extends FantasyPointSnapshotGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FantasyPointSnapshotGroupByOutputType, T['by']> &
       {

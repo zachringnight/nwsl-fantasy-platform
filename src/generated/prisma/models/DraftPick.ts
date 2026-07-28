@@ -238,7 +238,7 @@ export type DraftPickGroupByOutputType = {
   _max: DraftPickMaxAggregateOutputType | null
 }
 
-type GetDraftPickGroupByPayload<T extends DraftPickGroupByArgs> = Prisma.PrismaPromise<
+export type GetDraftPickGroupByPayload<T extends DraftPickGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DraftPickGroupByOutputType, T['by']> &
       {

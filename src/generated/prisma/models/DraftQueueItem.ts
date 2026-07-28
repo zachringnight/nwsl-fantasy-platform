@@ -206,7 +206,7 @@ export type DraftQueueItemGroupByOutputType = {
   _max: DraftQueueItemMaxAggregateOutputType | null
 }
 
-type GetDraftQueueItemGroupByPayload<T extends DraftQueueItemGroupByArgs> = Prisma.PrismaPromise<
+export type GetDraftQueueItemGroupByPayload<T extends DraftQueueItemGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DraftQueueItemGroupByOutputType, T['by']> &
       {

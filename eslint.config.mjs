@@ -5,6 +5,14 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    rules: {
+      // The current data-client architecture intentionally triggers async
+      // refresh functions from effects. Keep the React 19 diagnostic visible
+      // while a future query-cache migration removes those loader effects.
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -14,6 +22,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "tmp/**",
     "nwsl-model/data/raw/**",
+    "nwsl-model/.venv/**",
+    "nwsl-model/*.egg-info/**",
   ]),
 ]);
 

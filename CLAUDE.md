@@ -20,8 +20,9 @@ Python model package, run from `nwsl-model/` ONLY. `pythonpath = ["."]` in
 so running from the repo root silently breaks imports and data paths.
 ```bash
 cd nwsl-model
-python3 -m pytest                # full suite
-python3 -m pytest -q --ignore=tests/test_models.py --ignore=tests/test_pipeline_smoke.py   # fast loop
+uv sync --extra dev
+uv run python -m pytest                # full suite
+uv run python -m pytest -q --ignore=tests/test_models.py --ignore=tests/test_pipeline_smoke.py   # fast loop
 ```
 See `nwsl-model/README.md` and `nwsl-model/Makefile` for the full pipeline
 (train, backtest, evaluate, tune thresholds, totals model, promote, holdout,

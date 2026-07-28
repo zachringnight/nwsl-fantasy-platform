@@ -245,7 +245,7 @@ export type WaiverClaimGroupByOutputType = {
   _max: WaiverClaimMaxAggregateOutputType | null
 }
 
-type GetWaiverClaimGroupByPayload<T extends WaiverClaimGroupByArgs> = Prisma.PrismaPromise<
+export type GetWaiverClaimGroupByPayload<T extends WaiverClaimGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<WaiverClaimGroupByOutputType, T['by']> &
       {

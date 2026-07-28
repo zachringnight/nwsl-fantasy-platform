@@ -193,7 +193,7 @@ export type LineupEntryGroupByOutputType = {
   _max: LineupEntryMaxAggregateOutputType | null
 }
 
-type GetLineupEntryGroupByPayload<T extends LineupEntryGroupByArgs> = Prisma.PrismaPromise<
+export type GetLineupEntryGroupByPayload<T extends LineupEntryGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LineupEntryGroupByOutputType, T['by']> &
       {

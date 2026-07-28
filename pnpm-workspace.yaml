@@ -4,6 +4,11 @@ allowBuilds:
   prisma: true
   sharp: false
   unrs-resolver: false
+overrides:
+  postcss: 8.5.24
+  sharp: 0.35.3
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+minimumReleaseAgeExclude:
+  - postcss@8.5.24

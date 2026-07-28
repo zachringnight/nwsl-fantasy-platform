@@ -254,7 +254,7 @@ export type StandingEntryGroupByOutputType = {
   _max: StandingEntryMaxAggregateOutputType | null
 }
 
-type GetStandingEntryGroupByPayload<T extends StandingEntryGroupByArgs> = Prisma.PrismaPromise<
+export type GetStandingEntryGroupByPayload<T extends StandingEntryGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StandingEntryGroupByOutputType, T['by']> &
       {

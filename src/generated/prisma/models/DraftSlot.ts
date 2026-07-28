@@ -214,7 +214,7 @@ export type DraftSlotGroupByOutputType = {
   _max: DraftSlotMaxAggregateOutputType | null
 }
 
-type GetDraftSlotGroupByPayload<T extends DraftSlotGroupByArgs> = Prisma.PrismaPromise<
+export type GetDraftSlotGroupByPayload<T extends DraftSlotGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DraftSlotGroupByOutputType, T['by']> &
       {

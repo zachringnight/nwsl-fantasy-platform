@@ -252,7 +252,7 @@ export type TradeProposalGroupByOutputType = {
   _max: TradeProposalMaxAggregateOutputType | null
 }
 
-type GetTradeProposalGroupByPayload<T extends TradeProposalGroupByArgs> = Prisma.PrismaPromise<
+export type GetTradeProposalGroupByPayload<T extends TradeProposalGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TradeProposalGroupByOutputType, T['by']> &
       {

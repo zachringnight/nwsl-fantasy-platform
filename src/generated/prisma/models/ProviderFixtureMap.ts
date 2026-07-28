@@ -165,7 +165,7 @@ export type ProviderFixtureMapGroupByOutputType = {
   _max: ProviderFixtureMapMaxAggregateOutputType | null
 }
 
-type GetProviderFixtureMapGroupByPayload<T extends ProviderFixtureMapGroupByArgs> = Prisma.PrismaPromise<
+export type GetProviderFixtureMapGroupByPayload<T extends ProviderFixtureMapGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProviderFixtureMapGroupByOutputType, T['by']> &
       {

@@ -165,7 +165,7 @@ export type TradeVoteGroupByOutputType = {
   _max: TradeVoteMaxAggregateOutputType | null
 }
 
-type GetTradeVoteGroupByPayload<T extends TradeVoteGroupByArgs> = Prisma.PrismaPromise<
+export type GetTradeVoteGroupByPayload<T extends TradeVoteGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TradeVoteGroupByOutputType, T['by']> &
       {

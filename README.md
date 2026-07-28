@@ -15,8 +15,8 @@ The home for NWSL fantasy football. Build private classic leagues with live snak
 
 ### Prerequisites
 
-- Node.js 20.19+ or 24+
-- pnpm 10+
+- Node.js 24 LTS (the pinned version is in `.node-version`)
+- pnpm 11
 - A Supabase project (for auth and data)
 
 ### Setup
@@ -51,7 +51,7 @@ pnpm typecheck    # Type check
 
 - **Framework** — Next.js 16 with App Router
 - **Database** — PostgreSQL via Prisma 7
-- **Auth** — Supabase Auth + Auth.js
+- **Auth** — Supabase Auth
 - **Styling** — Tailwind CSS 4
 - **Language** — TypeScript 5
 

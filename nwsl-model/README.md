@@ -4,6 +4,15 @@ A joint 90-minute score-prediction framework for NWSL sides and totals markets. 
 
 Run everything in this package from `nwsl-model/` (pytest's `pythonpath = ["."]` and `data.official_matches_dir` in configs are cwd-relative).
 
+Create the pinned Python 3.12 environment before running the pipeline:
+
+```bash
+uv sync --extra dev
+```
+
+Use `uv run python` in place of bare `python3` when you have not activated
+`.venv` in the current shell.
+
 ## Package map
 
 ```
@@ -18,7 +27,7 @@ src/
   odds/      # DraftKings/Apify, FOX, API-Football shadow, history, freshness/quality
   utils/     # artifacts, gating, dates, io
 api/         # FastAPI prediction server (api/main.py, api/deps.py)
-tests/       # pytest suite (396 tests at the 2026-07-26 publishing checkpoint)
+tests/       # pytest suite (449 tests at the 2026-07-28 modernization checkpoint)
 configs/default.yaml   # single source of truth for all parameters
 ```
 
@@ -249,6 +258,6 @@ Full definitions and optional columns: `src/data/schemas.py`.
 ## Testing
 
 ```bash
-python3 -m pytest                 # full suite (396 tests at this checkpoint)
+uv run python -m pytest          # full suite (449 tests at this checkpoint)
 make test-fast                    # skip the two slow files (optimizer fits + subprocess pipeline)
 ```

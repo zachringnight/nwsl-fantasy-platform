@@ -224,7 +224,7 @@ export type StreakGroupByOutputType = {
   _max: StreakMaxAggregateOutputType | null
 }
 
-type GetStreakGroupByPayload<T extends StreakGroupByArgs> = Prisma.PrismaPromise<
+export type GetStreakGroupByPayload<T extends StreakGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StreakGroupByOutputType, T['by']> &
       {
