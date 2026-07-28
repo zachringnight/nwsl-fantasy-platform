@@ -131,6 +131,7 @@ class BacktestRunner:
         projected_lineups: Optional[pd.DataFrame] = None,
         team_season_priors: Optional[pd.DataFrame] = None,
         player_season_priors: Optional[pd.DataFrame] = None,
+        venues: Optional[pd.DataFrame] = None,
         models_to_run: Optional[list[str]] = None,
     ) -> dict[str, Any]:
         """Run the full backtest.
@@ -211,6 +212,7 @@ class BacktestRunner:
                         projected_lineups=projected_lineups,
                         team_season_priors=team_season_priors,
                         player_season_priors=player_season_priors,
+                        venues=venues,
                     )
                     fold_predictions.append(fold_preds)
                 except Exception as e:
@@ -273,6 +275,7 @@ class BacktestRunner:
         projected_lineups: Optional[pd.DataFrame] = None,
         team_season_priors: Optional[pd.DataFrame] = None,
         player_season_priors: Optional[pd.DataFrame] = None,
+        venues: Optional[pd.DataFrame] = None,
     ) -> pd.DataFrame:
         """Evaluate a single fold for a given model."""
         train = fold.train_matches
@@ -297,6 +300,7 @@ class BacktestRunner:
             team_season_priors=team_season_priors,
             player_season_priors=player_season_priors,
             lineup_model=None,
+            venues=venues,
             rolling_windows=self.config.get("features", {}).get("rolling_windows", [3, 5, 10]),
             short_rest_days=self.config.get("features", {}).get("short_rest_days", 4),
             **feature_flags,
@@ -321,7 +325,7 @@ class BacktestRunner:
         context_provider = ContextualFeatureProvider.from_training_frame(
             prepared_train,
             short_rest_days=self.config.get("features", {}).get("short_rest_days", 4),
-        )
+        ).attach_venues(venues)
 
         if base_model in BASELINE_MODELS or base_model in MARKET_MODELS:
             return self._evaluate_baseline_fold(
@@ -604,6 +608,7 @@ class BacktestRunner:
                 max_rating_log_adjustment=spi_cfg.get("max_rating_log_adjustment", 0.70),
                 lineup_log_scale=spi_cfg.get("lineup_log_scale", 0.035),
                 rest_log_scale=spi_cfg.get("rest_log_scale", 0.012),
+                travel_log_scale=spi_cfg.get("travel_log_scale", 0.0),
                 pace_weight=spi_cfg.get("pace_weight", 0.20),
                 min_lambda=spi_cfg.get("min_lambda", 0.20),
                 max_lambda=spi_cfg.get("max_lambda", 3.75),
@@ -622,6 +627,7 @@ class BacktestRunner:
                 max_rating_log_adjustment=spi_cfg.get("max_rating_log_adjustment", 0.70),
                 lineup_log_scale=spi_cfg.get("lineup_log_scale", 0.035),
                 rest_log_scale=spi_cfg.get("rest_log_scale", 0.012),
+                travel_log_scale=spi_cfg.get("travel_log_scale", 0.0),
                 pace_weight=spi_cfg.get("pace_weight", 0.20),
                 min_lambda=spi_cfg.get("min_lambda", 0.20),
                 max_lambda=spi_cfg.get("max_lambda", 3.75),

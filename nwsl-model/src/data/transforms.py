@@ -8,6 +8,8 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+from src.odds.provider import canonicalize_main_total_rows, _select_main_total_line
+
 logger = logging.getLogger("nwsl_model.data.transforms")
 
 
@@ -131,22 +133,32 @@ def merge_odds_to_matches(
     result_matches["match_id"] = result_matches["match_id"].astype(str)
     filtered["match_id"] = filtered["match_id"].astype(str)
 
-    # If multiple sportsbooks, average them
-    agg_cols = {}
-    odds_columns = (
-        ["over_odds", "under_odds"]
-        if market_key in {"total", "totals"}
-        else ["home_odds", "draw_odds", "away_odds"]
-    )
-    for col in odds_columns:
-        if col in filtered.columns:
-            agg_cols[col] = "mean"
-    if "line" in filtered.columns:
-        agg_cols["line"] = "first"
-
-    odds_agg = filtered.groupby("match_id").agg(agg_cols).reset_index()
-    if market_key in {"total", "totals"} and "line" in odds_agg.columns:
-        odds_agg = odds_agg.rename(columns={"line": "total_line"})
+    if market_key in {"total", "totals"}:
+        # A single book (e.g. DraftKings) can list many alternate total
+        # lines for one match (0.5, 0.75, ... 5.5). Picking "first" for the
+        # line and blindly averaging over_odds/under_odds across all of them
+        # blends unrelated bets into one meaningless number. Canonicalize to
+        # one line per (match_id, sportsbook) first, then pick the main line
+        # and average only the odds that belong to it.
+        canonical = canonicalize_main_total_rows(filtered)
+        if canonical.empty:
+            logger.warning(f"No odds found for {market_type}/{source_type}")
+            return result_matches
+        odds_agg = (
+            canonical.groupby("match_id")
+            .agg(
+                total_line=("line", _select_main_total_line),
+                over_odds=("over_odds", "mean"),
+                under_odds=("under_odds", "mean"),
+            )
+            .reset_index()
+        )
+    else:
+        agg_cols = {}
+        for col in ["home_odds", "draw_odds", "away_odds"]:
+            if col in filtered.columns:
+                agg_cols[col] = "mean"
+        odds_agg = filtered.groupby("match_id").agg(agg_cols).reset_index()
 
     result = result_matches.merge(odds_agg, on="match_id", how="left", suffixes=("", "_mkt"))
     return result

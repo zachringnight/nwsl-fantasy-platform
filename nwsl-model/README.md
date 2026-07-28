@@ -137,7 +137,13 @@ totals rules.
 - Quote contract: opening or first-seen current quote; a later quote is usable
   only if the over price is no worse
 - Frozen thresholds: expected-value edge `>= 0.02`, confidence `>= 0.03`
-- Stake cap: 0.25% of bankroll per locked match
+- Stake cap: 1.0% of bankroll per locked match (the platform standard
+  `max_stake_pct`). Ran at a reduced 0.25% cap from 2026-07-26 pending 20
+  accumulated locked decisions; raised to standard on 2026-07-28 by owner
+  decision after confirming zero decisions had actually locked under the
+  reduced cap (DraftKings totals coverage for NWSL was too thin to price
+  most matches in the window, not the thresholds - see
+  `plans/2026-07-26-opening-line-validation/README.md`).
 - Test design: thresholds selected on 2025 only and held fixed for the 2026
   rolling test
 - No separate full-promotion quota or ROI/CLV gate. The capped policy remains

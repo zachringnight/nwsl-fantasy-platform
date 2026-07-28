@@ -212,3 +212,24 @@ promotion path. ML remains research-only.
 The fresh serving artifact contains ratings for all 16 current teams, including
 both 2026 expansion clubs. The frozen 2025-only season-holdout warnings remain
 expected for that deliberately preseason test.
+
+## 2026-07-28 stake-cap addendum
+
+Checked `nwsl_model_runs`/`nwsl_model_slate_rows` in Supabase directly: the
+policy has run automatically 5 times since 2026-07-26 (most recently
+2026-07-28), every run `no_bet`, 0/103 slate rows ever actionable. The
+20-locked-decision accumulation this section calls for had not started -
+`priced_matches` was 0-5 out of 20+ matches in the window on every run,
+because DraftKings rarely prices NWSL totals at all (3 rows total in the
+whole historical odds dataset), not because the frozen thresholds were
+rejecting real candidates.
+
+Given the accumulation target was unreachable at the source-coverage level,
+not being protective against anything active, owner decision on 2026-07-28
+removed the 20-decision gate and raised `forward_stake_cap_bankroll_pct` from
+0.25 to the platform-standard 1.0 in
+`configs/policies/nwsl_totals_open_over_v1.json`. This does not change the
+frozen edge/confidence thresholds, model, side, or quote contract - only the
+stake size once a decision does clear them. The underlying blocker (thin
+DraftKings NWSL totals coverage) is unresolved; see the
+`codex/nwsl-odds-source-upgrade` branch for related work.

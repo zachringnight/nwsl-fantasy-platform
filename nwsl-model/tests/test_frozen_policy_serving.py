@@ -217,6 +217,67 @@ def test_build_frozen_policy_slate_uses_only_validated_total_2_5_line() -> None:
     assert slate.loc[0, "sportsbook"] == "DraftKings"
 
 
+def test_build_frozen_policy_slate_falls_back_when_draftkings_missing() -> None:
+    upcoming = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "match_date": "2026-07-26",
+                "home_team": "Home",
+                "away_team": "Away",
+            },
+            {
+                "match_id": "m2",
+                "match_date": "2026-07-26",
+                "home_team": "Home2",
+                "away_team": "Away2",
+            },
+        ]
+    )
+    odds = pd.DataFrame(
+        [
+            {
+                "match_id": "m1",
+                "timestamp": "2026-07-26T18:00:00Z",
+                "sportsbook": "DraftKings",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 1.80,
+                "under_odds": 1.95,
+                "source_type": "current",
+            },
+            # m2 has no DraftKings price at all - should fall back to FoxSports.
+            {
+                "match_id": "m2",
+                "timestamp": "2026-07-26T18:02:00Z",
+                "sportsbook": "FoxSports",
+                "market_type": "total",
+                "line": 2.5,
+                "over_odds": 2.20,
+                "under_odds": 1.60,
+                "source_type": "current",
+            },
+        ]
+    )
+
+    slate, summary = build_frozen_policy_slate(
+        upcoming=upcoming,
+        odds=odds,
+        snapshots=odds,
+        model=_FixedModel(),
+        evidence=_evidence(),
+        artifact_version="v1",
+        as_of=datetime(2026, 7, 26, 18, 30, tzinfo=timezone.utc),
+        days=1,
+    )
+
+    by_match = slate.set_index("match_id")
+    assert by_match.loc["m1", "sportsbook"] == "DraftKings"
+    assert by_match.loc["m2", "sportsbook"] == "FoxSports"
+    assert by_match.loc["m2", "over_odds"] == 2.20
+    assert summary["matches_with_current_total_price"] == 2
+
+
 def test_append_forward_decisions_locks_only_first_pick_per_match() -> None:
     rows = pd.DataFrame(
         [

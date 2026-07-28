@@ -2,6 +2,7 @@
   "policy_id": "nwsl-totals-open-over-v1",
   "evidence_version": "2026-07-26",
   "status": "ready_for_capped_forward_use",
+  "status_note": "2026-07-28: owner decision removed the 20-locked-decision accumulation gate and raised forward_stake_cap_bankroll_pct to the platform standard (see plans/2026-07-26-opening-line-validation/README.md addendum). Zero decisions had locked under the reduced cap - DraftKings totals coverage for NWSL was too thin to price most matches, not the thresholds. 'status' itself is left unchanged: src/betting/frozen_policy_serving.py hard-checks it equals \"ready_for_capped_forward_use\" as part of the fail-closed serving contract, so it is a code-checked token, not descriptive text.",
   "model_family": "team_ratings_poisson",
   "market_group": "totals",
   "side": "over",
@@ -106,7 +107,7 @@
       "over"
     ],
     "flat_backtest_stake_units": 1.0,
-    "forward_stake_cap_bankroll_pct": 0.25,
+    "forward_stake_cap_bankroll_pct": 1.0,
     "require_fresh_price": true,
     "require_model_family_match": true
   },

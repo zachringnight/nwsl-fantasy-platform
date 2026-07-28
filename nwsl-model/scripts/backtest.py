@@ -103,6 +103,11 @@ def main() -> None:
     results = runner.run(
         matches=dataset.matches,
         odds=dataset.odds,
+        appearances=dataset.appearances,
+        projected_lineups=dataset.projected_lineups,
+        team_season_priors=dataset.team_season_priors,
+        player_season_priors=dataset.player_season_priors,
+        venues=dataset.venues,
         models_to_run=args.models,
     )
 

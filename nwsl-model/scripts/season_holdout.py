@@ -167,6 +167,7 @@ def run_season_holdout(
             projected_lineups=dataset.projected_lineups,
             team_season_priors=dataset.team_season_priors,
             player_season_priors=dataset.player_season_priors,
+            venues=dataset.venues,
         )
         bet_log = staker.get_bet_log_df()
         decision_log = staker.get_decision_log_df()
