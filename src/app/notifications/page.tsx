@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { Bell, BellOff, Check, CheckCheck, Mail, Smartphone } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
 import { SurfaceCard } from "@/components/common/surface-card";
@@ -74,20 +74,23 @@ export default function NotificationsPage() {
     ? `fantasy-notification-preferences:${user.id}`
     : null;
 
-  useEffect(() => {
-    if (!preferencesStorageKey) return;
-
-    const saved = window.localStorage.getItem(preferencesStorageKey);
+  const loadSavedPreferences = useEffectEvent((storageKey: string) => {
+    const saved = window.localStorage.getItem(storageKey);
     if (!saved) return;
 
     try {
       setPreferences(JSON.parse(saved) as NotificationPreference[]);
     } catch {
-      window.localStorage.removeItem(preferencesStorageKey);
+      window.localStorage.removeItem(storageKey);
     }
+  });
+
+  useEffect(() => {
+    if (!preferencesStorageKey) return;
+    loadSavedPreferences(preferencesStorageKey);
   }, [preferencesStorageKey]);
 
-  const fetchNotifications = useCallback(async () => {
+  const fetchNotifications = useEffectEvent(async () => {
     if (!user?.id) {
       setIsLoading(false);
       return;
@@ -104,11 +107,11 @@ export default function NotificationsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.id]);
+  });
 
   useEffect(() => {
     void fetchNotifications();
-  }, [fetchNotifications]);
+  }, [user?.id]);
 
   const unreadCount = notifications.filter((n) => !n.readAt).length;
 

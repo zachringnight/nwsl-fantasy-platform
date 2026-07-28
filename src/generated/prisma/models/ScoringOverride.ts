@@ -227,7 +227,7 @@ export type ScoringOverrideGroupByOutputType = {
   _max: ScoringOverrideMaxAggregateOutputType | null
 }
 
-type GetScoringOverrideGroupByPayload<T extends ScoringOverrideGroupByArgs> = Prisma.PrismaPromise<
+export type GetScoringOverrideGroupByPayload<T extends ScoringOverrideGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ScoringOverrideGroupByOutputType, T['by']> &
       {

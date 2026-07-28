@@ -319,7 +319,7 @@ export type PlayerMatchStatLineGroupByOutputType = {
   _max: PlayerMatchStatLineMaxAggregateOutputType | null
 }
 
-type GetPlayerMatchStatLineGroupByPayload<T extends PlayerMatchStatLineGroupByArgs> = Prisma.PrismaPromise<
+export type GetPlayerMatchStatLineGroupByPayload<T extends PlayerMatchStatLineGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PlayerMatchStatLineGroupByOutputType, T['by']> &
       {

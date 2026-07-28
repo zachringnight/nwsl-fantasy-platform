@@ -193,7 +193,7 @@ export type RosterSpotGroupByOutputType = {
   _max: RosterSpotMaxAggregateOutputType | null
 }
 
-type GetRosterSpotGroupByPayload<T extends RosterSpotGroupByArgs> = Prisma.PrismaPromise<
+export type GetRosterSpotGroupByPayload<T extends RosterSpotGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<RosterSpotGroupByOutputType, T['by']> &
       {

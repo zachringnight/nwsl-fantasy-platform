@@ -186,7 +186,7 @@ export type ProviderIngestRunGroupByOutputType = {
   _max: ProviderIngestRunMaxAggregateOutputType | null
 }
 
-type GetProviderIngestRunGroupByPayload<T extends ProviderIngestRunGroupByArgs> = Prisma.PrismaPromise<
+export type GetProviderIngestRunGroupByPayload<T extends ProviderIngestRunGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProviderIngestRunGroupByOutputType, T['by']> &
       {

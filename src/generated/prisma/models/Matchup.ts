@@ -246,7 +246,7 @@ export type MatchupGroupByOutputType = {
   _max: MatchupMaxAggregateOutputType | null
 }
 
-type GetMatchupGroupByPayload<T extends MatchupGroupByArgs> = Prisma.PrismaPromise<
+export type GetMatchupGroupByPayload<T extends MatchupGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<MatchupGroupByOutputType, T['by']> &
       {

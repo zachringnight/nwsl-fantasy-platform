@@ -172,7 +172,7 @@ export type TradeAssetGroupByOutputType = {
   _max: TradeAssetMaxAggregateOutputType | null
 }
 
-type GetTradeAssetGroupByPayload<T extends TradeAssetGroupByArgs> = Prisma.PrismaPromise<
+export type GetTradeAssetGroupByPayload<T extends TradeAssetGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TradeAssetGroupByOutputType, T['by']> &
       {

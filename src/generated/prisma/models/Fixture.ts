@@ -234,7 +234,7 @@ export type FixtureGroupByOutputType = {
   _max: FixtureMaxAggregateOutputType | null
 }
 
-type GetFixtureGroupByPayload<T extends FixtureGroupByArgs> = Prisma.PrismaPromise<
+export type GetFixtureGroupByPayload<T extends FixtureGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FixtureGroupByOutputType, T['by']> &
       {

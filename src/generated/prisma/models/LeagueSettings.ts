@@ -341,7 +341,7 @@ export type LeagueSettingsGroupByOutputType = {
   _max: LeagueSettingsMaxAggregateOutputType | null
 }
 
-type GetLeagueSettingsGroupByPayload<T extends LeagueSettingsGroupByArgs> = Prisma.PrismaPromise<
+export type GetLeagueSettingsGroupByPayload<T extends LeagueSettingsGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LeagueSettingsGroupByOutputType, T['by']> &
       {

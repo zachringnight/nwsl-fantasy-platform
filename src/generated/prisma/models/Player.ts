@@ -200,7 +200,7 @@ export type PlayerGroupByOutputType = {
   _max: PlayerMaxAggregateOutputType | null
 }
 
-type GetPlayerGroupByPayload<T extends PlayerGroupByArgs> = Prisma.PrismaPromise<
+export type GetPlayerGroupByPayload<T extends PlayerGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PlayerGroupByOutputType, T['by']> &
       {

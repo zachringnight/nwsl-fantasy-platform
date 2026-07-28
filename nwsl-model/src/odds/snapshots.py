@@ -99,7 +99,12 @@ def materialize_closing_odds(
         match_date = completed["match_date"]
         completed["match_cutoff"] = pd.to_datetime(match_date, utc=True, errors="coerce")
         date_only = match_date.astype("string").str.fullmatch(r"\d{4}-\d{2}-\d{2}").fillna(False)
-        completed.loc[date_only, "match_cutoff"] += pd.Timedelta(days=1) - pd.Timedelta(nanoseconds=1)
+        # Pandas 3 defaults parsed timestamps to microsecond resolution. Keep
+        # the end-of-day cutoff in that native unit so assignment remains
+        # lossless across Pandas 2 and 3.
+        completed.loc[date_only, "match_cutoff"] += (
+            pd.Timedelta(days=1) - pd.Timedelta(microseconds=1)
+        )
 
     frames = []
     snap = snapshots.copy()

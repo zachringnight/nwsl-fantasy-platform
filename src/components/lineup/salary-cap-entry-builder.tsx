@@ -147,13 +147,6 @@ export function SalaryCapEntryBuilder({
   const slotPulseTimeoutRef = useRef<number | null>(null);
   const budgetPulseTimeoutRef = useRef<number | null>(null);
   const projectionPulseTimeoutRef = useRef<number | null>(null);
-  const switchSlateRef = useRef<(direction: -1 | 1) => void>(() => {});
-
-  const swipeRef = useSwipe<HTMLElement>({
-    onSwipeLeft: () => switchSlateRef.current(1),
-    onSwipeRight: () => switchSlateRef.current(-1),
-  });
-
   const refreshEntry = useCallback(async (slateKey?: string) => {
     setIsLoading(true);
     setError("");
@@ -297,6 +290,21 @@ export function SalaryCapEntryBuilder({
   )[0] ?? null;
   const averageProjectionPerSlot =
     summary.selectedCount > 0 ? summary.projectedPoints / summary.selectedCount : 0;
+
+  function handleSwitchSlate(direction: -1 | 1) {
+    const target = availableSlates[slateIndex + direction];
+
+    if (!target) {
+      return;
+    }
+
+    void refreshEntry(target.key);
+  }
+
+  const swipeRef = useSwipe<HTMLElement>({
+    onSwipeLeft: () => handleSwitchSlate(1),
+    onSwipeRight: () => handleSwitchSlate(-1),
+  });
 
   useEffect(() => {
     if (!entryState) {
@@ -539,18 +547,6 @@ export function SalaryCapEntryBuilder({
     handleAssignPlayer(recommendedSlot, player.id);
     setError("");
   }
-
-  function handleSwitchSlate(direction: -1 | 1) {
-    const target = availableSlates[slateIndex + direction];
-
-    if (!target) {
-      return;
-    }
-
-    void refreshEntry(target.key);
-  }
-
-  switchSlateRef.current = handleSwitchSlate;
 
   return (
     <section ref={swipeRef} className="space-y-5">

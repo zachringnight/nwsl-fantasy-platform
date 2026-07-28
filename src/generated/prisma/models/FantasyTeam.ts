@@ -224,7 +224,7 @@ export type FantasyTeamGroupByOutputType = {
   _max: FantasyTeamMaxAggregateOutputType | null
 }
 
-type GetFantasyTeamGroupByPayload<T extends FantasyTeamGroupByArgs> = Prisma.PrismaPromise<
+export type GetFantasyTeamGroupByPayload<T extends FantasyTeamGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FantasyTeamGroupByOutputType, T['by']> &
       {

@@ -206,7 +206,7 @@ export type LeagueScoringRuleGroupByOutputType = {
   _max: LeagueScoringRuleMaxAggregateOutputType | null
 }
 
-type GetLeagueScoringRuleGroupByPayload<T extends LeagueScoringRuleGroupByArgs> = Prisma.PrismaPromise<
+export type GetLeagueScoringRuleGroupByPayload<T extends LeagueScoringRuleGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LeagueScoringRuleGroupByOutputType, T['by']> &
       {

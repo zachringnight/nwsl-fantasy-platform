@@ -227,7 +227,7 @@ export type LeagueWeekGroupByOutputType = {
   _max: LeagueWeekMaxAggregateOutputType | null
 }
 
-type GetLeagueWeekGroupByPayload<T extends LeagueWeekGroupByArgs> = Prisma.PrismaPromise<
+export type GetLeagueWeekGroupByPayload<T extends LeagueWeekGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LeagueWeekGroupByOutputType, T['by']> &
       {
