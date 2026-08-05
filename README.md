@@ -47,6 +47,24 @@ pnpm lint         # Lint
 pnpm typecheck    # Type check
 ```
 
+## Codex project
+
+Open `/Users/zsoskin/NWSL/nwsl-fantasy-platform-main` as the Codex project.
+Repository-specific operating rules live in `AGENTS.md`.
+
+Verify the canonical checkout, GitHub connection, and required toolchains:
+
+```bash
+bash scripts/check-codex-project.sh --remote
+```
+
+The web application requires Node 24. If the system shell resolves a newer
+Node version, prefix web commands with:
+
+```bash
+export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
+```
+
 ## Tech stack
 
 - **Framework** — Next.js 16 with App Router
