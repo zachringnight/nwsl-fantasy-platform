@@ -1,14 +1,12 @@
 import { AppShell } from "@/components/common/app-shell";
-import { LiveModelPicks } from "@/components/analytics/live-model-picks";
 import { MatchPredictionBrowser } from "@/components/analytics/match-prediction-browser";
 import { getMatchPredictions } from "@/lib/analytics/general-predictions-data";
-import { getLiveModelBoard } from "@/lib/analytics/live-model-board";
 import Link from "next/link";
 
 export const metadata = {
   title: "Predictions",
   description:
-    "Daily NWSL model picks, tracked results, and upcoming match probabilities.",
+    "Traceable NWSL match probabilities and research-only model analysis.",
 };
 
 export const revalidate = 300;
@@ -23,17 +21,12 @@ export default async function PredictionsPage({
   const predictions = (await getMatchPredictions()).filter((prediction) =>
     prediction.date.startsWith(`${season}-`)
   );
-  const liveModelBoard =
-    season === "2026" ? await getLiveModelBoard() : null;
-
   return (
     <AppShell
       eyebrow="Predictive Models"
       title="Predictions"
-      description={`${season} frozen-policy picks, tracked results, and match probabilities from the NWSL model lab.`}
+      description={`${season} match probabilities and broad model-edge research from the NWSL model lab.`}
     >
-      {liveModelBoard ? <LiveModelPicks board={liveModelBoard} /> : null}
-
       {predictions[0] ? (
         <section
           className={`rounded-[1.4rem] border p-5 ${
@@ -95,9 +88,9 @@ export default async function PredictionsPage({
             </h3>
             <p className="mt-2 max-w-2xl text-sm text-muted">
               General match probabilities use the traceable SPI-lite baseline
-              and its Poisson score matrix. The frozen DraftKings Over 2.5 board
-              is evaluated separately under the locked research policy, so a
-              match projection is not a policy pick.
+              and its Poisson score matrix. The active research feed evaluates
+              positive model edges across fresh 1X2 and totals quotes; it does
+              not place wagers.
             </p>
           </div>
           <Link

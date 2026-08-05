@@ -967,7 +967,13 @@ def _normalize_players(
                     stat_entry["rawStats"],
                     ("games_played", "appearances"),
                 )
-                if games_played > 0 or not roster_rows:
+                if games_played == 0 and not roster_rows:
+                    # The provider can emit stat-only placeholder players for
+                    # its non-league "TBC" team. With no 2026 appearances or
+                    # official roster membership there is no truthful NWSL
+                    # team reference to publish, so omit the empty row.
+                    continue
+                if games_played > 0:
                     raise DataValidationError(
                         f"player {player_id} has a non-league season-stat team "
                         f"with {games_played} games played"
@@ -2104,8 +2110,15 @@ def build_payload(
         player_stat_entries=player_entries,
         team_ids=team_ids,
     )
+    published_official_player_ids = {
+        str(player["officialId"]) for player in players
+    }
     player_season_stats = sorted(
-        (_player_season_row(player_id, entry) for player_id, entry in player_entries.items()),
+        (
+            _player_season_row(player_id, entry)
+            for player_id, entry in player_entries.items()
+            if player_id in published_official_player_ids
+        ),
         key=lambda row: row["playerId"],
     )
     team_season_stats = sorted(

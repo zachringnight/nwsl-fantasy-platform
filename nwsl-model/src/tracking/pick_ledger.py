@@ -252,7 +252,7 @@ def _fmt_signed(value: float) -> str:
 
 
 def render_record_report(summary: dict, *, new_pick_count: int = 0) -> str:
-    """Render a Slack-ready running-record summary.
+    """Render an operator-ready running-record summary.
 
     Deliberately honest: this is a *forward* pick log. When nothing is settled
     yet, no win-rate or ROI is invented; pending counts are shown plainly.

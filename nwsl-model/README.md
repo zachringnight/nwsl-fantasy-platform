@@ -98,8 +98,10 @@ python3 scripts/train.py --config configs/default.yaml [--model dixon_coles|biva
 ```
 Fits the two pure score models, team ratings, context provider, and (for spi_lite) writes `<version>/spi_lite_summary.json` with the training data's actual league home/away rates and `<version>/config_snapshot.json` with the exact config used, so served baselines match what was trained rather than falling back to class defaults.
 
-`team_ratings_only` is reserved for the isolated totals policy. Keep its
-artifacts outside the global champion root:
+`team_ratings_only` builds ratings artifacts without fitting the heavier pure
+models. The active general runner uses those ratings to serve
+`spi_lite_baseline` under `data/processed/general/models`. Historical frozen
+policy rebuilds must keep their artifacts outside the global champion root:
 
 ```bash
 python3 scripts/train.py \
@@ -135,74 +137,40 @@ promotion gate accepts only that eligibility version and close-line evidence,
 so opening research can inform the next model round without promoting a live
 alias by accident.
 
-#### Frozen totals-over policy
+#### Active all-model-edges feed
 
-`nwsl-totals-open-over-v1` is a separate capped lane. It does not change
-`champion_pure`, the global promotion registry, or the default moneyline and
-totals rules.
+The active recommendation artifact evaluates every positive expected-value
+edge produced by the serving `spi_lite_baseline` model against fresh configured
+current quotes for both 1X2 and totals markets. It is research-only and never
+places a wager.
 
-- Model: `team_ratings_poisson`
-- Sportsbook/market/side: DraftKings total over 2.5 only
-- Quote contract: opening or first-seen current quote; a later quote is usable
-  only if the over price is no worse
-- Frozen thresholds: expected-value edge `>= 0.02`, confidence `>= 0.03`
-- Stake cap: 1.0% of bankroll per locked match (the platform standard
-  `max_stake_pct`). Ran at a reduced 0.25% cap from 2026-07-26 pending 20
-  accumulated locked decisions; raised to standard on 2026-07-28 by owner
-  decision after confirming zero decisions had actually locked under the
-  reduced cap (DraftKings totals coverage for NWSL was too thin to price
-  most matches in the window, not the thresholds - see
-  `plans/2026-07-26-opening-line-validation/README.md`).
-- Test design: thresholds selected on 2025 only and held fixed for the 2026
-  rolling test
-- No separate full-promotion quota or ROI/CLV gate. The capped policy remains
-  governed by its pick-level thresholds, quote contract, and source-health
-  safeguards; forward ROI and CLV remain monitoring evidence.
+- `data/processed/model_edges.csv` is the structured operator artifact.
+- `data/processed/web/model_edges.json` is the web-ready mirror.
+- Every row retains match, sportsbook, market, side, line, price, quote
+  timestamp, model probability, no-vig probability edge, expected value,
+  confidence, and the selection reason/tier.
+- Positive edges remain visible even when an old official-pick gate, side
+  restriction, confidence threshold, or promotion state would have rejected
+  them. Those fields remain attached as context rather than suppressing the
+  edge.
+- The tiered `betting_slate.csv` and forward ledger remain monitoring views;
+  they are not the complete edge feed.
 
-Rebuild the validation evidence:
+Generate the active model and complete positive-edge feed:
 
 ```bash
-python3 scripts/validate_frozen_policy.py \
-  --backtest-dir data/processed/research/opening-line-2026-07-26 \
-  --model team_ratings_poisson \
-  --policy-id nwsl-totals-open-over-v1 \
-  --train-season 2025 \
-  --test-season 2026 \
-  --output-dir data/processed/research/opening-line-2026-07-26/frozen-policy
+python3 scripts/predict.py \
+  --matches data/raw/upcoming.csv \
+  --model spi_lite_baseline \
+  --model-dir data/processed/general/models \
+  --output data/processed/predictions.csv
 ```
 
-Run and settle the live lane:
+`nwsl-totals-open-over-v1` was retired from active execution on 2026-07-30 by
+owner decision. Its code, evidence, run artifacts, and database history are
+preserved for audit and comparison, but the daily runner no longer trains,
+generates, settles, or publishes that lane.
 
-```bash
-make policy-train
-make policy-slate
-make policy-settle
-```
-
-Serving fails closed when the evidence/model/sportsbook/market/side contract
-does not match, the paired DraftKings 2.5 quote is missing or stale, a later
-price is worse than first seen, or the frozen thresholds are not met. FOX can
-remain visible as source-health or market context but cannot create an
-actionable frozen-policy pick. Every near-term decision is recorded locally,
-at most one actionable pick is locked per match, and settlement uses
-90-minute goals.
-After the complete runner succeeds, `scripts/publish_frozen_policy.py` posts
-the run, slate, exact fresh odds snapshots, immutable locked picks, and
-settlement updates to the Supabase-backed predictions and match pages. Every
-priced slate row must match one stored sportsbook, timestamp, line, over price,
-and under price exactly. A failed run never replaces the latest good
-publication, and daily publications do not create GitHub commits or Vercel
-deployments.
-
-Validate the publication contract without writing:
-
-```bash
-python3 scripts/publish_frozen_policy.py --dry-run
-```
-
-The live publisher reads `NWSL_MODEL_PUBLISH_SECRET` from the process,
-gitignored `.env.local`, or the `nwsl-model-publish` / `codex` macOS Keychain
-item. Never print or commit it.
 
 ### 4. Evaluate and promote
 ```bash
@@ -219,8 +187,9 @@ python3 scripts/generate_betting_slate.py --predictions data/processed/predictio
 python3 scripts/build_season_game_database.py --season 2026
 python3 scripts/export_web.py --config configs/default.yaml --model-dir data/processed --output-dir data/processed/web
 ```
-`Makefile` wraps `backtest`, `holdout`, `slate`, `policy-train`,
-`policy-slate`, `policy-settle`, `test`, and `test-fast` as shortcuts.
+`Makefile` wraps `backtest`, `holdout`, `slate`, `test`, and `test-fast` as
+shortcuts. Retired frozen-policy scripts remain available for explicit
+historical reproduction, but no active Make target invokes them.
 
 ## Model registry
 

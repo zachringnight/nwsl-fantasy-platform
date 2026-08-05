@@ -6,14 +6,14 @@ Usage:
     python scripts/predict.py --config configs/default.yaml --matches data/raw/upcoming.csv --model champion_blended
 """
 
+# ruff: noqa: E402
+
 from __future__ import annotations
 
 import argparse
 import logging
 import sys
 from datetime import datetime, timezone
-
-UTC = timezone.utc
 from pathlib import Path
 
 import pandas as pd
@@ -33,6 +33,41 @@ from src.utils.artifacts import resolve_model_artifact
 from src.utils.io import load_config, load_json, load_pickle, save_csv
 from src.utils.logging import setup_logging
 from src.utils.math_utils import decimal_from_probability
+
+UTC = timezone.utc
+
+MODEL_EDGE_COLUMNS = [
+    "match_id",
+    "match_date",
+    "home_team",
+    "away_team",
+    "generated_at",
+    "model",
+    "model_version",
+    "model_family",
+    "gating_status",
+    "market",
+    "market_type",
+    "side",
+    "line",
+    "sportsbook",
+    "source_type",
+    "quote_timestamp",
+    "model_probability",
+    "model_fair_odds",
+    "market_odds",
+    "market_no_vig_probability",
+    "probability_edge",
+    "expected_value",
+    "confidence",
+    "confidence_band",
+    "selection_reason",
+    "selection_tier",
+    "accepted",
+    "actionable",
+    "stake_pct",
+    "research_only",
+]
 
 
 def _load_upcoming_matches(path: str | Path) -> pd.DataFrame:
@@ -60,16 +95,10 @@ def _match_odds_rows(odds: pd.DataFrame | None, match_id: str) -> pd.DataFrame:
     if rows.empty:
         return rows
     if "source_type" not in rows.columns:
-        return rows
+        return pd.DataFrame(columns=rows.columns)
 
     rows["source_type"] = rows["source_type"].astype(str).str.lower()
-    current_rows = rows[rows["source_type"] == "current"].copy()
-    if not current_rows.empty:
-        return current_rows
-    close_rows = rows[rows["source_type"] == "close"].copy()
-    if not close_rows.empty:
-        return close_rows
-    return rows
+    return rows[rows["source_type"] == "current"].copy()
 
 
 def _format_decision(decision: object) -> str:
@@ -87,6 +116,76 @@ def _top_pick_tier(accepted: list[object], leans: list[object]) -> str:
     if leans:
         return "lean"
     return "no_bet"
+
+
+def positive_model_edge_records(
+    decisions: list[object],
+    *,
+    fixture: pd.Series,
+    model: str,
+    generated_at: datetime,
+) -> list[dict[str, object]]:
+    """Return every positive-EV fresh market edge, regardless of pick tier."""
+    rows: list[dict[str, object]] = []
+    generated_timestamp = pd.Timestamp(generated_at)
+    if generated_timestamp.tzinfo is None:
+        generated_timestamp = generated_timestamp.tz_localize("UTC")
+    else:
+        generated_timestamp = generated_timestamp.tz_convert("UTC")
+    for decision in decisions:
+        source_type = str(getattr(decision, "source_type", "")).strip().lower()
+        quote_timestamp = pd.to_datetime(
+            getattr(decision, "timestamp", None),
+            utc=True,
+            errors="coerce",
+        )
+        market_price = float(getattr(decision, "market_price", 0.0) or 0.0)
+        expected_value = float(getattr(decision, "expected_value", 0.0) or 0.0)
+        if (
+            source_type != "current"
+            or pd.isna(quote_timestamp)
+            or quote_timestamp > generated_timestamp
+            or market_price <= 1.0
+            or expected_value <= 0.0
+        ):
+            continue
+        rows.append(
+            {
+                "match_id": str(fixture["match_id"]),
+                "match_date": str(fixture["match_date"]),
+                "home_team": str(fixture["home_team"]),
+                "away_team": str(fixture["away_team"]),
+                "generated_at": generated_at.isoformat(),
+                "model": model,
+                "model_version": str(getattr(decision, "model_version", "")),
+                "model_family": str(getattr(decision, "model_family", "")),
+                "gating_status": str(getattr(decision, "gating_status", "unknown")),
+                "market": str(getattr(decision, "market", "")),
+                "market_type": str(getattr(decision, "market", "")).split("_", 1)[0],
+                "side": str(getattr(decision, "side", "")),
+                "line": getattr(decision, "line", None),
+                "sportsbook": str(getattr(decision, "sportsbook", "")),
+                "source_type": source_type,
+                "quote_timestamp": getattr(decision, "timestamp", None),
+                "model_probability": float(getattr(decision, "model_probability", 0.0)),
+                "model_fair_odds": float(getattr(decision, "model_price", 0.0)),
+                "market_odds": market_price,
+                "market_no_vig_probability": float(
+                    getattr(decision, "market_no_vig_probability", 0.0)
+                ),
+                "probability_edge": float(getattr(decision, "probability_edge", 0.0)),
+                "expected_value": expected_value,
+                "confidence": float(getattr(decision, "confidence", 0.0)),
+                "confidence_band": str(getattr(decision, "confidence_band", "low")),
+                "selection_reason": str(getattr(decision, "reason", "")),
+                "selection_tier": str(getattr(decision, "pick_tier", "no_bet")),
+                "accepted": bool(getattr(decision, "accepted", False)),
+                "actionable": bool(getattr(decision, "actionable", False)),
+                "stake_pct": float(getattr(decision, "stake_pct", 0.0)),
+                "research_only": True,
+            }
+        )
+    return rows
 
 
 def _merge_prediction_market_odds(
@@ -165,6 +264,16 @@ def main() -> None:
     parser.add_argument("--model", type=str, default="champion_pure")
     parser.add_argument("--model-dir", type=str, default="data/processed/models")
     parser.add_argument("--output", type=str, default="data/processed/predictions.csv")
+    parser.add_argument(
+        "--edges-output",
+        type=str,
+        default="data/processed/model_edges.csv",
+    )
+    parser.add_argument(
+        "--edges-json-output",
+        type=str,
+        default="data/processed/web/model_edges.json",
+    )
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -224,6 +333,7 @@ def main() -> None:
     selection = load_bet_selection_config(config)
 
     predictions = []
+    model_edges: list[dict[str, object]] = []
     now = datetime.now(UTC)
 
     for _, row in upcoming.iterrows():
@@ -294,6 +404,14 @@ def main() -> None:
             model_family=artifact["model_family"],
             blended=bool(artifact.get("blended", False)),
             gating_status=str(artifact.get("gating_status", "unknown")),
+        )
+        model_edges.extend(
+            positive_model_edge_records(
+                decisions,
+                fixture=row,
+                model=args.model,
+                generated_at=now,
+            )
         )
         accepted = [decision for decision in decisions if decision.accepted]
         leans = [decision for decision in decisions if decision.pick_tier == "lean"]
@@ -384,6 +502,22 @@ def main() -> None:
     output_df = pd.DataFrame(predictions)
     save_csv(output_df, args.output)
     logger.info(f"Predictions saved to {args.output}")
+    edge_output = pd.DataFrame(model_edges, columns=MODEL_EDGE_COLUMNS)
+    if not edge_output.empty:
+        edge_output = edge_output.sort_values(
+            ["match_date", "expected_value", "match_id", "sportsbook", "market"],
+            ascending=[True, False, True, True, True],
+        ).reset_index(drop=True)
+    save_csv(edge_output, args.edges_output)
+    edge_json_path = Path(args.edges_json_output)
+    edge_json_path.parent.mkdir(parents=True, exist_ok=True)
+    edge_output.to_json(edge_json_path, orient="records", indent=2)
+    logger.info(
+        "Positive model edges saved: rows=%s csv=%s json=%s",
+        len(edge_output),
+        args.edges_output,
+        edge_json_path,
+    )
 
     print(f"\nPredictions for {len(predictions)} matches:")
     for prediction in predictions:

@@ -1,15 +1,10 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { AppShell } from "@/components/common/app-shell";
-import { ModelMarketOdds } from "@/components/analytics/model-market-odds";
 import { MetricTile } from "@/components/ui/metric-tile";
 import { ProbabilityBar } from "@/components/analytics/charts/probability-bar";
 import { ScoreMatrixHeatmap } from "@/components/analytics/charts/score-matrix-heatmap";
 import { getMatchPrediction } from "@/lib/analytics/general-predictions-data";
-import {
-  getArchivedPrematchModelMarket,
-  getLiveModelBoard,
-} from "@/lib/analytics/live-model-board";
 import {
   analyticsMatchHref,
   analyticsTeamHref,
@@ -27,8 +22,6 @@ export default async function PredictionDetailPage({
 }) {
   const [{ matchId }, query] = await Promise.all([params, searchParams]);
   const season = query.season === "2025" ? "2025" : "2026";
-  const liveModelBoard =
-    season === "2026" ? await getLiveModelBoard() : null;
   const prediction = await getMatchPrediction(matchId);
 
   if (!prediction || !prediction.date.startsWith(`${season}-`)) {
@@ -51,21 +44,6 @@ export default async function PredictionDetailPage({
   const ahLines = Object.entries(prediction.asianHandicap).sort(
     ([a], [b]) => parseFloat(a) - parseFloat(b)
   );
-  const activeBoard = season === "2026" ? liveModelBoard : null;
-  let marketRow = activeBoard?.slate.find(
-    (row) => row.matchId === matchId
-  );
-  let marketOdds =
-    activeBoard?.odds.filter((row) => row.matchId === matchId) ?? [];
-  let marketArchived = false;
-  if (season === "2026" && marketOdds.length === 0) {
-    const archivedMarket = await getArchivedPrematchModelMarket({ matchId });
-    if (archivedMarket?.odds.length) {
-      marketRow = archivedMarket.modelRow;
-      marketOdds = archivedMarket.odds;
-      marketArchived = true;
-    }
-  }
   const generatedLabel = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
@@ -156,13 +134,6 @@ export default async function PredictionDetailPage({
           awayLabel={prediction.awayTeam}
         />
       </section>
-
-      <ModelMarketOdds
-        odds={marketOdds}
-        modelRow={marketRow}
-        heading={marketArchived ? "Archived pre-match odds" : "Market odds"}
-        archived={marketArchived}
-      />
 
       {/* Score Matrix */}
       <section className="glass-card rounded-[1.4rem] border border-line bg-white/4 p-5">

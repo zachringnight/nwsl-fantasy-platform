@@ -27,11 +27,11 @@ def test_public_data_publish_runs_independently_of_model_success() -> None:
     public_step = source.index(
         'run_public_data_step "publish_public_data_supabase"'
     )
-    model_publish_gate = source.index(
-        'if [ "$status" -eq 0 ] && [ "$REQUIRED_FAILURE" -eq 0 ]; then'
+    general_publish_step = source.index(
+        'run_general_projection_step "publish_general_predictions_supabase"'
     )
 
-    assert public_step < model_publish_gate
+    assert public_step < general_publish_step
     assert '"$PY" scripts/refresh_public_data.py' in source
     assert "PUBLIC_DATA_FAILURE=1" in source
     assert (
@@ -39,12 +39,7 @@ def test_public_data_publish_runs_independently_of_model_success() -> None:
         '[ "$PUBLIC_DATA_FAILURE" -ne 0 ] || '
         '[ "$GENERAL_PROJECTION_FAILURE" -ne 0 ]; then'
     ) in source
-    assert "PUBLIC_DATA_FAILURE" not in source[
-        model_publish_gate:source.index(
-            'run_required_step "publish_supabase"',
-            model_publish_gate,
-        )
-    ]
+    assert 'run_required_step "publish_supabase"' not in source
 
 
 def test_general_projection_pipeline_has_an_independent_failure_state() -> None:
@@ -57,6 +52,13 @@ def test_general_projection_pipeline_has_an_independent_failure_state() -> None:
     assert '"general_train"' in source
     assert '"general_predict"' in source
     assert '"publish_general_predictions_supabase"' in source
+    assert '"model_edge_slate"' in source
+    assert "data/processed/model_edges.csv" in source
+    assert (
+        'if [ "$REQUIRED_FAILURE" -eq 0 ] && '
+        '[ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then'
+    ) in source
+    assert "track_matchday SKIPPED (required edge-slate inputs incomplete)" in source
     lineage_step = source.index(
         'run_required_step "daily_lineage"'
     )

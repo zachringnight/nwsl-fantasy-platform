@@ -217,7 +217,7 @@ def test_build_frozen_policy_slate_uses_only_validated_total_2_5_line() -> None:
     assert slate.loc[0, "sportsbook"] == "DraftKings"
 
 
-def test_build_frozen_policy_slate_falls_back_when_draftkings_missing() -> None:
+def test_build_frozen_policy_slate_rejects_non_draftkings_prices() -> None:
     upcoming = pd.DataFrame(
         [
             {
@@ -246,7 +246,7 @@ def test_build_frozen_policy_slate_falls_back_when_draftkings_missing() -> None:
                 "under_odds": 1.95,
                 "source_type": "current",
             },
-            # m2 has no DraftKings price at all - should fall back to FoxSports.
+            # FOX is display/source-health context only, never a policy price.
             {
                 "match_id": "m2",
                 "timestamp": "2026-07-26T18:02:00Z",
@@ -273,9 +273,10 @@ def test_build_frozen_policy_slate_falls_back_when_draftkings_missing() -> None:
 
     by_match = slate.set_index("match_id")
     assert by_match.loc["m1", "sportsbook"] == "DraftKings"
-    assert by_match.loc["m2", "sportsbook"] == "FoxSports"
-    assert by_match.loc["m2", "over_odds"] == 2.20
-    assert summary["matches_with_current_total_price"] == 2
+    assert pd.isna(by_match.loc["m2", "sportsbook"])
+    assert pd.isna(by_match.loc["m2", "over_odds"])
+    assert by_match.loc["m2", "reason"] == "missing_current_total_price"
+    assert summary["matches_with_current_total_price"] == 1
 
 
 def test_append_forward_decisions_locks_only_first_pick_per_match() -> None:

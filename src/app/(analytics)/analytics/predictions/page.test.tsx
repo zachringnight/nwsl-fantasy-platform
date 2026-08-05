@@ -4,7 +4,6 @@ import type { MatchPrediction } from "@/types/analytics";
 
 const mocks = vi.hoisted(() => ({
   getMatchPredictions: vi.fn(),
-  getLiveModelBoard: vi.fn(),
 }));
 
 vi.mock("@/components/common/app-shell", () => ({
@@ -20,10 +19,6 @@ vi.mock("@/components/common/app-shell", () => ({
       {children}
     </main>
   ),
-}));
-
-vi.mock("@/components/analytics/live-model-picks", () => ({
-  LiveModelPicks: () => <div>Live 2026 model board</div>,
 }));
 
 vi.mock("@/components/analytics/match-prediction-browser", () => ({
@@ -42,10 +37,6 @@ vi.mock("@/components/analytics/match-prediction-browser", () => ({
 
 vi.mock("@/lib/analytics/general-predictions-data", () => ({
   getMatchPredictions: mocks.getMatchPredictions,
-}));
-
-vi.mock("@/lib/analytics/live-model-board", () => ({
-  getLiveModelBoard: mocks.getLiveModelBoard,
 }));
 
 import PredictionsPage from "./page";
@@ -79,35 +70,30 @@ describe("PredictionsPage season routing", () => {
       prediction("archive", "2025-10-01"),
       prediction("current", "2026-07-26"),
     ]);
-    mocks.getLiveModelBoard.mockResolvedValue({ run: { status: "no_bet" } });
   });
 
-  it("keeps the 2026 live board out of the 2025 archive", async () => {
+  it("shows only archived-season projections for 2025", async () => {
     render(
       await PredictionsPage({
         searchParams: Promise.resolve({ season: "2025" }),
       })
     );
 
-    expect(screen.queryByText("Live 2026 model board")).not.toBeInTheDocument();
     expect(screen.getByText("2025 prediction browser: 1")).toBeInTheDocument();
-    expect(mocks.getLiveModelBoard).not.toHaveBeenCalled();
   });
 
-  it("shows only current-season projections alongside the live board", async () => {
+  it("shows only current-season projections with the broad edge description", async () => {
     render(
       await PredictionsPage({
         searchParams: Promise.resolve({ season: "2026" }),
       })
     );
 
-    expect(screen.getByText("Live 2026 model board")).toBeInTheDocument();
     expect(screen.getByText("2026 prediction browser: 1")).toBeInTheDocument();
     expect(
       screen.getByText(
         /General match probabilities use the traceable SPI-lite baseline/
       )
     ).toBeInTheDocument();
-    expect(mocks.getLiveModelBoard).toHaveBeenCalledTimes(1);
   });
 });

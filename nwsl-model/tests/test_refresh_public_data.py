@@ -28,6 +28,7 @@ from scripts.refresh_public_data import (
     _lineup_appearance_teams_for_player,
     _match_core_stats,
     _merge_stats,
+    _normalize_players,
     _normalize_player_match_stats,
     _retry_delay,
     compute_payload_checksum,
@@ -658,6 +659,50 @@ def test_live_player_rows_are_counted_but_never_normalized_as_finished() -> None
         )
         == 1
     )
+
+
+def test_stat_only_zero_appearance_placeholder_player_is_omitted() -> None:
+    placeholder_team = f"nwsl::Football_Team::{'9' * 32}"
+    players, candidates, positions = _normalize_players(
+        rosters={TEAM_A: []},
+        player_stat_entries={
+            PLAYER_OFFICIAL: {
+                "meta": {
+                    "playerId": PLAYER_OFFICIAL,
+                    "displayName": "Placeholder Player",
+                    "providerId": "placeholder-1",
+                },
+                "teamIds": {placeholder_team},
+                "rawStats": {"games_played": 0},
+            }
+        },
+        team_ids={TEAM_A, TEAM_B},
+    )
+
+    assert players == []
+    assert candidates == {}
+    assert positions == {}
+
+
+def test_stat_only_nonleague_player_with_appearances_still_fails_closed() -> None:
+    placeholder_team = f"nwsl::Football_Team::{'9' * 32}"
+
+    with pytest.raises(DataValidationError, match="non-league season-stat team"):
+        _normalize_players(
+            rosters={TEAM_A: []},
+            player_stat_entries={
+                PLAYER_OFFICIAL: {
+                    "meta": {
+                        "playerId": PLAYER_OFFICIAL,
+                        "displayName": "Unresolved Player",
+                        "providerId": "unresolved-1",
+                    },
+                    "teamIds": {placeholder_team},
+                    "rawStats": {"games_played": 1},
+                }
+            },
+            team_ids={TEAM_A, TEAM_B},
+        )
 
 
 def test_finished_matches_replace_lagging_team_standings() -> None:
