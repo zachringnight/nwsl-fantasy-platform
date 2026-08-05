@@ -1,6 +1,6 @@
 {
   "source_url": "https://www.nwslsoccer.com/news/availability-report",
-  "rows": 98,
+  "rows": 39,
   "teams": [
     "Angel City FC",
     "Bay FC",
@@ -20,17 +20,20 @@
     "Washington Spirit"
   ],
   "status_counts": {
-    "out": 64,
-    "international_duty": 18,
-    "questionable": 16
+    "out": 21,
+    "questionable": 15,
+    "international_duty": 3
   },
-  "report_dates": [],
+  "report_dates": [
+    "2026-08-04"
+  ],
   "applied_to_projected_lineups": true,
-  "projected_rows_updated": 893,
-  "projected_start_removed": 279,
-  "snapshot_rows_total": 264,
+  "projected_rows_updated": 106,
+  "projected_start_removed": 12,
+  "snapshot_rows_total": 303,
   "snapshot_report_dates": [
     "2026-05-23",
-    "2026-07-18"
+    "2026-07-18",
+    "2026-08-04"
   ]
 }
