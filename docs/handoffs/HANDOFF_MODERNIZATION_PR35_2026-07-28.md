@@ -1,4 +1,14 @@
-# NWSL Platform Modernization Handoff — PR #35
+# NWSL Platform Modernization Handoff (PR #35)
+
+> **SUPERSEDED as of 2026-08-05. Historical evidence only.**
+>
+> PR #35 was merged, along with #36, #37, and #38. The "Immediate next
+> action" section below is complete and must not be executed again. The
+> verification results and bootstrap instructions remain accurate as a
+> record of the modernization baseline.
+>
+> For current sequencing use
+> `plans/2026-07-22-best-possible-nwsl-app/PLAN_STATUS.md`.
 
 - **Date:** 2026-07-28
 - **Canonical continuation:** [PR #35](https://github.com/zachringnight/nwsl-fantasy-platform/pull/35)
