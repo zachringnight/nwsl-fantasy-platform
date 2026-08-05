@@ -1,3 +1,4 @@
 *NWSL model — forward pick log*
-0 new pick(s) locked this run.
-Record: 0 settled, 13 pending. No results graded yet (forward test just started).
+2 new pick(s) locked this run.
+Record: 7-15-1 (W-L-P) | 23 settled, 2 pending | win rate 31.8% | -7.91u | ROI -34.4%
+  lean: 7-15 | -7.91u | ROI -34.4%

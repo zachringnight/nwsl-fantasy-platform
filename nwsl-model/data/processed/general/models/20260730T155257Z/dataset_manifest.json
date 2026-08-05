@@ -8,19 +8,19 @@
         "reference_matches": 189
       },
       "2026": {
-        "coverage_pct": 99.28,
-        "covered_matches": 137,
+        "coverage_pct": 99.23,
+        "covered_matches": 129,
         "fallback_match_ids": [
           "401853922"
         ],
-        "reference_matches": 138
+        "reference_matches": 130
       }
     },
     "fallback_match_ids": [
       "401853922"
     ],
     "match_xg_coverage_pct": 99.69,
-    "match_xgoals_rows": 329,
+    "match_xgoals_rows": 321,
     "season_coverage": [
       2025,
       2026
@@ -34,15 +34,15 @@
     "weather_features": "disabled",
     "xg_features": "asa_match_xgoals_loader_enrichment"
   },
-  "generated_at": "2026-08-03T15:21:21.641Z",
+  "generated_at": "2026-07-30T15:48:15.790Z",
   "matches": {
     "date_range": [
       "2025-03-15",
-      "2026-08-03"
+      "2026-07-30"
     ],
     "non_regular_season_rows": 7,
-    "regular_season_rows": 320,
-    "rows": 327,
+    "regular_season_rows": 312,
+    "rows": 319,
     "season_coverage": [
       2025,
       2026
@@ -51,17 +51,18 @@
   },
   "missing_feature_coverage": {
     "asa_match_xg_missing_pct": 0.31,
-    "odds_missing_pct": 14.37,
+    "odds_missing_pct": 12.23,
     "xg_missing_pct": 0.31
   },
   "odds": {
-    "rows": 1357,
+    "rows": 1439,
     "source_available": true,
     "markets": [
       "1x2",
       "total"
     ],
     "sportsbooks": [
+      "DraftKings",
       "FoxSports",
       "OddsPortalAvg",
       "OddsPortalEvent"
@@ -71,7 +72,7 @@
       "current",
       "open"
     ],
-    "latest_timestamp": "2026-08-03T15:22:37.975698+00:00"
+    "latest_timestamp": "2026-07-30T15:52:25.560836+00:00"
   },
   "source": "espn_public_api",
   "source_files": {
@@ -80,10 +81,10 @@
   },
   "upcoming": {
     "date_range": [
-      "2026-08-06",
+      "2026-08-01",
       "2026-11-01"
     ],
-    "rows": 102,
+    "rows": 110,
     "season_coverage": [
       2026
     ],

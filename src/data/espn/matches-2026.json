@@ -1530,9 +1530,9 @@
     "homeTeamId": "20907",
     "awayTeam": "Racing Louisville FC",
     "awayTeamId": "20905",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 5,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "CPKC Stadium"
   },
   {
@@ -1543,8 +1543,8 @@
     "awayTeam": "Washington Spirit",
     "awayTeamId": "15365",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "America First Field"
   },
   {
@@ -1555,8 +1555,8 @@
     "awayTeam": "Gotham FC",
     "awayTeamId": "15364",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "PayPal Park"
   },
   {
@@ -1566,9 +1566,9 @@
     "homeTeamId": "15366",
     "awayTeam": "Orlando Pride",
     "awayTeamId": "18206",
-    "homeGoals": 0,
+    "homeGoals": 5,
     "awayGoals": 0,
-    "status": "upcoming",
+    "status": "completed",
     "venue": "WakeMed Soccer Park"
   },
   {
@@ -1578,9 +1578,9 @@
     "homeTeamId": "20905",
     "awayTeam": "Chicago Stars FC",
     "awayTeamId": "15360",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Lynn Family Stadium"
   },
   {
@@ -1590,9 +1590,9 @@
     "homeTeamId": "20907",
     "awayTeam": "Angel City FC",
     "awayTeamId": "21422",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "CPKC Stadium"
   },
   {
@@ -1603,8 +1603,8 @@
     "awayTeam": "Gotham FC",
     "awayTeamId": "15364",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Shell Energy Stadium"
   },
   {
@@ -1614,9 +1614,9 @@
     "homeTeamId": "22187",
     "awayTeam": "Seattle Reign FC",
     "awayTeamId": "15363",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 2,
+    "awayGoals": 3,
+    "status": "completed",
     "venue": "PayPal Park"
   },
   {
@@ -1627,8 +1627,8 @@
     "awayTeam": "San Diego Wave FC",
     "awayTeamId": "21423",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Audi Field"
   },
   {
@@ -1638,9 +1638,9 @@
     "homeTeamId": "19141",
     "awayTeam": "Portland Thorns FC",
     "awayTeamId": "15362",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 5,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "America First Field"
   },
   {
@@ -1650,9 +1650,9 @@
     "homeTeamId": "131563",
     "awayTeam": "Boston Legacy FC",
     "awayTeamId": "131562",
-    "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "homeGoals": 1,
+    "awayGoals": 1,
+    "status": "completed",
     "venue": "Centennial Stadium"
   },
   {
