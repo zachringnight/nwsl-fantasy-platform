@@ -34,7 +34,7 @@
     "weather_features": "disabled",
     "xg_features": "asa_match_xgoals_loader_enrichment"
   },
-  "generated_at": "2026-08-05T21:39:49.139Z",
+  "generated_at": "2026-08-05T21:34:57.090Z",
   "matches": {
     "date_range": [
       "2025-03-15",
@@ -72,7 +72,7 @@
       "current",
       "open"
     ],
-    "latest_timestamp": "2026-08-05T21:41:38.595820+00:00"
+    "latest_timestamp": "2026-08-05T21:38:21.557525+00:00"
   },
   "source": "espn_public_api",
   "source_files": {

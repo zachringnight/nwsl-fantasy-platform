@@ -4,7 +4,7 @@
     "asa_player_analytics": "data/raw/asa_player_analytics.csv",
     "asa_team_analytics": "data/raw/asa_team_analytics.csv"
   },
-  "generated_at": "2026-08-05T21:20:18.590963+00:00",
+  "generated_at": "2026-08-05T21:40:02.776497+00:00",
   "manifest_xg_coverage": {
     "away_npxg": 99.69,
     "away_xg": 99.69,
