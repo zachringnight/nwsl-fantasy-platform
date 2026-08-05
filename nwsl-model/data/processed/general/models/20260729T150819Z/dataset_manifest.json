@@ -1,0 +1,93 @@
+{
+  "asa": {
+    "coverage_by_season": {
+      "2025": {
+        "coverage_pct": 100.0,
+        "covered_matches": 189,
+        "fallback_match_ids": [],
+        "reference_matches": 189
+      },
+      "2026": {
+        "coverage_pct": 99.21,
+        "covered_matches": 126,
+        "fallback_match_ids": [
+          "401853922"
+        ],
+        "reference_matches": 127
+      }
+    },
+    "fallback_match_ids": [
+      "401853922"
+    ],
+    "match_xg_coverage_pct": 99.68,
+    "match_xgoals_rows": 318,
+    "season_coverage": [
+      2025,
+      2026
+    ],
+    "source_available": true
+  },
+  "feature_policy": {
+    "surface_features": "disabled",
+    "training_window": "ESPN 2025-2026 public scoreboard",
+    "travel_features": "disabled",
+    "weather_features": "disabled",
+    "xg_features": "asa_match_xgoals_loader_enrichment"
+  },
+  "generated_at": "2026-07-29T15:06:27.245Z",
+  "matches": {
+    "date_range": [
+      "2025-03-15",
+      "2026-07-27"
+    ],
+    "non_regular_season_rows": 7,
+    "regular_season_rows": 309,
+    "rows": 316,
+    "season_coverage": [
+      2025,
+      2026
+    ],
+    "status": "completed_with_regular_season_flag"
+  },
+  "missing_feature_coverage": {
+    "asa_match_xg_missing_pct": 0.32,
+    "odds_missing_pct": 11.39,
+    "xg_missing_pct": 0.32
+  },
+  "odds": {
+    "rows": 1386,
+    "source_available": true,
+    "markets": [
+      "1x2",
+      "total"
+    ],
+    "sportsbooks": [
+      "DraftKings",
+      "FoxSports",
+      "OddsPortalAvg",
+      "OddsPortalEvent"
+    ],
+    "source_types": [
+      "close",
+      "current",
+      "open"
+    ],
+    "latest_timestamp": "2026-07-29T15:08:00.820788+00:00"
+  },
+  "source": "espn_public_api",
+  "source_files": {
+    "matches_2025": "src/data/espn/matches-2025.json",
+    "matches_2026": "src/data/espn/matches-2026.json"
+  },
+  "upcoming": {
+    "date_range": [
+      "2026-07-30",
+      "2026-11-01"
+    ],
+    "rows": 113,
+    "season_coverage": [
+      2026
+    ],
+    "status": "scheduled_only"
+  }
+}

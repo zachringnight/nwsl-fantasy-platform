@@ -85,8 +85,8 @@ export function MatchPredictionBrowser({
             Match probabilities
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Full score-model projections are separate from threshold-clearing
-            policy picks.
+            Full score-model projections feed broad positive-edge research
+            across fresh 1X2 and totals markets.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">

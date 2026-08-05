@@ -4,26 +4,45 @@
     "asa_player_analytics": "data/raw/asa_player_analytics.csv",
     "asa_team_analytics": "data/raw/asa_team_analytics.csv"
   },
-  "generated_at": "2026-07-28T15:02:35.755454+00:00",
+  "generated_at": "2026-08-05T21:40:02.776497+00:00",
   "manifest_xg_coverage": {
-    "away_npxg": 99.68,
-    "away_xg": 99.68,
-    "home_npxg": 99.68,
-    "home_xg": 99.68
+    "away_npxg": 99.69,
+    "away_xg": 99.69,
+    "coverage_by_season": {
+      "2025": {
+        "coverage_pct": 100.0,
+        "covered_matches": 189,
+        "fallback_match_ids": [],
+        "reference_matches": 189
+      },
+      "2026": {
+        "coverage_pct": 99.28,
+        "covered_matches": 137,
+        "fallback_match_ids": [
+          "401853922"
+        ],
+        "reference_matches": 138
+      }
+    },
+    "fallback_match_ids": [
+      "401853922"
+    ],
+    "home_npxg": 99.69,
+    "home_xg": 99.69
   },
   "rows": {
-    "match_xgoals": 318,
-    "player_analytics": 702,
+    "match_xgoals": 329,
+    "player_analytics": 709,
     "team_analytics": 30
   },
   "season_counts": {
     "match_xgoals": {
       "2025": 190,
-      "2026": 128
+      "2026": 139
     },
     "player_analytics": {
       "2025": 341,
-      "2026": 361
+      "2026": 368
     },
     "team_analytics": {
       "2025": 14,

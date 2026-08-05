@@ -6,10 +6,12 @@ Forward pick-log workflow (run once per matchday):
   2. Extract every actionable pick (official + lean) with its locked odds.
   3. Merge into the persistent ledger (idempotent: first-seen odds stay locked).
   4. Settle any pending picks whose match has now been played.
-  5. Write the ledger back and emit a Slack-ready running-record report.
+  5. Write the ledger back and emit an operator-ready running-record report.
 
 This tracks *real forward performance*, distinct from the historical backtest.
 """
+
+# ruff: noqa: E402
 
 from __future__ import annotations
 

@@ -8,19 +8,19 @@
         "reference_matches": 189
       },
       "2026": {
-        "coverage_pct": 99.21,
-        "covered_matches": 126,
+        "coverage_pct": 99.28,
+        "covered_matches": 137,
         "fallback_match_ids": [
           "401853922"
         ],
-        "reference_matches": 127
+        "reference_matches": 138
       }
     },
     "fallback_match_ids": [
       "401853922"
     ],
-    "match_xg_coverage_pct": 99.68,
-    "match_xgoals_rows": 318,
+    "match_xg_coverage_pct": 99.69,
+    "match_xgoals_rows": 329,
     "season_coverage": [
       2025,
       2026
@@ -34,15 +34,15 @@
     "weather_features": "disabled",
     "xg_features": "asa_match_xgoals_loader_enrichment"
   },
-  "generated_at": "2026-07-28T15:02:19.027Z",
+  "generated_at": "2026-08-05T21:39:49.139Z",
   "matches": {
     "date_range": [
       "2025-03-15",
-      "2026-07-27"
+      "2026-08-03"
     ],
     "non_regular_season_rows": 7,
-    "regular_season_rows": 309,
-    "rows": 316,
+    "regular_season_rows": 320,
+    "rows": 327,
     "season_coverage": [
       2025,
       2026
@@ -50,29 +50,29 @@
     "status": "completed_with_regular_season_flag"
   },
   "missing_feature_coverage": {
-    "asa_match_xg_missing_pct": 0.32,
-    "odds_missing_pct": 11.39,
-    "xg_missing_pct": 0.32
+    "asa_match_xg_missing_pct": 0.31,
+    "odds_missing_pct": 14.37,
+    "xg_missing_pct": 0.31
   },
   "odds": {
-    "latest_timestamp": "2026-07-28T15:39:57.007973+00:00",
+    "rows": 1386,
+    "source_available": true,
     "markets": [
       "1x2",
       "total"
-    ],
-    "rows": 1386,
-    "source_available": true,
-    "source_types": [
-      "close",
-      "current",
-      "open"
     ],
     "sportsbooks": [
       "DraftKings",
       "FoxSports",
       "OddsPortalAvg",
       "OddsPortalEvent"
-    ]
+    ],
+    "source_types": [
+      "close",
+      "current",
+      "open"
+    ],
+    "latest_timestamp": "2026-08-05T21:41:38.595820+00:00"
   },
   "source": "espn_public_api",
   "source_files": {
@@ -81,10 +81,10 @@
   },
   "upcoming": {
     "date_range": [
-      "2026-07-30",
+      "2026-08-06",
       "2026-11-01"
     ],
-    "rows": 113,
+    "rows": 102,
     "season_coverage": [
       2026
     ],

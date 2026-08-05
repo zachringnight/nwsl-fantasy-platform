@@ -19,10 +19,6 @@ import { getMatchResultsBySeason } from "@/lib/analytics/analytics-real-data";
 import { getEspnLiveMatch } from "@/lib/analytics/espn-live-match";
 import { getLiveNwslPublicData } from "@/lib/analytics/live-nwsl-public-data";
 import {
-  getArchivedPrematchModelMarket,
-  getLiveModelBoard,
-} from "@/lib/analytics/live-model-board";
-import {
   buildMatchStateNarrative,
   buildPrematchNarrative,
   getHeadToHead,
@@ -52,9 +48,8 @@ export default async function MatchDetailPage({
   params: Promise<{ matchId: string }>;
 }) {
   const { matchId } = await params;
-  const [live, liveModelBoard, snapshot, prediction] = await Promise.all([
+  const [live, snapshot, prediction] = await Promise.all([
     getLiveNwslPublicData(),
-    getLiveModelBoard(),
     getEspnLiveMatch(matchId),
     getMatchPrediction(matchId),
   ]);
@@ -165,32 +160,6 @@ export default async function MatchDetailPage({
           stats: snapshot?.stats ?? null,
           events: snapshot?.events ?? [],
         });
-  const officialMatchId = match.officialMatchId;
-  let marketRow =
-    liveModelBoard?.slate.find(
-      (row) =>
-        row.matchId === match.matchId ||
-        (officialMatchId && row.officialMatchId === officialMatchId)
-    ) ?? undefined;
-  let marketOdds =
-    liveModelBoard?.odds.filter(
-      (row) =>
-        row.matchId === match.matchId ||
-        (officialMatchId && row.officialMatchId === officialMatchId)
-    ) ?? [];
-  let marketArchived = false;
-  if (season === "2026" && (phase === "final" || marketOdds.length === 0)) {
-    const archivedMarket = await getArchivedPrematchModelMarket({
-      matchId: match.matchId,
-      officialMatchId,
-    });
-    if (archivedMarket?.odds.length) {
-      marketRow = archivedMarket.modelRow;
-      marketOdds = archivedMarket.odds;
-      marketArchived = true;
-    }
-  }
-
   return (
     <AppShell
       eyebrow={`Matchday ${match.matchday} · ${match.date}`}
@@ -308,9 +277,6 @@ export default async function MatchDetailPage({
         homeForm={homeForm}
         awayForm={awayForm}
         headToHead={headToHead}
-        marketOdds={marketOdds}
-        marketRow={marketRow}
-        marketArchived={marketArchived}
       />
     </AppShell>
   );

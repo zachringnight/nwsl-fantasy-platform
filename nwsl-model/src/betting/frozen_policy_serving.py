@@ -14,18 +14,6 @@ from src.utils.dates import parse_mixed_utc_datetime
 UTC = timezone.utc
 FROZEN_TOTAL_LINE = 2.5
 FROZEN_SPORTSBOOK = "draftkings"
-# Used only when DraftKings has no current total-2.5 price for a match, in
-# this priority order. DraftKings always wins when present, even if a
-# fallback book's price is better - see
-# test_uses_draftkings_when_multiple_sportsbooks_quote in
-# tests/test_frozen_policy_serving.py. Added 2026-07-28 by owner decision
-# after DK coverage was confirmed too thin to price most of a given week's
-# matches; these fallback sources are context/aggregator quotes (FoxSports,
-# FootyStats, OddsPortal), not necessarily the exact book a pick gets placed
-# at, so a filled-by-fallback pick is a real but slightly softer signal than
-# a DraftKings-sourced one. The "sportsbook" field on every slate row always
-# records which book actually filled it.
-FROZEN_SPORTSBOOK_FALLBACKS = ("foxsports", "footystats", "oddsportalevent", "oddsportalavg")
 
 
 def validate_policy_evidence(
@@ -166,23 +154,15 @@ def build_frozen_policy_slate(
     current_all = _normalized_total_rows(odds)
     current_all = current_all[current_all["source_type"].eq("current")]
 
-    filled_frames: list[pd.DataFrame] = []
-    matched_ids: set[str] = set()
-    for book in (FROZEN_SPORTSBOOK, *FROZEN_SPORTSBOOK_FALLBACKS):
-        book_rows = current_all[
-            current_all["sportsbook"].astype(str).str.casefold().eq(book)
-            & ~current_all["match_id"].isin(matched_ids)
-        ]
-        if book_rows.empty:
-            continue
-        book_best = book_rows.sort_values(
-            ["match_id", "over_odds", "timestamp_dt"],
-            ascending=[True, False, False],
-        ).drop_duplicates("match_id", keep="first")
-        filled_frames.append(book_best)
-        matched_ids.update(book_best["match_id"].tolist())
-
-    current = pd.concat(filled_frames, ignore_index=True) if filled_frames else current_all.iloc[0:0]
+    # This policy is a strict DraftKings-only lane. Context and shadow sources
+    # may remain in the raw odds feed for display and health reporting, but
+    # cannot create a priced slate row or affect its denominator.
+    current = current_all[
+        current_all["sportsbook"].astype(str).str.casefold().eq(FROZEN_SPORTSBOOK)
+    ].sort_values(
+        ["match_id", "over_odds", "timestamp_dt"],
+        ascending=[True, False, False],
+    ).drop_duplicates("match_id", keep="first")
     current = annotate_first_seen_quotes(current, snapshots)
     if not current.empty:
         current = current.set_index("match_id")

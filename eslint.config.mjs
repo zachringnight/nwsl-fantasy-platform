@@ -24,6 +24,12 @@ const eslintConfig = defineConfig([
     "nwsl-model/data/raw/**",
     "nwsl-model/.venv/**",
     "nwsl-model/*.egg-info/**",
+    // Agent worktrees are checkouts of other branches living inside this
+    // repo. They are excluded from git via .git/info/exclude, but ESLint
+    // still walks them on disk and reports their (older) code as errors in
+    // this branch's lint run. Lint each worktree from its own root instead.
+    ".claude/worktrees/**",
+    ".codex/worktrees/**",
   ]),
 ]);
 

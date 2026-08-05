@@ -4,7 +4,7 @@
 UV ?= uv
 PYTHON := $(UV) run python
 
-.PHONY: test test-fast refresh odds-poll backtest holdout slate policy-train policy-slate policy-settle
+.PHONY: test test-fast refresh odds-poll backtest holdout slate
 
 test:
 	$(PYTHON) -m pytest
@@ -35,13 +35,3 @@ holdout:
 
 slate:
 	$(PYTHON) scripts/generate_betting_slate.py --days 14
-
-policy-train:
-	$(PYTHON) scripts/train.py --model team_ratings_only \
-	  --output-dir data/processed/policy/nwsl-totals-open-over-v1/models
-
-policy-slate:
-	$(PYTHON) scripts/generate_frozen_policy_slate.py --days 14
-
-policy-settle:
-	$(PYTHON) scripts/settle_frozen_policy.py

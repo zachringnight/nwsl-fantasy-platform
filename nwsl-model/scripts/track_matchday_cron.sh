@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-# Daily matchday tracker: refresh odds, regenerate picks, settle past picks.
+# Daily matchday tracker: refresh odds, regenerate all positive model edges,
+# and settle the tiered forward recommendation log.
 #
 # This is the deterministic data pipeline behind the forward pick-log. It does
 # NOT send messages itself. A scheduled Codex task runs this and summarizes the
 # resulting pick record and source-health artifacts for Zach.
 #
 # Odds polling uses DraftKings through Apify plus public FOX market context.
-# Only DraftKings can create a pick; API-Football remains shadow-only.
+# The active research feed evaluates every configured fresh 1X2 and totals
+# quote. API-Football remains shadow-only.
 # Provider failures remain best-effort;
 # freshness, snapshot, and source-health checks are required and fail closed.
 
@@ -35,8 +37,8 @@ run_step() {
     fi
 }
 
-# Required policy steps fail the overall job but still let settlement/reporting
-# run so an operator gets the most complete diagnostic possible.
+# Required acquisition steps fail the overall job while allowing independent
+# public/general publication lanes to produce explicit diagnostics.
 run_required_step() {
     local label="$1"; shift
     echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) $label ===" >>"$LOG_FILE"
@@ -73,8 +75,8 @@ run_public_data_step() {
     fi
 }
 
-# General match probabilities publish independently from both public website
-# data and the frozen DraftKings-only policy. A partial context refresh may be
+# General match probabilities publish independently from public website data.
+# A partial context refresh may be
 # published only when its machine-readable artifact explicitly says partial;
 # a blocked refresh never advances the latest prediction snapshot.
 run_general_projection_step() {
@@ -116,21 +118,14 @@ if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
         "$PY" scripts/rebuild_operational_features.py --season 2026
 fi
 
-# 4. Capture current DraftKings prices and FOX context, remove stale "current"
-#    rows, append snapshots, and write source health. Only DraftKings 2.5 totals
-#    are eligible; API-Football stays shadow-only.
+# 4. Capture configured current DraftKings and FOX prices, remove stale
+#    "current" rows, append snapshots, and write source health. API-Football
+#    stays shadow-only.
 run_required_step "odds_poll" bash scripts/poll_current_odds.sh
 
-# 5. Fit and serve the isolated, frozen totals-over policy.
-run_required_step "policy_train" "$PY" scripts/train.py \
-    --model team_ratings_only \
-    --output-dir data/processed/policy/nwsl-totals-open-over-v1/models
-run_required_step "policy_slate" "$PY" scripts/generate_frozen_policy_slate.py
-run_required_step "policy_settle" "$PY" scripts/settle_frozen_policy.py
-
-# 6. Rebuild and publish the separate general match-probability artifact. The
-#    version is stable for this invocation, and publication does not require a
-#    Git commit or Vercel deployment.
+# 5. Rebuild and publish the active general model. Prediction generation also
+#    writes the structured positive-edge feed at data/processed/model_edges.csv
+#    and data/processed/web/model_edges.json.
 GENERAL_VERSION="$(date -u +%Y%m%dT%H%M%SZ)"
 if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
     run_general_projection_step "general_train" "$PY" scripts/train.py \
@@ -152,23 +147,24 @@ if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
         "$PY" scripts/publish_general_predictions.py
 fi
 
-# The legacy actionable-slate ledger remains best-effort and distinct from the
-# frozen policy and from the general probability feed.
-run_step "slate" "$PY" scripts/generate_betting_slate.py
+# Build the match-level edge summary from the same general-model invocation.
+if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    run_general_projection_step "model_edge_slate" \
+        "$PY" scripts/generate_betting_slate.py
+fi
 
-# 7. Lock today's general picks into the forward ledger and settle anything now played.
+# 6. Lock threshold-tiered edges into the forward ledger and settle anything
+#    now played. The complete positive-edge artifact remains research-only.
 #    track_matchday must succeed -- it is the point of the job -- so its exit
 #    status is the script's exit status.
-echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) track_matchday ===" >>"$LOG_FILE"
-"$PY" scripts/track_matchday.py >>"$LOG_FILE" 2>&1
-status=$?
-echo "--- track_matchday exit $status ---" >>"$LOG_FILE"
-
-# 8. Publish only a fully successful frozen-policy snapshot. The authenticated endpoint
-#    writes the run, complete slate, immutable picks, and settlements to
-#    Supabase atomically; a failed pipeline never replaces the latest good run.
-if [ "$status" -eq 0 ] && [ "$REQUIRED_FAILURE" -eq 0 ]; then
-    run_required_step "publish_supabase" "$PY" scripts/publish_frozen_policy.py
+status=1
+if [ "$REQUIRED_FAILURE" -eq 0 ] && [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
+    echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) track_matchday ===" >>"$LOG_FILE"
+    "$PY" scripts/track_matchday.py >>"$LOG_FILE" 2>&1
+    status=$?
+    echo "--- track_matchday exit $status ---" >>"$LOG_FILE"
+else
+    echo "--- track_matchday SKIPPED (required edge-slate inputs incomplete) ---" >>"$LOG_FILE"
 fi
 
 echo "=== $(date -u +%Y-%m-%dT%H:%M:%SZ) done ===" >>"$LOG_FILE"

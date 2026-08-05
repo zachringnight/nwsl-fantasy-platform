@@ -1,116 +1,129 @@
 {
-  "start_date": "2026-07-28",
+  "start_date": "2026-08-05",
   "days": 14,
   "event_urls": [
-    "https://www.foxsports.com/soccer/nwsl-bay-fc-vs-gotham-fc-jul-29-2026-game-boxscore-651699",
-    "https://www.foxsports.com/soccer/nwsl-bay-fc-vs-seattle-reign-fc-aug-01-2026-game-boxscore-651704",
+    "https://www.foxsports.com/soccer/nwsl-angel-city-fc-vs-washington-spirit-aug-16-2026-game-boxscore-651724",
     "https://www.foxsports.com/soccer/nwsl-boston-legacy-fc-vs-portland-thorns-fc-aug-09-2026-game-boxscore-651714",
     "https://www.foxsports.com/soccer/nwsl-chicago-stars-fc-vs-bay-fc-aug-09-2026-game-boxscore-651715",
-    "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-boston-legacy-fc-aug-02-2026-game-boxscore-651707",
     "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-north-carolina-courage-aug-05-2026-game-boxscore-651708",
     "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-utah-royals-fc-aug-08-2026-game-boxscore-651710",
+    "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-kansas-city-current-aug-14-2026-game-boxscore-651717",
     "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-san-diego-wave-fc-aug-07-2026-game-boxscore-651709",
-    "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-gotham-fc-aug-01-2026-game-boxscore-651703",
     "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-kansas-city-current-aug-08-2026-game-boxscore-651713",
-    "https://www.foxsports.com/soccer/nwsl-kansas-city-current-vs-angel-city-fc-aug-01-2026-game-boxscore-651702",
-    "https://www.foxsports.com/soccer/nwsl-kansas-city-current-vs-racing-louisville-fc-jul-29-2026-game-boxscore-651697",
-    "https://www.foxsports.com/soccer/nwsl-north-carolina-courage-vs-orlando-pride-jul-31-2026-game-boxscore-651700",
+    "https://www.foxsports.com/soccer/nwsl-north-carolina-courage-vs-houston-dash-aug-16-2026-game-boxscore-651723",
     "https://www.foxsports.com/soccer/nwsl-orlando-pride-vs-racing-louisville-fc-aug-07-2026-game-boxscore-651712",
-    "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-chicago-stars-fc-aug-01-2026-game-boxscore-651701",
+    "https://www.foxsports.com/soccer/nwsl-portland-thorns-fc-vs-orlando-pride-aug-15-2026-game-boxscore-651722",
+    "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-boston-legacy-fc-aug-15-2026-game-boxscore-651721",
+    "https://www.foxsports.com/soccer/nwsl-san-diego-wave-fc-vs-denver-summit-fc-aug-14-2026-game-boxscore-651718",
     "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-angel-city-fc-aug-09-2026-game-boxscore-651716",
-    "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-portland-thorns-fc-aug-02-2026-game-boxscore-651706",
-    "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-washington-spirit-jul-29-2026-game-boxscore-651698",
-    "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-north-carolina-courage-aug-08-2026-game-boxscore-651711",
-    "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-san-diego-wave-fc-aug-02-2026-game-boxscore-651705"
+    "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-chicago-stars-fc-aug-14-2026-game-boxscore-651719",
+    "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-bay-fc-aug-14-2026-game-boxscore-651720",
+    "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-north-carolina-courage-aug-08-2026-game-boxscore-651711"
   ],
   "parsed": [
     {
-      "foxsports_event_id": "651699",
-      "source_url": "https://www.foxsports.com/soccer/nwsl-bay-fc-vs-gotham-fc-jul-29-2026-game-boxscore-651699",
-      "match_date": "2026-07-29",
-      "home_team": "Bay FC",
-      "away_team": "Gotham FC",
-      "timestamp": "2026-07-28T15:39:57.007973+00:00",
+      "foxsports_event_id": "651708",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-north-carolina-courage-aug-05-2026-game-boxscore-651708",
+      "match_date": "2026-08-05",
+      "home_team": "Denver Summit FC",
+      "away_team": "North Carolina Courage",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "sportsbook": "FoxSports",
+      "market_type": "total",
+      "line": 2.5,
+      "over_odds": 1.558659217877095,
+      "under_odds": 2.27,
+      "source_type": "current"
+    },
+    {
+      "foxsports_event_id": "651709",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-san-diego-wave-fc-aug-07-2026-game-boxscore-651709",
+      "match_date": "2026-08-07",
+      "home_team": "Gotham FC",
+      "away_team": "San Diego Wave FC",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
       "over_odds": 1.9174311926605505,
-      "under_odds": 1.7407407407407407,
+      "under_odds": 1.7518796992481203,
       "source_type": "current"
     },
     {
-      "foxsports_event_id": "651697",
-      "source_url": "https://www.foxsports.com/soccer/nwsl-kansas-city-current-vs-racing-louisville-fc-jul-29-2026-game-boxscore-651697",
-      "match_date": "2026-07-29",
-      "home_team": "Kansas City Current",
+      "foxsports_event_id": "651712",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-orlando-pride-vs-racing-louisville-fc-aug-07-2026-game-boxscore-651712",
+      "match_date": "2026-08-07",
+      "home_team": "Orlando Pride",
       "away_team": "Racing Louisville FC",
-      "timestamp": "2026-07-28T15:39:57.007973+00:00",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 3.5,
-      "over_odds": 2.08,
-      "under_odds": 1.6329113924050633,
+      "over_odds": 2.23,
+      "under_odds": 1.5524861878453038,
       "source_type": "current"
     },
     {
-      "foxsports_event_id": "651698",
-      "source_url": "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-washington-spirit-jul-29-2026-game-boxscore-651698",
-      "match_date": "2026-07-29",
-      "home_team": "Utah Royals",
-      "away_team": "Washington Spirit",
-      "timestamp": "2026-07-28T15:39:57.007973+00:00",
+      "foxsports_event_id": "651713",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-kansas-city-current-aug-08-2026-game-boxscore-651713",
+      "match_date": "2026-08-08",
+      "home_team": "Houston Dash",
+      "away_team": "Kansas City Current",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
-      "over_odds": 1.7575757575757576,
-      "under_odds": 1.925925925925926,
+      "over_odds": 1.6756756756756757,
+      "under_odds": 2.06,
       "source_type": "current"
     },
     {
-      "foxsports_event_id": "651700",
-      "source_url": "https://www.foxsports.com/soccer/nwsl-north-carolina-courage-vs-orlando-pride-jul-31-2026-game-boxscore-651700",
-      "match_date": "2026-07-31",
-      "home_team": "North Carolina Courage",
-      "away_team": "Orlando Pride",
-      "timestamp": "2026-07-28T15:39:57.007973+00:00",
+      "foxsports_event_id": "651714",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-boston-legacy-fc-vs-portland-thorns-fc-aug-09-2026-game-boxscore-651714",
+      "match_date": "2026-08-09",
+      "home_team": "Boston Legacy FC",
+      "away_team": "Portland Thorns FC",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
-      "over_odds": 1.7142857142857144,
-      "under_odds": 2.0,
+      "over_odds": 1.6329113924050633,
+      "under_odds": 2.12,
       "source_type": "current"
     },
     {
-      "foxsports_event_id": "651707",
-      "source_url": "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-boston-legacy-fc-aug-02-2026-game-boxscore-651707",
-      "match_date": "2026-08-02",
-      "home_team": "Denver Summit FC",
-      "away_team": "Boston Legacy FC",
-      "timestamp": "2026-07-28T15:39:57.007973+00:00",
+      "foxsports_event_id": "651715",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-chicago-stars-fc-vs-bay-fc-aug-09-2026-game-boxscore-651715",
+      "match_date": "2026-08-09",
+      "home_team": "Chicago Stars FC",
+      "away_team": "Bay FC",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
-      "over_odds": 1.5494505494505495,
-      "under_odds": 2.3,
+      "over_odds": 1.6493506493506493,
+      "under_odds": 2.1,
+      "source_type": "current"
+    },
+    {
+      "foxsports_event_id": "651716",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-angel-city-fc-aug-09-2026-game-boxscore-651716",
+      "match_date": "2026-08-09",
+      "home_team": "Seattle Reign FC",
+      "away_team": "Angel City FC",
+      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "sportsbook": "FoxSports",
+      "market_type": "total",
+      "line": 2.5,
+      "over_odds": 1.819672131147541,
+      "under_odds": 1.8771929824561404,
       "source_type": "current"
     }
   ],
   "discovery_unmatched": [],
   "fetch_unmatched": [
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-bay-fc-vs-seattle-reign-fc-aug-01-2026-game-boxscore-651704",
-      "reason": "missing_total_market"
-    },
-    {
-      "url": "https://www.foxsports.com/soccer/nwsl-boston-legacy-fc-vs-portland-thorns-fc-aug-09-2026-game-boxscore-651714",
-      "reason": "missing_total_market"
-    },
-    {
-      "url": "https://www.foxsports.com/soccer/nwsl-chicago-stars-fc-vs-bay-fc-aug-09-2026-game-boxscore-651715",
-      "reason": "missing_total_market"
-    },
-    {
-      "url": "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-north-carolina-courage-aug-05-2026-game-boxscore-651708",
+      "url": "https://www.foxsports.com/soccer/nwsl-angel-city-fc-vs-washington-spirit-aug-16-2026-game-boxscore-651724",
       "reason": "missing_total_market"
     },
     {
@@ -118,43 +131,35 @@
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-san-diego-wave-fc-aug-07-2026-game-boxscore-651709",
+      "url": "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-kansas-city-current-aug-14-2026-game-boxscore-651717",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-gotham-fc-aug-01-2026-game-boxscore-651703",
+      "url": "https://www.foxsports.com/soccer/nwsl-north-carolina-courage-vs-houston-dash-aug-16-2026-game-boxscore-651723",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-kansas-city-current-aug-08-2026-game-boxscore-651713",
+      "url": "https://www.foxsports.com/soccer/nwsl-portland-thorns-fc-vs-orlando-pride-aug-15-2026-game-boxscore-651722",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-kansas-city-current-vs-angel-city-fc-aug-01-2026-game-boxscore-651702",
+      "url": "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-boston-legacy-fc-aug-15-2026-game-boxscore-651721",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-orlando-pride-vs-racing-louisville-fc-aug-07-2026-game-boxscore-651712",
+      "url": "https://www.foxsports.com/soccer/nwsl-san-diego-wave-fc-vs-denver-summit-fc-aug-14-2026-game-boxscore-651718",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-chicago-stars-fc-aug-01-2026-game-boxscore-651701",
+      "url": "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-chicago-stars-fc-aug-14-2026-game-boxscore-651719",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-angel-city-fc-aug-09-2026-game-boxscore-651716",
-      "reason": "missing_total_market"
-    },
-    {
-      "url": "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-portland-thorns-fc-aug-02-2026-game-boxscore-651706",
+      "url": "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-bay-fc-aug-14-2026-game-boxscore-651720",
       "reason": "missing_total_market"
     },
     {
       "url": "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-north-carolina-courage-aug-08-2026-game-boxscore-651711",
-      "reason": "missing_total_market"
-    },
-    {
-      "url": "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-san-diego-wave-fc-aug-02-2026-game-boxscore-651705",
       "reason": "missing_total_market"
     }
   ]
