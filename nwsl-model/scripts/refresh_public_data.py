@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import csv
 import hashlib
 import json
 import math
@@ -49,6 +50,7 @@ TEAM_CATEGORIES = ("general", "attacking", "passing", "defending")
 MODEL_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = MODEL_ROOT.parent
 DEFAULT_OUTPUT = MODEL_ROOT / "data/nwsl-official/nwsl_2026_public_data.json"
+ASA_PLAYER_ANALYTICS = MODEL_ROOT / "data/raw/asa_player_analytics.csv"
 sys.path.insert(0, str(MODEL_ROOT))
 
 from src.publishing.http import PublicationError, publish_with_readback  # noqa: E402
@@ -1140,6 +1142,328 @@ def _finished_lineup_appearance_keys(
     return appearances
 
 
+# A finished match lineup can reference a player the roster and season-stats
+# endpoints do not know. Two distinct provider defects produce this, and each
+# gets its own ID-exact remedy, applied in order:
+#
+# 1. Alias entities. The platform occasionally mints a NEW official player ID
+#    when a player transfers (observed 2026-08-02: Khyah Harper's Houston
+#    lineup entry used a fresh ID while her canonical profile, roster row,
+#    and season stats all live under her original ID with the identical Opta
+#    providerId). The lineup entry is remapped to the canonical player via
+#    exact providerId equality; nothing is synthesized and no duplicate
+#    person is ever published.
+#
+# 2. Genuine departures. Roster and season stats return only currently
+#    active players, so a player who appears in a finished lineup and then
+#    leaves the league vanishes from both while her lineup rows remain.
+#    For these, a minimal profile and season-stat stub are synthesized from
+#    the official lineup payload itself. Nothing is estimated: names, shirt
+#    numbers, and provider IDs are copied verbatim, and minutes come from
+#    the lineup's substitution events exactly as the appearances CSV derives
+#    them.
+
+
+def _lineup_entries(
+    lineups_by_match_id: Mapping[str, Mapping[str, Any]],
+) -> Iterable[tuple[str, Mapping[str, Any]]]:
+    """Yield (team ID, player entry) for every lineup entry, fielded or benched."""
+    for match_id in sorted(lineups_by_match_id):
+        payload = lineups_by_match_id[match_id]
+        for side in ("home", "away"):
+            team = payload.get(side) or {}
+            team_id = str(team.get("teamId") or "")
+            for player in team.get("fielded") or []:
+                yield team_id, player
+            for player in team.get("benched") or []:
+                yield team_id, player
+
+
+def _resolve_lineup_player_aliases(
+    *,
+    lineups_by_match_id: Mapping[str, Mapping[str, Any]],
+    known_official_ids: set[str],
+    provider_to_official: Mapping[str, str],
+) -> dict[str, str]:
+    """Map unknown lineup player IDs to canonical IDs via exact providerId.
+
+    Only an unambiguous relationship remaps: the unknown lineup entity must
+    carry exactly one providerId across all its lineup entries, and that
+    providerId must belong to exactly one profiled player (callers must
+    already have excluded duplicated providerIds from the mapping).
+    """
+    providers_by_player: defaultdict[str, set[str]] = defaultdict(set)
+    for _team_id, player in _lineup_entries(lineups_by_match_id):
+        player_id = str(player.get("playerId") or "")
+        if not player_id or player_id in known_official_ids:
+            continue
+        provider_id = _text(player.get("providerId"))
+        if provider_id:
+            providers_by_player[player_id].add(provider_id)
+
+    aliases: dict[str, str] = {}
+    for player_id, providers in providers_by_player.items():
+        if len(providers) != 1:
+            continue
+        canonical = provider_to_official.get(next(iter(providers)))
+        if canonical and canonical != player_id:
+            aliases[player_id] = canonical
+    return aliases
+
+
+def _remap_lineup_player_ids(
+    lineups_by_match_id: Mapping[str, Mapping[str, Any]],
+    alias_to_canonical: Mapping[str, str],
+) -> int:
+    """Rewrite alias player IDs to canonical IDs in-place. Returns rewrites."""
+    if not alias_to_canonical:
+        return 0
+    rewritten = 0
+    for _team_id, player in _lineup_entries(lineups_by_match_id):
+        canonical = alias_to_canonical.get(str(player.get("playerId") or ""))
+        if canonical is not None:
+            player["playerId"] = canonical  # type: ignore[index]
+            rewritten += 1
+    return rewritten
+
+_ASA_POSITION_TO_ENUM = {
+    "GK": "GK",
+    "CB": "DEF",
+    "LB": "DEF",
+    "RB": "DEF",
+    "FB": "DEF",
+    "WB": "DEF",
+    "D": "DEF",
+    "DF": "DEF",
+    "DM": "MID",
+    "CM": "MID",
+    "AM": "MID",
+    "M": "MID",
+    "MF": "MID",
+    "ST": "FWD",
+    "W": "FWD",
+    "F": "FWD",
+    "FW": "FWD",
+    "CF": "FWD",
+}
+
+
+def _normalized_name_key(value: str) -> str:
+    folded = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
+    return " ".join(folded.lower().split())
+
+
+def _asa_position_for_name(
+    display_name: str,
+    *,
+    path: Path = ASA_PLAYER_ANALYTICS,
+) -> str | None:
+    """Resolve a position enum from ASA analytics by exact normalized name.
+
+    Used only as the last resort for synthesized lineup-only profiles, where
+    the official lineup payload carries no positional information at all
+    (roleLabel "All", role 0). The match must be unique and unambiguous:
+    every ASA row sharing the name key must map to the same enum, otherwise
+    the lookup abstains and the caller fails closed.
+    """
+    if not path.is_file():
+        return None
+    key = _normalized_name_key(display_name)
+    if not key:
+        return None
+    mapped: set[str] = set()
+    with path.open(newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            row_key = _normalized_name_key(
+                str(row.get("player_name_key") or row.get("player_name") or "")
+            )
+            if row_key != key:
+                continue
+            enum = _ASA_POSITION_TO_ENUM.get(
+                str(row.get("position") or "").strip().upper()
+            )
+            if enum is None:
+                return None
+            mapped.add(enum)
+    if len(mapped) != 1:
+        return None
+    return next(iter(mapped))
+
+
+def _lineup_event_minute(events: Iterable[Mapping[str, Any]], event_type: str) -> float | None:
+    for event in events or []:
+        if event.get("type") != event_type:
+            continue
+        try:
+            base = float(event.get("time"))
+        except (TypeError, ValueError):
+            continue
+        try:
+            extra = float(event.get("additionalTime"))
+        except (TypeError, ValueError):
+            extra = 0.0
+        return base + extra
+    return None
+
+
+def _synthesize_missing_lineup_players(
+    *,
+    lineups_by_match_id: Mapping[str, Mapping[str, Any]],
+    official_lineup_appearances: Iterable[tuple[str, str, str]],
+    known_official_ids: set[str],
+    team_ids: set[str],
+    asa_position_for_name: Callable[[str], str | None] = _asa_position_for_name,
+    regulation_minutes: float = 90.0,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Build profiles and season-stat stubs for lineup players with no profile.
+
+    Fails closed on any ambiguity: multiple teams, no derivable display name,
+    no providerId, or no derivable position. Match statistics are NOT
+    synthesized; the stub carries only the appearance facts derivable from
+    the lineup itself (games, starts, minutes), and the season reconciliation
+    marks the player matchStatsComplete=False as it already does for any
+    lineup appearance without a stat row.
+    """
+    appearance_index: defaultdict[str, set[tuple[str, str]]] = defaultdict(set)
+    for player_id, match_id, team_id in official_lineup_appearances:
+        appearance_index[player_id].add((match_id, team_id))
+    missing_ids = sorted(set(appearance_index) - known_official_ids)
+
+    profiles: list[dict[str, Any]] = []
+    season_rows: list[dict[str, Any]] = []
+    for player_id in missing_ids:
+        teams = {team_id for _match_id, team_id in appearance_index[player_id]}
+        if len(teams) != 1:
+            raise DataValidationError(
+                f"synthesized lineup player {player_id} appears for "
+                f"{len(teams)} teams"
+            )
+        team_id = next(iter(teams))
+        if team_id not in team_ids:
+            raise DataValidationError(
+                f"synthesized lineup player {player_id} references unknown "
+                f"team {team_id}"
+            )
+
+        meta: Mapping[str, Any] | None = None
+        starts = 0
+        minutes_total = 0.0
+        for match_id, _team in sorted(appearance_index[player_id]):
+            payload = lineups_by_match_id.get(match_id) or {}
+            for side in ("home", "away"):
+                team = payload.get(side) or {}
+                if str(team.get("teamId")) != team_id:
+                    continue
+                for player in team.get("fielded") or []:
+                    if player.get("playerId") != player_id:
+                        continue
+                    meta = meta or player
+                    starts += 1
+                    out_minute = _lineup_event_minute(
+                        player.get("events") or [], "substitution-out"
+                    )
+                    end = regulation_minutes if out_minute is None else out_minute
+                    minutes_total += max(float(end), 0.0)
+                for player in team.get("benched") or []:
+                    if player.get("playerId") != player_id:
+                        continue
+                    events = player.get("events") or []
+                    in_minute = _lineup_event_minute(events, "substitution-in")
+                    if in_minute is None:
+                        continue
+                    meta = meta or player
+                    out_minute = _lineup_event_minute(events, "substitution-out")
+                    end = regulation_minutes if out_minute is None else out_minute
+                    minutes_total += max(float(end) - float(in_minute), 0.0)
+        if meta is None:
+            raise DataValidationError(
+                f"synthesized lineup player {player_id} has no lineup entry"
+            )
+
+        first_name = _text(meta.get("mediaFirstName"))
+        last_name = _text(meta.get("mediaLastName"))
+        display_name = _text(meta.get("displayName"))
+        if not display_name:
+            display_name = " ".join(
+                value for value in (first_name, last_name) if value
+            )
+        display_name = display_name or _text(meta.get("shortName"))
+        if not display_name:
+            raise DataValidationError(
+                f"synthesized lineup player {player_id} has no display name"
+            )
+        provider_id = _text(meta.get("providerId"))
+        if not provider_id:
+            raise DataValidationError(
+                f"synthesized lineup player {player_id} has no providerId"
+            )
+
+        try:
+            position = _position(meta.get("roleLabel"), meta.get("role"))
+        except DataValidationError:
+            if bool(meta.get("isGoalkeeper")):
+                position = "GK"
+            else:
+                position = asa_position_for_name(display_name)
+                if position is None:
+                    raise DataValidationError(
+                        f"synthesized lineup player {player_id} "
+                        f"({display_name}) has no derivable position"
+                    ) from None
+
+        route_id = _player_route_id(player_id)
+        profiles.append(
+            {
+                "id": route_id,
+                "officialId": player_id,
+                "providerId": provider_id,
+                "slug": _slugify(display_name),
+                "displayName": display_name,
+                "firstName": first_name,
+                "lastName": last_name,
+                "currentTeamId": team_id,
+                "position": position,
+                "playerStatus": "left_team",
+                "jerseyNumber": _jersey_number(meta.get("bibNumber")),
+                "dateOfBirth": None,
+                "nationality": _text(meta.get("nationality")),
+                "nationalityCode": _text(meta.get("nationalityIsoCode")),
+            }
+        )
+        season_rows.append(
+            {
+                "playerId": route_id,
+                "teamId": team_id,
+                "gamesPlayed": len(appearance_index[player_id]),
+                "starts": starts,
+                "minutesPlayed": minutes_total,
+                "goals": 0,
+                "assists": 0,
+                "shots": 0,
+                "shotsOnTarget": 0,
+                "xg": None,
+                "xa": None,
+                "passesAttempted": 0,
+                "passesCompleted": 0,
+                "passAccuracyPct": None,
+                "chancesCreated": 0,
+                "tackles": 0,
+                "tacklesWon": 0,
+                "interceptions": 0,
+                "clearances": 0,
+                "cleanSheets": 0,
+                "saves": 0,
+                "goalsConceded": 0,
+                "yellowCards": 0,
+                "redCards": 0,
+                "fantasyPoints": 0.0,
+                "pointsPer90": 0.0,
+                "rawStats": {},
+            }
+        )
+    return profiles, season_rows
+
+
 def _breakdown_fetch_jobs(
     *,
     aggregate_positive_teams: Mapping[str, str],
@@ -2155,16 +2479,81 @@ def build_payload(
         lambda match_id: fetch_match_lineup(client, match_id),
         workers=workers,
     )
+    # Remedy 1: the platform can mint a fresh official ID for a transferred
+    # player while her canonical profile keeps the same Opta providerId.
+    # Remap such alias lineup entries onto the canonical player before any
+    # appearance is derived, so one human is never published twice. Only a
+    # providerId that identifies exactly one profiled player may remap.
+    provider_counts: defaultdict[str, int] = defaultdict(int)
+    for profile in players:
+        provider_counts[str(profile["providerId"])] += 1
+    provider_to_official = {
+        str(profile["providerId"]): str(profile["officialId"])
+        for profile in players
+        if provider_counts[str(profile["providerId"])] == 1
+    }
+    lineup_player_aliases = _resolve_lineup_player_aliases(
+        lineups_by_match_id=lineups_by_match_id,
+        known_official_ids=set(official_to_route),
+        provider_to_official=provider_to_official,
+    )
+    _remap_lineup_player_ids(lineups_by_match_id, lineup_player_aliases)
     official_lineup_appearances = _finished_lineup_appearances(
         lineups_by_match_id
     )
+    # Remedy 2: a genuinely departed player (providerId unknown to every
+    # profile) can appear in a finished lineup while missing from the roster
+    # and season-stats endpoints (both are active-players-only). Synthesize
+    # her profile and season stub from the lineup itself so the publication
+    # is not permanently blocked. This runs after aggregate_positive_teams
+    # on purpose: synthesized players must not receive matchBreakdown jobs
+    # (the endpoint 500s for them), so their appearances fall into the
+    # already-tolerated lineup-only category.
+    synthesized_profiles, synthesized_season_rows = (
+        _synthesize_missing_lineup_players(
+            lineups_by_match_id=lineups_by_match_id,
+            official_lineup_appearances=official_lineup_appearances,
+            known_official_ids=set(official_to_route),
+            team_ids=team_ids,
+        )
+    )
+    synthesized_official_ids: set[str] = set()
+    for profile in synthesized_profiles:
+        official_id = str(profile["officialId"])
+        route_id = str(profile["id"])
+        players.append(profile)
+        official_to_route[official_id] = route_id
+        route_to_official[route_id] = official_id
+        current_teams_by_player[official_id] = str(profile["currentTeamId"])
+        candidates_by_player[official_id] = {str(profile["currentTeamId"])}
+        positions_by_player[route_id] = str(profile["position"])
+        published_official_player_ids.add(official_id)
+        synthesized_official_ids.add(official_id)
+    if synthesized_profiles:
+        players.sort(key=lambda row: str(row["officialId"]))
+        player_season_stats.extend(synthesized_season_rows)
+        player_season_stats.sort(key=lambda row: str(row["playerId"]))
+    # A finished lineup is official, ID-exact evidence that a player appeared
+    # for a team, so it extends her transfer candidates. Roster and season
+    # stats report only the current team, which otherwise strands a
+    # mid-season mover's earlier finished appearances (e.g. a Gotham match in
+    # a player's breakdown after she moved to Houston) behind the exact-team
+    # guards.
+    for player_id, _match_id, appearance_team_id in official_lineup_appearances:
+        appearance_candidates = candidates_by_player.get(player_id)
+        if appearance_candidates is not None:
+            appearance_candidates.add(appearance_team_id)
     lineup_appearance_keys = _finished_lineup_appearance_keys(
         official_lineup_appearances,
         official_to_route,
     )
     breakdown_jobs = _breakdown_fetch_jobs(
         aggregate_positive_teams=aggregate_positive_teams,
-        lineup_appearances=official_lineup_appearances,
+        lineup_appearances={
+            appearance
+            for appearance in official_lineup_appearances
+            if appearance[0] not in synthesized_official_ids
+        },
         candidates_by_player=candidates_by_player,
         current_teams_by_player=current_teams_by_player,
     )
@@ -2269,6 +2658,15 @@ def build_payload(
                 "finishedLineupAppearances": len(lineup_appearance_keys),
                 "statBearingMatchAppearances": len(stat_bearing_keys),
                 "lineupOnlyAppearancesExcluded": lineup_only_appearances_excluded,
+                "synthesizedLineupProfiles": len(synthesized_profiles),
+                "synthesizedLineupPlayerIds": ",".join(
+                    sorted(synthesized_official_ids)
+                ),
+                "remappedLineupPlayerAliases": len(lineup_player_aliases),
+                "remappedLineupPlayerIds": ",".join(
+                    f"{alias}->{canonical}"
+                    for alias, canonical in sorted(lineup_player_aliases.items())
+                ),
                 "playerSeasonAggregateFields": "starts,xa,cleanSheets",
                 "teamSeasonAggregateFields": (
                     "cleanSheets,shots,shotsOnTarget,xg,xga,possessionPct,"

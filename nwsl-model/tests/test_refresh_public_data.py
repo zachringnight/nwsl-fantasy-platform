@@ -22,8 +22,12 @@ from scripts.refresh_public_data import (
     _count_live_player_rows_excluded,
     _date_only,
     _fantasy_score,
+    _asa_position_for_name,
     _finished_lineup_appearances,
     _finished_lineup_appearance_keys,
+    _remap_lineup_player_ids,
+    _resolve_lineup_player_aliases,
+    _synthesize_missing_lineup_players,
     _is_official_appearance,
     _lineup_appearance_teams_for_player,
     _match_core_stats,
@@ -1051,3 +1055,257 @@ def test_mocked_observed_shape_stays_below_vercel_publish_body_limit() -> None:
     )
 
     assert compact_bytes < 4_400_000
+
+
+# --- synthesized lineup-only profiles -------------------------------------
+
+_SYNTH_PLAYER = "nwsl::Football_Player::" + "3" * 32
+_SYNTH_TEAM = "nwsl::Football_Team::" + "4" * 32
+_SYNTH_MATCH = "nwsl::Football_Match::" + "5" * 32
+
+
+def _synth_lineup_payload(
+    *,
+    benched_events: list[dict[str, Any]] | None = None,
+    fielded: bool = False,
+    is_goalkeeper: bool = False,
+    role_label: str = "All",
+    role: int = 0,
+) -> dict[str, Any]:
+    player = {
+        "providerId": "opta:Player:synthetic1",
+        "playerId": _SYNTH_PLAYER,
+        "bibNumber": "34",
+        "roleLabel": role_label,
+        "role": role,
+        "mediaFirstName": "Khyah",
+        "mediaLastName": "Harper",
+        "shortName": "K. Harper",
+        "displayName": None,
+        "nationality": "",
+        "nationalityIsoCode": "",
+        "isGoalkeeper": is_goalkeeper,
+        "events": benched_events or [],
+    }
+    side = {"teamId": _SYNTH_TEAM}
+    if fielded:
+        side["fielded"] = [player]
+        side["benched"] = []
+    else:
+        side["fielded"] = []
+        side["benched"] = [player]
+    return {
+        _SYNTH_MATCH: {
+            "home": side,
+            "away": {"teamId": "nwsl::Football_Team::" + "6" * 32},
+        }
+    }
+
+
+def test_synthesizes_substitute_profile_with_asa_position() -> None:
+    lineups = _synth_lineup_payload(
+        benched_events=[{"type": "substitution-in", "time": 55, "additionalTime": None}]
+    )
+    profiles, season_rows = _synthesize_missing_lineup_players(
+        lineups_by_match_id=lineups,
+        official_lineup_appearances={(_SYNTH_PLAYER, _SYNTH_MATCH, _SYNTH_TEAM)},
+        known_official_ids=set(),
+        team_ids={_SYNTH_TEAM},
+        asa_position_for_name=lambda name: "FWD",
+    )
+    assert len(profiles) == 1
+    profile = profiles[0]
+    assert profile["officialId"] == _SYNTH_PLAYER
+    assert profile["displayName"] == "Khyah Harper"
+    assert profile["slug"] == "khyah-harper"
+    assert profile["position"] == "FWD"
+    assert profile["playerStatus"] == "left_team"
+    assert profile["currentTeamId"] == _SYNTH_TEAM
+    assert profile["jerseyNumber"] == 34
+    assert len(season_rows) == 1
+    row = season_rows[0]
+    assert row["gamesPlayed"] == 1
+    assert row["starts"] == 0
+    assert row["minutesPlayed"] == 35.0
+    assert row["goals"] == 0
+    assert row["rawStats"] == {}
+
+
+def test_synthesizes_goalkeeper_from_lineup_flag_without_asa() -> None:
+    lineups = _synth_lineup_payload(fielded=True, is_goalkeeper=True)
+    profiles, season_rows = _synthesize_missing_lineup_players(
+        lineups_by_match_id=lineups,
+        official_lineup_appearances={(_SYNTH_PLAYER, _SYNTH_MATCH, _SYNTH_TEAM)},
+        known_official_ids=set(),
+        team_ids={_SYNTH_TEAM},
+        asa_position_for_name=lambda name: pytest.fail(
+            "ASA must not be consulted when the lineup marks a goalkeeper"
+        ),
+    )
+    assert profiles[0]["position"] == "GK"
+    assert season_rows[0]["starts"] == 1
+    assert season_rows[0]["minutesPlayed"] == 90.0
+
+
+def test_synthesizes_position_from_role_label_before_asa() -> None:
+    lineups = _synth_lineup_payload(fielded=True, role_label="Forward", role=4)
+    profiles, _season_rows = _synthesize_missing_lineup_players(
+        lineups_by_match_id=lineups,
+        official_lineup_appearances={(_SYNTH_PLAYER, _SYNTH_MATCH, _SYNTH_TEAM)},
+        known_official_ids=set(),
+        team_ids={_SYNTH_TEAM},
+        asa_position_for_name=lambda name: pytest.fail(
+            "ASA must not be consulted when roleLabel is derivable"
+        ),
+    )
+    assert profiles[0]["position"] == "FWD"
+
+
+def test_synthesis_fails_closed_without_derivable_position() -> None:
+    lineups = _synth_lineup_payload(
+        benched_events=[{"type": "substitution-in", "time": 55, "additionalTime": None}]
+    )
+    with pytest.raises(DataValidationError, match="no derivable position"):
+        _synthesize_missing_lineup_players(
+            lineups_by_match_id=lineups,
+            official_lineup_appearances={(_SYNTH_PLAYER, _SYNTH_MATCH, _SYNTH_TEAM)},
+            known_official_ids=set(),
+            team_ids={_SYNTH_TEAM},
+            asa_position_for_name=lambda name: None,
+        )
+
+
+def test_synthesis_skips_players_with_profiles() -> None:
+    lineups = _synth_lineup_payload(fielded=True)
+    profiles, season_rows = _synthesize_missing_lineup_players(
+        lineups_by_match_id=lineups,
+        official_lineup_appearances={(_SYNTH_PLAYER, _SYNTH_MATCH, _SYNTH_TEAM)},
+        known_official_ids={_SYNTH_PLAYER},
+        team_ids={_SYNTH_TEAM},
+        asa_position_for_name=lambda name: "FWD",
+    )
+    assert profiles == []
+    assert season_rows == []
+
+
+def test_synthesis_fails_closed_on_multiple_teams() -> None:
+    lineups = _synth_lineup_payload(fielded=True)
+    other_team = "nwsl::Football_Team::" + "7" * 32
+    with pytest.raises(DataValidationError, match="2 teams"):
+        _synthesize_missing_lineup_players(
+            lineups_by_match_id=lineups,
+            official_lineup_appearances={
+                (_SYNTH_PLAYER, _SYNTH_MATCH, _SYNTH_TEAM),
+                (_SYNTH_PLAYER, "nwsl::Football_Match::" + "8" * 32, other_team),
+            },
+            known_official_ids=set(),
+            team_ids={_SYNTH_TEAM, other_team},
+            asa_position_for_name=lambda name: "FWD",
+        )
+
+
+def test_asa_position_lookup_requires_unique_unambiguous_match(tmp_path) -> None:
+    path = tmp_path / "asa.csv"
+    path.write_text(
+        "player_name,player_name_key,position\n"
+        "Khyah Harper,khyah harper,ST\n"
+        "Jane Doe,jane doe,CB\n"
+        "Jane Doe,jane doe,ST\n"
+        "Odd Code,odd code,XX\n",
+        encoding="utf-8",
+    )
+    assert _asa_position_for_name("Khyah Harper", path=path) == "FWD"
+    assert _asa_position_for_name("KHYAH  HARPER", path=path) == "FWD"
+    assert _asa_position_for_name("Jane Doe", path=path) is None
+    assert _asa_position_for_name("Odd Code", path=path) is None
+    assert _asa_position_for_name("Nobody Here", path=path) is None
+    assert _asa_position_for_name("Khyah Harper", path=tmp_path / "missing.csv") is None
+
+
+# --- alias lineup entities (same person, new official ID) ------------------
+
+_ALIAS_OLD = "nwsl::Football_Player::" + "a" * 31 + "1"
+_ALIAS_NEW = "nwsl::Football_Player::" + "a" * 31 + "2"
+_SHARED_PROVIDER = "opta:Player:sameperson1"
+
+
+def _alias_lineup() -> dict[str, Any]:
+    return {
+        _SYNTH_MATCH: {
+            "home": {
+                "teamId": _SYNTH_TEAM,
+                "fielded": [],
+                "benched": [
+                    {
+                        "playerId": _ALIAS_NEW,
+                        "providerId": _SHARED_PROVIDER,
+                        "events": [{"type": "substitution-in", "time": 55}],
+                    }
+                ],
+            },
+            "away": {"teamId": "nwsl::Football_Team::" + "6" * 32},
+        }
+    }
+
+
+def test_alias_lineup_player_remaps_to_canonical_via_provider_id() -> None:
+    lineups = _alias_lineup()
+    aliases = _resolve_lineup_player_aliases(
+        lineups_by_match_id=lineups,
+        known_official_ids={_ALIAS_OLD},
+        provider_to_official={_SHARED_PROVIDER: _ALIAS_OLD},
+    )
+    assert aliases == {_ALIAS_NEW: _ALIAS_OLD}
+    rewritten = _remap_lineup_player_ids(lineups, aliases)
+    assert rewritten == 1
+    appearances = _finished_lineup_appearances(lineups)
+    assert appearances == {(_ALIAS_OLD, _SYNTH_MATCH, _SYNTH_TEAM)}
+
+
+def test_alias_resolution_abstains_for_unknown_or_ambiguous_provider() -> None:
+    lineups = _alias_lineup()
+    # Provider not present in any profile: no remap (synthesis fallback).
+    assert (
+        _resolve_lineup_player_aliases(
+            lineups_by_match_id=lineups,
+            known_official_ids=set(),
+            provider_to_official={},
+        )
+        == {}
+    )
+    # Player already profiled under this ID: no remap.
+    assert (
+        _resolve_lineup_player_aliases(
+            lineups_by_match_id=lineups,
+            known_official_ids={_ALIAS_NEW},
+            provider_to_official={_SHARED_PROVIDER: _ALIAS_OLD},
+        )
+        == {}
+    )
+
+
+def test_alias_resolution_abstains_when_lineups_disagree_on_provider() -> None:
+    second_match = "nwsl::Football_Match::" + "9" * 32
+    lineups = _alias_lineup()
+    lineups[second_match] = {
+        "home": {
+            "teamId": _SYNTH_TEAM,
+            "fielded": [
+                {
+                    "playerId": _ALIAS_NEW,
+                    "providerId": "opta:Player:differentperson",
+                    "events": [],
+                }
+            ],
+            "benched": [],
+        },
+        "away": {"teamId": "nwsl::Football_Team::" + "6" * 32},
+    }
+    assert (
+        _resolve_lineup_player_aliases(
+            lineups_by_match_id=lineups,
+            known_official_ids=set(),
+            provider_to_official={_SHARED_PROVIDER: _ALIAS_OLD},
+        )
+        == {}
+    )
