@@ -8,3 +8,6 @@ data/processed/research/
 data/processed/policy/
 data/raw/foxsports_current_totals_unmatched.csv
 data/raw/operational_feature_refresh.json
+
+# Public-data publication payload (authoritative copy lives in Supabase)
+data/nwsl-official/nwsl_2026_public_data.json
