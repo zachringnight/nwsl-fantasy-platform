@@ -2,22 +2,22 @@
   "status": "ready",
   "blockers": [],
   "completed_matches": {
-    "latest_espn_date": "2026-08-03",
-    "latest_raw_date": "2026-08-03",
-    "raw_rows": 327
+    "latest_espn_date": "2026-08-06",
+    "latest_raw_date": "2026-08-06",
+    "raw_rows": 328
   },
   "fixture_identity": {
-    "completed_ids": 327,
-    "upcoming_ids": 102,
+    "completed_ids": 328,
+    "upcoming_ids": 101,
     "overlap_match_ids": []
   },
   "asa_xg_2026": {
-    "covered_matches": 137,
-    "reference_matches": 138,
+    "covered_matches": 138,
+    "reference_matches": 139,
     "coverage_pct": 99.28,
     "fallback_match_ids": [
       "401853922"
     ]
   },
-  "source_manifest_generated_at": "2026-08-05T21:39:49.139Z"
+  "source_manifest_generated_at": "2026-08-06T16:29:45.943Z"
 }

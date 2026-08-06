@@ -88,14 +88,14 @@
     "teamId": "15366",
     "team": "North Carolina Courage",
     "abbreviation": "NC",
-    "played": 16,
-    "won": 7,
+    "played": 17,
+    "won": 8,
     "drawn": 3,
     "lost": 6,
-    "goalsFor": 26,
+    "goalsFor": 28,
     "goalsAgainst": 23,
-    "goalDifference": 3,
-    "points": 24
+    "goalDifference": 5,
+    "points": 27
   },
   {
     "rank": 8,
@@ -144,13 +144,13 @@
     "teamId": "131563",
     "team": "Denver Summit FC",
     "abbreviation": "DEN",
-    "played": 16,
+    "played": 17,
     "won": 5,
     "drawn": 5,
-    "lost": 6,
+    "lost": 7,
     "goalsFor": 22,
-    "goalsAgainst": 21,
-    "goalDifference": 1,
+    "goalsAgainst": 23,
+    "goalDifference": -1,
     "points": 20
   },
   {

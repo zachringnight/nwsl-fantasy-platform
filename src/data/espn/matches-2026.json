@@ -1663,8 +1663,8 @@
     "awayTeam": "North Carolina Courage",
     "awayTeamId": "15366",
     "homeGoals": 0,
-    "awayGoals": 0,
-    "status": "upcoming",
+    "awayGoals": 2,
+    "status": "completed",
     "venue": "Centennial Stadium"
   },
   {
@@ -2793,7 +2793,7 @@
     "homeGoals": 0,
     "awayGoals": 0,
     "status": "upcoming",
-    "venue": ""
+    "venue": "Dignity Health Sports Park"
   },
   {
     "matchId": "401854033",

@@ -1,19 +1,20 @@
 {
-  "start_date": "2026-08-05",
+  "start_date": "2026-08-06",
   "days": 14,
   "event_urls": [
     "https://www.foxsports.com/soccer/nwsl-angel-city-fc-vs-washington-spirit-aug-16-2026-game-boxscore-651724",
     "https://www.foxsports.com/soccer/nwsl-boston-legacy-fc-vs-portland-thorns-fc-aug-09-2026-game-boxscore-651714",
     "https://www.foxsports.com/soccer/nwsl-chicago-stars-fc-vs-bay-fc-aug-09-2026-game-boxscore-651715",
-    "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-north-carolina-courage-aug-05-2026-game-boxscore-651708",
     "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-utah-royals-fc-aug-08-2026-game-boxscore-651710",
     "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-kansas-city-current-aug-14-2026-game-boxscore-651717",
     "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-san-diego-wave-fc-aug-07-2026-game-boxscore-651709",
+    "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-chicago-stars-fc-aug-19-2026-game-boxscore-651726",
     "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-kansas-city-current-aug-08-2026-game-boxscore-651713",
     "https://www.foxsports.com/soccer/nwsl-north-carolina-courage-vs-houston-dash-aug-16-2026-game-boxscore-651723",
     "https://www.foxsports.com/soccer/nwsl-orlando-pride-vs-racing-louisville-fc-aug-07-2026-game-boxscore-651712",
     "https://www.foxsports.com/soccer/nwsl-portland-thorns-fc-vs-orlando-pride-aug-15-2026-game-boxscore-651722",
     "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-boston-legacy-fc-aug-15-2026-game-boxscore-651721",
+    "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-seattle-reign-fc-aug-19-2026-game-boxscore-651725",
     "https://www.foxsports.com/soccer/nwsl-san-diego-wave-fc-vs-denver-summit-fc-aug-14-2026-game-boxscore-651718",
     "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-angel-city-fc-aug-09-2026-game-boxscore-651716",
     "https://www.foxsports.com/soccer/nwsl-seattle-reign-fc-vs-chicago-stars-fc-aug-14-2026-game-boxscore-651719",
@@ -22,31 +23,17 @@
   ],
   "parsed": [
     {
-      "foxsports_event_id": "651708",
-      "source_url": "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-north-carolina-courage-aug-05-2026-game-boxscore-651708",
-      "match_date": "2026-08-05",
-      "home_team": "Denver Summit FC",
-      "away_team": "North Carolina Courage",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
-      "sportsbook": "FoxSports",
-      "market_type": "total",
-      "line": 2.5,
-      "over_odds": 1.558659217877095,
-      "under_odds": 2.27,
-      "source_type": "current"
-    },
-    {
       "foxsports_event_id": "651709",
       "source_url": "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-san-diego-wave-fc-aug-07-2026-game-boxscore-651709",
       "match_date": "2026-08-07",
       "home_team": "Gotham FC",
       "away_team": "San Diego Wave FC",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
-      "over_odds": 1.9174311926605505,
-      "under_odds": 1.7518796992481203,
+      "over_odds": 1.99009900990099,
+      "under_odds": 1.6896551724137931,
       "source_type": "current"
     },
     {
@@ -55,12 +42,26 @@
       "match_date": "2026-08-07",
       "home_team": "Orlando Pride",
       "away_team": "Racing Louisville FC",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 3.5,
-      "over_odds": 2.23,
-      "under_odds": 1.5524861878453038,
+      "over_odds": 2.21,
+      "under_odds": 1.5617977528089888,
+      "source_type": "current"
+    },
+    {
+      "foxsports_event_id": "651710",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-utah-royals-fc-aug-08-2026-game-boxscore-651710",
+      "match_date": "2026-08-08",
+      "home_team": "Denver Summit FC",
+      "away_team": "Utah Royals",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
+      "sportsbook": "FoxSports",
+      "market_type": "total",
+      "line": 2.5,
+      "over_odds": 1.6024096385542168,
+      "under_odds": 2.1799999999999997,
       "source_type": "current"
     },
     {
@@ -69,7 +70,7 @@
       "match_date": "2026-08-08",
       "home_team": "Houston Dash",
       "away_team": "Kansas City Current",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
@@ -78,17 +79,31 @@
       "source_type": "current"
     },
     {
+      "foxsports_event_id": "651711",
+      "source_url": "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-north-carolina-courage-aug-08-2026-game-boxscore-651711",
+      "match_date": "2026-08-08",
+      "home_team": "Washington Spirit",
+      "away_team": "North Carolina Courage",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
+      "sportsbook": "FoxSports",
+      "market_type": "total",
+      "line": 2.5,
+      "over_odds": 1.6329113924050633,
+      "under_odds": 2.1399999999999997,
+      "source_type": "current"
+    },
+    {
       "foxsports_event_id": "651714",
       "source_url": "https://www.foxsports.com/soccer/nwsl-boston-legacy-fc-vs-portland-thorns-fc-aug-09-2026-game-boxscore-651714",
       "match_date": "2026-08-09",
       "home_team": "Boston Legacy FC",
       "away_team": "Portland Thorns FC",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
-      "over_odds": 1.6329113924050633,
-      "under_odds": 2.12,
+      "over_odds": 1.6578947368421053,
+      "under_odds": 2.08,
       "source_type": "current"
     },
     {
@@ -97,7 +112,7 @@
       "match_date": "2026-08-09",
       "home_team": "Chicago Stars FC",
       "away_team": "Bay FC",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
@@ -111,7 +126,7 @@
       "match_date": "2026-08-09",
       "home_team": "Seattle Reign FC",
       "away_team": "Angel City FC",
-      "timestamp": "2026-08-05T21:41:38.595820+00:00",
+      "timestamp": "2026-08-06T16:35:55.836182+00:00",
       "sportsbook": "FoxSports",
       "market_type": "total",
       "line": 2.5,
@@ -127,11 +142,11 @@
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-denver-summit-fc-vs-utah-royals-fc-aug-08-2026-game-boxscore-651710",
+      "url": "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-kansas-city-current-aug-14-2026-game-boxscore-651717",
       "reason": "missing_total_market"
     },
     {
-      "url": "https://www.foxsports.com/soccer/nwsl-gotham-fc-vs-kansas-city-current-aug-14-2026-game-boxscore-651717",
+      "url": "https://www.foxsports.com/soccer/nwsl-houston-dash-vs-chicago-stars-fc-aug-19-2026-game-boxscore-651726",
       "reason": "missing_total_market"
     },
     {
@@ -147,6 +162,10 @@
       "reason": "missing_total_market"
     },
     {
+      "url": "https://www.foxsports.com/soccer/nwsl-racing-louisville-fc-vs-seattle-reign-fc-aug-19-2026-game-boxscore-651725",
+      "reason": "missing_total_market"
+    },
+    {
       "url": "https://www.foxsports.com/soccer/nwsl-san-diego-wave-fc-vs-denver-summit-fc-aug-14-2026-game-boxscore-651718",
       "reason": "missing_total_market"
     },
@@ -156,10 +175,6 @@
     },
     {
       "url": "https://www.foxsports.com/soccer/nwsl-utah-royals-fc-vs-bay-fc-aug-14-2026-game-boxscore-651720",
-      "reason": "missing_total_market"
-    },
-    {
-      "url": "https://www.foxsports.com/soccer/nwsl-washington-spirit-vs-north-carolina-courage-aug-08-2026-game-boxscore-651711",
       "reason": "missing_total_market"
     }
   ]

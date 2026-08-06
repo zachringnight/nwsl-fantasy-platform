@@ -1,0 +1,220 @@
+{
+  "data": {
+    "matches_path": "data/raw/matches.csv",
+    "upcoming_path": "data/raw/upcoming.csv",
+    "odds_path": "data/raw/odds.csv",
+    "normalized_odds_path": "data/raw/odds_normalized.csv",
+    "odds_snapshots_path": "data/raw/odds_snapshots.csv",
+    "venues_path": "data/raw/venues.csv",
+    "appearances_path": "data/raw/appearances.csv",
+    "projected_lineups_path": "data/raw/projected_lineups.csv",
+    "official_matches_dir": "../data/nwsl-official",
+    "asa_match_xgoals_path": "data/raw/asa_match_xgoals.csv",
+    "team_season_priors_path": "data/raw/team_season_priors.csv",
+    "player_season_priors_path": "data/raw/player_season_priors.csv",
+    "history_start_season": 2025,
+    "prior_history_start_season": 2025,
+    "output_dir": "data/processed",
+    "format": "csv"
+  },
+  "model": {
+    "primary_model": "dixon_coles",
+    "max_goals": 8,
+    "random_seed": 42
+  },
+  "team_ratings": {
+    "half_life_days": 45,
+    "prior_weight": 5.0,
+    "season_carryover": 0.25,
+    "multi_season_decay": true
+  },
+  "dixon_coles": {
+    "rho_init": -0.05,
+    "rho_bounds": [
+      -0.5,
+      0.5
+    ],
+    "regularization": 2.0,
+    "contextual_regularization": 3000.0,
+    "rho_regularization": 3000.0,
+    "home_advantage_init": 0.25,
+    "home_advantage_scale": 1.0,
+    "home_advantage_cap": 0.1,
+    "max_iter": 2000,
+    "tol": 1e-08
+  },
+  "bivariate_poisson": {
+    "lambda3_init": 0.1,
+    "lambda3_bounds": [
+      0.001,
+      2.0
+    ],
+    "regularization": 2.0,
+    "contextual_regularization": 3000.0,
+    "lambda3_regularization": 3000.0,
+    "home_advantage_init": 0.25,
+    "home_advantage_scale": 1.0,
+    "home_advantage_cap": 0.1,
+    "max_iter": 2000,
+    "tol": 1e-08
+  },
+  "elo_baseline": {
+    "k_factor": 20.0,
+    "home_advantage_elo": 45.0,
+    "draw_prior": 0.27,
+    "draw_prior_weight": 50.0
+  },
+  "spi_lite": {
+    "rating_weight": 0.55,
+    "current_full_weight_matches": 10.0,
+    "max_rating_log_adjustment": 0.7,
+    "lineup_log_scale": 0.035,
+    "rest_log_scale": 0.012,
+    "travel_log_scale": 0.0,
+    "pace_weight": 0.2,
+    "min_lambda": 0.2,
+    "max_lambda": 3.75,
+    "league_home_rate": null,
+    "league_away_rate": null
+  },
+  "lineup_adjustment": {
+    "ridge_alpha": 100.0,
+    "min_minutes": 200,
+    "split_attack_defense": true
+  },
+  "features": {
+    "rolling_windows": [
+      3,
+      5,
+      10
+    ],
+    "short_rest_days": 4,
+    "use_travel_distance": true,
+    "use_weather": true,
+    "use_surface": true
+  },
+  "market_blend": {
+    "alpha": 0.5,
+    "alpha_schedule_enabled": true,
+    "alpha_schedule": [
+      {
+        "matches_played_lt": 5,
+        "alpha": 0.3
+      },
+      {
+        "matches_played_lt": 10,
+        "alpha": 0.4
+      },
+      {
+        "matches_played_lt": 20,
+        "alpha": 0.5
+      },
+      {
+        "matches_played_lt": 999,
+        "alpha": 0.55
+      }
+    ],
+    "devig_method": "multiplicative"
+  },
+  "betting": {
+    "min_edge": 0.02,
+    "min_confidence": 0.08,
+    "market_rules": {
+      "moneyline": {
+        "min_edge": 0.03,
+        "min_confidence": 0.05,
+        "max_market_price": 4.0,
+        "side_rules": {
+          "draw": {
+            "min_edge": 0.12,
+            "min_confidence": 0.0,
+            "min_probability_edge": 0.12,
+            "min_market_price": 3.0,
+            "max_market_price": 5.5
+          }
+        }
+      },
+      "totals": {
+        "enabled": true,
+        "official_picks_enabled": false,
+        "min_edge": 0.1,
+        "min_confidence": 0.0,
+        "allowed_sides": [
+          "over"
+        ]
+      }
+    },
+    "allow_leans": true,
+    "lean_min_edge": 0.01,
+    "lean_min_confidence": 0.03,
+    "lean_max_probability_edge": 0.2,
+    "lean_kelly_fraction": 0.1,
+    "lean_max_stake_pct": 0.001,
+    "kelly_fraction": 0.25,
+    "max_stake_pct": 0.01,
+    "starting_bankroll": 10000.0,
+    "markets": [
+      "1x2",
+      "total"
+    ]
+  },
+  "backtest": {
+    "min_train_matches": 50,
+    "odds_source_type": "close",
+    "step_size": 28,
+    "run_ablations": false,
+    "fit": {
+      "common": {
+        "max_iter": 250,
+        "tol": 1e-06
+      }
+    },
+    "benchmarks": [
+      "uniform_baseline",
+      "home_field_baseline",
+      "team_ratings_poisson",
+      "rolling_npxg_poisson",
+      "spi_lite_baseline"
+    ]
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/nwsl_model.log"
+  },
+  "odds_provider": {
+    "stale_line_minutes": 180,
+    "api_football_shadow_url": "https://ncaa-zach-soskins-projects-95c2533d.vercel.app/api/nwsl/odds"
+  },
+  "threshold_tuning": {
+    "edge_grid": [
+      0.0,
+      0.01,
+      0.02,
+      0.03,
+      0.05,
+      0.08,
+      0.1
+    ],
+    "confidence_grid": [
+      0.0,
+      0.03,
+      0.05,
+      0.08,
+      0.1,
+      0.15
+    ],
+    "min_bets_per_cell": 8,
+    "min_history_bets": 30,
+    "rank_metric": "roi_units"
+  },
+  "market_residual": {
+    "enabled": true,
+    "regularization_c": 1.0,
+    "min_train_matches": 60
+  },
+  "totals_model": {
+    "enabled": true,
+    "regularization_c": 1.0,
+    "min_train_matches": 60
+  }
+}
