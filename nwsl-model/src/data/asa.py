@@ -45,6 +45,41 @@ def normalize_person_key(value: Any) -> str:
     return normalized
 
 
+def attach_non_penalty_xg(games: pd.DataFrame, penalties: pd.DataFrame) -> pd.DataFrame:
+    """Add real `home_npxg`/`away_npxg` by removing penalty xG from total xG.
+
+    ASA's game feed carries only total team xG. The model trains on npxG, so
+    without this subtraction the penalty share of xG (about 8% league-wide in
+    2026) is silently treated as open-play scoring rate.
+
+    `penalties` is the shot-pattern split keyed by (game_id, team_id). A team
+    absent from it took no penalty in that match, so its npxG equals its xG.
+    An entirely empty feed is a different situation: npxG is then unknown and
+    is left null rather than being reported as total xG.
+    """
+    result = games.copy()
+    if penalties is None or penalties.empty:
+        result["home_npxg"] = float("nan")
+        result["away_npxg"] = float("nan")
+        return result
+
+    lookup = {
+        (str(row["game_id"]), str(row["team_id"])): float(row["xgoals_for"])
+        for row in penalties.to_dict("records")
+        if pd.notna(row.get("xgoals_for"))
+    }
+
+    for side in ("home", "away"):
+        penalty_xg = [
+            lookup.get((str(row["asa_game_id"]), str(row[f"{side}_team_id"])), 0.0)
+            for row in result.to_dict("records")
+        ]
+        totals = pd.to_numeric(result[f"{side}_xg"], errors="coerce")
+        result[f"{side}_npxg"] = (totals - pd.Series(penalty_xg, index=result.index)).clip(lower=0.0)
+
+    return result
+
+
 def _empty_match_xgoals() -> pd.DataFrame:
     return pd.DataFrame(
         columns=[
@@ -54,6 +89,8 @@ def _empty_match_xgoals() -> pd.DataFrame:
             "away_team",
             "home_xg",
             "away_xg",
+            "home_npxg",
+            "away_npxg",
             "home_xg_players",
             "away_xg_players",
             "home_xpoints",
@@ -168,6 +205,16 @@ def _fetch_match_xgoals(
                 "game_id": "asa_game_id",
             }
         )
+        # ASA reports only total team xG per game. Penalties are recovered from
+        # the shot-pattern split and removed so the model trains on real npxG
+        # instead of a scoring rate inflated by the league's penalty share.
+        penalties = client.get_team_xgoals(
+            leagues="nwsl",
+            season_name=str(season),
+            shot_pattern="Penalty",
+            split_by_games=True,
+        )
+        frame = attach_non_penalty_xg(frame, penalties)
         frames.append(
             frame[
                 [
@@ -177,6 +224,8 @@ def _fetch_match_xgoals(
                     "away_team",
                     "home_xg",
                     "away_xg",
+                    "home_npxg",
+                    "away_npxg",
                     "home_xg_players",
                     "away_xg_players",
                     "home_xpoints",

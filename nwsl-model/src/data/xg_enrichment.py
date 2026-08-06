@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import logging
 from typing import Any
 
 import pandas as pd
 
 from src.data.match_ids import model_team_key
+
+logger = logging.getLogger("nwsl_model.data.xg_enrichment")
 
 XG_COLUMNS = ["home_npxg", "away_npxg", "home_xg", "away_xg"]
 
@@ -150,7 +153,14 @@ def enrich_matches_with_asa_xg(
         subset=["season_key", "match_date_key", "home_team_key", "away_team_key"]
     ).copy()
 
-    for column in ["home_xg", "away_xg", "home_xg_players", "away_xg_players"]:
+    for column in [
+        "home_xg",
+        "away_xg",
+        "home_npxg",
+        "away_npxg",
+        "home_xg_players",
+        "away_xg_players",
+    ]:
         if column not in source.columns:
             source[column] = pd.NA
         source[column] = pd.to_numeric(source[column], errors="coerce")
@@ -178,6 +188,8 @@ def enrich_matches_with_asa_xg(
                 "away_team_key",
                 "home_xg",
                 "away_xg",
+                "home_npxg",
+                "away_npxg",
                 "home_xg_players",
                 "away_xg_players",
             ]
@@ -193,7 +205,20 @@ def enrich_matches_with_asa_xg(
         player_col = f"{side}_xg_players"
         source_value = enriched[asa_col].combine_first(enriched[player_col])
         enriched[xg_col] = enriched[xg_col].combine_first(source_value)
-        enriched[f"{side}_npxg"] = enriched[f"{side}_npxg"].combine_first(source_value)
+        # npxG comes from the penalty-adjusted column. Falling back to total xG
+        # would reintroduce the penalty share as if it were open-play scoring,
+        # so that fallback is recorded rather than applied silently.
+        npxg_col = f"{side}_npxg"
+        npxg_source = enriched[f"{npxg_col}_asa"]
+        enriched[npxg_col] = enriched[npxg_col].combine_first(npxg_source)
+        unresolved = enriched[npxg_col].isna() & source_value.notna()
+        if bool(unresolved.any()):
+            logger.warning(
+                "npxG unavailable for %s %s rows; leaving null rather than "
+                "substituting total xG",
+                int(unresolved.sum()),
+                side,
+            )
 
     drop_cols: list[Any] = [
         "_row_id",
