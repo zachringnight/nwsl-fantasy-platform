@@ -229,8 +229,8 @@ def build_matches(
             if sb_col in matches.columns:
                 matches[f"{side}_xg"] = matches[sb_col].combine_first(matches[f"{side}_xg"])
                 matches.drop(columns=[sb_col], inplace=True)
-        matches["home_npxg"] = matches["home_npxg"].combine_first(matches["home_xg"])
-        matches["away_npxg"] = matches["away_npxg"].combine_first(matches["away_xg"])
+        # StatsBomb contributes total_xg, which includes penalties. It fills
+        # xG only; npxG is left for the ASA penalty-adjusted column below.
 
     if asa_match_xgoals is not None and not asa_match_xgoals.empty:
         asa = asa_match_xgoals.copy()
@@ -239,9 +239,17 @@ def build_matches(
         asa["home_team"] = asa["home_team"].map(canonicalize_team_name)
         asa["away_team"] = asa["away_team"].map(canonicalize_team_name)
         asa = asa.dropna(subset=["season", "match_date", "home_team", "away_team"]).copy()
-        for column in ("home_xg", "away_xg", "home_xg_players", "away_xg_players"):
-            if column in asa.columns:
-                asa[column] = pd.to_numeric(asa[column], errors="coerce")
+        for column in (
+            "home_xg",
+            "away_xg",
+            "home_npxg",
+            "away_npxg",
+            "home_xg_players",
+            "away_xg_players",
+        ):
+            if column not in asa.columns:
+                asa[column] = pd.NA
+            asa[column] = pd.to_numeric(asa[column], errors="coerce")
         asa = (
             asa.sort_values(["season", "match_date", "home_team", "away_team"])
             .drop_duplicates(["season", "match_date", "home_team", "away_team"], keep="last")
@@ -255,6 +263,8 @@ def build_matches(
                     "away_team",
                     "home_xg",
                     "away_xg",
+                    "home_npxg",
+                    "away_npxg",
                     "home_xg_players",
                     "away_xg_players",
                 ]
@@ -265,17 +275,24 @@ def build_matches(
         )
         for side in ("home", "away"):
             asa_col = f"{side}_xg_asa"
+            npxg_col = f"{side}_npxg_asa"
             player_col = f"{side}_xg_players"
             if asa_col in matches.columns:
                 matches[f"{side}_xg"] = matches[f"{side}_xg"].combine_first(matches[asa_col]).combine_first(matches[player_col])
-                matches[f"{side}_npxg"] = matches[f"{side}_npxg"].combine_first(matches[asa_col]).combine_first(matches[player_col])
                 matches.drop(columns=[asa_col], inplace=True)
+            # npxG takes only the penalty-adjusted column. Total xG and player
+            # xG both include penalties, so neither may stand in for it.
+            if npxg_col in matches.columns:
+                matches[f"{side}_npxg"] = matches[f"{side}_npxg"].combine_first(matches[npxg_col])
+                matches.drop(columns=[npxg_col], inplace=True)
             if player_col in matches.columns:
                 matches.drop(columns=[player_col], inplace=True)
 
     for side in ("home", "away"):
         matches[f"{side}_xg"] = matches[f"{side}_xg"].combine_first(matches[f"{side}_npxg"])
-        matches[f"{side}_npxg"] = matches[f"{side}_npxg"].combine_first(matches[f"{side}_xg"])
+        # npxG never falls back to total xG. Where no penalty-adjusted figure
+        # exists, goals scored are the last resort: a noisier estimate, but not
+        # one that systematically inflates the scoring rate.
         still_missing = matches[f"{side}_npxg"].isna()
         if still_missing.any():
             matches.loc[still_missing, f"{side}_npxg"] = matches.loc[still_missing, f"{side}_goals_90"].astype(float)
