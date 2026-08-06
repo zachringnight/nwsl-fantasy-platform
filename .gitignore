@@ -53,6 +53,10 @@ __pycache__/
 # nwsl-model: logs and regenerable run artifacts
 nwsl-model/logs/
 nwsl-model/data/processed/models/
+# One timestamped directory per daily run (~144K of pickles each). Written by
+# train.py and read only by the local predict/publish steps; nothing in the web
+# app or the Vercel build reads it, so it is regenerated rather than tracked.
+nwsl-model/data/processed/general/models/
 nwsl-model/data/processed/season_holdout/
 nwsl-model/data/processed/tuning/
 
