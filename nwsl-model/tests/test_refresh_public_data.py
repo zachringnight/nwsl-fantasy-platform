@@ -32,6 +32,7 @@ from scripts.refresh_public_data import (
     compute_payload_checksum,
     fetch_stats_category,
     finalize_payload,
+    publish_payload,
     resolve_transfer_match_team,
     validate_payload,
 )
@@ -198,6 +199,32 @@ def test_official_client_retries_429_and_timeout_with_deterministic_backoff() ->
         _retry_delay(url, 0, base_delay=0.1, max_delay=2.0),
         _retry_delay(url, 1, base_delay=0.1, max_delay=2.0),
     ]
+
+
+def test_publication_retries_transient_network_failure() -> None:
+    attempts: list[float] = []
+    sleeps: list[float] = []
+    outcomes: list[Any] = [urllib.error.URLError("temporary"), _Response({"ok": True})]
+
+    def opener(_request: Any, *, timeout: float) -> Any:
+        attempts.append(timeout)
+        outcome = outcomes.pop(0)
+        if isinstance(outcome, BaseException):
+            raise outcome
+        return outcome
+
+    result = publish_payload(
+        {"ok": True},
+        publish_url="https://example.test/publish",
+        secret="test-secret",
+        timeout=7.0,
+        opener=opener,
+        sleep=sleeps.append,
+    )
+
+    assert result["published"] is True
+    assert attempts == [7.0, 7.0]
+    assert sleeps == [_retry_delay("https://example.test/publish", 0, base_delay=0.5, max_delay=4.0)]
 
 
 def test_provider_birth_timestamp_normalizes_to_contract_date() -> None:

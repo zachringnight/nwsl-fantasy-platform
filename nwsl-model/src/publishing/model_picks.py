@@ -5,9 +5,12 @@ from __future__ import annotations
 import json
 import math
 import re
+import socket
+import ssl
+import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib import error, request
 
 import pandas as pd
@@ -57,6 +60,17 @@ def _number(value: Any) -> float | None:
     return float(cleaned)
 
 
+def _timestamp(value: Any) -> str | None:
+    """Return one UTC representation so matching layers share quote identity."""
+    text = _text(value)
+    if text is None:
+        return None
+    parsed = parse_mixed_utc_datetime(pd.Series([text])).iloc[0]
+    if pd.isna(parsed):
+        return text
+    return parsed.to_pydatetime().isoformat()
+
+
 def _boolean(value: Any) -> bool | None:
     cleaned = _clean(value)
     if cleaned is None or cleaned == "":
@@ -85,8 +99,8 @@ def _slate_row(
         "market": _text(row.get("market")),
         "side": _text(row.get("side")),
         "sportsbook": _text(row.get("sportsbook")),
-        "quoteTimestamp": _text(row.get("quote_timestamp")),
-        "firstSeenTimestamp": _text(row.get("first_seen_timestamp")),
+        "quoteTimestamp": _timestamp(row.get("quote_timestamp")),
+        "firstSeenTimestamp": _timestamp(row.get("first_seen_timestamp")),
         "line": _number(row.get("line")),
         "overOdds": _number(row.get("over_odds")),
         "underOdds": _number(row.get("under_odds")),
@@ -130,8 +144,8 @@ def _locked_pick(
         "market": market,
         "side": side,
         "sportsbook": _text(row.get("sportsbook")),
-        "quoteTimestamp": _text(row.get("quote_timestamp")),
-        "firstSeenTimestamp": _text(row.get("first_seen_timestamp")),
+        "quoteTimestamp": _timestamp(row.get("quote_timestamp")),
+        "firstSeenTimestamp": _timestamp(row.get("first_seen_timestamp")),
         "line": _number(row.get("line")),
         "overOdds": _number(row.get("over_odds")),
         "underOdds": _number(row.get("under_odds")),
@@ -324,7 +338,7 @@ def _published_odds_rows(
             continue
         sportsbook = _text(raw.get("sportsbook"))
         market_type = (_text(raw.get("market_type")) or "").lower()
-        quote_timestamp = _text(raw.get("timestamp"))
+        quote_timestamp = _timestamp(raw.get("timestamp"))
         if sportsbook is None or market_type not in {"1x2", "total"}:
             continue
         parsed_timestamp = parse_mixed_utc_datetime(pd.Series([quote_timestamp])).iloc[0]
@@ -444,6 +458,16 @@ def _same_number(left: Any, right: Any) -> bool:
     )
 
 
+def _same_timestamp(left: Any, right: Any) -> bool:
+    """Compare quote instants, not their equivalent ISO-8601 spelling."""
+    if left is None or right is None:
+        return left is right
+    timestamps = parse_mixed_utc_datetime(pd.Series([left, right]))
+    if timestamps.isna().any():
+        return False
+    return timestamps.iloc[0] == timestamps.iloc[1]
+
+
 def _validate_priced_slate_quotes(
     slate_rows: list[dict[str, Any]],
     odds_rows: list[dict[str, Any]],
@@ -469,7 +493,10 @@ def _validate_priced_slate_quotes(
             and odds_row["officialMatchId"] == slate_row["officialMatchId"]
             and odds_row["marketType"] == "total"
             and odds_row["sportsbook"] == slate_row["sportsbook"]
-            and odds_row["quoteTimestamp"] == slate_row["quoteTimestamp"]
+            and _same_timestamp(
+                odds_row["quoteTimestamp"],
+                slate_row["quoteTimestamp"],
+            )
             and _same_number(odds_row["line"], slate_row["line"])
             and _same_number(
                 odds_row["overOdds"],
@@ -662,8 +689,13 @@ def publish_payload(
     url: str,
     secret: str,
     timeout_seconds: int = 30,
+    opener: Callable[..., Any] = request.urlopen,
+    max_attempts: int = 3,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
     """POST one model snapshot without ever logging the publishing secret."""
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be at least 1")
     body = json.dumps(payload, allow_nan=False, separators=(",", ":")).encode("utf-8")
     req = request.Request(
         url,
@@ -675,13 +707,17 @@ def publish_payload(
             "Content-Length": str(len(body)),
         },
     )
-    try:
-        with request.urlopen(req, timeout=timeout_seconds) as response:
-            response_body = response.read()
-    except error.HTTPError as exc:
-        raise RuntimeError(f"Model publisher returned HTTP {exc.code}") from exc
-    except error.URLError as exc:
-        raise RuntimeError("Model publisher could not be reached") from exc
+    for attempt in range(max_attempts):
+        try:
+            with opener(req, timeout=timeout_seconds) as response:
+                response_body = response.read()
+            break
+        except error.HTTPError as exc:
+            raise RuntimeError(f"Model publisher returned HTTP {exc.code}") from exc
+        except (TimeoutError, socket.timeout, ssl.SSLError, error.URLError) as exc:
+            if attempt + 1 >= max_attempts:
+                raise RuntimeError("Model publisher could not be reached") from exc
+            sleep(min(4.0, 0.5 * (2**attempt)))
 
     result = json.loads(response_body.decode("utf-8"))
     if not result.get("ok"):

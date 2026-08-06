@@ -1,0 +1,226 @@
+# NWSL Model — Next Session TODO
+
+Updated: 2026-07-27
+
+Production: https://nwsl-fantasy-platform.vercel.app
+
+Repository: https://github.com/zachringnight/nwsl-fantasy-platform
+
+## Start here
+
+Read this file before reopening the wider planning docs. Do not repeat the
+completed audit unless one of the timestamps below has changed.
+
+### Worktree safety
+
+- Do **not** reset, stash, clean, delete, or broadly update
+  `/Users/zsoskin/Downloads/nwsl-fantasy-platform-main`.
+  It is on local `main`, behind `origin/main`, and contains unrelated user work.
+- Do **not** clean or repurpose
+  `/Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation`.
+  It contains the current operational model data, logs, and generated artifacts.
+- For implementation, create a new clean `codex/` worktree from the current
+  `origin/main` after checking that the intended branch/path do not already exist.
+- Preserve all unrelated dirty files. Stage only explicit task files.
+
+## Current production truth
+
+- Production commit: `27d6ba7415ae64a9d284870b5f8447bdc00c76df`
+  (`Display sportsbook odds in American format (#31)`).
+- PR #30 merged: odds-aware picks, match-date filtering, match odds, archived
+  pre-match context, and direct Supabase model publication.
+- PR #31 merged: American odds throughout the customer-facing site.
+- Live frozen-policy artifact read back from Supabase:
+  `20260727T155425Z`, generated `2026-07-27T15:54:26Z`.
+- The live system remains research-only and never places wagers.
+
+## Data-freshness audit verdict
+
+### Frozen DraftKings Over 2.5 picks lane: current
+
+- Training rows: 309 regular-season matches.
+- Season split: 182 from 2025 and all 127 completed 2026 matches.
+- Latest included result: `401853952`, Angel City FC 1–2 Racing Louisville FC,
+  played 2026-07-27.
+- Teams covered: all 16.
+- Duplicate match ids: 0.
+- 2026 share of effective rating weight: 99.58%.
+- ASA xG coverage: 126/127 2026 matches.
+- One xG fallback: `401853922`, Orlando Pride 3–1 Bay FC on 2026-05-29;
+  the model currently falls back to final goals for that row.
+- Future policy slate begins 2026-07-30. No forward-serving leakage was found.
+
+Evidence:
+
+- `nwsl-model/data/raw/dataset_manifest.json`
+- `nwsl-model/data/raw/matches.csv`
+- `nwsl-model/data/raw/upcoming.csv`
+- `nwsl-model/data/processed/policy/nwsl-totals-open-over-v1/models/20260727T155425Z/training_summary.json`
+- `nwsl-model/data/processed/policy/nwsl-totals-open-over-v1/models/20260727T155425Z/team_ratings.csv`
+- `nwsl-model/data/processed/policy/nwsl-totals-open-over-v1/latest_summary.json`
+
+### General match-probability lane: stale
+
+- `nwsl-model/data/processed/predictions.csv` is regenerated daily, but it still
+  resolves `champion_pure` to `model_version=20260526T030638Z`,
+  `model_family=home_field_baseline`, `gating_status=baseline_fallback`.
+- That artifact's embedded training cutoff is 2026-05-24.
+- Production probability cards/fair odds read the committed static file
+  `nwsl-model/data/processed/web/predictions.json`.
+- That web file was generated 2026-07-23 and still includes completed fixtures.
+  Production currently labels the completed 2026-07-27 Angel City–Louisville
+  match as the next prediction date.
+- Therefore the live picks board is current, but the general probability cards
+  must not be described as using the newest season data.
+
+### Player-derived features: three matches behind
+
+`nwsl-model/data/raw/appearances.csv` is missing:
+
+- `401853951` — San Diego Wave FC 0–2 Seattle Reign FC, 2026-07-26
+- `401854069` — Washington Spirit 1–0 Denver Summit FC, 2026-07-26
+- `401853952` — Angel City FC 1–2 Racing Louisville FC, 2026-07-27
+
+This does not change the frozen team-ratings pick lane, which uses team xG and
+scores. It does block calling a rebuilt player/context model fully current.
+
+## P0 — next implementation work
+
+### 1. Replace the stale general prediction feed
+
+- [ ] Choose one traceable current general-projection model artifact.
+- [ ] Retrain or rebuild it from the same refreshed completed-match dataset used
+      by the frozen policy.
+- [ ] Record at minimum: model version, model family, training cutoff,
+      source-manifest timestamp, generated timestamp, and gating status.
+- [ ] Publish general prediction rows to Supabase rather than relying on a
+      committed JSON file and daily GitHub/Vercel deployments.
+- [ ] Make `getMatchPredictions()` Supabase-first.
+- [ ] Keep static JSON only as an explicitly labeled stale fallback, or remove
+      it from production serving.
+- [ ] Exclude completed, postponed, and canceled matches from the upcoming
+      probability feed.
+- [ ] Preserve the distinction between general match probabilities and the
+      frozen DraftKings Over 2.5 pick policy.
+
+Acceptance:
+
+- Production's first available prediction date is a genuinely upcoming match.
+- Production exposes the exact model version and training cutoff.
+- The production version equals the artifact generated by the same successful
+  daily run.
+- No GitHub commit or Vercel deployment is required for the next daily refresh.
+
+### 2. Refresh player/context inputs before rebuilding the general model
+
+- [ ] Add the official appearance refresh and operational-feature rebuild to the
+      appropriate daily pipeline stage.
+- [ ] Reconcile all completed 2026 ESPN match ids to official appearance ids.
+- [ ] Fail or explicitly degrade when the newest completed matches lack player
+      coverage; do not silently call the context model current.
+- [ ] Confirm projected-lineup coverage separately from historical appearances.
+
+Acceptance:
+
+- Appearance coverage includes every completed match through the training cutoff,
+  or the missing ids are recorded in a machine-readable quality artifact.
+- A model artifact records whether player/context features were complete,
+  partial, or excluded.
+
+### 3. Make Supabase publishing acknowledgement-safe
+
+Latest runner log:
+
+`nwsl-model/logs/track_matchday_20260727T154705Z.log`
+
+Both publishers logged:
+
+`ssl.SSLError: [SSL: SSLV3_ALERT_BAD_RECORD_MAC]`
+
+The Supabase readback nevertheless shows the exact newest model artifact, which
+means the server likely committed before the client failed while reading the
+response.
+
+- [ ] Make both publishers idempotent for a stable run/publication id.
+- [ ] Add bounded retries for retryable transport failures.
+- [ ] After an ambiguous POST failure, read back the expected run id/version
+      before declaring failure or retrying.
+- [ ] Keep public-data and model publication statuses independent.
+- [ ] Never replace the latest good snapshot with a partial run.
+
+Acceptance:
+
+- A simulated lost response cannot create duplicate rows.
+- The runner distinguishes `confirmed`, `confirmed_by_readback`, and `failed`.
+- The automation reports the exact verified state rather than only the client
+  socket result.
+
+### 4. Add automated freshness and lineage gates
+
+- [ ] Assert raw completed-match max date equals the latest completed ESPN match.
+- [ ] Assert completed and upcoming match-id sets do not overlap.
+- [ ] Assert 2026 xG coverage and list every fallback match id.
+- [ ] Assert the newest production artifact version equals the expected run
+      after successful publication.
+- [ ] Assert general prediction rows contain only eligible future fixtures.
+- [ ] Add a visible stale state when any production artifact exceeds its allowed
+      freshness window.
+
+## P1 — model-quality follow-ups
+
+- [ ] Backfill or explicitly retain the documented fallback for missing ASA xG
+      match `401853922`.
+- [ ] Verify whether the ASA field being copied into `home_npxg/away_npxg` is
+      truly non-penalty xG; rename or transform it if it is total xG.
+- [ ] Label the 2026 validation correctly as rolling/walk-forward: thresholds
+      were selected on 2025, while ratings update from earlier 2026 results.
+- [ ] Keep the frozen thresholds and safeguards unchanged unless a separate
+      forward-validation review justifies a policy change.
+
+## P2 — product/design follow-up after data is correct
+
+- [ ] Review the existing design, motion, transition, and animation inventory.
+- [ ] Activate only features that improve comprehension and navigation.
+- [ ] Preserve the current visual language; do not redesign the site.
+- [ ] Recheck match, team, player, and prediction interlinking after the new
+      Supabase prediction source is live.
+
+## Boundaries that must remain in force
+
+- Research-only. Never place a wager.
+- DraftKings through the validated Apify contract is the only sportsbook that
+  can create a frozen-policy pick.
+- FOX is display/source-health context only.
+- API-Football is shadow-only and cannot create picks automatically.
+- A pick requires a fresh paired DraftKings total at exactly 2.5.
+- Missing, stale, one-sided, unmatched, live-only, or terminal-event odds mean
+  no price-based pick.
+- Frozen pick thresholds: EV edge at least 2%, confidence at least 3%.
+- Stake cap: 0.25% of bankroll.
+- No separate full-promotion quota or ROI/CLV gate.
+- Store decimal odds internally for math and settlement; display American odds.
+- Do not print tokens, secrets, authorization headers, or raw Apify payloads.
+- Automation cadence stays once daily at 8:00 AM Pacific, plus matchday-gated
+  runs at 2:00 PM and 8:00 PM Pacific.
+
+Automation ids:
+
+- `nwsl-totals-picks-progress`
+- `nwsl-matchday-extra-refreshes`
+
+## Completed verification — do not redo without a relevant change
+
+- Web: 73 test files / 351 tests passed.
+- Web TypeScript check passed.
+- Web lint passed with 0 errors; existing unrelated warnings remain.
+- Web production build passed.
+- Focused model/data/publishing checks: 30 passed.
+- PR #31 Vercel deployment reached `READY`.
+- Production match, prediction-list, match-detail, and prediction-detail routes
+  returned HTTP 200.
+- Production American-odds examples verified, including `O -230 · U +145`.
+- No recent Vercel runtime errors were found after PR #31.
+
+## New-session starter prompt
+
+> Read `/Users/zsoskin/.codex/worktrees/nwsl-opening-line-validation/NEXT_SESSION_TODO.md` first. Treat it as the current handoff. Do not reset, stash, clean, or edit either existing dirty checkout. Create a clean `codex/` worktree from current `origin/main`, then execute P0 in order. Start with tests and source-lineage verification, preserve the frozen research-only and DraftKings-only safeguards, publish through Supabase, open a ready PR, merge after checks, and verify the exact production artifact by readback.

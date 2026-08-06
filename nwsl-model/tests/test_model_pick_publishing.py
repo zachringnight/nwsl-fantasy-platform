@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import json
+import ssl
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
 import pytest
 
-from src.publishing.model_picks import build_publish_payload
+from src.publishing.model_picks import build_publish_payload, publish_payload
 
 NOW = datetime(2026, 7, 26, 20, 0, tzinfo=timezone.utc)
 OFFICIAL_MATCH_ID = "nwsl::Football_Match::0123456789abcdef0123456789abcdef"
@@ -254,6 +255,31 @@ def test_build_publish_payload_requires_exact_fresh_slate_quote(
         )
 
 
+def test_build_publish_payload_accepts_equivalent_utc_quote_timestamps(
+    tmp_path: Path,
+) -> None:
+    context = _publish_context(tmp_path)
+    context["odds"].loc[
+        context["odds"]["market_type"].eq("total"),
+        "timestamp",
+    ] = "2026-07-26T19:59:00Z"
+
+    payload = build_publish_payload(
+        summary=_summary(),
+        slate=pd.DataFrame([_row()]),
+        decisions=pd.DataFrame([_row()]),
+        forward_results={},
+        evidence=_evidence(),
+        source_health={},
+        **context,
+    )
+
+    assert len(payload["odds"]) == 2
+    assert payload["slate"][0]["quoteTimestamp"] == "2026-07-26T19:59:00+00:00"
+    total_odds = next(row for row in payload["odds"] if row["marketType"] == "total")
+    assert total_odds["quoteTimestamp"] == payload["slate"][0]["quoteTimestamp"]
+
+
 def test_build_publish_payload_fails_closed_on_unmapped_2026_slate(
     tmp_path: Path,
 ) -> None:
@@ -274,3 +300,39 @@ def test_build_publish_payload_fails_closed_on_unmapped_2026_slate(
             source_health={},
             **context,
         )
+
+
+def test_model_publication_retries_transient_tls_failure() -> None:
+    class Response:
+        def __enter__(self) -> "Response":
+            return self
+
+        def __exit__(self, *_args: object) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return b'{"ok": true, "publication": {}}'
+
+    outcomes: list[object] = [ssl.SSLError("temporary"), Response()]
+    calls: list[float] = []
+    sleeps: list[float] = []
+
+    def opener(_request: object, *, timeout: float) -> Response:
+        calls.append(timeout)
+        outcome = outcomes.pop(0)
+        if isinstance(outcome, BaseException):
+            raise outcome
+        return outcome  # type: ignore[return-value]
+
+    result = publish_payload(
+        {"run": {}},
+        url="https://example.test/publish",
+        secret="test-secret",
+        timeout_seconds=7,
+        opener=opener,
+        sleep=sleeps.append,
+    )
+
+    assert result["ok"] is True
+    assert calls == [7, 7]
+    assert sleeps == [0.5]

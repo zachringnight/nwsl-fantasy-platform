@@ -18,6 +18,7 @@ import math
 import os
 import re
 import socket
+import ssl
 import subprocess
 import sys
 import tempfile
@@ -495,7 +496,7 @@ class OfficialApiClient:
                 if exc.code != 429 and not 500 <= exc.code <= 599:
                     raise FetchError(f"official API returned HTTP {exc.code}") from exc
                 last_error = exc
-            except (TimeoutError, socket.timeout, urllib.error.URLError) as exc:
+            except (TimeoutError, socket.timeout, ssl.SSLError, urllib.error.URLError) as exc:
                 last_error = exc
 
             if attempt + 1 < self.max_attempts:
@@ -2361,6 +2362,8 @@ def publish_payload(
     secret: str,
     timeout: float = 45.0,
     opener: Callable[..., Any] = urllib.request.urlopen,
+    max_attempts: int = 3,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
     if not secret:
         raise RefreshError("publish secret is empty")
@@ -2385,16 +2388,22 @@ def publish_payload(
             "User-Agent": "nwsl-public-data-refresh/1.0",
         },
     )
-    try:
-        with opener(request, timeout=timeout) as response:
-            status = int(getattr(response, "status", 200))
-            raw = response.read(65_537)
-            if len(raw) > 65_536:
-                raise RefreshError("publish response exceeded the safety limit")
-    except urllib.error.HTTPError as exc:
-        raise RefreshError(f"publish endpoint returned HTTP {exc.code}") from exc
-    except (TimeoutError, socket.timeout, urllib.error.URLError) as exc:
-        raise RefreshError(f"publish request failed ({type(exc).__name__})") from exc
+    if max_attempts < 1:
+        raise RefreshError("publish max_attempts must be at least 1")
+    for attempt in range(max_attempts):
+        try:
+            with opener(request, timeout=timeout) as response:
+                status = int(getattr(response, "status", 200))
+                raw = response.read(65_537)
+                if len(raw) > 65_536:
+                    raise RefreshError("publish response exceeded the safety limit")
+            break
+        except urllib.error.HTTPError as exc:
+            raise RefreshError(f"publish endpoint returned HTTP {exc.code}") from exc
+        except (TimeoutError, socket.timeout, ssl.SSLError, urllib.error.URLError) as exc:
+            if attempt + 1 >= max_attempts:
+                raise RefreshError(f"publish request failed ({type(exc).__name__})") from exc
+            sleep(_retry_delay(publish_url, attempt, base_delay=0.5, max_delay=4.0))
     if status < 200 or status >= 300:
         raise RefreshError(f"publish endpoint returned HTTP {status}")
     response_value: Any = None
