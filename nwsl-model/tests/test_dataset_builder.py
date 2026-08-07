@@ -72,7 +72,10 @@ def test_build_matches_merges_statsbomb_xg(tmp_path: Path) -> None:
     assert matches.loc[0, "home_team"] == "Washington Spirit"
     assert matches.loc[0, "away_team"] == "NC Courage"
     assert matches.loc[0, "home_xg"] == 0.95
-    assert matches.loc[0, "away_npxg"] == 2.15
+    assert matches.loc[0, "away_xg"] == 2.15
+    # StatsBomb total_xg includes penalties, so it fills xG only. With no
+    # penalty-adjusted source, npxG falls back to goals (away_score=4).
+    assert matches.loc[0, "away_npxg"] == 4.0
 
 
 def test_build_matches_prefers_asa_xg_and_falls_back_to_goals(tmp_path: Path) -> None:
@@ -130,7 +133,9 @@ def test_build_matches_prefers_asa_xg_and_falls_back_to_goals(tmp_path: Path) ->
     match_one = matches.set_index("match_id").loc["m1"]
     match_two = matches.set_index("match_id").loc["m2"]
     assert match_one["home_xg"] == 1.42
-    assert match_one["away_npxg"] == 1.18
+    # This ASA fixture predates the penalty split and carries no npxG. Total xG
+    # must not stand in for it, so npxG falls back to goals (away_score=2).
+    assert match_one["away_npxg"] == 2.0
     assert match_two["home_npxg"] == 0.0
     assert match_two["away_npxg"] == 0.0
 
@@ -675,3 +680,57 @@ def test_build_dataset_filters_to_history_start_season(tmp_path: Path) -> None:
     assert paths["refresh_manifest"].exists()
     assert outputs.manifest["history_start_season"] == 2025
     assert outputs.manifest["matches"]["season_coverage"] == [2025]
+
+
+def test_build_matches_uses_asa_npxg_and_never_substitutes_total_xg(tmp_path: Path) -> None:
+    """npxG must come from ASA's penalty-adjusted column.
+
+    build_matches runs automatically whenever data/raw/matches.csv is absent,
+    so a total-xG substitution here silently reintroduces the penalty
+    inflation that the ASA fetch now removes.
+    """
+    repo_root = tmp_path / "repo"
+    official_path = repo_root / "data" / "nwsl-official" / "nwsl_2021_official_matches.csv"
+
+    _write_csv(
+        official_path,
+        [
+            {
+                "season": 2021,
+                "match_id": "m1",
+                "match_date_utc": "2021-05-01T00:00:00Z",
+                "match_date_local": "2021-05-01T00:00:00",
+                "home_official_name": "Kansas City Current",
+                "away_official_name": "OL Reign",
+                "home_score": 1,
+                "away_score": 2,
+                "round_name": "Regular Season",
+                "stadium_name": "CMP",
+                "city_name": "Kansas City",
+            }
+        ],
+    )
+
+    asa_match_xgoals = pd.DataFrame(
+        [
+            {
+                "season": 2021,
+                "match_date": "2021-05-01",
+                "home_team": "Current",
+                "away_team": "Reign",
+                "home_xg": 1.42,
+                "away_xg": 1.18,
+                "home_npxg": 0.66,
+                "away_npxg": 1.18,
+                "home_xg_players": 1.4,
+                "away_xg_players": 1.2,
+            }
+        ]
+    )
+
+    matches = build_matches(repo_root, asa_match_xgoals=asa_match_xgoals)
+
+    row = matches.set_index("match_id").loc["m1"]
+    assert row["home_xg"] == 1.42
+    assert row["home_npxg"] == 0.66
+    assert row["away_npxg"] == 1.18

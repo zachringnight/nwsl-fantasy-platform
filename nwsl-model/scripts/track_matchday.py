@@ -24,6 +24,11 @@ import pandas as pd
 MODEL_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(MODEL_ROOT))
 
+from src.tracking.pick_clv import (
+    build_closing_price_index,
+    render_clv_line,
+    summarize_pick_clv,
+)
 from src.tracking.pick_ledger import (
     LEDGER_COLUMNS,
     extract_picks_from_slate,
@@ -48,12 +53,16 @@ def main() -> None:
     parser.add_argument("--ledger", help="Persistent pick ledger CSV", default=None)
     parser.add_argument("--report", help="Where to write the Slack-ready report", default=None)
     parser.add_argument("--as-of", help="recorded_at timestamp (default: now UTC)", default=None)
+    parser.add_argument("--normalized-odds", help="Long-form odds store (close rows)", default=None)
+    parser.add_argument("--closing-odds", help="Closing odds materialized from snapshots", default=None)
     args = parser.parse_args()
 
     slate_path = _resolve(args.slate, "data/processed/betting_slate.csv")
     matches_path = _resolve(args.matches, "data/raw/matches.csv")
     ledger_path = _resolve(args.ledger, "data/processed/pick_ledger.csv")
     report_path = _resolve(args.report, "data/processed/pick_record_report.md")
+    normalized_odds_path = _resolve(args.normalized_odds, "data/raw/odds_normalized.csv")
+    closing_odds_path = _resolve(args.closing_odds, "data/raw/closing_odds.csv")
 
     recorded_at = args.as_of or pd.Timestamp.now(tz="UTC").strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -77,6 +86,16 @@ def main() -> None:
 
     summary = summarize_record(ledger)
     report = render_record_report(summary, new_pick_count=new_locked)
+
+    # Pick-level CLV. ROI on a log this small cannot separate skill from
+    # variance; CLV converges much faster, so it rides along on every run.
+    # A missing odds store degrades to "unknown", never to a fabricated 0.00.
+    closing_index = build_closing_price_index(
+        pd.read_csv(normalized_odds_path, dtype={"match_id": str}) if normalized_odds_path.exists() else None,
+        pd.read_csv(closing_odds_path, dtype={"match_id": str}) if closing_odds_path.exists() else None,
+    )
+    clv_summary = summarize_pick_clv(ledger, closing_index)
+    report = report + "\n" + render_clv_line(clv_summary)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(report + "\n")
 

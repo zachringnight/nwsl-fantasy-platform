@@ -9,18 +9,18 @@
       },
       "2026": {
         "coverage_pct": 99.28,
-        "covered_matches": 137,
+        "covered_matches": 138,
         "fallback_match_ids": [
           "401853922"
         ],
-        "reference_matches": 138
+        "reference_matches": 139
       }
     },
     "fallback_match_ids": [
       "401853922"
     ],
-    "match_xg_coverage_pct": 99.69,
-    "match_xgoals_rows": 329,
+    "match_xg_coverage_pct": 99.7,
+    "match_xgoals_rows": 330,
     "season_coverage": [
       2025,
       2026
@@ -34,15 +34,15 @@
     "weather_features": "disabled",
     "xg_features": "asa_match_xgoals_loader_enrichment"
   },
-  "generated_at": "2026-08-05T21:39:49.139Z",
+  "generated_at": "2026-08-06T22:06:32.335Z",
   "matches": {
     "date_range": [
       "2025-03-15",
-      "2026-08-03"
+      "2026-08-06"
     ],
     "non_regular_season_rows": 7,
-    "regular_season_rows": 320,
-    "rows": 327,
+    "regular_season_rows": 321,
+    "rows": 328,
     "season_coverage": [
       2025,
       2026
@@ -50,12 +50,12 @@
     "status": "completed_with_regular_season_flag"
   },
   "missing_feature_coverage": {
-    "asa_match_xg_missing_pct": 0.31,
-    "odds_missing_pct": 14.37,
-    "xg_missing_pct": 0.31
+    "asa_match_xg_missing_pct": 0.3,
+    "odds_missing_pct": 14.63,
+    "xg_missing_pct": 0.3
   },
   "odds": {
-    "rows": 1386,
+    "rows": 1378,
     "source_available": true,
     "markets": [
       "1x2",
@@ -72,7 +72,7 @@
       "current",
       "open"
     ],
-    "latest_timestamp": "2026-08-05T21:41:38.595820+00:00"
+    "latest_timestamp": "2026-08-06T22:13:55.763592+00:00"
   },
   "source": "espn_public_api",
   "source_files": {
@@ -81,10 +81,10 @@
   },
   "upcoming": {
     "date_range": [
-      "2026-08-06",
+      "2026-08-07",
       "2026-11-01"
     ],
-    "rows": 102,
+    "rows": 101,
     "season_coverage": [
       2026
     ],

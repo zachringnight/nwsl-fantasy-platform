@@ -153,6 +153,13 @@ if [ "$GENERAL_PROJECTION_FAILURE" -eq 0 ]; then
         "$PY" scripts/generate_betting_slate.py
 fi
 
+# 5b. Materialize closing prices from the accumulated snapshot history so the
+#     forward log can report CLV on the picks it actually made. CLV converges
+#     on far fewer samples than ROI, which is what makes it worth carrying on a
+#     log this small. Best-effort by design: a stale closing store degrades the
+#     CLV line to "unknown" and must never block pick logging or settlement.
+run_step "materialize_closing_odds" "$PY" scripts/materialize_closing_odds.py
+
 # 6. Lock threshold-tiered edges into the forward ledger and settle anything
 #    now played. The complete positive-edge artifact remains research-only.
 #    track_matchday must succeed -- it is the point of the job -- so its exit
